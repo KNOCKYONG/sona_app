@@ -208,6 +208,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
     final screenSize = MediaQuery.of(context).size;
     const margin = 16.0;
     const cardPadding = 16.0;
+    const bottomNavHeight = 80.0; // 하단 네비게이션 바 높이 + SafeArea
     
     // 화면 크기에 따른 동적 카드 너비 (최대 300, 최소 280)
     final cardWidth = (screenSize.width - margin * 2).clamp(280.0, 300.0);
@@ -227,10 +228,11 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       left = margin;
     }
     
-    // 아래쪽 경계 체크 (대략적인 카드 높이 추정)
+    // 아래쪽 경계 체크 (대략적인 카드 높이 추정 + 하단 네비게이션 바 고려)
     const estimatedCardHeight = 380.0;
-    if (top + estimatedCardHeight + margin > screenSize.height) {
-      top = screenSize.height - estimatedCardHeight - margin;
+    final bottomLimit = screenSize.height - bottomNavHeight;
+    if (top + estimatedCardHeight + margin > bottomLimit) {
+      top = bottomLimit - estimatedCardHeight - margin;
     }
     
     // 위쪽 경계 체크

@@ -1650,13 +1650,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             icon: Icons.touch_app,
             highlightArea: HighlightArea(
               left: MediaQuery.of(context).size.width * 0.15,
-              top: MediaQuery.of(context).size.height * 0.75,
+              top: MediaQuery.of(context).size.height * 0.70,
               width: MediaQuery.of(context).size.width * 0.7,
               height: 80,
             ),
             messagePosition: Offset(
               MediaQuery.of(context).size.width * 0.05,
-              MediaQuery.of(context).size.height * 0.55,
+              MediaQuery.of(context).size.height * 0.30,
             ),
             tip: '연인 관계로 시작하면 더욱 로맨틱한 대화를 나눌 수 있어요!',
           ),

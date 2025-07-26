@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_service.dart';
 
 class TutorialOverlay extends StatefulWidget {
   final Widget child;
@@ -36,20 +38,23 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
     }
     
     final prefs = await SharedPreferences.getInstance();
+    final authService = context.read<AuthService>();
+    final userId = authService.user?.uid ?? 'anonymous';
+    
     // 튜토리얼 모드인 경우 항상 표시, 일반 모드에서는 한 번만 표시
     final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
-    final hasSeenTutorial = prefs.getBool('tutorial_${widget.screenKey}') ?? false;
-    final allPersonasViewed = prefs.getBool('all_personas_viewed') ?? false;
+    final hasSeenTutorial = prefs.getBool('tutorial_${widget.screenKey}_$userId') ?? false;
+    final allPersonasViewed = prefs.getBool('all_personas_viewed_$userId') ?? false;
     
     // 페르소나 선택 화면에서 모든 페르소나를 확인했다면 튜토리얼 표시 안함
     if (widget.screenKey == 'persona_selection' && allPersonasViewed && !isTutorialMode) {
       return;
     }
     
-    // 각 스텝별로 다시 보지 않기 설정 확인
+    // 각 스텝별로 다시 보지 않기 설정 확인 (사용자별로)
     bool allStepsHidden = true;
     for (int i = 0; i < widget.tutorialSteps.length; i++) {
-      final stepHidden = prefs.getBool('tutorial_${widget.screenKey}_step_$i') ?? false;
+      final stepHidden = prefs.getBool('tutorial_${widget.screenKey}_step_${i}_$userId') ?? false;
       if (!stepHidden) {
         allStepsHidden = false;
         break;
@@ -61,7 +66,8 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       return;
     }
     
-    if (isTutorialMode || !hasSeenTutorial) {
+    // 튜토리얼 모드이거나, (튜토리얼을 본 적이 없고 모든 스텝이 숨겨지지 않은 경우)에만 표시
+    if (isTutorialMode || (!hasSeenTutorial && !allStepsHidden)) {
       // 화면이 완전히 로드된 후 튜토리얼 표시
       await Future.delayed(const Duration(milliseconds: 500));
       if (mounted) {
@@ -95,10 +101,12 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       return;
     }
     
-    // 현재 스텝을 다시 보지 않기로 선택했다면 저장
+    // 현재 스텝을 다시 보지 않기로 선택했다면 저장 (사용자별로)
     if (_dontShowAgainSteps[_currentStep] == true) {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('tutorial_${widget.screenKey}_step_$_currentStep', true);
+      final authService = context.read<AuthService>();
+      final userId = authService.user?.uid ?? 'anonymous';
+      await prefs.setBool('tutorial_${widget.screenKey}_step_${_currentStep}_$userId', true);
     }
     
     if (_currentStep < widget.tutorialSteps.length - 1) {
@@ -123,11 +131,13 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
 
   Future<void> _completeTutorial() async {
     final prefs = await SharedPreferences.getInstance();
+    final authService = context.read<AuthService>();
+    final userId = authService.user?.uid ?? 'anonymous';
     final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
     
-    // 튜토리얼 모드가 아닐 때만 완료 상태를 저장
+    // 튜토리얼 모드가 아닐 때만 완료 상태를 저장 (사용자별로)
     if (!isTutorialMode) {
-      await prefs.setBool('tutorial_${widget.screenKey}', true);
+      await prefs.setBool('tutorial_${widget.screenKey}_$userId', true);
     }
     
     setState(() {

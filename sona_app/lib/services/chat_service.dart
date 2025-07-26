@@ -314,20 +314,36 @@ class ChatService extends ChangeNotifier {
             debugPrint('Error getting casual speech setting: $e');
           }
           
-          final smartContext = await _buildEnhancedContext(
-            userId: userId,
-            persona: persona,
-            recentMessages: _messages.where((m) => m.personaId == persona.id).toList(),
-          );
-          
           // Create persona with correct isCasualSpeech value
           final personaWithCorrectSpeech = persona.copyWith(isCasualSpeech: isCasualSpeech);
+          
+          // 💭 메모리 서비스를 통한 스마트 컨텍스트 구성
+          final smartContext = await _memoryService.buildSmartContext(
+            userId: userId,
+            personaId: persona.id,
+            recentMessages: _messages.where((m) => m.personaId == persona.id).toList(),
+            persona: personaWithCorrectSpeech,
+            maxTokens: 800, // 향상된 컨텍스트 용량
+          );
+          
+          // 최근 AI 메시지 추출 (질문 시스템용)
+          final recentAIMessages = _messages
+              .where((m) => m.personaId == persona.id && !m.isFromUser)
+              .take(3)
+              .map((m) => m.content)
+              .toList();
+          
+          // 메시지 개수 계산 (첫 만남 감지용)
+          final messageCount = _messages.where((m) => m.personaId == persona.id).length;
           
           aiResponseContent = await EnhancedOpenAIService.generateContextAwareResponse(
             persona: personaWithCorrectSpeech,
             userMessage: userMessage,
             relationshipType: relationshipType,
             smartContext: smartContext,
+            recentAIMessages: recentAIMessages,
+            messageCount: messageCount,
+            matchedAt: persona.matchedAt ?? DateTime.now(), // 매칭 시간이 없으면 현재 시간 사용
           );
           
           // Check if user message was rude before analyzing emotion
@@ -455,6 +471,9 @@ class ChatService extends ChangeNotifier {
        
        await batch.commit();
        debugPrint('✅ Batch wrote ${messagesToWrite.length} messages');
+       
+       // 💭 메모리 서비스에 중요한 대화 저장
+       await _processConversationMemories(messagesToWrite);
      } catch (e) {
        debugPrint('❌ Error in batch write: $e');
        // Firebase 권한 오류는 더 이상 재시도하지 않음
@@ -1258,6 +1277,70 @@ class ChatService extends ChangeNotifier {
   Future<bool> isTutorialMessageLimitReached() async {
     final count = await getTotalTutorialMessageCount();
     return count >= 30;  // 30 message limit for tutorial mode
+  }
+  
+  /// 💭 대화 메모리 처리 (중요한 대화 추출 및 저장)
+  Future<void> _processConversationMemories(List<_PendingMessage> pendingMessages) async {
+    try {
+      // 페르소나별로 그룹화
+      final messagesByPersona = <String, List<Message>>{};
+      
+      for (final pending in pendingMessages) {
+        if (!messagesByPersona.containsKey(pending.personaId)) {
+          messagesByPersona[pending.personaId] = [];
+        }
+        messagesByPersona[pending.personaId]!.add(pending.message);
+      }
+      
+      // 각 페르소나별로 메모리 처리
+      for (final entry in messagesByPersona.entries) {
+        final personaId = entry.key;
+        final messages = entry.value;
+        final userId = pendingMessages.first.userId; // 모든 메시지는 같은 사용자
+        
+        // 중요한 메모리 추출
+        final memories = await _memoryService.extractImportantMemories(
+          messages: messages,
+          userId: userId,
+          personaId: personaId,
+        );
+        
+        // 메모리 저장
+        if (memories.isNotEmpty) {
+          await _memoryService.saveMemories(memories);
+          debugPrint('💾 Saved ${memories.length} conversation memories for persona $personaId');
+        }
+        
+        // 주기적으로 대화 요약 생성 (메시지가 20개 이상일 때)
+        final personaMessages = _messages.where((m) => m.personaId == personaId).toList();
+        if (personaMessages.length >= 20 && personaMessages.length % 20 == 0) {
+          await _createConversationSummary(userId, personaId, personaMessages);
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error processing conversation memories: $e');
+    }
+  }
+  
+  /// 📚 대화 요약 생성
+  Future<void> _createConversationSummary(String userId, String personaId, List<Message> messages) async {
+    try {
+      // 페르소나 정보 가져오기
+      final persona = _personaService?.getPersonaById(personaId);
+      if (persona == null) return;
+      
+      final summary = await _memoryService.createConversationSummary(
+        messages: messages,
+        userId: userId,
+        personaId: personaId,
+        persona: persona,
+      );
+      
+      await _memoryService.saveSummary(summary);
+      debugPrint('📚 Created conversation summary for persona $personaId');
+    } catch (e) {
+      debugPrint('❌ Error creating conversation summary: $e');
+    }
   }
 }
 

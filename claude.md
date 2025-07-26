@@ -142,4 +142,47 @@ claude mcp remove youtube-mcp
 
 ** firebase mcp 적극 활용할 것 **
 
+** Serena MCP 적극 활용할 것 **
+Serena MCP는 강력한 코딩 에이전트 툴킷으로 의미론적 코드 검색 및 편집 기능을 제공합니다.
+
+### Serena MCP 주요 기능:
+- **의미론적 코드 분석**: 언어 서버 프로토콜을 통한 IDE 수준의 코드 이해
+- **다중 언어 지원**: 다양한 프로그래밍 언어에 대한 지원
+- **대형 코드베이스 처리**: 복잡한 코딩 작업에 특화된 성능
+- **웹 대시보드**: http://127.0.0.1:24282/dashboard/index.html 에서 로그 및 상태 확인 가능
+
+### Serena MCP 설치 방법:
+```bash
+# 권장 설치 방법 (IDE 어시스턴트 컨텍스트와 현재 프로젝트 경로 포함)
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project "%cd%"
+
+# 또는 기본 설치
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server
+```
+
+### Serena MCP 사용 시 주의사항:
+1. **uv 패키지 매니저 필요**: Serena는 uv로 관리되므로 사전 설치 필요
+2. **초기 연결 시간**: 첫 설치 시 의존성 설치로 인해 30초 정도 소요될 수 있음
+3. **프로젝트 컨텍스트**: --context ide-assistant 옵션 사용 권장
+4. **웹 대시보드**: 기본적으로 로컬호스트에 대시보드가 시작되어 로그 및 상태 모니터링 가능
+
+### Serena MCP 설정 예시 (수동 설정 시):
+```json
+{
+  "serena": {
+    "command": "uvx",
+    "args": [
+      "--from",
+      "git+https://github.com/oraios/serena",
+      "serena-mcp-server",
+      "--context",
+      "ide-assistant",
+      "--project",
+      "%cd%"
+    ],
+    "type": "stdio"
+  }
+}
+```
+
 ** scripts/process_persona_image.py 파일 활용하여 cloudflare mcp를 사용하기 전에 이미지 처리할 것 **

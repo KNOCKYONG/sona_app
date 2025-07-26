@@ -99,6 +99,16 @@ class PersonaService extends ChangeNotifier {
   List<Persona> get sessionPersonas => _matchedPersonas;
   List<Persona> get myPersonas => _matchedPersonas;
 
+  /// Get persona by ID from all personas
+  Persona? getPersonaById(String personaId) {
+    try {
+      return _allPersonas.firstWhere((persona) => persona.id == personaId);
+    } catch (e) {
+      debugPrint('Persona not found with ID: $personaId');
+      return null;
+    }
+  }
+
   /// Initialize service with parallel loading
   Future<void> initialize({String? userId}) async {
     // Prevent duplicate initialization

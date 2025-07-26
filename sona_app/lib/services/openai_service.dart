@@ -323,7 +323,7 @@ class OpenAIService {
   /// Get fallback response
   static String _getFallbackResponse(Persona persona, String userMessage) {
     final responses = [
-      '아 잠깐만ㅋㅋ 생각이 안 나네 다시 말해줄래?',
+      '아 잠깐만... 생각이 안 나네 다시 말해줄래?',
       '어? 뭔가 이상하네 내가 멍하니 있었나봐ㅋㅋ',
       '잠깐 뭐라고 했지? 다시 한번만 말해줘',
       '어라 갑자기 머리가 하얘졌어ㅠㅠ 다시 말해줄래?',

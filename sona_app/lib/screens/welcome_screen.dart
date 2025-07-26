@@ -179,7 +179,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            '환영합니다! 🎉',
+                            '환영합니다!',
                             style: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
@@ -188,7 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                           const SizedBox(height: 20),
                           const Text(
-                            'SONA에서 특별한 인연을 만나보세요',
+                            'Sona에서 특별한 인연을 만나보세요',
                             style: TextStyle(
                               fontSize: 18,
                               color: Colors.white70,
@@ -210,7 +210,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           ),
                           const SizedBox(height: 20),
                           const Text(
-                            '페르소나를 준비하고 있어요...',
+                            'Sona들을 준비하고 있어요...',
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.white70,

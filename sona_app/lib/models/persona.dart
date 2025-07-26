@@ -15,6 +15,7 @@ class Persona {
   final bool isExpert; // 전문가 여부
   final String? profession; // 전문 분야 (예: '임상심리학', '상담심리학', '정신건강의학')
   final String role; // 페르소나 역할 ('normal', 'expert')
+  final DateTime? matchedAt; // 매칭된 시간
   
   // 새로운 이미지 구조 (Cloudflare R2)
   final Map<String, dynamic>? imageUrls; // 크기별 이미지 URL 저장
@@ -36,6 +37,7 @@ class Persona {
     this.isExpert = false, // 기본값은 일반 페르소나
     this.profession, // 전문 분야는 선택사항
     this.role = 'normal', // 기본값은 일반 페르소나
+    this.matchedAt, // 매칭된 시간
     this.imageUrls, // 새로운 이미지 URL 구조
   }) : createdAt = createdAt ?? DateTime.now();
 

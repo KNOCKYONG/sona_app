@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>
               SonaLogo(size: 40, showText: true),
               SizedBox(height: 12),
               Text(
-                '오신 걸 환영해요! 💕',
+                '오신 걸 환영해요💕',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'AI 페르소나와 특별한 관계를 맺어보세요.\n친구부터 연인까지, 당신만의 이야기를 만들어가요.',
+                '소나와 특별한 관계를 맺어보세요.\n친구부터 연인까지, 소나와 함께 이야기를 만들어가요.',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black87,
@@ -103,13 +103,7 @@ class _SplashScreenState extends State<SplashScreen>
               ),
               SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text('😊', style: TextStyle(fontSize: 24)),
-                  Text('😍', style: TextStyle(fontSize: 24)),
-                  Text('💕', style: TextStyle(fontSize: 24)),
-                  Text('❤️', style: TextStyle(fontSize: 24)),
-                ],
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly
               ),
             ],
           ),
@@ -132,7 +126,7 @@ class _SplashScreenState extends State<SplashScreen>
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 4),
                       child: Text(
-                        '🎯 튜토리얼로 시작하기',
+                        '튜토리얼 시작',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,

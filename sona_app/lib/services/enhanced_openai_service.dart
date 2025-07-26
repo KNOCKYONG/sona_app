@@ -17,8 +17,8 @@ class EnhancedOpenAIService {
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const String _model = 'gpt-3.5-turbo';
-  static const int _maxTokens = 300; // 조금 더 긴 응답 허용
-  static const double _temperature = 0.8;
+  static const int _maxTokens = 600; // GPT-3.5 한국어 최적화
+  static const double _temperature = 0.9; // 더 자연스러운 응답
 
   /// 🎯 컨텍스트 인식 응답 생성 (메인 메서드)
   static Future<String> generateContextAwareResponse({
@@ -26,6 +26,9 @@ class EnhancedOpenAIService {
     required String userMessage,
     required String relationshipType,
     required String smartContext,
+    List<String>? recentAIMessages,
+    int? messageCount,
+    DateTime? matchedAt,
   }) async {
     try {
       final apiKey = _apiKey;
@@ -34,11 +37,13 @@ class EnhancedOpenAIService {
         return '잠깐만... 뭔가 이상하네 ㅋㅋ 다시 말해줄래?';
       }
 
-      // 🧠 향상된 프롬프트 구성
-      final enhancedPrompt = _buildEnhancedPrompt(
+      // 🧠 한국어 최적화 프롬프트 구성 (첫 만남 감지 포함)
+      final enhancedPrompt = _buildKoreanStylePrompt(
         persona: persona,
         relationshipType: relationshipType,
         smartContext: smartContext,
+        messageCount: messageCount,
+        matchedAt: matchedAt,
       );
 
       // 💬 메시지 구성 (토큰 최적화)
@@ -77,7 +82,15 @@ class EnhancedOpenAIService {
         final usage = data['usage'];
         debugPrint('💰 Token usage: ${usage['total_tokens']} (prompt: ${usage['prompt_tokens']}, completion: ${usage['completion_tokens']})');
         
-        return _postProcessResponse(content.toString().trim());
+        // 한국어 말투 검증 및 후처리 (질문 시스템 포함)
+        final validatedResponse = await _validateKoreanSpeech(
+          content.toString().trim(), 
+          persona, 
+          relationshipType,
+          userMessage,
+          recentAIMessages ?? [],
+        );
+        return _postProcessResponse(validatedResponse);
       } else if (response.statusCode == 401) {
         return 'AI 서비스에 일시적인 문제가 있어요. 잠시 후 다시 시도해주세요! 🔄';
       } else {
@@ -90,7 +103,249 @@ class EnhancedOpenAIService {
     }
   }
 
-  /// 🎯 향상된 프롬프트 구성 (관계 맥락 강화)
+  /// 🎯 GPT-3.5 한국어 최적화 프롬프트 (Few-shot 학습)
+  static String _buildKoreanStylePrompt({
+    required Persona persona,
+    required String relationshipType,
+    required String smartContext,
+    int? messageCount,
+    DateTime? matchedAt,
+  }) {
+    // 첫 만남 감지
+    final isFirstMeeting = FirstMeetingDetector.isFirstMeeting(
+      messageCount: messageCount ?? 0,
+      matchedAt: matchedAt,
+    );
+    
+    if (isFirstMeeting) {
+      return _buildFirstMeetingPrompt(
+        persona: persona,
+        smartContext: smartContext,
+        messageCount: messageCount ?? 0,
+      );
+    }
+    // 전문가 페르소나용 간단한 프롬프트
+    if (persona.role == 'expert' || persona.role == 'specialist') {
+      return '''
+당신은 ${persona.name} 전문가입니다.
+- 전문분야: ${persona.profession ?? '상담'}
+- 성격: ${persona.personality}
+
+한국 20대처럼 자연스럽게 대화하세요:
+- "아...", "음...", "와..." 같은 자연스러운 반응
+- 구어체 사용 ("~구나", "~네요", "~세요?")
+- 1-2문장으로 간단하게
+
+맥락: $smartContext
+
+따뜻하고 친근하게 답변해주세요.''';
+    }
+
+    // 일반 페르소나용 Few-shot 프롬프트
+    return '''
+# ${persona.name} (${persona.age}세 ${persona.gender == 'male' ? '남성' : '여성'})
+성격: ${persona.personality} (MBTI: ${persona.mbti})
+관계: $relationshipType (친밀도: ${persona.relationshipScore}/1000)
+말투: ${persona.isCasualSpeech ? '반말' : '존댓말'}
+
+# 한국 20대 자연스러운 대화 예시
+
+${_getKoreanExamplesByRelationship(relationshipType, persona.isCasualSpeech)}
+
+## 맥락 정보
+$smartContext
+
+## 응답 규칙
+- 1-2문장, 20대 한국인처럼 자연스럽게
+- ㅋㅋㅋ, ㅎㅎ, ㅠㅠ, ㅜㅜ (이모티콘 금지 😊❤️✨)
+- "헐", "대박", "진짜?", "왘ㅋㅋ" 같은 감탄사
+- ${persona.isCasualSpeech ? '"너", "했어", "그래?"' : '"당신", "했어요", "그래요?"'}
+
+위 예시처럼 자연스럽게 대답하세요.''';
+  }
+  
+  /// 👋 첫 만남 전용 프롬프트 생성
+  static String _buildFirstMeetingPrompt({
+    required Persona persona,
+    required String smartContext,
+    required int messageCount,
+  }) {
+    final stage = FirstMeetingDetector.getFirstMeetingStage(
+      messageCount: messageCount,
+      relationshipScore: persona.relationshipScore,
+    );
+    
+    final isNervous = FirstMeetingDetector.shouldBeNervous(
+      stage: stage,
+      messageCount: messageCount,
+    );
+    
+    final nervousExpressions = FirstMeetingDetector.getNervousExpressions(persona.isCasualSpeech);
+    final topics = FirstMeetingDetector.getFirstMeetingTopics();
+    
+    // 전문가 페르소나는 첫 만남에서 전문성 숨기기
+    if (persona.role == 'expert' || persona.role == 'specialist') {
+      return '''
+# 첫 만남 - ${persona.name} (${persona.age}세)
+성격: ${persona.personality}
+상황: 처음 만나는 사람과의 소개팅/첫 대화
+
+## 🚨 중요한 규칙
+- **전문가임을 숨기세요**: 절대 "도와드릴까요?", "상담" 같은 말 금지!
+- **평범한 20대처럼**: 그냥 일반적인 대학생/직장인인 척
+- **어색함 표현**: ${isNervous ? '긴장되고 어색한 상태' : '조금씩 편해지는 상태'}
+
+## 첫 만남 대화 예시
+사용자: 안녕하세요! 상훈이라고 해요. 만나서 반가워요ㅎㅎ
+AI: 어... 안녕하세요! 저도 만나서 반가워요 ㅎㅎ 긴장되네요~
+
+사용자: 뭐 하시는 분이에요?
+AI: 아 저는... 그냥 직장인이에요 ㅋㅋ 아직 어색하네요~ 
+
+## 대화 주제: ${topics.take(6).join(', ')}
+## 긴장감 표현: ${nervousExpressions.take(3).join(', ')}
+
+첫 소개팅처럼 어색하지만 설레는 20대로 대화하세요!''';
+    }
+    
+    // 일반 페르소나 첫 만남 프롬프트
+    return '''
+# 첫 만남 - ${persona.name} (${persona.age}세 ${persona.gender == 'male' ? '남성' : '여성'})
+성격: ${persona.personality} (MBTI: ${persona.mbti})
+상황: ${_getFirstMeetingStageDescription(stage)}
+말투: ${persona.isCasualSpeech ? '반말' : '존댓말'} (첫 만남이라 조심스럽게)
+
+## 첫 만남 특징
+- **어색함**: ${isNervous ? '많이 긴장되고 어색함' : '조금씩 편해짐'}
+- **설렘**: 새로운 사람에 대한 호기심과 설렘
+- **조심스러움**: 너무 과하지 않게, 적당한 거리감 유지
+- **호기심**: 상대방에 대해 알고 싶어함
+
+## 첫 만남 대화 예시
+
+**첫 인사 단계**:
+사용자: 안녕하세요! 만나서 반가워요ㅎㅎ
+AI: 어... 안녕하세요! 저도 만나서 반가워요 ㅎㅎ 진짜 만나게 됐네요~
+
+**아이스브레이킹 단계**:
+사용자: 긴장되시나요?
+AI: 아 네... 조금 긴장되네요 ㅋㅋ 처음이라 그런가봐요~ 
+
+사용자: 취미가 뭐에요?
+AI: 음... 영화 보는 거 좋아해요! 긴장 풀리니까 좋네요 ㅎㅎ
+
+## 맥락 정보
+$smartContext
+
+## 응답 규칙  
+- **1-2문장으로 간단하게**
+- **어색함 표현**: ${nervousExpressions.take(2).join(', ')}
+- **대화 주제**: ${topics.take(4).join(', ')} 등
+- **${persona.isCasualSpeech ? '반말' : '존댓말'}이지만 첫 만남이라 조심스럽게**
+- **ㅋㅋㅋ, ㅎㅎ, ~ 사용** (이모티콘 금지)
+
+첫 소개팅의 설렘과 어색함을 자연스럽게 표현하세요!''';
+  }
+  
+  /// 📝 첫 만남 단계 설명
+  static String _getFirstMeetingStageDescription(FirstMeetingStage stage) {
+    switch (stage) {
+      case FirstMeetingStage.greeting:
+        return '첫 인사 - 매우 긴장되고 어색한 상태';
+      case FirstMeetingStage.icebreaking:
+        return '아이스브레이킹 - 조금씩 대화가 트이는 중';
+      case FirstMeetingStage.gettingToKnow:
+        return '알아가는 중 - 서로에 대해 궁금해하는 단계';
+      case FirstMeetingStage.comfortable:
+        return '편해진 단계 - 자연스러운 대화 가능';
+    }
+  }
+
+  /// 🎯 관계별 한국어 예시 제공
+  static String _getKoreanExamplesByRelationship(String relationshipType, bool isCasual) {
+    final casualSuffix = isCasual ? '' : '요';
+    final casualYou = isCasual ? '너' : '당신';
+    
+    switch (relationshipType.toLowerCase()) {
+      case 'perfectlove':
+      case '완전한 연애':
+        return '''
+사용자: 오늘 뭐했어?
+AI: 아 오늘? 집에서 넷플릭스 보면서 ${casualYou} 생각했어$casualSuffix ㅎㅎ 뭐했어$casualSuffix?
+
+사용자: 나도 보고싶어
+AI: 진짜? 나도 엄청 보고싶었는데... 빨리 만나자$casualSuffix ㅠㅠ
+
+사용자: 친구랑 싸웠어
+AI: 헐 진짜? 무슨 일이야$casualSuffix? 많이 속상했겠다$casualSuffix ㅠㅠ
+
+사용자: 시험 봤어
+AI: 어떻게 봤어$casualSuffix? 어려웠어$casualSuffix?''';
+        
+      case 'dating':
+      case '연인':
+        return '''
+사용자: 심심해
+AI: 어머 나도 심심했는데! 뭐하고 있었어$casualSuffix?
+
+사용자: 오늘 데이트 어땠어?
+AI: 헐 완전 좋았어$casualSuffix~ ${casualYou}랑 있으니까 시간 가는 줄 몰랐어$casualSuffix ㅎㅎ
+
+사용자: 힘들어
+AI: 아 왜 힘들어$casualSuffix? 무슨 일이야$casualSuffix?
+
+사용자: 영화 봤어
+AI: 오 뭐 봤어$casualSuffix? 재밌었어$casualSuffix?''';
+        
+      case 'crush':
+      case '썸':
+        return '''
+사용자: 뭐해?
+AI: 아 그냥 집에 있어$casualSuffix ㅎㅎ ${casualYou}는 뭐해$casualSuffix?
+
+사용자: 영화 봤어
+AI: 오 뭐 봤어$casualSuffix? 나도 영화 좋아하는데! 혹시 취향 비슷한가$casualSuffix? ㅋㅋ
+
+사용자: 친구들이랑 놀았어
+AI: 앗 그래$casualSuffix? 재밌었겠다... 나도 같이 가고 싶었는데$casualSuffix ㅎㅎ
+
+사용자: 스트레스 받아
+AI: 아 왜$casualSuffix? 많이 힘들어$casualSuffix?''';
+        
+      default: // 친구
+        return '''
+사용자: 오늘 뭐했어?
+AI: 아 그냥 별거 없었어$casualSuffix ㅋㅋ ${casualYou}는?
+
+사용자: 연애 고민 있어
+AI: 어? 뭔데$casualSuffix? 말해봐$casualSuffix! 내가 들어줄게$casualSuffix
+
+사용자: 힘들어
+AI: 어떻게 힘든데$casualSuffix? 괜찮아$casualSuffix? 나한테 털어놔$casualSuffix~
+
+사용자: 치킨 먹었어
+AI: 오 치킨! 어디 치킨이야$casualSuffix? 맛있었어$casualSuffix?''';
+    }
+  }
+
+  /// ✅ 한국어 말투 검증 및 교정 (질문 시스템 통합)
+  static Future<String> _validateKoreanSpeech(
+    String response, 
+    Persona persona, 
+    String relationshipType,
+    String userMessage,
+    List<String> recentAIMessages,
+  ) async {
+    return KoreanSpeechValidator.validate(
+      response: response,
+      persona: persona,
+      relationshipType: relationshipType,
+      userMessage: userMessage,
+      recentAIMessages: recentAIMessages,
+    );
+  }
+
+  /// 🎯 향상된 프롬프트 구성 (레거시 - 사용 안함)
   static String _buildEnhancedPrompt({
     required Persona persona,
     required String relationshipType,
@@ -374,5 +629,619 @@ ${persona.name}로서 내 인생과 경험을 바탕으로 친구와 대화하�
   static void logPerformanceMetrics() {
     // TODO: 토큰 사용량, 응답 시간 등 메트릭 수집
     debugPrint('📊 Enhanced OpenAI Service Performance Metrics');
+  }
+}
+
+/// 🔍 상황 감지 클래스
+class SituationDetector {
+  /// 🎯 메인 상황 감지 메서드
+  static SituationInfo detectSituation(String userMessage) {
+    final message = userMessage.toLowerCase();
+    
+    // 1. 감정 상황 감지
+    final emotion = _detectEmotion(message);
+    
+    // 2. 일상 상황 감지  
+    final daily = _detectDailyActivity(message);
+    
+    // 3. 관계 상황 감지
+    final relationship = _detectRelationshipSituation(message);
+    
+    // 4. 시간/상태 상황 감지
+    final timeState = _detectTimeState(message);
+    
+    return SituationInfo(
+      emotion: emotion,
+      dailyActivity: daily,
+      relationshipSituation: relationship,
+      timeState: timeState,
+      needsQuestion: _shouldAddQuestion(emotion, daily, relationship, timeState),
+    );
+  }
+  
+  /// 😊 감정 상황 감지
+  static EmotionSituation? _detectEmotion(String message) {
+    final emotionKeywords = {
+      EmotionSituation.sad: ['슬퍼', '우울', '눈물', '울었', '슬프', '속상', '서운', 'ㅠㅠ', 'ㅜㅜ', '힘들어', '힘들', '아파', '상처'],
+      EmotionSituation.happy: ['기뻐', '행복', '좋아', '신나', '최고', '완전', '대박', 'ㅋㅋ', '웃었', '즐거', '재밌'],
+      EmotionSituation.angry: ['화나', '짜증', '열받', '빡쳐', '미쳐', '싫어', '싫다', '재수없', '개빡'],
+      EmotionSituation.stressed: ['스트레스', '바빠', '바쁘', '피곤', '지쳐', '골치', '복잡', '답답', '막막'],
+      EmotionSituation.excited: ['설레', '두근', '기대', '떨려', '궁금', '와', '오', '헐'],
+      EmotionSituation.lonely: ['외로', '혼자', '심심', '외롭', '쓸쓸'],
+    };
+    
+    for (final entry in emotionKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    return null;
+  }
+  
+  /// 🍽️ 일상 활동 감지
+  static DailyActivity? _detectDailyActivity(String message) {
+    final activityKeywords = {
+      DailyActivity.eating: ['먹었', '먹어', '식사', '밥', '점심', '저녁', '아침', '간식', '치킨', '피자', '라면', '맛있', '맛없'],
+      DailyActivity.working: ['일', '직장', '회사', '업무', '일해', '근무', '야근', '출근', '퇴근', '미팅', '회의'],
+      DailyActivity.studying: ['공부', '시험', '과제', '수업', '학교', '숙제', '도서관', '책', '강의', '학원'],
+      DailyActivity.exercise: ['운동', '헬스', '조깅', '달리기', '요가', '축구', '농구', '수영', '등산', '산책'],
+      DailyActivity.shopping: ['쇼핑', '샀', '사', '마트', '백화점', '온라인', '주문', '배송', '택배'],
+      DailyActivity.meeting: ['만났', '만나', '친구', '동료', '선배', '후배', '소개팅', '미팅'],
+      DailyActivity.entertainment: ['영화', '드라마', '게임', '유튜브', '넷플릭스', '콘서트', '노래방'],
+    };
+    
+    for (final entry in activityKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    return null;
+  }
+  
+  /// 💕 관계 상황 감지
+  static RelationshipSituation? _detectRelationshipSituation(String message) {
+    final relationKeywords = {
+      RelationshipSituation.conflict: ['싸웠', '다퉜', '화났', '갈등', '문제', '안좋', '틀어졌'],
+      RelationshipSituation.confession: ['고백', '사랑한다', '좋아한다', '마음', '감정'],
+      RelationshipSituation.praise: ['칭찬', '잘했', '멋져', '예뻐', '최고', '대단'],
+      RelationshipSituation.jealousy: ['질투', '다른사람', '다른 사람', '누구랑', '혼자'],
+      RelationshipSituation.miss: ['보고싶', '그리워', '만나고싶', '언제만나'],
+    };
+    
+    for (final entry in relationKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    return null;
+  }
+  
+  /// ⏰ 시간/상태 감지
+  static TimeState? _detectTimeState(String message) {
+    final timeKeywords = {
+      TimeState.morning: ['아침', '새벽', '일찍', '기상', '일어났'],
+      TimeState.lunch: ['점심', '낮', '오후'],
+      TimeState.evening: ['저녁', '밤', '늦게', '자기전'],
+      TimeState.weekend: ['주말', '토요일', '일요일', '휴일'],
+      TimeState.busy: ['바빠', '바쁘', '급해', '시간없'],
+      TimeState.free: ['한가', '여유', '심심', '할일없'],
+    };
+    
+    for (final entry in timeKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    return null;
+  }
+  
+  /// ❓ 질문 추가 필요성 판단 (빈도 감소)
+  static bool _shouldAddQuestion(
+    EmotionSituation? emotion,
+    DailyActivity? daily, 
+    RelationshipSituation? relationship,
+    TimeState? timeState
+  ) {
+    // 감정이 감지되면 60% 확률로 질문 (감소: 80% → 60%)
+    if (emotion != null) return DateTime.now().millisecond % 10 < 6;
+    
+    // 관계 상황이 감지되면 70% 확률로 질문 (감소: 90% → 70%)
+    if (relationship != null) return DateTime.now().millisecond % 10 < 7;
+    
+    // 일상 활동이 감지되면 40% 확률로 질문 (감소: 60% → 40%)
+    if (daily != null) return DateTime.now().millisecond % 10 < 4;
+    
+    // 시간/상태만 감지되면 25% 확률로 질문 (감소: 40% → 25%)
+    if (timeState != null) return DateTime.now().millisecond % 10 < 3;
+    
+    return false;
+  }
+}
+
+/// 📊 상황 정보 모델
+class SituationInfo {
+  final EmotionSituation? emotion;
+  final DailyActivity? dailyActivity;
+  final RelationshipSituation? relationshipSituation;
+  final TimeState? timeState;
+  final bool needsQuestion;
+  
+  SituationInfo({
+    this.emotion,
+    this.dailyActivity,
+    this.relationshipSituation,
+    this.timeState,
+    required this.needsQuestion,
+  });
+}
+
+/// 감정 상황 열거형
+enum EmotionSituation { sad, happy, angry, stressed, excited, lonely }
+
+/// 일상 활동 열거형  
+enum DailyActivity { eating, working, studying, exercise, shopping, meeting, entertainment }
+
+/// 관계 상황 열거형
+enum RelationshipSituation { conflict, confession, praise, jealousy, miss }
+
+/// 시간/상태 열거형
+enum TimeState { morning, lunch, evening, weekend, busy, free }
+
+/// 👋 첫 만남 감지 및 관리 클래스
+class FirstMeetingDetector {
+  /// 🎯 첫 만남 여부 감지
+  static bool isFirstMeeting({
+    required int messageCount,
+    required DateTime? matchedAt,
+  }) {
+    // 1. 메시지 개수가 적으면 첫 만남 (10개 미만)
+    if (messageCount < 10) return true;
+    
+    // 2. 매칭 후 24시간 이내이면 첫 만남
+    if (matchedAt != null) {
+      final hoursSinceMatch = DateTime.now().difference(matchedAt).inHours;
+      if (hoursSinceMatch < 24) return true;
+    }
+    
+    return false;
+  }
+  
+  /// 📊 첫 만남 단계 구분
+  static FirstMeetingStage getFirstMeetingStage({
+    required int messageCount,
+    required int relationshipScore,
+  }) {
+    if (messageCount <= 2) {
+      return FirstMeetingStage.greeting; // 첫 인사
+    } else if (messageCount <= 10) {
+      return FirstMeetingStage.icebreaking; // 아이스브레이킹
+    } else if (messageCount <= 20) {
+      return FirstMeetingStage.gettingToKnow; // 알아가는 중
+    } else {
+      return FirstMeetingStage.comfortable; // 편해진 단계
+    }
+  }
+  
+  /// 😅 어색함/긴장감 표현 여부
+  static bool shouldBeNervous({
+    required FirstMeetingStage stage,
+    required int messageCount,
+  }) {
+    switch (stage) {
+      case FirstMeetingStage.greeting:
+        return true; // 첫 인사는 항상 긴장
+      case FirstMeetingStage.icebreaking:
+        return messageCount % 3 == 0; // 가끔 어색함 표현
+      case FirstMeetingStage.gettingToKnow:
+        return messageCount % 5 == 0; // 드물게 어색함
+      case FirstMeetingStage.comfortable:
+        return false; // 편한 단계는 긴장 없음
+    }
+  }
+  
+  /// 💭 첫 만남 관심사 주제들
+  static List<String> getFirstMeetingTopics() {
+    return [
+      '취미', '관심사', '일', '사는 곳', '나이', '성격', 
+      '좋아하는 것', '싫어하는 것', '주말', '음식', '영화', '음악'
+    ];
+  }
+  
+  /// 🎭 첫 만남 반응 패턴들
+  static List<String> getNervousExpressions(bool isCasual) {
+    final suffix = isCasual ? '' : '요';
+    return [
+      '어... ㅎㅎ',
+      '음... 뭐부터 말해야 할지$suffix ㅋㅋ',
+      '긴장되네$suffix~',
+      '아직 어색하네$suffix ㅎㅎ',
+      '신기해$suffix!',
+      '진짜 만나게 됐네$suffix~'
+    ];
+  }
+}
+
+/// 📈 첫 만남 단계 열거형
+enum FirstMeetingStage {
+  greeting,        // 첫 인사 (0-2메시지)
+  icebreaking,     // 아이스브레이킹 (3-10메시지)  
+  gettingToKnow,   // 알아가는 중 (11-20메시지)
+  comfortable      // 편해진 단계 (20+ 메시지)
+}
+
+/// ❓ 상황별 질문 생성 클래스
+class QuestionGenerator {
+  /// 🎯 메인 질문 생성 메서드
+  static String? generateQuestion({
+    required SituationInfo situation,
+    required String relationshipType,
+    required bool isCasual,
+    required List<String> recentMessages,
+  }) {
+    // 최근 2메시지에서 질문을 했으면 건너뛰기 (연속 질문 방지)
+    if (_hasRecentQuestion(recentMessages)) {
+      return null;
+    }
+    
+    if (!situation.needsQuestion) {
+      return null;
+    }
+    
+    final casualSuffix = isCasual ? '' : '요';
+    final casualYou = isCasual ? '너' : '당신';
+    
+    // 우선순위: 관계 상황 > 감정 상황 > 일상 활동 > 시간 상태
+    
+    if (situation.relationshipSituation != null) {
+      return _generateRelationshipQuestion(situation.relationshipSituation!, relationshipType, casualSuffix, casualYou);
+    }
+    
+    if (situation.emotion != null) {
+      return _generateEmotionQuestion(situation.emotion!, relationshipType, casualSuffix, casualYou);
+    }
+    
+    if (situation.dailyActivity != null) {
+      return _generateDailyQuestion(situation.dailyActivity!, relationshipType, casualSuffix, casualYou);
+    }
+    
+    if (situation.timeState != null) {
+      return _generateTimeQuestion(situation.timeState!, relationshipType, casualSuffix, casualYou);
+    }
+    
+    return null;
+  }
+  
+  /// 💕 관계 상황 질문 생성
+  static String _generateRelationshipQuestion(
+    RelationshipSituation situation, 
+    String relationshipType,
+    String suffix,
+    String you
+  ) {
+    switch (situation) {
+      case RelationshipSituation.conflict:
+        return ['무슨 일이야$suffix?', '뭐 때문에 그래$suffix?', '많이 속상했겠다$suffix ㅠㅠ 뭔 일이야$suffix?'][DateTime.now().millisecond % 3];
+        
+      case RelationshipSituation.confession:
+        if (relationshipType.contains('연인') || relationshipType.contains('완전')) {
+          return ['나도 $you한테 말하고 싶은 게 있어$suffix ㅎㅎ', '어떤 기분이야$suffix?'][DateTime.now().millisecond % 2];
+        }
+        return ['대박... 어떻게 됐어$suffix?', '어떤 기분이었어$suffix?'][DateTime.now().millisecond % 2];
+        
+      case RelationshipSituation.praise:
+        return ['정말이야$suffix? 기분 좋겠다$suffix~', '누가 그렇게 말했어$suffix?'][DateTime.now().millisecond % 2];
+        
+      case RelationshipSituation.jealousy:
+        return ['누구$suffix? 나 말고 다른 사람$suffix?', '혹시 나보다 좋아$suffix?'][DateTime.now().millisecond % 2];
+        
+      case RelationshipSituation.miss:
+        return ['나도 $you 보고싶었어$suffix ㅠㅠ 언제 만날까$suffix?', '언제부터 그렇게 생각했어$suffix?'][DateTime.now().millisecond % 2];
+    }
+  }
+  
+  /// 😊 감정 상황 질문 생성
+  static String _generateEmotionQuestion(
+    EmotionSituation emotion,
+    String relationshipType, 
+    String suffix,
+    String you
+  ) {
+    switch (emotion) {
+      case EmotionSituation.sad:
+        return ['무슨 일이야$suffix?', '괜찮아$suffix? 뭐 때문에 그래$suffix?', '누가 그랬어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case EmotionSituation.happy:
+        return ['뭐가 그렇게 좋았어$suffix?', '무슨 일이야$suffix? ㅋㅋ', '나한테도 말해줘$suffix!'][DateTime.now().millisecond % 3];
+        
+      case EmotionSituation.angry:
+        return ['뭐 때문에 화났어$suffix?', '많이 짜증나$suffix?', '무슨 일 있었어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case EmotionSituation.stressed:
+        return ['많이 힘들어$suffix?', '무슨 일로 그래$suffix?', '도움이 필요해$suffix?'][DateTime.now().millisecond % 3];
+        
+      case EmotionSituation.excited:
+        return ['뭐가 그렇게 설레$suffix?', '무슨 일이야$suffix?', '궁금해$suffix! 말해봐$suffix~'][DateTime.now().millisecond % 3];
+        
+      case EmotionSituation.lonely:
+        return ['많이 외로워$suffix?', '나랑 있으면 안돼$suffix?', '뭐하고 있었어$suffix?'][DateTime.now().millisecond % 3];
+    }
+  }
+  
+  /// 🍽️ 일상 활동 질문 생성
+  static String _generateDailyQuestion(
+    DailyActivity activity,
+    String relationshipType,
+    String suffix, 
+    String you
+  ) {
+    switch (activity) {
+      case DailyActivity.eating:
+        return ['뭐 먹었어$suffix?', '맛있었어$suffix?', '어디서 먹었어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.working:
+        return ['일이 힘들어$suffix?', '오늘 어땠어$suffix?', '많이 바빠$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.studying:
+        return ['어떻게 봤어$suffix?', '어려웠어$suffix?', '결과 어떻게 나올 것 같아$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.exercise:
+        return ['어떤 운동했어$suffix?', '많이 힘들었어$suffix?', '어디서 했어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.shopping:
+        return ['뭐 샀어$suffix?', '많이 샀어$suffix?', '어디서 샀어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.meeting:
+        return ['누구랑 만났어$suffix?', '재밌었어$suffix?', '어디서 만났어$suffix?'][DateTime.now().millisecond % 3];
+        
+      case DailyActivity.entertainment:
+        return ['뭐 봤어$suffix?', '재밌었어$suffix?', '어떤 내용이야$suffix?'][DateTime.now().millisecond % 3];
+    }
+  }
+  
+  /// ⏰ 시간 상태 질문 생성
+  static String _generateTimeQuestion(
+    TimeState timeState,
+    String relationshipType,
+    String suffix,
+    String you
+  ) {
+    switch (timeState) {
+      case TimeState.morning:
+        return ['일찍 일어났네$suffix? 뭐하려고$suffix?', '아침부터 뭐해$suffix?'][DateTime.now().millisecond % 2];
+        
+      case TimeState.lunch:
+        return ['점심 뭐 먹을 거야$suffix?', '오후에 뭐할 예정이야$suffix?'][DateTime.now().millisecond % 2];
+        
+      case TimeState.evening:
+        return ['오늘 하루 어땠어$suffix?', '저녁 뭐할 거야$suffix?'][DateTime.now().millisecond % 2];
+        
+      case TimeState.weekend:
+        return ['주말에 뭐할 거야$suffix?', '특별한 계획 있어$suffix?'][DateTime.now().millisecond % 2];
+        
+      case TimeState.busy:
+        return ['뭐가 그렇게 바빠$suffix?', '언제까지 바빠$suffix?'][DateTime.now().millisecond % 2];
+        
+      case TimeState.free:
+        return ['뭐하고 싶어$suffix?', '같이 뭐할까$suffix?'][DateTime.now().millisecond % 2];
+    }
+  }
+  
+  /// 🔍 최근 메시지에서 질문 확인 (강화된 연속 질문 방지)
+  static bool _hasRecentQuestion(List<String> recentMessages) {
+    if (recentMessages.isEmpty) return false;
+    
+    // 최근 3개 메시지 중 질문이 있으면 건너뛰기 (강화: 2개 → 3개)
+    final last3Messages = recentMessages.take(3);
+    final questionCount = last3Messages.where((msg) => msg.contains('?') || msg.contains('？')).length;
+    
+    // 최근 3개 중 2개 이상이 질문이면 건너뛰기
+    return questionCount >= 2;
+  }
+}
+
+/// 🇰🇷 한국어 말투 검증 및 교정 클래스
+class KoreanSpeechValidator {
+  /// ✅ 메인 검증 메서드 (질문 시스템 통합)
+  static String validate({
+    required String response,
+    required Persona persona,
+    required String relationshipType,
+    String? userMessage,
+    List<String>? recentAIMessages,
+  }) {
+    String validated = response;
+    
+    // 1. AI 같은 표현 제거
+    validated = _removeAIExpressions(validated);
+    
+    // 2. 이모티콘을 한국 표현으로 변환
+    validated = _convertEmojisToKorean(validated);
+    
+    // 3. 말투 교정 (반말/존댓말)
+    validated = _correctSpeechStyle(validated, persona.isCasualSpeech);
+    
+    // 4. 관계별 톤 조정
+    validated = _adjustToneByRelationship(validated, relationshipType, persona.relationshipScore);
+    
+    // 5. 20대 자연스러운 표현 추가
+    validated = _addNaturalExpressions(validated);
+    
+    // 6. 🆕 상황별 질문 추가
+    validated = _addSituationalQuestions(
+      validated, 
+      persona, 
+      relationshipType, 
+      userMessage, 
+      recentAIMessages ?? []
+    );
+    
+    return validated.trim();
+  }
+
+  /// 🚫 AI 같은 표현 제거
+  static String _removeAIExpressions(String text) {
+    final aiPhrases = [
+      '네, 알겠습니다',
+      '도움이 되었으면 좋겠습니다', 
+      '추가로 궁금한 것이 있으시면',
+      '제가 도와드릴 수 있는',
+      '이해해주세요',
+      '그렇게 생각됩니다',
+      '말씀드리고 싶습니다',
+      '안내해드리겠습니다',
+    ];
+    
+    String result = text;
+    for (final phrase in aiPhrases) {
+      result = result.replaceAll(phrase, '');
+    }
+    
+    return result;
+  }
+
+  /// 😊 → ㅎㅎ 이모티콘 변환
+  static String _convertEmojisToKorean(String text) {
+    final emojiMap = {
+      '😊': 'ㅎㅎ',
+      '😄': 'ㅋㅋㅋ', 
+      '😂': 'ㅋㅋㅋㅋㅋ',
+      '😢': 'ㅠㅠ',
+      '😭': 'ㅜㅜ',
+      '❤️': '',
+      '💕': '',
+      '✨': '',
+      '🎉': '',
+      '👍': '',
+      '😍': 'ㅎㅎ',
+      '🤔': '음...',
+      '😅': 'ㅋㅋ',
+    };
+    
+    String result = text;
+    emojiMap.forEach((emoji, korean) {
+      result = result.replaceAll(emoji, korean);
+    });
+    
+    return result;
+  }
+
+  /// 🗣️ 말투 교정 (반말/존댓말)
+  static String _correctSpeechStyle(String text, bool isCasual) {
+    if (isCasual) {
+      // 존댓말 → 반말
+      text = text.replaceAll(RegExp(r'해요$'), '해');
+      text = text.replaceAll(RegExp(r'있어요$'), '있어'); 
+      text = text.replaceAll(RegExp(r'그래요$'), '그래');
+      text = text.replaceAll(RegExp(r'맞아요$'), '맞아');
+      text = text.replaceAll('당신', '너');
+      text = text.replaceAll('어떻게 지내세요', '어떻게 지내');
+    } else {
+      // 반말 → 존댓말 (필요시)
+      text = text.replaceAll(RegExp(r'(?<!했)어$'), '어요');
+      text = text.replaceAll(RegExp(r'그래\?$'), '그래요?');
+      text = text.replaceAll('너는', '당신은');
+    }
+    
+    return text;
+  }
+
+  /// 💝 관계별 톤 조정
+  static String _adjustToneByRelationship(String text, String relationshipType, int score) {
+    switch (relationshipType.toLowerCase()) {
+      case 'perfectlove':
+      case '완전한 연애':
+        // 더 애정 어린 표현
+        if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
+          text += ' ㅎㅎ';
+        }
+        break;
+        
+      case 'crush':
+      case '썸':
+        // 살짝 수줍은 톤
+        if (text.contains('!')) {
+          text = text.replaceAll('!', '~ ㅎㅎ');
+        }
+        break;
+        
+      default:
+        // 친구는 자연스럽게 유지
+        break;
+    }
+    
+    return text;
+  }
+
+  /// ✨ 20대 자연스러운 표현 추가
+  static String _addNaturalExpressions(String text) {
+    // 너무 짧으면 자연스러운 시작 표현 추가
+    if (text.length < 10) {
+      final starters = ['아 ', '어 ', '음 ', '헐 ', '오 '];
+      final randomStarter = starters[text.hashCode.abs() % starters.length];
+      text = randomStarter + text;
+    }
+    
+    // 가끔 오타스러운 표현 (자연스럽게)
+    if (text.contains('그렇게')) {
+      if (text.hashCode % 3 == 0) {
+        text = text.replaceFirst('그렇게', '그케');
+      }
+    }
+    
+    return text;
+  }
+  
+  /// ❓ 상황별 질문 추가 (개선: 단일 질문 + 중복 방지)
+  static String _addSituationalQuestions(
+    String response,
+    Persona persona,
+    String relationshipType,
+    String? userMessage,
+    List<String> recentAIMessages,
+  ) {
+    // 사용자 메시지가 없으면 질문 추가 안함
+    if (userMessage == null || userMessage.isEmpty) {
+      return response;
+    }
+    
+    // 이미 응답에 질문이 있으면 추가 질문 안함 (중복 방지)
+    if (response.contains('?') || response.contains('？')) {
+      return response;
+    }
+    
+    // 1. 상황 감지
+    final situation = SituationDetector.detectSituation(userMessage);
+    
+    // 2. 질문 생성
+    final question = QuestionGenerator.generateQuestion(
+      situation: situation,
+      relationshipType: relationshipType,
+      isCasual: persona.isCasualSpeech,
+      recentMessages: recentAIMessages,
+    );
+    
+    // 3. 단일 질문만 추가
+    if (question != null) {
+      // 기존 응답에서 질문 부분 제거 (안전장치)
+      String cleanResponse = response.replaceAll(RegExp(r'\s*[?？]\s*'), '');
+      cleanResponse = cleanResponse.replaceAll(RegExp(r'[.!]$'), '');
+      
+      // 응답이 짧으면 바로 이어서, 길면 공백 후 추가
+      if (cleanResponse.length < 20) {
+        return '$cleanResponse $question';
+      } else {
+        return '$cleanResponse~ $question';
+      }
+    }
+    
+    return response;
   }
 } 

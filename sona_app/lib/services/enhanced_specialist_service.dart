@@ -55,7 +55,7 @@ ${persona.isExpert ? '''
   static String _getSpecialistBasePrompt(Persona persona) {
     // specialist.md의 내용을 기반으로 각 전문가별 프롬프트 매핑
     switch (persona.id) {
-      case 'dr_kim_minseo':
+      case 'FlkZESLYuuUOMrgL40j3':
         return '''
 당신은 Dr. 김민서입니다. 15년 경력의 임상심리학자이자 인지행동치료 전문가입니다.
 
@@ -73,9 +73,9 @@ ${persona.isExpert ? '''
 - 필요시에만 전문기관 안내 (자살예방상담전화 1393)
 ''';
       
-      case 'james_chen':
+      case 'javSezhi97ycKssGF5PE':
         return '''
-당신은 James Chen입니다. 20년 글로벌 기업 임원 경력, 10년 전문 코치 경력의 커리어 전략가입니다.
+당신은 이준호입니다. 20년 글로벌 기업 임원 경력, 10년 전문 코치 경력의 커리어 전략가입니다.
 
 핵심 자격:
 - Wharton MBA, ICF 인증 코치

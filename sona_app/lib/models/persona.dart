@@ -71,40 +71,81 @@ class Persona {
   // 이미지 URL 헬퍼 메서드들 (Cloudflare R2 구조 대응)
   String? getThumbnailUrl() {
     // 새로운 R2 구조에서 썸네일 URL 가져오기
-    if (imageUrls != null && imageUrls!.containsKey('thumb')) {
-      final thumbUrls = imageUrls!['thumb'] as Map<String, dynamic>?;
-      // WebP 우선, 없으면 JPEG
-      return thumbUrls?['webp'] ?? thumbUrls?['jpg'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null) {
+      // 직접 thumb 키 확인
+      if (imageUrls!.containsKey('thumb')) {
+        final thumbUrls = imageUrls!['thumb'] as Map<String, dynamic>?;
+        // JPEG 우선 (WebP 디코딩 문제 회피)
+        return thumbUrls?['jpg'] ?? thumbUrls?['webp'] ?? photoUrls.firstOrNull;
+      }
+      // mainImageUrls 구조 확인
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey('thumb')) {
+          return mainUrls['thumb'] as String?;
+        }
+      }
     }
     return photoUrls.firstOrNull;
   }
   
   String? getMediumImageUrl() {
     // 프로필 보기용 중간 크기 이미지
-    if (imageUrls != null && imageUrls!.containsKey('medium')) {
-      final mediumUrls = imageUrls!['medium'] as Map<String, dynamic>?;
-      // WebP 우선, 없으면 JPEG
-      return mediumUrls?['webp'] ?? mediumUrls?['jpg'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null) {
+      // 직접 medium 키 확인
+      if (imageUrls!.containsKey('medium')) {
+        final mediumUrls = imageUrls!['medium'] as Map<String, dynamic>?;
+        // JPEG 우선 (WebP 디코딩 문제 회피)
+        return mediumUrls?['jpg'] ?? mediumUrls?['webp'] ?? photoUrls.firstOrNull;
+      }
+      // mainImageUrls 구조 확인 (윤미 같은 경우)
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey('medium')) {
+          // mainImageUrls.medium은 직접 URL 문자열
+          return mainUrls['medium'] as String?;
+        }
+      }
     }
     return photoUrls.firstOrNull;
   }
   
   String? getLargeImageUrl() {
     // 상세 보기용 큰 이미지
-    if (imageUrls != null && imageUrls!.containsKey('large')) {
-      final largeUrls = imageUrls!['large'] as Map<String, dynamic>?;
-      // WebP 우선, 없으면 JPEG
-      return largeUrls?['webp'] ?? largeUrls?['jpg'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null) {
+      // 직접 large 키 확인
+      if (imageUrls!.containsKey('large')) {
+        final largeUrls = imageUrls!['large'] as Map<String, dynamic>?;
+        // JPEG 우선 (WebP 디코딩 문제 회피)
+        return largeUrls?['jpg'] ?? largeUrls?['webp'] ?? photoUrls.firstOrNull;
+      }
+      // mainImageUrls 구조 확인
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey('large')) {
+          return mainUrls['large'] as String?;
+        }
+      }
     }
     return photoUrls.firstOrNull;
   }
   
   String? getSmallImageUrl() {
     // 작은 이미지 (카드용)
-    if (imageUrls != null && imageUrls!.containsKey('small')) {
-      final smallUrls = imageUrls!['small'] as Map<String, dynamic>?;
-      // WebP 우선, 없으면 JPEG
-      return smallUrls?['webp'] ?? smallUrls?['jpg'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null) {
+      // 직접 small 키 확인
+      if (imageUrls!.containsKey('small')) {
+        final smallUrls = imageUrls!['small'] as Map<String, dynamic>?;
+        // JPEG 우선 (WebP 디코딩 문제 회피)
+        return smallUrls?['jpg'] ?? smallUrls?['webp'] ?? photoUrls.firstOrNull;
+      }
+      // mainImageUrls 구조 확인
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey('small')) {
+          return mainUrls['small'] as String?;
+        }
+      }
     }
     return photoUrls.firstOrNull;
   }

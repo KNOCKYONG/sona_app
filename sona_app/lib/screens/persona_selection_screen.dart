@@ -7,8 +7,7 @@ import '../services/auth_service.dart';
 import '../services/persona_service.dart';
 import '../services/device_id_service.dart';
 import '../models/persona.dart';
-import '../widgets/persona_card_simple.dart';
-import '../widgets/persona_card_new.dart';
+import '../widgets/persona_card.dart';
 import '../widgets/tutorial_overlay.dart';
 import '../widgets/sona_logo.dart';
 import '../widgets/animated_action_button.dart';
@@ -1449,7 +1448,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         return const SizedBox.shrink();
                       }
                       // 소나 ID를 키로 사용하여 안정적인 렌더링 보장
-                      return PersonaCardNew(
+                      return PersonaCard(
                         key: ValueKey(personas[index].id),
                         persona: personas[index],
                         horizontalThresholdPercentage: horizontalThresholdPercentage.toDouble(),

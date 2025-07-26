@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../models/persona.dart';
+import '../models/persona.dart';
 
-/// Optimized PersonaCard with performance improvements:
+/// Optimized PersonaCard with performance improvements and R2 image support:
+/// - R2 image loading with fallback to photoUrls
 /// - Const constructors and pre-calculated values
 /// - Optimized overlay rendering with safer color calculations
 /// - Reduced widget rebuilds with separate stateless widgets
+/// - Expert badge support
 /// - Cached gradients and shadows
-/// - Lazy loading for images
 class PersonaCard extends StatefulWidget {
   final Persona persona;
   final double horizontalThresholdPercentage;
@@ -31,12 +32,11 @@ class _PersonaCardState extends State<PersonaCard> {
   // Pre-calculated static values
   static const _cardRadius = BorderRadius.all(Radius.circular(16));
   static const _gradientColors = [Colors.transparent, Color(0xCC000000)];
-  static const _shadowColor = Color(0x20000000);
   
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    _pageController = PageController(initialPage: 0);
   }
 
   @override
@@ -45,7 +45,109 @@ class _PersonaCardState extends State<PersonaCard> {
     super.dispose();
   }
 
+  Widget _buildPersonaImage() {
+    // R2 이미지 URL 확인
+    final r2ImageUrl = widget.persona.getMediumImageUrl();
+    
+    // 디버그 정보 출력
+    debugPrint('=== PersonaCard Image Debug ===');
+    debugPrint('Persona: ${widget.persona.name}');
+    debugPrint('imageUrls raw: ${widget.persona.imageUrls}');
+    debugPrint('getMediumImageUrl result: $r2ImageUrl');
+    
+    // 영문 URL은 인코딩 없이 그대로 사용
+    final urlToUse = r2ImageUrl;
+    
+    // R2 URL이 잘못된 형식인지 확인
+    if (urlToUse != null) {
+      debugPrint('🔷 Final URL to use: $urlToUse');
+    }
+    
+    // R2 이미지가 있고 유효한 경우 (커스텀 도메인 포함)
+    if (urlToUse != null && (urlToUse.contains('r2.dev') || urlToUse.contains('teamsona.work'))) {
+      // WebP URL을 JPEG로 변경 시도
+      final jpegUrl = urlToUse.endsWith('.webp') 
+          ? urlToUse.replaceAll('.webp', '.jpg')
+          : urlToUse;
+          
+      return CachedNetworkImage(
+        imageUrl: jpegUrl,  // JPEG URL 사용
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+        placeholder: (context, url) => Container(
+          color: Colors.grey[300],
+          child: const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFFFF6B9D),
+              strokeWidth: 2,
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) {
+          // JPEG 실패 시 WebP 시도
+          if (jpegUrl != r2ImageUrl && r2ImageUrl != null) {
+            return CachedNetworkImage(
+              imageUrl: r2ImageUrl!,  // 원본 WebP URL
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              placeholder: (context, url) => Container(
+                color: Colors.grey[300],
+                child: const Center(
+                  child: CircularProgressIndicator(
+                    color: Color(0xFFFF6B9D),
+                    strokeWidth: 2,
+                  ),
+                ),
+              ),
+              errorWidget: (context, url, error) => Container(
+                color: Colors.grey[300],
+                child: const Center(
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              memCacheWidth: 800,
+              memCacheHeight: 1200,
+            );
+          }
+          // 이미 JPEG인 경우 플레이스홀더
+          return Container(
+            color: Colors.grey[300],
+            child: const Center(
+              child: Icon(
+                Icons.person,
+                size: 60,
+                color: Colors.grey,
+              ),
+            ),
+          );
+        },
+        memCacheWidth: 800,
+        memCacheHeight: 1200,
+      );
+    }
+    
+    // R2 이미지가 없으면 플레이스홀더 표시
+    return Container(
+      color: Colors.grey[300],
+      child: const Center(
+        child: Icon(
+          Icons.person,
+          size: 60,
+          color: Colors.grey,
+        ),
+      ),
+    );
+  }
+  
   void _nextPhoto() {
+    if (widget.persona.photoUrls.isEmpty) return;
+    
     if (_currentPhotoIndex < widget.persona.photoUrls.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -55,6 +157,8 @@ class _PersonaCardState extends State<PersonaCard> {
   }
 
   void _previousPhoto() {
+    if (widget.persona.photoUrls.isEmpty) return;
+    
     if (_currentPhotoIndex > 0) {
       _pageController.previousPage(
         duration: const Duration(milliseconds: 300),
@@ -65,6 +169,9 @@ class _PersonaCardState extends State<PersonaCard> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if using R2 image
+    final hasR2Image = widget.persona.getMediumImageUrl()?.contains('r2.dev') ?? false;
+    
     return Card(
       elevation: 8,
       shape: const RoundedRectangleBorder(borderRadius: _cardRadius),
@@ -72,33 +179,25 @@ class _PersonaCardState extends State<PersonaCard> {
         borderRadius: _cardRadius,
         child: Stack(
           children: [
-            // Photo PageView
-            _PhotoPageView(
-              photoUrls: widget.persona.photoUrls,
-              pageController: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPhotoIndex = index;
-                });
-              },
-            ),
+            // Photo display (R2 image or PageView)
+            _buildPersonaImage(),
             
-            // Photo counter (top right)
-            if (widget.persona.photoUrls.length > 1)
+            // Photo counter (top right) - only for multiple photos and no R2 image
+            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
               _PhotoCounter(
                 current: _currentPhotoIndex,
                 total: widget.persona.photoUrls.length,
               ),
             
-            // Photo indicators (bottom)
-            if (widget.persona.photoUrls.length > 1)
+            // Photo indicators (bottom) - only for multiple photos and no R2 image
+            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
               _PhotoIndicators(
                 count: widget.persona.photoUrls.length,
                 currentIndex: _currentPhotoIndex,
               ),
             
-            // Navigation areas
-            if (widget.persona.photoUrls.length > 1)
+            // Navigation areas - only for multiple photos and no R2 image
+            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
               _NavigationAreas(
                 currentIndex: _currentPhotoIndex,
                 maxIndex: widget.persona.photoUrls.length - 1,
@@ -109,20 +208,30 @@ class _PersonaCardState extends State<PersonaCard> {
             // Gradient overlay
             const _GradientOverlay(),
             
-            // Persona info
-            _PersonaInfo(persona: widget.persona),
+            // Persona info with expert badge
+            _PersonaInfo(
+              persona: widget.persona,
+              isExpert: widget.persona.isExpert || 
+                        widget.persona.role == 'expert' || 
+                        widget.persona.role == 'specialist' || 
+                        widget.persona.name.contains('Dr.'),
+            ),
             
-            // Swipe overlay
+            // Swipe overlay with safe color handling
             _SwipeOverlay(
               horizontal: widget.horizontalThresholdPercentage,
               vertical: widget.verticalThresholdPercentage,
+              isExpert: widget.persona.isExpert || 
+                        widget.persona.role == 'expert' || 
+                        widget.persona.role == 'specialist' || 
+                        widget.persona.name.contains('Dr.'),
             ),
             
             // Relationship badge
             if (widget.persona.relationshipScore > 0)
               _RelationshipBadge(
                 persona: widget.persona,
-                hasMultiplePhotos: widget.persona.photoUrls.length > 1,
+                hasMultiplePhotos: widget.persona.photoUrls.length > 1 && !hasR2Image,
               ),
           ],
         ),
@@ -380,11 +489,15 @@ class _GradientOverlay extends StatelessWidget {
   }
 }
 
-// Persona info widget
+// Persona info widget with expert badge support
 class _PersonaInfo extends StatelessWidget {
   final Persona persona;
+  final bool isExpert;
 
-  const _PersonaInfo({required this.persona});
+  const _PersonaInfo({
+    required this.persona,
+    required this.isExpert,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -399,28 +512,29 @@ class _PersonaInfo extends StatelessWidget {
           Row(
             children: [
               // 전문가 뱃지를 이름 앞에 표시
-              if (persona.isExpert) ...[
+              if (isExpert) ...[
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF2196F3),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white, width: 1.5),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 2),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 4,
-                        offset: const Offset(0, 1),
+                        color: Colors.black.withValues(alpha: 0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.verified, color: Colors.white, size: 16),
-                      const SizedBox(width: 4),
-                      const Text('전문가', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                    ],
+                  child: const Icon(
+                    Icons.verified,
+                    color: Colors.white,
+                    size: 18,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -429,8 +543,8 @@ class _PersonaInfo extends StatelessWidget {
               // 이름
               Flexible(
                 child: Text(
-                  persona.isExpert && persona.profession != null
-                      ? 'Dr. ${persona.name}'
+                  isExpert && persona.profession != null
+                      ? (persona.name.contains('Dr.') ? persona.name : 'Dr. ${persona.name}')
                       : persona.name,
                   style: const TextStyle(
                     color: Colors.white,
@@ -457,9 +571,9 @@ class _PersonaInfo extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
+                  color: Colors.black.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
                 ),
                 child: Text(
                   persona.mbti,
@@ -473,6 +587,26 @@ class _PersonaInfo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
+          // 전문 분야 표시 (전문가인 경우)
+          if (isExpert && persona.profession != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
+              ),
+              child: Text(
+                persona.profession!,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
           Text(
             persona.description,
             style: const TextStyle(
@@ -480,7 +614,7 @@ class _PersonaInfo extends StatelessWidget {
               fontSize: 16,
               height: 1.4,
             ),
-            maxLines: 2,
+            maxLines: isExpert ? 1 : 2,
             overflow: TextOverflow.ellipsis,
           ),
           if (persona.photoUrls.length > 1) ...[
@@ -509,81 +643,108 @@ class _PersonaInfo extends StatelessWidget {
   }
 }
 
-// Swipe overlay widget with optimized color calculations
+// Swipe overlay widget with optimized color calculations and expert support
 class _SwipeOverlay extends StatelessWidget {
   final double horizontal;
   final double vertical;
+  final bool isExpert;
 
   const _SwipeOverlay({
     required this.horizontal,
     required this.vertical,
+    required this.isExpert,
   });
 
   Color _getOverlayColor() {
-    // Check for invalid values
-    if (horizontal.isNaN || horizontal.isInfinite || 
-        vertical.isNaN || vertical.isInfinite) {
-      return Colors.transparent;
-    }
+    // Complete safety checks with default transparent color
+    try {
+      // Check for invalid values
+      if (horizontal.isNaN || horizontal.isInfinite || 
+          vertical.isNaN || vertical.isInfinite) {
+        return const Color(0x00000000); // Fully transparent
+      }
 
-    // Clamp values to safe range
-    final safeHorizontal = horizontal.clamp(-1.0, 1.0);
-    final safeVertical = vertical.clamp(-1.0, 1.0);
-    
-    // Calculate opacity (0.0 to 0.5)
-    double opacity(double value) => (value.abs() * 0.5).clamp(0.0, 0.5);
+      // Clamp values to safe range
+      final safeHorizontal = horizontal.clamp(-1.0, 1.0);
+      final safeVertical = vertical.clamp(-1.0, 1.0);
+      
+      // Safe opacity calculation (0.0 to 0.5)
+      double calculateSafeOpacity(double value) {
+        final absValue = value.abs().clamp(0.0, 1.0);
+        return (absValue * 0.5).clamp(0.0, 0.5);
+      }
 
-    // Check thresholds and return appropriate color
-    if (safeVertical < -0.1) {
-      return Colors.blue.withValues(alpha: opacity(safeVertical));
-    } else if (safeHorizontal > 0.1) {
-      return const Color(0xFFFF6B9D).withValues(alpha: opacity(safeHorizontal));
-    } else if (safeHorizontal < -0.1) {
-      return Colors.grey.withValues(alpha: opacity(safeHorizontal));
+      // Check thresholds and return appropriate color
+      if (safeVertical < -0.1) {
+        final opacity = calculateSafeOpacity(safeVertical);
+        if (isExpert) {
+          // Experts use like color instead of super like
+          return Color.fromRGBO(255, 107, 157, opacity); // Pink (Like)
+        } else {
+          return Color.fromRGBO(25, 118, 210, opacity); // Blue (Super Like)
+        }
+      } else if (safeHorizontal > 0.1) {
+        final opacity = calculateSafeOpacity(safeHorizontal);
+        return Color.fromRGBO(255, 107, 157, opacity); // Pink (Like)
+      } else if (safeHorizontal < -0.1) {
+        final opacity = calculateSafeOpacity(safeHorizontal);
+        return Color.fromRGBO(158, 158, 158, opacity); // Grey (Pass)
+      }
+    } catch (e) {
+      debugPrint('Error in _getOverlayColor: $e');
     }
     
-    return Colors.transparent;
+    return const Color(0x00000000); // Default transparent
   }
 
   Widget? _getOverlayIcon() {
-    // Check for invalid values
-    if (horizontal.isNaN || horizontal.isInfinite || 
-        vertical.isNaN || vertical.isInfinite) {
-      return null;
-    }
+    try {
+      // Check for invalid values
+      if (horizontal.isNaN || horizontal.isInfinite || 
+          vertical.isNaN || vertical.isInfinite) {
+        return null;
+      }
 
-    final safeHorizontal = horizontal.clamp(-1.0, 1.0);
-    final safeVertical = vertical.clamp(-1.0, 1.0);
-    
-    if (safeVertical < -0.1) {
-      return const Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('💫', style: TextStyle(fontSize: 50)),
-          SizedBox(height: 8),
-          Text(
-            'SUPER\nLIKE',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              height: 1.2,
-            ),
+      final safeHorizontal = horizontal.clamp(-1.0, 1.0);
+      final safeVertical = vertical.clamp(-1.0, 1.0);
+      
+      if (safeVertical < -0.1) {
+        if (isExpert) {
+          // Experts show like icon instead of super like
+          return const Text('💕', style: TextStyle(fontSize: 60));
+        } else {
+          return const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('💫', style: TextStyle(fontSize: 50)),
+              SizedBox(height: 8),
+              Text(
+                'SUPER\nLIKE',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  height: 1.2,
+                ),
+              ),
+            ],
+          );
+        }
+      } else if (safeHorizontal > 0.1) {
+        return const Text('💕', style: TextStyle(fontSize: 60));
+      } else if (safeHorizontal < -0.1) {
+        return const Text(
+          '✕',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 60,
+            fontWeight: FontWeight.bold,
           ),
-        ],
-      );
-    } else if (safeHorizontal > 0.1) {
-      return const Text('💕', style: TextStyle(fontSize: 60));
-    } else if (safeHorizontal < -0.1) {
-      return const Text(
-        '✕',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 60,
-          fontWeight: FontWeight.bold,
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      debugPrint('Error in _getOverlayIcon: $e');
     }
     
     return null;

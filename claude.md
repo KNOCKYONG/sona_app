@@ -6,33 +6,120 @@
 **명령어**: `이미지 최적화`
 
 **기능**: 
-- `C:\Users\yong\Documents\personas` 폴더의 모든 페르소나 이미지를 자동으로 처리
+- `C:\Users\yong\Documents\personas` 폴더의 **모든** 페르소나 이미지를 로컬에서 최적화
+- 이미지가 있는 모든 폴더 자동 감지 및 처리
+- **한글 폴더명을 영문으로 자동 변환** (예: 상훈 -> sanghoon)
 - 5가지 크기로 최적화 (thumb: 150px, small: 300px, medium: 600px, large: 1200px, original)
-- WebP와 JPEG 두 가지 형식으로 생성
-- Cloudflare R2 Storage에 자동 업로드
-- Firebase personas 컬렉션의 imageUrls 필드 업데이트
-- 폴더가 없는 페르소나들의 imageUrls 필드 자동 정리
+- 고품질 JPEG 형식으로 생성 (품질: 95, 원본: 98)
+- **`assets/personas` 폴더에 영문 폴더명으로 저장**
+- 수동으로 Cloudflare R2에 업로드 후 '이미지 반영' 명령어 사용
 
-**실행 스크립트**: `python scripts/auto_persona_image_processor.py`
+**실행 스크립트**: 
+`python scripts/local_image_optimizer_english.py`
 
-**옵션**:
-- `--dry-run`: 실제 처리 없이 미리보기
-- `--force`: 기존 이미지가 있어도 강제 업데이트
-- `--source <path>`: 다른 소스 디렉토리 지정
+**한글-영문 매핑**:
+- 상훈 → sanghoon
+- Dr. 박지은 → dr-park-jieun
+- 수진 → sujin
+- 예림 → yerim
+- 예슬 → yeseul
+- 윤미 → yoonmi
+- 정훈 → jeonghoon
+- 지우 → jiwoo
+- 채연 → chaeyeon
+- 하연 → hayeon
+- 혜진 → hyejin
 
-**사용 예시**:
-```bash
-# 기본 실행
-python scripts/auto_persona_image_processor.py
+**프로세스**:
+1. **이미지 최적화 (로컬)**
+   - `C:\Users\yong\Documents\personas` 내 모든 디렉토리 검사
+   - 이미지 파일이 있는 폴더만 자동 선별
+   - 한글 폴더명을 영문으로 자동 변환
+   - 각 폴더의 첫 번째 이미지를 5가지 크기로 최적화
+   - `assets/personas/{영문명}/main_{크기}.jpg` 형태로 저장
 
-# 미리보기
-python scripts/auto_persona_image_processor.py --dry-run
+2. **수동 R2 업로드**
+   - `assets/personas` 폴더의 내용을 Cloudflare R2에 수동 업로드
+   - 경로 구조: `personas/{영문명}/main_{크기}.jpg`
 
-# 강제 업데이트
-python scripts/auto_persona_image_processor.py --force
+3. **Firebase 반영 ('이미지 반영' 명령어)**
+   - R2에 업로드된 이미지 경로 확인
+   - Firebase personas 컬렉션의 imageUrls 필드 업데이트
+   - 영문 폴더명 기반 URL 사용
 
-업로드가 완료된 최적화 이미지는 프로젝트 폴더 내에서 삭제할 것
+**최종 imageUrls 구조**:
+```json
+{
+  "imageUrls": {
+    "thumb": {"jpg": "https://teamsona.work/personas/영문명/main_thumb.jpg"},
+    "small": {"jpg": "https://teamsona.work/personas/영문명/main_small.jpg"},
+    "medium": {"jpg": "https://teamsona.work/personas/영문명/main_medium.jpg"},
+    "large": {"jpg": "https://teamsona.work/personas/영문명/main_large.jpg"},
+    "original": {"jpg": "https://teamsona.work/personas/영문명/main_original.jpg"}
+  },
+  "updatedAt": "2025-01-27T16:30:00.000Z"
+}
 ```
+
+예시 (상훈):
+```json
+{
+  "imageUrls": {
+    "thumb": {"jpg": "https://teamsona.work/personas/sanghoon/main_thumb.jpg"},
+    "small": {"jpg": "https://teamsona.work/personas/sanghoon/main_small.jpg"},
+    "medium": {"jpg": "https://teamsona.work/personas/sanghoon/main_medium.jpg"},
+    "large": {"jpg": "https://teamsona.work/personas/sanghoon/main_large.jpg"},
+    "original": {"jpg": "https://teamsona.work/personas/sanghoon/main_original.jpg"}
+  }
+}
+```
+
+---
+
+### 이미지 반영
+**명령어**: `이미지 반영`
+
+**기능**: 
+- Cloudflare R2에 업로드된 이미지를 Firebase에 반영
+- `assets/personas` 폴더 구조를 기반으로 페르소나 확인
+- Firebase personas 컬렉션의 imageUrls 필드 업데이트
+- 업데이트 시간 자동 기록
+
+**실행 스크립트**: 
+`python scripts/firebase_image_updater_english.py`
+
+**사전 요구사항**:
+- '이미지 최적화' 명령어 실행 완료
+- assets/personas 폴더의 이미지를 Cloudflare R2에 수동 업로드 완료
+
+**프로세스**:
+1. **페르소나 스캔**
+   - `assets/personas` 폴더의 하위 디렉토리 확인
+   - 5가지 크기의 이미지 파일이 모두 있는 페르소나만 선택
+
+2. **Firebase 업데이트**
+   - 각 페르소나의 Firebase 문서 조회
+   - imageUrls 필드를 R2 URL 구조로 업데이트
+   - 업데이트 시간 기록
+   - 생성된 임시 JSON 파일 삭제
+
+**실행 스크립트**: 
+```bash
+# 1단계: 이미지 처리 및 로컬 생성
+python scripts/upload_persona_images_to_r2.py
+
+# 2단계: R2 업로드 및 Firebase 업데이트 (자동화 예정)
+# 현재는 수동으로 MCP 명령 실행 필요
+
+# 3단계: 임시 파일 정리
+powershell -Command "Get-ChildItem -Path . -Filter '*.webp' | Remove-Item -Force; Get-ChildItem -Path . -Filter '*.jpg' | Remove-Item -Force; Get-ChildItem -Path . -Filter '*_results.json' | Remove-Item -Force"
+```
+
+**주의사항**:
+- Windows 환경에서 한글 폴더명 인코딩 문제 있을 수 있음
+- R2 업로드 시 URL 인코딩 자동 처리됨
+- Firebase MCP가 설치되어 있어야 함
+- Cloudflare R2 MCP가 설치되어 있어야 함
 
 ## 클로드 코드에서의 mcp-installer를 사용한 MCP (Model Context Protocol) 설치 및 설정 가이드 
 공통 주의사항

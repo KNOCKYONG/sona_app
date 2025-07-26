@@ -62,7 +62,8 @@ class PersonaService extends ChangeNotifier {
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
       final filtered = _allPersonas.where((persona) => 
         !_isPersonaRecentlySwiped(persona.id) && 
-        !matchedIds.contains(persona.id)
+        !matchedIds.contains(persona.id) &&
+        _hasR2Image(persona)  // Only include personas with R2 images
       ).toList();
       
       // Randomize the order
@@ -70,13 +71,14 @@ class PersonaService extends ChangeNotifier {
       _shuffledAvailablePersonas = filtered;
       _lastShuffleTime = now;
       
-      debugPrint('✅ Shuffled ${filtered.length} personas for swipe session');
+      debugPrint('✅ Shuffled ${filtered.length} personas with R2 images for swipe session');
     } else {
       // Update the existing shuffled list to exclude newly swiped/matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
       _shuffledAvailablePersonas = _shuffledAvailablePersonas!.where((persona) => 
         !_isPersonaRecentlySwiped(persona.id) && 
-        !matchedIds.contains(persona.id)
+        !matchedIds.contains(persona.id) &&
+        _hasR2Image(persona)  // Only include personas with R2 images
       ).toList();
     }
     
@@ -88,7 +90,8 @@ class PersonaService extends ChangeNotifier {
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
     }
-    return _matchedPersonas;
+    // Filter out personas without R2 images
+    return _matchedPersonas.where((persona) => _hasR2Image(persona)).toList();
   }
   
   Persona? get currentPersona => _currentPersona;
@@ -209,11 +212,11 @@ class PersonaService extends ChangeNotifier {
       }
     }
     
-    // Firebase 로드 실패 시 폴백 페르소나 사용
+    // Firebase 로드 실패 시 빈 리스트 사용
     if (!firebaseLoaded) {
-      debugPrint('❌ ALL FIREBASE ATTEMPTS FAILED - Using fallback personas');
-      _allPersonas = _getFallbackPersonas();
-      debugPrint('✅ Loaded ${_allPersonas.length} fallback personas for tutorial');
+      debugPrint('❌ ALL FIREBASE ATTEMPTS FAILED - Using empty persona list');
+      _allPersonas = [];
+      debugPrint('✅ Using empty persona list for tutorial');
     } else {
       debugPrint('🎉 TUTORIAL FIREBASE SUCCESS: ${_allPersonas.length} personas loaded!');
     }
@@ -259,13 +262,13 @@ class PersonaService extends ChangeNotifier {
     try {
       final success = await _loadFromFirebase();
       if (!success) {
-        debugPrint('Firebase failed, loading fallback personas...');
-        _allPersonas = _getFallbackPersonas();
-        debugPrint('✅ Loaded ${_allPersonas.length} fallback personas');
+        debugPrint('Firebase failed, using empty persona list...');
+        _allPersonas = [];
+        debugPrint('✅ Using empty persona list');
       }
     } catch (e) {
-      debugPrint('Error loading from Firebase: $e, using fallback');
-      _allPersonas = _getFallbackPersonas();
+      debugPrint('Error loading from Firebase: $e, using empty list');
+      _allPersonas = [];
     }
   }
 
@@ -966,7 +969,14 @@ class PersonaService extends ChangeNotifier {
       
       // Parse photoUrls - handle both string and array formats with validation
       List<String> photoUrls = [];
-      if (data['photoUrls'] != null) {
+      
+      // First check if R2 images are available in imageUrls field
+      if (data['imageUrls'] != null && data['imageUrls'] is Map) {
+        // R2 images are available, clear photoUrls to force using R2 images
+        photoUrls = [];
+        debugPrint('🎯 R2 images available for ${data['name']}, clearing photoUrls');
+      } else if (data['photoUrls'] != null) {
+        // No R2 images, use legacy photoUrls with validation
         if (data['photoUrls'] is List) {
           final rawUrls = List<String>.from(data['photoUrls']);
           photoUrls = _validateAndFilterPhotoUrls(rawUrls);
@@ -983,6 +993,22 @@ class PersonaService extends ChangeNotifier {
       final role = data['role'] ?? 'normal';
       final isSpecialist = role == 'specialist' || role == 'expert';
       
+      // Parse imageUrls for R2 storage
+      Map<String, dynamic>? imageUrls;
+      if (data['imageUrls'] != null) {
+        debugPrint('🔍 Parsing imageUrls for ${data['name']}:');
+        debugPrint('   Type: ${data['imageUrls'].runtimeType}');
+        debugPrint('   Value: ${data['imageUrls']}');
+        
+        if (data['imageUrls'] is Map) {
+          imageUrls = Map<String, dynamic>.from(data['imageUrls']);
+          debugPrint('   ✅ Parsed as Map: $imageUrls');
+        } else if (data['imageUrls'] is String) {
+          // Sometimes Firebase returns "[Object]" as a string
+          debugPrint('   ⚠️ imageUrls is String, might be corrupted data');
+        }
+      }
+      
       final persona = Persona(
         id: doc.id,
         name: data['name'] ?? '',
@@ -998,34 +1024,16 @@ class PersonaService extends ChangeNotifier {
         isExpert: data['isExpert'] ?? isSpecialist,  // Set isExpert based on role
         profession: data['profession'],
         role: role,
+        imageUrls: imageUrls,  // Add R2 image URLs
       );
-      
-      // 🔍 DEBUG: 전문가 페르소나 로깅
-      if (persona.isExpert || persona.role == 'specialist' || persona.role == 'expert' || persona.name.contains('Dr.')) {
-        debugPrint('🩺 SPECIALIST/EXPERT PERSONA LOADED: ${persona.name}');
-        debugPrint('   - ID: ${persona.id}');
-        debugPrint('   - Role: ${persona.role}');
-        debugPrint('   - IsExpert: ${persona.isExpert}');
-        debugPrint('   - Profession: ${persona.profession}');
-        debugPrint('   - Firebase Data: $data');
-      }
       
       return persona;
     }).toList();
   }
 
-  /// 🔧 Validate and filter photo URLs, replace invalid ones with placeholders
+  /// 🔧 Validate and filter photo URLs - only return valid URLs, no placeholders
   List<String> _validateAndFilterPhotoUrls(List<String> rawUrls) {
-    const List<String> placeholderUrls = [
-      'https://images.unsplash.com/photo-1494790108755-2616b64d4b6c?w=400&h=600&fit=crop&crop=face',
-      'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=600&fit=crop&crop=face',
-      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=face',
-      'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=600&fit=crop&crop=face',
-      'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=400&h=600&fit=crop&crop=face',
-    ];
-    
     List<String> validUrls = [];
-    int placeholderIndex = 0;
     
     for (String url in rawUrls) {
       String trimmedUrl = url.trim();
@@ -1036,20 +1044,8 @@ class PersonaService extends ChangeNotifier {
       // Check if URL is valid (starts with http or https)
       if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
         validUrls.add(trimmedUrl);
-        debugPrint('✅ Valid photo URL: $trimmedUrl');
-      } else {
-        // Invalid URL (like assets/images/...), replace with placeholder
-        final placeholderUrl = placeholderUrls[placeholderIndex % placeholderUrls.length];
-        validUrls.add(placeholderUrl);
-        placeholderIndex++;
-        debugPrint('❌ Invalid photo URL replaced: $trimmedUrl -> $placeholderUrl');
       }
-    }
-    
-    // Ensure at least one photo exists
-    if (validUrls.isEmpty) {
-      validUrls.add(placeholderUrls[0]);
-      debugPrint('📷 No valid photos found, using default placeholder');
+      // Skip invalid URLs (like assets/images/...) without replacement
     }
     
     return validUrls;
@@ -1132,6 +1128,11 @@ class PersonaService extends ChangeNotifier {
     final now = DateTime.now();
     _sessionSwipedPersonas.removeWhere((id, time) => 
       now.difference(time).inHours >= 24);
+  }
+  
+  /// Check if persona has R2 image
+  bool _hasR2Image(Persona persona) {
+    return persona.imageUrls != null && persona.imageUrls!.isNotEmpty;
   }
   
   /// Force reshuffle of available personas (useful after major changes)
@@ -1431,62 +1432,6 @@ class PersonaService extends ChangeNotifier {
       debugPrint('Error batch loading relationships: $e');
       return {};
     }
-  }
-
-  /// Get fallback personas when Firebase fails
-  List<Persona> _getFallbackPersonas() {
-    return [
-      Persona(
-        id: 'fallback_001',
-        name: '아리',
-        age: 22,
-        mbti: 'ENFP',
-        photoUrls: ['https://via.placeholder.com/400x600/FFB6C1/FFFFFF?text=아리'],
-        description: '음악, 영화, 여행을 좋아해요',
-        personality: '밝고 활발한 성격으로 새로운 경험을 좋아해요.',
-        gender: 'female',
-      ),
-      Persona(
-        id: 'fallback_002',
-        name: '민준',
-        age: 25,
-        mbti: 'INFJ',
-        photoUrls: ['https://via.placeholder.com/400x600/87CEEB/FFFFFF?text=민준'],
-        description: '독서, 사진, 카페를 좋아해요',
-        personality: '차분하고 신중한 성격으로 깊은 대화를 좋아해요.',
-        gender: 'male',
-      ),
-      Persona(
-        id: 'fallback_003',
-        name: '서연',
-        age: 24,
-        mbti: 'ESFJ',
-        photoUrls: ['https://via.placeholder.com/400x600/DDA0DD/FFFFFF?text=서연'],
-        description: '요리, 운동, 드라마를 좋아해요',
-        personality: '따뜻하고 배려심 많은 성격으로 사람들과 어울리는 걸 좋아해요.',
-        gender: 'female',
-      ),
-      Persona(
-        id: 'fallback_004',
-        name: '지훈',
-        age: 26,
-        mbti: 'INTJ',
-        photoUrls: ['https://via.placeholder.com/400x600/98FB98/FFFFFF?text=지훈'],
-        description: '게임, 프로그래밍, 과학을 좋아해요',
-        personality: '논리적이고 분석적인 성격으로 새로운 기술에 관심이 많아요.',
-        gender: 'male',
-      ),
-      Persona(
-        id: 'fallback_005',
-        name: '유나',
-        age: 23,
-        mbti: 'ISFP',
-        photoUrls: ['https://via.placeholder.com/400x600/F0E68C/FFFFFF?text=유나'],
-        description: '그림, 음악, 자연을 좋아해요',
-        personality: '예술적 감각이 뛰어나고 자유로운 영혼을 가지고 있어요.',
-        gender: 'female',
-      ),
-    ];
   }
 
   @override

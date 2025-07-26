@@ -23,7 +23,12 @@
       "mcp__serena-mcp__replace_regex",
       "mcp__serena-mcp__execute_shell_command",
       "mcp__serena-mcp__create_text_file",
-      "mcp__cloudflare-r2__r2_put_object"
+      "mcp__cloudflare-r2__r2_put_object",
+      "mcp__cloudflare-r2__r2_list_objects",
+      "mcp__cloudflare-r2__r2_delete_object",
+      "mcp__cloudflare-r2__r2_get_object",
+      "mcp",
+      "mcp__cloudflare-r2__r2_list_buckets"
     ],
     "deny": []
   }

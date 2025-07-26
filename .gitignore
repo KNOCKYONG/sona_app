@@ -114,3 +114,19 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 *.lnk
+
+# Serena configuration
+.serena/
+
+# Cloudflare Wrangler
+.wrangler/
+
+# Temporary scripts
+batch_update_personas.js
+update_persona_images.js
+
+# Generated/output files
+scripts/output/
+
+# Claude settings (local only)
+.claude/settings.local.json

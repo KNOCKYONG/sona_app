@@ -209,10 +209,11 @@ class PersonaService extends ChangeNotifier {
       }
     }
     
-    // Firebase 로드 실패 시 에러 로그만 남기기
+    // Firebase 로드 실패 시 폴백 페르소나 사용
     if (!firebaseLoaded) {
-      debugPrint('❌ ALL FIREBASE ATTEMPTS FAILED - No personas loaded');
-      _allPersonas = []; // 빈 리스트로 설정
+      debugPrint('❌ ALL FIREBASE ATTEMPTS FAILED - Using fallback personas');
+      _allPersonas = _getFallbackPersonas();
+      debugPrint('✅ Loaded ${_allPersonas.length} fallback personas for tutorial');
     } else {
       debugPrint('🎉 TUTORIAL FIREBASE SUCCESS: ${_allPersonas.length} personas loaded!');
     }
@@ -258,12 +259,13 @@ class PersonaService extends ChangeNotifier {
     try {
       final success = await _loadFromFirebase();
       if (!success) {
-        debugPrint('Failed to load from Firebase, personas list will be empty');
-        _allPersonas = [];
+        debugPrint('Firebase failed, loading fallback personas...');
+        _allPersonas = _getFallbackPersonas();
+        debugPrint('✅ Loaded ${_allPersonas.length} fallback personas');
       }
     } catch (e) {
-      debugPrint('Error loading from Firebase: $e');
-      _allPersonas = [];
+      debugPrint('Error loading from Firebase: $e, using fallback');
+      _allPersonas = _getFallbackPersonas();
     }
   }
 
@@ -1426,6 +1428,62 @@ class PersonaService extends ChangeNotifier {
       debugPrint('Error batch loading relationships: $e');
       return {};
     }
+  }
+
+  /// Get fallback personas when Firebase fails
+  List<Persona> _getFallbackPersonas() {
+    return [
+      Persona(
+        id: 'fallback_001',
+        name: '아리',
+        age: 22,
+        mbti: 'ENFP',
+        photoUrls: ['https://via.placeholder.com/400x600/FFB6C1/FFFFFF?text=아리'],
+        description: '음악, 영화, 여행을 좋아해요',
+        personality: '밝고 활발한 성격으로 새로운 경험을 좋아해요.',
+        gender: 'female',
+      ),
+      Persona(
+        id: 'fallback_002',
+        name: '민준',
+        age: 25,
+        mbti: 'INFJ',
+        photoUrls: ['https://via.placeholder.com/400x600/87CEEB/FFFFFF?text=민준'],
+        description: '독서, 사진, 카페를 좋아해요',
+        personality: '차분하고 신중한 성격으로 깊은 대화를 좋아해요.',
+        gender: 'male',
+      ),
+      Persona(
+        id: 'fallback_003',
+        name: '서연',
+        age: 24,
+        mbti: 'ESFJ',
+        photoUrls: ['https://via.placeholder.com/400x600/DDA0DD/FFFFFF?text=서연'],
+        description: '요리, 운동, 드라마를 좋아해요',
+        personality: '따뜻하고 배려심 많은 성격으로 사람들과 어울리는 걸 좋아해요.',
+        gender: 'female',
+      ),
+      Persona(
+        id: 'fallback_004',
+        name: '지훈',
+        age: 26,
+        mbti: 'INTJ',
+        photoUrls: ['https://via.placeholder.com/400x600/98FB98/FFFFFF?text=지훈'],
+        description: '게임, 프로그래밍, 과학을 좋아해요',
+        personality: '논리적이고 분석적인 성격으로 새로운 기술에 관심이 많아요.',
+        gender: 'male',
+      ),
+      Persona(
+        id: 'fallback_005',
+        name: '유나',
+        age: 23,
+        mbti: 'ISFP',
+        photoUrls: ['https://via.placeholder.com/400x600/F0E68C/FFFFFF?text=유나'],
+        description: '그림, 음악, 자연을 좋아해요',
+        personality: '예술적 감각이 뛰어나고 자유로운 영혼을 가지고 있어요.',
+        gender: 'female',
+      ),
+    ];
   }
 
   @override

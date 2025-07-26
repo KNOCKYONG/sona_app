@@ -17,8 +17,10 @@ import 'screens/profile_screen.dart';
 import 'screens/privacy_policy_screen.dart';
 import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
+import 'screens/test_auth_screen.dart';
 
 import 'services/auth_service.dart';
+import 'services/user_service.dart';
 import 'services/persona_service.dart';
 import 'services/chat_service.dart';
 import 'services/subscription_service.dart';
@@ -34,9 +36,18 @@ void main() async {
     print('Warning: .env file not found. Using default configuration.');
   }
   
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Firebase 중복 초기화 방지
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    if (e.toString().contains('duplicate-app')) {
+      print('Firebase already initialized');
+    } else {
+      rethrow;
+    }
+  }
 
   // Crashlytics 설정 (웹에서는 제한적으로 지원)
   if (!kIsWeb) {
@@ -70,6 +81,7 @@ class SonaApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
         ChangeNotifierProvider(create: (_) => SubscriptionService()),
         ChangeNotifierProxyProvider<PersonaService, ChatService>(
@@ -98,6 +110,7 @@ class SonaApp extends StatelessWidget {
           '/privacy-policy': (context) => const PrivacyPolicyScreen(),
           '/terms-of-service': (context) => const TermsOfServiceScreen(),
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
+          '/test-auth': (context) => const TestAuthScreen(),
         },
       ),
     );

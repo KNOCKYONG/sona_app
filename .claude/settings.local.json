@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(echo $OS)",
+      "Bash(npx -y @anaisbetts/mcp-installer install @upstash/context7-mcp@latest)",
+      "Bash(claude mcp:*)",
+      "Bash",
+      "WebFetch(domain:github.com)",
+      "mcp__firebase-mcp__firestore_list_documents",
+      "mcp__firebase-mcp__firestore_add_document",
+      "mcp__firebase-mcp__firestore_get_document",
+      "mcp__firebase-mcp__firestore_update_document",
+      "mcp__firebase-mcp__storage_upload",
+      "mcp__firebase-mcp__storage_list_files",
+      "mcp__mcp-installer__install_repo_mcp_server",
+      "WebFetch(domain:pub-f687f5cf7a7b4d598a1a73d0a7cca8b8.r2.dev)"
+    ],
+    "deny": []
+  }
+}

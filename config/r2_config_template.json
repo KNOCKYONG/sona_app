@@ -1,0 +1,7 @@
+{
+  "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+  "access_key_id": "YOUR_R2_ACCESS_KEY_ID",
+  "secret_access_key": "YOUR_R2_SECRET_ACCESS_KEY",
+  "bucket_name": "sona-personas",
+  "public_domain": "https://sona-personas.YOUR_ACCOUNT_ID.r2.cloudflarestorage.com"
+}

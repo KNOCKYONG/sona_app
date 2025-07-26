@@ -1,0 +1,19 @@
+{
+  "name": "sona_app",
+  "version": "1.0.0",
+  "description": "SONA는 ChatGPT 기반의 AI 페르소나와 자연스러운 대화를 나눌 수 있는 Flutter 앱입니다.",
+  "main": "firebase_mcp_setup.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  }
+}

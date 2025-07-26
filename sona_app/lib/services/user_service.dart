@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -262,15 +263,57 @@ class UserService extends ChangeNotifier {
     }
   }
 
-  // 프로필 이미지 업로드
+  // 프로필 이미지 업로드 (Firestore에 base64로 저장)
   Future<String?> _uploadProfileImage(String uid, File imageFile) async {
     try {
-      final ref = _storage.ref().child('users/$uid/profile.jpg');
-      final uploadTask = await ref.putFile(imageFile);
-      final downloadUrl = await uploadTask.ref.getDownloadURL();
-      return downloadUrl;
+      // 파일이 존재하는지 확인
+      if (!await imageFile.exists()) {
+        debugPrint('이미지 파일이 존재하지 않습니다: ${imageFile.path}');
+        return null;
+      }
+      
+      // 파일 크기 확인 (1MB 제한 - Firestore 문서 크기 제한)
+      final fileSize = await imageFile.length();
+      if (fileSize > 1024 * 1024) {
+        debugPrint('파일 크기가 너무 큽니다: ${fileSize / 1024 / 1024}MB');
+        _error = '이미지 파일 크기는 1MB 이하여야 합니다.';
+        return null;
+      }
+      
+      debugPrint('이미지 파일 크기: ${fileSize / 1024}KB');
+      
+      try {
+        debugPrint('Firestore에 base64로 프로필 이미지 저장 시도...');
+        
+        // 파일을 바이트로 읽기
+        final bytes = await imageFile.readAsBytes();
+        debugPrint('이미지 바이트 크기: ${bytes.length} bytes (${bytes.length / 1024}KB)');
+        
+        // base64로 인코딩
+        debugPrint('Base64 인코딩 시작...');
+        final base64String = base64Encode(bytes);
+        final dataUrl = 'data:image/jpeg;base64,$base64String';
+        debugPrint('Base64 인코딩 완료. 데이터 URL 길이: ${dataUrl.length}');
+        
+        // Firestore에 저장
+        debugPrint('Firestore에 저장 시작...');
+        await _firestore.collection('user_profile_images').doc(uid).set({
+          'imageData': dataUrl,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        
+        debugPrint('✅ Firestore에 프로필 이미지 저장 성공!');
+        _error = null; // 성공 시 에러 메시지 초기화
+        return dataUrl;
+      } catch (firestoreError) {
+        debugPrint('Firestore 저장 실패: $firestoreError');
+        _error = '이미지 저장에 실패했습니다. 다시 시도해주세요.';
+      }
+      
+      return null;
     } catch (e) {
-      debugPrint('프로필 이미지 업로드 실패: $e');
+      debugPrint('프로필 이미지 업로드 최종 실패: $e');
+      _error = _error ?? '이미지 업로드에 실패했습니다. 나중에 다시 시도해주세요.';
       return null;
     }
   }
@@ -397,6 +440,41 @@ class UserService extends ChangeNotifier {
       return query.docs.isEmpty;
     } catch (e) {
       debugPrint('닉네임 중복 확인 실패: $e');
+      return false;
+    }
+  }
+  
+  // 프로필 이미지만 업데이트
+  Future<bool> updateProfileImage(File profileImage) async {
+    try {
+      if (_currentUser == null) return false;
+      
+      _isLoading = true;
+      notifyListeners();
+      
+      // 프로필 이미지 업로드
+      final newProfileImageUrl = await _uploadProfileImage(
+        _currentUser!.uid,
+        profileImage,
+      );
+      
+      // Firestore 업데이트
+      await _firestore.collection('users').doc(_currentUser!.uid).update({
+        'profileImageUrl': newProfileImageUrl,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      
+      // 로컬 사용자 정보 업데이트
+      await _loadUserData(_currentUser!.uid);
+      
+      _isLoading = false;
+      notifyListeners();
+      
+      return true;
+    } catch (e) {
+      _error = '프로필 이미지 업데이트 실패: $e';
+      _isLoading = false;
+      notifyListeners();
       return false;
     }
   }

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'dart:convert';
 import '../services/auth_service.dart';
+import '../services/user_service.dart';
 import '../services/persona_service.dart';
 import '../services/chat_service.dart';
+import 'matched_personas_screen.dart';
+import 'profile_edit_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,12 +19,61 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final ImagePicker _picker = ImagePicker();
+  bool _isUploadingImage = false;
+  
+  Future<void> _pickAndUploadImage() async {
+    final XFile? image = await _picker.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 800,
+      maxHeight: 800,
+      imageQuality: 85,
+    );
+    
+    if (image != null && mounted) {
+      setState(() {
+        _isUploadingImage = true;
+      });
+      
+      try {
+        final userService = Provider.of<UserService>(context, listen: false);
+        final success = await userService.updateProfileImage(File(image.path));
+        
+        if (mounted) {
+          if (success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('프로필 사진이 업데이트되었습니다'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('프로필 사진 업데이트에 실패했습니다'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isUploadingImage = false;
+          });
+        }
+      }
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final userService = Provider.of<UserService>(context);
     final personaService = Provider.of<PersonaService>(context);
     final chatService = Provider.of<ChatService>(context);
-    final user = authService.user;
+    final firebaseUser = authService.user;
+    final appUser = userService.currentUser;
     final isLoggedIn = authService.isAuthenticated;
     
     // 로그인하지 않은 경우 로그인 유도 화면 표시
@@ -166,35 +221,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         child: ClipOval(
-                          child: user?.photoURL != null
-                              ? CachedNetworkImage(
-                                  imageUrl: user!.photoURL!,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => Container(
-                                    color: Colors.grey[200],
-                                    child: const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Color(0xFFFF6B9D),
-                                      ),
-                                    ),
-                                  ),
-                                  errorWidget: (context, url, error) => Container(
-                                    color: Colors.grey[200],
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 50,
-                                      color: Colors.grey[400],
+                          child: _isUploadingImage
+                              ? Container(
+                                  color: Colors.grey[200],
+                                  child: const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Color(0xFFFF6B9D),
                                     ),
                                   ),
                                 )
-                              : Container(
-                                  color: Colors.grey[200],
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 50,
-                                    color: Colors.grey[400],
-                                  ),
-                                ),
+                              : (appUser?.profileImageUrl != null || firebaseUser?.photoURL != null)
+                                  ? _buildProfileImage(
+                                      appUser?.profileImageUrl ?? firebaseUser?.photoURL ?? '',
+                                    )
+                                  : Container(
+                                      color: Colors.grey[200],
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 50,
+                                        color: Colors.grey[400],
+                                      ),
+                                    ),
                         ),
                       ),
                       Positioned(
@@ -213,14 +260,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           child: IconButton(
                             padding: EdgeInsets.zero,
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.camera_alt,
                               size: 18,
-                              color: Colors.white,
+                              color: _isUploadingImage ? Colors.white54 : Colors.white,
                             ),
-                            onPressed: () {
-                              // 프로필 사진 변경
-                            },
+                            onPressed: _isUploadingImage ? null : _pickAndUploadImage,
                           ),
                         ),
                       ),
@@ -230,7 +275,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   
                   // 사용자 이름
                   Text(
-                    user?.displayName ?? '소나 친구',
+                    appUser?.nickname ?? firebaseUser?.displayName ?? '소나 친구',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -240,9 +285,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 4),
                   
                   // 이메일
-                  if (user?.email != null)
+                  if (firebaseUser?.email != null)
                     Text(
-                      user!.email!,
+                      firebaseUser!.email!,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[600],
@@ -275,22 +320,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     title: '매칭된 소나',
                     subtitle: '${personaService.matchedPersonas.length}명의 소나와 대화중',
                     onTap: () {
-                      // 매칭된 소나 목록
-                    },
-                  ),
-                  _buildMenuItem(
-                    icon: Icons.history,
-                    title: '대화 기록',
-                    subtitle: '최근 대화 내역',
-                    onTap: () {
-                      // 대화 기록 화면
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MatchedPersonasScreen(),
+                        ),
+                      );
                     },
                   ),
                   _buildMenuItem(
                     icon: Icons.edit,
                     title: '프로필 편집',
                     onTap: () {
-                      // 프로필 편집 화면
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ProfileEditScreen(),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(height: 20),
@@ -375,6 +422,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildProfileImage(String imageUrl) {
+    // base64 이미지인 경우
+    if (imageUrl.startsWith('data:image')) {
+      final base64String = imageUrl.split(',').last;
+      return Image.memory(
+        base64Decode(base64String),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: Icon(
+              Icons.person,
+              size: 50,
+              color: Colors.grey[400],
+            ),
+          );
+        },
+      );
+    }
+    
+    // 일반 URL인 경우
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      fit: BoxFit.cover,
+      placeholder: (context, url) => Container(
+        color: Colors.grey[200],
+        child: const Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFFF6B9D),
+          ),
+        ),
+      ),
+      errorWidget: (context, url, error) => Container(
+        color: Colors.grey[200],
+        child: Icon(
+          Icons.person,
+          size: 50,
+          color: Colors.grey[400],
+        ),
+      ),
     );
   }
 

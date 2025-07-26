@@ -108,28 +108,12 @@ class _ChatScreenState extends State<ChatScreen> {
     final persona = personaService.currentPersona;
     
     if (persona != null) {
-      await Future.delayed(const Duration(seconds: 1));
-      
-      final welcomeMessage = Message(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+      // 초기 인사 메시지 전송
+      await chatService.sendInitialGreeting(
+        userId: authService.user?.uid ?? 'tutorial_user',
         personaId: persona.id,
-        content: _getPersonalizedWelcomeMessage(persona),
-        type: MessageType.text,
-        isFromUser: false,
-        emotion: EmotionType.happy,
+        persona: persona,
       );
-      
-      if (authService.isTutorialMode) {
-        setState(() {
-          chatService.messages.add(welcomeMessage);
-        });
-      } else {
-        await chatService.sendSystemMessage(
-          content: _getPersonalizedWelcomeMessage(persona),
-          userId: authService.user?.uid ?? 'tutorial_user',
-          personaId: persona.id,
-        );
-      }
     }
   }
 

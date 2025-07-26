@@ -1342,6 +1342,83 @@ class ChatService extends ChangeNotifier {
       debugPrint('❌ Error creating conversation summary: $e');
     }
   }
+
+  /// 페르소나와 첫 매칭 후 인사 메시지 전송
+  Future<void> sendInitialGreeting({
+    required String userId,
+    required String personaId,
+    required Persona persona,
+  }) async {
+    try {
+      // 이미 메시지가 있는지 확인
+      final existingMessages = _messagesByPersona[personaId] ?? [];
+      if (existingMessages.isNotEmpty) {
+        debugPrint('Messages already exist for persona $personaId, skipping initial greeting');
+        return;
+      }
+
+      // 페르소나의 성격에 맞는 인사 메시지 생성
+      String greetingContent;
+      EmotionType emotion;
+      
+      // 전문가 페르소나인지 확인
+      final isExpert = persona.isExpert || persona.role == 'expert' || persona.role == 'specialist';
+      
+      if (isExpert) {
+        // 전문가용 인사
+        greetingContent = '안녕하세요, ${persona.name}입니다. 만나서 반가워요. 편안하게 마음을 나눠주세요.';
+        emotion = EmotionType.thoughtful;
+      } else {
+        // 일반 페르소나 성격별 인사
+        switch (persona.personality.toLowerCase()) {
+          case 'cheerful':
+          case '밝고 활발한':
+            greetingContent = '안녕하세요! 만나서 정말 반가워요! 😊 우리 앞으로 즐거운 시간 보내요!';
+            emotion = EmotionType.happy;
+            break;
+          case 'gentle':
+          case '온화한':
+            greetingContent = '안녕하세요... 만나서 반가워요. 천천히 서로 알아가면 좋겠어요.';
+            emotion = EmotionType.shy;
+            break;
+          case 'mysterious':
+          case '신비로운':
+            greetingContent = '드디어 만났네요... 당신에 대해 궁금한 게 많아요.';
+            emotion = EmotionType.thoughtful;
+            break;
+          default:
+            greetingContent = '안녕하세요! 저는 ${persona.name}이에요. 만나서 반가워요!';
+            emotion = EmotionType.happy;
+        }
+      }
+
+      // 인사 메시지 생성 (일반 텍스트 메시지로)
+      final greetingMessage = Message(
+        id: _uuid.v4(),
+        personaId: personaId,
+        content: greetingContent,
+        type: MessageType.text,  // 시스템 메시지가 아닌 일반 텍스트
+        isFromUser: false,
+        timestamp: DateTime.now(),
+        emotion: emotion,
+        relationshipScoreChange: 0,
+      );
+
+      // 메시지 저장
+      _messages.add(greetingMessage);
+      _messagesByPersona[personaId] = [greetingMessage];
+      
+      // Firebase에 저장
+      if (userId != 'tutorial_user') {
+        _queueMessageForSaving(userId, personaId, greetingMessage);
+      }
+      
+      notifyListeners();
+      debugPrint('✅ Sent initial greeting from ${persona.name}');
+    } catch (e) {
+      debugPrint('❌ Error sending initial greeting: $e');
+    }
+  }
 }
 
 /// Helper classes

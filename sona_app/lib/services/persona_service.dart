@@ -619,6 +619,8 @@ class PersonaService extends ChangeNotifier {
           currentRelationship: relationshipType,
         );
         debugPrint('✅ Updated current persona: ${_currentPersona!.name} → $newScore');
+        // 🔥 즉시 UI 업데이트 (currentPersona 변경)
+        notifyListeners();
       }
       
       // Update matched personas list
@@ -639,6 +641,7 @@ class PersonaService extends ChangeNotifier {
       ));
       
       debugPrint('🔄 Relationship update completed successfully');
+      // 🔥 최종 UI 업데이트 (모든 변경사항 반영)
       notifyListeners();
     } catch (e) {
       debugPrint('❌ Error updating relationship score: $e');

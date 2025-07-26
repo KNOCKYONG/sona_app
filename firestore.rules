@@ -34,6 +34,15 @@ service cloud.firestore {
       allow read, write: if true; // 일별 품질 통계용 공개 접근
     }
     
+    // 🔧 NEW: 대화 메모리 및 요약 컬렉션 (튜토리얼 모드 지원)
+    match /memories/{document} {
+      allow read, write: if true; // 튜토리얼 모드를 위한 공개 접근
+    }
+    
+    match /summary/{document} {
+      allow read, write: if true; // 튜토리얼 모드를 위한 공개 접근
+    }
+    
     // 인증된 사용자의 개인 데이터
     match /users/{userId} {
       // 닉네임 중복 확인을 위한 읽기 권한 - 임시로 모든 사용자 허용

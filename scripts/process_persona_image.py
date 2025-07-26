@@ -72,7 +72,7 @@ def create_optimized_versions(input_path, output_dir, persona_name):
                     'dimensions': f'{new_width}x{new_height}'
                 })
                 
-                print(f"✅ Created {size_name}: {new_width}x{new_height}")
+                print(f"Created {size_name}: {new_width}x{new_height}")
             
             # Also save the original in WebP format
             orig_webp = persona_dir / 'main_original.webp'
@@ -86,7 +86,7 @@ def create_optimized_versions(input_path, output_dir, persona_name):
             return results
             
     except Exception as e:
-        print(f"❌ Error processing image: {e}")
+        print(f"Error processing image: {e}")
         return None
 
 def main():
@@ -99,19 +99,19 @@ def main():
     
     # Check if input file exists
     if not os.path.exists(args.input):
-        print(f"❌ Error: Input file '{args.input}' not found")
+        print(f"Error: Input file '{args.input}' not found")
         sys.exit(1)
     
-    print(f"🖼️  Processing image for persona: {args.persona}")
-    print(f"📁 Input: {args.input}")
-    print(f"📂 Output directory: {args.output}")
+    print(f"Processing image for persona: {args.persona}")
+    print(f"Input: {args.input}")
+    print(f"Output directory: {args.output}")
     print()
     
     results = create_optimized_versions(args.input, args.output, args.persona)
     
     if results:
-        print("\n✨ Processing complete!")
-        print("\n📋 Generated files:")
+        print("\nProcessing complete!")
+        print("\nGenerated files:")
         for result in results:
             print(f"  - {result['size']}: {result['dimensions']}")
             print(f"    WebP: {result['webp']}")

@@ -131,11 +131,25 @@ class OptimizedPersonaImage extends StatelessWidget {
   }
   
   String? _getImageUrl() {
-    // 새로운 이미지 구조 사용
+    // 새로운 R2 이미지 구조 사용
     if (persona.imageUrls != null) {
-      final mainUrls = persona.imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
-      if (mainUrls != null && mainUrls.containsKey(imageSize.suffix)) {
-        return mainUrls[imageSize.suffix];
+      // R2 구조에서 크기별 URL 가져오기
+      switch (imageSize) {
+        case ImageSize.thumbnail:
+          final thumbUrls = persona.imageUrls!['thumb'] as Map<String, dynamic>?;
+          return thumbUrls?['webp'] ?? thumbUrls?['jpg'];
+        case ImageSize.small:
+          final smallUrls = persona.imageUrls!['small'] as Map<String, dynamic>?;
+          return smallUrls?['webp'] ?? smallUrls?['jpg'];
+        case ImageSize.medium:
+          final mediumUrls = persona.imageUrls!['medium'] as Map<String, dynamic>?;
+          return mediumUrls?['webp'] ?? mediumUrls?['jpg'];
+        case ImageSize.large:
+          final largeUrls = persona.imageUrls!['large'] as Map<String, dynamic>?;
+          return largeUrls?['webp'] ?? largeUrls?['jpg'];
+        case ImageSize.original:
+          final originalUrls = persona.imageUrls!['original'] as Map<String, dynamic>?;
+          return originalUrls?['webp'];
       }
     }
     

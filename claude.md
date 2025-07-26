@@ -1,5 +1,39 @@
 # Claude.md
 
+## 자동화 명령어
+
+### 이미지 최적화
+**명령어**: `이미지 최적화`
+
+**기능**: 
+- `C:\Users\yong\Documents\personas` 폴더의 모든 페르소나 이미지를 자동으로 처리
+- 5가지 크기로 최적화 (thumb: 150px, small: 300px, medium: 600px, large: 1200px, original)
+- WebP와 JPEG 두 가지 형식으로 생성
+- Cloudflare R2 Storage에 자동 업로드
+- Firebase personas 컬렉션의 imageUrls 필드 업데이트
+- 폴더가 없는 페르소나들의 imageUrls 필드 자동 정리
+
+**실행 스크립트**: `python scripts/auto_persona_image_processor.py`
+
+**옵션**:
+- `--dry-run`: 실제 처리 없이 미리보기
+- `--force`: 기존 이미지가 있어도 강제 업데이트
+- `--source <path>`: 다른 소스 디렉토리 지정
+
+**사용 예시**:
+```bash
+# 기본 실행
+python scripts/auto_persona_image_processor.py
+
+# 미리보기
+python scripts/auto_persona_image_processor.py --dry-run
+
+# 강제 업데이트
+python scripts/auto_persona_image_processor.py --force
+
+업로드가 완료된 최적화 이미지는 프로젝트 폴더 내에서 삭제할 것
+```
+
 ## 클로드 코드에서의 mcp-installer를 사용한 MCP (Model Context Protocol) 설치 및 설정 가이드 
 공통 주의사항
 1. 현재 사용 환경을 확인할 것. 모르면 사용자에게 물어볼 것. 

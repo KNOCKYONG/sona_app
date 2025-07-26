@@ -68,30 +68,52 @@ class Persona {
     return getRelationshipType().index >= RelationshipType.crush.index;
   }
   
-  // 이미지 URL 헬퍼 메서드들
+  // 이미지 URL 헬퍼 메서드들 (Cloudflare R2 구조 대응)
   String? getThumbnailUrl() {
-    // 새로운 구조에서 썸네일 URL 가져오기
-    if (imageUrls != null && imageUrls!.containsKey('mainImageUrls')) {
-      final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
-      return mainUrls?['thumb'] ?? photoUrls.firstOrNull;
+    // 새로운 R2 구조에서 썸네일 URL 가져오기
+    if (imageUrls != null && imageUrls!.containsKey('thumb')) {
+      final thumbUrls = imageUrls!['thumb'] as Map<String, dynamic>?;
+      // WebP 우선, 없으면 JPEG
+      return thumbUrls?['webp'] ?? thumbUrls?['jpg'] ?? photoUrls.firstOrNull;
     }
     return photoUrls.firstOrNull;
   }
   
   String? getMediumImageUrl() {
     // 프로필 보기용 중간 크기 이미지
-    if (imageUrls != null && imageUrls!.containsKey('mainImageUrls')) {
-      final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
-      return mainUrls?['medium'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null && imageUrls!.containsKey('medium')) {
+      final mediumUrls = imageUrls!['medium'] as Map<String, dynamic>?;
+      // WebP 우선, 없으면 JPEG
+      return mediumUrls?['webp'] ?? mediumUrls?['jpg'] ?? photoUrls.firstOrNull;
     }
     return photoUrls.firstOrNull;
   }
   
   String? getLargeImageUrl() {
     // 상세 보기용 큰 이미지
-    if (imageUrls != null && imageUrls!.containsKey('mainImageUrls')) {
-      final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
-      return mainUrls?['large'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null && imageUrls!.containsKey('large')) {
+      final largeUrls = imageUrls!['large'] as Map<String, dynamic>?;
+      // WebP 우선, 없으면 JPEG
+      return largeUrls?['webp'] ?? largeUrls?['jpg'] ?? photoUrls.firstOrNull;
+    }
+    return photoUrls.firstOrNull;
+  }
+  
+  String? getSmallImageUrl() {
+    // 작은 이미지 (카드용)
+    if (imageUrls != null && imageUrls!.containsKey('small')) {
+      final smallUrls = imageUrls!['small'] as Map<String, dynamic>?;
+      // WebP 우선, 없으면 JPEG
+      return smallUrls?['webp'] ?? smallUrls?['jpg'] ?? photoUrls.firstOrNull;
+    }
+    return photoUrls.firstOrNull;
+  }
+  
+  String? getOriginalImageUrl() {
+    // 원본 이미지
+    if (imageUrls != null && imageUrls!.containsKey('original')) {
+      final originalUrls = imageUrls!['original'] as Map<String, dynamic>?;
+      return originalUrls?['webp'] ?? photoUrls.firstOrNull;
     }
     return photoUrls.firstOrNull;
   }

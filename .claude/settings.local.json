@@ -22,7 +22,8 @@
       "mcp__firebase-mcp__firestore_list_collections",
       "mcp__serena-mcp__replace_regex",
       "mcp__serena-mcp__execute_shell_command",
-      "mcp__serena-mcp__create_text_file"
+      "mcp__serena-mcp__create_text_file",
+      "mcp__cloudflare-r2__r2_put_object"
     ],
     "deny": []
   }

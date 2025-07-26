@@ -253,7 +253,7 @@ class _PersonaCardNewState extends State<PersonaCardNew> {
                       }
                       
                       return CachedNetworkImage(
-                        imageUrl: widget.persona.photoUrls[index],
+                        imageUrl: widget.persona.getMediumImageUrl() ?? widget.persona.photoUrls[index],
                         fit: BoxFit.cover,
                         width: double.infinity,
                         height: double.infinity,

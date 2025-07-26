@@ -19,6 +19,7 @@ import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
 import 'screens/test_auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
+import 'screens/settings_screen.dart';
 
 import 'services/auth_service.dart';
 import 'services/user_service.dart';
@@ -113,6 +114,7 @@ class SonaApp extends StatelessWidget {
           '/terms-of-service': (context) => const TermsOfServiceScreen(),
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
           '/test-auth': (context) => const TestAuthScreen(),
+          '/settings': (context) => const SettingsScreen(),
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int _currentPage = 0;
   bool _isCheckingNickname = false;
   bool _isNicknameAvailable = true;
+  Timer? _nicknameCheckTimer;
 
   @override
   void dispose() {
@@ -49,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _nicknameController.dispose();
     _introController.dispose();
     _pageController.dispose();
+    _nicknameCheckTimer?.cancel();
     super.dispose();
   }
 
@@ -212,11 +215,124 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _nextPage() {
-    if (_currentPage < 3) {
+    // 현재 페이지의 유효성 검사
+    bool canProceed = false;
+    
+    switch (_currentPage) {
+      case 0: // 기본 정보 페이지
+        canProceed = _validateBasicInfo();
+        break;
+      case 1: // 프로필 정보 페이지  
+        canProceed = _validateProfileInfo();
+        break;
+      case 2: // 선호 설정 페이지
+        canProceed = _validatePreferences();
+        break;
+    }
+    
+    if (canProceed && _currentPage < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+    }
+  }
+  
+  bool _validateBasicInfo() {
+    // 이메일 가입인 경우
+    if (!widget.isGoogleSignUp) {
+      // 이메일 검사
+      if (_emailController.text.isEmpty) {
+        _showErrorSnackBar('이메일을 입력해주세요');
+        return false;
+      }
+      if (!_emailController.text.contains('@')) {
+        _showErrorSnackBar('올바른 이메일 형식이 아닙니다');
+        return false;
+      }
+      
+      // 비밀번호 검사
+      if (_passwordController.text.isEmpty) {
+        _showErrorSnackBar('비밀번호를 입력해주세요');
+        return false;
+      }
+      if (_passwordController.text.length < 6) {
+        _showErrorSnackBar('비밀번호는 6자 이상이어야 합니다');
+        return false;
+      }
+    }
+    
+    // 닉네임 검사
+    if (_nicknameController.text.isEmpty) {
+      _showErrorSnackBar('닉네임을 입력해주세요');
+      return false;
+    }
+    if (_nicknameController.text.length < 2 || _nicknameController.text.length > 10) {
+      _showErrorSnackBar('닉네임은 2-10자여야 합니다');
+      return false;
+    }
+    if (!_isNicknameAvailable) {
+      _showErrorSnackBar('이미 사용 중인 닉네임입니다');
+      return false;
+    }
+    
+    return true;
+  }
+  
+  bool _validateProfileInfo() {
+    // 성별 검사 (선택사항이므로 체크하지 않음)
+    
+    // 생년월일 검사 (필수)
+    if (_selectedBirth == null) {
+      _showErrorSnackBar('생년월일을 선택해주세요');
+      return false;
+    }
+    
+    // 자기소개는 선택사항이므로 체크하지 않음
+    
+    return true;
+  }
+  
+  bool _validatePreferences() {
+    // 선호 성별과 나이 범위는 기본값이 있으므로 체크하지 않음
+    return true;
+  }
+  
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+  
+  bool _canProceedToNextPage() {
+    switch (_currentPage) {
+      case 0: // 기본 정보 페이지
+        // 이메일 가입인 경우
+        if (!widget.isGoogleSignUp) {
+          if (_emailController.text.isEmpty || 
+              !_emailController.text.contains('@') ||
+              _passwordController.text.isEmpty ||
+              _passwordController.text.length < 6) {
+            return false;
+          }
+        }
+        // 닉네임 검사
+        return _nicknameController.text.length >= 2 && 
+               _nicknameController.text.length <= 10 &&
+               _isNicknameAvailable &&
+               !_isCheckingNickname;
+               
+      case 1: // 프로필 정보 페이지
+        return _selectedBirth != null;
+        
+      case 2: // 선호 설정 페이지
+        return true; // 기본값이 있으므로 항상 true
+        
+      default:
+        return false;
     }
   }
 
@@ -288,15 +404,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     
                     if (_currentPage < 3)
                       ElevatedButton(
-                        onPressed: _nextPage,
+                        onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.primaryColor,
+                          backgroundColor: _canProceedToNextPage() 
+                              ? AppTheme.primaryColor 
+                              : Colors.grey[300],
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
                             vertical: 12,
                           ),
                         ),
-                        child: const Text('다음'),
+                        child: Text(
+                          '다음',
+                          style: TextStyle(
+                            color: _canProceedToNextPage() 
+                                ? Colors.white 
+                                : Colors.grey[600],
+                          ),
+                        ),
                       )
                     else
                       ElevatedButton(
@@ -356,7 +481,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(
-                labelText: '이메일',
+                labelText: '이메일 *',
                 hintText: 'example@email.com',
                 prefixIcon: Icon(Icons.email_outlined),
               ),
@@ -376,7 +501,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             TextFormField(
               controller: _passwordController,
               decoration: const InputDecoration(
-                labelText: '비밀번호',
+                labelText: '비밀번호 *',
                 hintText: '6자 이상',
                 prefixIcon: Icon(Icons.lock_outline),
               ),
@@ -398,7 +523,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TextFormField(
             controller: _nicknameController,
             decoration: InputDecoration(
-              labelText: '닉네임',
+              labelText: '닉네임 *',
               hintText: '2-10자',
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
@@ -422,9 +547,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : null,
             ),
             onChanged: (value) {
-              if (value.length >= 2) {
-                _checkNicknameAvailability(value);
+              // 타이머 취소
+              _nicknameCheckTimer?.cancel();
+              
+              // 닉네임이 비어있거나 너무 짧으면 검사하지 않음
+              if (value.isEmpty || value.length < 2) {
+                setState(() {
+                  _isNicknameAvailable = true;
+                  _isCheckingNickname = false;
+                });
+                return;
               }
+              
+              // 500ms 후에 중복 확인
+              setState(() {
+                _isCheckingNickname = true;
+              });
+              
+              _nicknameCheckTimer = Timer(const Duration(milliseconds: 500), () {
+                _checkNicknameAvailability(value);
+              });
             },
             validator: (value) {
               if (value == null || value.isEmpty) {

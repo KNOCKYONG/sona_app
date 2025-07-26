@@ -1331,6 +1331,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     Widget scaffold = Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Consumer<AuthService>(
           builder: (context, authService, child) {
             return SonaLogo(
@@ -1340,35 +1341,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           },
         ),
         centerTitle: true,
-        actions: [
-          Consumer<AuthService>(
-            builder: (context, authService, child) {
-              if (authService.isTutorialMode) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextButton(
-                      onPressed: () => _showTutorialExitDialog(),
-                      child: const Text(
-                        '로그인하기',
-                        style: TextStyle(
-                          color: Color(0xFFFF6B9D),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                );
-              }
-              return IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/profile');
-                },
-              );
-            },
-          ),
-        ],
       ),
       body: Consumer<PersonaService>(
         builder: (context, personaService, child) {

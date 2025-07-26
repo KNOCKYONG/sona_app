@@ -18,6 +18,7 @@ import 'screens/privacy_policy_screen.dart';
 import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
 import 'screens/test_auth_screen.dart';
+import 'screens/main_navigation_screen.dart';
 
 import 'services/auth_service.dart';
 import 'services/user_service.dart';
@@ -103,10 +104,11 @@ class SonaApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/welcome': (context) => const WelcomeScreen(),
-          '/persona-selection': (context) => const PersonaSelectionScreen(),
+          '/main': (context) => const MainNavigationScreen(),
+          '/persona-selection': (context) => const MainNavigationScreen(),
           '/chat': (context) => const ChatScreen(),
-          '/chat-list': (context) => const ChatListScreen(),
-          '/profile': (context) => const ProfileScreen(),
+          '/chat-list': (context) => const MainNavigationScreen(),
+          '/profile': (context) => const MainNavigationScreen(),
           '/privacy-policy': (context) => const PrivacyPolicyScreen(),
           '/terms-of-service': (context) => const TermsOfServiceScreen(),
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),

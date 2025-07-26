@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       );
       
       if (user != null && mounted) {
-        Navigator.of(context).pushReplacementNamed('/persona-selection');
+        Navigator.of(context).pushReplacementNamed('/main');
       } else if (mounted && userService.error != null) {
         _showErrorSnackBar(userService.error!);
       }
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         // 기존 사용자인지 확인
         if (userService.currentUser != null) {
           // 기존 사용자 - 페르소나 선택 화면으로
-          Navigator.of(context).pushReplacementNamed('/persona-selection');
+          Navigator.of(context).pushReplacementNamed('/main');
         } else {
           // 신규 사용자 - 추가 정보 입력 화면으로
           Navigator.of(context).push(
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       final success = await authService.startTutorialMode();
       
       if (success && mounted) {
-        Navigator.of(context).pushReplacementNamed('/persona-selection');
+        Navigator.of(context).pushReplacementNamed('/main');
       } else if (mounted) {
         _showErrorSnackBar('튜토리얼 모드를 시작할 수 없습니다.');
       }

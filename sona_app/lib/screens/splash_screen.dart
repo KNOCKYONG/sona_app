@@ -58,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen>
       await personaService.initialize(userId: authService.currentUser?.uid);
       
       if (authService.isAuthenticated) {
-        Navigator.of(context).pushReplacementNamed('/persona-selection');
+        Navigator.of(context).pushReplacementNamed('/main');
       } else {
         _showWelcomeDialog();
       }
@@ -194,7 +194,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
       
       if (success) {
-        Navigator.of(context).pushReplacementNamed('/persona-selection');
+        Navigator.of(context).pushReplacementNamed('/main');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

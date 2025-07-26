@@ -127,6 +127,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        automaticallyImplyLeading: false,
         title: Row(
           children: [
             const SonaLogoSmall(size: 32),
@@ -141,7 +142,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             ),
           ],
         ),
-                  actions: [
+        actions: [
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.black87),
             onPressed: () async {
@@ -194,12 +195,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
             icon: const Icon(Icons.search, color: Colors.black87),
             onPressed: () {
               // 검색 기능 추가 예정
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.favorite, color: Color(0xFFFF6B9D)),
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, '/persona-selection');
             },
           ),
         ],
@@ -425,45 +420,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
               );
             },
           );
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // 채팅 탭 선택
-        selectedItemColor: const Color(0xFFFF6B9D),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: '채팅',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: '매칭',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '프로필',
-          ),
-        ],
-        onTap: (index) {
-          switch (index) {
-            case 0:
-              Navigator.pushReplacementNamed(context, '/');
-              break;
-            case 1:
-              // 현재 화면
-              break;
-            case 2:
-              Navigator.pushReplacementNamed(context, '/persona-selection');
-              break;
-            case 3:
-              Navigator.pushReplacementNamed(context, '/profile');
-              break;
-          }
         },
       ),
     );

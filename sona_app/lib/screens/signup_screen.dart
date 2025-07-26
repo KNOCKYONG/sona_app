@@ -178,7 +178,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/persona-selection');
+        Navigator.pushReplacementNamed(context, '/main');
       }
     } else {
       // 이메일/비밀번호 회원가입
@@ -199,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/persona-selection');
+        Navigator.pushReplacementNamed(context, '/main');
       }
     }
     

@@ -296,6 +296,7 @@ class PersonaService extends ChangeNotifier {
           relationshipScore: cachedRelationship.score,
           currentRelationship: _getRelationshipTypeFromScore(cachedRelationship.score),
           isCasualSpeech: cachedRelationship.isCasualSpeech,
+          imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
         notifyListeners();
         return;
@@ -308,6 +309,7 @@ class PersonaService extends ChangeNotifier {
           relationshipScore: relationshipData['relationshipScore'] ?? 50,
           currentRelationship: _getRelationshipTypeFromScore(relationshipData['relationshipScore'] ?? 50),
           isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
+          imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
         
         // Cache the relationship
@@ -361,7 +363,7 @@ class PersonaService extends ChangeNotifier {
         'lastInteraction': FieldValue.serverTimestamp(),
         'personaName': persona.name,
         'personaAge': persona.age,
-        'personaPhotoUrl': (persona.photoUrls.isNotEmpty) ? persona.photoUrls.first : '',
+        'personaPhotoUrl': persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
       };
 
       // Queue for batch operation
@@ -372,6 +374,7 @@ class PersonaService extends ChangeNotifier {
         relationshipScore: 50,
         currentRelationship: RelationshipType.friend,
         isCasualSpeech: false,
+        imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -434,7 +437,7 @@ class PersonaService extends ChangeNotifier {
         'lastInteraction': FieldValue.serverTimestamp(),
         'personaName': persona.name,
         'personaAge': persona.age,
-        'personaPhotoUrl': (persona.photoUrls.isNotEmpty) ? persona.photoUrls.first : '',
+        'personaPhotoUrl': persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
       };
 
       // Queue for batch operation
@@ -620,6 +623,7 @@ class PersonaService extends ChangeNotifier {
         _currentPersona = _currentPersona?.copyWith(
           relationshipScore: newScore,
           currentRelationship: relationshipType,
+          imageUrls: _currentPersona?.imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated current persona: ${_currentPersona!.name} → $newScore');
         // 🔥 즉시 UI 업데이트 (currentPersona 변경)
@@ -632,6 +636,7 @@ class PersonaService extends ChangeNotifier {
         _matchedPersonas[index] = _matchedPersonas[index].copyWith(
           relationshipScore: newScore,
           currentRelationship: relationshipType,
+          imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated matched persona: ${_matchedPersonas[index].name} → $newScore');
       }
@@ -795,6 +800,7 @@ class PersonaService extends ChangeNotifier {
             relationshipScore: relationshipScore,
             currentRelationship: _getRelationshipTypeFromScore(relationshipScore),
             isCasualSpeech: data['isCasualSpeech'] ?? false,
+            imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           
           _matchedPersonas.add(matchedPersona);
@@ -1163,6 +1169,7 @@ class PersonaService extends ChangeNotifier {
         relationshipScore: 50,
         currentRelationship: RelationshipType.friend,
         isCasualSpeech: false,
+        imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -1205,6 +1212,7 @@ class PersonaService extends ChangeNotifier {
             isExpert: isExpertPersona,
             role: isExpertPersona ? 'expert' : persona.role,
             profession: isExpertPersona ? '임상심리학' : persona.profession,
+            imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           
           // 🔍 DEBUG: 전문가 페르소나 확인
@@ -1255,6 +1263,7 @@ class PersonaService extends ChangeNotifier {
       isExpert: isExpertPersona,
       role: isExpertPersona ? 'expert' : persona.role,
       profession: isExpertPersona ? '임상심리학' : persona.profession,
+      imageUrls: persona.imageUrls,  // Preserve imageUrls
     );
     
     // For tutorial mode, directly set the persona without Firebase operations
@@ -1294,6 +1303,8 @@ class PersonaService extends ChangeNotifier {
     try {
       final docId = '${_currentUserId}_$personaId';
       
+      final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+      
       final passData = {
         'userId': _currentUserId!,
         'personaId': personaId,
@@ -1302,6 +1313,9 @@ class PersonaService extends ChangeNotifier {
         'isActive': false,
         'passedAt': FieldValue.serverTimestamp(),
         'createdAt': FieldValue.serverTimestamp(),
+        'personaName': persona?.name ?? '',
+        'personaAge': persona?.age ?? 0,
+        'personaPhotoUrl': '',  // No photo URL for passed personas
       };
 
       await _firestore
@@ -1351,6 +1365,7 @@ class PersonaService extends ChangeNotifier {
             relationshipScore: relationshipData['relationshipScore'] ?? persona.relationshipScore,
             currentRelationship: _getRelationshipTypeFromScore(relationshipData['relationshipScore'] ?? persona.relationshipScore),
             isCasualSpeech: relationshipData['isCasualSpeech'] ?? persona.isCasualSpeech,
+            imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           refreshedPersonas.add(refreshedPersona);
           

@@ -152,9 +152,19 @@ class Persona {
   
   String? getOriginalImageUrl() {
     // 원본 이미지
-    if (imageUrls != null && imageUrls!.containsKey('original')) {
-      final originalUrls = imageUrls!['original'] as Map<String, dynamic>?;
-      return originalUrls?['webp'] ?? photoUrls.firstOrNull;
+    if (imageUrls != null) {
+      // 직접 original 키 확인
+      if (imageUrls!.containsKey('original')) {
+        final originalUrls = imageUrls!['original'] as Map<String, dynamic>?;
+        return originalUrls?['jpg'] ?? originalUrls?['webp'] ?? photoUrls.firstOrNull;
+      }
+      // mainImageUrls 구조 확인
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey('original')) {
+          return mainUrls['original'] as String?;
+        }
+      }
     }
     return photoUrls.firstOrNull;
   }
@@ -164,26 +174,45 @@ class Persona {
     final urls = <String>[];
     
     if (imageUrls != null) {
-      // 메인 이미지
-      final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
-      if (mainUrls != null && mainUrls.containsKey(size)) {
-        urls.add(mainUrls[size]);
+      // 현재 Firebase 구조에서 직접 size 키 확인
+      if (imageUrls!.containsKey(size)) {
+        final sizeUrls = imageUrls![size] as Map<String, dynamic>?;
+        if (sizeUrls != null && sizeUrls.containsKey('jpg')) {
+          urls.add(sizeUrls['jpg'] as String);
+        }
       }
       
-      // 추가 이미지들
-      final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
-      if (additionalUrls != null) {
-        additionalUrls.forEach((key, value) {
-          final urlMap = value as Map<String, dynamic>;
-          if (urlMap.containsKey(size)) {
-            urls.add(urlMap[size]);
+      // 대체 구조: mainImageUrls가 있는 경우
+      else if (imageUrls!.containsKey('mainImageUrls')) {
+        final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
+        if (mainUrls != null && mainUrls.containsKey(size)) {
+          urls.add(mainUrls[size]);
+        }
+        
+        // 추가 이미지들 - 순서대로 정렬
+        final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
+        if (additionalUrls != null) {
+          // image1, image2, ... 순서로 정렬
+          final sortedKeys = additionalUrls.keys.toList()
+            ..sort((a, b) {
+              // 숫자 추출하여 정렬
+              final numA = int.tryParse(a.replaceAll('image', '')) ?? 0;
+              final numB = int.tryParse(b.replaceAll('image', '')) ?? 0;
+              return numA.compareTo(numB);
+            });
+          
+          for (final key in sortedKeys) {
+            final urlMap = additionalUrls[key] as Map<String, dynamic>;
+            if (urlMap.containsKey(size)) {
+              urls.add(urlMap[size]);
+            }
           }
-        });
+        }
       }
     }
     
     // 폴백: 기존 photoUrls 사용
-    if (urls.isEmpty) {
+    if (urls.isEmpty && photoUrls.isNotEmpty) {
       return photoUrls;
     }
     

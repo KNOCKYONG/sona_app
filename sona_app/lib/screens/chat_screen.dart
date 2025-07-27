@@ -769,8 +769,15 @@ class _PersonaTitle extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () => _showPersonaProfile(context, updatedPersona),
-          child: _ProfileImage(
-            photoUrl: updatedPersona.photoUrls.isNotEmpty ? updatedPersona.photoUrls.first : null,
+          child: Builder(
+            builder: (context) {
+              final thumbnailUrl = updatedPersona.getThumbnailUrl();
+              debugPrint('🖼️ Profile Image URL: $thumbnailUrl');
+              debugPrint('📦 ImageUrls data: ${updatedPersona.imageUrls}');
+              return _ProfileImage(
+                photoUrl: thumbnailUrl,
+              );
+            },
           ),
         ),
         const SizedBox(width: 12),
@@ -863,6 +870,8 @@ class _ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('🔍 _ProfileImage build - photoUrl: $photoUrl');
+    
     return Container(
       width: 40,
       height: 40,
@@ -874,7 +883,7 @@ class _ProfileImage extends StatelessWidget {
         ),
       ),
       child: ClipOval(
-        child: photoUrl != null
+        child: photoUrl != null && photoUrl!.isNotEmpty
             ? CachedNetworkImage(
                 imageUrl: photoUrl!,
                 fit: BoxFit.cover,
@@ -889,7 +898,10 @@ class _ProfileImage extends StatelessWidget {
                     ),
                   ),
                 ),
-                errorWidget: (context, url, error) => _buildDefaultAvatar(),
+                errorWidget: (context, url, error) {
+                  debugPrint('❌ Image load error: $error for URL: $url');
+                  return _buildDefaultAvatar();
+                },
               )
             : _buildDefaultAvatar(),
       ),

@@ -68,7 +68,8 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       }
     } else if (tapPosition > screenWidth * 0.7) {
       // 오른쪽 탭 - 다음 사진
-      if (_currentPhotoIndex < widget.persona.photoUrls.length - 1) {
+      final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
+      if (_currentPhotoIndex < allImageUrls.length - 1) {
         setState(() {
           _currentPhotoIndex++;
         });
@@ -169,12 +170,13 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                       _currentPhotoIndex = index;
                                     });
                                   },
-                                  itemCount: widget.persona.photoUrls.length,
+                                  itemCount: widget.persona.getAllImageUrls(size: 'large').length,
                                   itemBuilder: (context, index) {
+                                    final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
                                     return GestureDetector(
                                       onTapUp: _onPhotoTap,
                                       child: CachedNetworkImage(
-                                        imageUrl: widget.persona.photoUrls[index],
+                                        imageUrl: allImageUrls[index],
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) => Container(
                                           color: Colors.grey[300],
@@ -199,29 +201,34 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                               ),
                               
                               // 사진 인디케이터
-                              if (widget.persona.photoUrls.length > 1)
-                                Positioned(
-                                  top: 16,
-                                  left: 16,
-                                  right: 16,
-                                  child: Row(
-                                    children: List.generate(
-                                      widget.persona.photoUrls.length,
-                                      (index) => Expanded(
-                                        child: Container(
-                                          height: 3,
-                                          margin: const EdgeInsets.symmetric(horizontal: 1),
-                                          decoration: BoxDecoration(
-                                            color: index == _currentPhotoIndex
-                                                ? Colors.white
-                                                : Colors.white.withOpacity(0.3),
-                                            borderRadius: BorderRadius.circular(2),
+                              Builder(builder: (context) {
+                                final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
+                                if (allImageUrls.length > 1) {
+                                  return Positioned(
+                                    top: 16,
+                                    left: 16,
+                                    right: 16,
+                                    child: Row(
+                                      children: List.generate(
+                                        allImageUrls.length,
+                                        (index) => Expanded(
+                                          child: Container(
+                                            height: 3,
+                                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                                            decoration: BoxDecoration(
+                                              color: index == _currentPhotoIndex
+                                                  ? Colors.white
+                                                  : Colors.white.withOpacity(0.3),
+                                              borderRadius: BorderRadius.circular(2),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              }),
                               
                               // 그라데이션 오버레이
                               Positioned(

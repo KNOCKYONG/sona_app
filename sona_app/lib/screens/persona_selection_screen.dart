@@ -302,6 +302,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       final updatedPersona = persona.copyWith(
         relationshipScore: relationshipScore,
         currentRelationship: relationshipType,
+        imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
       
       // 스와이프 마킹만 하고 현재 persona 설정
@@ -809,18 +810,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     ],
                   ),
                   child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: persona.photoUrls.first,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.person, size: 40),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.person, size: 40),
-                      ),
-                    ),
+                    child: persona.getThumbnailUrl() != null
+                        ? CachedNetworkImage(
+                            imageUrl: persona.getThumbnailUrl()!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.person, size: 40),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.person, size: 40),
+                            ),
+                          )
+                        : Container(
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.person, size: 40),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -1115,18 +1121,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     border: Border.all(color: Colors.white, width: 3),
                   ),
                   child: ClipOval(
-                    child: CachedNetworkImage(
-                      imageUrl: persona.photoUrls.first,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.person, size: 40),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.grey[300],
-                        child: const Icon(Icons.person, size: 40),
-                      ),
-                    ),
+                    child: persona.getThumbnailUrl() != null
+                        ? CachedNetworkImage(
+                            imageUrl: persona.getThumbnailUrl()!,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.person, size: 40),
+                            ),
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.person, size: 40),
+                            ),
+                          )
+                        : Container(
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.person, size: 40),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -1259,10 +1270,22 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           // 🎯 매칭된 소나와 바로 채팅 시작 (더 나은 UX)
           // 🔧 FIX: 업데이트된 persona를 전달
           final updatedPersona = persona.isExpert 
-              ? persona.copyWith(relationshipScore: 50, currentRelationship: RelationshipType.friend)
+              ? persona.copyWith(
+                  relationshipScore: 50, 
+                  currentRelationship: RelationshipType.friend,
+                  imageUrls: persona.imageUrls,  // Preserve imageUrls
+                )
               : isSuperLike 
-                  ? persona.copyWith(relationshipScore: 200, currentRelationship: RelationshipType.crush)
-                  : persona.copyWith(relationshipScore: 50, currentRelationship: RelationshipType.friend);
+                  ? persona.copyWith(
+                      relationshipScore: 200, 
+                      currentRelationship: RelationshipType.crush,
+                      imageUrls: persona.imageUrls,  // Preserve imageUrls
+                    )
+                  : persona.copyWith(
+                      relationshipScore: 50, 
+                      currentRelationship: RelationshipType.friend,
+                      imageUrls: persona.imageUrls,  // Preserve imageUrls
+                    );
           
           Navigator.of(screenContext).pushNamedAndRemoveUntil(
             '/chat',

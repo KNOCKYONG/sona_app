@@ -46,32 +46,34 @@ class _PersonaCardState extends State<PersonaCard> {
   }
 
   Widget _buildPersonaImage() {
-    // R2 이미지 URL 확인
-    final r2ImageUrl = widget.persona.getMediumImageUrl();
+    // 모든 이미지 URL 가져오기 (medium 크기)
+    final allImageUrls = widget.persona.getAllImageUrls(size: 'medium');
     
     // 디버그 정보 출력
     debugPrint('=== PersonaCard Image Debug ===');
     debugPrint('Persona: ${widget.persona.name}');
-    debugPrint('imageUrls raw: ${widget.persona.imageUrls}');
-    debugPrint('getMediumImageUrl result: $r2ImageUrl');
+    debugPrint('getAllImageUrls count: ${allImageUrls.length}');
+    debugPrint('URLs: $allImageUrls');
     
-    // 영문 URL은 인코딩 없이 그대로 사용
-    final urlToUse = r2ImageUrl;
-    
-    // R2 URL이 잘못된 형식인지 확인
-    if (urlToUse != null) {
-      debugPrint('🔷 Final URL to use: $urlToUse');
+    // 이미지가 없는 경우 플레이스홀더 표시
+    if (allImageUrls.isEmpty) {
+      return Container(
+        color: Colors.grey[300],
+        child: const Center(
+          child: Icon(
+            Icons.person,
+            size: 60,
+            color: Colors.grey,
+          ),
+        ),
+      );
     }
     
-    // R2 이미지가 있고 유효한 경우 (커스텀 도메인 포함)
-    if (urlToUse != null && (urlToUse.contains('r2.dev') || urlToUse.contains('teamsona.work'))) {
-      // WebP URL을 JPEG로 변경 시도
-      final jpegUrl = urlToUse.endsWith('.webp') 
-          ? urlToUse.replaceAll('.webp', '.jpg')
-          : urlToUse;
-          
+    // 단일 이미지인 경우
+    if (allImageUrls.length == 1) {
+      final imageUrl = allImageUrls.first;
       return CachedNetworkImage(
-        imageUrl: jpegUrl,  // JPEG URL 사용
+        imageUrl: imageUrl,
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
@@ -84,39 +86,48 @@ class _PersonaCardState extends State<PersonaCard> {
             ),
           ),
         ),
-        errorWidget: (context, url, error) {
-          // JPEG 실패 시 WebP 시도
-          if (jpegUrl != r2ImageUrl && r2ImageUrl != null) {
-            return CachedNetworkImage(
-              imageUrl: r2ImageUrl!,  // 원본 WebP URL
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-              placeholder: (context, url) => Container(
-                color: Colors.grey[300],
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: Color(0xFFFF6B9D),
-                    strokeWidth: 2,
-                  ),
-                ),
+        errorWidget: (context, url, error) => Container(
+          color: Colors.grey[300],
+          child: const Center(
+            child: Icon(
+              Icons.person,
+              size: 60,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        memCacheWidth: 800,
+        memCacheHeight: 1200,
+      );
+    }
+    
+    // 여러 이미지인 경우 PageView 사용
+    return PageView.builder(
+      controller: _pageController,
+      onPageChanged: (index) {
+        setState(() {
+          _currentPhotoIndex = index;
+        });
+      },
+      physics: const NeverScrollableScrollPhysics(), // 스와이프는 탭으로만
+      itemCount: allImageUrls.length,
+      itemBuilder: (context, index) {
+        final imageUrl = allImageUrls[index];
+        return CachedNetworkImage(
+          imageUrl: imageUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          placeholder: (context, url) => Container(
+            color: Colors.grey[300],
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFFF6B9D),
+                strokeWidth: 2,
               ),
-              errorWidget: (context, url, error) => Container(
-                color: Colors.grey[300],
-                child: const Center(
-                  child: Icon(
-                    Icons.person,
-                    size: 60,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              memCacheWidth: 800,
-              memCacheHeight: 1200,
-            );
-          }
-          // 이미 JPEG인 경우 플레이스홀더
-          return Container(
+            ),
+          ),
+          errorWidget: (context, url, error) => Container(
             color: Colors.grey[300],
             child: const Center(
               child: Icon(
@@ -125,30 +136,19 @@ class _PersonaCardState extends State<PersonaCard> {
                 color: Colors.grey,
               ),
             ),
-          );
-        },
-        memCacheWidth: 800,
-        memCacheHeight: 1200,
-      );
-    }
-    
-    // R2 이미지가 없으면 플레이스홀더 표시
-    return Container(
-      color: Colors.grey[300],
-      child: const Center(
-        child: Icon(
-          Icons.person,
-          size: 60,
-          color: Colors.grey,
-        ),
-      ),
+          ),
+          memCacheWidth: 800,
+          memCacheHeight: 1200,
+        );
+      },
     );
   }
   
   void _nextPhoto() {
-    if (widget.persona.photoUrls.isEmpty) return;
+    final allImageUrls = widget.persona.getAllImageUrls(size: 'medium');
+    if (allImageUrls.isEmpty) return;
     
-    if (_currentPhotoIndex < widget.persona.photoUrls.length - 1) {
+    if (_currentPhotoIndex < allImageUrls.length - 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -157,7 +157,8 @@ class _PersonaCardState extends State<PersonaCard> {
   }
 
   void _previousPhoto() {
-    if (widget.persona.photoUrls.isEmpty) return;
+    final allImageUrls = widget.persona.getAllImageUrls(size: 'medium');
+    if (allImageUrls.isEmpty) return;
     
     if (_currentPhotoIndex > 0) {
       _pageController.previousPage(
@@ -169,8 +170,9 @@ class _PersonaCardState extends State<PersonaCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Check if using R2 image
-    final hasR2Image = widget.persona.getMediumImageUrl()?.contains('r2.dev') ?? false;
+    // Check if using multiple images
+    final allImageUrls = widget.persona.getAllImageUrls(size: 'medium');
+    final hasMultipleImages = allImageUrls.length > 1;
     
     return Card(
       elevation: 8,
@@ -179,28 +181,28 @@ class _PersonaCardState extends State<PersonaCard> {
         borderRadius: _cardRadius,
         child: Stack(
           children: [
-            // Photo display (R2 image or PageView)
+            // Photo display (PageView or single image)
             _buildPersonaImage(),
             
-            // Photo counter (top right) - only for multiple photos and no R2 image
-            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
+            // Photo counter (top right) - only for multiple photos
+            if (hasMultipleImages)
               _PhotoCounter(
                 current: _currentPhotoIndex,
-                total: widget.persona.photoUrls.length,
+                total: allImageUrls.length,
               ),
             
-            // Photo indicators (bottom) - only for multiple photos and no R2 image
-            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
+            // Photo indicators (bottom) - only for multiple photos
+            if (hasMultipleImages)
               _PhotoIndicators(
-                count: widget.persona.photoUrls.length,
+                count: allImageUrls.length,
                 currentIndex: _currentPhotoIndex,
               ),
             
-            // Navigation areas - only for multiple photos and no R2 image
-            if (widget.persona.photoUrls.length > 1 && !hasR2Image)
+            // Navigation areas - only for multiple photos
+            if (hasMultipleImages)
               _NavigationAreas(
                 currentIndex: _currentPhotoIndex,
-                maxIndex: widget.persona.photoUrls.length - 1,
+                maxIndex: allImageUrls.length - 1,
                 onPrevious: _previousPhoto,
                 onNext: _nextPhoto,
               ),
@@ -231,7 +233,7 @@ class _PersonaCardState extends State<PersonaCard> {
             if (widget.persona.relationshipScore > 0)
               _RelationshipBadge(
                 persona: widget.persona,
-                hasMultiplePhotos: widget.persona.photoUrls.length > 1 && !hasR2Image,
+                hasMultiplePhotos: hasMultipleImages,
               ),
           ],
         ),
@@ -617,26 +619,35 @@ class _PersonaInfo extends StatelessWidget {
             maxLines: isExpert ? 1 : 2,
             overflow: TextOverflow.ellipsis,
           ),
-          if (persona.photoUrls.length > 1) ...[
-            const SizedBox(height: 12),
-            const Row(
-              children: [
-                Icon(
-                  Icons.touch_app,
-                  color: Colors.white60,
-                  size: 16,
-                ),
-                SizedBox(width: 4),
-                Text(
-                  '좌우 탭으로 사진 넘기기',
-                  style: TextStyle(
-                    color: Colors.white60,
-                    fontSize: 12,
+          // 여러 이미지가 있을 때 안내 표시
+          Builder(builder: (context) {
+            final allImageUrls = persona.getAllImageUrls(size: 'medium');
+            if (allImageUrls.length > 1) {
+              return Column(
+                children: const [
+                  SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.touch_app,
+                        color: Colors.white60,
+                        size: 16,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '좌우 탭으로 사진 넘기기',
+                        style: TextStyle(
+                          color: Colors.white60,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
     );

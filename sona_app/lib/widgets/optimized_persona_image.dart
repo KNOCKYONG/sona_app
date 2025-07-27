@@ -136,34 +136,21 @@ class OptimizedPersonaImage extends StatelessWidget {
       // R2 구조에서 크기별 URL 가져오기
       switch (imageSize) {
         case ImageSize.thumbnail:
-          final thumbUrls = persona.imageUrls!['thumb'] as Map<String, dynamic>?;
-          return thumbUrls?['webp'] ?? thumbUrls?['jpg'];
+          return persona.getThumbnailUrl();
         case ImageSize.small:
-          final smallUrls = persona.imageUrls!['small'] as Map<String, dynamic>?;
-          return smallUrls?['webp'] ?? smallUrls?['jpg'];
+          return persona.getSmallImageUrl();
         case ImageSize.medium:
-          final mediumUrls = persona.imageUrls!['medium'] as Map<String, dynamic>?;
-          return mediumUrls?['webp'] ?? mediumUrls?['jpg'];
+          return persona.getMediumImageUrl();
         case ImageSize.large:
-          final largeUrls = persona.imageUrls!['large'] as Map<String, dynamic>?;
-          return largeUrls?['webp'] ?? largeUrls?['jpg'];
+          return persona.getLargeImageUrl();
         case ImageSize.original:
-          final originalUrls = persona.imageUrls!['original'] as Map<String, dynamic>?;
-          return originalUrls?['webp'];
+          return persona.getOriginalImageUrl();
       }
     }
     
-    // 폴백: Cloudflare R2 URL 생성
+    // 폴백: photoUrls 사용
     if (persona.photoUrls.isNotEmpty) {
-      // 첫 번째 URL이 R2 URL인지 확인
-      final firstUrl = persona.photoUrls.first;
-      if (firstUrl.contains('r2.dev')) {
-        // 이미 R2 URL이면 그대로 사용
-        return firstUrl;
-      } else {
-        // 아니면 R2 URL 생성
-        return CloudflareR2Service.getImageUrl(persona.id, imageSize);
-      }
+      return persona.photoUrls.first;
     }
     
     return null;

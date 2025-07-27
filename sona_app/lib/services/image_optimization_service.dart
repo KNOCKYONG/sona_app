@@ -55,11 +55,11 @@ class ImageOptimizationService {
     for (final size in ImageSize.values) {
       if (size == ImageSize.original) {
         if (includeOriginal) {
-          // 원본도 WebP로 변환하여 크기 줄이기
-          final webpData = img.encodeWebP(originalImage, quality: webpQuality);
-          images[size] = Uint8List.fromList(webpData);
-          fileSizes[size] = webpData.length;
-          debugPrint('💾 Original WebP: ${_formatBytes(webpData.length)}');
+          // 원본도 JPEG로 변환하여 크기 줄이기
+          final jpegData = img.encodeJpg(originalImage, quality: webpQuality);
+          images[size] = Uint8List.fromList(jpegData);
+          fileSizes[size] = jpegData.length;
+          debugPrint('💾 Original JPEG: ${formatBytes(jpegData.length)}');
         }
         continue;
       }
@@ -67,10 +67,10 @@ class ImageOptimizationService {
       // 리사이즈 필요 여부 확인
       if (originalImage.width <= size.maxWidth) {
         // 원본이 더 작으면 리사이즈 안함
-        final webpData = img.encodeWebP(originalImage, quality: webpQuality);
-        images[size] = Uint8List.fromList(webpData);
-        fileSizes[size] = webpData.length;
-        debugPrint('📸 ${size.suffix}: ${originalImage.width}x${originalImage.height} (원본 크기 유지) - ${_formatBytes(webpData.length)}');
+        final jpegData = img.encodeJpg(originalImage, quality: webpQuality);
+        images[size] = Uint8List.fromList(jpegData);
+        fileSizes[size] = jpegData.length;
+        debugPrint('📸 ${size.suffix}: ${originalImage.width}x${originalImage.height} (원본 크기 유지) - ${formatBytes(jpegData.length)}');
         continue;
       }
       
@@ -86,17 +86,17 @@ class ImageOptimizationService {
         interpolation: img.Interpolation.cubic, // 고품질 보간
       );
       
-      // WebP로 인코딩 (최적의 압축률)
-      final webpData = img.encodeWebP(resized, quality: webpQuality);
-      images[size] = Uint8List.fromList(webpData);
-      fileSizes[size] = webpData.length;
+      // JPEG로 인코딩 (최적의 압축률)
+      final jpegData = img.encodeJpg(resized, quality: webpQuality);
+      images[size] = Uint8List.fromList(jpegData);
+      fileSizes[size] = jpegData.length;
       
-      debugPrint('📸 ${size.suffix}: ${newWidth}x${newHeight} - ${_formatBytes(webpData.length)}');
+      debugPrint('📸 ${size.suffix}: ${newWidth}x${newHeight} - ${formatBytes(jpegData.length)}');
     }
     
     // 총 크기 계산
     final totalSize = fileSizes.values.fold(0, (sum, size) => sum + size);
-    debugPrint('✅ Total optimized size: ${_formatBytes(totalSize)}');
+    debugPrint('✅ Total optimized size: ${formatBytes(totalSize)}');
     
     return OptimizedImageSet(
       images: images,
@@ -113,7 +113,7 @@ class ImageOptimizationService {
   }
   
   /// 파일 크기 포맷팅
-  static String _formatBytes(int bytes) {
+  static String formatBytes(int bytes) {
     if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
     return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
@@ -121,14 +121,14 @@ class ImageOptimizationService {
   
   /// MIME 타입 결정
   static String getMimeType(ImageSize size) {
-    return 'image/webp'; // 모든 사이즈 WebP 사용
+    return 'image/jpeg'; // 모든 사이즈 JPEG 사용
   }
   
   /// 파일명 생성
   static String generateFileName(String personaId, ImageSize size, {String? index}) {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final indexStr = index != null ? '_$index' : '';
-    return 'personas/$personaId/${size.suffix}$indexStr\_$timestamp.webp';
+    return 'personas/$personaId/${size.suffix}$indexStr\_$timestamp.jpg';
   }
 }
 

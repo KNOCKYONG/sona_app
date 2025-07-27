@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sona App Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .test-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .persona {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            width: 300px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        .loading {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sona App Image Test - Custom Domain</h1>
+    <p>Testing images from teamsona.work domain</p>
+    
+    <div class="test-container">
+        <div class="persona">
+            <h2>채연 (chaeyeon)</h2>
+            <p>URL: https://teamsona.work/personas/chaeyeon/main_medium.jpg</p>
+            <img src="https://teamsona.work/personas/chaeyeon/main_medium.jpg" 
+                 onerror="this.parentElement.querySelector('.status').innerHTML='<span class=error>Failed to load</span>'"
+                 onload="this.parentElement.querySelector('.status').innerHTML='<span class=success>Successfully loaded</span>'"
+                 alt="채연">
+            <div class="status loading">Loading...</div>
+        </div>
+        
+        <div class="persona">
+            <h2>Dr. 박지은 (dr-park-jieun)</h2>
+            <p>URL: https://teamsona.work/personas/dr-park-jieun/main_medium.jpg</p>
+            <img src="https://teamsona.work/personas/dr-park-jieun/main_medium.jpg" 
+                 onerror="this.parentElement.querySelector('.status').innerHTML='<span class=error>Failed to load</span>'"
+                 onload="this.parentElement.querySelector('.status').innerHTML='<span class=success>Successfully loaded</span>'"
+                 alt="Dr. 박지은">
+            <div class="status loading">Loading...</div>
+        </div>
+        
+        <div class="persona">
+            <h2>예림 (yerim)</h2>
+            <p>URL: https://teamsona.work/personas/yerim/main_medium.jpg</p>
+            <img src="https://teamsona.work/personas/yerim/main_medium.jpg" 
+                 onerror="this.parentElement.querySelector('.status').innerHTML='<span class=error>Failed to load</span>'"
+                 onload="this.parentElement.querySelector('.status').innerHTML='<span class=success>Successfully loaded</span>'"
+                 alt="예림">
+            <div class="status loading">Loading...</div>
+        </div>
+        
+        <div class="persona">
+            <h2>상훈 (sanghoon)</h2>
+            <p>URL: https://teamsona.work/personas/sanghoon/main_medium.jpg</p>
+            <img src="https://teamsona.work/personas/sanghoon/main_medium.jpg" 
+                 onerror="this.parentElement.querySelector('.status').innerHTML='<span class=error>Failed to load</span>'"
+                 onload="this.parentElement.querySelector('.status').innerHTML='<span class=success>Successfully loaded</span>'"
+                 alt="상훈">
+            <div class="status loading">Loading...</div>
+        </div>
+    </div>
+    
+    <script>
+        // JavaScript로 각 이미지 상태 확인
+        const testUrls = [
+            'https://teamsona.work/personas/chaeyeon/main_medium.jpg',
+            'https://teamsona.work/personas/dr-park-jieun/main_medium.jpg',
+            'https://teamsona.work/personas/yerim/main_medium.jpg',
+            'https://teamsona.work/personas/sanghoon/main_medium.jpg'
+        ];
+        
+        console.log('Testing image URLs...');
+        testUrls.forEach(url => {
+            fetch(url, { method: 'HEAD' })
+                .then(response => {
+                    console.log(`${url}: ${response.status} ${response.statusText}`);
+                })
+                .catch(error => {
+                    console.error(`${url}: ${error}`);
+                });
+        });
+    </script>
+</body>
+</html>

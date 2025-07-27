@@ -9,6 +9,7 @@ import '../services/device_id_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/sona_logo.dart';
+import '../widgets/optimized_persona_image.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -314,23 +315,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               ),
                             ),
                             child: ClipOval(
-                              child: persona.photoUrls.isNotEmpty
-                                ? CachedNetworkImage(
-                                    imageUrl: persona.photoUrls.first,
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) => Container(
-                                      color: Colors.grey[300],
-                                      child: const Icon(Icons.person, size: 30),
-                                    ),
-                                    errorWidget: (context, url, error) => Container(
-                                      color: Colors.grey[300],
-                                      child: const Icon(Icons.person, size: 30),
-                                    ),
-                                  )
-                                : Container(
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.person, size: 30),
-                                  ),
+                              child: OptimizedPersonaImage.thumbnail(
+                                persona: persona,
+                                size: 60,
+                              ),
                             ),
                           ),
                           // 관계 점수 뱃지

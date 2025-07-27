@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Dict, List, Optional, Set
 import argparse
 from datetime import datetime
+import numpy as np
 
 # Configuration
 PERSONAS_SOURCE_DIR = r"C:\Users\yong\Documents\personas"
@@ -28,6 +29,62 @@ SIZES = {
     'medium': 600,
     'large': 1200
 }
+
+def remove_black_bars(img):
+    """Remove black letterbox bars from top and bottom of image"""
+    # Convert to numpy array
+    img_array = np.array(img)
+    
+    # For RGB images
+    if len(img_array.shape) == 3:
+        # Calculate mean brightness for each row
+        row_means = np.mean(img_array, axis=(1, 2))
+    else:
+        # For grayscale
+        row_means = np.mean(img_array, axis=1)
+    
+    # Find non-black rows (threshold of 10 to account for very dark but not pure black)
+    non_black_rows = np.where(row_means > 10)[0]
+    
+    if len(non_black_rows) == 0:
+        return img
+    
+    # Get the bounds of non-black content
+    top = non_black_rows[0]
+    bottom = non_black_rows[-1] + 1
+    
+    # Check if we found black bars (more than 5% of image height)
+    height = img_array.shape[0]
+    if top > height * 0.05 or (height - bottom) > height * 0.05:
+        print(f"    Detected black bars: top={top}px, bottom={height-bottom}px")
+        # Crop the image
+        if len(img_array.shape) == 3:
+            cropped_array = img_array[top:bottom, :, :]
+        else:
+            cropped_array = img_array[top:bottom, :]
+        return Image.fromarray(cropped_array)
+    
+    return img
+
+def smart_crop_square(img, size):
+    """Smart crop to square aspect ratio for persona cards"""
+    width, height = img.size
+    
+    if width == height:
+        return img
+    
+    # For portrait images, crop from top to focus on face area
+    if width < height:
+        # Take square from top portion (usually where face is)
+        crop_height = width
+        top = min(int(height * 0.1), height - crop_height)  # Start 10% from top or less
+        return img.crop((0, top, width, top + crop_height))
+    
+    # For landscape images, center crop
+    else:
+        crop_width = height
+        left = (width - crop_width) // 2
+        return img.crop((left, 0, left + crop_width, height))
 
 class AutoPersonaImageProcessor:
     def __init__(self, source_dir: str = PERSONAS_SOURCE_DIR):
@@ -92,6 +149,11 @@ class AutoPersonaImageProcessor:
                     background = Image.new('RGB', img.size, (255, 255, 255))
                     background.paste(img, mask=img.split()[-1] if img.mode == 'RGBA' else None)
                     img = background
+                elif img.mode != 'RGB':
+                    img = img.convert('RGB')
+                
+                # Remove black bars if present
+                img = remove_black_bars(img)
                 
                 orig_width, orig_height = img.size
                 aspect_ratio = orig_width / orig_height
@@ -101,18 +163,42 @@ class AutoPersonaImageProcessor:
                 
                 # Process each size
                 for size_name, target_size in SIZES.items():
-                    if orig_width > orig_height:
-                        new_width = target_size
-                        new_height = int(target_size / aspect_ratio)
+                    # For thumbnail and small sizes, use smart square crop
+                    if size_name in ['thumb', 'small']:
+                        # First resize to target size maintaining aspect ratio
+                        if orig_width > orig_height:
+                            new_width = int(target_size * aspect_ratio)
+                            new_height = target_size
+                        else:
+                            new_width = target_size
+                            new_height = int(target_size / aspect_ratio)
+                        
+                        # Don't upscale
+                        if new_width > orig_width or new_height > orig_height:
+                            resized = img.copy()
+                        else:
+                            resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                        
+                        # Then smart crop to square
+                        resized = smart_crop_square(resized, target_size)
+                        
+                        # Final resize to exact target size if needed
+                        if resized.size != (target_size, target_size):
+                            resized = resized.resize((target_size, target_size), Image.Resampling.LANCZOS)
                     else:
-                        new_height = target_size
-                        new_width = int(target_size * aspect_ratio)
-                    
-                    # Don't upscale images
-                    if new_width > orig_width or new_height > orig_height:
-                        new_width, new_height = orig_width, orig_height
-                    
-                    resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                        # For medium and large, maintain aspect ratio
+                        if orig_width > orig_height:
+                            new_width = target_size
+                            new_height = int(target_size / aspect_ratio)
+                        else:
+                            new_height = target_size
+                            new_width = int(target_size * aspect_ratio)
+                        
+                        # Don't upscale images
+                        if new_width > orig_width or new_height > orig_height:
+                            new_width, new_height = orig_width, orig_height
+                        
+                        resized = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
                     
                     # Save WebP and JPEG
                     webp_file = f"temp_{persona_name}_{size_name}.webp"

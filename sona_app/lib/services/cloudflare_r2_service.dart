@@ -40,14 +40,14 @@ class CloudflareR2Service {
         final size = entry.key;
         final imageData = entry.value;
         
-        final path = 'personas/$personaId/main_${size.suffix}.webp';
+        final path = 'personas/$personaId/main_${size.suffix}.jpg';
         
         // TODO: MCP를 통한 실제 업로드
         // 현재는 가상의 URL 생성
         final url = _generatePublicUrl(path);
         mainUrls[size] = url;
         
-        debugPrint('📤 Uploaded main ${size.suffix}: ${ImageOptimizationService._formatBytes(mainOptimized.fileSizes[size]!)}');
+        debugPrint('📤 Uploaded main ${size.suffix}: ${ImageOptimizationService.formatBytes(mainOptimized.fileSizes[size]!)}');
       }
       
       // 3. 추가 이미지들 처리
@@ -66,7 +66,7 @@ class CloudflareR2Service {
             final size = entry.key;
             final imageData = entry.value;
             
-            final path = 'personas/$personaId/sub${i}_${size.suffix}.webp';
+            final path = 'personas/$personaId/sub${i}_${size.suffix}.jpg';
             
             // TODO: MCP를 통한 실제 업로드
             final url = _generatePublicUrl(path);
@@ -94,7 +94,7 @@ class CloudflareR2Service {
   /// 이미지 URL 생성 (크기별)
   static String getImageUrl(String personaId, ImageSize size, {bool isMain = true, int? index}) {
     final prefix = isMain ? 'main' : 'sub$index';
-    final path = 'personas/$personaId/${prefix}_${size.suffix}.webp';
+    final path = 'personas/$personaId/${prefix}_${size.suffix}.jpg';
     return _generatePublicUrl(path);
   }
   

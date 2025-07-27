@@ -32,7 +32,7 @@ class _SkipButtonState extends State<SkipButton>
     );
 
     _fadeAnimation = Tween<double>(
-      begin: 0.7,
+      begin: 0.9,
       end: 1.0,
     ).animate(CurvedAnimation(
       parent: _controller,
@@ -76,12 +76,12 @@ class _SkipButtonState extends State<SkipButton>
                   ),
                   decoration: BoxDecoration(
                     color: _isHovered
-                        ? Colors.white.withValues(alpha: 0.2)
-                        : Colors.black.withValues(alpha: 0.3),
+                        ? Colors.white.withValues(alpha: 0.3)
+                        : Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.5),
-                      width: 1,
+                      color: Colors.white.withValues(alpha: 0.8),
+                      width: 1.5,
                     ),
                     boxShadow: [
                       BoxShadow(
@@ -101,7 +101,7 @@ class _SkipButtonState extends State<SkipButton>
                         size: 20,
                       ),
                       const SizedBox(width: 4),
-                      // Skip 텍스트 (작게 표시)
+                      // Next/Finish 텍스트 (작게 표시)
                       Text(
                         'Skip',
                         style: TextStyle(

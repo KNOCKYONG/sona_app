@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../models/tutorial_animation.dart';
 import 'gesture_animator.dart';
@@ -29,7 +30,7 @@ class AnimatedTutorialGuide extends StatefulWidget {
 
 class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
     with TickerProviderStateMixin {
-  late AnimationController _stepController;
+  Timer? _stepTimer;
   final List<AnimationController> _animationControllers = [];
 
   @override
@@ -39,11 +40,17 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
   }
 
   void _initializeAnimations() {
-    // 전체 스텝 타이머
-    _stepController = AnimationController(
-      duration: widget.step.stepDuration,
-      vsync: this,
-    );
+    debugPrint('AnimatedTutorialGuide - Step ${widget.currentStep + 1}: Duration = ${widget.step.stepDuration}');
+    
+    // 타이머로 스텝 duration 관리
+    _stepTimer?.cancel();
+    _stepTimer = Timer(widget.step.stepDuration, () {
+      if (mounted) {
+        debugPrint('AnimatedTutorialGuide - Step ${widget.currentStep + 1} completed after ${widget.step.stepDuration}, moving to next');
+        widget.step.onComplete?.call();
+        widget.onNext();
+      }
+    });
 
     // 각 애니메이션을 위한 컨트롤러 생성
     for (var animation in widget.step.animations) {
@@ -64,16 +71,6 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
         }
       });
     }
-
-    // 스텝 완료 시 다음으로
-    _stepController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        widget.step.onComplete?.call();
-        widget.onNext();
-      }
-    });
-
-    _stepController.forward();
   }
 
   @override
@@ -81,7 +78,7 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
     super.didUpdateWidget(oldWidget);
     // 스텝이 변경되면 애니메이션 재초기화
     if (oldWidget.step != widget.step || oldWidget.currentStep != widget.currentStep) {
-      _stepController.dispose();
+      _stepTimer?.cancel();
       for (var controller in _animationControllers) {
         controller.dispose();
       }
@@ -92,7 +89,7 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
 
   @override
   void dispose() {
-    _stepController.dispose();
+    _stepTimer?.cancel();
     for (var controller in _animationControllers) {
       controller.dispose();
     }
@@ -103,7 +100,9 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // 하이라이트 영역
+        // dim 화면 제거 - 애니메이션과 하이라이트만 표시
+        
+        // 하이라이트 애니메이션 효과
         if (widget.step.highlightArea != null)
           HighlightAnimator(
             highlightArea: widget.step.highlightArea!,
@@ -119,9 +118,9 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
           );
         }),
 
-        // Skip 버튼 - 다음 스텝으로 이동
+        // Skip 버튼 - 튜토리얼 종료 (가장 위에 렌더링)
         SkipButton(
-          onSkip: widget.onNext,  // onSkip 대신 onNext 호출
+          onSkip: widget.onSkip,  // 튜토리얼 전체를 스킵
           currentStep: widget.currentStep,
           totalSteps: widget.totalSteps,
         ),

@@ -29,6 +29,7 @@ import 'services/chat_service.dart';
 import 'services/subscription_service.dart';
 import 'services/purchase_service.dart';
 import 'services/mock_purchase_service.dart';
+import 'services/cache_manager.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -78,6 +79,9 @@ void main() async {
       }
     };
   }
+
+  // 캐시 매니저 초기화
+  await CacheManager.instance.initialize();
 
   runApp(const SonaApp());
 }

@@ -7,6 +7,7 @@ import '../services/auth_service.dart';
 import '../services/persona_service.dart';
 import '../services/device_id_service.dart';
 import '../services/user_service.dart';
+import '../services/cache_manager.dart';
 import '../models/persona.dart';
 import '../widgets/persona_card.dart';
 import '../widgets/tutorial_overlay.dart';
@@ -30,6 +31,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   
   int _currentIndex = 0;
   bool _isLoading = false;
+  bool _isFirstTimeUser = false;
 
   @override
   void initState() {
@@ -47,7 +49,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadPersonas();
+      _checkFirstTimeUser();
     });
+  }
+  
+  Future<void> _checkFirstTimeUser() async {
+    final isFirstTime = await CacheManager.instance.isFirstTimeUser();
+    if (mounted) {
+      setState(() {
+        _isFirstTimeUser = isFirstTime;
+      });
+    }
   }
 
   Future<void> _loadPersonas() async {
@@ -1376,7 +1388,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                     ),
                     child: const Text(
-                      '채팅으로 돌아가기',
+                      '새로고침',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
@@ -1539,8 +1551,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       ),
     );
 
-    // 튜토리얼 모드이고 사용 가능한 소나가 있을 때만 튜토리얼 오버레이 표시
-    if (authService.isTutorialMode) {
+    // 첫 사용자이고 사용 가능한 소나가 있을 때만 튜토리얼 오버레이 표시
+    if (_isFirstTimeUser) {
       return Consumer<PersonaService>(
         builder: (context, personaService, child) {
           final hasAvailablePersonas = personaService.availablePersonas.isNotEmpty;
@@ -1556,6 +1568,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           return TutorialOverlay(
             screenKey: 'persona_selection',
             child: scaffold,
+            onTutorialComplete: () {
+              // 튜토리얼 완료 시 상태 업데이트
+              if (mounted) {
+                setState(() {
+                  _isFirstTimeUser = false;
+                });
+              }
+            },
             animatedSteps: [
               // 스텝 1: 스와이프 가이드
               anim_model.AnimatedTutorialStep(

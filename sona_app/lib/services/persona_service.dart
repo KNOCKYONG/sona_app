@@ -547,24 +547,7 @@ class PersonaService extends ChangeNotifier {
     final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
     final currentPersona = _currentPersona;
     
-    // 🔧 강화된 전문가 체크: 여러 소스에서 확인
-    final isExpert = persona?.role == 'expert' || 
-                    persona?.role == 'specialist' ||
-                    persona?.isExpert == true ||
-                    currentPersona?.role == 'expert' ||
-                    currentPersona?.role == 'specialist' ||
-                    currentPersona?.isExpert == true ||
-                    persona?.name.contains('Dr.') == true ||
-                    currentPersona?.name.contains('Dr.') == true;
-    
-    if (isExpert) {
-      debugPrint('🩺 Expert persona detected - skipping relationship score update');
-      debugPrint('   - Persona ID: $personaId');
-      debugPrint('   - Persona Name: ${persona?.name}');
-      debugPrint('   - Persona Role: ${persona?.role}');
-      debugPrint('   - Current Persona Role: ${currentPersona?.role}');
-      return;
-    }
+    // 모든 페르소나는 일반 페르소나로 처리하여 관계 점수 업데이트
     
     debugPrint('🔄 Starting relationship score update: personaId=$personaId, change=$change, userId=$userId');
     
@@ -1027,10 +1010,10 @@ class PersonaService extends ChangeNotifier {
         isCasualSpeech: false,
         gender: data['gender'] ?? 'female',
         mbti: data['mbti'] ?? 'ENFP',
-        isExpert: data['isExpert'] ?? isSpecialist,  // Set isExpert based on role
+        imageUrls: imageUrls,  // Add R2 image URLs
+        isExpert: data['isExpert'] ?? false,
         profession: data['profession'],
         role: role,
-        imageUrls: imageUrls,  // Add R2 image URLs
       );
       
       return persona;
@@ -1202,26 +1185,15 @@ class PersonaService extends ChangeNotifier {
           final relationshipScore = isSuperLiked ? 200 : 50;
           final relationshipType = isSuperLiked ? RelationshipType.crush : RelationshipType.friend;
           
-          // 🔧 튜토리얼 모드에서 Dr. Maria Santos를 전문가로 강제 설정
-          final isExpertPersona = persona.name.contains('Dr.') || persona.name.contains('Maria') || persona.name.contains('Santos');
+          // 모든 페르소나는 일반 페르소나로 처리
           
           final tutorialPersona = persona.copyWith(
             relationshipScore: relationshipScore,
             currentRelationship: relationshipType,
             isCasualSpeech: false,
-            isExpert: isExpertPersona,
-            role: isExpertPersona ? 'expert' : persona.role,
-            profession: isExpertPersona ? '임상심리학' : persona.profession,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           
-          // 🔍 DEBUG: 전문가 페르소나 확인
-          if (isExpertPersona) {
-            debugPrint('🩺 TUTORIAL EXPERT DETECTED: ${persona.name}');
-            debugPrint('   - Role: ${tutorialPersona.role}');
-            debugPrint('   - IsExpert: ${tutorialPersona.isExpert}');
-            debugPrint('   - Profession: ${tutorialPersona.profession}');
-          }
           _matchedPersonas.add(tutorialPersona);
           
           debugPrint('📋 Loaded tutorial persona: ${persona.name} → $relationshipScore (${relationshipType.displayName})');
@@ -1256,26 +1228,11 @@ class PersonaService extends ChangeNotifier {
   Future<void> setCurrentPersonaForTutorial(Persona persona) async {
     debugPrint('🎓 Setting current persona for tutorial: ${persona.name} (score: ${persona.relationshipScore}, relationship: ${persona.currentRelationship.displayName})');
     
-    // 🔧 튜토리얼 모드에서 Dr. Maria Santos를 전문가로 강제 설정
-    final isExpertPersona = persona.name.contains('Dr.') || persona.name.contains('Maria') || persona.name.contains('Santos');
-    
-    final updatedPersona = persona.copyWith(
-      isExpert: isExpertPersona,
-      role: isExpertPersona ? 'expert' : persona.role,
-      profession: isExpertPersona ? '임상심리학' : persona.profession,
-      imageUrls: persona.imageUrls,  // Preserve imageUrls
-    );
+    // 모든 페르소나는 일반 페르소나로 처리
     
     // For tutorial mode, directly set the persona without Firebase operations
-    _currentPersona = updatedPersona;
+    _currentPersona = persona;
     
-    // 🔍 DEBUG: 전문가 페르소나 확인
-    if (isExpertPersona) {
-      debugPrint('🩺 TUTORIAL CURRENT EXPERT: ${updatedPersona.name}');
-      debugPrint('   - Role: ${updatedPersona.role}');
-      debugPrint('   - IsExpert: ${updatedPersona.isExpert}');
-      debugPrint('   - Profession: ${updatedPersona.profession}');
-    }
     
     // Also update the matched personas list if this persona is there
     final index = _matchedPersonas.indexWhere((p) => p.id == persona.id);

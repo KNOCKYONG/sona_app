@@ -9,6 +9,7 @@ import '../services/device_id_service.dart';
 import '../models/persona.dart';
 import '../widgets/persona_card.dart';
 import '../widgets/tutorial_overlay.dart';
+import '../models/tutorial_animation.dart' as anim_model;
 import '../widgets/sona_logo.dart';
 import '../widgets/animated_action_button.dart';
 import '../theme/app_theme.dart';
@@ -212,37 +213,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       
       if (direction == CardSwiperDirection.right) {
         debugPrint('💕 Right swipe - Liking persona: ${persona.name}');
-        if (persona.isExpert) {
-          // 전문가 매칭 시 로그인 확인
-          final authService = Provider.of<AuthService>(context, listen: false);
-          if (authService.isTutorialMode || authService.user == null) {
-            _showExpertLoginRequiredDialog(persona);
-            return true;
-          } else {
-            _showExpertConsultationDialog(persona);
-            return true;
-          }
-        } else {
-          _onPersonaLiked(persona, isSuperLike: false);
-        }
+        _onPersonaLiked(persona, isSuperLike: false);
       } else if (direction == CardSwiperDirection.left) {
         debugPrint('👈 Left swipe - Passing persona: ${persona.name}');
         _onPersonaPassed(persona);
       } else if (direction == CardSwiperDirection.top) {
         debugPrint('⭐ Top swipe - Super liking persona: ${persona.name}');
-        if (persona.isExpert) {
-          // 전문가 매칭 시 로그인 확인
-          final authService = Provider.of<AuthService>(context, listen: false);
-          if (authService.isTutorialMode || authService.user == null) {
-            _showExpertLoginRequiredDialog(persona);
-            return true;
-          } else {
-            _showExpertConsultationDialog(persona);
-            return true;
-          }
-        } else {
-          _onPersonaLiked(persona, isSuperLike: true);
-        }
+        _onPersonaLiked(persona, isSuperLike: true);
       }
     } else {
       debugPrint('❌ Index out of bounds: $previousIndex (total: ${personas.length})');
@@ -1556,7 +1533,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       builder: (context, personaService, child) {
                         final personas = personaService.availablePersonas;
                         final currentPersona = personas.isNotEmpty ? personas[0] : null;
-                        final isExpert = currentPersona?.isExpert ?? false;
+                        final isExpert = false;
                         
                         return AnimatedActionButton(
                           onTap: (_isLoading || isExpert) ? null : _onSuperLikePressed,
@@ -1619,91 +1596,160 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             return scaffold;
           }
           
+          final screenWidth = MediaQuery.of(context).size.width;
+          final screenHeight = MediaQuery.of(context).size.height;
+          
           return TutorialOverlay(
             screenKey: 'persona_selection',
             child: scaffold,
+            animatedSteps: [
+              // 스텝 1: 스와이프 가이드
+              anim_model.AnimatedTutorialStep(
+                animations: [
+                  // 오른쪽 스와이프 애니메이션 - 친구 (더 긴 이동거리)
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.swipeRight,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.47),
+                    endPosition: Offset(screenWidth * 0.95, screenHeight * 0.47),  // 0.85 → 0.95로 증가
+                    duration: const Duration(seconds: 2),
+                    delay: const Duration(milliseconds: 500),
+                  ),
+                  // 위로 스와이프 애니메이션 - 연인 (더 긴 이동거리)
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.swipeUp,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.47),
+                    endPosition: Offset(screenWidth * 0.5, screenHeight * 0.15),  // 0.25 → 0.15로 감소 (더 위로)
+                    duration: const Duration(seconds: 2),
+                    delay: const Duration(seconds: 3),
+                  ),
+                  // 왼쪽 스와이프 애니메이션 - 패스 (더 긴 이동거리)
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.swipeLeft,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.47),
+                    endPosition: Offset(screenWidth * 0.05, screenHeight * 0.47),  // 0.15 → 0.05로 감소
+                    duration: const Duration(seconds: 2),
+                    delay: const Duration(seconds: 6),
+                  ),
+                ],
+                highlightArea: anim_model.HighlightArea(
+                  left: screenWidth * 0.1,
+                  top: screenHeight * 0.25,
+                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.45,
+                  borderRadius: BorderRadius.circular(20),
+                  glowRadius: 30,
+                ),
+                stepDuration: const Duration(seconds: 10),  // 10초로 증가
+              ),
+              // 스텝 2: 프로필 사진 스와이프 가이드
+              anim_model.AnimatedTutorialStep(
+                animations: [
+                  // 왼쪽 화살표 탭
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.tap,
+                    startPosition: Offset(screenWidth * 0.2, screenHeight * 0.4),
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(milliseconds: 500),
+                  ),
+                  // 오른쪽 화살표 탭
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.tap,
+                    startPosition: Offset(screenWidth * 0.8, screenHeight * 0.4),
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(seconds: 2),
+                  ),
+                  // 프로필 사진 영역 펄스
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.pulse,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.4),
+                    duration: const Duration(seconds: 2),
+                    delay: const Duration(seconds: 3, milliseconds: 500),
+                    color: const Color(0xFF66D9EF),
+                  ),
+                ],
+                highlightArea: anim_model.HighlightArea(
+                  left: screenWidth * 0.15,
+                  top: screenHeight * 0.3,
+                  width: screenWidth * 0.7,
+                  height: screenHeight * 0.2,  // 프로필 사진 영역만
+                  borderRadius: BorderRadius.circular(15),
+                  glowColor: const Color(0xFF66D9EF),
+                ),
+                stepDuration: const Duration(seconds: 8),
+              ),
+              // 스텝 3: 하단 버튼 가이드
+              anim_model.AnimatedTutorialStep(
+                animations: [
+                  // 왼쪽 버튼 (X) 탭 - 더 아래로 조정
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.tap,
+                    startPosition: Offset(screenWidth * 0.25, screenHeight * 0.85),  // 0.74 → 0.85로 조정
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(milliseconds: 500),
+                  ),
+                  // 중앙 버튼 (하트) 탭 - 더 아래로 조정
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.tap,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.85),  // 0.74 → 0.85로 조정
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(seconds: 2, milliseconds: 500),
+                  ),
+                  // 오른쪽 버튼 (별) 탭 - 더 아래로 조정
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.tap,
+                    startPosition: Offset(screenWidth * 0.75, screenHeight * 0.85),  // 0.74 → 0.85로 조정
+                    duration: const Duration(seconds: 1),
+                    delay: const Duration(seconds: 4),
+                  ),
+                ],
+                highlightArea: anim_model.HighlightArea(
+                  left: screenWidth * 0.1,  // 0.15 → 0.1로 조정 (좀 더 넓게)
+                  top: screenHeight * 0.80,  // 0.70 → 0.80으로 조정 (더 아래로)
+                  width: screenWidth * 0.8,  // 0.7 → 0.8로 조정 (좀 더 넓게)
+                  height: 100,  // 80 → 100으로 증가
+                  borderRadius: BorderRadius.circular(40),
+                  glowRadius: 20,
+                ),
+                stepDuration: const Duration(seconds: 8),
+              ),
+              // 스텝 4: 매칭 완료 애니메이션
+              anim_model.AnimatedTutorialStep(
+                animations: [
+                  // 하트 바운스 애니메이션
+                  anim_model.TutorialAnimation(
+                    type: anim_model.TutorialAnimationType.bounce,
+                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.5),
+                    duration: const Duration(seconds: 2),
+                    color: const Color(0xFFFF6B9D),
+                    repeat: true,
+                  ),
+                ],
+                stepDuration: const Duration(seconds: 5),  // 5초로 증가
+              ),
+            ],
+            // 레거시 텍스트 스텝 (백업용)
             tutorialSteps: [
-          TutorialStep(
-            title: 'AI 소나와 매칭하기',
-            description: '다양한 성격의 AI 소나들과 대화를 나눠보세요.\n\n• 오른쪽 스와이프 = 친구로 만나기 💕\n• 위로 스와이프 = 연인으로 만나기 ⭐\n• 왼쪽 스와이프 = 다음에 만나기 ❌',
-            icon: Icons.favorite,
-            highlightArea: HighlightArea(
-              left: MediaQuery.of(context).size.width * 0.1,
-              top: MediaQuery.of(context).size.height * 0.25,
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.45,
-            ),
-            messagePosition: Offset(
-              MediaQuery.of(context).size.width * 0.05,
-              MediaQuery.of(context).size.height * 0.1,
-            ),
-            gestureHint: GestureHint(
-              type: GestureType.swipeRight,
-              startPosition: Offset(
-                MediaQuery.of(context).size.width * 0.5,
-                MediaQuery.of(context).size.height * 0.5,
+              TutorialStep(
+                title: '',
+                description: '',
+                messagePosition: Offset(0, 0),
               ),
-              endPosition: Offset(
-                MediaQuery.of(context).size.width * 0.8,
-                MediaQuery.of(context).size.height * 0.5,
+              TutorialStep(
+                title: '',
+                description: '',
+                messagePosition: Offset(0, 0),
               ),
-            ),
-            tip: '상황에 따라 관계 타입을 선택하면 다른 대화 스타일을 경험할 수 있어요!',
-          ),
-          TutorialStep(
-            title: '소나 프로필 자세히 보기',
-            description: '카드를 탭하거나 프로필 사진을 스와이프하여 소나의 다양한 모습을 확인해보세요.\n\n각 소나마다 고유한 성격과 취미, 관심사가 있답니다!',
-            icon: Icons.photo_library,
-            highlightArea: HighlightArea(
-              left: MediaQuery.of(context).size.width * 0.15,
-              top: MediaQuery.of(context).size.height * 0.3,
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: MediaQuery.of(context).size.height * 0.35,
-            ),
-            messagePosition: Offset(
-              MediaQuery.of(context).size.width * 0.05,
-              MediaQuery.of(context).size.height * 0.72,
-            ),
-            gestureHint: GestureHint(
-              type: GestureType.tap,
-              startPosition: Offset(
-                MediaQuery.of(context).size.width * 0.5,
-                MediaQuery.of(context).size.height * 0.47,
+              TutorialStep(
+                title: '',
+                description: '',
+                messagePosition: Offset(0, 0),
               ),
-              endPosition: Offset(
-                MediaQuery.of(context).size.width * 0.5,
-                MediaQuery.of(context).size.height * 0.47,
+              TutorialStep(
+                title: '',
+                description: '',
+                messagePosition: Offset(0, 0),
               ),
-            ),
-            tip: '프로필 사진을 좌우로 스와이프하면 더 많은 사진을 볼 수 있어요!',
-          ),
-          TutorialStep(
-            title: '빠른 선택 버튼',
-            description: '스와이프가 어려우신가요? 하단 버튼으로 쉽게 선택하세요!\n\n• ❌ 다음에 만나기\n• ❤️ 친구로 만나기\n• ⭐ 연인으로 만나기 (슈퍼 라이크)',
-            icon: Icons.touch_app,
-            highlightArea: HighlightArea(
-              left: MediaQuery.of(context).size.width * 0.15,
-              top: MediaQuery.of(context).size.height * 0.70,
-              width: MediaQuery.of(context).size.width * 0.7,
-              height: 80,
-            ),
-            messagePosition: Offset(
-              MediaQuery.of(context).size.width * 0.05,
-              MediaQuery.of(context).size.height * 0.30,
-            ),
-            tip: '연인 관계로 시작하면 더욱 로맨틱한 대화를 나눌 수 있어요!',
-          ),
-          TutorialStep(
-            title: '대화 시작하기 🎉',
-            description: '소나와 매칭이 완료되면 채팅 화면으로 이동해요!\n\n• 소나가 먼저 인사를 건네줍니다\n• 자연스럽게 대화를 나눠보세요\n• 언제든 새로운 소나와 만날 수 있어요',
-            icon: Icons.chat_bubble,
-            messagePosition: Offset(
-              MediaQuery.of(context).size.width * 0.05,
-              MediaQuery.of(context).size.height * 0.35,
-            ),
-            tip: '튜토리얼을 완료하고 실제 AI와 대화해보세요!',
-          ),
-        ],
+            ],
           );
         },
       );

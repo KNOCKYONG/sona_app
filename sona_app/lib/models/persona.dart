@@ -12,13 +12,15 @@ class Persona {
   final bool isCasualSpeech; // 반말 사용 플래그
   final String gender; // 성별 ('male', 'female')
   final String mbti; // MBTI 성격 유형 (예: 'ENFP', 'INTJ')
-  final bool isExpert; // 전문가 여부
-  final String? profession; // 전문 분야 (예: '임상심리학', '상담심리학', '정신건강의학')
-  final String role; // 페르소나 역할 ('normal', 'expert')
   final DateTime? matchedAt; // 매칭된 시간
   
   // 새로운 이미지 구조 (Cloudflare R2)
   final Map<String, dynamic>? imageUrls; // 크기별 이미지 URL 저장
+  
+  // 전문가/상담사 관련 필드
+  final bool isExpert; // 전문가 여부
+  final String? profession; // 전문 분야 (예: '심리상담', '연애코치')
+  final String? role; // 역할 (예: 'expert', 'specialist', 'normal')
 
   Persona({
     required this.id,
@@ -34,11 +36,11 @@ class Persona {
     this.isCasualSpeech = false, // 기본값은 존댓말
     this.gender = 'female', // 기본값은 여성
     this.mbti = 'ENFP', // 기본값은 ENFP
-    this.isExpert = false, // 기본값은 일반 페르소나
-    this.profession, // 전문 분야는 선택사항
-    this.role = 'normal', // 기본값은 일반 페르소나
     this.matchedAt, // 매칭된 시간
     this.imageUrls, // 새로운 이미지 URL 구조
+    this.isExpert = false, // 기본값은 일반 페르소나
+    this.profession, // 전문 분야
+    this.role, // 역할
   }) : createdAt = createdAt ?? DateTime.now();
 
   // 관계 상태 확인 메서드
@@ -234,10 +236,10 @@ class Persona {
       'isCasualSpeech': isCasualSpeech,
       'gender': gender,
       'mbti': mbti,
+      'imageUrls': imageUrls, // 새로운 이미지 URL 구조
       'isExpert': isExpert,
       'profession': profession,
       'role': role,
-      'imageUrls': imageUrls, // 새로운 이미지 URL 구조
     };
   }
 
@@ -259,12 +261,12 @@ class Persona {
       isCasualSpeech: json['isCasualSpeech'] ?? false,
       gender: json['gender'] ?? 'female',
       mbti: json['mbti'] ?? 'ENFP',
-      isExpert: json['isExpert'] ?? false,
-      profession: json['profession'],
-      role: json['role'] ?? 'normal',
       imageUrls: json['imageUrls'] != null 
         ? Map<String, dynamic>.from(json['imageUrls']) 
         : null,
+      isExpert: json['isExpert'] ?? false,
+      profession: json['profession'],
+      role: json['role'],
     );
   }
 
@@ -280,10 +282,10 @@ class Persona {
     bool? isCasualSpeech,
     String? gender,
     String? mbti,
+    Map<String, dynamic>? imageUrls,
     bool? isExpert,
     String? profession,
     String? role,
-    Map<String, dynamic>? imageUrls,
   }) {
     return Persona(
       id: id,
@@ -299,10 +301,10 @@ class Persona {
       isCasualSpeech: isCasualSpeech ?? this.isCasualSpeech,
       gender: gender ?? this.gender,
       mbti: mbti ?? this.mbti,
+      imageUrls: imageUrls ?? this.imageUrls,
       isExpert: isExpert ?? this.isExpert,
       profession: profession ?? this.profession,
       role: role ?? this.role,
-      imageUrls: imageUrls ?? this.imageUrls,
     );
   }
 }

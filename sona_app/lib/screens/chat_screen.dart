@@ -12,6 +12,7 @@ import '../../models/message.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
 import '../widgets/tutorial_overlay.dart';
+import '../../models/tutorial_animation.dart' as anim_model;
 import '../widgets/sona_logo.dart';
 import '../widgets/persona_profile_viewer.dart';
 import '../widgets/modern_emotion_picker.dart';
@@ -118,8 +119,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String _getPersonalizedWelcomeMessage(Persona persona) {
-    // 전문가 페르소나인지 확인
-    final isExpert = persona.isExpert || persona.role == 'expert' || persona.role == 'specialist';
+    // 모든 페르소나는 일반 페르소나
+    final isExpert = false;
     
     if (isExpert) {
       // 전문가용 첫 인사말 - 더 전문적이지만 친근하게
@@ -274,7 +275,7 @@ class _ChatScreenState extends State<ChatScreen> {
           // Message input
           Consumer<PersonaService>(
             builder: (context, personaService, child) {
-              final isExpertChat = personaService.currentPersona?.isExpert ?? false;
+              final isExpertChat = false;
               return _MessageInput(
                 controller: _messageController,
                 focusNode: _focusNode,
@@ -297,6 +298,7 @@ class _ChatScreenState extends State<ChatScreen> {
           screenKey: 'chat_screen',
           child: scaffold,
           tutorialSteps: tutorialSteps,
+          animatedSteps: _getAnimatedTutorialSteps(),  // 애니메이션 스텝 추가
         );
       }
     }
@@ -334,83 +336,86 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  List<anim_model.AnimatedTutorialStep> _getAnimatedTutorialSteps() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    
+    return [
+      // 스텝 1: 메시지 입력 가이드
+      anim_model.AnimatedTutorialStep(
+        animations: [
+          // 타이핑 애니메이션 - 입력창 중앙에 위치
+          anim_model.TutorialAnimation(
+            type: anim_model.TutorialAnimationType.typing,
+            startPosition: Offset(screenWidth * 0.5, screenHeight - 65),  // 입력창 중앙
+            duration: const Duration(seconds: 3),
+            delay: const Duration(milliseconds: 500),
+          ),
+          // 전송 버튼 탭 - 실제 버튼 위치에 맞춤
+          anim_model.TutorialAnimation(
+            type: anim_model.TutorialAnimationType.tap,
+            startPosition: Offset(screenWidth - 60, screenHeight - 65),  // 오른쪽 전송 버튼
+            duration: const Duration(seconds: 1),
+            delay: const Duration(seconds: 4),
+          ),
+        ],
+        highlightArea: anim_model.HighlightArea(
+          left: 20,
+          top: screenHeight - 100,  // 하단 입력창 영역
+          width: screenWidth - 40,
+          height: 70,
+          borderRadius: BorderRadius.circular(35),
+          glowColor: const Color(0xFFFF6B9D),
+        ),
+        stepDuration: const Duration(seconds: 8),
+      ),
+      // 스텝 2: 감정 버튼 가이드
+      anim_model.AnimatedTutorialStep(
+        animations: [
+          // 감정 버튼 바운스 - 입력창 내부 왼쪽의 이모지 버튼
+          anim_model.TutorialAnimation(
+            type: anim_model.TutorialAnimationType.bounce,
+            startPosition: Offset(60, screenHeight - 65),  // 입력창 내부 왼쪽 이모지 버튼
+            duration: const Duration(seconds: 2),
+            color: const Color(0xFFFFEB3B),
+            repeat: true,
+          ),
+          // 탭 애니메이션
+          anim_model.TutorialAnimation(
+            type: anim_model.TutorialAnimationType.tap,
+            startPosition: Offset(60, screenHeight - 65),  // 입력창 내부 왼쪽 이모지 버튼
+            duration: const Duration(seconds: 1),
+            delay: const Duration(seconds: 3),
+          ),
+        ],
+        highlightArea: anim_model.HighlightArea(
+          left: 35,  // 이모지 버튼 주변
+          top: screenHeight - 90,  // 입력창 높이
+          width: 50,
+          height: 50,
+          borderRadius: BorderRadius.circular(25),
+          glowColor: const Color(0xFFFFEB3B),
+          glowRadius: 20,
+        ),
+        stepDuration: const Duration(seconds: 6),
+      ),
+    ];
+  }
+  
   List<TutorialStep> _getChatTutorialSteps() {
     final screenSize = MediaQuery.of(context).size;
     
+    // 레거시 텍스트 스텝 (백업용) - 2개로 줄임
     return [
       TutorialStep(
-        title: '소나와의 첫 대화 💬',
-        description: '선택한 소나와 대화를 나눠보세요!\n\n• 소나가 먼저 인사를 건네줍니다\n• 자연스럽게 대화를 이어가세요\n• 메시지는 하단 입력창에 작성해주세요',
-        icon: Icons.chat_bubble_outline,
-        messagePosition: Offset(
-          screenSize.width * 0.05,
-          screenSize.height * 0.15,
-        ),
-        tip: '소나는 당신의 대화 상대방이 되어 친근하게 응답해줄 거예요!',
+        title: '',
+        description: '',
+        messagePosition: Offset(0, 0),
       ),
       TutorialStep(
-        title: '메시지 보내기 📤',
-        description: '하단의 입력창에 메시지를 작성하고 전송 버튼을 눌러보세요.\n\n• 텍스트를 입력하고 보내기 버튼을 누르세요\n• 엔터키를 눌러도 메시지가 전송됩니다',
-        icon: Icons.send,
-        highlightArea: HighlightArea(
-          left: screenSize.width * 0.05,
-          top: screenSize.height * 0.87,
-          width: screenSize.width * 0.9,
-          height: 60,
-        ),
-        messagePosition: Offset(
-          screenSize.width * 0.05,
-          screenSize.height * 0.65,
-        ),
-        gestureHint: GestureHint(
-          type: GestureType.tap,
-          startPosition: Offset(
-            screenSize.width * 0.92,
-            screenSize.height * 0.9,
-          ),
-          endPosition: Offset(
-            screenSize.width * 0.92,
-            screenSize.height * 0.9,
-          ),
-        ),
-        tip: '메시지를 보내면 소나가 바로 응답해줄 거예요!',
-      ),
-      TutorialStep(
-        title: '감정 표현하기 😊',
-        description: '감정 버튼을 눌러 현재 기분을 소나에게 전달해보세요!\n\n다양한 감정을 표현하면 소나가 더 공감하며 대화해줍니다.',
-        icon: Icons.mood,
-        highlightArea: HighlightArea(
-          left: screenSize.width * 0.75,
-          top: screenSize.height * 0.87,
-          width: 48,
-          height: 48,
-        ),
-        messagePosition: Offset(
-          screenSize.width * 0.05,
-          screenSize.height * 0.6,
-        ),
-        gestureHint: GestureHint(
-          type: GestureType.tap,
-          startPosition: Offset(
-            screenSize.width * 0.79,
-            screenSize.height * 0.9,
-          ),
-          endPosition: Offset(
-            screenSize.width * 0.79,
-            screenSize.height * 0.9,
-          ),
-        ),
-        tip: '감정에 따라 소나의 대화 스타일이 달라져요!',
-      ),
-      TutorialStep(
-        title: '튜토리얼 완료! 🎉',
-        description: '이제 소나와 자유롭게 대화해보세요!\n\n• 궁금한 것들을 물어보세요\n• 일상 이야기를 나눠보세요\n• 언제든 새로운 소나와 만날 수 있어요',
-        icon: Icons.celebration,
-        messagePosition: Offset(
-          screenSize.width * 0.05,
-          screenSize.height * 0.35,
-        ),
-        tip: '실제 AI와 대화하려면 로그인해주세요!',
+        title: '',
+        description: '',
+        messagePosition: Offset(0, 0),
       ),
     ];
   }
@@ -759,11 +764,8 @@ class _PersonaTitle extends StatelessWidget {
       builder: (context, personaService, child) {
         // Get the updated persona with latest relationship score
         final updatedPersona = personaService.currentPersona ?? persona;
-        // 🔧 강화된 전문가 체크 - 메서드 시작 부분에서 선언
-        final isExpert = updatedPersona.role == 'expert' || 
-                        updatedPersona.role == 'specialist' ||
-                        updatedPersona.isExpert == true ||
-                        updatedPersona.name.contains('Dr.');
+        // 모든 페르소나는 일반 페르소나
+        final isExpert = false;
         
         return Row(
       children: [

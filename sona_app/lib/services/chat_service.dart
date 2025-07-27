@@ -255,7 +255,8 @@ class ChatService extends ChangeNotifier {
       try {
         // Determine if this is a paid consultation
         isPaidConsultation = persona.isExpert || 
-                            _isSpecialistPersona(persona);
+                            persona.role == 'expert' || 
+                            persona.role == 'specialist';
         
         if (isPaidConsultation) {
           // Use professional consultation service for specialists
@@ -653,28 +654,6 @@ class ChatService extends ChangeNotifier {
   // Helper methods remain the same but with optimizations...
   String? _getCurrentUserId() => _currentUserId;
   
-  /// Check if persona is a specialist requiring professional consultation
-  bool _isSpecialistPersona(Persona persona) {
-    // Check by role field
-    if (persona.isExpert) return true;
-    
-    // Check by persona name patterns (전문 상담사)
-    final specialistNames = [
-      'Dr. 김민서', 'James Chen', 'Sofia Rodriguez', '박준영',
-      'Dr. Maria Santos', 'Dr. 이서연', 'Attorney Robert Kim', 'Dr. Akiko Tanaka'
-    ];
-    
-    if (specialistNames.contains(persona.name)) return true;
-    
-    // Check by description keywords
-    final description = persona.description.toLowerCase();
-    final specialistKeywords = [
-      'therapist', 'counselor', 'coach', 'consultant', 'advisor',
-      '상담사', '전문가', '코치', '컨설턴트', '어드바이저'
-    ];
-    
-    return specialistKeywords.any((keyword) => description.contains(keyword));
-  }
   
   String _getRelationshipTypeString(int score) {
     if (score >= 800) return '완벽한 사랑';

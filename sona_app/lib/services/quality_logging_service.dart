@@ -25,7 +25,7 @@ class QualityLoggingService {
         'timestamp': DateTime.now().toIso8601String(),
         'user_id': userId,
         'persona_id': persona.id,
-        'persona_type': persona.isExpert ? 'specialist' : 'normal',
+        'persona_type': 'normal',
         'persona_name': persona.name,
         
         // 메시지 정보 (개인정보 보호를 위해 일부만)
@@ -43,7 +43,7 @@ class QualityLoggingService {
         // 상태 플래그
         'is_crisis_response': isCrisisResponse,
         'requires_human_review': requiresHumanReview,
-        'is_paid_consultation': persona.isExpert,
+        'is_paid_consultation': false,
         
         // 추가 컨텍스트
         'platform': kIsWeb ? 'web' : 'mobile',

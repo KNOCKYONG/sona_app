@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../models/tutorial_animation.dart' as anim_model;
+import 'animated_tutorial/animated_tutorial_guide.dart';
 
 class TutorialOverlay extends StatefulWidget {
   final Widget child;
   final String screenKey;
   final List<TutorialStep> tutorialSteps;
+  final List<anim_model.AnimatedTutorialStep>? animatedSteps;
 
   const TutorialOverlay({
     super.key,
     required this.child,
     required this.screenKey,
     required this.tutorialSteps,
+    this.animatedSteps,
   });
 
   @override
@@ -78,20 +82,61 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
     }
   }
 
-  String _getIconEmoji(IconData icon) {
-    // Material Icons를 이모지로 변환하는 헬퍼 메서드
-    if (icon == Icons.swipe) return '👆';
-    if (icon == Icons.photo_library) return '📷';
-    if (icon == Icons.star) return '⭐';
-    if (icon == Icons.favorite) return '💕';
-    if (icon == Icons.chat) return '💬';
-    if (icon == Icons.info_outline) return 'ℹ️';
-    if (icon == Icons.lightbulb_outline) return '💡';
-    if (icon == Icons.swipe_left) return '👈';
-    if (icon == Icons.swipe_right) return '👉';
-    if (icon == Icons.touch_app) return '👆';
-    if (icon == Icons.pan_tool) return '✋';
-    return 'ℹ️'; // 기본값
+  // 애니메이션 스텝으로 변환
+  anim_model.AnimatedTutorialStep? _convertToAnimatedStep(TutorialStep step) {
+    final animations = <anim_model.TutorialAnimation>[];
+    
+    // GestureHint가 있으면 애니메이션으로 변환
+    if (step.gestureHint != null) {
+      final hint = step.gestureHint!;
+      anim_model.TutorialAnimationType type;
+      
+      switch (hint.type) {
+        case GestureType.swipeLeft:
+          type = anim_model.TutorialAnimationType.swipeLeft;
+          break;
+        case GestureType.swipeRight:
+          type = anim_model.TutorialAnimationType.swipeRight;
+          break;
+        case GestureType.tap:
+          type = anim_model.TutorialAnimationType.tap;
+          break;
+        default:
+          type = anim_model.TutorialAnimationType.tap;
+      }
+      
+      animations.add(anim_model.TutorialAnimation(
+        type: type,
+        startPosition: hint.startPosition,
+        endPosition: hint.endPosition,
+        duration: const Duration(seconds: 2),
+        repeat: true,
+      ));
+    }
+    
+    // HighlightArea 변환
+    anim_model.HighlightArea? highlightArea;
+    if (step.highlightArea != null) {
+      highlightArea = anim_model.HighlightArea(
+        left: step.highlightArea!.left,
+        top: step.highlightArea!.top,
+        width: step.highlightArea!.width,
+        height: step.highlightArea!.height,
+        borderRadius: BorderRadius.circular(12),
+        glowRadius: 30,
+        glowColor: const Color(0xFFFF6B9D),
+      );
+    }
+    
+    if (animations.isEmpty && highlightArea == null) {
+      return null;
+    }
+    
+    return anim_model.AnimatedTutorialStep(
+      animations: animations,
+      highlightArea: highlightArea,
+      stepDuration: const Duration(seconds: 5),
+    );
   }
 
   void _nextStep() async {
@@ -169,51 +214,71 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       return const SizedBox.shrink(); // 빈 위젯 반환
     }
     
-    final currentStep = widget.tutorialSteps[_currentStep];
+    // 애니메이션 스텝이 제공되었으면 사용, 아니면 기존 스텝에서 변환
+    anim_model.AnimatedTutorialStep? animatedStep;
+    if (widget.animatedSteps != null && _currentStep < widget.animatedSteps!.length) {
+      animatedStep = widget.animatedSteps![_currentStep];
+    } else {
+      animatedStep = _convertToAnimatedStep(widget.tutorialSteps[_currentStep]);
+    }
     
     return GestureDetector(
       onTap: () {}, // 오버레이 클릭 방지
       child: Container(
         color: Colors.black.withValues(alpha: 0.7),
-        child: Stack(
-          children: [
-            // 하이라이트 영역
-            if (currentStep.highlightArea != null)
-              Positioned(
-                left: currentStep.highlightArea!.left,
-                top: currentStep.highlightArea!.top,
-                width: currentStep.highlightArea!.width,
-                height: currentStep.highlightArea!.height,
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: const Color(0xFFFF6B9D),
-                      width: 3,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFFFF6B9D).withValues(alpha: 0.5),
-                        blurRadius: 20,
-                        spreadRadius: 5,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            
-            // 설명 카드
-            _buildPositionedMessageCard(currentStep),
-            
-            // 제스처 힌트 애니메이션
-            if (currentStep.gestureHint != null)
-              _buildGestureHint(currentStep.gestureHint!),
-          ],
-        ),
+        child: animatedStep != null
+            ? AnimatedTutorialGuide(
+                step: animatedStep,
+                currentStep: _currentStep,
+                totalSteps: widget.tutorialSteps.length,
+                onNext: _nextStep,
+                onSkip: _skipTutorial,
+                onPrevious: _currentStep > 0 ? _previousStep : null,
+              )
+            : _buildLegacyTutorialOverlay(),
       ),
     );
   }
+  
+  // 애니메이션이 없는 레거시 튜토리얼을 위한 백업
+  Widget _buildLegacyTutorialOverlay() {
+    final currentStep = widget.tutorialSteps[_currentStep];
+    
+    return Stack(
+      children: [
+        // 하이라이트 영역
+        if (currentStep.highlightArea != null)
+          Positioned(
+            left: currentStep.highlightArea!.left,
+            top: currentStep.highlightArea!.top,
+            width: currentStep.highlightArea!.width,
+            height: currentStep.highlightArea!.height,
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color(0xFFFF6B9D),
+                  width: 3,
+                ),
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFF6B9D).withValues(alpha: 0.5),
+                    blurRadius: 20,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        
+        // 제스처 힌트 애니메이션
+        if (currentStep.gestureHint != null)
+          _buildGestureHint(currentStep.gestureHint!),
+      ],
+    );
+  }
 
+  // 텍스트 카드는 더 이상 사용하지 않음 (레거시 지원을 위해 유지)
   Widget _buildPositionedMessageCard(TutorialStep step) {
     final screenSize = MediaQuery.of(context).size;
     const margin = 16.0;
@@ -273,11 +338,9 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
           children: [
             Row(
               children: [
-                Text(
-                  step.icon != null 
-                    ? _getIconEmoji(step.icon!)
-                    : 'ℹ️',
-                  style: const TextStyle(fontSize: 20),
+                const Text(
+                  'ℹ️',
+                  style: TextStyle(fontSize: 20),
                 ),
                 const SizedBox(width: 8),
                 Expanded(

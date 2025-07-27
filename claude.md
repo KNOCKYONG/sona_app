@@ -299,11 +299,25 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
       "--context",
       "ide-assistant",
       "--project",
-      "%cd%"
+      "C:\\Users\\yong\\sonaapp"
     ],
     "type": "stdio"
   }
 }
 ```
+
+### 현재 프로젝트 Serena MCP 설정 상태:
+- **설치 상태**: ✅ 완료 (정상 연결)
+- **프로젝트 경로**: `C:\Users\yong\sonaapp` (절대 경로로 설정됨)
+- **웹 대시보드**: http://127.0.0.1:24283/dashboard/index.html
+- **사용 가능한 도구**: 27개 (semantic 코드 분석, 심볼 검색, 메모리 관리 등)
+- **설정 파일**: User 스코프로 설치되어 Claude 재시작 시 자동 연결
+
+### Serena MCP 자동 연결 확인:
+다음 Claude 세션부터는 자동으로 Serena MCP가 연결됩니다:
+1. **User 설정에 저장됨**: `C:\Users\yong\.claude\mcp_servers.json`에 설정 저장
+2. **자동 시작**: Claude 코드 실행 시 자동으로 Serena MCP 서버 시작
+3. **연결 확인**: `/mcp` 명령으로 연결 상태 확인 가능
+4. **웹 대시보드**: 브라우저에서 실시간 로그 및 상태 모니터링 가능
 
 ** scripts/process_persona_image.py 파일 활용하여 cloudflare mcp를 사용하기 전에 이미지 처리할 것 **

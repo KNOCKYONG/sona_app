@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io' show File;
+
+// Only import permission_handler for non-web platforms
+import 'package:permission_handler/permission_handler.dart'
+    if (dart.library.html) 'permission_handler_stub.dart';
 
 class PermissionHelper {
   /// 카메라/갤러리 권한 요청 및 이미지 선택
@@ -10,6 +14,24 @@ class PermissionHelper {
     required ImageSource source,
   }) async {
     try {
+      // Web에서는 권한 체크가 필요없음
+      if (kIsWeb) {
+        final picker = ImagePicker();
+        final pickedFile = await picker.pickImage(
+          source: source,
+          maxWidth: 1024,
+          maxHeight: 1024,
+          imageQuality: 85,
+        );
+        // Web에서는 File 객체를 생성할 수 없으므로 null 반환
+        // 실제 웹 구현에서는 XFile을 직접 사용해야 함
+        if (pickedFile != null) {
+          debugPrint('Image picked on web: ${pickedFile.path}');
+          // Web에서는 File을 생성할 수 없으므로 null 반환
+          return null;
+        }
+        return null;
+      }
       // 권한 요청
       Permission permission;
       String permissionName;
@@ -20,7 +42,8 @@ class PermissionHelper {
         permissionName = '카메라';
         permissionDescription = '프로필 사진 촬영을 위해 카메라 접근이 필요합니다.';
       } else {
-        if (Platform.isIOS) {
+        // Platform check using defaultTargetPlatform for web compatibility
+        if (Theme.of(context).platform == TargetPlatform.iOS) {
           permission = Permission.photos;
         } else {
           permission = Permission.storage;

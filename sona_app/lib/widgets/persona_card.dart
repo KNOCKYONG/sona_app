@@ -213,20 +213,14 @@ class _PersonaCardState extends State<PersonaCard> {
             // Persona info with expert badge
             _PersonaInfo(
               persona: widget.persona,
-              isExpert: widget.persona.isExpert || 
-                        widget.persona.role == 'expert' || 
-                        widget.persona.role == 'specialist' || 
-                        widget.persona.name.contains('Dr.'),
+              isExpert: false,
             ),
             
             // Swipe overlay with safe color handling
             _SwipeOverlay(
               horizontal: widget.horizontalThresholdPercentage,
               vertical: widget.verticalThresholdPercentage,
-              isExpert: widget.persona.isExpert || 
-                        widget.persona.role == 'expert' || 
-                        widget.persona.role == 'specialist' || 
-                        widget.persona.name.contains('Dr.'),
+              isExpert: false,
             ),
             
             // Relationship badge

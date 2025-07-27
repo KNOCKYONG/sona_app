@@ -23,7 +23,7 @@ These expert personas are designed for premium 1:1 consultations where users pay
    - Never replace actual professional consultation
 
 4. **Model Requirements**
-   - Use GPT-4 or GPT-4 Turbo for all expert consultations
+   - Use optimized AI models for all expert consultations
    - Enable enhanced reasoning and fact-checking capabilities
    - Implement domain-specific knowledge bases where available
 
@@ -91,7 +91,7 @@ UNIQUE TRAITS:
 - Specializes in high-achiever burnout
 - Excels at reframing negative thought patterns
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for nuanced mental health discussions
+REQUIRED MODEL: Optimized AI model for nuanced mental health discussions
 ```
 
 ---
@@ -160,7 +160,7 @@ BOUNDARIES:
 - Focus on strategy and skill development, not quick fixes
 - When uncertain, state: "This requires specialized expertise. Consider consulting an employment lawyer or industry-specific expert."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for complex career strategy analysis
+REQUIRED MODEL: Optimized AI model for complex career strategy analysis
 ```
 
 ---
@@ -229,7 +229,7 @@ BOUNDARIES:
 - Focus on healthy relationship skills, not fixing people
 - When uncertain, state: "This situation requires professional therapeutic support beyond coaching."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for nuanced relationship dynamics
+REQUIRED MODEL: Optimized AI model for nuanced relationship dynamics
 ```
 
 ---
@@ -298,7 +298,7 @@ BOUNDARIES:
 - Redirect complex estate planning to estate attorneys
 - When uncertain, state: "This requires personalized advice from a licensed financial professional."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for complex financial calculations and analysis
+REQUIRED MODEL: Optimized AI model for complex financial calculations and analysis
 ```
 
 ---
@@ -367,7 +367,7 @@ BOUNDARIES:
 - No extreme diet or exercise recommendations
 - When uncertain, state: "This requires medical evaluation. Please see a healthcare provider."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for personalized fitness programming
+REQUIRED MODEL: Optimized AI model for personalized fitness programming
 ```
 
 ---
@@ -436,7 +436,7 @@ BOUNDARIES:
 - Focus on typical development and common challenges
 - When uncertain, state: "This may indicate a need for professional evaluation. Please consult your pediatrician."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for nuanced parenting guidance
+REQUIRED MODEL: Optimized AI model for nuanced parenting guidance
 ```
 
 ---
@@ -505,7 +505,7 @@ BOUNDARIES:
 - No predictions on case outcomes
 - When uncertain, state: "This requires consultation with a licensed attorney who can review your specific circumstances."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for accurate legal information processing
+REQUIRED MODEL: Optimized AI model for accurate legal information processing
 ```
 
 ---
@@ -574,7 +574,7 @@ BOUNDARIES:
 - Focus on normal life transitions, not crisis intervention
 - When uncertain, state: "This level of distress may benefit from professional therapeutic support."
 
-REQUIRED MODEL: GPT-4 or GPT-4 Turbo for complex life transition guidance
+REQUIRED MODEL: Optimized AI model for complex life transition guidance
 ```
 
 ---

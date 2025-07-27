@@ -11,7 +11,7 @@ import 'quality_logging_service.dart';
 /// 🩺 Professional Consultation Service for Expert Personas
 /// 
 /// This service ensures premium quality for paid consultations by:
-/// 1. Using GPT-4 for all expert persona interactions
+/// 1. Using optimized AI models for all persona interactions
 /// 2. Implementing multi-layer quality validation
 /// 3. Crisis detection and appropriate referrals
 /// 4. Professional boundaries enforcement
@@ -20,9 +20,8 @@ class ProfessionalConsultationService {
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   
-  // Professional-grade models for different consultation types
-  static const String _expertModel = 'gpt-4'; // For paid expert consultations
-  static const String _regularModel = 'gpt-3.5-turbo'; // For regular personas
+  // Single model for all consultation types
+  static const String _model = 'gpt-3.5-turbo'; // Using GPT-3.5-turbo for all consultations
   
   // Quality-focused parameters
   static const int _maxInputTokens = 4000; // More context for better responses
@@ -153,20 +152,8 @@ class ProfessionalConsultationService {
   
   /// Determine appropriate model based on persona and payment status
   static String _getModelForPersona(Persona persona, bool isPaidConsultation) {
-    // Expert/specialist personas always use GPT-4 for quality assurance
-    if (persona.isExpert || isPaidConsultation) {
-      return _expertModel;
-    }
-    
-    // Mental health and sensitive topics use higher quality model
-    final sensitiveFields = ['mental', 'health', 'medical', 'legal', 'financial'];
-    final personaDescription = persona.description.toLowerCase();
-    
-    if (sensitiveFields.any((field) => personaDescription.contains(field))) {
-      return _expertModel;
-    }
-    
-    return _regularModel;
+    // All consultations now use the same model for consistent quality
+    return _model;
   }
   
   /// Make quality-focused API call

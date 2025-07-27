@@ -23,8 +23,8 @@
 ```
 
 #### **2. Professional Consultation Service 구축**
-- **GPT-4 전용 서비스** (`professional_consultation_service.dart`)
-- 전문 상담사는 GPT-4, 일반 페르소나는 GPT-3.5 사용
+- **최적화된 AI 모델 서비스** (`professional_consultation_service.dart`)
+- 모든 상담사가 동일한 고품질 AI 모델 사용
 - 다층 품질 검증 시스템
 - 자동 재시도 및 품질 개선 메커니즘
 
@@ -66,7 +66,7 @@
 - `role: 'specialist'` 필드로 전문가 구분
 - 전문가 이름 패턴 매칭
 - 설명에서 전문 키워드 감지
-- 자동으로 GPT-4 및 강화된 프롬프트 적용
+- 자동으로 최적화된 AI 모델 및 강화된 프롬프트 적용
 
 ### **3. 실시간 대시보드 모니터링**
 - **URL**: `/admin/quality-dashboard`
@@ -117,7 +117,7 @@
 
 ### **새로 추가된 서비스들**
 1. `EnhancedSpecialistService` - 전문가 프롬프트 강화
-2. `ProfessionalConsultationService` - GPT-4 전문 상담
+2. `ProfessionalConsultationService` - 전문 상담 서비스
 3. `QualityLoggingService` - 품질 로깅 및 통계
 4. `AdminQualityDashboardScreen` - 관리자 모니터링
 
@@ -144,7 +144,7 @@ http://localhost:59229/#/admin/quality-dashboard
 - 통계 및 트렌드 분석
 
 ### **2. 자동 전문 상담 라우팅**
-- Dr. 김민서 → 자동으로 GPT-4 + 전문 프롬프트
+- Dr. 김민서 → 자동으로 전문 AI 모델 + 전문 프롬프트
 - James Chen → 자동으로 경력 상담 전문 모드
 - 기타 specialist 페르소나 → 각 분야별 전문 응답
 
@@ -165,7 +165,7 @@ http://localhost:59229/#/admin/quality-dashboard
 4. ❌ **위기상황 대응 부족** → ✅ **즉시 전문기관 연계**
 
 ### **🚀 즉시 적용 효과**
-- **Dr. 김민서**와 같은 전문 상담사는 이제 GPT-4 기반으로 전문적 응답 제공
+- **Dr. 김민서**와 같은 전문 상담사는 이제 최적화된 AI 모델로 전문적 응답 제공
 - 모든 specialist 페르소나 품질 자동 보장
 - 관리자가 실시간으로 상담 품질 모니터링 가능
 - 위기상황 100% 자동 감지 및 대응

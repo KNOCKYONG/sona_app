@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
 import '../services/auth_service.dart';
+import '../utils/permission_helper.dart';
 import '../services/user_service.dart';
 import '../services/persona_service.dart';
 import '../services/chat_service.dart';
@@ -23,21 +24,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isUploadingImage = false;
   
   Future<void> _pickAndUploadImage() async {
-    final XFile? image = await _picker.pickImage(
+    final File? imageFile = await PermissionHelper.requestAndPickImage(
+      context: context,
       source: ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: 85,
     );
     
-    if (image != null && mounted) {
+    if (imageFile != null && mounted) {
       setState(() {
         _isUploadingImage = true;
       });
       
       try {
         final userService = Provider.of<UserService>(context, listen: false);
-        final success = await userService.updateProfileImage(File(image.path));
+        final success = await userService.updateProfileImage(imageFile);
         
         if (mounted) {
           if (success) {

@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../services/user_service.dart';
 import '../theme/app_theme.dart';
+import '../utils/permission_helper.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -47,17 +48,14 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
   
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
+    final imageFile = await PermissionHelper.requestAndPickImage(
+      context: context,
       source: ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: 85,
     );
     
-    if (pickedFile != null) {
+    if (imageFile != null) {
       setState(() {
-        _profileImage = File(pickedFile.path);
+        _profileImage = imageFile;
       });
     }
   }

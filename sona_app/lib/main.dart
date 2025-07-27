@@ -17,11 +17,10 @@ import 'screens/profile_screen.dart';
 import 'screens/privacy_policy_screen.dart';
 import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
-import 'screens/test_auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/purchase_screen.dart';
-import 'screens/test_purchase_screen.dart';
+import 'screens/purchase_policy_screen.dart';
 
 import 'services/auth_service.dart';
 import 'services/user_service.dart';
@@ -39,7 +38,9 @@ void main() async {
   try {
     await dotenv.load(fileName: ".env");
   } catch (e) {
-    print('Warning: .env file not found. Using default configuration.');
+    if (kDebugMode) {
+      print('Warning: .env file not found. Using default configuration.');
+    }
   }
   
   // Firebase 중복 초기화 방지
@@ -49,7 +50,9 @@ void main() async {
     );
   } catch (e) {
     if (e.toString().contains('duplicate-app')) {
-      print('Firebase already initialized');
+      if (kDebugMode) {
+        print('Firebase already initialized');
+      }
     } else {
       rethrow;
     }
@@ -124,10 +127,9 @@ class SonaApp extends StatelessWidget {
           '/privacy-policy': (context) => const PrivacyPolicyScreen(),
           '/terms-of-service': (context) => const TermsOfServiceScreen(),
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
-          '/test-auth': (context) => const TestAuthScreen(),
           '/settings': (context) => const SettingsScreen(),
           '/purchase': (context) => const PurchaseScreen(),
-          '/test-purchase': (context) => const TestPurchaseScreen(),
+          '/purchase-policy': (context) => const PurchasePolicyScreen(),
         },
       ),
     );

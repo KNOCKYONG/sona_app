@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import '../services/user_service.dart';
 import '../models/app_user.dart';
 import '../theme/app_theme.dart';
+import '../widgets/terms_agreement_widget.dart';
+import '../utils/permission_helper.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isGoogleSignUp;
@@ -39,6 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> _selectedInterests = [];
   File? _profileImage;
   
+  // Terms agreement
+  bool _agreedToTerms = false;
+  bool _agreedToPrivacy = false;
+  bool _agreedToMarketing = false;
+  
   int _currentPage = 0;
   bool _isCheckingNickname = false;
   bool _isNicknameAvailable = true;
@@ -56,17 +63,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
+    final image = await PermissionHelper.requestAndPickImage(
+      context: context,
       source: ImageSource.gallery,
-      maxWidth: 800,
-      maxHeight: 800,
-      imageQuality: 85,
     );
     
-    if (pickedFile != null) {
+    if (image != null) {
       setState(() {
-        _profileImage = File(pickedFile.path);
+        _profileImage = image;
       });
     }
   }
@@ -162,6 +166,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
     
+    if (!_agreedToTerms || !_agreedToPrivacy) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('필수 약관에 동의해주세요')),
+      );
+      return;
+    }
+    
     final userService = context.read<UserService>();
     
     if (widget.isGoogleSignUp) {
@@ -228,9 +239,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 2: // 선호 설정 페이지
         canProceed = _validatePreferences();
         break;
+      case 3: // 관심사 페이지
+        canProceed = _validateInterests();
+        break;
     }
     
-    if (canProceed && _currentPage < 3) {
+    if (canProceed && _currentPage < 4) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -298,6 +312,26 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
   
+  bool _validateInterests() {
+    if (_selectedInterests.isEmpty) {
+      _showErrorSnackBar('관심사를 최소 1개 이상 선택해주세요');
+      return false;
+    }
+    return true;
+  }
+  
+  bool _validateTermsAgreement() {
+    if (!_agreedToTerms) {
+      _showErrorSnackBar('서비스 이용약관에 동의해주세요');
+      return false;
+    }
+    if (!_agreedToPrivacy) {
+      _showErrorSnackBar('개인정보 처리방침에 동의해주세요');
+      return false;
+    }
+    return true;
+  }
+  
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -331,6 +365,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 2: // 선호 설정 페이지
         return true; // 기본값이 있으므로 항상 true
         
+      case 3: // 관심사 페이지
+        return _selectedInterests.isNotEmpty;
+        
+      case 4: // 약관 동의 페이지
+        return _agreedToTerms && _agreedToPrivacy;
+        
       default:
         return false;
     }
@@ -362,7 +402,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 4,
+                value: (_currentPage + 1) / 5,
                 backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
@@ -384,6 +424,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _buildProfileInfoPage(),
                     _buildPreferencePage(),
                     _buildInterestsPage(),
+                    _buildTermsAgreementPage(),
                   ],
                 ),
               ),
@@ -402,7 +443,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     else
                       const SizedBox(width: 60),
                     
-                    if (_currentPage < 3)
+                    if (_currentPage < 4)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
@@ -862,6 +903,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 checkmarkColor: AppTheme.primaryColor,
               );
             }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTermsAgreementPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '약관 동의',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '서비스 이용을 위한 약관에 동의해주세요',
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 32),
+          
+          TermsAgreementWidget(
+            agreedToTerms: _agreedToTerms,
+            agreedToPrivacy: _agreedToPrivacy,
+            agreedToMarketing: _agreedToMarketing,
+            onTermsChanged: (value) {
+              setState(() {
+                _agreedToTerms = value;
+              });
+            },
+            onPrivacyChanged: (value) {
+              setState(() {
+                _agreedToPrivacy = value;
+              });
+            },
+            onMarketingChanged: (value) {
+              setState(() {
+                _agreedToMarketing = value;
+              });
+            },
           ),
         ],
       ),

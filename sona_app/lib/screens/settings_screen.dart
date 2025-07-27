@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth_service.dart';
+import '../utils/account_deletion_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -122,27 +123,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pushNamed(context, '/terms-of-service');
               },
             ),
+            _buildMenuItem(
+              icon: Icons.payment_outlined,
+              title: '구매 및 환불 정책',
+              onTap: () {
+                Navigator.pushNamed(context, '/purchase-policy');
+              },
+            ),
             
-            // 개발자 옵션 (디버그 모드에서만 표시)
-            if (const bool.fromEnvironment('dart.vm.product') == false) ...[
-              _buildSectionTitle('개발자 옵션'),
-              _buildMenuItem(
-                icon: Icons.bug_report_outlined,
-                title: '구매 서비스 테스트',
-                subtitle: '인앱 결제 테스트 화면',
-                onTap: () {
-                  Navigator.pushNamed(context, '/test-purchase');
-                },
-              ),
-              _buildMenuItem(
-                icon: Icons.account_circle_outlined,
-                title: '인증 테스트',
-                subtitle: '로그인/회원가입 테스트',
-                onTap: () {
-                  Navigator.pushNamed(context, '/test-auth');
-                },
-              ),
-            ],
+            // 계정 관리
+            _buildSectionTitle('계정 관리'),
+            _buildMenuItem(
+              icon: Icons.delete_outline,
+              title: '계정 삭제',
+              subtitle: '모든 데이터가 삭제됩니다',
+              onTap: () {
+                AccountDeletionDialog.show(context);
+              },
+            ),
             
             const SizedBox(height: 40),
           ],

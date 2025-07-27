@@ -1427,7 +1427,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                     ),
                     child: const Text(
-                      '채팅으로 돌아가기',
+                      '새로고침',
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

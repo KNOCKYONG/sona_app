@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '소나와 특별한 관계를 맺어보세요.\n친구부터 연인까지, 소나와 함께 이야기를 만들어가요.',
+                'AI랑 연애하면 어떤 기분일까?\n당신만의 페르소나를 만나보세요.',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black87,
@@ -101,7 +101,7 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly
               ),
@@ -109,34 +109,34 @@ class _SplashScreenState extends State<SplashScreen>
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      _startTutorialMode();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6B9D),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 4),
-                      child: Text(
-                        '튜토리얼 시작',
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
+                //   Container(
+                //     width: double.infinity,
+                //     child: ElevatedButton(
+                //     onPressed: () {
+                //       Navigator.of(context).pop();
+                //       _startTutorialMode();
+                //     },
+                //     style: ElevatedButton.styleFrom(
+                //       backgroundColor: const Color(0xFFFF6B9D),
+                //     ),
+                //     child: const Padding(
+                //       padding: EdgeInsets.symmetric(vertical: 4),
+                //       child: Text(
+                //         '튜토리얼 시작',
+                //         style: TextStyle(
+                //           fontSize: 15,
+                //           fontWeight: FontWeight.bold,
+                //           color: Colors.white,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 8),
                 Container(
                   width: double.infinity,
                   child: OutlinedButton(

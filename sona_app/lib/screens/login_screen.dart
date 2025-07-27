@@ -206,16 +206,20 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         
                         // 탭 뷰
                         Container(
-                          height: 320,
+                          height: 380,
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                           child: TabBarView(
                             controller: _tabController,
                             children: [
                               // 로그인 탭
-                              _buildLoginTab(),
+                              SingleChildScrollView(
+                                child: _buildLoginTab(),
+                              ),
                               
                               // 회원가입 탭
-                              _buildSignUpTab(),
+                              SingleChildScrollView(
+                                child: _buildSignUpTab(),
+                              ),
                             ],
                           ),
                         ),
@@ -225,16 +229,16 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   const SizedBox(height: 12),
                   
                   // 튜토리얼 모드 버튼
-                  TextButton(
-                    onPressed: _isLoading ? null : _handleTutorialMode,
-                    child: const Text(
-                      '로그인 없이 둘러보기',
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ),
+                  // TextButton(
+                  //   onPressed: _isLoading ? null : _handleTutorialMode,
+                  //   child: const Text(
+                  //     '로그인 없이 둘러보기',
+                  //     style: TextStyle(
+                  //       color: Colors.white70,
+                  //       fontSize: 14,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -249,6 +253,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       key: _formKey,
       child: Column(
         children: [
+          const SizedBox(height: 16),
           // 이메일 입력
           TextFormField(
             controller: _emailController,
@@ -411,6 +416,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(height: 16),
         const Icon(
           Icons.favorite,
           size: 48,

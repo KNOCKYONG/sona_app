@@ -96,11 +96,12 @@ class SonaApp extends StatelessWidget {
               ? PurchaseService() 
               : MockPurchaseService(),
         ),
-        ChangeNotifierProxyProvider<PersonaService, ChatService>(
+        ChangeNotifierProxyProvider2<PersonaService, UserService, ChatService>(
           create: (_) => ChatService(),
-          update: (_, personaService, chatService) {
+          update: (_, personaService, userService, chatService) {
             if (chatService != null) {
               chatService.setPersonaService(personaService);
+              chatService.setUserService(userService);
             }
             return chatService ?? ChatService();
           },

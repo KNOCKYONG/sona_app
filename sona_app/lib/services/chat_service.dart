@@ -13,6 +13,7 @@ import 'local_storage_service.dart';
 import 'conversation_memory_service.dart';
 import 'enhanced_openai_service.dart';
 import 'professional_consultation_service.dart';
+import 'user_service.dart';
 
 /// 🚀 Optimized Chat Service with Performance Enhancements
 /// 
@@ -48,6 +49,7 @@ class ChatService extends ChangeNotifier {
   
   // Service references
   PersonaService? _personaService;
+  UserService? _userService;
   String? _currentUserId;
   
   // Data storage
@@ -63,6 +65,10 @@ class ChatService extends ChangeNotifier {
   
   void setPersonaService(PersonaService personaService) {
     _personaService = personaService;
+  }
+  
+  void setUserService(UserService userService) {
+    _userService = userService;
   }
   
   void setCurrentUserId(String userId) {
@@ -383,11 +389,18 @@ class ChatService extends ChangeNotifier {
         
       } catch (e) {
         debugPrint('AI Response Generation Error: $e');
+        // Get user nickname
+        String? userNickname;
+        if (_userService?.currentUser != null) {
+          userNickname = _userService!.currentUser!.nickname;
+        }
+        
         // Fallback to persona-aware natural response
         final naturalResponse = await _naturalAIService.generateResponse(
           persona: persona,
           userMessage: userMessage,
           chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+          userNickname: userNickname,
         );
         aiResponseContent = naturalResponse.content;
         emotion = naturalResponse.emotion ?? EmotionType.neutral;

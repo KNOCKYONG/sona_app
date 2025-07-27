@@ -331,40 +331,12 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       children: [
         Row(
           children: [
-            // 전문가 뱃지를 이름 앞에 표시
-            if (widget.persona.isExpert) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2196F3),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white, width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.verified, color: Colors.white, size: 16),
-                    const SizedBox(width: 4),
-                    const Text('전문가', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-            ],
+            // 전문가 뱃지 제거됨
             
             // 이름
             Flexible(
               child: Text(
-                widget.persona.isExpert && widget.persona.profession != null
-                    ? 'Dr. ${widget.persona.name}'
-                    : widget.persona.name,
+                widget.persona.name,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 28,
@@ -445,40 +417,12 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       children: [
         Row(
           children: [
-            // 전문가 뱃지를 이름 앞에 표시
-            if (widget.persona.isExpert) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2196F3),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white, width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 4,
-                      offset: const Offset(0, 1),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.verified, color: Colors.white, size: 16),
-                    const SizedBox(width: 4),
-                    const Text('전문가', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-            ],
+            // 전문가 뱃지 제거됨
             
             // 이름
             Flexible(
               child: Text(
-                widget.persona.isExpert && widget.persona.profession != null
-                    ? 'Dr. ${widget.persona.name}'
-                    : widget.persona.name,
+                widget.persona.name,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 28,

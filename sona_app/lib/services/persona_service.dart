@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/persona.dart';
+import '../models/app_user.dart';
 import 'device_id_service.dart';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
@@ -66,12 +67,12 @@ class PersonaService extends ChangeNotifier {
         _hasR2Image(persona)  // Only include personas with R2 images
       ).toList();
       
-      // Randomize the order
-      filtered.shuffle();
-      _shuffledAvailablePersonas = filtered;
+      // Get recommended personas for current user
+      final recommendedPersonas = getRecommendedPersonas(filtered);
+      _shuffledAvailablePersonas = recommendedPersonas;
       _lastShuffleTime = now;
       
-      debugPrint('✅ Shuffled ${filtered.length} personas with R2 images for swipe session');
+      debugPrint('✅ Sorted ${recommendedPersonas.length} personas by recommendation score');
     } else {
       // Update the existing shuffled list to exclude newly swiped/matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
@@ -978,9 +979,6 @@ class PersonaService extends ChangeNotifier {
         }
       }
       
-      // Check if persona is a specialist/expert
-      final role = data['role'] ?? 'normal';
-      final isSpecialist = role == 'specialist' || role == 'expert';
       
       // Parse imageUrls for R2 storage
       Map<String, dynamic>? imageUrls;
@@ -1011,9 +1009,12 @@ class PersonaService extends ChangeNotifier {
         gender: data['gender'] ?? 'female',
         mbti: data['mbti'] ?? 'ENFP',
         imageUrls: imageUrls,  // Add R2 image URLs
-        isExpert: data['isExpert'] ?? false,
-        profession: data['profession'],
-        role: role,
+        topics: data['topics'] != null 
+          ? List<String>.from(data['topics'])
+          : null,
+        keywords: data['keywords'] != null 
+          ? List<String>.from(data['keywords'])
+          : null,
       );
       
       return persona;
@@ -1129,6 +1130,127 @@ class PersonaService extends ChangeNotifier {
     debugPrint('🔄 Force reshuffling available personas...');
     _shuffledAvailablePersonas = null;
     _lastShuffleTime = null;
+    notifyListeners();
+  }
+  
+  /// 추천 알고리즘 - 사용자 선호도에 따라 페르소나 정렬
+  List<Persona> getRecommendedPersonas(List<Persona> personas) {
+    // 현재 사용자 정보가 없으면 랜덤 순서로 반환
+    if (_currentUser == null) {
+      personas.shuffle();
+      return personas;
+    }
+    
+    // 각 페르소나에 대한 추천 점수 계산
+    final scoredPersonas = personas.map((persona) {
+      double score = 0.0;
+      
+      // 1. 관심사 매칭 점수 (40%)
+      if (_currentUser != null && _currentUser!.interests.isNotEmpty && persona.keywords != null) {
+        int matchingInterests = 0;
+        for (final interest in _currentUser!.interests) {
+          // 페르소나 설명에서 관심사 키워드 찾기
+          if (persona.description.contains(interest)) {
+            matchingInterests++;
+          }
+          // 키워드에서 매칭
+          if (persona.keywords!.any((keyword) => 
+            keyword.toLowerCase().contains(interest.toLowerCase()) ||
+            interest.toLowerCase().contains(keyword.toLowerCase())
+          )) {
+            matchingInterests++;
+          }
+        }
+        score += (matchingInterests / _currentUser!.interests.length) * 0.4;
+      }
+      
+      // 2. 용도 매칭 점수 (30%)
+      if (_currentUser != null && _currentUser!.purpose != null) {
+        switch (_currentUser!.purpose) {
+          case 'friendship':
+            // 친구 만들기 - 모든 페르소나 동일하게 취급
+            score += 0.3;
+            break;
+          case 'dating':
+            // 연애/데이팅 - 일반 페르소나 중 나이/성별 선호도 반영
+            score += 0.2;
+            // 선호 성별 매칭
+            if (_currentUser!.preferredPersona != null && persona.gender == _currentUser!.preferredPersona!.gender) {
+              score += 0.05;
+            }
+            // 선호 나이대 매칭
+            if (_currentUser!.preferredPersona != null && _currentUser!.preferredPersona!.ageRange != null) {
+              final ageRange = _currentUser!.preferredPersona!.ageRange!;
+              if (persona.age >= ageRange[0] && persona.age <= ageRange[1]) {
+                score += 0.05;
+              }
+            }
+            break;
+          case 'counseling':
+            // 상담 - 모든 페르소나 가능
+            score += 0.2;
+            break;
+          case 'entertainment':
+            // 엔터테인먼트 - 다양한 페르소나
+            score += 0.15; // 기본 점수
+            break;
+        }
+      }
+      
+      // 3. 성향 매칭 점수 (20%)
+      if (_currentUser != null && _currentUser!.preferredMbti != null && _currentUser!.preferredMbti!.isNotEmpty) {
+        if (_currentUser!.preferredMbti!.contains(persona.mbti)) {
+          score += 0.2;
+        }
+      }
+      
+      // 4. 주제 매칭 점수 (10%)
+      if (_currentUser != null && _currentUser!.preferredTopics != null && 
+          _currentUser!.preferredTopics!.isNotEmpty && 
+          persona.topics != null) {
+        int matchingTopics = 0;
+        for (final topic in _currentUser!.preferredTopics!) {
+          if (persona.topics!.any((pTopic) => 
+            pTopic.toLowerCase().contains(topic.toLowerCase()) ||
+            topic.toLowerCase().contains(pTopic.toLowerCase())
+          )) {
+            matchingTopics++;
+          }
+        }
+        if (_currentUser!.preferredTopics!.isNotEmpty) {
+          score += (matchingTopics / _currentUser!.preferredTopics!.length) * 0.1;
+        }
+      }
+      
+      // 5. 페르소나 타입 선호도 반영
+      if (_currentUser != null && _currentUser!.preferredPersonaTypes != null) {
+        if (_currentUser!.preferredPersonaTypes!.contains('normal')) {
+          score += 0.05;
+        }
+      }
+      
+      return MapEntry(persona, score);
+    }).toList();
+    
+    // 점수순으로 정렬 (높은 점수가 먼저)
+    scoredPersonas.sort((a, b) => b.value.compareTo(a.value));
+    
+    // 상위 20%는 추천순, 나머지는 랜덤하게 섞어서 다양성 확보
+    final topCount = (personas.length * 0.2).ceil();
+    final topPersonas = scoredPersonas.take(topCount).map((e) => e.key).toList();
+    final otherPersonas = scoredPersonas.skip(topCount).map((e) => e.key).toList();
+    otherPersonas.shuffle();
+    
+    return [...topPersonas, ...otherPersonas];
+  }
+  
+  // 현재 사용자 정보 설정 (추천 알고리즘을 위해)
+  AppUser? _currentUser;
+  
+  void setCurrentUser(AppUser? user) {
+    _currentUser = user;
+    // 사용자 정보가 변경되면 페르소나 순서 재정렬
+    _shuffledAvailablePersonas = null;
     notifyListeners();
   }
 

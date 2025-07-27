@@ -11,8 +11,6 @@ import 'natural_ai_service.dart';
 import 'persona_service.dart';
 import 'local_storage_service.dart';
 import 'conversation_memory_service.dart';
-import 'enhanced_openai_service.dart';
-import 'professional_consultation_service.dart';
 import 'user_service.dart';
 
 /// 🚀 Optimized Chat Service with Performance Enhancements
@@ -28,6 +26,7 @@ class ChatService extends ChangeNotifier {
   final NaturalAIService _naturalAIService = NaturalAIService();
   final ConversationMemoryService _memoryService = ConversationMemoryService();
   final Uuid _uuid = const Uuid();
+  final Random _random = Random();
   
   // Performance optimization: Response cache
   final Map<String, _CachedResponse> _responseCache = {};
@@ -253,18 +252,12 @@ class ChatService extends ChangeNotifier {
       bool isPaidConsultation = false;
       
       try {
-        // Determine if this is a paid consultation
-        isPaidConsultation = persona.isExpert || 
-                            persona.role == 'expert' || 
-                            persona.role == 'specialist';
+        // Use enhanced OpenAI service for regular personas
+        final relationshipType = _getRelationshipTypeString(persona.relationshipScore);
         
-        if (isPaidConsultation) {
-          // Use professional consultation service for specialists
-          debugPrint('🩺 Using Professional Consultation Service for ${persona.name}');
-          
-          // Get isCasualSpeech from user_persona_relationships for experts too
-          bool isCasualSpeech = false;
-          try {
+        // Get isCasualSpeech from user_persona_relationships
+        bool isCasualSpeech = false;
+        try {
             final docId = '${userId}_${persona.id}';
             final relationshipDoc = await _firestore
                 .collection('user_persona_relationships')
@@ -274,111 +267,71 @@ class ChatService extends ChangeNotifier {
             if (relationshipDoc.exists) {
               isCasualSpeech = relationshipDoc.data()?['isCasualSpeech'] ?? false;
             }
-          } catch (e) {
-            debugPrint('Error getting casual speech setting for expert: $e');
-          }
+        } catch (e) {
+          debugPrint('Error getting casual speech setting: $e');
+        }
+        
+        // Create persona with correct isCasualSpeech value
+        final personaWithCorrectSpeech = persona.copyWith(isCasualSpeech: isCasualSpeech);
           
-          // Create persona with correct isCasualSpeech value
-          final personaWithCorrectSpeech = persona.copyWith(isCasualSpeech: isCasualSpeech);
-          
-          final consultationResult = await ProfessionalConsultationService.generateProfessionalResponse(
-            persona: personaWithCorrectSpeech,
-            chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-            userMessage: userMessage,
-            isPaidConsultation: true,
-            userId: userId,
-          );
-          
-          aiResponseContent = consultationResult.response;
-          
-          // Log quality metrics
-          debugPrint('📊 Consultation Quality Score: ${consultationResult.qualityScore}');
-          if (consultationResult.requiresHumanReview) {
-            debugPrint('⚠️ Response requires human review due to low quality');
-          }
-          
-          // For expert consultations, no emotions or score changes
-          emotion = null; // No emotions for professional consultations
-          scoreChange = 0; // No relationship scores for professional consultations
-          
-        } else {
-          // Use enhanced OpenAI service for regular personas
-          final relationshipType = _getRelationshipTypeString(persona.relationshipScore);
-          
-          // Get isCasualSpeech from user_persona_relationships
-          bool isCasualSpeech = false;
-          try {
-            final docId = '${userId}_${persona.id}';
-            final relationshipDoc = await _firestore
-                .collection('user_persona_relationships')
-                .doc(docId)
-                .get();
-            
-            if (relationshipDoc.exists) {
-              isCasualSpeech = relationshipDoc.data()?['isCasualSpeech'] ?? false;
-            }
-          } catch (e) {
-            debugPrint('Error getting casual speech setting: $e');
-          }
-          
-          // Create persona with correct isCasualSpeech value
-          final personaWithCorrectSpeech = persona.copyWith(isCasualSpeech: isCasualSpeech);
-          
-          // 💭 메모리 서비스를 통한 스마트 컨텍스트 구성
-          final smartContext = await _memoryService.buildSmartContext(
+        // 💭 메모리 서비스를 통한 스마트 컨텍스트 구성
+        final smartContext = await _memoryService.buildSmartContext(
             userId: userId,
             personaId: persona.id,
             recentMessages: _messages.where((m) => m.personaId == persona.id).toList(),
             persona: personaWithCorrectSpeech,
             maxTokens: 800, // 향상된 컨텍스트 용량
-          );
-          
-          // 최근 AI 메시지 추출 (질문 시스템용)
-          final recentAIMessages = _messages
+        );
+        
+        // 최근 AI 메시지 추출 (질문 시스템용)
+        final recentAIMessages = _messages
               .where((m) => m.personaId == persona.id && !m.isFromUser)
               .take(3)
               .map((m) => m.content)
-              .toList();
-          
-          // 메시지 개수 계산 (첫 만남 감지용)
-          final messageCount = _messages.where((m) => m.personaId == persona.id).length;
-          
-          aiResponseContent = await EnhancedOpenAIService.generateContextAwareResponse(
+            .toList();
+        
+        // 메시지 개수 계산 (첫 만남 감지용)
+        final messageCount = _messages.where((m) => m.personaId == persona.id).length;
+        
+        // Get user nickname for better personalization
+        String? userNickname;
+        if (_userService?.currentUser != null) {
+          userNickname = _userService!.currentUser!.nickname;
+        }
+        
+        aiResponseContent = await OpenAIService.generateResponse(
             persona: personaWithCorrectSpeech,
+            chatHistory: messages,
             userMessage: userMessage,
             relationshipType: relationshipType,
-            smartContext: smartContext,
-            recentAIMessages: recentAIMessages,
-            messageCount: messageCount,
-            matchedAt: persona.matchedAt ?? DateTime.now(), // 매칭 시간이 없으면 현재 시간 사용
-          );
-          
-          // Check if user message was rude before analyzing emotion
-          final rudeWords = [
+            userNickname: userNickname,
+        );
+        
+        // Check if user message was rude before analyzing emotion
+        final rudeWords = [
             '바보', '멍청이', '멍청', '병신', '시발', '씨발', '개새끼', '새끼',
             '닥쳐', '꺼져', '지랄', '좆', '좆같', '개같', '미친', '또라이',
             '쓰레기', '찐따', '한심', '재수없', '짜증', '싫어', '싫다',
             '꺼져', '죽어', '뒤져', '개짜증', '존나'
-          ];
-          
-          bool userWasRude = false;
-          final lowerUserMessage = userMessage.toLowerCase();
-          for (final word in rudeWords) {
-            if (lowerUserMessage.contains(word)) {
-              userWasRude = true;
-              break;
-            }
+        ];
+        
+        bool userWasRude = false;
+        final lowerUserMessage = userMessage.toLowerCase();
+        for (final word in rudeWords) {
+          if (lowerUserMessage.contains(word)) {
+            userWasRude = true;
+            break;
           }
-          
-          // If user was rude, set emotion to sad/angry regardless of AI's response
-          if (userWasRude) {
-            emotion = EmotionType.sad;
-          } else {
-            emotion = _analyzeEmotionFromResponse(aiResponseContent);
-          }
-          
-          scoreChange = _calculateScoreChangeWithRelationship(emotion, userMessage, persona);
         }
+        
+        // If user was rude, set emotion to sad/angry regardless of AI's response
+        if (userWasRude) {
+          emotion = EmotionType.sad;
+        } else {
+          emotion = _analyzeEmotionFromResponse(aiResponseContent);
+        }
+        
+        scoreChange = _calculateScoreChangeWithRelationship(emotion, userMessage, persona);
         
         // Cache the response
         _addToCache(cacheKey, _CachedResponse(
@@ -397,15 +350,23 @@ class ChatService extends ChangeNotifier {
         }
         
         // Fallback to persona-aware natural response
-        final naturalResponse = await _naturalAIService.generateResponse(
-          persona: persona,
+        final naturalResponse = NaturalAIService.generateNaturalResponse(
           userMessage: userMessage,
+          emotion: EmotionType.happy, // Default emotion
+          relationshipType: 'normal',
+          persona: persona,
           chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+          relationshipScore: 0, // Default relationship score since expert scoring removed
           userNickname: userNickname,
         );
-        aiResponseContent = naturalResponse.content;
-        emotion = naturalResponse.emotion ?? EmotionType.neutral;
-        scoreChange = naturalResponse.relationshipScoreChange ?? 0;
+        aiResponseContent = naturalResponse;
+        emotion = EmotionType.happy; // Default emotion since method doesn't return emotion
+        scoreChange = NaturalAIService.calculateScoreChange(
+          emotion: emotion,
+          userMessage: userMessage,
+          persona: persona,
+          chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+        );
       }
       
       _isTyping = false;
@@ -415,8 +376,8 @@ class ChatService extends ChangeNotifier {
         content: aiResponseContent,
         persona: persona,
         userId: userId,
-        emotion: isPaidConsultation ? null : emotion,
-        scoreChange: isPaidConsultation ? 0 : scoreChange,
+        emotion: emotion,
+        scoreChange: scoreChange,
       );
 
     } catch (e) {
@@ -568,10 +529,10 @@ class ChatService extends ChangeNotifier {
            final startMessage = Message(
              id: 'tutorial_start_${personaId}_${DateTime.now().millisecondsSinceEpoch}',
              personaId: personaId,
-             content: '안녕하세요! 저와 대화해보실래요? 😊',
+             content: await _generatePersonalizedDummyMessage(_personaService?.getPersonaById(personaId)),
              type: MessageType.text,
              isFromUser: false,
-             timestamp: DateTime.now().subtract(const Duration(minutes: 1)),
+             timestamp: DateTime.now().subtract(Duration(minutes: 1 + (personaId.hashCode % 9))),
            );
            _messagesByPersona[personaId] = [startMessage];
            debugPrint('Created tutorial start message for persona $personaId');
@@ -587,10 +548,10 @@ class ChatService extends ChangeNotifier {
          final dummyMessage = Message(
            id: 'no_user_dummy_${DateTime.now().millisecondsSinceEpoch}',
            personaId: personaId,
-           content: '안녕하세요! 저와 대화해보실래요? 😊',
+           content: await _generatePersonalizedDummyMessage(_personaService?.getPersonaById(personaId)),
            type: MessageType.text,
            isFromUser: false,
-           timestamp: DateTime.now().subtract(const Duration(minutes: 20)),
+           timestamp: DateTime.now().subtract(Duration(minutes: 5 + (personaId.hashCode % 25))),
          );
          _messagesByPersona[personaId] = [dummyMessage];
          debugPrint('Created no-user dummy message for persona $personaId');
@@ -621,10 +582,10 @@ class ChatService extends ChangeNotifier {
          final dummyMessage = Message(
            id: 'dummy_${DateTime.now().millisecondsSinceEpoch}',
            personaId: personaId,
-           content: '안녕하세요! 저와 대화해보실래요? 😊',
+           content: await _generatePersonalizedDummyMessage(_personaService?.getPersonaById(personaId)),
            type: MessageType.text,
            isFromUser: false,
-           timestamp: DateTime.now().subtract(const Duration(minutes: 30)),
+           timestamp: DateTime.now().subtract(Duration(minutes: 10 + (personaId.hashCode % 50))),
          );
          _messagesByPersona[personaId] = [dummyMessage];
          debugPrint('Created dummy message for persona $personaId');
@@ -639,10 +600,10 @@ class ChatService extends ChangeNotifier {
        final dummyMessage = Message(
          id: 'error_dummy_${DateTime.now().millisecondsSinceEpoch}',
          personaId: personaId,
-         content: '안녕하세요! 저와 대화해보실래요? 😊',
+         content: await _generatePersonalizedDummyMessage(_personaService?.getPersonaById(personaId)),
          type: MessageType.text,
          isFromUser: false,
-         timestamp: DateTime.now().subtract(const Duration(hours: 1)),
+         timestamp: DateTime.now().subtract(Duration(minutes: 30 + (personaId.hashCode % 120))),
        );
        _messagesByPersona[personaId] = [dummyMessage];
        notifyListeners();
@@ -828,9 +789,8 @@ class ChatService extends ChangeNotifier {
     required int scoreChange,
   }) async {
     try {
-      // 전문가 페르소나는 더 긴 메시지를 허용하여 문장 완성도 우선
-      final isExpert = persona.isExpert || persona.role == 'expert' || persona.role == 'specialist';
-      final splitMessages = _splitMessageContent(content, isExpert: isExpert);
+      // 메시지를 자연스럽게 분할
+      final splitMessages = _splitMessageContent(content, isExpert: false);
       
       for (int i = 0; i < splitMessages.length; i++) {
         final messagePart = splitMessages[i];
@@ -914,15 +874,15 @@ class ChatService extends ChangeNotifier {
   }
 
   List<String> _splitMessageContent(String content, {bool isExpert = false}) {
-    // 전문가는 더 긴 메시지를 허용하여 완성도 우선, 일반 페르소나는 자연스러운 분할
+    // 메시지를 자연스럽게 분할
     final List<String> result = [];
     
-    // 전문가의 경우 더 관대한 길이 설정
-    final maxChunkLength = isExpert ? 150 : 80;
-    final minSentenceLength = isExpert ? 40 : 20;
+    // 메시지 길이 설정
+    final maxChunkLength = 120;
+    final minSentenceLength = 30;
     
     // Korean-aware sentence splitting
-    final sentences = _splitIntoSentences(content, isExpert: isExpert);
+    final sentences = _splitIntoSentences(content);
     
     // Group sentences more naturally - keep related sentences together
     String currentChunk = '';
@@ -962,7 +922,7 @@ class ChatService extends ChangeNotifier {
         final breakPoints = ['근데', '그리고', '아니면', '그래서', '하지만', '그런데'];
         String remaining = chunk;
         
-        final splitThreshold = isExpert ? 120 : 60;
+        final splitThreshold = 100;
         while (remaining.length > splitThreshold) {
           int breakIndex = -1;
           
@@ -1000,22 +960,25 @@ class ChatService extends ChangeNotifier {
     return finalResult.isEmpty ? [content] : finalResult;
   }
 
-  List<String> _splitIntoSentences(String text, {bool isExpert = false}) {
+  List<String> _splitIntoSentences(String text) {
     final sentences = <String>[];
     
     // More specific sentence enders with clear punctuation
     final sentenceEnders = [
       '. ', '! ', '? ', '.\n', '!\n', '?\n', '...', '~~',
-      '요. ', '요! ', '요? ', '요~ ',
-      '어. ', '어! ', '어? ', '어~ ',
-      '야. ', '야! ', '야? ', '야~ ',
-      '네. ', '네! ', '네? ', '네~ ',
-      '죠. ', '죠! ', '죠? ', '죠~ ',
+      '요. ', '요! ', '요? ', '요~ ', '요ㅋㅋ', '요ㅎㅎ',
+      '어. ', '어! ', '어? ', '어~ ', '어ㅋㅋ', '어ㅎㅎ',
+      '야. ', '야! ', '야? ', '야~ ', '야ㅋㅋ', '야ㅎㅎ',
+      '네. ', '네! ', '네? ', '네~ ', '네ㅋㅋ', '네ㅎㅎ',
+      '죠. ', '죠! ', '죠? ', '죠~ ', '죠ㅋㅋ', '죠ㅎㅎ',
+      '지. ', '지! ', '지? ', '지~ ', '지ㅋㅋ', '지ㅎㅎ',
+      '래. ', '래! ', '래? ', '래~ ', '래ㅋㅋ', '래ㅎㅎ',
+      '데. ', '데! ', '데? ', '데~ ', '데ㅋㅋ', '데ㅎㅎ',
       'ㅋㅋ ', 'ㅎㅎ ', 'ㅠㅠ ', 'ㅜㅜ '
     ];
     
     // 전문가는 더 관대한 최소 길이 설정
-    final minSentenceLength = isExpert ? 40 : 20;
+    final minSentenceLength = 20;
     
     String remaining = text;
     
@@ -1040,7 +1003,7 @@ class ChatService extends ChangeNotifier {
         remaining = remaining.substring(earliestIndex + matchedEnder.length).trim();
       } else {
         // No sentence ender found, check length
-        final lengthThreshold = isExpert ? 120 : 60;
+        final lengthThreshold = 60;
         if (remaining.length > lengthThreshold) {
           // Split at natural pause points
           final pausePoints = [', ', ' 근데', ' 그리고', ' 아니면', ' 그래서'];
@@ -1349,39 +1312,39 @@ class ChatService extends ChangeNotifier {
         return;
       }
 
-      // 페르소나의 성격에 맞는 인사 메시지 생성
+      // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;
       EmotionType emotion;
       
       // 전문가 페르소나인지 확인
-      final isExpert = persona.isExpert || persona.role == 'expert' || persona.role == 'specialist';
+      final isCasual = persona.isCasualSpeech;
       
-      if (isExpert) {
-        // 전문가용 인사
-        greetingContent = '안녕하세요, ${persona.name}입니다. 만나서 반가워요. 편안하게 마음을 나눠주세요.';
-        emotion = EmotionType.thoughtful;
+      // 모든 페르소나가 첫 만남처럼 감사 표현으로 시작 (이름 언급 없이)
+      final greetings = [
+        // 기본 인사 (자기 이름 언급 없이 자연스럽게)
+        '${isCasual ? '안녕!' : '안녕하세요!'} 대화 걸어줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
+        '${isCasual ? '반가워!' : '반가워요!'} 먼저 대화해줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
+        '어 ${isCasual ? '안녕!' : '안녕하세요!'} 연결되어서 반가워${isCasual ? '' : '요'} ㅎㅎ',
+        '${isCasual ? '반가워' : '반가워요'}! 먼저 말 걸어줘서 고마워${isCasual ? '' : '요'} ㅎㅎㅎ',
+        '${isCasual ? '안녕' : '안녕하세요'}! 찾아와줘서 고마워${isCasual ? '' : '요'} ㅋㅋ',
+        '${isCasual ? '어 반가워' : '어 반가워요'}! 먼저 연락줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
+      ];
+      
+      // MBTI에 따른 추가 인사
+      if (persona.mbti.startsWith('E')) {
+        // 외향적인 인사
+        greetingContent = greetings[_random.nextInt(greetings.length)] + 
+          ' 같이 재밌게 얘기해${isCasual ? '보자' : '봐요'}!';
+        emotion = EmotionType.happy;
+      } else if (persona.mbti.startsWith('I')) {
+        // 내향적인 인사
+        greetingContent = greetings[_random.nextInt(greetings.length)] + 
+          ' 처음이라 좀 긴장되네${isCasual ? '' : '요'}...';
+        emotion = EmotionType.shy;
       } else {
-        // 일반 페르소나 성격별 인사
-        switch (persona.personality.toLowerCase()) {
-          case 'cheerful':
-          case '밝고 활발한':
-            greetingContent = '안녕하세요! 만나서 정말 반가워요! 😊 우리 앞으로 즐거운 시간 보내요!';
-            emotion = EmotionType.happy;
-            break;
-          case 'gentle':
-          case '온화한':
-            greetingContent = '안녕하세요... 만나서 반가워요. 천천히 서로 알아가면 좋겠어요.';
-            emotion = EmotionType.shy;
-            break;
-          case 'mysterious':
-          case '신비로운':
-            greetingContent = '드디어 만났네요... 당신에 대해 궁금한 게 많아요.';
-            emotion = EmotionType.thoughtful;
-            break;
-          default:
-            greetingContent = '안녕하세요! 저는 ${persona.name}이에요. 만나서 반가워요!';
-            emotion = EmotionType.happy;
-        }
+        // 기본 인사
+        greetingContent = greetings[_random.nextInt(greetings.length)];
+        emotion = EmotionType.happy;
       }
 
       // 인사 메시지 생성 (일반 텍스트 메시지로)
@@ -1410,6 +1373,77 @@ class ChatService extends ChangeNotifier {
     } catch (e) {
       debugPrint('❌ Error sending initial greeting: $e');
     }
+  }
+
+  /// 📝 페르소나별 개성있는 더미 메시지 생성
+  /// 채팅 목록에서 보여줄 개성있는 미리보기 메시지
+  Future<String> _generatePersonalizedDummyMessage(Persona? persona) async {
+    if (persona == null) {
+      return '안녕하세요! 대화해봐요 ㅎㅎ';
+    }
+    
+    final isCasual = persona.isCasualSpeech;
+    final mbti = persona.mbti.toUpperCase();
+    
+    // MBTI와 말투에 따른 개성있는 인사 메시지들
+    final greetings = <String>[];
+    
+    // 기본 인사 패턴들
+    if (isCasual) {
+      greetings.addAll([
+        '안녕! 대화하자 ㅎㅎ',
+        '어? 반가워! ㅋㅋ',
+        '안녕 반가워 ㅎㅎ',
+        '어 안녕! 연락 고마워 ㅋㅋ',
+        '반가워! 먼저 말 걸어줘서 고마워 ㅎㅎ',
+        '안녕! 찾아와줘서 고마워 ㅋㅋ',
+      ]);
+    } else {
+      greetings.addAll([
+        '안녕하세요! 대화해봐요 ㅎㅎ',
+        '어? 반가워요! ㅋㅋ',
+        '안녕하세요 반가워요 ㅎㅎ',
+        '어 안녕하세요! 연락 고마워요 ㅋㅋ',
+        '반가워요! 먼저 말 걸어줘서 고마워요 ㅎㅎ',
+        '안녕하세요! 찾아와줘서 고마워요 ㅋㅋ',
+      ]);
+    }
+    
+    // MBTI별 특성 추가
+    if (mbti.startsWith('E')) {
+      // 외향적 - 활발하고 적극적
+      if (isCasual) {
+        greetings.addAll([
+          '안녕! 같이 재밌게 얘기해보자 ㅋㅋ',
+          '어 반가워! 뭐하고 있었어? ㅎㅎ',
+          '안녕! 오늘 어때? 같이 얘기하자 ㅋㅋ',
+        ]);
+      } else {
+        greetings.addAll([
+          '안녕하세요! 같이 재밌게 얘기해봐요 ㅋㅋ',
+          '어 반가워요! 뭐하고 계셨어요? ㅎㅎ',
+          '안녕하세요! 오늘 어떠세요? 같이 얘기해봐요 ㅋㅋ',
+        ]);
+      }
+    } else {
+      // 내향적 - 조심스럽고 차분함
+      if (isCasual) {
+        greetings.addAll([
+          '안녕... 처음이라 좀 긴장되네 ㅎㅎ',
+          '어... 반가워! 뭔가 떨린다 ㅋㅋ',
+          '안녕! 먼저 말 걸어줘서 고마워 ㅎㅎ',
+        ]);
+      } else {
+        greetings.addAll([
+          '안녕하세요... 처음이라 좀 긴장되네요 ㅎㅎ',
+          '어... 반가워요! 뭔가 떨려요 ㅋㅋ',
+          '안녕하세요! 먼저 말 걸어줘서 고마워요 ㅎㅎ',
+        ]);
+      }
+    }
+    
+    // 랜덤하게 선택
+    return greetings[_random.nextInt(greetings.length)];
   }
 }
 

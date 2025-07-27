@@ -67,7 +67,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
       
       for (final persona in matchedPersonas) {
         debugPrint('📨 Loading messages for persona: ${persona.name} (${persona.id})');
-        chatService.loadMessages(persona.id);
+        await chatService.loadChatHistory(currentUserId, persona.id);
       }
       
       if (matchedPersonas.isEmpty) {

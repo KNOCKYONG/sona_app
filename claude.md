@@ -18,17 +18,6 @@
 `python scripts/local_image_optimizer_english.py`
 
 **한글-영문 매핑**:
-- 상훈 → sanghoon
-- Dr. 박지은 → dr-park-jieun
-- 수진 → sujin
-- 예림 → yerim
-- 예슬 → yeseul
-- 윤미 → yoonmi
-- 정훈 → jeonghoon
-- 지우 → jiwoo
-- 채연 → chaeyeon
-- 하연 → hayeon
-- 혜진 → hyejin
 
 **프로세스**:
 1. **이미지 최적화 (로컬)**

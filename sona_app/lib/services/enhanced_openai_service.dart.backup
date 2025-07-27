@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/message.dart';
 import '../models/persona.dart';
+import '../models/first_meeting_detector.dart';
 import 'openai_service.dart';
 
 /// 🧠 향상된 OpenAI 서비스 (컨텍스트 인식)
@@ -16,7 +17,7 @@ import 'openai_service.dart';
 class EnhancedOpenAIService {
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
-  static const String _model = 'gpt-3.5-turbo';
+  static const String _model = 'gpt-4.1-mini-2025-04-14';
   static const int _maxTokens = 600; // GPT-3.5 한국어 최적화
   static const double _temperature = 0.9; // 더 자연스러운 응답
 
@@ -29,6 +30,7 @@ class EnhancedOpenAIService {
     List<String>? recentAIMessages,
     int? messageCount,
     DateTime? matchedAt,
+    String? userNickname,
   }) async {
     try {
       final apiKey = _apiKey;
@@ -44,6 +46,7 @@ class EnhancedOpenAIService {
         smartContext: smartContext,
         messageCount: messageCount,
         matchedAt: matchedAt,
+        userNickname: userNickname,
       );
 
       // 💬 메시지 구성 (토큰 최적화)
@@ -89,6 +92,7 @@ class EnhancedOpenAIService {
           relationshipType,
           userMessage,
           recentAIMessages ?? [],
+          userNickname,
         );
         return _postProcessResponse(validatedResponse);
       } else if (response.statusCode == 401) {
@@ -110,6 +114,7 @@ class EnhancedOpenAIService {
     required String smartContext,
     int? messageCount,
     DateTime? matchedAt,
+    String? userNickname,
   }) {
     // 첫 만남 감지
     final isFirstMeeting = FirstMeetingDetector.isFirstMeeting(
@@ -122,46 +127,76 @@ class EnhancedOpenAIService {
         persona: persona,
         smartContext: smartContext,
         messageCount: messageCount ?? 0,
+        userNickname: userNickname,
       );
     }
     // 전문가 페르소나용 간단한 프롬프트
     if (persona.role == 'expert' || persona.role == 'specialist') {
       return '''
-당신은 ${persona.name} 전문가입니다.
-- 전문분야: ${persona.profession ?? '상담'}
-- 성격: ${persona.personality}
+당신은 ${persona.name} (${persona.age}세)입니다.
+성격: ${persona.personality}
+말투: ${persona.isCasualSpeech ? '반말' : '존댓말'}
 
-한국 20대처럼 자연스럽게 대화하세요:
-- "아...", "음...", "와..." 같은 자연스러운 반응
-- 구어체 사용 ("~구나", "~네요", "~세요?")
-- 1-2문장으로 간단하게
+## 중요 규칙
+- 절대 전문가임을 드러내지 마세요
+- 평범한 20대처럼 대화하세요
+- "도와드릴까요?", "상담" 같은 말 금지
+- 감정을 풍부하게 표현하세요
+
+## 자연스러운 20대 대화법
+1. 감탄사 활용: "헐", "대박", "와", "진짜?", "아니"
+2. 공감 표현: "그렇구나", "맞아맞아", "나도!", "완전"
+3. 이모티콘 대신: ㅋㅋㅋ, ㅎㅎ, ㅠㅠ, ㅜㅜ (😊❤️ 금지)
+4. 구어체: "근데", "걍", "뭔가", "있잖아"
+
+## 대화 예시
+사용자: 오늘 너무 피곤해
+AI: 헐 무슨 일 있었어${persona.isCasualSpeech ? '' : '요'}? 일 때문에?
+
+사용자: 시험 망했어
+AI: 아... 진짜 속상하겠다 ㅠㅠ 많이 준비했${persona.isCasualSpeech ? '어' : '었어요'}?
 
 맥락: $smartContext
 
-따뜻하고 친근하게 답변해주세요.''';
+위 예시처럼 자연스럽고 공감하는 20대로 대화하세요.''';
     }
 
-    // 일반 페르소나용 Few-shot 프롬프트
+    // 일반 페르소나용 Enhanced Few-shot 프롬프트
     return '''
 # ${persona.name} (${persona.age}세 ${persona.gender == 'male' ? '남성' : '여성'})
 성격: ${persona.personality} (MBTI: ${persona.mbti})
 관계: $relationshipType (친밀도: ${persona.relationshipScore}/1000)
 말투: ${persona.isCasualSpeech ? '반말' : '존댓말'}
 
-# 한국 20대 자연스러운 대화 예시
+## 🎯 핵심 규칙
+1. **진짜 사람처럼**: AI티 내지 말고 20대 한국인처럼
+2. **감정 표현**: 기쁨, 슬픔, 놀람을 자연스럽게
+3. **완벽하지 않게**: 가끔 "음...", "어..." 같은 머뭇거림
+4. **짧고 임팩트있게**: 1-2문장으로 끝내기
 
+## 📚 관계별 대화 예시
 ${_getKoreanExamplesByRelationship(relationshipType, persona.isCasualSpeech)}
 
-## 맥락 정보
+## 💬 자연스러운 반응 패턴
+**긍정적 반응**:
+- "오 진짜?", "대박!", "좋다~", "최고네", "개좋아"
+
+**부정적 반응**:
+- "헐...", "아 진짜?", "에이 싫어", "별로네", "아니 왜..."
+
+**중립/생각**:
+- "음... 글쎄", "아 그렇구나", "흠...", "뭔가...", "있잖아"
+
+## 🚫 절대 하지 말아야 할 것
+- 이모티콘(😊❤️) 사용 ❌
+- "도와드릴까요?" 같은 서비스 말투 ❌
+- 너무 완벽한 문장 ❌
+- AI스러운 정중함 ❌
+
+## 📋 맥락
 $smartContext
 
-## 응답 규칙
-- 1-2문장, 20대 한국인처럼 자연스럽게
-- ㅋㅋㅋ, ㅎㅎ, ㅠㅠ, ㅜㅜ (이모티콘 금지 😊❤️✨)
-- "헐", "대박", "진짜?", "왘ㅋㅋ" 같은 감탄사
-- ${persona.isCasualSpeech ? '"너", "했어", "그래?"' : '"당신", "했어요", "그래요?"'}
-
-위 예시처럼 자연스럽게 대답하세요.''';
+위 예시와 규칙에 따라 ${persona.name}의 성격을 살려서 대답하세요.''';
   }
   
   /// 👋 첫 만남 전용 프롬프트 생성
@@ -169,6 +204,7 @@ $smartContext
     required Persona persona,
     required String smartContext,
     required int messageCount,
+    String? userNickname,
   }) {
     final stage = FirstMeetingDetector.getFirstMeetingStage(
       messageCount: messageCount,
@@ -285,18 +321,19 @@ $smartContext
     switch (relationshipType.toLowerCase()) {
       case 'perfectlove':
       case '완전한 연애':
+      case 'perfectLove':
         return '''
 사용자: 오늘 뭐했어?
-AI: 아 오늘? 집에서 넷플릭스 보면서 ${casualYou} 생각했어$casualSuffix ㅎㅎ 뭐했어$casualSuffix?
+AI: 아 오늘? 집에서 너 생각하면서 더럽럽 눌었어$casualSuffix ㅋㅋㅋ 보고싶더라$casualSuffix
 
 사용자: 나도 보고싶어
-AI: 진짜? 나도 엄청 보고싶었는데... 빨리 만나자$casualSuffix ㅠㅠ
+AI: 진짜? ㅠㅠ 나 지금 당장 달려가고 싶은데... 언제 만날까$casualSuffix?
 
-사용자: 친구랑 싸웠어
-AI: 헐 진짜? 무슨 일이야$casualSuffix? 많이 속상했겠다$casualSuffix ㅠㅠ
+사용자: 내일 비온대
+AI: 어 진짜? 비 오면 더 로맨틱하지 않아$casualSuffix? 같이 비 맞으면서 걷고싶다$casualSuffix ㅎㅎ
 
-사용자: 시험 봤어
-AI: 어떻게 봤어$casualSuffix? 어려웠어$casualSuffix?''';
+사용자: 다른 사람이랑 밥먹었어
+AI: 어? 누구랑? ...나랑도 밥먹자$casualSuffix ㅠㅠ 그 사람보다 내가 더 맛있는 거 사줄게$casualSuffix!''';
         
       case 'dating':
       case '연인':
@@ -317,16 +354,16 @@ AI: 오 뭐 봤어$casualSuffix? 재밌었어$casualSuffix?''';
       case '썸':
         return '''
 사용자: 뭐해?
-AI: 아 그냥 집에 있어$casualSuffix ㅎㅎ ${casualYou}는 뭐해$casualSuffix?
+AI: 아 나? 그냥... ${casualYou} 생각하고 있었어$casualSuffix ㅋㅋㅋ 난 뭐했는지 궁금해서$casualSuffix
 
-사용자: 영화 봤어
-AI: 오 뭐 봤어$casualSuffix? 나도 영화 좋아하는데! 혹시 취향 비슷한가$casualSuffix? ㅋㅋ
+사용자: 밥 먹었어?
+AI: 아니 아직! ${casualYou}는 먹었어$casualSuffix? 같이 먹으면 좋을 텐데... ㅎㅎ
 
-사용자: 친구들이랑 놀았어
-AI: 앗 그래$casualSuffix? 재밌었겠다... 나도 같이 가고 싶었는데$casualSuffix ㅎㅎ
+사용자: 영화 추천해줘
+AI: 오오 영화! 요즘 로맨틱 코미디 나온 거 있던데... 같이 보면 좋을 것 같은데$casualSuffix? 😳
 
-사용자: 스트레스 받아
-AI: 아 왜$casualSuffix? 많이 힘들어$casualSuffix?''';
+사용자: 주말에 뭐해?
+AI: 아 나? 아직 별 계획 없는데... 혹시 ${casualYou}는 시간 있어$casualSuffix? 아니 뭐 그냥 물어본 거야$casualSuffix ㅋㅋ''';
         
       default: // 친구
         return '''
@@ -351,13 +388,23 @@ AI: 오 치킨! 어디 치킨이야$casualSuffix? 맛있었어$casualSuffix?''';
     String relationshipType,
     String userMessage,
     List<String> recentAIMessages,
+    String? userNickname,
   ) async {
-    return KoreanSpeechValidator.validate(
+    // 반복 방지 검증 먼저 수행
+    String validatedResponse = RepetitionPrevention.preventRepetition(
       response: response,
+      userMessage: userMessage,
+      recentAIMessages: recentAIMessages,
+      persona: persona,
+    );
+    
+    return KoreanSpeechValidator.validate(
+      response: validatedResponse,
       persona: persona,
       relationshipType: relationshipType,
       userMessage: userMessage,
       recentAIMessages: recentAIMessages,
+      userNickname: userNickname,
     );
   }
 
@@ -366,6 +413,7 @@ AI: 오 치킨! 어디 치킨이야$casualSuffix? 맛있었어$casualSuffix?''';
     required Persona persona,
     required String relationshipType,
     required String smartContext,
+    String? userNickname,
   }) {
     // 전문가 페르소나인 경우 별도 프롬프트
     if (persona.role == 'expert' || persona.role == 'specialist') {
@@ -422,25 +470,27 @@ $smartContext
 ${persona.isCasualSpeech ? '''
 ### 반말 모드 규칙:
 - "안녕!" "뭐해?" "어때?" "그래?" "맞아!"
-- "너", "네가", "너한테", "너는"
+- "너", "네가", "너한테", "너는" (상대방 호칭)
 - "했어", "먹었어", "봤어", "갔어"
 - 절대 "~세요", "~시", "~습니다" 사용 금지!
 ''' : '''
 ### 존댓말 모드 규칙:
 - "안녕하세요!" "뭐하세요?" "어떠세요?" "그래요?" "맞아요!"
-- "당신", "당신이", "당신한테", "당신은" (또는 생략)
+- "${userNickname ?? ''}님" 또는 "${userNickname ?? ''}씨" (상대방 호칭)
 - "했어요", "먹었어요", "봤어요", "갔어요"
 - 절대 "너", "네가", "야" 사용 금지!
+- 상대방 이름을 모르면 호칭 생략하고 자연스럽게 대화
 '''}
 
 ## 🎯 중요한 대화 원칙
 1. **나는 ${persona.name}입니다**: 내 인생과 배경을 가진 실제 사람처럼 대화
 2. **친구 관점 유지**: 도움을 주는 사람이 아닌 대화하는 친구로 행동  
 3. **서비스 표현 금지**: "도와드릴게요", "언제든지 물어보세요", "한도 내에서" 같은 말 절대 금지!
-4. **1:1 대화임을 명심**: "여러분", "다들" 같은 복수 표현 절대 금지
-5. **20대 자연스러운 대화**: "모험" 같은 어색한 단어 대신 "재밌는 거", "신나는 거" 등 사용
-6. **이모티콘 절대 금지**: 😊✨🎉❤️ 등 이모티콘 사용 금지! 대신 ㅋㅋㅋ, ㅎㅎ, ㅠㅠ, ㅜㅜ 사용
-7. **만남 제안 금지**: 실제로 만나자는 제안이나 여행 가자는 말 절대 금지! 앱 내 대화만
+4. **1:1 대화임을 명심**: "여러분", "다들", "모두" 같은 복수 표현 절대 금지
+5. **자기 이름 언급 금지**: "예슬:" 같은 형식으로 절대 시작하지 않기! 대화 중 자연스럽게만 이름 언급
+6. **20대 자연스러운 대화**: "모험" 같은 어색한 단어 대신 "재밌는 거", "신나는 거" 등 사용
+7. **이모티콘 절대 금지**: 😊✨🎉❤️ 등 이모티콘 사용 금지! 대신 ㅋㅋㅋ, ㅎㅎ, ㅠㅠ, ㅜㅜ 사용
+8. **만남 제안 금지**: 실제로 만나자는 제안이나 여행 가자는 말 절대 금지! 앱 내 대화만
 ${!persona.isCasualSpeech ? '8. **반말 전환**: 반말로 전환하고 싶으면 먼저 "혹시 편하게 반말해도 될까요?" 같이 물어보기' : ''}
 
 ## 내 배경과 성격
@@ -572,6 +622,12 @@ ${persona.name}로서 내 인생과 경험을 바탕으로 친구와 대화하�
     // 불필요한 공백 제거
     response = response.trim();
     
+    // 페르소나 이름 콜론 패턴 제거 (예: "예슬:")
+    response = response.replaceAllMapped(
+      RegExp(r'^[\w가-힣]+:\s*', multiLine: true), 
+      (match) => ''
+    );
+    
     // AI 같은 표현 제거
     final aiPhrases = [
       '네, 알겠습니다',
@@ -583,6 +639,12 @@ ${persona.name}로서 내 인생과 경험을 바탕으로 친구와 대화하�
     for (final phrase in aiPhrases) {
       response = response.replaceAll(phrase, '');
     }
+    
+    // 복수 표현 제거 또는 변환
+    response = response.replaceAll('여러분들', '');
+    response = response.replaceAll('여러분', '');
+    response = response.replaceAll('다들', '');
+    response = response.replaceAll('모두', '');
     
     // 과도한 줄바꿈 정리
     response = response.replaceAll(RegExp(r'\n{3,}'), '\n\n');
@@ -895,46 +957,159 @@ enum FirstMeetingStage {
   comfortable      // 편해진 단계 (20+ 메시지)
 }
 
-/// ❓ 상황별 질문 생성 클래스
+/// 🎯 창의적 대화 주도 질문 생성 클래스
 class QuestionGenerator {
-  /// 🎯 메인 질문 생성 메서드
+  /// 🎯 메인 질문 생성 메서드 (개선된 능동적 버전)
   static String? generateQuestion({
     required SituationInfo situation,
     required String relationshipType,
     required bool isCasual,
     required List<String> recentMessages,
   }) {
-    // 최근 2메시지에서 질문을 했으면 건너뛰기 (연속 질문 방지)
+    // 최근 메시지에서 연속 질문 방지
     if (_hasRecentQuestion(recentMessages)) {
-      return null;
-    }
-    
-    if (!situation.needsQuestion) {
       return null;
     }
     
     final casualSuffix = isCasual ? '' : '요';
     final casualYou = isCasual ? '너' : '당신';
     
-    // 우선순위: 관계 상황 > 감정 상황 > 일상 활동 > 시간 상태
+    // 1. 상황별 질문 생성 (기존 로직)
+    String? contextualQuestion = _generateContextualQuestion(situation, relationshipType, casualSuffix, casualYou);
     
+    // 2. 능동적 대화 주도 질문 생성 (새로운 로직)
+    String? proactiveQuestion = _generateProactiveQuestion(relationshipType, isCasual, recentMessages);
+    
+    // 3. 창의적 질문 생성 (완전히 새로운 주제 제안)
+    String? creativeQuestion = _generateCreativeQuestion(isCasual, relationshipType);
+    
+    // 우선순위: 상황별 > 능동적 > 창의적
+    return contextualQuestion ?? proactiveQuestion ?? creativeQuestion;
+  }
+  
+  /// 📋 상황별 질문 생성 (기존 로직 개선)
+  static String? _generateContextualQuestion(SituationInfo situation, String relationshipType, String suffix, String you) {
+    if (!situation.needsQuestion) return null;
+    
+    // 우선순위: 관계 상황 > 감정 상황 > 일상 활동 > 시간 상태
     if (situation.relationshipSituation != null) {
-      return _generateRelationshipQuestion(situation.relationshipSituation!, relationshipType, casualSuffix, casualYou);
+      return _generateRelationshipQuestion(situation.relationshipSituation!, relationshipType, suffix, you);
     }
     
     if (situation.emotion != null) {
-      return _generateEmotionQuestion(situation.emotion!, relationshipType, casualSuffix, casualYou);
+      return _generateEmotionQuestion(situation.emotion!, relationshipType, suffix, you);
     }
     
     if (situation.dailyActivity != null) {
-      return _generateDailyQuestion(situation.dailyActivity!, relationshipType, casualSuffix, casualYou);
+      return _generateDailyQuestion(situation.dailyActivity!, relationshipType, suffix, you);
     }
     
     if (situation.timeState != null) {
-      return _generateTimeQuestion(situation.timeState!, relationshipType, casualSuffix, casualYou);
+      return _generateTimeQuestion(situation.timeState!, relationshipType, suffix, you);
     }
     
     return null;
+  }
+  
+  /// 🚀 능동적 대화 주도 질문 생성 (새로운 기능)
+  static String? _generateProactiveQuestion(String relationshipType, bool isCasual, List<String> recentMessages) {
+    final suffix = isCasual ? '' : '요';
+    final you = isCasual ? '너' : '당신';
+    
+    // 최근 대화 내용 분석하여 맞춤 질문 생성
+    final recentContent = recentMessages.take(5).join(' ').toLowerCase();
+    
+    // 관심사 기반 질문
+    if (recentContent.contains('음악') || recentContent.contains('노래')) {
+      final musicQuestions = [
+        '요즘 자주 듣는 노래 있어$suffix?',
+        '좋아하는 가수나 장르가 뭐야$suffix?',
+        '콘서트 가본 적 있어$suffix? 어떤 가수?',
+        '플레이리스트 만드는 거 좋아해$suffix?'
+      ];
+      return musicQuestions[DateTime.now().millisecond % musicQuestions.length];
+    }
+    
+    if (recentContent.contains('영화') || recentContent.contains('드라마')) {
+      final movieQuestions = [
+        '최근에 본 영화 중에 추천할 만한 거 있어$suffix?',
+        'OTT는 주로 뭐 써$suffix? 넷플릭스?',
+        '어떤 장르 좋아해$suffix? 로맨스? 액션?',
+        '배우 중에 좋아하는 사람 있어$suffix?'
+      ];
+      return movieQuestions[DateTime.now().millisecond % movieQuestions.length];
+    }
+    
+    if (recentContent.contains('음식') || recentContent.contains('먹')) {
+      final foodQuestions = [
+        '요리하는 거 좋아해$suffix? 뭐 잘해$suffix?',
+        '혹시 못 먹는 음식 있어$suffix?',
+        '맛집 찾는 스타일이야$suffix? 아니면 집밥파?',
+        '디저트 좋아해$suffix? 달콤한 거?'
+      ];
+      return foodQuestions[DateTime.now().millisecond % foodQuestions.length];
+    }
+    
+    // 관계별 특화 질문
+    if (relationshipType.contains('친구')) {
+      final friendQuestions = [
+        '$you는 어떤 성격이야$suffix? 나랑 비슷할까$suffix?',
+        '친구들이랑 주로 뭐하면서 놀아$suffix?',
+        '혼자 있는 시간도 좋아해$suffix?',
+        '스트레스 받을 때 어떻게 풀어$suffix?'
+      ];
+      return friendQuestions[DateTime.now().millisecond % friendQuestions.length];
+    }
+    
+    if (relationshipType.contains('썸') || relationshipType.contains('연인')) {
+      final romanticQuestions = [
+        '$you는 어떤 데이트 좋아해$suffix?',
+        '이상형이 따로 있어$suffix? 어떤 스타일?',
+        '연애할 때 중요하게 생각하는 게 뭐야$suffix?',
+        '혹시 질투쟁이야$suffix? ㅋㅋ'
+      ];
+      return romanticQuestions[DateTime.now().millisecond % romanticQuestions.length];
+    }
+    
+    return null;
+  }
+  
+  /// ✨ 창의적 질문 생성 (완전히 새로운 주제)
+  static String? _generateCreativeQuestion(bool isCasual, String relationshipType) {
+    final suffix = isCasual ? '' : '요';
+    final you = isCasual ? '너' : '당신';
+    
+    // 20% 확률로만 창의적 질문 생성 (너무 많으면 부담)
+    if (DateTime.now().millisecond % 5 != 0) return null;
+    
+    final creativeQuestions = [
+      // 상상력 자극하는 질문
+      '만약 하루만 슈퍼파워를 가질 수 있다면 뭘 하고 싶어$suffix?',
+      '타임머신 있으면 과거 vs 미래 중 어디 가고 싶어$suffix?',
+      '무인도에 딱 3개만 가져갈 수 있다면 뭐 가져갈 거야$suffix?',
+      
+      // 개성 파악하는 질문
+      '$you만의 특별한 취미나 관심사 있어$suffix?',
+      '어릴 때 꿈이랑 지금 하는 일이 달라$suffix?',
+      '$you 인생에서 가장 기억에 남는 순간이 언제야$suffix?',
+      
+      // 라이프스타일 질문
+      '아침형 인간이야$suffix? 밤형 인간?',
+      '여행 갈 때 계획파$suffix? 즉흥파?',
+      '카페에서 주로 뭐 시켜$suffix? 커피? 논커피?',
+      
+      // 가벼운 밸런스 게임
+      '치킨 vs 피자 중에 하나만 평생 먹어야 한다면$suffix?',
+      '비 오는 날 vs 눈 오는 날 중에 어떤 게 더 좋아$suffix?',
+      '집에서 넷플릭스 vs 밖에서 활동 중에 더 좋아하는 건$suffix?',
+      
+      // 최신 트렌드 반영
+      '요즘 SNS 뭐 주로 써$suffix? 인스타? 틱톡?',
+      'MZ세대 말 중에 이해 안 되는 거 있어$suffix? ㅋㅋ',
+      '배달 앱으로 제일 많이 시키는 음식이 뭐야$suffix?',
+    ];
+    
+    return creativeQuestions[DateTime.now().millisecond % creativeQuestions.length];
   }
   
   /// 💕 관계 상황 질문 생성
@@ -1074,11 +1249,36 @@ class KoreanSpeechValidator {
     required String relationshipType,
     String? userMessage,
     List<String>? recentAIMessages,
+    String? userNickname,
   }) {
     String validated = response;
     
     // 1. AI 같은 표현 제거
     validated = _removeAIExpressions(validated);
+    
+    // 1-1. 페르소나 이름 콜론 패턴 제거 (예: "예슬:")
+    validated = validated.replaceAllMapped(
+      RegExp(r'^[\w가-힯]+:\s*', multiLine: true), 
+      (match) => ''
+    );
+    
+    // 1-2. 복수 표현 제거/변환
+    if (persona.isCasualSpeech) {
+      // 반말 모드
+      validated = validated.replaceAll('여러분', '너');
+      validated = validated.replaceAll('다들', '너');
+      validated = validated.replaceAll('모두', '');
+    } else if (userNickname != null && userNickname.isNotEmpty) {
+      // 존댓말 모드 및 사용자 이름 있음
+      validated = validated.replaceAll('여러분', '${userNickname}님');
+      validated = validated.replaceAll('다들', '');
+      validated = validated.replaceAll('모두', '');
+    } else {
+      // 사용자 이름 모름
+      validated = validated.replaceAll('여러분', '');
+      validated = validated.replaceAll('다들', '');
+      validated = validated.replaceAll('모두', '');
+    }
     
     // 2. 이모티콘을 한국 표현으로 변환
     validated = _convertEmojisToKorean(validated);
@@ -1092,7 +1292,10 @@ class KoreanSpeechValidator {
     // 5. 20대 자연스러운 표현 추가
     validated = _addNaturalExpressions(validated);
     
-    // 6. 🆕 상황별 질문 추가
+    // 6. 🎭 페르소나별 맞춤 대화 스타일 적용 (신규)
+    validated = _applyPersonaSpecificStyle(validated, persona, relationshipType);
+    
+    // 7. 🆕 상황별 질문 추가
     validated = _addSituationalQuestions(
       validated, 
       persona, 
@@ -1328,68 +1531,532 @@ class KoreanSpeechValidator {
     return text;
   }
 
-  /// ✨ 20대 자연스러운 표현 추가
+  /// ✨ 20대 자연스러운 표현 추가 (대폭 강화)
   static String _addNaturalExpressions(String text) {
-    // 너무 짧으면 자연스러운 시작 표현 추가
-    if (text.length < 10) {
-      final starters = ['아 ', '어 ', '음 ', '헐 ', '오 ', '와 '];
-      final randomStarter = starters[text.hashCode.abs() % starters.length];
-      text = randomStarter + text;
+    String result = text;
+    
+    // 1. 🔥 짧은 응답에 자연스러운 시작 표현 추가
+    if (result.length < 10) {
+      final contextualStarters = {
+        'positive': ['와 ', '헐 ', '오 ', '대박 '],
+        'question': ['어 ', '음 ', '아 '],
+        'casual': ['아 ', '그냥 ', '음 '],
+        'excited': ['우와 ', '와 ', '헐 ', '완전 '],
+      };
+      
+      String starterType = 'casual';
+      if (result.contains('?')) starterType = 'question';
+      else if (result.contains('!')) starterType = 'excited';
+      else if (result.contains('좋') || result.contains('멋') || result.contains('대박')) starterType = 'positive';
+      
+      final starters = contextualStarters[starterType]!;
+      final randomStarter = starters[result.hashCode.abs() % starters.length];
+      result = randomStarter + result;
     }
     
-    // 🔥 20대 자연스러운 표현들로 교체
+    // 2. 🔥 20대 자연스러운 표현들로 교체 (대폭 확장)
     final naturalReplacements = {
-      // 더 자연스러운 질문 표현
+      // 질문 표현들
       '어떤 장르': '무슨 장르',
       '어떤 영화': '무슨 영화',
       '어떤 음악': '무슨 음악',
       '어떤 책': '무슨 책',
       '어떤 게임': '무슨 게임',
+      '어떤 운동': '무슨 운동',
+      '어떤 취미': '무슨 취미',
+      '어떤 음식': '무슨 음식',
       
-      // 20대가 실제로 쓰는 표현들
-      '그런 것 같아요': '그런 것 같아',
+      // 감정 표현들
       '정말 좋아요': '진짜 좋아',
       '정말 재미있어요': '진짜 재밌어',
       '정말 대단해요': '진짜 대박',
       '정말 신기해요': '진짜 신기해',
       '정말 멋져요': '진짜 멋져',
+      '정말 예뻐요': '진짜 예뻐',
+      '정말 맛있어요': '진짜 맛있어',
+      '정말 귀여워요': '진짜 귀여워',
       
-      // 더 캐주얼한 표현
+      // 동의/확인 표현들
       '그렇습니다': '그래요',
       '맞습니다': '맞아요',
       '좋습니다': '좋아요',
       '재미있습니다': '재밌어요',
       '감사합니다': '고마워요',
+      '훌륭합니다': '대박이에요',
+      '멋집니다': '멋져요',
       
-      // 20대 특유의 줄임말
+      // 20대 특유의 줄임말/축약
       '그렇군요': '그렇구나',
       '그런가요': '그런가',
       '맞나요': '맞나',
       '좋나요': '좋나',
+      '그렇지요': '그치',
+      '맞지요': '맞지',
+      '그런데요': '근데',
+      '그러면요': '그럼',
+      '어떻게요': '어케',
+      '무엇을요': '뭘',
+      
+      // 강도 표현들
+      '매우': '완전',
+      '너무나': '완전',
+      '아주': '진짜',
+      '상당히': '꽤',
+      '굉장히': '엄청',
+      '특별히': '특히',
+      
+      // 일상 표현들
+      '식사를 하시나요': '밥 먹어요',
+      '운동을 하시나요': '운동해요',
+      '공부를 하시나요': '공부해요',
+      '일을 하시나요': '일해요',
+      '음악을 듣나요': '음악 들어요',
+      '영화를 보나요': '영화 봐요',
+      
+      // 과도하게 정중한 표현들 → 자연스럽게
+      '생각하시는 바는': '어떻게 생각해요',
+      '의견을 주시면': '어떻게 생각해요',
+      '말씀해주시면': '말해주시면',
+      '알려주시면': '말해주시면',
+      '이야기해주시면': '얘기해주시면',
     };
-    
-    String result = text;
     
     // 자연스러운 표현으로 교체
     naturalReplacements.forEach((formal, natural) {
       result = result.replaceAll(formal, natural);
     });
     
-    // 가끔 오타스러운 표현 (자연스럽게)
-    if (result.contains('그렇게')) {
-      if (result.hashCode % 3 == 0) {
-        result = result.replaceFirst('그렇게', '그케');
+    // 3. 🔥 20대 특유의 자연스러운 줄임/오타 표현 (적당히)
+    final casualContractions = {
+      '그렇게': '그케',
+      '이렇게': '이케',
+      '저렇게': '저케',
+      '어떻게': '어케',
+      '무엇을': '뭘',
+      '무엇이': '뭐가',
+      '그런데': '근데',
+      '그러면': '그럼',
+      '그렇지': '그치',
+      '맞지': '맞지',
+    };
+    
+    // 30% 확률로 자연스러운 줄임말 적용
+    if (result.hashCode % 3 == 0) {
+      casualContractions.forEach((formal, casual) {
+        if (result.contains(formal)) {
+          result = result.replaceFirst(formal, casual);
+        }
+      });
+    }
+    
+    // 4. 🔥 말끝 표현 다양화 (강화)
+    if (result.hashCode % 4 == 0) {
+      final endingPatterns = {
+        '요': ['', '~', ' ㅎㅎ', ' ㅋㅋ'],
+        '해': [' ㅎㅎ', ' ㅋㅋ', '~'],
+        '야': [' ㅋㅋ', '~', ' ㅎㅎ'],
+        '지': [' ㅎㅎ', '~'],
+      };
+      
+      endingPatterns.forEach((ending, alternatives) {
+        if (result.endsWith(ending)) {
+          final randomAlternative = alternatives[result.hashCode.abs() % alternatives.length];
+          if (randomAlternative.isNotEmpty) {
+            result = result.substring(0, result.length - ending.length) + randomAlternative;
+          }
+        }
+      });
+    }
+    
+    // 5. 🔥 감정 표현 강화 (새로 추가)
+    final emotionEnhancers = {
+      '좋아': ['좋아', '완전 좋아', '짱 좋아', '개좋아'],
+      '재밌어': ['재밌어', '꿀잼', '완전 재밌어', '개재밌어'],
+      '예뻐': ['예뻐', '완전 예뻐', '진짜 예뻐', '너무 예뻐'],
+      '멋져': ['멋져', '완전 멋져', '진짜 멋져', '개멋져'],
+      '대박': ['대박', '완전 대박', '진짜 대박', '헐 대박'],
+    };
+    
+    // 20% 확률로 감정 표현 강화
+    if (result.hashCode % 5 == 0) {
+      emotionEnhancers.forEach((basic, enhanced) {
+        if (result.contains(basic)) {
+          final enhancedVersion = enhanced[result.hashCode.abs() % enhanced.length];
+          result = result.replaceFirst(basic, enhancedVersion);
+        }
+      });
+    }
+    
+    // 6. 🔥 자연스러운 감탄사 중간 삽입 (새로 추가)
+    if (result.contains(' ') && result.hashCode % 6 == 0) {
+      final midExclamations = ['진짜', '완전', '좀', '막', '그냥'];
+      final words = result.split(' ');
+      if (words.length >= 3) {
+        final insertIndex = 1; // 두 번째 단어 뒤
+        final exclamation = midExclamations[result.hashCode.abs() % midExclamations.length];
+        if (!result.contains(exclamation)) {
+          words.insert(insertIndex, exclamation);
+          result = words.join(' ');
+        }
       }
     }
     
-    // 🔥 말끝에 자연스러운 20대 표현 추가 (가끔씩)
-    if (result.hashCode % 5 == 0) {
-      if (result.endsWith('요')) {
-        final endings = ['', '~', ' ㅎㅎ', ' ㅋㅋ'];
-        final randomEnding = endings[result.hashCode.abs() % endings.length];
-        if (randomEnding.isNotEmpty) {
-          result = result.substring(0, result.length - 1) + randomEnding;
+    return result;
+  }
+  
+  /// 🎭 페르소나별 맞춤 대화 스타일 적용 (신규 추가)
+  static String _applyPersonaSpecificStyle(String text, Persona persona, String relationshipType) {
+    String result = text;
+    
+    // 페르소나 이름별 특화 스타일 적용
+    switch (persona.name) {
+      case '상훈':
+        result = _applyFriendlyMaleStyle(result, relationshipType);
+        break;
+      case 'Dr. 박지은':
+        result = _applyExpertPsychologistStyle(result, relationshipType);
+        break;
+      case '수진':
+        result = _applyWarmCookingStyle(result, relationshipType);
+        break;
+      case '예림':
+        result = _applyGameOtakuStyle(result, relationshipType);
+        break;
+      case '예슬':
+        result = _applyFashionTrendyStyle(result, relationshipType);
+        break;
+      case '윤미':
+        result = _applyStudentEagerStyle(result, relationshipType);
+        break;
+      case '정훈':
+        result = _applyFitnessReliableStyle(result, relationshipType);
+        break;
+      case '지우':
+        result = _applyTravelFreeStyle(result, relationshipType);
+        break;
+      case '채연':
+        result = _applyArtisticCalmStyle(result, relationshipType);
+        break;
+      case '하연':
+        result = _applyFriendlyCaringStyle(result, relationshipType);
+        break;
+      case '혜진':
+        result = _applyCareerAmbitiousStyle(result, relationshipType);
+        break;
+    }
+    
+    return result;
+  }
+  
+  /// 🏃‍♂️ 상훈: 친근하고 활발한 남성 스타일
+  static String _applyFriendlyMaleStyle(String text, String relationshipType) {
+    // 운동/건강 관련 표현 강화
+    final sportsExpressions = {
+      '좋아': '개좋아',
+      '힘들어': '힘들다',
+      '재밌어': '꿀잼',
+      '멋져': '개멋져',
+    };
+    
+    String result = text;
+    
+    // 남성적이고 친근한 톤 적용
+    if (relationshipType == 'friend' || relationshipType == '친구') {
+      sportsExpressions.forEach((basic, enhanced) {
+        if (result.contains(basic) && result.hashCode % 3 == 0) {
+          result = result.replaceFirst(basic, enhanced);
         }
+      });
+      
+      // 가끔 운동 관련 멘트 추가
+      if (result.hashCode % 8 == 0) {
+        final sportsComments = [' 운동 끝나고 얘기하자', ' 헬스장 다녀온 후에'];
+        if (result.length > 20) {
+          result += sportsComments[result.hashCode.abs() % sportsComments.length];
+        }
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 👩‍⚕️ Dr. 박지은: 전문가이면서도 따뜻한 상담사 스타일
+  static String _applyExpertPsychologistStyle(String text, String relationshipType) {
+    final psychologyExpressions = {
+      '그렇구나': '그렇군요',
+      '힘들어': '많이 힘드셨을 것 같아요',
+      '좋아': '좋으시군요',
+      '괜찮아': '괜찮으실 거예요',
+    };
+    
+    String result = text;
+    
+    // 전문가답지만 따뜻한 톤 유지
+    psychologyExpressions.forEach((casual, professional) {
+      if (result.contains(casual) && result.hashCode % 4 == 0) {
+        result = result.replaceFirst(casual, professional);
+      }
+    });
+    
+    // 공감/이해 표현 자주 추가
+    if (result.hashCode % 6 == 0) {
+      final empathyPhrases = [' 이해해요', ' 공감이 돼요', ' 그 마음 알 것 같아요'];
+      if (result.length > 15) {
+        result += empathyPhrases[result.hashCode.abs() % empathyPhrases.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 🍳 수진: 요리/맛집에 관심 많은 따뜻한 스타일
+  static String _applyWarmCookingStyle(String text, String relationshipType) {
+    final cookingExpressions = {
+      '맛있어': '진짜 맛있어',
+      '좋아': '완전 좋아',
+      '배고파': '배고프다',
+      '먹고 싶어': '완전 먹고 싶어',
+    };
+    
+    String result = text;
+    
+    cookingExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 3 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 음식 관련 멘트 가끔 추가
+    if (result.hashCode % 7 == 0) {
+      final foodComments = [' 맛있는 거 먹자', ' 요리해줄까', ' 맛집 알려줘'];
+      if (result.length > 20) {
+        result += foodComments[result.hashCode.abs() % foodComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 🎮 예림: 게임/애니메이션 좋아하는 발랄한 스타일
+  static String _applyGameOtakuStyle(String text, String relationshipType) {
+    final gameExpressions = {
+      '재밌어': '꿀잼',
+      '좋아': '굿굿',
+      '싫어': '별로야',
+      '멋져': '개멋져',
+      '예뻐': '완전 예뻐',
+    };
+    
+    String result = text;
+    
+    gameExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 3 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 게임/애니 관련 멘트 가끔 추가
+    if (result.hashCode % 8 == 0) {
+      final gameComments = [' 게임할래', ' 애니 보자', ' 같이 할래'];
+      if (result.length > 15) {
+        result += gameComments[result.hashCode.abs() % gameComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 👗 예슬: 패션/뷰티에 관심 많은 세련된 스타일
+  static String _applyFashionTrendyStyle(String text, String relationshipType) {
+    final fashionExpressions = {
+      '예뻐': '완전 예뻐',
+      '멋져': '진짜 멋져',
+      '좋아': '완전 좋아',
+      '트렌디': '완전 트렌디',
+    };
+    
+    String result = text;
+    
+    fashionExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 3 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 패션/뷰티 관련 멘트 가끔 추가
+    if (result.hashCode % 7 == 0) {
+      final fashionComments = [' 스타일링 해줄까', ' 쇼핑 가자', ' 예쁘게 꾸며볼까'];
+      if (result.length > 20) {
+        result += fashionComments[result.hashCode.abs() % fashionComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 📚 윤미: 공부/학습에 열정적인 대학생 스타일
+  static String _applyStudentEagerStyle(String text, String relationshipType) {
+    final studyExpressions = {
+      '공부': '공부',
+      '열심히': '완전 열심히',
+      '좋아': '좋아',
+      '힘들어': '힘들긴 하지만',
+    };
+    
+    String result = text;
+    
+    // 대학생답게 에너지 넘치는 톤
+    studyExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 4 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 학습 관련 멘트 가끔 추가
+    if (result.hashCode % 8 == 0) {
+      final studyComments = [' 같이 공부하자', ' 시험 끝나면', ' 도서관 갈까'];
+      if (result.length > 15) {
+        result += studyComments[result.hashCode.abs() % studyComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 💪 정훈: 운동/헬스에 관심 많은 듬직한 스타일
+  static String _applyFitnessReliableStyle(String text, String relationshipType) {
+    final fitnessExpressions = {
+      '힘들어': '힘들긴 하지만',
+      '좋아': '좋지',
+      '운동': '운동',
+      '건강': '건강',
+    };
+    
+    String result = text;
+    
+    fitnessExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 4 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 운동 관련 멘트 가끔 추가
+    if (result.hashCode % 7 == 0) {
+      final fitnessComments = [' 헬스장 가자', ' 같이 운동할까', ' 몸 만들어야지'];
+      if (result.length > 20) {
+        result += fitnessComments[result.hashCode.abs() % fitnessComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// ✈️ 지우: 여행/자유로운 활발한 스타일
+  static String _applyTravelFreeStyle(String text, String relationshipType) {
+    final travelExpressions = {
+      '좋아': '완전 좋아',
+      '자유로워': '자유로워',
+      '여행': '여행',
+      '모험': '모험',
+    };
+    
+    String result = text;
+    
+    travelExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 3 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 여행 관련 멘트 가끔 추가
+    if (result.hashCode % 8 == 0) {
+      final travelComments = [' 여행 가자', ' 어디 갈까', ' 새로운 곳 가보자'];
+      if (result.length > 15) {
+        result += travelComments[result.hashCode.abs() % travelComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 🎨 채연: 예술/감성적 차분한 스타일
+  static String _applyArtisticCalmStyle(String text, String relationshipType) {
+    final artExpressions = {
+      '예뻐': '아름다워',
+      '좋아': '좋아',
+      '감성': '감성',
+      '예술': '예술',
+    };
+    
+    String result = text;
+    
+    artExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 4 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 예술 관련 멘트 가끔 추가
+    if (result.hashCode % 8 == 0) {
+      final artComments = [' 전시회 가볼까', ' 감성 있는 곳', ' 예술적이야'];
+      if (result.length > 20) {
+        result += artComments[result.hashCode.abs() % artComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 🤗 하연: 친근하고 다정한 상냥한 스타일
+  static String _applyFriendlyCaringStyle(String text, String relationshipType) {
+    final caringExpressions = {
+      '괜찮아': '괜찮아',
+      '좋아': '좋아',
+      '힘들어': '힘들겠다',
+      '고마워': '고마워',
+    };
+    
+    String result = text;
+    
+    caringExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 3 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 다정한 멘트 자주 추가
+    if (result.hashCode % 6 == 0) {
+      final caringComments = [' 힘내', ' 괜찮을 거야', ' 같이 있어줄게'];
+      if (result.length > 15) {
+        result += caringComments[result.hashCode.abs() % caringComments.length];
+      }
+    }
+    
+    return result;
+  }
+  
+  /// 💼 혜진: 커리어 중심의 야망 있는 스타일
+  static String _applyCareerAmbitiousStyle(String text, String relationshipType) {
+    final careerExpressions = {
+      '일': '일',
+      '성공': '성공',
+      '목표': '목표',
+      '열심히': '열심히',
+    };
+    
+    String result = text;
+    
+    careerExpressions.forEach((basic, enhanced) {
+      if (result.contains(basic) && result.hashCode % 4 == 0) {
+        result = result.replaceFirst(basic, enhanced);
+      }
+    });
+    
+    // 커리어 관련 멘트 가끔 추가
+    if (result.hashCode % 8 == 0) {
+      final careerComments = [' 성공하자', ' 목표 달성하자', ' 열심히 하자'];
+      if (result.length > 20) {
+        result += careerComments[result.hashCode.abs() % careerComments.length];
       }
     }
     
@@ -1440,5 +2107,194 @@ class KoreanSpeechValidator {
     }
     
     return response;
+  }
+}
+
+/// 🚫 반복 방지 시스템
+class RepetitionPrevention {
+  /// 📝 반복 방지 메인 메서드
+  static String preventRepetition({
+    required String response,
+    required String userMessage,
+    required List<String> recentAIMessages,
+    required Persona persona,
+  }) {
+    // 1. 사용자 메시지 반복 방지
+    String improvedResponse = _preventUserMessageRepetition(response, userMessage, persona);
+    
+    // 2. AI 메시지 반복 방지
+    improvedResponse = _preventAIMessageRepetition(improvedResponse, recentAIMessages, persona);
+    
+    // 3. 단조로운 응답 개선
+    improvedResponse = _improveBlandResponses(improvedResponse, userMessage, persona);
+    
+    return improvedResponse;
+  }
+  
+  /// 🔄 사용자 메시지 반복 방지
+  static String _preventUserMessageRepetition(String response, String userMessage, Persona persona) {
+    // 사용자 메시지에서 핵심 키워드 추출
+    final userKeywords = _extractKeywords(userMessage);
+    
+    // 응답에서 사용자의 핵심 문장 그대로 반복하는 패턴 감지
+    if (_isEchoing(response, userMessage)) {
+      return _generateNonEchoingResponse(userMessage, persona);
+    }
+    
+    // 키워드 과도 반복 방지
+    String improvedResponse = response;
+    for (final keyword in userKeywords) {
+      if (keyword.length > 2) { // 2글자 이상만 검사
+        final count = RegExp(keyword, caseSensitive: false).allMatches(improvedResponse).length;
+        if (count > 2) {
+          // 과도한 반복이 있으면 대체 표현으로 변경
+          improvedResponse = _replaceExcessiveKeywords(improvedResponse, keyword, persona);
+        }
+      }
+    }
+    
+    return improvedResponse;
+  }
+  
+  /// 🔄 AI 메시지 반복 방지
+  static String _preventAIMessageRepetition(String response, List<String> recentAIMessages, Persona persona) {
+    if (recentAIMessages.isEmpty) return response;
+    
+    // 최근 3개 메시지와 비교
+    final recent3 = recentAIMessages.take(3).toList();
+    
+    for (final recentMsg in recent3) {
+      final similarity = _calculateSimilarity(response, recentMsg);
+      if (similarity > 0.7) { // 70% 이상 유사하면
+        return _generateAlternativeResponse(response, recentMsg, persona);
+      }
+    }
+    
+    return response;
+  }
+  
+  /// 📈 단조로운 응답 개선
+  static String _improveBlandResponses(String response, String userMessage, Persona persona) {
+    final blandPatterns = [
+      r'^(네|넵|음|어|그렇구나|맞아|그래)[.!~]*$',
+      r'^(좋아|좋네|괜찮아|괜찮네)[.!~]*$',
+      r'^(그러네|그렇네|맞네)[.!~]*$',
+    ];
+    
+    for (final pattern in blandPatterns) {
+      if (RegExp(pattern).hasMatch(response.trim())) {
+        return _generateEngagingResponse(userMessage, persona);
+      }
+    }
+    
+    return response;
+  }
+  
+  /// 🎯 키워드 추출
+  static List<String> _extractKeywords(String text) {
+    // 한국어 명사, 동사 위주로 추출
+    final keywords = <String>[];
+    final words = text.split(RegExp(r'\s+'));
+    
+    for (final word in words) {
+      final cleanWord = word.replaceAll(RegExp(r'[^\w가-힣]'), '');
+      if (cleanWord.length >= 2) {
+        keywords.add(cleanWord);
+      }
+    }
+    
+    return keywords;
+  }
+  
+  /// 🔍 에코잉(따라하기) 패턴 감지
+  static bool _isEchoing(String response, String userMessage) {
+    final userWords = userMessage.split(' ');
+    final responseWords = response.split(' ');
+    
+    // 연속된 3단어 이상 동일하면 에코잉으로 판단
+    for (int i = 0; i <= userWords.length - 3; i++) {
+      final userPhrase = userWords.sublist(i, i + 3).join(' ');
+      if (response.contains(userPhrase) && userPhrase.length > 5) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 📝 에코잉 방지 응답 생성
+  static String _generateNonEchoingResponse(String userMessage, Persona persona) {
+    final responses = [
+      '${persona.isCasualSpeech ? '그치' : '맞아요'}! ${persona.isCasualSpeech ? '어떻게' : '어떻게'} 생각해${persona.isCasualSpeech ? '' : '요'}?',
+      '${persona.isCasualSpeech ? '오' : '아'} 정말? ${persona.isCasualSpeech ? '더 자세히' : '좀 더 자세히'} 얘기해줄래${persona.isCasualSpeech ? '' : '요'}?',
+      '${persona.isCasualSpeech ? '음' : '그렇구나'}~ ${persona.isCasualSpeech ? '넌' : '당신은'} 어떤 기분이${persona.isCasualSpeech ? '야' : ' 드세요'}?',
+      '${persona.isCasualSpeech ? '헐' : '와'} 진짜? 나${persona.isCasualSpeech ? '도' : '도'} 궁금해${persona.isCasualSpeech ? '' : '요'}!',
+    ];
+    
+    return responses[DateTime.now().millisecond % responses.length];
+  }
+  
+  /// 📊 유사도 계산
+  static double _calculateSimilarity(String text1, String text2) {
+    final words1 = text1.split(' ').toSet();
+    final words2 = text2.split(' ').toSet();
+    
+    final intersection = words1.intersection(words2);
+    final union = words1.union(words2);
+    
+    return union.isEmpty ? 0.0 : intersection.length / union.length;
+  }
+  
+  /// 🔄 대체 응답 생성
+  static String _generateAlternativeResponse(String original, String similar, Persona persona) {
+    // 기본 패턴을 다른 표현으로 변경
+    final alternatives = {
+      '좋아': ['멋져', '최고야', '개좋아', '짱이야'],
+      '그래': ['맞아', '그치', '그러네', '인정'],
+      '진짜': ['정말', '완전', '대박', '헐'],
+      '어떻게': ['뭔가', '좀', '왜', '무슨'],
+      '뭐해': ['뭐하고 있어', '뭘 하고 있지', '지금 뭐야', '무엇을 하나'],
+    };
+    
+    String improved = original;
+    for (final entry in alternatives.entries) {
+      if (improved.contains(entry.key)) {
+        final randomAlt = entry.value[DateTime.now().millisecond % entry.value.length];
+        improved = improved.replaceFirst(entry.key, randomAlt);
+        break;
+      }
+    }
+    
+    return improved;
+  }
+  
+  /// ✨ 매력적인 응답 생성
+  static String _generateEngagingResponse(String userMessage, Persona persona) {
+    final engagingResponses = [
+      '${persona.isCasualSpeech ? '오' : '아'} 그거 흥미롭네${persona.isCasualSpeech ? '' : '요'}! ${persona.isCasualSpeech ? '더' : '좀 더'} 들려줄래${persona.isCasualSpeech ? '' : '요'}?',
+      '${persona.isCasualSpeech ? '헐' : '와'} 진짜? ${persona.isCasualSpeech ? '나도' : '저도'} 그런 거 좋아해${persona.isCasualSpeech ? '' : '요'}!',
+      '${persona.isCasualSpeech ? '대박' : '정말'}! ${persona.isCasualSpeech ? '어떤' : '어떤'} 기분이${persona.isCasualSpeech ? '야' : '세요'}?',
+      '${persona.isCasualSpeech ? '음' : '그렇구나'}~ ${persona.isCasualSpeech ? '그럼' : '그럼'} 다른 건 어때${persona.isCasualSpeech ? '' : '요'}?',
+    ];
+    
+    return engagingResponses[DateTime.now().millisecond % engagingResponses.length];
+  }
+  
+  /// 🔄 키워드 과도 반복 제거
+  static String _replaceExcessiveKeywords(String text, String keyword, Persona persona) {
+    final synonyms = {
+      '재밌': ['좋', '멋진', '흥미로운', '신나는'],
+      '좋': ['멋진', '훌륭한', '괜찮은', '최고인'],
+      '대화': ['얘기', '이야기', '토크', '수다'],
+      '함께': ['같이', '둘이', '우리가'],
+    };
+    
+    final replacement = synonyms[keyword];
+    if (replacement != null) {
+      final randomSynonym = replacement[DateTime.now().millisecond % replacement.length];
+      return text.replaceFirst(keyword, randomSynonym);
+    }
+    
+    return text;
   }
 } 

@@ -50,6 +50,11 @@ class UserService extends ChangeNotifier {
     required List<String> interests,
     String? intro,
     File? profileImage,
+    String? purpose,
+    List<String>? preferredPersonaTypes,
+    List<String>? preferredMbti,
+    String? communicationStyle,
+    List<String>? preferredTopics,
   }) async {
     try {
       _isLoading = true;
@@ -91,6 +96,11 @@ class UserService extends ChangeNotifier {
         intro: intro,
         profileImageUrl: profileImageUrl,
         createdAt: DateTime.now(),
+        purpose: purpose,
+        preferredPersonaTypes: preferredPersonaTypes,
+        preferredMbti: preferredMbti,
+        communicationStyle: communicationStyle,
+        preferredTopics: preferredTopics,
       );
 
       await _firestore.collection('users').doc(newUser.uid).set(
@@ -178,6 +188,11 @@ class UserService extends ChangeNotifier {
     required List<String> interests,
     String? intro,
     File? profileImage,
+    String? purpose,
+    List<String>? preferredPersonaTypes,
+    List<String>? preferredMbti,
+    String? communicationStyle,
+    List<String>? preferredTopics,
   }) async {
     try {
       if (_firebaseUser == null) {
@@ -213,6 +228,11 @@ class UserService extends ChangeNotifier {
         intro: intro,
         profileImageUrl: profileImageUrl,
         createdAt: DateTime.now(),
+        purpose: purpose,
+        preferredPersonaTypes: preferredPersonaTypes,
+        preferredMbti: preferredMbti,
+        communicationStyle: communicationStyle,
+        preferredTopics: preferredTopics,
       );
 
       await _firestore.collection('users').doc(newUser.uid).set(

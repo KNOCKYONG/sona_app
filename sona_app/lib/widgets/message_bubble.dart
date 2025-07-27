@@ -14,7 +14,6 @@ import '../../theme/app_theme.dart';
 /// - Optimized shadow rendering
 class MessageBubble extends StatelessWidget {
   final Message message;
-  final bool isExpertChat;
   final VoidCallback? onScoreChange;
   
   // Static DateFormat to avoid recreating on each build
@@ -28,7 +27,6 @@ class MessageBubble extends StatelessWidget {
   const MessageBubble({
     super.key,
     required this.message,
-    this.isExpertChat = false,
     this.onScoreChange,
   });
 
@@ -51,7 +49,7 @@ class MessageBubble extends StatelessWidget {
       case MessageType.emotion:
         return _EmotionMessage(message: message);
       default:
-        return _TextMessage(message: message, isExpertChat: isExpertChat);
+        return _TextMessage(message: message);
     }
   }
 }
@@ -59,7 +57,6 @@ class MessageBubble extends StatelessWidget {
 // Separate widget for text messages to avoid rebuilds
 class _TextMessage extends StatelessWidget {
   final Message message;
-  final bool isExpertChat;
   
   static const _userTextStyle = TextStyle(
     color: Colors.white,
@@ -75,7 +72,6 @@ class _TextMessage extends StatelessWidget {
 
   const _TextMessage({
     required this.message,
-    this.isExpertChat = false,
   });
 
   @override
@@ -154,7 +150,6 @@ class _TextMessage extends StatelessWidget {
                       _TimeAndScore(
                         message: message,
                         isFromUser: isFromUser,
-                        isExpertChat: isExpertChat,
                       ),
                     ],
                   ),
@@ -168,7 +163,6 @@ class _TextMessage extends StatelessWidget {
   }
 
   bool get _shouldShowEmotion =>
-      !isExpertChat && // Don't show emotions for expert chats
       message.emotion != null && 
       message.relationshipScoreChange != null &&
       message.relationshipScoreChange!.abs() >= 3;
@@ -178,12 +172,10 @@ class _TextMessage extends StatelessWidget {
 class _TimeAndScore extends StatelessWidget {
   final Message message;
   final bool isFromUser;
-  final bool isExpertChat;
 
   const _TimeAndScore({
     required this.message,
     required this.isFromUser,
-    this.isExpertChat = false,
   });
 
   @override
@@ -204,8 +196,7 @@ class _TimeAndScore extends StatelessWidget {
         // Score change (only rebuild this part when subscription changes)
         Consumer<SubscriptionService>(
           builder: (context, subscriptionService, child) {
-            if (isExpertChat || // Hide score changes for expert chats
-                !subscriptionService.canShowIntimacyScore ||
+            if (!subscriptionService.canShowIntimacyScore ||
                 message.relationshipScoreChange == null ||
                 message.relationshipScoreChange == 0) {
               return const SizedBox.shrink();

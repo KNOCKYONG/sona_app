@@ -213,14 +213,12 @@ class _PersonaCardState extends State<PersonaCard> {
             // Persona info with expert badge
             _PersonaInfo(
               persona: widget.persona,
-              isExpert: false,
             ),
             
             // Swipe overlay with safe color handling
             _SwipeOverlay(
               horizontal: widget.horizontalThresholdPercentage,
               vertical: widget.verticalThresholdPercentage,
-              isExpert: false,
             ),
             
             // Relationship badge
@@ -488,11 +486,9 @@ class _GradientOverlay extends StatelessWidget {
 // Persona info widget with expert badge support
 class _PersonaInfo extends StatelessWidget {
   final Persona persona;
-  final bool isExpert;
 
   const _PersonaInfo({
     required this.persona,
-    required this.isExpert,
   });
 
   @override
@@ -507,41 +503,11 @@ class _PersonaInfo extends StatelessWidget {
         children: [
           Row(
             children: [
-              // 전문가 뱃지를 이름 앞에 표시
-              if (isExpert) ...[
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.4),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.verified,
-                    color: Colors.white,
-                    size: 18,
-                  ),
-                ),
-                const SizedBox(width: 10),
-              ],
               
               // 이름
               Flexible(
                 child: Text(
-                  isExpert && persona.profession != null
-                      ? (persona.name.contains('Dr.') ? persona.name : 'Dr. ${persona.name}')
-                      : persona.name,
+                  persona.name,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 28,
@@ -583,26 +549,6 @@ class _PersonaInfo extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          // 전문 분야 표시 (전문가인 경우)
-          if (isExpert && persona.profession != null) ...[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.black.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.3), width: 1),
-              ),
-              child: Text(
-                persona.profession!,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-          ],
           Text(
             persona.description,
             style: const TextStyle(
@@ -610,7 +556,7 @@ class _PersonaInfo extends StatelessWidget {
               fontSize: 16,
               height: 1.4,
             ),
-            maxLines: isExpert ? 1 : 2,
+            maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
           // 여러 이미지가 있을 때 안내 표시
@@ -649,51 +595,109 @@ class _PersonaInfo extends StatelessWidget {
 }
 
 // Swipe overlay widget with optimized color calculations and expert support
-class _SwipeOverlay extends StatelessWidget {
+class _SwipeOverlay extends StatefulWidget {
   final double horizontal;
   final double vertical;
-  final bool isExpert;
 
   const _SwipeOverlay({
     required this.horizontal,
     required this.vertical,
-    required this.isExpert,
   });
+
+  @override
+  State<_SwipeOverlay> createState() => _SwipeOverlayState();
+}
+
+class _SwipeOverlayState extends State<_SwipeOverlay> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+  Color? _currentColor;
+  Widget? _currentIcon;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 150), // Fast transition
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(_SwipeOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    
+    final newColor = _getOverlayColor();
+    final newIcon = _getOverlayIcon();
+    
+    // Only animate if there's an actual change
+    if (newColor != _currentColor || newIcon.runtimeType != _currentIcon.runtimeType) {
+      _currentColor = newColor;
+      _currentIcon = newIcon;
+      
+      if (newColor != Colors.transparent) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    }
+  }
 
   Color _getOverlayColor() {
     // Complete safety checks with default transparent color
     try {
       // Check for invalid values
-      if (horizontal.isNaN || horizontal.isInfinite || 
-          vertical.isNaN || vertical.isInfinite) {
+      if (widget.horizontal.isNaN || widget.horizontal.isInfinite || 
+          widget.vertical.isNaN || widget.vertical.isInfinite) {
         return const Color(0x00000000); // Fully transparent
       }
 
       // Clamp values to safe range
-      final safeHorizontal = horizontal.clamp(-1.0, 1.0);
-      final safeVertical = vertical.clamp(-1.0, 1.0);
+      final safeHorizontal = widget.horizontal.clamp(-1.0, 1.0);
+      final safeVertical = widget.vertical.clamp(-1.0, 1.0);
       
-      // Safe opacity calculation (0.0 to 0.5)
+      // Debug logging
+      if (safeHorizontal.abs() > 0.05 || safeVertical.abs() > 0.05) {
+        debugPrint('Swipe threshold: H=$safeHorizontal, V=$safeVertical');
+      }
+      
+      // Safe opacity calculation (0.0 to 0.7 for better visibility)
       double calculateSafeOpacity(double value) {
         final absValue = value.abs().clamp(0.0, 1.0);
-        return (absValue * 0.5).clamp(0.0, 0.5);
+        return (absValue * 0.7).clamp(0.0, 0.7); // Increased from 0.5 to 0.7
       }
 
-      // Check thresholds and return appropriate color
-      if (safeVertical < -0.1) {
-        final opacity = calculateSafeOpacity(safeVertical);
-        if (isExpert) {
-          // Experts use like color instead of super like
+      // Prioritize horizontal movement over vertical for clearer direction detection
+      final horizontalDominant = safeHorizontal.abs() > safeVertical.abs() * 1.5;
+      
+      // Check thresholds with horizontal priority
+      if (horizontalDominant) {
+        if (safeHorizontal < -0.1) {
+          final opacity = calculateSafeOpacity(safeHorizontal);
+          return Color.fromRGBO(96, 96, 96, opacity); // Darker grey for Pass
+        } else if (safeHorizontal > 0.1) {
+          final opacity = calculateSafeOpacity(safeHorizontal);
           return Color.fromRGBO(255, 107, 157, opacity); // Pink (Like)
-        } else {
+        }
+      } else {
+        // Only check vertical if it's clearly dominant
+        if (safeVertical < -0.15 && safeHorizontal.abs() < 0.1) { // Increased threshold
+          final opacity = calculateSafeOpacity(safeVertical);
           return Color.fromRGBO(25, 118, 210, opacity); // Blue (Super Like)
         }
-      } else if (safeHorizontal > 0.1) {
-        final opacity = calculateSafeOpacity(safeHorizontal);
-        return Color.fromRGBO(255, 107, 157, opacity); // Pink (Like)
-      } else if (safeHorizontal < -0.1) {
-        final opacity = calculateSafeOpacity(safeHorizontal);
-        return Color.fromRGBO(158, 158, 158, opacity); // Grey (Pass)
       }
     } catch (e) {
       debugPrint('Error in _getOverlayColor: $e');
@@ -705,48 +709,74 @@ class _SwipeOverlay extends StatelessWidget {
   Widget? _getOverlayIcon() {
     try {
       // Check for invalid values
-      if (horizontal.isNaN || horizontal.isInfinite || 
-          vertical.isNaN || vertical.isInfinite) {
+      if (widget.horizontal.isNaN || widget.horizontal.isInfinite || 
+          widget.vertical.isNaN || widget.vertical.isInfinite) {
         return null;
       }
 
-      final safeHorizontal = horizontal.clamp(-1.0, 1.0);
-      final safeVertical = vertical.clamp(-1.0, 1.0);
+      final safeHorizontal = widget.horizontal.clamp(-1.0, 1.0);
+      final safeVertical = widget.vertical.clamp(-1.0, 1.0);
       
-      if (safeVertical < -0.1) {
-        if (isExpert) {
-          // Experts show like icon instead of super like
-          return const Text('💕', style: TextStyle(fontSize: 60));
-        } else {
+      // Prioritize horizontal movement over vertical for clearer direction detection
+      final horizontalDominant = safeHorizontal.abs() > safeVertical.abs() * 1.5;
+      
+      // Check thresholds with horizontal priority
+      if (horizontalDominant) {
+        if (safeHorizontal < -0.1) {
+          // Enhanced Pass icon with border for better visibility
+          return Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 4),
+            ),
+            child: const Text(
+              '✕',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 80, // Increased from 60 to 80
+                fontWeight: FontWeight.w900, // Bolder
+                shadows: [
+                  Shadow(
+                    offset: Offset(0, 2),
+                    blurRadius: 4,
+                    color: Colors.black54,
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else if (safeHorizontal > 0.1) {
+          return const Text('💕', style: TextStyle(fontSize: 70)); // Increased size
+        }
+      } else {
+        // Only show vertical icons if clearly dominant
+        if (safeVertical < -0.15 && safeHorizontal.abs() < 0.1) { // Increased threshold
           return const Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('💫', style: TextStyle(fontSize: 50)),
+              Text('💫', style: TextStyle(fontSize: 60)), // Increased from 50
               SizedBox(height: 8),
               Text(
                 'SUPER\nLIKE',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 18, // Increased from 16
+                  fontWeight: FontWeight.w900,
                   height: 1.2,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(0, 2),
+                      blurRadius: 4,
+                      color: Colors.black54,
+                    ),
+                  ],
                 ),
               ),
             ],
           );
         }
-      } else if (safeHorizontal > 0.1) {
-        return const Text('💕', style: TextStyle(fontSize: 60));
-      } else if (safeHorizontal < -0.1) {
-        return const Text(
-          '✕',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 60,
-            fontWeight: FontWeight.bold,
-          ),
-        );
       }
     } catch (e) {
       debugPrint('Error in _getOverlayIcon: $e');
@@ -758,18 +788,29 @@ class _SwipeOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = _getOverlayColor();
-    if (color == Colors.transparent) {
+    final icon = _getOverlayIcon();
+    
+    if (color == Colors.transparent || color == const Color(0x00000000)) {
       return const SizedBox.shrink();
     }
 
     return Positioned.fill(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Center(
-          child: _getOverlayIcon() ?? const SizedBox.shrink(),
+      child: FadeTransition(
+        opacity: _fadeAnimation,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100), // Smooth color transition
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Center(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 150),
+              switchInCurve: Curves.easeInOut,
+              switchOutCurve: Curves.easeInOut,
+              child: icon ?? const SizedBox.shrink(),
+            ),
+          ),
         ),
       ),
     );

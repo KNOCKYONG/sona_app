@@ -6,6 +6,7 @@ import 'package:animations/animations.dart';
 import '../services/auth_service.dart';
 import '../services/persona_service.dart';
 import '../services/device_id_service.dart';
+import '../services/user_service.dart';
 import '../models/persona.dart';
 import '../widgets/persona_card.dart';
 import '../widgets/tutorial_overlay.dart';
@@ -52,6 +53,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   Future<void> _loadPersonas() async {
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+    final userService = Provider.of<UserService>(context, listen: false);
     
     // 🔧 DeviceIdService로 사용자 ID 확보
     final currentUserId = await DeviceIdService.getCurrentUserId(
@@ -65,6 +67,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     await DeviceIdService.logDeviceInfo();
     
     personaService.setCurrentUserId(currentUserId);
+    
+    // 추천 알고리즘을 위해 현재 사용자 정보 설정
+    if (userService.currentUser != null) {
+      debugPrint('📊 Setting current user for recommendation algorithm');
+      personaService.setCurrentUser(userService.currentUser!);
+    } else {
+      debugPrint('⚠️ No current user available for recommendation algorithm');
+    }
     
     if (authService.isTutorialMode) {
       // 튜토리얼 모드에서도 전체 초기화 사용 (완전한 상태 설정)
@@ -255,19 +265,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     final authService = Provider.of<AuthService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     
-    // 전문가 매칭 처리
-    if (persona.isExpert) {
-      if (authService.isTutorialMode || authService.user == null) {
-        _showExpertLoginRequiredDialog(persona);
-        return;
-      } else {
-        // 전문가 매칭 처리
-        await personaService.markPersonaAsSwiped(persona.id);
-        await personaService.matchWithPersona(persona.id, isSuperLike: false);
-        _showExpertConsultationDialog(persona);
-        return;
-      }
-    }
+    // 전문가 기능 제거됨
     
     if (authService.isTutorialMode) {
       // 🎓 튜토리얼 모드: 직접 persona 설정 (Firebase 호출 없이)
@@ -648,16 +646,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                           color: Colors.white,
                         ),
                       ),
-                      if (persona.profession != null) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          persona.profession!,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white70,
-                          ),
-                        ),
-                      ],
                       const SizedBox(height: 12),
                       Text(
                         persona.description,
@@ -816,24 +804,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     color: Colors.white,
                   ),
                 ),
-                if (persona.profession != null) ...[
-                  const SizedBox(height: 4),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      persona.profession!,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
+                // profession 필드 제거됨
                 const SizedBox(height: 20),
                 
                 Container(
@@ -970,7 +941,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     ),
                     const TextSpan(text: '님은 '),
                     TextSpan(
-                      text: persona.profession ?? '전문가',
+                      text: '상담사',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF2196F3),
@@ -1051,11 +1022,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 🔧 FIX: 메인 화면의 context를 미리 저장
     final BuildContext screenContext = context;
     
-    // Show expert consultation popup first if it's an expert
-    if (persona.isExpert) {
-      _showExpertConsultationPopup(persona, screenContext);
-      return;
-    }
+    // 전문가 기능 제거됨
     
     showModal<void>(
       context: context,
@@ -1226,7 +1193,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       debugPrint('🆔 Processing match with userId: $currentUserId');
       
       // 🔧 중요: 전문가 페르소나도 실제로 매칭 처리해야 채팅 목록에 나타남
-      debugPrint('🩺 Processing expert persona match: ${persona.name} (isExpert: ${persona.isExpert})');
+      debugPrint('🩺 Processing persona match: ${persona.name}');
       
       // 실제 매칭 처리 (전문가든 일반이든 모두 매칭 필요)
       final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
@@ -1246,23 +1213,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         try {
           // 🎯 매칭된 소나와 바로 채팅 시작 (더 나은 UX)
           // 🔧 FIX: 업데이트된 persona를 전달
-          final updatedPersona = persona.isExpert 
+          final updatedPersona = isSuperLike 
               ? persona.copyWith(
+                  relationshipScore: 200, 
+                  currentRelationship: RelationshipType.crush,
+                  imageUrls: persona.imageUrls,  // Preserve imageUrls
+                )
+              : persona.copyWith(
                   relationshipScore: 50, 
                   currentRelationship: RelationshipType.friend,
                   imageUrls: persona.imageUrls,  // Preserve imageUrls
-                )
-              : isSuperLike 
-                  ? persona.copyWith(
-                      relationshipScore: 200, 
-                      currentRelationship: RelationshipType.crush,
-                      imageUrls: persona.imageUrls,  // Preserve imageUrls
-                    )
-                  : persona.copyWith(
-                      relationshipScore: 50, 
-                      currentRelationship: RelationshipType.friend,
-                      imageUrls: persona.imageUrls,  // Preserve imageUrls
-                    );
+                );
           
           Navigator.of(screenContext).pushNamedAndRemoveUntil(
             '/chat',
@@ -1533,22 +1494,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       builder: (context, personaService, child) {
                         final personas = personaService.availablePersonas;
                         final currentPersona = personas.isNotEmpty ? personas[0] : null;
-                        final isExpert = false;
                         
                         return AnimatedActionButton(
-                          onTap: (_isLoading || isExpert) ? null : _onSuperLikePressed,
+                          onTap: _isLoading ? null : _onSuperLikePressed,
                           size: 70,
-                          gradientColors: isExpert 
-                              ? [Colors.grey[400]!, Colors.grey[500]!]
-                              : [const Color(0xFF00BCD4), const Color(0xFF2196F3)],
-                          shadowColor: isExpert 
-                              ? Colors.grey
-                              : const Color(0xFF2196F3),
-                          icon: isExpert ? Icons.block : Icons.star_rounded,
+                          gradientColors: [const Color(0xFF00BCD4), const Color(0xFF2196F3)],
+                          shadowColor: const Color(0xFF2196F3),
+                          icon: Icons.star_rounded,
                           iconSize: 35,
-                          tooltip: isExpert 
-                              ? '전문가는 Super Like 불가'
-                              : 'Super Like (바로 썸 단계)',
+                          tooltip: 'Super Like (바로 썸 단계)',
                         );
                       },
                     ),

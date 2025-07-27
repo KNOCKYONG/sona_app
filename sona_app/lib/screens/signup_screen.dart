@@ -41,6 +41,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   List<String> _selectedInterests = [];
   File? _profileImage;
   
+  // 새로운 필드들
+  String? _selectedPurpose;
+  List<String> _selectedPersonaTypes = ['normal']; // 기본값: 일반 페르소나
+  List<String> _selectedPreferredMbti = [];
+  String _communicationStyle = 'adaptive'; // 기본값: 적응형
+  List<String> _selectedPreferredTopics = [];
+  
   // Terms agreement
   bool _agreedToTerms = false;
   bool _agreedToPrivacy = false;
@@ -189,6 +196,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         interests: _selectedInterests,
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
+        purpose: _selectedPurpose,
+        preferredPersonaTypes: _selectedPersonaTypes,
+        preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        communicationStyle: _communicationStyle,
+        preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
       );
       
       if (user != null && mounted) {
@@ -210,6 +222,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         interests: _selectedInterests,
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
+        purpose: _selectedPurpose,
+        preferredPersonaTypes: _selectedPersonaTypes,
+        preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        communicationStyle: _communicationStyle,
+        preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
       );
       
       if (user != null && mounted) {
@@ -236,15 +253,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 1: // 프로필 정보 페이지  
         canProceed = _validateProfileInfo();
         break;
-      case 2: // 선호 설정 페이지
+      case 2: // 사용 목적 페이지
+        canProceed = _validatePurpose();
+        break;
+      case 3: // 선호 설정 페이지
         canProceed = _validatePreferences();
         break;
-      case 3: // 관심사 페이지
+      case 4: // 관심사 페이지
         canProceed = _validateInterests();
+        break;
+      case 5: // 선호 주제 페이지
+        canProceed = _validateTopics();
         break;
     }
     
-    if (canProceed && _currentPage < 4) {
+    if (canProceed && _currentPage < 6) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -320,6 +343,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
   
+  bool _validatePurpose() {
+    if (_selectedPurpose == null) {
+      _showErrorSnackBar('사용 목적을 선택해주세요');
+      return false;
+    }
+    return true;
+  }
+  
+  bool _validateTopics() {
+    // 선택사항이므로 항상 true
+    return true;
+  }
+  
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
       _showErrorSnackBar('서비스 이용약관에 동의해주세요');
@@ -362,13 +398,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 1: // 프로필 정보 페이지
         return _selectedBirth != null;
         
-      case 2: // 선호 설정 페이지
+      case 2: // 사용 목적 페이지
+        return _selectedPurpose != null;
+        
+      case 3: // 선호 설정 페이지
         return true; // 기본값이 있으므로 항상 true
         
-      case 3: // 관심사 페이지
+      case 4: // 관심사 페이지
         return _selectedInterests.isNotEmpty;
         
-      case 4: // 약관 동의 페이지
+      case 5: // 선호 주제 페이지
+        return true; // 선택사항이므로 항상 true
+        
+      case 6: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
         
       default:
@@ -402,7 +444,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 5,
+                value: (_currentPage + 1) / 7,
                 backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
@@ -422,8 +464,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     _buildBasicInfoPage(),
                     _buildProfileInfoPage(),
+                    _buildPurposePage(), // 새로운 페이지
                     _buildPreferencePage(),
                     _buildInterestsPage(),
+                    _buildTopicsPage(), // 새로운 페이지
                     _buildTermsAgreementPage(),
                   ],
                 ),
@@ -443,7 +487,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     else
                       const SizedBox(width: 60),
                     
-                    if (_currentPage < 4)
+                    if (_currentPage < 6)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
@@ -862,6 +906,169 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  Widget _buildPurposePage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '사용 목적',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'SONA를 사용하시는 목적을 선택해주세요',
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 32),
+          
+          ...PurposeOptions.purposes.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedPurpose = entry.key;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: _selectedPurpose == entry.key 
+                          ? AppTheme.primaryColor 
+                          : Colors.grey[300]!,
+                      width: _selectedPurpose == entry.key ? 2 : 1,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    color: _selectedPurpose == entry.key 
+                        ? AppTheme.primaryColor.withOpacity(0.05)
+                        : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _getPurposeIcon(entry.key),
+                        size: 32,
+                        color: _selectedPurpose == entry.key 
+                            ? AppTheme.primaryColor 
+                            : Colors.grey[600],
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              entry.value,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: _selectedPurpose == entry.key 
+                                    ? AppTheme.primaryColor 
+                                    : Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _getPurposeDescription(entry.key),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_selectedPurpose == entry.key)
+                        const Icon(
+                          Icons.check_circle,
+                          color: AppTheme.primaryColor,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+          
+          const SizedBox(height: 32),
+          
+          const Text(
+            '선호하는 페르소나 유형',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _buildPersonaTypeChip('normal', '일반 페르소나'),
+              _buildPersonaTypeChip('expert', '전문가 페르소나'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildPersonaTypeChip(String type, String label) {
+    final isSelected = _selectedPersonaTypes.contains(type);
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (selected) {
+        setState(() {
+          if (selected) {
+            _selectedPersonaTypes.add(type);
+          } else {
+            _selectedPersonaTypes.remove(type);
+          }
+        });
+      },
+      selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+      checkmarkColor: AppTheme.primaryColor,
+    );
+  }
+  
+  IconData _getPurposeIcon(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return Icons.people;
+      case 'dating':
+        return Icons.favorite;
+      case 'counseling':
+        return Icons.psychology;
+      case 'entertainment':
+        return Icons.theater_comedy;
+      default:
+        return Icons.chat;
+    }
+  }
+  
+  String _getPurposeDescription(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return '새로운 친구를 만나고 대화를 나누고 싶어요';
+      case 'dating':
+        return '연애 감정을 느끼며 로맨틱한 관계를 원해요';
+      case 'counseling':
+        return '전문가의 조언과 상담이 필요해요';
+      case 'entertainment':
+        return '재미있는 대화와 즐거운 시간을 보내고 싶어요';
+      default:
+        return '';
+    }
+  }
+
   Widget _buildInterestsPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -896,6 +1103,144 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _selectedInterests.add(interest);
                     } else {
                       _selectedInterests.remove(interest);
+                    }
+                  });
+                },
+                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                checkmarkColor: AppTheme.primaryColor,
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTopicsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '선호하는 대화 주제',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '어떤 주제로 대화하고 싶으신가요? (선택사항)',
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+          
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: TopicOptions.allTopics.map((topic) {
+              final isSelected = _selectedPreferredTopics.contains(topic);
+              return FilterChip(
+                label: Text(topic),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedPreferredTopics.add(topic);
+                    } else {
+                      _selectedPreferredTopics.remove(topic);
+                    }
+                  });
+                },
+                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                checkmarkColor: AppTheme.primaryColor,
+              );
+            }).toList(),
+          ),
+          
+          const SizedBox(height: 40),
+          
+          const Text(
+            '선호하는 대화 스타일',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Column(
+            children: [
+              RadioListTile<String>(
+                title: const Text('편안하고 캐주얼한 대화'),
+                subtitle: const Text('친구처럼 편하게 대화해요'),
+                value: 'casual',
+                groupValue: _communicationStyle,
+                onChanged: (value) {
+                  setState(() {
+                    _communicationStyle = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('정중하고 포멀한 대화'),
+                subtitle: const Text('존댓말로 예의 바르게 대화해요'),
+                value: 'formal',
+                groupValue: _communicationStyle,
+                onChanged: (value) {
+                  setState(() {
+                    _communicationStyle = value!;
+                  });
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('상황에 맞게 조절'),
+                subtitle: const Text('관계가 발전함에 따라 자연스럽게 변해요'),
+                value: 'adaptive',
+                groupValue: _communicationStyle,
+                onChanged: (value) {
+                  setState(() {
+                    _communicationStyle = value!;
+                  });
+                },
+              ),
+            ],
+          ),
+          
+          const SizedBox(height: 32),
+          
+          const Text(
+            '선호하는 MBTI (선택사항)',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            '특정 MBTI 유형의 페르소나를 선호하신다면 선택해주세요',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: MbtiOptions.allTypes.map((mbti) {
+              final isSelected = _selectedPreferredMbti.contains(mbti);
+              return FilterChip(
+                label: Text(mbti),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedPreferredMbti.add(mbti);
+                    } else {
+                      _selectedPreferredMbti.remove(mbti);
                     }
                   });
                 },

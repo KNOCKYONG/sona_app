@@ -13,6 +13,13 @@ class AppUser {
   final String? profileImageUrl;
   final DateTime createdAt;
   final DateTime? updatedAt;
+  
+  // 새로운 필드들
+  final String? purpose; // 'friendship', 'dating', 'counseling', 'entertainment'
+  final List<String>? preferredPersonaTypes; // 'normal', 'expert', 'both'
+  final List<String>? preferredMbti; // 선호하는 MBTI 유형들
+  final String? communicationStyle; // 'casual', 'formal', 'adaptive'
+  final List<String>? preferredTopics; // 선호하는 대화 주제들
 
   AppUser({
     required this.uid,
@@ -27,6 +34,11 @@ class AppUser {
     this.profileImageUrl,
     required this.createdAt,
     this.updatedAt,
+    this.purpose,
+    this.preferredPersonaTypes,
+    this.preferredMbti,
+    this.communicationStyle,
+    this.preferredTopics,
   });
 
   // 나이 계산 함수
@@ -55,6 +67,11 @@ class AppUser {
       'profileImageUrl': profileImageUrl,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
+      'purpose': purpose,
+      'preferredPersonaTypes': preferredPersonaTypes,
+      'preferredMbti': preferredMbti,
+      'communicationStyle': communicationStyle,
+      'preferredTopics': preferredTopics,
     };
   }
 
@@ -76,6 +93,17 @@ class AppUser {
       updatedAt: data['updatedAt'] != null 
           ? (data['updatedAt'] as Timestamp).toDate() 
           : null,
+      purpose: data['purpose'],
+      preferredPersonaTypes: data['preferredPersonaTypes'] != null 
+          ? List<String>.from(data['preferredPersonaTypes'])
+          : null,
+      preferredMbti: data['preferredMbti'] != null 
+          ? List<String>.from(data['preferredMbti'])
+          : null,
+      communicationStyle: data['communicationStyle'],
+      preferredTopics: data['preferredTopics'] != null 
+          ? List<String>.from(data['preferredTopics'])
+          : null,
     );
   }
 
@@ -90,6 +118,11 @@ class AppUser {
     String? intro,
     String? profileImageUrl,
     DateTime? updatedAt,
+    String? purpose,
+    List<String>? preferredPersonaTypes,
+    List<String>? preferredMbti,
+    String? communicationStyle,
+    List<String>? preferredTopics,
   }) {
     return AppUser(
       uid: uid,
@@ -104,6 +137,11 @@ class AppUser {
       profileImageUrl: profileImageUrl ?? this.profileImageUrl,
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      purpose: purpose ?? this.purpose,
+      preferredPersonaTypes: preferredPersonaTypes ?? this.preferredPersonaTypes,
+      preferredMbti: preferredMbti ?? this.preferredMbti,
+      communicationStyle: communicationStyle ?? this.communicationStyle,
+      preferredTopics: preferredTopics ?? this.preferredTopics,
     );
   }
 }
@@ -153,5 +191,46 @@ class InterestOptions {
     '스포츠',
     '캠핑',
     '자기계발',
+  ];
+}
+
+// 사용 목적 옵션
+class PurposeOptions {
+  static const Map<String, String> purposes = {
+    'friendship': '친구 만들기',
+    'dating': '연애/데이팅',
+    'counseling': '상담/조언',
+    'entertainment': '엔터테인먼트',
+  };
+}
+
+// 선호 주제 옵션
+class TopicOptions {
+  static const List<String> allTopics = [
+    '일상 대화',
+    '연애 상담',
+    '진로 상담',
+    '취미 공유',
+    '운동/건강',
+    '요리/맛집',
+    '여행 계획',
+    '문화/예술',
+    '게임 이야기',
+    '공부/학습',
+    '직장 생활',
+    '인간관계',
+    '자기계발',
+    '심리 상담',
+    '패션/뷰티',
+  ];
+}
+
+// MBTI 옵션
+class MbtiOptions {
+  static const List<String> allTypes = [
+    'INTJ', 'INTP', 'ENTJ', 'ENTP',
+    'INFJ', 'INFP', 'ENFJ', 'ENFP',
+    'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
+    'ISTP', 'ISFP', 'ESTP', 'ESFP',
   ];
 }

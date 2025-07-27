@@ -17,10 +17,9 @@ class Persona {
   // 새로운 이미지 구조 (Cloudflare R2)
   final Map<String, dynamic>? imageUrls; // 크기별 이미지 URL 저장
   
-  // 전문가/상담사 관련 필드
-  final bool isExpert; // 전문가 여부
-  final String? profession; // 전문 분야 (예: '심리상담', '연애코치')
-  final String? role; // 역할 (예: 'expert', 'specialist', 'normal')
+  // 추천 관련 필드
+  final List<String>? topics; // 페르소나가 다룰 수 있는 주제들
+  final List<String>? keywords; // 페르소나를 설명하는 키워드들
 
   Persona({
     required this.id,
@@ -38,9 +37,8 @@ class Persona {
     this.mbti = 'ENFP', // 기본값은 ENFP
     this.matchedAt, // 매칭된 시간
     this.imageUrls, // 새로운 이미지 URL 구조
-    this.isExpert = false, // 기본값은 일반 페르소나
-    this.profession, // 전문 분야
-    this.role, // 역할
+    this.topics, // 주제들
+    this.keywords, // 키워드들
   }) : createdAt = createdAt ?? DateTime.now();
 
   // 관계 상태 확인 메서드
@@ -237,9 +235,8 @@ class Persona {
       'gender': gender,
       'mbti': mbti,
       'imageUrls': imageUrls, // 새로운 이미지 URL 구조
-      'isExpert': isExpert,
-      'profession': profession,
-      'role': role,
+      'topics': topics,
+      'keywords': keywords,
     };
   }
 
@@ -264,9 +261,12 @@ class Persona {
       imageUrls: json['imageUrls'] != null 
         ? Map<String, dynamic>.from(json['imageUrls']) 
         : null,
-      isExpert: json['isExpert'] ?? false,
-      profession: json['profession'],
-      role: json['role'],
+      topics: json['topics'] != null 
+        ? List<String>.from(json['topics'])
+        : null,
+      keywords: json['keywords'] != null 
+        ? List<String>.from(json['keywords'])
+        : null,
     );
   }
 
@@ -283,9 +283,8 @@ class Persona {
     String? gender,
     String? mbti,
     Map<String, dynamic>? imageUrls,
-    bool? isExpert,
-    String? profession,
-    String? role,
+    List<String>? topics,
+    List<String>? keywords,
   }) {
     return Persona(
       id: id,
@@ -302,9 +301,8 @@ class Persona {
       gender: gender ?? this.gender,
       mbti: mbti ?? this.mbti,
       imageUrls: imageUrls ?? this.imageUrls,
-      isExpert: isExpert ?? this.isExpert,
-      profession: profession ?? this.profession,
-      role: role ?? this.role,
+      topics: topics ?? this.topics,
+      keywords: keywords ?? this.keywords,
     );
   }
 }

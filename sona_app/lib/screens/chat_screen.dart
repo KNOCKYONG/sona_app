@@ -119,30 +119,15 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   String _getPersonalizedWelcomeMessage(Persona persona) {
-    // 모든 페르소나는 일반 페르소나
-    final isExpert = false;
+    // 일반 페르소나용 인사말
+    const messages = [
+      '안녕하세요! {name}이라고 해요. 만나서 반가워요ㅎㅎ',
+      '안녕하세요~ 오늘 하루는 어떠셨나요? 저는 {name}이라고 해요.',
+      '반가워요! 전 {name}이라고 해요. 편하게 대화해요ㅎㅎ',
+    ];
     
-    if (isExpert) {
-      // 전문가용 첫 인사말 - 더 전문적이지만 친근하게
-      const expertMessages = [
-        '안녕하세요, {name}입니다. 만나서 반가워요. 편안하게 마음을 나눠주세요.',
-        '안녕하세요~ 저는 {name}라고 해요. 오늘은 어떤 이야기를 나누고 싶으세요?',
-        '반가워요! {name}입니다. 어떤 고민이든 편하게 말씀해 주세요.',
-      ];
-      
-      final template = expertMessages[DateTime.now().millisecondsSinceEpoch % expertMessages.length];
-      return template.replaceAll('{name}', persona.name);
-    } else {
-      // 일반 페르소나용 인사말
-      const messages = [
-        '안녕하세요! {name}이라고 해요. 만나서 반가워요ㅎㅎ',
-        '안녕하세요~ 오늘 하루는 어떠셨나요? 저는 {name}이라고 해요.',
-        '반가워요! 전 {name}이라고 해요. 편하게 대화해요ㅎㅎ',
-      ];
-      
-      final template = messages[DateTime.now().millisecondsSinceEpoch % messages.length];
-      return template.replaceAll('{name}', persona.name);
-    }
+    final template = messages[DateTime.now().millisecondsSinceEpoch % messages.length];
+    return template.replaceAll('{name}', persona.name);
   }
 
   void _sendMessage() async {
@@ -261,7 +246,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     return MessageBubble(
                       key: ValueKey(message.id),
                       message: message,
-                      isExpertChat: personaService.currentPersona?.isExpert ?? false,
                       onScoreChange: () {
                         // Handle score change if needed
                       },
@@ -275,14 +259,12 @@ class _ChatScreenState extends State<ChatScreen> {
           // Message input
           Consumer<PersonaService>(
             builder: (context, personaService, child) {
-              final isExpertChat = false;
               return _MessageInput(
                 controller: _messageController,
                 focusNode: _focusNode,
                 onSend: _sendMessage,
                 onAttachment: _showAttachmentMenu,
                 onEmotion: _showEmotionPicker,
-                isExpertChat: isExpertChat,
               );
             },
           ),
@@ -764,8 +746,6 @@ class _PersonaTitle extends StatelessWidget {
       builder: (context, personaService, child) {
         // Get the updated persona with latest relationship score
         final updatedPersona = personaService.currentPersona ?? persona;
-        // 모든 페르소나는 일반 페르소나
-        final isExpert = false;
         
         return Row(
       children: [
@@ -787,52 +767,15 @@ class _PersonaTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  // 전문가 뱃지 표시
-                  if (isExpert) ...[
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF2196F3),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text(
-                        '전문가',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 6),
-                  ],
-                  Expanded(
-                    child: Text(
-                      isExpert
-                          ? '${updatedPersona.name}님과의 상담'
-                          : '${updatedPersona.name}님과의 대화',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ],
+              Text(
+                '${updatedPersona.name}님과의 대화',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
-              // 전문가는 전문 분야 표시, 일반 페르소나는 온라인 상태 표시
-              if (isExpert)
-                Text(
-                  updatedPersona.profession ?? '전문 상담',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                )
-              else
-                _OnlineStatus(persona: updatedPersona),
+              _OnlineStatus(persona: updatedPersona),
             ],
           ),
         ),
@@ -931,8 +874,6 @@ class _OnlineStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     // 🔍 DEBUG: 전문가 페르소나 확인
     debugPrint('🩺 _OnlineStatus - Persona: ${persona.name}');
-    debugPrint('   - Role: ${persona.role}');
-    debugPrint('   - IsExpert: ${persona.isExpert}');
     debugPrint('   - Should NOT show for experts!');
     
     // Use currentRelationship if available, otherwise calculate from score
@@ -1041,15 +982,12 @@ class _MessageInput extends StatelessWidget {
   final VoidCallback onSend;
   final VoidCallback onAttachment;
   final VoidCallback onEmotion;
-  final bool isExpertChat;
-
   const _MessageInput({
     required this.controller,
     required this.focusNode,
     required this.onSend,
     required this.onAttachment,
     required this.onEmotion,
-    this.isExpertChat = false,
   });
 
   @override
@@ -1065,9 +1003,7 @@ class _MessageInput extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Hide attachment button for expert chat
-              if (!isExpertChat) ...[
-                // Attachment button
+              // Attachment button
                 Consumer<AuthService>(
                   builder: (context, authService, child) {
                     return ModernIconButton(
@@ -1080,8 +1016,7 @@ class _MessageInput extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
-              ],
+              const SizedBox(width: 8),
               
               // Message input field
               Expanded(
@@ -1123,9 +1058,8 @@ class _MessageInput extends StatelessWidget {
               
               const SizedBox(width: 8),
               
-              // Emotion button (hidden for expert chat)
-              if (!isExpertChat) ...[
-                Consumer<AuthService>(
+              // Emotion button
+              Consumer<AuthService>(
                   builder: (context, authService, child) {
                     return AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
@@ -1140,8 +1074,7 @@ class _MessageInput extends StatelessWidget {
                     );
                   },
                 ),
-                const SizedBox(width: 8),
-              ],
+              const SizedBox(width: 8),
               
               // Send button
               AnimatedContainer(

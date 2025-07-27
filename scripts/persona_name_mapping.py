@@ -15,7 +15,24 @@ PERSONA_NAME_MAPPING = {
     "지우": "jiwoo",
     "채연": "chaeyeon",
     "하연": "hayeon",
-    "혜진": "hyejin"
+    "혜진": "hyejin",
+    "나연": "nayeon",
+    "동현": "donghyun",
+    "미연": "miyeon",
+    "민수": "minsu",
+    "민준": "minjun",
+    "박준영": "park-junyoung",
+    "성호": "seongho",
+    "세빈": "sebin",
+    "소희": "sohee",
+    "영훈": "younghoon",
+    "재성": "jaesung",
+    "재현": "jaehyun",
+    "종호": "jongho",
+    "준영": "junyoung",
+    "준호": "junho",
+    "진욱": "jinwook",
+    "효진": "hyojin"
 }
 
 def get_english_name(korean_name: str) -> str:

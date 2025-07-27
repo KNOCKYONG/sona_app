@@ -5,7 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    // Web Client ID from Firebase console
+    clientId: '874385422837-p5k562hl218ph0s2ucqgdi4ngk658r4s.apps.googleusercontent.com',
+  );
   User? _user;
   bool _isLoading = false;
   bool _isTutorialMode = false;

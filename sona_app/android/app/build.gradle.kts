@@ -16,7 +16,7 @@ plugins {
 }
 
 android {
-    namespace = "com.sona.app"
+    namespace = "com.nohbrother.teamsona.chatapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
@@ -31,13 +31,26 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.sona.app"
+        applicationId = "com.nohbrother.teamsona.chatapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+    
+    // Disable deferred components to avoid Play Core dependency
+    bundle {
+        abi {
+            enableSplit = false
+        }
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
     }
 
     // Load signing configuration
@@ -101,4 +114,7 @@ dependencies {
     
     // Firebase Cloud Messaging (선택사항)
     implementation("com.google.firebase:firebase-messaging")
+    
+    // Google Play Billing
+    implementation("com.android.billingclient:billing:6.1.0")
 }

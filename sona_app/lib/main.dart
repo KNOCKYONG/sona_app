@@ -20,12 +20,16 @@ import 'screens/admin_quality_dashboard_screen.dart';
 import 'screens/test_auth_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/purchase_screen.dart';
+import 'screens/test_purchase_screen.dart';
 
 import 'services/auth_service.dart';
 import 'services/user_service.dart';
 import 'services/persona_service.dart';
 import 'services/chat_service.dart';
 import 'services/subscription_service.dart';
+import 'services/purchase_service.dart';
+import 'services/mock_purchase_service.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -86,6 +90,12 @@ class SonaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
         ChangeNotifierProvider(create: (_) => SubscriptionService()),
+        // 개발 환경에서는 Mock 서비스 사용
+        ChangeNotifierProvider<PurchaseService>(
+          create: (_) => const bool.fromEnvironment('dart.vm.product') 
+              ? PurchaseService() 
+              : MockPurchaseService(),
+        ),
         ChangeNotifierProxyProvider<PersonaService, ChatService>(
           create: (_) => ChatService(),
           update: (_, personaService, chatService) {
@@ -115,6 +125,8 @@ class SonaApp extends StatelessWidget {
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
           '/test-auth': (context) => const TestAuthScreen(),
           '/settings': (context) => const SettingsScreen(),
+          '/purchase': (context) => const PurchaseScreen(),
+          '/test-purchase': (context) => const TestPurchaseScreen(),
         },
       ),
     );

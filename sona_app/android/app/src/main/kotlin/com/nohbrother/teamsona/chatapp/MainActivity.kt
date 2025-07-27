@@ -1,4 +1,4 @@
-package com.sona.app
+package com.nohbrother.teamsona.chatapp
 
 import io.flutter.embedding.android.FlutterActivity
 

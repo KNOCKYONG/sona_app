@@ -340,6 +340,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       );
                     },
                   ),
+                  _buildMenuItem(
+                    icon: Icons.shopping_bag,
+                    title: '스토어',
+                    subtitle: '하트 구매 및 프리미엄 가입',
+                    onTap: () {
+                      Navigator.pushNamed(context, '/purchase');
+                    },
+                  ),
                   const SizedBox(height: 20),
                   
                   // 로그아웃 버튼

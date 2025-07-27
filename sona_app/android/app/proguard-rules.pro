@@ -21,5 +21,21 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
+# Google Play Core - Split Install
+-keep class com.google.android.play.core.splitcompat.** { *; }
+-keep class com.google.android.play.core.splitinstall.** { *; }
+-keep class com.google.android.play.core.tasks.** { *; }
+-keep class com.google.android.play.core.** { *; }
+-dontwarn com.google.android.play.core.**
+
+# In-App Billing
+-keep class com.android.billingclient.** { *; }
+-dontwarn com.android.billingclient.**
+
+# Flutter Embedding
+-keep class io.flutter.embedding.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-dontwarn io.flutter.embedding.engine.deferredcomponents.**
+
 # Keep data classes
--keep class com.sona.app.** { *; }
+-keep class com.nohbrother.teamsona.chatapp.** { *; }

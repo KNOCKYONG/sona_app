@@ -123,6 +123,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
             
+            // 개발자 옵션 (디버그 모드에서만 표시)
+            if (const bool.fromEnvironment('dart.vm.product') == false) ...[
+              _buildSectionTitle('개발자 옵션'),
+              _buildMenuItem(
+                icon: Icons.bug_report_outlined,
+                title: '구매 서비스 테스트',
+                subtitle: '인앱 결제 테스트 화면',
+                onTap: () {
+                  Navigator.pushNamed(context, '/test-purchase');
+                },
+              ),
+              _buildMenuItem(
+                icon: Icons.account_circle_outlined,
+                title: '인증 테스트',
+                subtitle: '로그인/회원가입 테스트',
+                onTap: () {
+                  Navigator.pushNamed(context, '/test-auth');
+                },
+              ),
+            ],
+            
             const SizedBox(height: 40),
           ],
         ),

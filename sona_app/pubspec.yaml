@@ -45,6 +45,9 @@ dependencies:
   uuid: ^4.2.1
   cupertino_icons: ^1.0.2
   
+  # In-App Purchase
+  in_app_purchase: ^3.2.1
+  
   # Fonts
   google_fonts: ^6.1.0
 

@@ -1363,6 +1363,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           },
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.shopping_bag_outlined,
+              color: Color(0xFFFF6B9D),
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/purchase');
+            },
+          ),
+        ],
       ),
       body: Consumer<PersonaService>(
         builder: (context, personaService, child) {

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
+import '../services/cache_manager.dart';
+import '../widgets/tutorial_overlay.dart';
+import '../models/tutorial_animation.dart' as anim_model;
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -12,12 +15,29 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
+  bool _isFirstTime = false;
 
   final List<Widget> _screens = [
     const PersonaSelectionScreen(),
     const ChatListScreen(),
     const ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkFirstTimeUser();
+  }
+
+  Future<void> _checkFirstTimeUser() async {
+    final isFirstTime = await CacheManager.instance.isFirstTimeUser();
+    debugPrint('MainNavigationScreen - isFirstTime: $isFirstTime');
+    if (mounted) {
+      setState(() {
+        _isFirstTime = isFirstTime;
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -27,7 +47,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final scaffold = Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
         children: _screens,
@@ -72,5 +92,25 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ),
     );
+
+    // 첫 사용자에게만 메인 네비게이션 튜토리얼 표시
+    if (_isFirstTime) {
+      return TutorialOverlay(
+        screenKey: 'main_navigation_intro',
+        tutorialSteps: [
+          TutorialStep(
+            title: 'SONA에 오신 것을 환영합니다!',
+            description: 'AI 페르소나와 특별한 관계를 만들어보세요.',
+            messagePosition: Offset(
+              MediaQuery.of(context).size.width / 2 - 150,
+              100,
+            ),
+          ),
+        ],
+        child: scaffold,
+      );
+    }
+
+    return scaffold;
   }
 }

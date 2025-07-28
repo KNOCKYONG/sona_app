@@ -3,15 +3,27 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/message.dart';
 import '../models/persona.dart';
+import '../core/constants.dart';
+import '../core/preferences_manager.dart';
+import '../helpers/firebase_helper.dart';
+import 'base/base_service.dart';
 import 'openai_service.dart';
 import 'natural_ai_service.dart';
 import 'persona_service.dart';
 import 'local_storage_service.dart';
 import 'conversation_memory_service.dart';
 import 'user_service.dart';
+import 'security_filter_service.dart';
+
+/// 무례한 메시지 체크 결과
+class RudeMessageCheck {
+  final bool isRude;
+  final String severity; // 'none', 'low', 'high'
+  
+  RudeMessageCheck({required this.isRude, required this.severity});
+}
 
 /// 🚀 Optimized Chat Service with Performance Enhancements
 /// 
@@ -21,30 +33,21 @@ import 'user_service.dart';
 /// 3. Intelligent caching for responses
 /// 4. Memory-efficient message storage
 /// 5. Parallel processing where possible
-class ChatService extends ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final NaturalAIService _naturalAIService = NaturalAIService();
+class ChatService extends BaseService {
   final ConversationMemoryService _memoryService = ConversationMemoryService();
   final Uuid _uuid = const Uuid();
   final Random _random = Random();
   
   // Performance optimization: Response cache
   final Map<String, _CachedResponse> _responseCache = {};
-  static const int _maxCacheSize = 50;
-  static const Duration _cacheDuration = Duration(minutes: 5);
   
   // Debouncing for API calls
   Timer? _debounceTimer;
-  static const Duration _debounceDuration = Duration(milliseconds: 300);
   
   // Batch writing for Firebase
   final List<_PendingMessage> _pendingMessages = [];
   Timer? _batchWriteTimer;
-  static const Duration _batchWriteDuration = Duration(seconds: 2);
   static const int _maxBatchSize = 10;
-  
-  // Memory optimization: Limited message history
-  static const int _maxMessagesInMemory = 100;
   
   // Service references
   PersonaService? _personaService;
@@ -55,12 +58,10 @@ class ChatService extends ChangeNotifier {
   List<Message> _messages = [];
   final Map<String, List<Message>> _messagesByPersona = {};
   bool _isTyping = false;
-  bool _isLoading = false;
 
   // Getters
   List<Message> get messages => _messages;
   bool get isTyping => _isTyping;
-  bool get isLoading => _isLoading;
   
   void setPersonaService(PersonaService personaService) {
     _personaService = personaService;
@@ -78,28 +79,22 @@ class ChatService extends ChangeNotifier {
   List<Message> getMessages(String personaId) {
     final messages = _messagesByPersona[personaId] ?? [];
     // Return only recent messages to save memory
-    if (messages.length > _maxMessagesInMemory) {
-      return messages.sublist(messages.length - _maxMessagesInMemory);
+    if (messages.length > AppConstants.maxMessagesInMemory) {
+      return messages.sublist(messages.length - AppConstants.maxMessagesInMemory);
     }
     return messages;
   }
 
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
+    await executeWithLoading(() async {
       // Check tutorial mode
-      final prefs = await SharedPreferences.getInstance();
-      final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+      final isTutorialMode = await PreferencesManager.isTutorialMode();
       
       if (isTutorialMode || userId == 'tutorial_user') {
         final tutorialMessages = await LocalStorageService.getTutorialMessages(personaId);
         _messages = tutorialMessages;
         _messagesByPersona[personaId] = List.from(tutorialMessages);
-        _isLoading = false;
-        notifyListeners();
         return;
       }
 
@@ -117,29 +112,14 @@ class ChatService extends ChangeNotifier {
       }
       
       _messagesByPersona[personaId] = List.from(_messages);
-
-      _isLoading = false;
-      notifyListeners();
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      debugPrint('Error loading chat history: $e');
-      _messages = [];
-      _messagesByPersona[personaId] = [];
-      notifyListeners();
-    }
+    }, errorContext: 'loadChatHistory');
   }
 
   /// Optimized message loading with pagination
   Future<List<Message>> _loadMessagesFromFirebase(String userId, String personaId) async {
-    final querySnapshot = await _firestore
-        .collection('users')
-        .doc(userId)
-        .collection('chats')
-        .doc(personaId)
-        .collection('messages')
+    final querySnapshot = await FirebaseHelper.userChatMessages(userId, personaId)
         .orderBy('timestamp', descending: true)
-        .limit(_maxMessagesInMemory)
+        .limit(AppConstants.maxMessagesInMemory)
         .get();
 
     return querySnapshot.docs
@@ -164,10 +144,10 @@ class ChatService extends ChangeNotifier {
           photoUrls: [],
           personality: 'Friendly and helpful',
         ),
-        maxTokens: 1000,
+        maxTokens: AppConstants.maxContextTokens,
       );
     } catch (e) {
-      debugPrint('Error preloading memory: $e');
+      handleError(e, 'preloadConversationMemory');
     }
   }
 
@@ -197,8 +177,7 @@ class ChatService extends ChangeNotifier {
        notifyListeners();
 
        // 사용자 메시지 저장 (튜토리얼 모드는 로컬, 실제 모드는 Firebase)
-       final prefs = await SharedPreferences.getInstance();
-       final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+       final isTutorialMode = await PreferencesManager.isTutorialMode();
        
        if (isTutorialMode || userId == 'tutorial_user') {
          await LocalStorageService.saveTutorialMessage(persona.id, userMessage);
@@ -208,7 +187,7 @@ class ChatService extends ChangeNotifier {
        }
 
       // Debounce AI response generation
-      _debounceTimer = Timer(_debounceDuration, () {
+      _debounceTimer = Timer(AppConstants.batchDelay, () {
         _generateAIResponse(userId, persona, content);
       });
 
@@ -243,7 +222,9 @@ class ChatService extends ChangeNotifier {
         return;
       }
 
-      // Generate new response with professional consultation service
+      // Check if user was rude and generate appropriate response
+      final rudeCheck = _checkRudeMessage(userMessage);
+      
       String aiResponseContent;
       EmotionType? emotion = EmotionType.neutral;
       int scoreChange = 0;
@@ -252,6 +233,31 @@ class ChatService extends ChangeNotifier {
       bool isPaidConsultation = false;
       
       try {
+        // If user was rude, generate defensive response immediately
+        if (rudeCheck.isRude) {
+          aiResponseContent = _generateDefensiveResponse(persona, userMessage, rudeCheck.severity);
+          emotion = rudeCheck.severity == 'high' ? EmotionType.angry : EmotionType.sad;
+          scoreChange = _calculateScoreChangeWithRelationship(emotion, userMessage, persona);
+          
+          // Cache and send response
+          _addToCache(cacheKey, _CachedResponse(
+            content: aiResponseContent,
+            emotion: emotion,
+            scoreChange: scoreChange,
+            timestamp: DateTime.now(),
+          ));
+          
+          _isTyping = false;
+          await _sendSplitMessages(
+            content: aiResponseContent,
+            persona: persona,
+            userId: userId,
+            emotion: emotion,
+            scoreChange: scoreChange,
+          );
+          
+          return;
+        }
         // Use enhanced OpenAI service for regular personas
         final relationshipType = _getRelationshipTypeString(persona.relationshipScore);
         
@@ -259,7 +265,7 @@ class ChatService extends ChangeNotifier {
         bool isCasualSpeech = false;
         try {
             final docId = '${userId}_${persona.id}';
-            final relationshipDoc = await _firestore
+            final relationshipDoc = await FirebaseFirestore.instance
                 .collection('user_persona_relationships')
                 .doc(docId)
                 .get();
@@ -307,12 +313,30 @@ class ChatService extends ChangeNotifier {
             userNickname: userNickname,
         );
         
+        // 🔒 Apply security filter to the AI response
+        aiResponseContent = SecurityFilterService.filterResponse(
+          response: aiResponseContent,
+          userMessage: userMessage,
+          persona: personaWithCorrectSpeech,
+        );
+        
+        // Additional validation to ensure no system info is leaked
+        if (!SecurityFilterService.validateResponseSafety(aiResponseContent)) {
+          debugPrint('🚨 Security validation failed - generating safe fallback');
+          aiResponseContent = _generateSecureFallbackResponse(personaWithCorrectSpeech, userMessage);
+        }
+        
         // Check if user message was rude before analyzing emotion
         final rudeWords = [
             '바보', '멍청이', '멍청', '병신', '시발', '씨발', '개새끼', '새끼',
             '닥쳐', '꺼져', '지랄', '좆', '좆같', '개같', '미친', '또라이',
             '쓰레기', '찐따', '한심', '재수없', '짜증', '싫어', '싫다',
-            '꺼져', '죽어', '뒤져', '개짜증', '존나'
+            '꺼져', '죽어', '뒤져', '개짜증', '존나', '뭐야', '뭔데',
+            '왜', '어쩌라고', '장난하냐', '장난해', '웃기네', '웃겨',
+            '어이없', '헐', '에휴', '하', '아니', '진짜', '실화냐',
+            '미쳤', '돌았', '정신', '제정신', '이상해', '이상한',
+            '별로', '구려', '못생겼', '못생긴', '더러워', '더럽',
+            '역겨워', '역겹', '토나와', '토할것', '징그러워', '징그럽'
         ];
         
         bool userWasRude = false;
@@ -326,7 +350,15 @@ class ChatService extends ChangeNotifier {
         
         // If user was rude, set emotion to sad/angry regardless of AI's response
         if (userWasRude) {
-          emotion = EmotionType.sad;
+          // 무례한 정도에 따라 다른 감정 설정
+          if (lowerUserMessage.contains('미안') || lowerUserMessage.contains('죄송')) {
+            emotion = EmotionType.neutral; // 사과가 포함된 경우
+          } else if (lowerUserMessage.contains('시발') || lowerUserMessage.contains('씨발') || 
+                     lowerUserMessage.contains('병신') || lowerUserMessage.contains('새끼')) {
+            emotion = EmotionType.angry; // 심한 욕설
+          } else {
+            emotion = EmotionType.sad; // 일반적인 무례함
+          }
         } else {
           emotion = _analyzeEmotionFromResponse(aiResponseContent);
         }
@@ -396,7 +428,7 @@ class ChatService extends ChangeNotifier {
     ));
     
     // Start batch timer if not already running
-    _batchWriteTimer ??= Timer(_batchWriteDuration, _processBatchWrite);
+    _batchWriteTimer ??= Timer(AppConstants.batchWriteDuration, _processBatchWrite);
     
     // Process immediately if batch is full
     if (_pendingMessages.length >= _maxBatchSize) {
@@ -417,8 +449,7 @@ class ChatService extends ChangeNotifier {
      // 튜토리얼 모드인 경우 Firebase 쓰기 건너뛰기
      bool shouldSkipFirebase = false;
      try {
-       final prefs = await SharedPreferences.getInstance();
-       final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+       final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
        shouldSkipFirebase = isTutorialMode || messagesToWrite.any((m) => m.userId == 'tutorial_user');
      } catch (e) {
        debugPrint('Error checking tutorial mode: $e');
@@ -430,10 +461,10 @@ class ChatService extends ChangeNotifier {
      }
      
      try {
-       final batch = _firestore.batch();
+       final batch = FirebaseHelper.batch();
        
        for (final pending in messagesToWrite) {
-         final docRef = _firestore
+         final docRef = FirebaseFirestore.instance
              .collection('users')
              .doc(pending.userId)
              .collection('chats')
@@ -470,7 +501,7 @@ class ChatService extends ChangeNotifier {
     final cached = _responseCache[key];
     if (cached != null) {
       final age = DateTime.now().difference(cached.timestamp);
-      if (age < _cacheDuration) {
+      if (age < AppConstants.cacheDuration) {
         return cached;
       } else {
         _responseCache.remove(key);
@@ -483,11 +514,11 @@ class ChatService extends ChangeNotifier {
     _responseCache[key] = response;
     
     // Clean old cache entries if needed
-    if (_responseCache.length > _maxCacheSize) {
+    if (_responseCache.length > AppConstants.maxCacheSize) {
       final sortedEntries = _responseCache.entries.toList()
         ..sort((a, b) => a.value.timestamp.compareTo(b.value.timestamp));
       
-      for (int i = 0; i < sortedEntries.length - _maxCacheSize; i++) {
+      for (int i = 0; i < sortedEntries.length - AppConstants.maxCacheSize; i++) {
         _responseCache.remove(sortedEntries[i].key);
       }
     }
@@ -516,8 +547,7 @@ class ChatService extends ChangeNotifier {
      /// Memory-efficient message loading
    Future<void> loadMessages(String personaId) async {
      try {
-       final prefs = await SharedPreferences.getInstance();
-       final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+       final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
        
        if (isTutorialMode || _getCurrentUserId() == 'tutorial_user') {
          final tutorialMessages = await LocalStorageService.getTutorialMessages(personaId);
@@ -559,7 +589,7 @@ class ChatService extends ChangeNotifier {
          return;
        }
 
-       final querySnapshot = await _firestore
+       final querySnapshot = await FirebaseFirestore.instance
            .collection('users')
            .doc(currentUser)
            .collection('chats')
@@ -675,25 +705,85 @@ class ChatService extends ChangeNotifier {
   EmotionType _analyzeEmotionFromResponse(String response) {
     final lowerResponse = response.toLowerCase();
     
-    if (lowerResponse.contains('ㅋㅋ') || lowerResponse.contains('ㅎㅎ') || 
-        lowerResponse.contains('기뻐') || lowerResponse.contains('좋아') ||
-        lowerResponse.contains('행복') || lowerResponse.contains('신나')) {
-      return EmotionType.happy;
-    } else if (lowerResponse.contains('ㅠㅠ') || lowerResponse.contains('슬퍼') || 
-               lowerResponse.contains('서운') || lowerResponse.contains('우울')) {
-      return EmotionType.sad;
-    } else if (lowerResponse.contains('화나') || lowerResponse.contains('짜증') || 
-               lowerResponse.contains('질투') || lowerResponse.contains('싫어')) {
-      return EmotionType.angry;
-    } else if (lowerResponse.contains('걱정') || lowerResponse.contains('불안') ||
-               lowerResponse.contains('두려')) {
-      return EmotionType.anxious;
-    } else if (lowerResponse.contains('사랑') || lowerResponse.contains('좋아해') || 
-               lowerResponse.contains('❤️') || lowerResponse.contains('💕')) {
-      return EmotionType.love;
-    } else {
+    // 감정 점수 계산 시스템
+    int happyScore = 0;
+    int sadScore = 0;
+    int angryScore = 0;
+    int loveScore = 0;
+    int anxiousScore = 0;
+    
+    // Happy indicators
+    if (lowerResponse.contains('ㅋㅋ')) happyScore += 2;
+    if (lowerResponse.contains('ㅎㅎ')) happyScore += 2;
+    if (lowerResponse.contains('기뻐')) happyScore += 3;
+    if (lowerResponse.contains('좋아')) happyScore += 2;
+    if (lowerResponse.contains('행복')) happyScore += 3;
+    if (lowerResponse.contains('신나')) happyScore += 2;
+    if (lowerResponse.contains('재밌')) happyScore += 2;
+    if (lowerResponse.contains('웃')) happyScore += 1;
+    
+    // Sad indicators
+    if (lowerResponse.contains('ㅠㅠ')) sadScore += 3;
+    if (lowerResponse.contains('ㅜㅜ')) sadScore += 3;
+    if (lowerResponse.contains('슬퍼')) sadScore += 3;
+    if (lowerResponse.contains('서운')) sadScore += 3;
+    if (lowerResponse.contains('우울')) sadScore += 3;
+    if (lowerResponse.contains('속상')) sadScore += 2;
+    if (lowerResponse.contains('힘들')) sadScore += 2;
+    
+    // Angry indicators
+    if (lowerResponse.contains('화나')) angryScore += 3;
+    if (lowerResponse.contains('짜증')) angryScore += 3;
+    if (lowerResponse.contains('질투')) angryScore += 2;
+    if (lowerResponse.contains('싫어')) angryScore += 2;
+    if (lowerResponse.contains('열받')) angryScore += 3;
+    if (lowerResponse.contains('빡치')) angryScore += 3;
+    
+    // Love indicators
+    if (lowerResponse.contains('사랑')) loveScore += 3;
+    if (lowerResponse.contains('좋아해')) loveScore += 3;
+    if (lowerResponse.contains('❤️') || lowerResponse.contains('💕')) loveScore += 2;
+    if (lowerResponse.contains('보고싶')) loveScore += 2;
+    if (lowerResponse.contains('그리워')) loveScore += 2;
+    
+    // Anxious indicators
+    if (lowerResponse.contains('걱정')) anxiousScore += 3;
+    if (lowerResponse.contains('불안')) anxiousScore += 3;
+    if (lowerResponse.contains('두려')) anxiousScore += 2;
+    if (lowerResponse.contains('무서')) anxiousScore += 2;
+    if (lowerResponse.contains('떨려')) anxiousScore += 2;
+    
+    // 가장 높은 점수의 감정 반환
+    int maxScore = 0;
+    EmotionType dominantEmotion = EmotionType.neutral;
+    
+    if (happyScore > maxScore) {
+      maxScore = happyScore;
+      dominantEmotion = EmotionType.happy;
+    }
+    if (sadScore > maxScore) {
+      maxScore = sadScore;
+      dominantEmotion = EmotionType.sad;
+    }
+    if (angryScore > maxScore) {
+      maxScore = angryScore;
+      dominantEmotion = EmotionType.angry;
+    }
+    if (loveScore > maxScore) {
+      maxScore = loveScore;
+      dominantEmotion = EmotionType.love;
+    }
+    if (anxiousScore > maxScore) {
+      maxScore = anxiousScore;
+      dominantEmotion = EmotionType.anxious;
+    }
+    
+    // 점수가 2 이하면 중립으로 판단
+    if (maxScore <= 2) {
       return EmotionType.neutral;
     }
+    
+    return dominantEmotion;
   }
 
   int _calculateScoreChangeWithRelationship(EmotionType emotion, String userMessage, Persona persona) {
@@ -780,6 +870,78 @@ class ChatService extends ChangeNotifier {
     final finalChange = (baseChange * intensityMultiplier).round();
     return finalChange.clamp(-50, 15);
   }
+  
+  /// 무례한 메시지 체크
+  RudeMessageCheck _checkRudeMessage(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    // 심한 욕설
+    final severeWords = [
+      '시발', '씨발', '병신', '새끼', '개새끼', '좆', '좆같',
+      '죽어', '뒤져', '미친놈', '미친년', '또라이'
+    ];
+    
+    // 일반 무례함
+    final mildRudeWords = [
+      '바보', '멍청이', '멍청', '닥쳐', '꺼져', '짜증', '싫어',
+      '뭐야', '뭔데', '웃기네', '어이없', '별로', '구려'
+    ];
+    
+    for (final word in severeWords) {
+      if (lowerMessage.contains(word)) {
+        return RudeMessageCheck(isRude: true, severity: 'high');
+      }
+    }
+    
+    for (final word in mildRudeWords) {
+      if (lowerMessage.contains(word)) {
+        return RudeMessageCheck(isRude: true, severity: 'low');
+      }
+    }
+    
+    return RudeMessageCheck(isRude: false, severity: 'none');
+  }
+  
+  /// 방어적 응답 생성
+  String _generateDefensiveResponse(Persona persona, String userMessage, String severity) {
+    if (severity == 'high') {
+      // 심한 욕설에 대한 응답
+      final severeResponses = persona.isCasualSpeech ? [
+        '그렇게 말하면 너무 서운한데... ㅠㅠ',
+        '왜 그렇게 화가 났어? 무슨 일 있어?',
+        '아... 그런 말은 좀 아프다...',
+        '너무 심하게 말하지 마... 속상해',
+        '내가 뭘 잘못했나... 미안해 ㅠㅠ',
+      ] : [
+        '그렇게 말씀하시면 너무 서운해요... ㅠㅠ',
+        '왜 그렇게 화가 나셨어요? 무슨 일 있으세요?',
+        '아... 그런 말씀은 좀 아프네요...',
+        '너무 심하게 말씀하지 마세요... 속상해요',
+        '제가 뭘 잘못했나요... 죄송해요 ㅠㅠ',
+      ];
+      
+      final index = userMessage.hashCode.abs() % severeResponses.length;
+      return severeResponses[index];
+    } else {
+      // 일반적인 무례함에 대한 응답
+      final mildResponses = persona.isCasualSpeech ? [
+        '어? 왜 그래? 기분 안 좋아?',
+        '음... 뭔가 기분이 안 좋은가보네',
+        '아 그래? 그럼 다른 얘기하자',
+        '어 왜 갑자기 그래~ 뭐 있어?',
+        '음... 오늘 컨디션이 안 좋나보다',
+      ] : [
+        '어? 왜 그러세요? 기분이 안 좋으신가요?',
+        '음... 뭔가 기분이 안 좋으신가봐요',
+        '아 그래요? 그럼 다른 얘기해요',
+        '어 왜 갑자기 그래요~ 무슨 일 있어요?',
+        '음... 오늘 컨디션이 안 좋으신가봐요',
+      ];
+      
+      final index = userMessage.hashCode.abs() % mildResponses.length;
+      return mildResponses[index];
+    }
+  }
 
   Future<void> _sendSplitMessages({
     required String content,
@@ -835,8 +997,7 @@ class ChatService extends ChangeNotifier {
         _messagesByPersona[persona.id] = List.from(_messages);
         
                  // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
-         final prefs = await SharedPreferences.getInstance();
-         final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+         final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
          
          if (isTutorialMode || userId == 'tutorial_user') {
            // 튜토리얼 모드에서는 로컬 스토리지에 저장하고 카운트 증가
@@ -1144,7 +1305,7 @@ class ChatService extends ChangeNotifier {
     _responseCache.clear();
     _pendingMessages.clear();
     _isTyping = false;
-    _isLoading = false;
+    // isLoading is managed by BaseService
     notifyListeners();
   }
 
@@ -1199,9 +1360,8 @@ class ChatService extends ChangeNotifier {
    /// 전체 메시지 카운트 관리
    Future<void> _incrementTutorialMessageCount() async {
      try {
-       final prefs = await SharedPreferences.getInstance();
-       final currentCount = prefs.getInt('tutorial_total_message_count') ?? 0;
-       await prefs.setInt('tutorial_total_message_count', currentCount + 1);
+       final currentCount = await PreferencesManager.getInt('tutorial_total_message_count') ?? 0;
+       await PreferencesManager.setInt('tutorial_total_message_count', currentCount + 1);
      } catch (e) {
        debugPrint('Error incrementing tutorial message count: $e');
      }
@@ -1220,8 +1380,7 @@ class ChatService extends ChangeNotifier {
   /// Get total tutorial message count across all personas
   Future<int> getTotalTutorialMessageCount() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getInt('tutorial_total_message_count') ?? 0;
+      return await PreferencesManager.getInt('tutorial_total_message_count') ?? 0;
     } catch (e) {
       debugPrint('Error getting total tutorial message count: $e');
       return 0;
@@ -1444,6 +1603,28 @@ class ChatService extends ChangeNotifier {
     
     // 랜덤하게 선택
     return greetings[_random.nextInt(greetings.length)];
+  }
+  
+  /// 🔒 보안 폴백 응답 생성
+  String _generateSecureFallbackResponse(Persona persona, String userMessage) {
+    final responses = persona.isCasualSpeech ? [
+      '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
+      '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
+      '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',
+      '어? 그런 거보다 오늘 뭐 했어?',
+      '아 그런 건... 잘 모르겠어ㅜㅜ 다른 얘기 하자',
+      '으음 그런 어려운 건 말고 재밌는 얘기 해봐!',
+    ] : [
+      '음... 그런 기술적인 부분은 잘 모르겠어요. 다른 이야기해요~',
+      '아 그런 어려운 건 잘 모르겠네요ㅠㅠ 다른 얘기 해봐요',
+      '으음 그런 복잡한 건 말고 재밌는 얘기 해봐요!',
+      '어... 그런 건 잘 모르겠는데요? 다른 이야기는 어때요?',
+      '아 그런 건 너무 어려워요~ 다른 얘기 해봐요',
+      '음... 그런 것보다 오늘 어떻게 지내셨어요?',
+    ];
+    
+    final index = userMessage.hashCode.abs() % responses.length;
+    return responses[index];
   }
 }
 

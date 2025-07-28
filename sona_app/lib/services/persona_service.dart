@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/persona.dart';
 import '../models/app_user.dart';
 import 'device_id_service.dart';
+import 'base/base_service.dart';
+import '../helpers/firebase_helper.dart';
+import '../core/constants.dart';
+import '../core/preferences_manager.dart';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
 /// 
@@ -15,14 +18,13 @@ import 'device_id_service.dart';
 /// 3. Lazy loading for matched personas
 /// 4. Memory-efficient data structures
 /// 5. Parallel data fetching
-class PersonaService extends ChangeNotifier {
+class PersonaService extends BaseService {
   String? _currentUserId;
   
   // Data storage with caching
   List<Persona> _allPersonas = [];
   List<Persona> _matchedPersonas = [];
   Persona? _currentPersona;
-  bool _isLoading = false;
   
   // Stable shuffled list for swipe session
   List<Persona>? _shuffledAvailablePersonas;
@@ -96,7 +98,8 @@ class PersonaService extends ChangeNotifier {
   }
   
   Persona? get currentPersona => _currentPersona;
-  bool get isLoading => _isLoading;
+  @override
+  bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
   
   // Additional getters for compatibility
@@ -122,9 +125,8 @@ class PersonaService extends ChangeNotifier {
     
     _loadingCompleter = Completer<void>();
     
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+    await executeWithLoading(() async {
+      final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
       
       if (isTutorialMode || userId == 'tutorial_user') {
         await _initializeTutorialMode();
@@ -133,19 +135,13 @@ class PersonaService extends ChangeNotifier {
       }
       
       _loadingCompleter!.complete();
-    } catch (e) {
-      _loadingCompleter!.completeError(e);
-      debugPrint('Error initializing PersonaService: $e');
-    }
+    }, errorContext: 'initialize', showError: false);
   }
 
   /// Tutorial mode initialization with AGGRESSIVE Firebase access
   Future<void> _initializeTutorialMode() async {
     debugPrint('🎓 Tutorial mode initialization - FORCING Firebase access');
     _currentUserId = 'tutorial_user';
-    
-    _isLoading = true;
-    notifyListeners();
     
     // 🔥 AGGRESSIVE Firebase loading for tutorial mode
     debugPrint('🚀 AGGRESSIVELY attempting Firebase personas load...');
@@ -178,7 +174,7 @@ class PersonaService extends ChangeNotifier {
         await Future.delayed(const Duration(seconds: 2));
         
         // Try loading again
-        final querySnapshot = await _firestore.collection('personas').get();
+        final querySnapshot = await FirebaseHelper.personas.get();
         
         if (querySnapshot.docs.isNotEmpty) {
           _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
@@ -195,14 +191,13 @@ class PersonaService extends ChangeNotifier {
         try {
           debugPrint('🎯 LAST RESORT: Direct access attempt...');
           
-          final querySnapshot = await _firestore
-              .collection('personas')
+          final querySnapshot = await FirebaseHelper.personas
               .limit(1) // Just try to get one document
               .get();
               
           if (querySnapshot.docs.isNotEmpty) {
             // If we can get one, try to get all
-            final allSnapshot = await _firestore.collection('personas').get();
+            final allSnapshot = await FirebaseHelper.personas.get();
             _allPersonas = _parseFirebasePersonas(allSnapshot.docs);
             firebaseLoaded = true;
             debugPrint('🎉 LAST RESORT SUCCESS! Loaded ${_allPersonas.length} personas');
@@ -227,7 +222,7 @@ class PersonaService extends ChangeNotifier {
       _loadTutorialMatchedPersonas(),
     ]);
     
-    _isLoading = false;
+    // isLoading is managed by BaseService
     notifyListeners();
     
     debugPrint('✅ Tutorial initialization complete with ${_allPersonas.length} personas');
@@ -242,7 +237,7 @@ class PersonaService extends ChangeNotifier {
     
     debugPrint('🚀 PersonaService initializing with userId: $_currentUserId');
     
-    _isLoading = true;
+    // isLoading is managed by BaseService
     notifyListeners();
     
     // Parallel loading for performance
@@ -254,7 +249,7 @@ class PersonaService extends ChangeNotifier {
     // Lazy load matched personas
     _matchedPersonasLoaded = false;
     
-    _isLoading = false;
+    // isLoading is managed by BaseService
     notifyListeners();
   }
 
@@ -334,8 +329,7 @@ class PersonaService extends ChangeNotifier {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
     
     if (isTutorialMode || _currentUserId == 'tutorial_user') {
       return await _likeTutorialPersona(personaId);
@@ -406,8 +400,7 @@ class PersonaService extends ChangeNotifier {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
     
     if (isTutorialMode || _currentUserId == 'tutorial_user') {
       return await _superLikeTutorialPersona(personaId);
@@ -492,20 +485,18 @@ class PersonaService extends ChangeNotifier {
       
       debugPrint('🎓⭐ Processing tutorial SUPER LIKE for persona: ${persona.name}');
       
-      final prefs = await SharedPreferences.getInstance();
-      
-      final matchedIds = prefs.getStringList('tutorial_matched_personas') ?? [];
+      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
       
       if (!matchedIds.contains(personaId)) {
         matchedIds.add(personaId);
-        await prefs.setStringList('tutorial_matched_personas', matchedIds);
+        await PreferencesManager.setStringList('tutorial_matched_personas', matchedIds);
       }
       
       // Also save to super liked list
-      final superLikedIds = prefs.getStringList('tutorial_super_liked_personas') ?? [];
+      final superLikedIds = await PreferencesManager.getStringList('tutorial_super_liked_personas') ?? [];
       if (!superLikedIds.contains(personaId)) {
         superLikedIds.add(personaId);
-        await prefs.setStringList('tutorial_super_liked_personas', superLikedIds);
+        await PreferencesManager.setStringList('tutorial_super_liked_personas', superLikedIds);
         debugPrint('💾 Saved super like flag for: ${persona.name}');
       }
       
@@ -579,8 +570,7 @@ class PersonaService extends ChangeNotifier {
       debugPrint('📊 Score calculation: $currentScore + $change = $newScore (${relationshipType.displayName})');
       
       // Check if in tutorial mode
-      final prefs = await SharedPreferences.getInstance();
-      final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+      final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
       
       if (isTutorialMode || userId == 'tutorial_user') {
         debugPrint('🎓 Tutorial mode - updating local state only');
@@ -658,8 +648,7 @@ class PersonaService extends ChangeNotifier {
   void _queueRelationshipCreate(Map<String, dynamic> relationshipData) {
     final docId = '${relationshipData['userId']}_${relationshipData['personaId']}';
     
-    _firestore
-        .collection('user_persona_relationships')
+    FirebaseHelper.userPersonaRelationships
         .doc(docId)
         .set(relationshipData)
         .catchError((e) {
@@ -693,11 +682,10 @@ class PersonaService extends ChangeNotifier {
     debugPrint('🔥 Processing ${updates.length} relationship updates...');
     
     try {
-      final batch = _firestore.batch();
+      final batch = FirebaseHelper.batch();
       
       for (final update in updates) {
-        final docRef = _firestore
-            .collection('user_persona_relationships')
+        final docRef = FirebaseHelper.userPersonaRelationships
             .doc('${update.userId}_${update.personaId}');
         
         // Get persona info for complete document
@@ -742,8 +730,7 @@ class PersonaService extends ChangeNotifier {
 
   /// Optimized matched personas loading with caching
   Future<void> _loadMatchedPersonas() async {
-    final prefs = await SharedPreferences.getInstance();
-    final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
+    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
     
     if (isTutorialMode || _currentUserId == 'tutorial_user') {
       await _loadTutorialMatchedPersonas();
@@ -757,8 +744,7 @@ class PersonaService extends ChangeNotifier {
 
     try {
       // Try simple query first
-      final querySnapshot = await _firestore
-          .collection('user_persona_relationships')
+      final querySnapshot = await FirebaseHelper.userPersonaRelationships
           .where('userId', isEqualTo: _currentUserId!)
           .get();
 
@@ -837,8 +823,6 @@ class PersonaService extends ChangeNotifier {
     }
   }
 
-  // Firebase instance
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// Load personas from Firebase with enhanced retry and authentication
   Future<bool> _loadFromFirebase() async {
@@ -856,8 +840,7 @@ class PersonaService extends ChangeNotifier {
         // Strategy 1: Direct access (should work with new Security Rules)
         if (attempt == 1) {
           debugPrint('📖 Trying direct Firebase access...');
-          final querySnapshot = await _firestore
-              .collection('personas')
+          final querySnapshot = await FirebaseHelper.personas
               .get();
           
           if (querySnapshot.docs.isNotEmpty) {
@@ -876,7 +859,7 @@ class PersonaService extends ChangeNotifier {
             
             await Future.delayed(const Duration(milliseconds: 500)); // Give time for auth to propagate
             
-            final querySnapshot = await _firestore
+            final querySnapshot = await FirebaseFirestore.instance
                 .collection('personas')
                 .get();
                 
@@ -897,7 +880,7 @@ class PersonaService extends ChangeNotifier {
             // Don't sign out if we're already authenticated, just retry
             await Future.delayed(const Duration(milliseconds: 1000));
             
-            final querySnapshot = await _firestore
+            final querySnapshot = await FirebaseFirestore.instance
                 .collection('personas')
                 .get();
                 
@@ -915,7 +898,7 @@ class PersonaService extends ChangeNotifier {
         else if (attempt == 4) {
           debugPrint('🚨 Last resort: Trying with limit query...');
           try {
-            final querySnapshot = await _firestore
+            final querySnapshot = await FirebaseFirestore.instance
                 .collection('personas')
                 .limit(10)
                 .get();
@@ -1056,8 +1039,7 @@ class PersonaService extends ChangeNotifier {
     
     try {
       final docId = '${_currentUserId}_$personaId';
-      final doc = await _firestore
-          .collection('user_persona_relationships')
+      final doc = await FirebaseHelper.userPersonaRelationships
           .doc(docId)
           .get();
       
@@ -1072,8 +1054,7 @@ class PersonaService extends ChangeNotifier {
 
   Future<void> _loadSwipedPersonas() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final swipedIds = prefs.getStringList('swiped_personas') ?? [];
+      final swipedIds = await PreferencesManager.getStringList('swiped_personas') ?? [];
       
       _sessionSwipedPersonas.clear();
       for (String id in swipedIds) {
@@ -1086,8 +1067,7 @@ class PersonaService extends ChangeNotifier {
 
   Future<void> _loadMatchedPersonasFromLocal() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final matchedIds = prefs.getStringList('matched_personas') ?? [];
+      final matchedIds = await PreferencesManager.getStringList('matched_personas') ?? [];
       
       _matchedPersonas = _allPersonas
           .where((persona) => matchedIds.contains(persona.id))
@@ -1100,9 +1080,8 @@ class PersonaService extends ChangeNotifier {
 
   Future<void> _saveMatchedPersonas() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
       final matchedIds = _matchedPersonas.map((persona) => persona.id).toList();
-      await prefs.setStringList('matched_personas', matchedIds);
+      await PreferencesManager.setStringList('matched_personas', matchedIds);
     } catch (e) {
       debugPrint('Error saving matched personas: $e');
     }
@@ -1261,13 +1240,11 @@ class PersonaService extends ChangeNotifier {
         debugPrint('⚠️ Persona not found for tutorial liking: $personaId');
         return false;
       }
-      final prefs = await SharedPreferences.getInstance();
-      
-      final matchedIds = prefs.getStringList('tutorial_matched_personas') ?? [];
+      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
       
       if (!matchedIds.contains(personaId)) {
         matchedIds.add(personaId);
-        await prefs.setStringList('tutorial_matched_personas', matchedIds);
+        await PreferencesManager.setStringList('tutorial_matched_personas', matchedIds);
       }
       
       final matchedPersona = persona.copyWith(
@@ -1293,9 +1270,8 @@ class PersonaService extends ChangeNotifier {
 
   Future<void> _loadTutorialMatchedPersonas() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final matchedIds = prefs.getStringList('tutorial_matched_personas') ?? [];
-      final superLikedIds = prefs.getStringList('tutorial_super_liked_personas') ?? [];
+      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
+      final superLikedIds = await PreferencesManager.getStringList('tutorial_super_liked_personas') ?? [];
       
       _matchedPersonas.clear();
       
@@ -1397,8 +1373,7 @@ class PersonaService extends ChangeNotifier {
         'personaPhotoUrl': '',  // No photo URL for passed personas
       };
 
-      await _firestore
-          .collection('user_persona_relationships')
+      await FirebaseHelper.userPersonaRelationships
           .doc(docId)
           .set(passData);
 
@@ -1494,8 +1469,7 @@ class PersonaService extends ChangeNotifier {
         
         final futures = batch.map((personaId) async {
           final docId = '${_currentUserId}_$personaId';
-          final doc = await _firestore
-              .collection('user_persona_relationships')
+          final doc = await FirebaseHelper.userPersonaRelationships
               .doc(docId)
               .get();
           

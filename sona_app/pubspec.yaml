@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.2.2
   uuid: ^4.2.1
   cupertino_icons: ^1.0.2
+  crypto: ^3.0.3
   
   # In-App Purchase
   in_app_purchase: ^3.2.1

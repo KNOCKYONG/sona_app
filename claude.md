@@ -1,5 +1,222 @@
 # Claude.md
 
+## 리팩토링된 아키텍처 구조
+
+### 1. BaseService 패턴
+모든 서비스 클래스는 `BaseService`를 상속받아 구현합니다.
+
+```dart
+// lib/services/base/base_service.dart
+abstract class BaseService extends ChangeNotifier {
+  // 공통 로딩 상태 및 에러 핸들링
+  bool _isLoading = false;
+  String? _error;
+  
+  // 비동기 작업 실행 메서드
+  Future<T?> executeWithLoading<T>(Future<T> Function() action);
+  Future<T?> executeSafely<T>(Future<T> Function() action);
+  T? executeSafelySync<T>(T Function() action);
+}
+```
+
+**사용 예시**:
+```dart
+class MyService extends BaseService {
+  Future<void> fetchData() async {
+    await executeWithLoading(() async {
+      // 자동으로 로딩 상태 관리 및 에러 핸들링
+      final result = await api.getData();
+      return result;
+    });
+  }
+}
+```
+
+### 2. AppConstants 중앙 관리
+모든 상수값은 `AppConstants` 클래스에서 중앙 관리합니다.
+
+```dart
+// lib/core/constants.dart
+class AppConstants {
+  // Firebase 컬렉션명
+  static const String usersCollection = 'users';
+  static const String personasCollection = 'personas';
+  
+  // 토큰 제한
+  static const int maxInputTokens = 3000;
+  static const int maxOutputTokens = 300;
+  
+  // 로컬 저장소 키
+  static const String deviceIdKey = 'device_id';
+  static const String tutorialModeKey = 'tutorial_mode';
+}
+```
+
+**사용 규칙**:
+- 하드코딩된 문자열 대신 항상 AppConstants 사용
+- 새로운 상수는 카테고리별로 그룹화하여 추가
+- 의미 있는 이름 사용 (예: `maxInputTokens` not `MAX_TOKEN`)
+
+### 3. FirebaseHelper 패턴
+Firebase 작업은 `FirebaseHelper`를 통해 수행합니다.
+
+```dart
+// lib/helpers/firebase_helper.dart
+class FirebaseHelper {
+  // 컬렉션 참조
+  static CollectionReference<Map<String, dynamic>> get users;
+  static DocumentReference<Map<String, dynamic>> user(String userId);
+  
+  // 서브 컬렉션
+  static CollectionReference<Map<String, dynamic>> userChats(String userId);
+  
+  // 공통 작업
+  static Map<String, dynamic> withTimestamps(Map<String, dynamic> data);
+  static WriteBatch batch();
+}
+```
+
+**사용 예시**:
+```dart
+// 유저 문서 가져오기
+final userDoc = await FirebaseHelper.user(userId).get();
+
+// 타임스탬프 추가하여 저장
+await FirebaseHelper.userChats(userId).add(
+  FirebaseHelper.withTimestamps({
+    'message': 'Hello',
+    'personaId': personaId,
+  })
+);
+```
+
+### 4. PreferencesManager 싱글톤
+로컬 저장소는 `PreferencesManager`를 통해 관리합니다.
+
+```dart
+// lib/core/preferences_manager.dart
+class PreferencesManager {
+  // 초기화 (앱 시작 시 호출)
+  static Future<void> initialize();
+  
+  // 타입별 저장/로드 메서드
+  static Future<bool> setString(String key, String value);
+  static Future<String?> getString(String key);
+  
+  // 앱 전용 메서드
+  static Future<String?> getDeviceId();
+  static Future<bool> setTutorialMode(bool value);
+}
+```
+
+**사용 예시**:
+```dart
+// 앱 시작 시 초기화
+await PreferencesManager.initialize();
+
+// 디바이스 ID 저장
+await PreferencesManager.setDeviceId(deviceId);
+
+// 튜토리얼 모드 확인
+final isTutorial = await PreferencesManager.isTutorialMode();
+```
+
+### 5. 보안 서비스 아키텍처
+
+#### SecurityFilterService (메인 보안 필터)
+```dart
+// lib/services/security_filter_service.dart
+class SecurityFilterService {
+  // 메인 필터 메서드
+  static String filterResponse({
+    required String response,
+    required String userMessage,
+    required Persona persona,
+  });
+  
+  // 문맥 인식 필터
+  static String filterResponseWithContext({
+    required String response,
+    required String userMessage,
+    required Persona persona,
+    List<String> recentMessages = const [],
+  });
+}
+```
+
+#### PromptInjectionDefense (고급 인젝션 방어)
+```dart
+// lib/services/prompt_injection_defense.dart
+class PromptInjectionDefense {
+  // 인젝션 감지 및 위험도 평가
+  static Future<InjectionAnalysis> analyzeInjection(String input);
+  
+  // 엔트로피 기반 난수성 감지
+  static double _calculateEntropy(String text);
+}
+```
+
+#### SystemInfoProtection (시스템 정보 보호)
+```dart
+// lib/services/system_info_protection.dart
+class SystemInfoProtection {
+  // 시스템 정보 제거
+  static String protectSystemInfo(String text);
+  
+  // 정보 유출 위험도 평가
+  static double assessLeakageRisk(String text);
+}
+```
+
+#### SafeResponseGenerator (안전한 응답 생성)
+```dart
+// lib/services/safe_response_generator.dart
+class SafeResponseGenerator {
+  // 카테고리별 안전한 응답 생성
+  static String generateSafeResponse({
+    required Persona persona,
+    required String category,
+    String? userMessage,
+  });
+}
+```
+
+### 6. 구현 가이드라인
+
+#### 새 서비스 생성 시
+1. `BaseService` 상속
+2. 로딩 상태가 필요한 작업은 `executeWithLoading` 사용
+3. 에러 핸들링이 필요한 작업은 `executeSafely` 사용
+
+```dart
+class NewService extends BaseService {
+  Future<List<Item>> fetchItems() async {
+    return await executeWithLoading(() async {
+      final snapshot = await FirebaseHelper.items.get();
+      return snapshot.docs.map((doc) => Item.fromJson(doc.data())).toList();
+    });
+  }
+}
+```
+
+#### Firebase 작업 시
+1. `FirebaseHelper`의 컬렉션 참조 사용
+2. 타임스탬프는 `withTimestamps` 메서드 사용
+3. 배치 작업은 `batch()` 메서드 사용
+
+#### 로컬 저장소 사용 시
+1. 앱 시작 시 `PreferencesManager.initialize()` 호출
+2. 키는 `AppConstants`에 정의
+3. 타입별 메서드 사용 (setString, setInt, setBool 등)
+
+#### 보안 강화 구현 시
+1. 모든 사용자 입력은 `PromptInjectionDefense`로 검증
+2. AI 응답은 `SecurityFilterService`로 필터링
+3. 시스템 정보는 `SystemInfoProtection`으로 보호
+4. 위험한 요청에는 `SafeResponseGenerator`로 응답
+
+---
+
 ## 자동화 명령어
 
 ### 이미지 최적화

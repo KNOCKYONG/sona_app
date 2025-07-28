@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../core/preferences_manager.dart';
+import 'base/base_service.dart';
 
-class AuthService extends ChangeNotifier {
+class AuthService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     // Web Client ID from Firebase console
     clientId: '874385422837-p5k562hl218ph0s2ucqgdi4ngk658r4s.apps.googleusercontent.com',
   );
   User? _user;
-  bool _isLoading = false;
   bool _isTutorialMode = false;
 
   User? get user => _user;
   User? get currentUser => _user; // Firebase 호환성을 위한 별칭
-  bool get isLoading => _isLoading;
   bool get isAuthenticated => _user != null;
   bool get isTutorialMode => _isTutorialMode;
 
@@ -27,17 +26,12 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<bool> signInWithGoogle() async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
+    final result = await executeWithLoading<bool>(() async {
       // Google 로그인 시작
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       
       // 사용자가 로그인을 취소한 경우
       if (googleUser == null) {
-        _isLoading = false;
-        notifyListeners();
         return false;
       }
 
@@ -60,22 +54,14 @@ class AuthService extends ChangeNotifier {
         await _saveUserProfile();
       }
 
-      _isLoading = false;
-      notifyListeners();
       return true;
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      debugPrint('Google sign in failed: $e');
-      return false;
-    }
+    }, errorContext: 'signInWithGoogle');
+    
+    return result ?? false;
   }
 
   Future<bool> signInAnonymously() async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
+    final result = await executeWithLoading<bool>(() async {
       final credential = await _auth.signInAnonymously();
       _user = credential.user;
       
@@ -84,46 +70,29 @@ class AuthService extends ChangeNotifier {
         await _saveDefaultSettings();
       }
 
-      _isLoading = false;
-      notifyListeners();
       return true;
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      debugPrint('Anonymous sign in failed: $e');
-      return false;
-    }
+    }, errorContext: 'signInAnonymously');
+    
+    return result ?? false;
   }
 
 
   Future<bool> signInWithEmail(String email, String password) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
+    final result = await executeWithLoading<bool>(() async {
       final credential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
       
       _user = credential.user;
-
-      _isLoading = false;
-      notifyListeners();
       return true;
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      debugPrint('Email sign in failed: $e');
-      return false;
-    }
+    }, errorContext: 'signInWithEmail');
+    
+    return result ?? false;
   }
 
   Future<bool> signUpWithEmail(String email, String password) async {
-    try {
-      _isLoading = true;
-      notifyListeners();
-
+    final result = await executeWithLoading<bool>(() async {
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -134,36 +103,27 @@ class AuthService extends ChangeNotifier {
       // 첫 회원가입 시 기본 설정 저장
       await _saveDefaultSettings();
       await _saveUserProfile();
-
-      _isLoading = false;
-      notifyListeners();
+      
       return true;
-    } catch (e) {
-      _isLoading = false;
-      notifyListeners();
-      debugPrint('Email sign up failed: $e');
-      return false;
-    }
+    }, errorContext: 'signUpWithEmail');
+    
+    return result ?? false;
   }
 
   Future<void> signOut() async {
-    try {
+    await executeWithLoading(() async {
       // Google 로그인도 로그아웃
       await _googleSignIn.signOut();
       await _auth.signOut();
       _user = null;
       _isTutorialMode = false;
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Sign out failed: $e');
-    }
+    }, errorContext: 'signOut', showError: false);
   }
 
   Future<void> _saveDefaultSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('first_launch', false);
-    await prefs.setString('user_id', _user?.uid ?? '');
-    await prefs.setInt('emotion_points', 100); // 초기 감정 포인트
+    await PreferencesManager.setBool('first_launch', false);
+    await PreferencesManager.setString('user_id', _user?.uid ?? '');
+    await PreferencesManager.setInt('emotion_points', 100); // 초기 감정 포인트
   }
 
   Future<void> _saveUserProfile() async {
@@ -202,26 +162,23 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> getUserPreferences() async {
-    final prefs = await SharedPreferences.getInstance();
     return {
-      'emotion_points': prefs.getInt('emotion_points') ?? 100,
-      'notifications_enabled': prefs.getBool('notifications_enabled') ?? true,
-      'sound_enabled': prefs.getBool('sound_enabled') ?? true,
-      'theme_mode': prefs.getString('theme_mode') ?? 'light',
+      'emotion_points': await PreferencesManager.getInt('emotion_points') ?? 100,
+      'notifications_enabled': await PreferencesManager.getBool('notifications_enabled') ?? true,
+      'sound_enabled': await PreferencesManager.getBool('sound_enabled') ?? true,
+      'theme_mode': await PreferencesManager.getString('theme_mode') ?? 'light',
     };
   }
 
   Future<void> updateUserPreferences(Map<String, dynamic> preferences) async {
-    final prefs = await SharedPreferences.getInstance();
-    
     for (String key in preferences.keys) {
       final value = preferences[key];
       if (value is bool) {
-        await prefs.setBool(key, value);
+        await PreferencesManager.setBool(key, value);
       } else if (value is int) {
-        await prefs.setInt(key, value);
+        await PreferencesManager.setInt(key, value);
       } else if (value is String) {
-        await prefs.setString(key, value);
+        await PreferencesManager.setString(key, value);
       }
     }
     
@@ -229,40 +186,34 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> spendEmotionPoints(int amount) async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentPoints = prefs.getInt('emotion_points') ?? 0;
+    final currentPoints = await PreferencesManager.getInt('emotion_points') ?? 0;
     final newPoints = (currentPoints - amount).clamp(0, 9999);
-    await prefs.setInt('emotion_points', newPoints);
+    await PreferencesManager.setInt('emotion_points', newPoints);
     notifyListeners();
   }
 
   Future<void> addEmotionPoints(int amount) async {
-    final prefs = await SharedPreferences.getInstance();
-    final currentPoints = prefs.getInt('emotion_points') ?? 0;
+    final currentPoints = await PreferencesManager.getInt('emotion_points') ?? 0;
     final newPoints = (currentPoints + amount).clamp(0, 9999);
-    await prefs.setInt('emotion_points', newPoints);
+    await PreferencesManager.setInt('emotion_points', newPoints);
     notifyListeners();
   }
 
   // 튜토리얼 모드 시작
   Future<bool> startTutorialMode() async {
-    try {
+    final result = await executeWithLoading<bool>(() async {
       _isTutorialMode = true;
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('is_tutorial_mode', true);
-      notifyListeners();
+      await PreferencesManager.setBool('is_tutorial_mode', true);
       return true;
-    } catch (e) {
-      debugPrint('Failed to start tutorial mode: $e');
-      return false;
-    }
+    }, errorContext: 'startTutorialMode', showError: false);
+    
+    return result ?? false;
   }
 
   // 튜토리얼 모드 종료 후 로그인으로 이동
   Future<bool> exitTutorialAndSignIn() async {
     _isTutorialMode = false;
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('is_tutorial_mode', false);
+    await PreferencesManager.setBool('is_tutorial_mode', false);
     notifyListeners();
     return await signInAnonymously();
   }

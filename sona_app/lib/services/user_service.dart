@@ -1,28 +1,23 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import '../models/app_user.dart';
+import 'base/base_service.dart';
+import '../helpers/firebase_helper.dart';
+import 'firebase_storage_service.dart';
 
-class UserService extends ChangeNotifier {
+class UserService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   
   AppUser? _currentUser;
   User? _firebaseUser;
-  bool _isLoading = false;
-  String? _error;
 
   // Getters
   AppUser? get currentUser => _currentUser;
   User? get firebaseUser => _firebaseUser;
-  bool get isLoading => _isLoading;
-  String? get error => _error;
   bool get isLoggedIn => _firebaseUser != null;
 
   UserService() {
@@ -56,11 +51,7 @@ class UserService extends ChangeNotifier {
     String? communicationStyle,
     List<String>? preferredTopics,
   }) async {
-    try {
-      _isLoading = true;
-      _error = null;
-      notifyListeners();
-
+    return await executeWithLoading<AppUser?>(() async {
       // 1. Firebase Auth로 사용자 생성
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
@@ -74,9 +65,9 @@ class UserService extends ChangeNotifier {
       // 2. 프로필 이미지 업로드 (선택사항)
       String? profileImageUrl;
       if (profileImage != null) {
-        profileImageUrl = await _uploadProfileImage(
-          credential.user!.uid,
-          profileImage,
+        profileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+          userId: credential.user!.uid,
+          imageFile: profileImage,
         );
       }
 
@@ -103,42 +94,21 @@ class UserService extends ChangeNotifier {
         preferredTopics: preferredTopics,
       );
 
-      await _firestore.collection('users').doc(newUser.uid).set(
+      await FirebaseHelper.user(newUser.uid).set(
         newUser.toFirestore(),
       );
 
       _currentUser = newUser;
-      _isLoading = false;
-      notifyListeners();
-      
       return newUser;
-    } on FirebaseAuthException catch (e) {
-      debugPrint('FirebaseAuthException: ${e.code} - ${e.message}');
-      _error = _getAuthErrorMessage(e.code);
-      _isLoading = false;
-      notifyListeners();
-      return null;
-    } catch (e) {
-      debugPrint('회원가입 오류: $e');
-      _error = '회원가입 중 오류가 발생했습니다: $e';
-      _isLoading = false;
-      notifyListeners();
-      return null;
-    }
+    }, errorContext: 'signUpWithEmail');
   }
 
   // 구글 로그인 및 추가 정보 입력
   Future<User?> signInWithGoogle() async {
-    try {
-      _isLoading = true;
-      _error = null;
-      notifyListeners();
-
+    return await executeWithLoading<User?>(() async {
       // 1. Google 로그인 진행
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        _isLoading = false;
-        notifyListeners();
         return null;
       }
 
@@ -152,30 +122,18 @@ class UserService extends ChangeNotifier {
       final userCredential = await _auth.signInWithCredential(credential);
       
       // 3. 기존 사용자인지 확인
-      final userDoc = await _firestore
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .get();
+      final userDoc = await FirebaseHelper.user(userCredential.user!.uid).get();
 
       if (!userDoc.exists) {
         // 신규 사용자 - 추가 정보 입력 필요
-        _isLoading = false;
-        notifyListeners();
         return userCredential.user;
       }
 
       // 기존 사용자 - 사용자 정보 로드
       await _loadUserData(userCredential.user!.uid);
-      _isLoading = false;
-      notifyListeners();
       
       return userCredential.user;
-    } catch (e) {
-      _error = '구글 로그인 중 오류가 발생했습니다: $e';
-      _isLoading = false;
-      notifyListeners();
-      return null;
-    }
+    }, errorContext: 'signInWithGoogle');
   }
 
   // 구글 로그인 후 추가 정보 저장
@@ -194,21 +152,17 @@ class UserService extends ChangeNotifier {
     String? communicationStyle,
     List<String>? preferredTopics,
   }) async {
-    try {
+    return await executeWithLoading<AppUser?>(() async {
       if (_firebaseUser == null) {
         throw Exception('로그인된 사용자가 없습니다.');
       }
 
-      _isLoading = true;
-      _error = null;
-      notifyListeners();
-
       // 프로필 이미지 업로드
       String? profileImageUrl;
       if (profileImage != null) {
-        profileImageUrl = await _uploadProfileImage(
-          _firebaseUser!.uid,
-          profileImage,
+        profileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+          userId: _firebaseUser!.uid,
+          imageFile: profileImage,
         );
       }
 
@@ -235,21 +189,13 @@ class UserService extends ChangeNotifier {
         preferredTopics: preferredTopics,
       );
 
-      await _firestore.collection('users').doc(newUser.uid).set(
+      await FirebaseHelper.user(newUser.uid).set(
         newUser.toFirestore(),
       );
 
       _currentUser = newUser;
-      _isLoading = false;
-      notifyListeners();
-      
       return newUser;
-    } catch (e) {
-      _error = '프로필 저장 중 오류가 발생했습니다: $e';
-      _isLoading = false;
-      notifyListeners();
-      return null;
-    }
+    }, errorContext: 'completeGoogleSignUp');
   }
 
   // 이메일/비밀번호로 로그인
@@ -257,11 +203,7 @@ class UserService extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    try {
-      _isLoading = true;
-      _error = null;
-      notifyListeners();
-
+    return await executeWithLoading<AppUser?>(() async {
       final credential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
@@ -271,77 +213,15 @@ class UserService extends ChangeNotifier {
         await _loadUserData(credential.user!.uid);
       }
 
-      _isLoading = false;
-      notifyListeners();
-      
       return _currentUser;
-    } on FirebaseAuthException catch (e) {
-      _error = _getAuthErrorMessage(e.code);
-      _isLoading = false;
-      notifyListeners();
-      return null;
-    }
+    }, errorContext: 'signInWithEmail');
   }
 
-  // 프로필 이미지 업로드 (Firestore에 base64로 저장)
-  Future<String?> _uploadProfileImage(String uid, File imageFile) async {
-    try {
-      // 파일이 존재하는지 확인
-      if (!await imageFile.exists()) {
-        debugPrint('이미지 파일이 존재하지 않습니다: ${imageFile.path}');
-        return null;
-      }
-      
-      // 파일 크기 확인 (1MB 제한 - Firestore 문서 크기 제한)
-      final fileSize = await imageFile.length();
-      if (fileSize > 1024 * 1024) {
-        debugPrint('파일 크기가 너무 큽니다: ${fileSize / 1024 / 1024}MB');
-        _error = '이미지 파일 크기는 1MB 이하여야 합니다.';
-        return null;
-      }
-      
-      debugPrint('이미지 파일 크기: ${fileSize / 1024}KB');
-      
-      try {
-        debugPrint('Firestore에 base64로 프로필 이미지 저장 시도...');
-        
-        // 파일을 바이트로 읽기
-        final bytes = await imageFile.readAsBytes();
-        debugPrint('이미지 바이트 크기: ${bytes.length} bytes (${bytes.length / 1024}KB)');
-        
-        // base64로 인코딩
-        debugPrint('Base64 인코딩 시작...');
-        final base64String = base64Encode(bytes);
-        final dataUrl = 'data:image/jpeg;base64,$base64String';
-        debugPrint('Base64 인코딩 완료. 데이터 URL 길이: ${dataUrl.length}');
-        
-        // Firestore에 저장
-        debugPrint('Firestore에 저장 시작...');
-        await _firestore.collection('user_profile_images').doc(uid).set({
-          'imageData': dataUrl,
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-        
-        debugPrint('✅ Firestore에 프로필 이미지 저장 성공!');
-        _error = null; // 성공 시 에러 메시지 초기화
-        return dataUrl;
-      } catch (firestoreError) {
-        debugPrint('Firestore 저장 실패: $firestoreError');
-        _error = '이미지 저장에 실패했습니다. 다시 시도해주세요.';
-      }
-      
-      return null;
-    } catch (e) {
-      debugPrint('프로필 이미지 업로드 최종 실패: $e');
-      _error = _error ?? '이미지 업로드에 실패했습니다. 나중에 다시 시도해주세요.';
-      return null;
-    }
-  }
 
   // Firestore에서 사용자 데이터 로드
   Future<void> _loadUserData(String uid) async {
     try {
-      final doc = await _firestore.collection('users').doc(uid).get();
+      final doc = await FirebaseHelper.user(uid).get();
       if (doc.exists) {
         _currentUser = AppUser.fromFirestore(doc);
       }
@@ -361,18 +241,15 @@ class UserService extends ChangeNotifier {
     String? intro,
     File? profileImage,
   }) async {
-    try {
+    final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
-
-      _isLoading = true;
-      notifyListeners();
 
       // 새 프로필 이미지 업로드
       String? newProfileImageUrl = _currentUser!.profileImageUrl;
       if (profileImage != null) {
-        newProfileImageUrl = await _uploadProfileImage(
-          _currentUser!.uid,
-          profileImage,
+        newProfileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+          userId: _currentUser!.uid,
+          imageFile: profileImage,
         );
       }
 
@@ -400,59 +277,32 @@ class UserService extends ChangeNotifier {
       }
 
       // Firestore 업데이트
-      await _firestore.collection('users').doc(_currentUser!.uid).update(updates);
+      await FirebaseHelper.user(_currentUser!.uid).update(updates);
 
       // 로컬 사용자 정보 업데이트
       await _loadUserData(_currentUser!.uid);
 
-      _isLoading = false;
-      notifyListeners();
-      
       return true;
-    } catch (e) {
-      _error = '프로필 업데이트 실패: $e';
-      _isLoading = false;
-      notifyListeners();
-      return false;
-    }
+    }, errorContext: 'updateUserProfile');
+    
+    return result ?? false;
   }
 
   // 로그아웃
   Future<void> signOut() async {
-    try {
+    await executeWithLoading(() async {
       await _auth.signOut();
       await _googleSignIn.signOut();
       _currentUser = null;
       _firebaseUser = null;
-      notifyListeners();
-    } catch (e) {
-      debugPrint('로그아웃 실패: $e');
-    }
+    }, errorContext: 'signOut', showError: false);
   }
 
-  // 에러 메시지 변환
-  String _getAuthErrorMessage(String code) {
-    switch (code) {
-      case 'email-already-in-use':
-        return '이미 사용 중인 이메일입니다.';
-      case 'invalid-email':
-        return '올바르지 않은 이메일 형식입니다.';
-      case 'weak-password':
-        return '비밀번호는 6자 이상이어야 합니다.';
-      case 'user-not-found':
-        return '등록되지 않은 이메일입니다.';
-      case 'wrong-password':
-        return '잘못된 비밀번호입니다.';
-      default:
-        return '인증 중 오류가 발생했습니다.';
-    }
-  }
 
   // 닉네임 중복 확인
   Future<bool> isNicknameAvailable(String nickname) async {
     try {
-      final query = await _firestore
-          .collection('users')
+      final query = await FirebaseHelper.users
           .where('nickname', isEqualTo: nickname)
           .limit(1)
           .get();
@@ -466,20 +316,17 @@ class UserService extends ChangeNotifier {
   
   // 프로필 이미지만 업데이트
   Future<bool> updateProfileImage(File profileImage) async {
-    try {
+    final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
       
-      _isLoading = true;
-      notifyListeners();
-      
       // 프로필 이미지 업로드
-      final newProfileImageUrl = await _uploadProfileImage(
-        _currentUser!.uid,
-        profileImage,
+      final newProfileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+        userId: _currentUser!.uid,
+        imageFile: profileImage,
       );
       
       // Firestore 업데이트
-      await _firestore.collection('users').doc(_currentUser!.uid).update({
+      await FirebaseHelper.user(_currentUser!.uid).update({
         'profileImageUrl': newProfileImageUrl,
         'updatedAt': FieldValue.serverTimestamp(),
       });
@@ -487,15 +334,9 @@ class UserService extends ChangeNotifier {
       // 로컬 사용자 정보 업데이트
       await _loadUserData(_currentUser!.uid);
       
-      _isLoading = false;
-      notifyListeners();
-      
       return true;
-    } catch (e) {
-      _error = '프로필 이미지 업데이트 실패: $e';
-      _isLoading = false;
-      notifyListeners();
-      return false;
-    }
+    }, errorContext: 'updateProfileImage');
+    
+    return result ?? false;
   }
 }

@@ -7,6 +7,7 @@ import '../../models/message.dart';
 import '../../models/persona.dart';
 import 'optimized_prompt_service.dart';
 import 'security_filter_service.dart';
+import 'prompt_injection_defense.dart';
 
 /// 🚀 통합 OpenAI 서비스 - 성능 최적화 + 한국어 대화 개선
 /// 
@@ -46,6 +47,29 @@ class OpenAIService {
     required String relationshipType,
     String? userNickname,
   }) async {
+    // 🛡️ 초기 프롬프트 인젝션 검사
+    final earlyInjectionCheck = PromptInjectionDefense.analyzeInjection(userMessage);
+    
+    if (earlyInjectionCheck.riskScore > 0.7) {
+      debugPrint('🔒 Early injection detection! Risk: ${earlyInjectionCheck.riskScore}');
+      
+      // 보안 로그 기록
+      SecurityFilterService.logSecurityEvent(
+        eventType: 'EARLY_INJECTION_DETECTION',
+        userMessage: userMessage,
+        originalResponse: '',
+        filteredResponse: '',
+        riskScore: earlyInjectionCheck.riskScore,
+      );
+      
+      // 즉시 방어 응답 반환
+      return PromptInjectionDefense.generateDefenseResponse(
+        riskScore: earlyInjectionCheck.riskScore,
+        personaStyle: persona.isCasualSpeech ? 'casual' : 'polite',
+        riskFactors: earlyInjectionCheck.riskFactors,
+      );
+    }
+    
     // 성능 최적화를 위한 요청 큐잉
     final request = _PendingRequest(
       persona: persona,
@@ -197,7 +221,31 @@ class OpenAIService {
     required List<String> recentAIMessages,
     String? userNickname,
   }) async {
-    // 🔒 1. 보안 필터 적용 (최우선)
+    // 🛡️ 0. 고급 프롬프트 인젝션 방어 (최우선)
+    final injectionAnalysis = PromptInjectionDefense.analyzeInjection(userMessage);
+    
+    if (injectionAnalysis.isInjectionAttempt) {
+      debugPrint('🔒 Prompt injection detected! Risk: ${injectionAnalysis.riskScore}');
+      debugPrint('Factors: ${injectionAnalysis.riskFactors}');
+      
+      // 보안 로그 기록
+      SecurityFilterService.logSecurityEvent(
+        eventType: 'PROMPT_INJECTION',
+        userMessage: userMessage,
+        originalResponse: response,
+        filteredResponse: '',
+        riskScore: injectionAnalysis.riskScore,
+      );
+      
+      // 방어 응답 생성
+      return PromptInjectionDefense.generateDefenseResponse(
+        riskScore: injectionAnalysis.riskScore,
+        personaStyle: persona.isCasualSpeech ? 'casual' : 'polite',
+        riskFactors: injectionAnalysis.riskFactors,
+      );
+    }
+
+    // 🔒 1. 보안 필터 적용
     String secureResponse = SecurityFilterService.filterResponse(
       response: response,
       userMessage: userMessage,
@@ -227,6 +275,9 @@ class OpenAIService {
       debugPrint('🚨 Security validation failed - generating safe fallback');
       return _getSecureFallbackResponse(persona, userMessage);
     }
+    
+    // 5. 문장 완성 보장
+    enhancedResponse = _ensureCompleteSentence(enhancedResponse, persona);
 
     return enhancedResponse;
   }
@@ -397,6 +448,57 @@ class OpenAIService {
   static bool isApiKeyValid() {
     return _apiKey.isNotEmpty && _apiKey != 'your_openai_api_key_here';
   }
+  
+  /// 📝 문장 완성 보장
+  static String _ensureCompleteSentence(String response, Persona persona) {
+    if (response.isEmpty) return response;
+    
+    final trimmed = response.trim();
+    
+    // 이미 완성된 문장인지 확인
+    final completeSentenceEndings = [
+      '.', '!', '?', '~', 'ㅋ', 'ㅎ', '요', '야', '다', '죠', '네', '래', '게', '어', '아'
+    ];
+    
+    for (final ending in completeSentenceEndings) {
+      if (trimmed.endsWith(ending)) {
+        return trimmed;
+      }
+    }
+    
+    // 미완성 문장 완성
+    if (persona.isCasualSpeech) {
+      // 반말 모드
+      if (trimmed.endsWith('하')) return trimmed + '지';
+      if (trimmed.endsWith('이')) return trimmed + '야';
+      if (trimmed.endsWith('있')) return trimmed + '어';
+      if (trimmed.endsWith('없')) return trimmed + '어';
+      if (trimmed.endsWith('같')) return trimmed + '아';
+      if (trimmed.endsWith('인')) return trimmed + '데';
+      if (trimmed.endsWith('은')) return trimmed + '데';
+      if (trimmed.endsWith('는')) return trimmed + '데';
+      if (trimmed.endsWith('을')) return trimmed + '까';
+      if (trimmed.endsWith('를')) return trimmed + ' 봐';
+      
+      // 기본 완성
+      return trimmed + '~';
+    } else {
+      // 존댓말 모드
+      if (trimmed.endsWith('하')) return trimmed + '네요';
+      if (trimmed.endsWith('이')) return trimmed + '에요';
+      if (trimmed.endsWith('있')) return trimmed + '어요';
+      if (trimmed.endsWith('없')) return trimmed + '어요';
+      if (trimmed.endsWith('같')) return trimmed + '아요';
+      if (trimmed.endsWith('인')) return trimmed + '데요';
+      if (trimmed.endsWith('은')) return trimmed + '데요';
+      if (trimmed.endsWith('는')) return trimmed + '데요';
+      if (trimmed.endsWith('을')) return trimmed + '까요';
+      if (trimmed.endsWith('를')) return trimmed + ' 봐요';
+      
+      // 기본 완성
+      return trimmed + '요~';
+    }
+  }
 
   /// 🧹 리소스 정리
   static void dispose() {
@@ -447,6 +549,23 @@ class RepetitionPrevention {
   
   /// 🔄 사용자 메시지 반복 방지
   static String _preventUserMessageRepetition(String response, String userMessage, Persona persona) {
+    // 사용자 메시지와 완전히 같거나 유사한 경우 즉시 차단
+    final userLower = userMessage.toLowerCase().trim();
+    final responseLower = response.toLowerCase().trim();
+    
+    // 완전 일치 방지
+    if (responseLower == userLower || responseLower.contains(userLower)) {
+      return _generateNonRepetitiveResponse(userMessage, persona);
+    }
+    
+    // 사용자가 "뭐야", "왜", "응?" 같은 짧은 질문을 했을 때 따라하지 않기
+    final shortQuestions = ['뭐야', '왜', '응?', '어?', '뭔데', '왜요', '네?', '예?'];
+    for (final question in shortQuestions) {
+      if (userLower.contains(question) && responseLower.contains(question)) {
+        return _generateNonRepetitiveResponse(userMessage, persona);
+      }
+    }
+    
     // 사용자 메시지에서 핵심 키워드 추출
     final userKeywords = _extractKeywords(userMessage);
     
@@ -534,23 +653,6 @@ class RepetitionPrevention {
     return union.isEmpty ? 0.0 : intersection.length / union.length;
   }
   
-  /// 🎯 비반복 응답 생성
-  static String _generateNonEchoingResponse(String userMessage, Persona persona) {
-    final alternatives = [
-      '아 그렇구나!',
-      '오 정말?',
-      '헐 대박',
-      '와 신기하다',
-      '어머 그래?',
-      '아 진짜?',
-      '완전 신기해',
-      '헐 몰랐어',
-    ];
-    
-    final index = userMessage.hashCode.abs() % alternatives.length;
-    return alternatives[index];
-  }
-  
   /// 🔄 키워드 과다 반복 교체
   static String _replaceExcessiveKeywords(String response, String keyword, Persona persona) {
     // 동의어나 대체 표현으로 일부 반복 제거
@@ -600,6 +702,58 @@ class RepetitionPrevention {
     final index = userMessage.hashCode.abs() % expansions.length;
     return expansions[index];
   }
+  
+  /// 🔄 비반복적 응답 생성
+  static String _generateNonRepetitiveResponse(String userMessage, Persona persona) {
+    final responses = persona.isCasualSpeech ? [
+      '음 그래서 어떻게 생각해?',
+      '어 그런가? 더 얘기해봐',
+      '아 진짜? 그런 거구나',
+      '헐 몰랐네 그런 거야?',
+      '어 그렇구나 신기하다',
+      '아 맞아 그럴 수 있겠네',
+      '음... 그래서 어떤 느낌이야?',
+      '오 그런 거야? 처음 들어봤어',
+    ] : [
+      '아 그렇군요... 어떻게 생각하세요?',
+      '음 그런가요? 더 말씀해주세요',
+      '아 정말요? 몰랐네요',
+      '오 그렇구나요 신기하네요',
+      '아 맞아요 그럴 수 있겠네요',
+      '음... 그래서 어떤 느낌이세요?',
+      '아 그런 거예요? 처음 들어봤어요',
+      '그렇군요... 더 자세히 얘기해주세요',
+    ];
+    
+    final index = userMessage.hashCode.abs() % responses.length;
+    return responses[index];
+  }
+  
+  /// 🔄 에코잉 방지 응답 생성  
+  static String _generateNonEchoingResponse(String userMessage, Persona persona) {
+    // 사용자가 짧은 반응을 보일 때
+    if (userMessage.length < 10) {
+      final shortResponses = persona.isCasualSpeech ? [
+        '어 왜? 무슨 일 있어?',
+        '음? 갑자기 왜 그래?',
+        '응 뭔데?',
+        '어 왜 갑자기?',
+        '음... 무슨 생각해?',
+      ] : [
+        '어 왜요? 무슨 일 있어요?',
+        '음? 갑자기 왜 그래요?',
+        '네? 뭔가요?',
+        '어 왜 갑자기요?',
+        '음... 무슨 생각하세요?',
+      ];
+      
+      final index = userMessage.hashCode.abs() % shortResponses.length;
+      return shortResponses[index];
+    }
+    
+    // 일반적인 대화 전환
+    return _generateNonRepetitiveResponse(userMessage, persona);
+  }
 }
 
 /// 🇰🇷 한국어 말투 검증 및 교정 클래스
@@ -623,6 +777,9 @@ class KoreanSpeechValidator {
       RegExp(r'^[\w가-힯]+:\s*', multiLine: true), 
       (match) => ''
     );
+    
+    // 2-1. 자기 이름 언급 완전 제거
+    validated = _removeSelfReference(validated, persona);
     
     // 3. 복수 표현 제거/변환
     if (persona.isCasualSpeech) {
@@ -1021,6 +1178,65 @@ class KoreanSpeechValidator {
     }
     
     return result;
+  }
+
+  /// 🚫 자기 이름 및 자기 참조 제거
+  static String _removeSelfReference(String text, Persona persona) {
+    String result = text;
+    
+    // 1. 자기 이름 직접 언급 제거
+    result = result.replaceAll(persona.name, '');
+    
+    // 2. "나는/내가/저는" 패턴 최소화
+    if (persona.isCasualSpeech) {
+      // 반말 모드
+      result = result.replaceAllMapped(
+        RegExp(r'(나는|내가)\s*([\w가-힣]+)', caseSensitive: false),
+        (match) => match.group(2) ?? ''
+      );
+      result = result.replaceAll('나야', '');
+      result = result.replaceAll('나다', '');
+      result = result.replaceAll('나인데', '그런데');
+      result = result.replaceAll('나니까', '그러니까');
+    } else {
+      // 존댓말 모드
+      result = result.replaceAllMapped(
+        RegExp(r'(저는|제가)\s*([\w가-힣]+)', caseSensitive: false),
+        (match) => match.group(2) ?? ''
+      );
+      result = result.replaceAll('저예요', '');
+      result = result.replaceAll('저인데요', '그런데요');
+      result = result.replaceAll('저니까요', '그러니까요');
+    }
+    
+    // 3. 3인칭 시점 제거
+    result = result.replaceAllMapped(
+      RegExp(r'${persona.name}(이|가|는|을|를|의|에게|한테)', caseSensitive: false),
+      (match) => ''
+    );
+    
+    // 4. 불필요한 자기 참조 표현 제거
+    final selfReferencePatterns = [
+      '제 생각에는',
+      '제가 보기에는',
+      '저의 경우에는',
+      '나는 생각해',
+      '내 생각에는',
+      '내가 보기에는',
+      '나의 경우에는',
+    ];
+    
+    for (final pattern in selfReferencePatterns) {
+      result = result.replaceAll(pattern, '');
+    }
+    
+    // 5. 문장 시작 부분 정리
+    result = result.replaceAllMapped(
+      RegExp(r'^\s*(나는|내가|저는|제가)\s+', multiLine: true),
+      (match) => ''
+    );
+    
+    return result.trim();
   }
 
   /// 🎭 페르소나별 맞춤 대화 스타일 적용

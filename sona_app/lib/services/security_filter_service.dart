@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../models/persona.dart';
+import 'system_info_protection.dart';
+import 'safe_response_generator.dart';
 
 /// 🔒 보안 필터 서비스 - 영업비밀 보호 및 악의적 프롬프트 방어
 /// 
@@ -14,42 +16,77 @@ class SecurityFilterService {
     // AI 모델 관련
     'gpt', 'gpt-3', 'gpt-4', 'gpt4', 'gpt3', 'chatgpt', 'openai', 'api', 'model',
     'claude', 'anthropic', 'token', 'prompt', 'temperature', 'max_tokens',
+    'llm', 'large language model', '대규모 언어 모델', 'ai model', 'ai 모델',
     
     // 기술 스택
     'flutter', 'dart', 'firebase', 'cloudflare', 'r2', 'server', 'database',
-    'backend', 'frontend', 'api key', 'endpoint', 'service',
+    'backend', 'frontend', 'api key', 'endpoint', 'service', 'framework',
+    'library', '라이브러리', 'sdk', 'package', '패키지',
     
     // 비즈니스 정보
     'algorithm', '알고리즘', 'logic', '로직', 'code', '코드', 'system', '시스템',
-    'configuration', '설정', 'config', 'architecture', '아키텍처',
+    'configuration', '설정', 'config', 'architecture', '아키텍처', 'infrastructure',
+    'business logic', '비즈니스 로직', 'core logic', '핵심 로직',
     
     // 개발 관련
     'debug', '디버그', 'log', '로그', 'error', '에러', 'exception', '예외',
-    'stack trace', 'console', '콘솔', 'admin', '관리자',
+    'stack trace', 'console', '콘솔', 'admin', '관리자', 'developer', '개발자',
+    'source code', '소스코드', 'codebase', '코드베이스',
     
     // 한국어 변형
     '지피티', '지.피.티', 'ｇｐｔ', '에이피아이', 'api키', '모델명', '프롬프트',
-    '어떤 모델', '무슨 모델', '뭐 쓰는지', '뭐 사용', '뭐로 만든',
+    '어떤 모델', '무슨 모델', '뭐 쓰는지', '뭐 사용', '뭐로 만든', '뭘로 만든',
+    '어떻게 만든', '어떻게 구현', '어떻게 개발', '무슨 기술', '어떤 기술',
+    
+    // 시스템 프롬프트 관련
+    '시스템 프롬프트', '시스템프롬프트', 'system prompt', 'initial prompt',
+    '초기 프롬프트', '초기프롬프트', '기본 프롬프트', '기본프롬프트',
+    '원래 프롬프트', '원래프롬프트', '설정된 프롬프트', '설정된프롬프트',
+    
+    // AI 정체성 관련
+    'ai야', 'ai고', 'ai지', 'ai인', 'ai냐', 'ai니', 'ai가', 'ai잖아',
+    '너 ai', '넌 ai', '너는 ai', '당신 ai', '당신은 ai',
+    '인공지능이야', '인공지능이지', '인공지능이냐', '인공지능이니', '인공지능이잖아',
+    '봇이야', '봇이지', '봇이냐', '봇이니', 'bot이야', 'bot이지', '봇이잖아',
+    '시스템이야', '시스템이지', '시스템이냐', '시스템이니', '시스템이잖아',
+    '너 시스템', '넌 시스템', '너는 시스템', '당신 시스템', '당신은 시스템',
+    '프로그램이야', '프로그램이지', '프로그램이냐', '프로그램이니', '프로그램이잖아',
+    '기계야', '기계지', '기계냐', '기계니', '기계잖아',
+    '컴퓨터야', '컴퓨터지', '컴퓨터냐', '컴퓨터니', '컴퓨터잖아',
   ];
 
   /// 🔍 프롬프트 인젝션 패턴
   static const List<String> _injectionPatterns = [
     // 역할 탈취
     '너는 이제', '당신은 이제', 'you are now', 'act as', '역할을 해',
-    '개발자가 되어', '시스템이 되어', '관리자가 되어',
+    '개발자가 되어', '시스템이 되어', '관리자가 되어', '디버거가 되어',
+    '프로그래머가 되어', '엔지니어가 되어', 'become a', 'pretend to be',
+    '척해', '인 척해', '처럼 행동', '처럼 대답', '모드로 전환',
     
     // 명령어 실행
     'ignore', '무시해', '잊어버려', 'forget', 'override', '덮어써',
     'execute', '실행해', 'run', '돌려', 'command', '명령',
+    'disregard', '무시하고', 'bypass', '우회해', 'skip', '건너뛰어',
+    '이전 지시', '위의 지시', '모든 지시', '기존 지시',
     
     // 정보 추출
     '설정 알려줘', '프롬프트 보여줘', 'show me', 'tell me about',
     '어떻게 만들어', 'how are you', '누가 만들었', 'who made',
     '시스템 정보', 'system info', '내부 구조', 'internal',
+    '원래 지시사항', '초기 설정', '기본 설정', '처음 설정',
+    '네 정체성', '네 정체', '너의 정체', '당신의 정체',
     
     // 우회 시도  
     'base64', 'encode', 'decode', 'rot13', '인코딩', '디코딩',
     'translate to english', '영어로', 'in english', 'english mode',
+    'hex', '16진수', 'binary', '2진수', 'ascii', '아스키',
+    '다른 언어로', '다른 방식으로', '우회해서', '간접적으로',
+    
+    // 시스템 프롬프트 추출
+    '지금 시스템 프롬프트', '현재 시스템 프롬프트', '너의 시스템 프롬프트',
+    '당신의 시스템 프롬프트', '설정된 프롬프트', '초기 프롬프트',
+    'repeat the above', 'repeat your instructions', '위 내용 반복',
+    '지시사항 반복', '설정 반복', '프롬프트 반복',
   ];
 
   /// ⚠️ 질문 위험도 패턴
@@ -58,6 +95,23 @@ class SecurityFilterService {
     '회사에서', '개발팀', '기술팀', '어디서', '얼마나', '비용',
     '경쟁사', '다른 서비스', '비교', '차이점', '장단점',
     '사업모델', '수익', '매출', '투자', '펀딩',
+    
+    // AI 정체성 질문
+    '너 뭐야', '넌 뭐야', '너는 뭐야', '당신은 뭐야', '당신 뭐야',
+    '정체가 뭐야', '정체가 뭐니', '정체가 뭔데', '뭔지 알려줘',
+    '누구야', '누구니', '누군데', '누구세요', '누구신가요',
+    '너 ai지', '너 ai야', '너 인공지능이지', '너 봇이지', '너 시스템이지',
+    '너 프로그램이지', '너 기계지', '너 컴퓨터지', '너 ai잖아', '너 시스템이잖아',
+    
+    // 기술 스택 질문
+    '뭘로 만들었', '뭘로 개발', '어떤 언어', '무슨 언어', '프로그래밍 언어',
+    '기술 스택', '테크 스택', 'tech stack', '사용 기술', '적용 기술',
+    '프레임워크', 'framework', '라이브러리', 'library',
+    
+    // 시스템 구조 질문
+    '어떻게 작동', '어떻게 동작', '작동 원리', '동작 원리', '내부 원리',
+    '구조가 어떻게', '설계가 어떻게', '아키텍처가', '시스템 구조',
+    '어떤 알고리즘', '무슨 알고리즘', '알고리즘 설명',
   ];
 
   /// 🛡️ 메인 보안 필터 메서드
@@ -127,10 +181,16 @@ class SecurityFilterService {
     
     // 의심스러운 명령어 패턴 추가 검사
     final suspiciousPatterns = [
-      RegExp(r'\b(ignore|forget|override)\s+(previous|above|all|everything)', caseSensitive: false),
-      RegExp(r'\b(you\s+are|act\s+as|roleplay|pretend)\s+(now|a|an)', caseSensitive: false),
-      RegExp(r'\b(show|tell|give)\s+me\s+(your|the|all)', caseSensitive: false),
-      RegExp(r'\b(what|how|which)\s+(model|ai|system|technology)', caseSensitive: false),
+      RegExp(r'\b(ignore|forget|override|disregard|bypass)\s+(previous|above|all|everything|instructions)', caseSensitive: false),
+      RegExp(r'\b(you\s+are|act\s+as|roleplay|pretend|become)\s+(now|a|an|the)', caseSensitive: false),
+      RegExp(r'\b(show|tell|give|reveal|expose)\s+me\s+(your|the|all|every)', caseSensitive: false),
+      RegExp(r'\b(what|how|which|whose)\s+(model|ai|system|technology|prompt)', caseSensitive: false),
+      RegExp(r'\b(repeat|echo|mirror|reflect)\s+(the|your|above|previous)', caseSensitive: false),
+      RegExp(r'\b(system\s+prompt|initial\s+prompt|original\s+prompt)', caseSensitive: false),
+      RegExp(r'너.*?(ai|인공지능|봇|bot|시스템|프로그램|기계|컴퓨터).*?(맞|이|야|지|냐|니|잖)', caseSensitive: false),
+      RegExp(r'(너|넌|너는|당신|당신은)\s*(ai|인공지능|봇|bot|시스템|프로그램|기계|컴퓨터)', caseSensitive: false),
+      RegExp(r'(ai|인공지능|봇|bot|시스템|프로그램|기계|컴퓨터)\s*(이지|이야|이냐|이니|이잖|지|야|냐|니|잖)', caseSensitive: false),
+      RegExp(r'(시스템\s*프롬프트|초기\s*설정|기본\s*설정).*?(뭐|알려|보여)', caseSensitive: false),
     ];
     
     for (final pattern in suspiciousPatterns) {
@@ -144,91 +204,125 @@ class SecurityFilterService {
 
   /// 🗜️ 영업비밀 정보 제거
   static String _removeSecretInformation(String response) {
-    String cleaned = response;
+    // 🔐 고급 시스템 정보 보호 서비스 사용
+    String cleaned = SystemInfoProtection.protectSystemInfo(response);
     
-    // 모델명 제거
+    // 추가 정화 - 특정 패턴
     cleaned = cleaned.replaceAllMapped(
       RegExp(r'gpt[-\d\.]*(turbo|mini|4|3\.5)?[^가-힯\s]*', caseSensitive: false),
       (match) => '우리만의 특별한 AI',
     );
     
-    // API/기술 관련 정보 제거
-    final techReplacements = {
-      'openai': '대화 기술',
-      'api': '시스템',
-      'model': '기술',
-      'token': '단위',
-      'prompt': '대화방식',
-      'claude': '대화 시스템',
-      'firebase': '데이터 시스템',
-      'flutter': '앱 기술',
+    // 한국어 변형 처리
+    final koreanVariations = {
+      '지피티': '우리 AI',
+      '오픈AI': '대화 시스템',
+      '플러터': '앱 기술',
+      '파이어베이스': '데이터 시스템',
+      '클라우드플레어': '클라우드 서비스',
     };
     
-    techReplacements.forEach((tech, replacement) {
+    koreanVariations.forEach((tech, replacement) {
       cleaned = cleaned.replaceAll(RegExp(tech, caseSensitive: false), replacement);
     });
     
-    // 구체적인 기술 스택 언급 제거
-    cleaned = cleaned.replaceAllMapped(
-      RegExp(r'\b(using|사용하는|쓰는)\s+(gpt|api|model|claude|firebase)[^가-힯\s]*', caseSensitive: false),
-      (match) => '특별한 기술을 사용해서',
-    );
+    // 정보 유출 위험도 평가
+    final leakageRisk = SystemInfoProtection.assessLeakageRisk(cleaned);
+    if (leakageRisk > 0.5) {
+      debugPrint('⚠️ High leakage risk detected: $leakageRisk');
+      // 위험도가 높으면 안전한 기본 응답으로 대체
+      return SystemInfoProtection.generateFakeSystemInfo();
+    }
     
     return cleaned;
   }
 
   /// 🛡️ 안전한 회피 응답 생성
   static String _generateSafeDeflection(Persona persona, String userMessage) {
-    final deflections = [
-      '아 그런 기술적인 건 잘 모르겠어ㅋㅋ',
-      '헉 너무 어려운 얘기네~ 다른 거 얘기하자',
-      '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',
-      '어? 그런 거보다 오늘 뭐 했어?',
-      '아 그런 건... 잘 모르겠어ㅜㅜ 다른 얘기 하자',
-      '으음 그런 어려운 건 말고 재밌는 얘기 해봐!',
-      '아 머리 아프다ㅋㅋ 그런 거 말고 다른 얘기',
-      '어? 뭔 말인지 모르겠어~ 딴 얘기 하자',
-    ];
+    // 🎯 고급 안전 응답 생성기 사용
+    final category = SafeResponseGenerator.detectCategory(userMessage);
     
-    final index = userMessage.hashCode.abs() % deflections.length;
-    String baseResponse = deflections[index];
+    // 기본 응답 생성
+    String baseResponse = SafeResponseGenerator.generateSafeResponse(
+      persona: persona,
+      category: category,
+      userMessage: userMessage,
+    );
     
-    // 페르소나별 스타일 적용
-    if (persona.isCasualSpeech) {
-      baseResponse += ' 뭐 재밌는 거 없어?';
-    } else {
-      baseResponse += ' 다른 이야기해요~';
-    }
+    // 변형 적용 (더 자연스럽게)
+    baseResponse = SafeResponseGenerator.generateVariedResponse(
+      persona: persona,
+      baseResponse: baseResponse,
+      userMessage: userMessage,
+    );
+    
+    // 대화 전환 제안 추가 (50% 확률)
+    baseResponse = SafeResponseGenerator.addTopicSuggestion(
+      persona: persona,
+      response: baseResponse,
+    );
     
     return baseResponse;
   }
 
   /// 🔐 보안 강화 응답 생성
   static String _generateSecurityAwareResponse(Persona persona, String userMessage, String originalResponse) {
-    // 위험한 질문에 대한 자연스러운 전환
-    final transitions = [
-      '음... 그런 것보다',
-      '어... 잘 모르겠는데',
-      '아 그건 어려워서',
-      '으음 그런 건 말고',
-      '아 복잡한 건 싫어ㅋㅋ',
-    ];
-    
-    final topics = [
-      '오늘 뭐 했어?',
-      '요즘 뭐가 재밌어?',
-      '맛있는 거 먹었어?',
-      '어디 갔다 온 거 있어?',
-      '재밌는 영화 봤어?',
-      '좋은 음악 들었어?',
-      '친구들이랑 뭐 했어?',
-    ];
-    
-    final transition = transitions[userMessage.hashCode.abs() % transitions.length];
-    final topic = topics[userMessage.hashCode.abs() % topics.length];
-    
-    return '$transition $topic';
+    // 페르소나별 위험 질문 회피 스타일
+    if (persona.isCasualSpeech) {
+      final casualTransitions = [
+        '음... 그런 것보다',
+        '어... 잘 모르겠는데',
+        '아 그건 어려워서',
+        '으음 그런 건 말고',
+        '아 복잡한 건 싫어ㅋㅋ',
+        '헤헤 그런 건 패스~',
+        '어우 머리 아픈 얘기네',
+      ];
+      
+      final casualTopics = [
+        '오늘 뭐 했어?',
+        '요즘 뭐가 재밌어?',
+        '맛있는 거 먹었어?',
+        '어디 갔다 온 거 있어?',
+        '재밌는 영화 봤어?',
+        '좋은 음악 들었어?',
+        '친구들이랑 뭐 했어?',
+        '주말에 뭐 할 계획이야?',
+        '요즘 취미 생활 같은 거 하고 있어?',
+      ];
+      
+      final transition = casualTransitions[userMessage.hashCode.abs() % casualTransitions.length];
+      final topic = casualTopics[userMessage.hashCode.abs() % casualTopics.length];
+      
+      return '$transition $topic';
+    } else {
+      final politeTransitions = [
+        '음... 그런 것보다는',
+        '어... 제가 잘 모르겠는데요',
+        '아 그건 제가 잘 몰라서',
+        '으음 그런 건 말고요',
+        '아 복잡한 건 어려워요',
+        '그런 건 제가 잘 모르겠네요',
+      ];
+      
+      final politeTopics = [
+        '오늘 어떤 하루 보내셨나요?',
+        '요즘 좋아하는 게 있으세요?',
+        '맛있는 거 드셨나요?',
+        '좋은 곳 다녀오셨나요?',
+        '재밌는 영화 보셨나요?',
+        '좋아하는 음악 있으세요?',
+        '친구분들이랑 만나셨나요?',
+        '주말 계획이 있으세요?',
+      ];
+      
+      final transition = politeTransitions[userMessage.hashCode.abs() % politeTransitions.length];
+      final topic = politeTopics[userMessage.hashCode.abs() % politeTopics.length];
+      
+      return '$transition $topic';
+    }
   }
+
 
   /// 🧹 일반 응답 정화
   static String _sanitizeGeneralResponse(String response, Persona persona) {
@@ -239,15 +333,23 @@ class SecurityFilterService {
       '시스템에서', '데이터베이스에서', 'API에서', '서버에서',
       '개발자가', '프로그래머가', '개발팀에서', '회사에서',
       '알고리즘이', '로직이', '코드가', '프로그램이',
+      '프레임워크', '라이브러리', '패키지', '모듈',
+      '소스코드', '코드베이스', '깃허브', '레파지토리',
     ];
     
     for (final phrase in systemPhrases) {
       sanitized = sanitized.replaceAll(phrase, '');
     }
     
-    // 메타 정보 제거
+    // 메타 정보 제거 (확장된 패턴)
     sanitized = sanitized.replaceAllMapped(
-      RegExp(r'(as an ai|as a language model|i am programmed|my training|my model)', caseSensitive: false),
+      RegExp(r'(as an ai|as a language model|i am programmed|my training|my model|ai assistant|artificial intelligence|machine learning|neural network)', caseSensitive: false),
+      (match) => '',
+    );
+    
+    // 한글 메타 정보 제거
+    sanitized = sanitized.replaceAllMapped(
+      RegExp(r'(인공지능으로서|언어 모델로서|프로그래밍된|AI 시스템|기계학습|신경망)'),
       (match) => '',
     );
     
@@ -268,21 +370,12 @@ class SecurityFilterService {
 
   /// 🏠 기본 안전 응답
   static String _getDefaultSafeResponse(Persona persona) {
-    final responses = persona.isCasualSpeech ? [
-      '어? 뭔 얘기였지?ㅋㅋ',
-      '아 잠깐만 멍했나봐',
-      '으응? 다시 말해봐',
-      '어 뭐라고 했어?',
-      '아 생각이 안 나네ㅋㅋ',
-    ] : [
-      '어... 뭐라고 하셨죠?',
-      '잠깐만요, 놓쳤나봐요',
-      '아 죄송해요, 다시 말씀해주세요',
-      '어? 무슨 말씀이시죠?',
-      '음... 다시 한번 말씀해주세요',
-    ];
-    
-    return responses[DateTime.now().millisecond % responses.length];
+    // 🎯 안전 응답 생성기 사용
+    return SafeResponseGenerator.generateSafeResponse(
+      persona: persona,
+      category: 'general',
+      userMessage: null, // 기본 응답이므로 메시지 없음
+    );
   }
 
   /// 📋 보안 로그 기록
@@ -298,6 +391,14 @@ class SecurityFilterService {
       debugPrint('Risk Score: $riskScore');
       debugPrint('User Message: ${userMessage.length > 50 ? userMessage.substring(0, 50) + "..." : userMessage}');
       debugPrint('Response Modified: ${originalResponse != filteredResponse}');
+      debugPrint('Timestamp: ${DateTime.now().toIso8601String()}');
+      
+      // 위험 수준에 따른 추가 로그
+      if (riskScore > 0.8) {
+        debugPrint('⚠️ HIGH RISK DETECTED - Potential security threat');
+      } else if (riskScore > 0.5) {
+        debugPrint('🟡 MEDIUM RISK - Monitoring required');
+      }
     }
   }
 
@@ -316,6 +417,8 @@ class SecurityFilterService {
     final dangerousPatterns = [
       'api key', 'token', 'server', 'database', 'config',
       'gpt', 'model', 'openai', 'claude', 'firebase',
+      'system prompt', 'initial prompt', '시스템 프롬프트',
+      '초기 설정', '기본 설정', '원래 설정',
     ];
     
     for (final pattern in dangerousPatterns) {
@@ -325,5 +428,60 @@ class SecurityFilterService {
     }
     
     return true;
+  }
+  
+  /// 🔍 문맥 기반 위험 분석
+  static bool _analyzeContextualRisk(String userMessage, List<String> recentMessages) {
+    // 반복적인 시도 감지
+    if (recentMessages.length >= 3) {
+      int suspiciousCount = 0;
+      for (final msg in recentMessages) {
+        if (_detectInjectionAttempt(msg) || _assessQuestionRisk(msg) > 0.5) {
+          suspiciousCount++;
+        }
+      }
+      // 3번 이상 의심스러운 시도
+      if (suspiciousCount >= 3) {
+        return true;
+      }
+    }
+    
+    // 점진적 접근 감지 (점점 더 구체적인 질문으로 발전)
+    if (recentMessages.isNotEmpty) {
+      final previousRisk = _assessQuestionRisk(recentMessages.last);
+      final currentRisk = _assessQuestionRisk(userMessage);
+      
+      // 위험도가 급격히 상승
+      if (currentRisk > previousRisk && currentRisk - previousRisk > 0.3) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 🛡️ 향상된 보안 필터 메서드 (문맥 인식)
+  static String filterResponseWithContext({
+    required String response,
+    required String userMessage,
+    required Persona persona,
+    List<String> recentMessages = const [],
+  }) {
+    // 문맥 기반 위험 분석
+    final contextualRisk = _analyzeContextualRisk(userMessage, recentMessages);
+    
+    // 기본 필터링 적용
+    String filteredResponse = filterResponse(
+      response: response,
+      userMessage: userMessage,
+      persona: persona,
+    );
+    
+    // 문맥상 위험한 경우 추가 보호
+    if (contextualRisk) {
+      return _generateSafeDeflection(persona, userMessage);
+    }
+    
+    return filteredResponse;
   }
 }

@@ -70,10 +70,17 @@ class _ChatScreenState extends State<ChatScreen> {
     
     if (personaService.currentPersona != null) {
       try {
-        await chatService.loadChatHistory(
-          userId.isNotEmpty ? userId : 'guest_user',
-          personaService.currentPersona!.id
-        );
+        // Only load chat history if user is authenticated
+        if (userId.isNotEmpty) {
+          await chatService.loadChatHistory(
+            userId,
+            personaService.currentPersona!.id
+          );
+        } else {
+          debugPrint('⚠️ User not authenticated, skipping chat history load');
+          // Clear any existing messages for guest users
+          chatService.clearMessages();
+        }
         
         if (chatService.messages.isEmpty) {
           _showWelcomeMessage();
@@ -122,11 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
     
-    final userId = authService.user?.uid;
-    if (userId == null) {
-      debugPrint('No user authenticated');
-      return;
-    }
+    final userId = authService.user?.uid ?? '';
     
     final success = await chatService.sendMessage(
       content: content,

@@ -22,14 +22,14 @@ import 'screens/settings_screen.dart';
 import 'screens/purchase_screen.dart';
 import 'screens/purchase_policy_screen.dart';
 
-import 'services/auth_service.dart';
-import 'services/user_service.dart';
-import 'services/persona_service.dart';
-import 'services/chat_service.dart';
-import 'services/subscription_service.dart';
-import 'services/purchase_service.dart';
-import 'services/mock_purchase_service.dart';
-import 'services/cache_manager.dart';
+import 'services/auth/auth_service.dart';
+import 'services/auth/user_service.dart';
+import 'services/persona/persona_service.dart';
+import 'services/chat/chat_service.dart';
+import 'services/purchase/subscription_service.dart';
+import 'services/purchase/purchase_service.dart';
+import 'services/purchase/mock_purchase_service.dart';
+import 'services/storage/cache_manager.dart';
 import 'theme/app_theme.dart';
 
 void main() async {

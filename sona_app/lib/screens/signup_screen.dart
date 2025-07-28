@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import '../services/user_service.dart';
+import '../services/auth/user_service.dart';
 import '../models/app_user.dart';
 import '../theme/app_theme.dart';
-import '../widgets/terms_agreement_widget.dart';
+import '../widgets/auth/terms_agreement_widget.dart';
 import '../utils/permission_helper.dart';
 
 class SignUpScreen extends StatefulWidget {

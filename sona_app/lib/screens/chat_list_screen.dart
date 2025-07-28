@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../services/chat_service.dart';
-import '../services/persona_service.dart';
-import '../services/auth_service.dart';
-import '../services/subscription_service.dart';
-import '../services/device_id_service.dart';
+import '../services/chat/chat_service.dart';
+import '../services/persona/persona_service.dart';
+import '../services/auth/auth_service.dart';
+import '../services/purchase/subscription_service.dart';
+import '../services/auth/device_id_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
-import '../widgets/sona_logo.dart';
-import '../widgets/optimized_persona_image.dart';
+import '../widgets/common/sona_logo.dart';
+import '../widgets/persona/optimized_persona_image.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});

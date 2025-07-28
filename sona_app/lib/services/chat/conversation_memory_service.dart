@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/message.dart';
-import '../models/persona.dart';
+import '../../models/message.dart';
+import '../../models/persona.dart';
 
 /// 💭 대화 기억 및 맥락 관리 서비스
 /// 

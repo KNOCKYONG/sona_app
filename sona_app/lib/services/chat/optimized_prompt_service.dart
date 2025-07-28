@@ -1,4 +1,4 @@
-import '../models/persona.dart';
+import '../../models/persona.dart';
 
 /// 토큰 최적화를 위한 스마트 프롬프트 조립 시스템
 /// 필요한 부분만 동적으로 조합하여 토큰 사용량을 50% 이상 절약

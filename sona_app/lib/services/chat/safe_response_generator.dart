@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../models/persona.dart';
+import '../../models/persona.dart';
 
 /// 🛡️ 안전한 응답 생성기
 /// 

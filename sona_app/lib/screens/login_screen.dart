@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
-import '../services/user_service.dart';
-import '../widgets/sona_logo.dart';
+import '../services/auth/auth_service.dart';
+import '../services/auth/user_service.dart';
+import '../widgets/common/sona_logo.dart';
 import '../theme/app_theme.dart';
 import 'signup_screen.dart';
 

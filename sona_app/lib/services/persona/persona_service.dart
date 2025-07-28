@@ -2,13 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/persona.dart';
-import '../models/app_user.dart';
-import 'device_id_service.dart';
-import 'base/base_service.dart';
-import '../helpers/firebase_helper.dart';
-import '../core/constants.dart';
-import '../core/preferences_manager.dart';
+import '../../models/persona.dart';
+import '../../models/app_user.dart';
+import '../auth/device_id_service.dart';
+import '../base/base_service.dart';
+import '../../helpers/firebase_helper.dart';
+import '../../core/constants.dart';
+import '../../core/preferences_manager.dart';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
 /// 

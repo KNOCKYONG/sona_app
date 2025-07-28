@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../models/persona.dart';
+import '../../models/persona.dart';
 
 /// Optimized PersonaCard with performance improvements and R2 image support:
 /// - R2 image loading with fallback to photoUrls

@@ -527,3 +527,5 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
 4. **웹 대시보드**: 브라우저에서 실시간 로그 및 상태 모니터링 가능
 
 ** scripts/process_persona_image.py 파일 활용하여 cloudflare mcp를 사용하기 전에 이미지 처리할 것 **
+
+** test 용도로 생성한 파일들은 test가 끝나면 삭제할 것 **

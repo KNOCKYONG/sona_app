@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../models/persona.dart';
+import '../../models/persona.dart';
 import 'system_info_protection.dart';
 import 'safe_response_generator.dart';
 

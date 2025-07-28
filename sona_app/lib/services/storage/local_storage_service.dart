@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/message.dart';
+import '../../models/message.dart';
 
 class LocalStorageService {
   static const String _messagesPrefix = 'tutorial_messages_';

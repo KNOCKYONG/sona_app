@@ -1,6 +1,6 @@
 import 'dart:math';
-import '../models/message.dart';
-import '../models/persona.dart';
+import '../../models/message.dart';
+import '../../models/persona.dart';
 
 /// AI 응답의 자연스러움을 높이는 서비스
 class NaturalAIService {

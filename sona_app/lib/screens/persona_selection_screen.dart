@@ -3,17 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animations/animations.dart';
-import '../services/auth_service.dart';
-import '../services/persona_service.dart';
-import '../services/device_id_service.dart';
-import '../services/user_service.dart';
-import '../services/cache_manager.dart';
+import '../services/auth/auth_service.dart';
+import '../services/persona/persona_service.dart';
+import '../services/auth/device_id_service.dart';
+import '../services/auth/user_service.dart';
+import '../services/storage/cache_manager.dart';
 import '../models/persona.dart';
-import '../widgets/persona_card.dart';
-import '../widgets/tutorial_overlay.dart';
+import '../widgets/persona/persona_card.dart';
+import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
-import '../widgets/sona_logo.dart';
-import '../widgets/animated_action_button.dart';
+import '../widgets/common/sona_logo.dart';
+import '../widgets/navigation/animated_action_button.dart';
 import '../theme/app_theme.dart';
 
 class PersonaSelectionScreen extends StatefulWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../services/user_service.dart';
+import '../services/auth/user_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/permission_helper.dart';
 

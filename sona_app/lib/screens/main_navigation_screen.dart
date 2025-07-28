@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
-import '../services/cache_manager.dart';
-import '../widgets/tutorial_overlay.dart';
+import '../services/storage/cache_manager.dart';
+import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 
 class MainNavigationScreen extends StatefulWidget {

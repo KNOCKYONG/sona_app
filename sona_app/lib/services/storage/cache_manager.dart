@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:crypto/crypto.dart';
-import '../models/message.dart';
-import '../models/persona.dart';
+import '../../models/message.dart';
+import '../../models/persona.dart';
 
 class CacheManager {
   static CacheManager? _instance;

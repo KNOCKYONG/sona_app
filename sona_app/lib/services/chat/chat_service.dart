@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
-import '../models/message.dart';
-import '../models/persona.dart';
-import '../core/constants.dart';
-import '../core/preferences_manager.dart';
-import '../helpers/firebase_helper.dart';
-import 'base/base_service.dart';
+import '../../models/message.dart';
+import '../../models/persona.dart';
+import '../../core/constants.dart';
+import '../../core/preferences_manager.dart';
+import '../../helpers/firebase_helper.dart';
+import '../base/base_service.dart';
 import 'openai_service.dart';
 import 'natural_ai_service.dart';
-import 'persona_service.dart';
-import 'local_storage_service.dart';
+import '../persona/persona_service.dart';
+import '../storage/local_storage_service.dart';
 import 'conversation_memory_service.dart';
-import 'user_service.dart';
+import '../auth/user_service.dart';
 import 'security_filter_service.dart';
 
 /// 무례한 메시지 체크 결과

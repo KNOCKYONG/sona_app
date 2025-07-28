@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../services/auth_service.dart';
-import '../widgets/sona_logo.dart';
+import '../services/auth/auth_service.dart';
+import '../widgets/common/sona_logo.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});

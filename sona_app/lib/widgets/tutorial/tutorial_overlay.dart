@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
-import '../services/cache_manager.dart';
-import '../models/tutorial_animation.dart' as anim_model;
-import 'animated_tutorial/animated_tutorial_guide.dart';
+import '../../services/auth/auth_service.dart';
+import '../../services/storage/cache_manager.dart';
+import '../../models/tutorial_animation.dart' as anim_model;
+import 'animated_tutorial_guide.dart';
 
 class TutorialOverlay extends StatefulWidget {
   final Widget child;

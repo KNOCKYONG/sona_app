@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../models/persona.dart';
+import '../../models/persona.dart';
 
 class PersonaProfileViewer extends StatefulWidget {
   final Persona persona;

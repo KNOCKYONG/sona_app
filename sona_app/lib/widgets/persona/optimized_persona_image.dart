@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../models/persona.dart';
-import '../services/image_optimization_service.dart';
-import '../services/cloudflare_r2_service.dart';
+import '../../models/persona.dart';
+import '../../services/persona/image_optimization_service.dart';
+import '../../services/persona/cloudflare_r2_service.dart';
 
 /// 최적화된 페르소나 이미지 위젯
 /// 크기에 따라 적절한 이미지를 로드하고 캐싱

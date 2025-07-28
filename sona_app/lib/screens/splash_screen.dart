@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animations/animations.dart';
-import '../services/auth_service.dart';
-import '../services/persona_service.dart';
-import '../widgets/sona_logo.dart';
+import '../services/auth/auth_service.dart';
+import '../services/persona/persona_service.dart';
+import '../widgets/common/sona_logo.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

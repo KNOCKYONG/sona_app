@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import '../core/constants.dart';
+import '../../core/constants.dart';
 
 /// 통합 이미지 업로드 서비스
 /// 모든 이미지 업로드 로직을 중앙화하여 관리

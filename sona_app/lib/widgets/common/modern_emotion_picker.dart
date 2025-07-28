@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
-import '../theme/app_theme.dart';
+import '../../theme/app_theme.dart';
 
 class ModernEmotionPicker extends StatefulWidget {
   final Function(String) onEmotionSelected;

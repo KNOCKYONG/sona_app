@@ -4,11 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:convert';
-import '../services/auth_service.dart';
+import '../services/auth/auth_service.dart';
 import '../utils/permission_helper.dart';
-import '../services/user_service.dart';
-import '../services/persona_service.dart';
-import '../services/chat_service.dart';
+import '../services/auth/user_service.dart';
+import '../services/persona/persona_service.dart';
+import '../services/chat/chat_service.dart';
 import 'matched_personas_screen.dart';
 import 'profile_edit_screen.dart';
 

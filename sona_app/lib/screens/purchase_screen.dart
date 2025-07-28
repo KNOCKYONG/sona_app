@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import '../services/purchase_service.dart';
+import '../services/purchase/purchase_service.dart';
 import '../theme/app_theme.dart';
 
 class PurchaseScreen extends StatefulWidget {

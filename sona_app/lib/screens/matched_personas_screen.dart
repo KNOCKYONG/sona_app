@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../services/persona_service.dart';
+import '../services/persona/persona_service.dart';
 import '../models/persona.dart';
 
 class MatchedPersonasScreen extends StatelessWidget {

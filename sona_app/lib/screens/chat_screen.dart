@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../services/auth_service.dart';
-import '../../services/persona_service.dart';
-import '../../services/chat_service.dart';
-import '../../services/subscription_service.dart';
+import '../../services/auth/auth_service.dart';
+import '../../services/persona/persona_service.dart';
+import '../../services/chat/chat_service.dart';
+import '../../services/purchase/subscription_service.dart';
 import '../../models/persona.dart';
-import '../widgets/message_bubble.dart';
-import '../widgets/typing_indicator.dart';
-import '../widgets/persona_profile_viewer.dart';
-import '../widgets/modern_emotion_picker.dart';
+import '../widgets/chat/message_bubble.dart';
+import '../widgets/chat/typing_indicator.dart';
+import '../widgets/persona/persona_profile_viewer.dart';
+import '../widgets/common/modern_emotion_picker.dart';
 import '../theme/app_theme.dart';
 
 /// Optimized ChatScreen with performance improvements:

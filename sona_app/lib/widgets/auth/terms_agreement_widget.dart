@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import '../screens/privacy_policy_screen.dart';
-import '../screens/terms_of_service_screen.dart';
+import '../../screens/privacy_policy_screen.dart';
+import '../../screens/terms_of_service_screen.dart';
 
 class TermsAgreementWidget extends StatefulWidget {
   final bool agreedToTerms;

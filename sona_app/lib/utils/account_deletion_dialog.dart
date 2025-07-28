@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/auth_service.dart';
-import '../services/user_service.dart';
+import '../services/auth/auth_service.dart';
+import '../services/auth/user_service.dart';
 
 class AccountDeletionDialog {
   static Future<void> show(BuildContext context) async {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../base/base_service.dart';
 
 /// 인앱 결제 상품 ID
 class ProductIds {
@@ -33,7 +34,7 @@ class ProductIds {
 }
 
 /// 구매 서비스
-class PurchaseService extends ChangeNotifier {
+class PurchaseService extends BaseService {
   final InAppPurchase _inAppPurchase = InAppPurchase.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;

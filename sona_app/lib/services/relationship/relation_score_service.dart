@@ -24,19 +24,17 @@ class RelationScoreService extends BaseService {
   
   /// 관계 단계별 점수 임계값
   static const Map<RelationshipType, int> _scoreThresholds = {
-    RelationshipType.stranger: 0,
-    RelationshipType.acquaintance: 50,
+    RelationshipType.friend: 0,
     RelationshipType.crush: 200,
-    RelationshipType.dating: 600,
-    RelationshipType.perfectLove: 900,
+    RelationshipType.dating: 500,
+    RelationshipType.perfectLove: 1000,
   };
   
   /// 관계 단계별 최대 점수
   static const Map<RelationshipType, int> _maxScores = {
-    RelationshipType.stranger: 49,
-    RelationshipType.acquaintance: 199,
-    RelationshipType.crush: 599,
-    RelationshipType.dating: 899,
+    RelationshipType.friend: 199,
+    RelationshipType.crush: 499,
+    RelationshipType.dating: 999,
     RelationshipType.perfectLove: 1000,
   };
   
@@ -101,9 +99,7 @@ class RelationScoreService extends BaseService {
   /// 관계 단계별 최대 변화량
   int _getMaxChangeForRelationship(RelationshipType relationship) {
     switch (relationship) {
-      case RelationshipType.stranger:
-        return 5;
-      case RelationshipType.acquaintance:
+      case RelationshipType.friend:
         return 7;
       case RelationshipType.crush:
         return 10;
@@ -117,12 +113,9 @@ class RelationScoreService extends BaseService {
   /// 관계 단계별 점수 변화 보정
   int _applyRelationshipModifier(int baseChange, RelationshipType relationship) {
     switch (relationship) {
-      case RelationshipType.stranger:
-        // 낯선 사람일 때는 긍정적 변화 증폭
-        return baseChange > 0 ? (baseChange * 1.5).round() : baseChange;
-      case RelationshipType.acquaintance:
-        // 지인일 때는 변화량 그대로
-        return baseChange;
+      case RelationshipType.friend:
+        // 친구일 때는 긍정적 변화 증폭
+        return baseChange > 0 ? (baseChange * 1.2).round() : baseChange;
       case RelationshipType.crush:
         // 썸 단계에서는 부정적 변화 감소
         return baseChange < 0 ? (baseChange * 0.7).round() : baseChange;
@@ -150,16 +143,14 @@ class RelationScoreService extends BaseService {
   
   /// 점수를 기반으로 관계 타입 결정
   RelationshipType getRelationshipType(int score) {
-    if (score >= 900) {
+    if (score >= 1000) {
       return RelationshipType.perfectLove;
-    } else if (score >= 600) {
+    } else if (score >= 500) {
       return RelationshipType.dating;
     } else if (score >= 200) {
       return RelationshipType.crush;
-    } else if (score >= 50) {
-      return RelationshipType.acquaintance;
     } else {
-      return RelationshipType.stranger;
+      return RelationshipType.friend;
     }
   }
   
@@ -167,16 +158,14 @@ class RelationScoreService extends BaseService {
   String getRelationshipTypeString(int score) {
     final type = getRelationshipType(score);
     switch (type) {
-      case RelationshipType.stranger:
-        return '낯선 사람';
-      case RelationshipType.acquaintance:
-        return '아는 사람';
+      case RelationshipType.friend:
+        return '친구';
       case RelationshipType.crush:
         return '썸';
       case RelationshipType.dating:
-        return '연인';
+        return '연애';
       case RelationshipType.perfectLove:
-        return '완벽한 사랑';
+        return '완전 연애';
     }
   }
   
@@ -195,8 +184,7 @@ class RelationScoreService extends BaseService {
       
       // user_persona_relationships 컬렉션 업데이트
       final docId = '${userId}_${personaId}';
-      await FirebaseHelper.firestore
-          .collection('user_persona_relationships')
+      await FirebaseHelper.userPersonaRelationships
           .doc(docId)
           .set({
         'userId': userId,
@@ -234,7 +222,7 @@ class RelationScoreService extends BaseService {
   }) async {
     // 관계 단계가 변경된 경우에만 이력 추가
     if (oldRelationship != newRelationship) {
-      await FirebaseHelper.firestore
+      await FirebaseFirestore.instance
           .collection('relationship_history')
           .add({
         'userId': userId,
@@ -258,8 +246,7 @@ class RelationScoreService extends BaseService {
   }) async {
     final result = await executeSafely<int>(() async {
       final docId = '${userId}_${personaId}';
-      final doc = await FirebaseHelper.firestore
-          .collection('user_persona_relationships')
+      final doc = await FirebaseHelper.userPersonaRelationships
           .doc(docId)
           .get();
       
@@ -275,8 +262,7 @@ class RelationScoreService extends BaseService {
   /// 모든 페르소나와의 관계 점수 조회
   Future<Map<String, int>> getAllRelationshipScores(String userId) async {
     final result = await executeSafely<Map<String, int>>(() async {
-      final snapshot = await FirebaseHelper.firestore
-          .collection('user_persona_relationships')
+      final snapshot = await FirebaseHelper.userPersonaRelationships
           .where('userId', isEqualTo: userId)
           .get();
       
@@ -301,7 +287,7 @@ class RelationScoreService extends BaseService {
     int limit = 10,
   }) async {
     final result = await executeSafely<List<Map<String, dynamic>>>(() async {
-      final snapshot = await FirebaseHelper.firestore
+      final snapshot = await FirebaseFirestore.instance
           .collection('relationship_history')
           .where('userId', isEqualTo: userId)
           .where('personaId', isEqualTo: personaId)

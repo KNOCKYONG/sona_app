@@ -78,12 +78,7 @@ class DeviceIdService {
   /// 🎯 현재 사용자 ID 가져오기 (로그인 상태 고려)
   static Future<String> getCurrentUserId({
     String? firebaseUserId,
-    bool isTutorialMode = false,
   }) async {
-    if (isTutorialMode) {
-      return 'tutorial_user';
-    }
-
     if (firebaseUserId != null && firebaseUserId.isNotEmpty) {
       debugPrint('🔥 Using Firebase user ID: $firebaseUserId');
       return firebaseUserId;

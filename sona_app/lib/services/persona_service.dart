@@ -126,113 +126,18 @@ class PersonaService extends BaseService {
     _loadingCompleter = Completer<void>();
     
     await executeWithLoading(() async {
-      final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
       
-      if (isTutorialMode || userId == 'tutorial_user') {
-        await _initializeTutorialMode();
-      } else {
-        await _initializeNormalMode(userId);
-      }
+      await _initializeNormalMode(userId);
       
       _loadingCompleter!.complete();
     }, errorContext: 'initialize', showError: false);
   }
 
-  /// Tutorial mode initialization with AGGRESSIVE Firebase access
-  Future<void> _initializeTutorialMode() async {
-    debugPrint('🎓 Tutorial mode initialization - FORCING Firebase access');
-    _currentUserId = 'tutorial_user';
-    
-    // 🔥 AGGRESSIVE Firebase loading for tutorial mode
-    debugPrint('🚀 AGGRESSIVELY attempting Firebase personas load...');
-    
-    bool firebaseLoaded = false;
-    
-    // First attempt with enhanced method
-    firebaseLoaded = await _loadFromFirebase();
-    
-    // If that fails, try additional emergency measures
-    if (!firebaseLoaded) {
-      debugPrint('🆘 First attempt failed, trying EMERGENCY measures...');
-      
-      try {
-        // Emergency strategy: Force sign in anonymously and retry
-        debugPrint('🎭 EMERGENCY: Force anonymous authentication...');
-        
-        // Clear any existing auth state first
-        try {
-          await FirebaseAuth.instance.signOut();
-        } catch (signOutError) {
-          debugPrint('Sign out error (ignored): $signOutError');
-        }
-        
-        // Force anonymous sign in
-        final userCredential = await FirebaseAuth.instance.signInAnonymously();
-        debugPrint('✅ EMERGENCY anonymous auth successful: ${userCredential.user?.uid}');
-        
-        // Wait for auth to fully propagate
-        await Future.delayed(const Duration(seconds: 2));
-        
-        // Try loading again
-        final querySnapshot = await FirebaseHelper.personas.get();
-        
-        if (querySnapshot.docs.isNotEmpty) {
-          _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
-          firebaseLoaded = true;
-          debugPrint('🎉 EMERGENCY SUCCESS! Loaded ${_allPersonas.length} personas');
-        } else {
-          debugPrint('⚠️ Emergency auth successful but no personas found');
-        }
-        
-      } catch (emergencyError) {
-        debugPrint('💥 EMERGENCY measures failed: $emergencyError');
-        
-        // Last resort: Try direct access one more time
-        try {
-          debugPrint('🎯 LAST RESORT: Direct access attempt...');
-          
-          final querySnapshot = await FirebaseHelper.personas
-              .limit(1) // Just try to get one document
-              .get();
-              
-          if (querySnapshot.docs.isNotEmpty) {
-            // If we can get one, try to get all
-            final allSnapshot = await FirebaseHelper.personas.get();
-            _allPersonas = _parseFirebasePersonas(allSnapshot.docs);
-            firebaseLoaded = true;
-            debugPrint('🎉 LAST RESORT SUCCESS! Loaded ${_allPersonas.length} personas');
-          }
-        } catch (lastResortError) {
-          debugPrint('💥 Even last resort failed: $lastResortError');
-        }
-      }
-    }
-    
-    // Firebase 로드 실패 시 빈 리스트 사용
-    if (!firebaseLoaded) {
-      debugPrint('❌ ALL FIREBASE ATTEMPTS FAILED - Using empty persona list');
-      _allPersonas = [];
-      debugPrint('✅ Using empty persona list for tutorial');
-    } else {
-      debugPrint('🎉 TUTORIAL FIREBASE SUCCESS: ${_allPersonas.length} personas loaded!');
-    }
-    
-    await Future.wait([
-      _loadSwipedPersonas(),
-      _loadTutorialMatchedPersonas(),
-    ]);
-    
-    // isLoading is managed by BaseService
-    notifyListeners();
-    
-    debugPrint('✅ Tutorial initialization complete with ${_allPersonas.length} personas');
-  }
 
   /// Normal mode initialization with parallel loading
   Future<void> _initializeNormalMode(String? userId) async {
     _currentUserId = await DeviceIdService.getCurrentUserId(
       firebaseUserId: userId,
-      isTutorialMode: false,
     );
     
     debugPrint('🚀 PersonaService initializing with userId: $_currentUserId');
@@ -329,10 +234,9 @@ class PersonaService extends BaseService {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
 
-    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-    
-    if (isTutorialMode || _currentUserId == 'tutorial_user') {
-      return await _likeTutorialPersona(personaId);
+    if (_currentUserId == '') {
+      debugPrint('⚠️ No user ID available for liking persona');
+      return false;
     }
 
     try {
@@ -400,10 +304,9 @@ class PersonaService extends BaseService {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
 
-    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-    
-    if (isTutorialMode || _currentUserId == 'tutorial_user') {
-      return await _superLikeTutorialPersona(personaId);
+    if (_currentUserId == '') {
+      debugPrint('⚠️ No user ID available for super liking persona');
+      return false;
     }
 
     try {
@@ -569,16 +472,10 @@ class PersonaService extends BaseService {
       
       debugPrint('📊 Score calculation: $currentScore + $change = $newScore (${relationshipType.displayName})');
       
-      // Check if in tutorial mode
-      final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-      
-      if (isTutorialMode || userId == 'tutorial_user') {
-        debugPrint('🎓 Tutorial mode - updating local state only');
-        await _updateTutorialRelationship(personaId, newScore, relationshipType);
-      } else {
-        debugPrint('🔥 Normal mode - queuing Firebase update');
-        // Queue update for batch processing
-        _queueRelationshipUpdate(_PendingRelationshipUpdate(
+      // Update relationship in Firebase
+      debugPrint('🔥 Normal mode - queuing Firebase update');
+      // Queue update for batch processing
+      _queueRelationshipUpdate(_PendingRelationshipUpdate(
           userId: userId,
           personaId: personaId,
           newScore: newScore,
@@ -590,7 +487,6 @@ class PersonaService extends BaseService {
           debugPrint('🚀 Significant change detected ($change) - processing immediately');
           Future.microtask(() => _processBatchUpdates());
         }
-      }
       
       // Update local state immediately for all modes
       if (_currentPersona?.id == personaId) {
@@ -630,19 +526,6 @@ class PersonaService extends BaseService {
     }
   }
 
-  /// Update tutorial mode relationship (local only)
-  Future<void> _updateTutorialRelationship(String personaId, int newScore, RelationshipType relationshipType) async {
-    try {
-      debugPrint('🎓 Updating tutorial relationship: $personaId → $newScore');
-      
-      // No Firebase update for tutorial mode, only local state
-      // This is already handled in the main method
-      
-      debugPrint('✅ Tutorial relationship updated locally');
-    } catch (e) {
-      debugPrint('❌ Error updating tutorial relationship: $e');
-    }
-  }
 
   /// Queue relationship creation for batch processing
   void _queueRelationshipCreate(Map<String, dynamic> relationshipData) {
@@ -730,10 +613,8 @@ class PersonaService extends BaseService {
 
   /// Optimized matched personas loading with caching
   Future<void> _loadMatchedPersonas() async {
-    final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-    
-    if (isTutorialMode || _currentUserId == 'tutorial_user') {
-      await _loadTutorialMatchedPersonas();
+    if (_currentUserId == '') {
+      debugPrint('⚠️ No user ID available for loading matched personas');
       return;
     }
 
@@ -1268,42 +1149,6 @@ class PersonaService extends BaseService {
     }
   }
 
-  Future<void> _loadTutorialMatchedPersonas() async {
-    try {
-      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
-      final superLikedIds = await PreferencesManager.getStringList('tutorial_super_liked_personas') ?? [];
-      
-      _matchedPersonas.clear();
-      
-      for (final personaId in matchedIds) {
-        final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
-        if (persona != null) {
-          // Super liked personas get 200 score (crush), regular likes get 50 score (friend)
-          final isSuperLiked = superLikedIds.contains(personaId);
-          final relationshipScore = isSuperLiked ? 200 : 50;
-          final relationshipType = isSuperLiked ? RelationshipType.crush : RelationshipType.friend;
-          
-          // 모든 페르소나는 일반 페르소나로 처리
-          
-          final tutorialPersona = persona.copyWith(
-            relationshipScore: relationshipScore,
-            currentRelationship: relationshipType,
-            isCasualSpeech: false,
-            imageUrls: persona.imageUrls,  // Preserve imageUrls
-          );
-          
-          _matchedPersonas.add(tutorialPersona);
-          
-          debugPrint('📋 Loaded tutorial persona: ${persona.name} → $relationshipScore (${relationshipType.displayName})');
-        }
-      }
-      
-      debugPrint('✅ Loaded ${_matchedPersonas.length} tutorial matched personas');
-    } catch (e) {
-      debugPrint('Error loading tutorial matched personas: $e');
-      _matchedPersonas = [];
-    }
-  }
 
   /// Public method to load tutorial personas (deprecated - use initialize() instead)
   @Deprecated('Use initialize() with tutorial_user userId instead')
@@ -1323,32 +1168,6 @@ class PersonaService extends BaseService {
     await setCurrentPersona(persona);
   }
 
-  Future<void> setCurrentPersonaForTutorial(Persona persona) async {
-    debugPrint('🎓 Setting current persona for tutorial: ${persona.name} (score: ${persona.relationshipScore}, relationship: ${persona.currentRelationship.displayName})');
-    
-    // 모든 페르소나는 일반 페르소나로 처리
-    
-    // For tutorial mode, directly set the persona without Firebase operations
-    _currentPersona = persona;
-    
-    
-    // Also update the matched personas list if this persona is there
-    final index = _matchedPersonas.indexWhere((p) => p.id == persona.id);
-    if (index != -1) {
-      _matchedPersonas[index] = persona;
-      debugPrint('✅ Updated matched persona in list: ${persona.name} → ${persona.relationshipScore}');
-    }
-    
-    // Cache the relationship for consistency
-    _addToCache(persona.id, _CachedRelationship(
-      score: persona.relationshipScore,
-      isCasualSpeech: persona.isCasualSpeech,
-      timestamp: DateTime.now(),
-    ));
-    
-    debugPrint('✅ Tutorial persona set successfully: ${persona.name} → ${persona.relationshipScore} (${persona.currentRelationship.displayName})');
-    notifyListeners();
-  }
 
   Future<bool> passPersona(String personaId) async {
     if (_currentUserId == null) {

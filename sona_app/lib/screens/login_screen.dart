@@ -96,13 +96,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     setState(() => _isLoading = true);
     
     try {
-      final authService = Provider.of<AuthService>(context, listen: false);
-      final success = await authService.startTutorialMode();
-      
-      if (success && mounted) {
+      // Tutorial mode removed - navigate directly to main
+      if (mounted) {
         Navigator.of(context).pushReplacementNamed('/main');
-      } else if (mounted) {
-        _showErrorSnackBar('튜토리얼 모드를 시작할 수 없습니다.');
       }
     } catch (e) {
       if (mounted) {

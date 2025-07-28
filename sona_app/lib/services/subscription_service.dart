@@ -108,9 +108,8 @@ class SubscriptionService extends ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       
-      // Check if this is tutorial mode
-      final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
-      if (isTutorialMode || userId == 'tutorial_user') {
+      // Check if this is tutorial user
+      if (userId == 'tutorial_user') {
         return _createFreeSubscription(userId);
       }
       

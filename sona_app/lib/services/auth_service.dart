@@ -11,12 +11,10 @@ class AuthService extends BaseService {
     clientId: '874385422837-p5k562hl218ph0s2ucqgdi4ngk658r4s.apps.googleusercontent.com',
   );
   User? _user;
-  bool _isTutorialMode = false;
 
   User? get user => _user;
   User? get currentUser => _user; // Firebase 호환성을 위한 별칭
   bool get isAuthenticated => _user != null;
-  bool get isTutorialMode => _isTutorialMode;
 
   AuthService() {
     _auth.authStateChanges().listen((User? user) {
@@ -116,7 +114,6 @@ class AuthService extends BaseService {
       await _googleSignIn.signOut();
       await _auth.signOut();
       _user = null;
-      _isTutorialMode = false;
     }, errorContext: 'signOut', showError: false);
   }
 
@@ -199,38 +196,4 @@ class AuthService extends BaseService {
     notifyListeners();
   }
 
-  // 튜토리얼 모드 시작
-  Future<bool> startTutorialMode() async {
-    final result = await executeWithLoading<bool>(() async {
-      _isTutorialMode = true;
-      await PreferencesManager.setBool('is_tutorial_mode', true);
-      return true;
-    }, errorContext: 'startTutorialMode', showError: false);
-    
-    return result ?? false;
-  }
-
-  // 튜토리얼 모드 종료 후 로그인으로 이동
-  Future<bool> exitTutorialAndSignIn() async {
-    _isTutorialMode = false;
-    await PreferencesManager.setBool('is_tutorial_mode', false);
-    notifyListeners();
-    return await signInAnonymously();
-  }
-
-  // 튜토리얼 모드 종료
-  void exitTutorialMode() {
-    _isTutorialMode = false;
-    notifyListeners();
-  }
-
-  // 튜토리얼 모드에서 사용할 가상 사용자 정보
-  Map<String, dynamic> getTutorialUserPreferences() {
-    return {
-      'emotion_points': 100,
-      'notifications_enabled': true,
-      'sound_enabled': true,
-      'theme_mode': 'light',
-    };
-  }
 }

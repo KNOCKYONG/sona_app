@@ -23,7 +23,6 @@ class AppConstants {
   
   // Message Limits
   static const int maxMessagesInMemory = 100;
-  static const int maxTutorialMessages = 30;
   static const int maxCacheSize = 50;
   static const int maxBatchSize = 500;
   static const int recentMessagesLimit = 10;
@@ -53,7 +52,6 @@ class AppConstants {
   
   // Local Storage Keys
   static const String deviceIdKey = 'device_id';
-  static const String tutorialModeKey = 'tutorial_mode';
   static const String swipedPersonasKey = 'swiped_personas';
   static const String lastSyncKey = 'last_sync';
   static const String cachedUserKey = 'cached_user';

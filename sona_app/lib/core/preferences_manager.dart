@@ -141,13 +141,6 @@ class PreferencesManager {
   static Future<bool> setDeviceId(String deviceId) => 
       setString(AppConstants.deviceIdKey, deviceId);
   
-  /// 튜토리얼 모드 상태 가져오기
-  static Future<bool> isTutorialMode() async => 
-      await getBool(AppConstants.tutorialModeKey) ?? false;
-  
-  /// 튜토리얼 모드 상태 설정
-  static Future<bool> setTutorialMode(bool value) => 
-      setBool(AppConstants.tutorialModeKey, value);
   
   /// 스와이프한 페르소나 ID 목록 가져오기
   static Future<List<String>> getSwipedPersonas() async => 

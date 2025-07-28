@@ -168,8 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startTutorialMode() {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    authService.startTutorialMode();
+    // Tutorial mode removed - navigate directly to persona selection
     Navigator.of(context).pushReplacementNamed('/persona-selection');
   }
 

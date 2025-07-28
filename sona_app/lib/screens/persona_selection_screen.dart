@@ -70,7 +70,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 🔧 DeviceIdService로 사용자 ID 확보
     final currentUserId = await DeviceIdService.getCurrentUserId(
       firebaseUserId: authService.user?.uid,
-      isTutorialMode: authService.isTutorialMode,
     );
     
     debugPrint('🆔 Loading personas with userId: $currentUserId');
@@ -88,13 +87,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       debugPrint('⚠️ No current user available for recommendation algorithm');
     }
     
-    if (authService.isTutorialMode) {
-      // 튜토리얼 모드에서도 전체 초기화 사용 (완전한 상태 설정)
-      await personaService.initialize(userId: 'tutorial_user');
-    } else {
-      // 일반 모드에서는 전체 초기화
-      await personaService.initialize(userId: currentUserId);
-    }
+    // 일반 모드에서는 전체 초기화
+    await personaService.initialize(userId: currentUserId);
   }
 
   void _showTutorialExitDialog() {
@@ -180,7 +174,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       },
     );
 
-    final success = await authService.exitTutorialAndSignIn();
+    final success = await authService.signInWithGoogle();
     
     if (mounted) {
       Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
@@ -279,78 +273,53 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     // 전문가 기능 제거됨
     
-    if (authService.isTutorialMode) {
-      // 🎓 튜토리얼 모드: 직접 persona 설정 (Firebase 호출 없이)
-      debugPrint('🎓 Tutorial mode - Processing like: ${isSuperLike ? "SUPER" : "regular"}');
+    // 🔧 일반 모드: Firebase를 통한 매칭 처리
+    Future.microtask(() async {
+      debugPrint('🔄 Processing persona match: ${persona.name}');
       
-      // Super like: 200점(썸), 일반 like: 50점(친구)
-      final relationshipScore = isSuperLike ? 200 : 50;
-      final relationshipType = isSuperLike ? RelationshipType.crush : RelationshipType.friend;
-      final updatedPersona = persona.copyWith(
-        relationshipScore: relationshipScore,
-        currentRelationship: relationshipType,
-        imageUrls: persona.imageUrls,  // Preserve imageUrls
+      // 먼저 스와이프 마킹
+      await personaService.markPersonaAsSwiped(persona.id);
+      
+      // 그 다음 매칭 처리 (내부적으로 이미 스와이프 체크함)
+      final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
+      
+      debugPrint('✅ Match processing complete: ${persona.name} (success: $matchSuccess, isSuperLike: $isSuperLike)');
+    });
+    
+    // 🔧 DeviceIdService 기반 매칭 (로그인 없이도 작동)
+    setState(() => _isLoading = true);
+    
+    try {
+      // DeviceIdService로 사용자 ID 확보
+      final currentUserId = await DeviceIdService.getCurrentUserId(
+        firebaseUserId: authService.user?.uid,
       );
       
-      // 스와이프 마킹만 하고 현재 persona 설정
-      await personaService.markPersonaAsSwiped(persona.id);
-      await personaService.setCurrentPersonaForTutorial(updatedPersona);
+      debugPrint('🆔 Matching with userId: $currentUserId');
       
-      // 튜토리얼 매칭 처리
-      await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
+      // PersonaService가 currentUserId를 가지고 있는지 확인
+      if (personaService.matchedPersonas.isEmpty) {
+        personaService.setCurrentUserId(currentUserId);
+      }
       
-      debugPrint('✅ Tutorial matching complete: ${persona.name} → $relationshipScore (${relationshipType.displayName})');
-      _showMatchDialog(persona, isSuperLike: isSuperLike);
-    } else {
-      // 🔧 일반 모드: Firebase를 통한 매칭 처리
-      Future.microtask(() async {
-        debugPrint('🔄 Processing persona match: ${persona.name}');
-        
-        // 먼저 스와이프 마킹
-        await personaService.markPersonaAsSwiped(persona.id);
-        
-        // 그 다음 매칭 처리 (내부적으로 이미 스와이프 체크함)
-        final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
-        
-        debugPrint('✅ Match processing complete: ${persona.name} (success: $matchSuccess, isSuperLike: $isSuperLike)');
-      });
+      // 매칭 수행
+      final success = await personaService.likePersona(persona.id);
       
-      // 🔧 DeviceIdService 기반 매칭 (로그인 없이도 작동)
-      setState(() => _isLoading = true);
+      setState(() => _isLoading = false);
       
-      try {
-        // DeviceIdService로 사용자 ID 확보
-        final currentUserId = await DeviceIdService.getCurrentUserId(
-          firebaseUserId: authService.user?.uid,
-          isTutorialMode: authService.isTutorialMode,
-        );
-        
-        debugPrint('🆔 Matching with userId: $currentUserId');
-        
-        // PersonaService가 currentUserId를 가지고 있는지 확인
-        if (personaService.matchedPersonas.isEmpty) {
-          personaService.setCurrentUserId(currentUserId);
-        }
-        
-        // 매칭 수행
-        final success = await personaService.likePersona(persona.id);
-        
-        setState(() => _isLoading = false);
-        
-        if (success && mounted) {
-          _showMatchDialog(persona, isSuperLike: isSuperLike);
-        } else if (mounted) {
-          debugPrint('❌ Matching failed for persona: ${persona.id}');
-          // 실패해도 다이얼로그는 표시 (UX)
-          _showMatchDialog(persona, isSuperLike: isSuperLike);
-        }
-      } catch (e) {
-        setState(() => _isLoading = false);
-        debugPrint('❌ Error in matching process: $e');
-        // 에러가 발생해도 다이얼로그 표시 (UX)
-        if (mounted) {
-          _showMatchDialog(persona, isSuperLike: isSuperLike);
-        }
+      if (success && mounted) {
+        _showMatchDialog(persona, isSuperLike: isSuperLike);
+      } else if (mounted) {
+        debugPrint('❌ Matching failed for persona: ${persona.id}');
+        // 실패해도 다이얼로그는 표시 (UX)
+        _showMatchDialog(persona, isSuperLike: isSuperLike);
+      }
+    } catch (e) {
+      setState(() => _isLoading = false);
+      debugPrint('❌ Error in matching process: $e');
+      // 에러가 발생해도 다이얼로그 표시 (UX)
+      if (mounted) {
+        _showMatchDialog(persona, isSuperLike: isSuperLike);
       }
     }
   }
@@ -1199,7 +1168,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       // 🔧 DeviceIdService로 사용자 ID 확보
       final currentUserId = await DeviceIdService.getCurrentUserId(
         firebaseUserId: authService.user?.uid,
-        isTutorialMode: authService.isTutorialMode,
       );
       
       debugPrint('🆔 Processing match with userId: $currentUserId');
@@ -1686,28 +1654,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                 ),
                 stepDuration: const Duration(seconds: 8),
               ),
-              // 스텝 4: 매칭 완료 애니메이션
-              anim_model.AnimatedTutorialStep(
-                animations: [
-                  // 하트 바운스 애니메이션
-                  anim_model.TutorialAnimation(
-                    type: anim_model.TutorialAnimationType.bounce,
-                    startPosition: Offset(screenWidth * 0.5, screenHeight * 0.5),
-                    duration: const Duration(seconds: 2),
-                    color: const Color(0xFFFF6B9D),
-                    repeat: true,
-                  ),
-                ],
-                stepDuration: const Duration(seconds: 5),  // 5초로 증가
-              ),
             ],
-            // 레거시 텍스트 스텝 (백업용)
+            // 레거시 텍스트 스텝 (백업용) - 3개로 축소
             tutorialSteps: [
-              TutorialStep(
-                title: '',
-                description: '',
-                messagePosition: Offset(0, 0),
-              ),
               TutorialStep(
                 title: '',
                 description: '',

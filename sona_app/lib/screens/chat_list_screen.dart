@@ -39,7 +39,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
       // 1. 🔧 현재 사용자 ID 확보 (DeviceIdService 사용)
       final currentUserId = await DeviceIdService.getCurrentUserId(
         firebaseUserId: authService.user?.uid,
-        isTutorialMode: authService.isTutorialMode,
       );
       
       debugPrint('🆔 Chat list using userId: $currentUserId');
@@ -50,8 +49,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
       
       if (authService.user != null) {
         subscriptionService.loadSubscription(authService.user!.uid);
-      } else if (authService.isTutorialMode) {
-        subscriptionService.loadSubscription('tutorial_user');
       } else {
         // DeviceId 기반 구독 (무료)
         subscriptionService.loadSubscription(currentUserId);
@@ -163,7 +160,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 // 🔧 DeviceIdService로 사용자 ID 확보
                 final currentUserId = await DeviceIdService.getCurrentUserId(
                   firebaseUserId: authService.user?.uid,
-                  isTutorialMode: authService.isTutorialMode,
                 );
                 
                 await personaService.initialize(userId: currentUserId);

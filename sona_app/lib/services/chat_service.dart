@@ -88,16 +88,6 @@ class ChatService extends BaseService {
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
     await executeWithLoading(() async {
-      // Check tutorial mode
-      final isTutorialMode = await PreferencesManager.isTutorialMode();
-      
-      if (isTutorialMode || userId == 'tutorial_user') {
-        final tutorialMessages = await LocalStorageService.getTutorialMessages(personaId);
-        _messages = tutorialMessages;
-        _messagesByPersona[personaId] = List.from(tutorialMessages);
-        return;
-      }
-
       // Load messages and preload memory in parallel
       final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
       final memoryLoading = _preloadConversationMemory(userId, personaId);
@@ -176,15 +166,8 @@ class ChatService extends BaseService {
        _messagesByPersona[persona.id] = List.from(_messages);
        notifyListeners();
 
-       // 사용자 메시지 저장 (튜토리얼 모드는 로컬, 실제 모드는 Firebase)
-       final isTutorialMode = await PreferencesManager.isTutorialMode();
-       
-       if (isTutorialMode || userId == 'tutorial_user') {
-         await LocalStorageService.saveTutorialMessage(persona.id, userMessage);
-         await _incrementTutorialMessageCount();
-       } else {
-         _queueMessageForSaving(userId, persona.id, userMessage);
-       }
+       // 사용자 메시지 저장
+       _queueMessageForSaving(userId, persona.id, userMessage);
 
       // Debounce AI response generation
       _debounceTimer = Timer(AppConstants.batchDelay, () {
@@ -446,17 +429,11 @@ class ChatService extends BaseService {
      final messagesToWrite = List<_PendingMessage>.from(_pendingMessages);
      _pendingMessages.clear();
      
-     // 튜토리얼 모드인 경우 Firebase 쓰기 건너뛰기
-     bool shouldSkipFirebase = false;
-     try {
-       final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-       shouldSkipFirebase = isTutorialMode || messagesToWrite.any((m) => m.userId == 'tutorial_user');
-     } catch (e) {
-       debugPrint('Error checking tutorial mode: $e');
-     }
+     // Skip Firebase write if any message has empty userId
+     bool shouldSkipFirebase = messagesToWrite.any((m) => m.userId == '');
      
      if (shouldSkipFirebase) {
-       debugPrint('⏭️ Skipping Firebase batch write for tutorial mode (${messagesToWrite.length} messages)');
+       debugPrint('⏭️ Skipping Firebase batch write for empty userId (${messagesToWrite.length} messages)');
        return;
      }
      
@@ -547,9 +524,8 @@ class ChatService extends BaseService {
      /// Memory-efficient message loading
    Future<void> loadMessages(String personaId) async {
      try {
-       final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-       
-       if (isTutorialMode || _getCurrentUserId() == 'tutorial_user') {
+        
+       if (_getCurrentUserId() == '') {
          final tutorialMessages = await LocalStorageService.getTutorialMessages(personaId);
          if (tutorialMessages.isNotEmpty) {
            _messagesByPersona[personaId] = tutorialMessages;
@@ -997,30 +973,19 @@ class ChatService extends BaseService {
         _messagesByPersona[persona.id] = List.from(_messages);
         
                  // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
-         final isTutorialMode = await PreferencesManager.getBool('is_tutorial_mode') ?? false;
-         
-         if (isTutorialMode || userId == 'tutorial_user') {
-           // 튜토리얼 모드에서는 로컬 스토리지에 저장하고 카운트 증가
-           await LocalStorageService.saveTutorialMessage(persona.id, aiMessage);
-           await _incrementTutorialMessageCount();
-         } else {
-           // 일반 모드에서는 배치 큐에 추가
-           _queueMessageForSaving(userId, persona.id, aiMessage);
-         }
+            
+         // Queue message for batch saving
+         _queueMessageForSaving(userId, persona.id, aiMessage);
          
          // 마지막 메시지에서만 친밀도 변화 반영
          if (isLastMessage) {
            debugPrint('📊 Processing relationship score change: $scoreChange for ${persona.name}');
            
            if (scoreChange != 0) {
-             // 튜토리얼 모드가 아닐 때만 Firebase 업데이트
-             if (userId != 'tutorial_user' && !isTutorialMode) {
+             // Update Firebase relationship score
+             if (userId != '') {
                debugPrint('🔥 Normal mode - calling PersonaService for score update');
                _notifyScoreChange(persona.id, scoreChange, userId);
-             } else {
-               debugPrint('🎓 Tutorial mode - updating local persona score');
-               // 튜토리얼 모드에서는 로컬에서만 친밀도 업데이트
-               _updateTutorialPersonaScore(persona, scoreChange);
              }
            } else {
              debugPrint('⏭️ No score change to process');
@@ -1331,7 +1296,7 @@ class ChatService extends BaseService {
        notifyListeners();
 
        // 튜토리얼 모드가 아닐 때만 Firebase에 저장
-       if (userId != 'tutorial_user') {
+       if (userId != '') {
          _queueMessageForSaving(userId, personaId, systemMessage);
        }
      } catch (e) {
@@ -1377,21 +1342,6 @@ class ChatService extends BaseService {
     }
   }
   
-  /// Get total tutorial message count across all personas
-  Future<int> getTotalTutorialMessageCount() async {
-    try {
-      return await PreferencesManager.getInt('tutorial_total_message_count') ?? 0;
-    } catch (e) {
-      debugPrint('Error getting total tutorial message count: $e');
-      return 0;
-    }
-  }
-  
-  /// Check if tutorial message limit has been reached
-  Future<bool> isTutorialMessageLimitReached() async {
-    final count = await getTotalTutorialMessageCount();
-    return count >= 30;  // 30 message limit for tutorial mode
-  }
   
   /// 💭 대화 메모리 처리 (중요한 대화 추출 및 저장)
   Future<void> _processConversationMemories(List<_PendingMessage> pendingMessages) async {
@@ -1523,7 +1473,7 @@ class ChatService extends BaseService {
       _messagesByPersona[personaId] = [greetingMessage];
       
       // Firebase에 저장
-      if (userId != 'tutorial_user') {
+      if (userId != '') {
         _queueMessageForSaving(userId, personaId, greetingMessage);
       }
       

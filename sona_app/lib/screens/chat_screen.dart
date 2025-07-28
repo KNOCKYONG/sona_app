@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/auth_service.dart';
 import '../../services/persona_service.dart';
 import '../../services/chat_service.dart';
 import '../../services/subscription_service.dart';
 import '../../models/persona.dart';
-import '../../models/message.dart';
 import '../widgets/message_bubble.dart';
 import '../widgets/typing_indicator.dart';
-import '../widgets/tutorial_overlay.dart';
-import '../../models/tutorial_animation.dart' as anim_model;
-import '../widgets/sona_logo.dart';
 import '../widgets/persona_profile_viewer.dart';
 import '../widgets/modern_emotion_picker.dart';
 import '../theme/app_theme.dart';
@@ -37,9 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
   
-  bool _isTyping = false;
   String _selectedEmotion = 'neutral';
-  static const int _maxTutorialMessages = 30;
 
   @override
   void initState() {
@@ -59,33 +51,27 @@ class _ChatScreenState extends State<ChatScreen> {
     
     chatService.setPersonaService(personaService);
     
-    final userId = authService.user?.uid ?? 'tutorial_user';
+    final userId = authService.user?.uid ?? '';
     chatService.setCurrentUserId(userId);
     
     debugPrint('🔗 ChatService initialized with PersonaService and userId: $userId');
     
     if (authService.user != null) {
       await subscriptionService.loadSubscription(authService.user!.uid);
-    } else if (authService.isTutorialMode) {
-      await subscriptionService.loadSubscription('tutorial_user');
     }
     
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona) {
-      if (authService.isTutorialMode) {
-        await personaService.setCurrentPersonaForTutorial(args);
-      } else {
-        await personaService.selectPersona(args);
-        // 🔧 FIX: Force refresh relationship data from Firebase for accurate display
-        debugPrint('🔄 Forcing relationship refresh for persona: ${args.name}');
-        await personaService.refreshMatchedPersonasRelationships();
-      }
+      await personaService.selectPersona(args);
+      // 🔧 FIX: Force refresh relationship data from Firebase for accurate display
+      debugPrint('🔄 Forcing relationship refresh for persona: ${args.name}');
+      await personaService.refreshMatchedPersonasRelationships();
     }
     
     if (personaService.currentPersona != null) {
       try {
         await chatService.loadChatHistory(
-          userId,
+          userId.isNotEmpty ? userId : 'guest_user',
           personaService.currentPersona!.id
         );
         
@@ -111,24 +97,13 @@ class _ChatScreenState extends State<ChatScreen> {
     if (persona != null) {
       // 초기 인사 메시지 전송
       await chatService.sendInitialGreeting(
-        userId: authService.user?.uid ?? 'tutorial_user',
+        userId: authService.user?.uid ?? '',
         personaId: persona.id,
         persona: persona,
       );
     }
   }
 
-  String _getPersonalizedWelcomeMessage(Persona persona) {
-    // 일반 페르소나용 인사말
-    const messages = [
-      '안녕하세요! {name}이라고 해요. 만나서 반가워요ㅎㅎ',
-      '안녕하세요~ 오늘 하루는 어떠셨나요? 저는 {name}이라고 해요.',
-      '반가워요! 전 {name}이라고 해요. 편하게 대화해요ㅎㅎ',
-    ];
-    
-    final template = messages[DateTime.now().millisecondsSinceEpoch % messages.length];
-    return template.replaceAll('{name}', persona.name);
-  }
 
   void _sendMessage() async {
     final content = _messageController.text.trim();
@@ -138,26 +113,20 @@ class _ChatScreenState extends State<ChatScreen> {
     final authService = Provider.of<AuthService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     
-    if (authService.isTutorialMode) {
-      final currentCount = await chatService.getTotalTutorialMessageCount();
-      if (currentCount >= _maxTutorialMessages) {
-        _showLoginPromptDialog();
-        return;
-      }
-    }
     
     _messageController.clear();
     
-    final persona = personaService.currentPersona ?? Persona(
-      id: 'tutorial_persona',
-      name: '튜토리얼',
-      age: 22,
-      description: 'SONA 앱 체험용 페르소나',
-      photoUrls: [],
-      personality: '친근하고 도움이 되는 성격',
-    );
+    final persona = personaService.currentPersona;
+    if (persona == null) {
+      debugPrint('No persona selected');
+      return;
+    }
     
-    final userId = authService.user?.uid ?? 'tutorial_user';
+    final userId = authService.user?.uid;
+    if (userId == null) {
+      debugPrint('No user authenticated');
+      return;
+    }
     
     final success = await chatService.sendMessage(
       content: content,
@@ -202,14 +171,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    
     Widget scaffold = Scaffold(
       appBar: _buildAppBar(),
       body: Column(
         children: [
-          // Tutorial mode banner
-          if (authService.isTutorialMode) const _TutorialBanner(),
           
           // Chat messages list
           Expanded(
@@ -272,19 +237,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
     
-    if (authService.isTutorialMode) {
-      final tutorialSteps = _getChatTutorialSteps();
-      // 🔧 FIX: 튜토리얼 스텝이 있을 때만 오버레이 표시
-      if (tutorialSteps.isNotEmpty) {
-        return TutorialOverlay(
-          screenKey: 'chat_screen',
-          child: scaffold,
-          tutorialSteps: tutorialSteps,
-          animatedSteps: _getAnimatedTutorialSteps(),  // 애니메이션 스텝 추가
-        );
-      }
-    }
-
     return scaffold;
   }
 
@@ -318,268 +270,14 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  List<anim_model.AnimatedTutorialStep> _getAnimatedTutorialSteps() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    
-    return [
-      // 스텝 1: 메시지 입력 가이드
-      anim_model.AnimatedTutorialStep(
-        animations: [
-          // 타이핑 애니메이션 - 입력창 중앙에 위치
-          anim_model.TutorialAnimation(
-            type: anim_model.TutorialAnimationType.typing,
-            startPosition: Offset(screenWidth * 0.5, screenHeight - 65),  // 입력창 중앙
-            duration: const Duration(seconds: 3),
-            delay: const Duration(milliseconds: 500),
-          ),
-          // 전송 버튼 탭 - 실제 버튼 위치에 맞춤
-          anim_model.TutorialAnimation(
-            type: anim_model.TutorialAnimationType.tap,
-            startPosition: Offset(screenWidth - 60, screenHeight - 65),  // 오른쪽 전송 버튼
-            duration: const Duration(seconds: 1),
-            delay: const Duration(seconds: 4),
-          ),
-        ],
-        highlightArea: anim_model.HighlightArea(
-          left: 20,
-          top: screenHeight - 100,  // 하단 입력창 영역
-          width: screenWidth - 40,
-          height: 70,
-          borderRadius: BorderRadius.circular(35),
-          glowColor: const Color(0xFFFF6B9D),
-        ),
-        stepDuration: const Duration(seconds: 8),
-      ),
-      // 스텝 2: 감정 버튼 가이드
-      anim_model.AnimatedTutorialStep(
-        animations: [
-          // 감정 버튼 바운스 - 입력창 내부 왼쪽의 이모지 버튼
-          anim_model.TutorialAnimation(
-            type: anim_model.TutorialAnimationType.bounce,
-            startPosition: Offset(60, screenHeight - 65),  // 입력창 내부 왼쪽 이모지 버튼
-            duration: const Duration(seconds: 2),
-            color: const Color(0xFFFFEB3B),
-            repeat: true,
-          ),
-          // 탭 애니메이션
-          anim_model.TutorialAnimation(
-            type: anim_model.TutorialAnimationType.tap,
-            startPosition: Offset(60, screenHeight - 65),  // 입력창 내부 왼쪽 이모지 버튼
-            duration: const Duration(seconds: 1),
-            delay: const Duration(seconds: 3),
-          ),
-        ],
-        highlightArea: anim_model.HighlightArea(
-          left: 35,  // 이모지 버튼 주변
-          top: screenHeight - 90,  // 입력창 높이
-          width: 50,
-          height: 50,
-          borderRadius: BorderRadius.circular(25),
-          glowColor: const Color(0xFFFFEB3B),
-          glowRadius: 20,
-        ),
-        stepDuration: const Duration(seconds: 6),
-      ),
-    ];
-  }
   
-  List<TutorialStep> _getChatTutorialSteps() {
-    final screenSize = MediaQuery.of(context).size;
-    
-    // 레거시 텍스트 스텝 (백업용) - 2개로 줄임
-    return [
-      TutorialStep(
-        title: '',
-        description: '',
-        messagePosition: Offset(0, 0),
-      ),
-      TutorialStep(
-        title: '',
-        description: '',
-        messagePosition: Offset(0, 0),
-      ),
-    ];
-  }
 
-  void _showLoginPromptDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Text(
-            '🎉 튜토리얼 체험 완료!',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFFF6B9D),
-            ),
-            textAlign: TextAlign.center,
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.message,
-                size: 60,
-                color: Color(0xFFFF6B9D),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                '30개의 메시지를 모두 사용하셨습니다.',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                '로그인하시면 제한 없이 대화를 나누고\n모든 기능을 사용할 수 있어요!',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  children: const [
-                    Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.blue, size: 16),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            '무제한 대화',
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.blue, size: 16),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            '데이터 저장 및 동기화',
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.blue, size: 16),
-                        SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            '프리미엄 기능 사용',
-                            style: TextStyle(fontSize: 13),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text(
-                '나중에',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.of(context).pop();
-                final authService = Provider.of<AuthService>(context, listen: false);
-                
-                // Show loading
-                showDialog(
-                  context: context,
-                  barrierDismissible: false,
-                  builder: (BuildContext context) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Color(0xFFFF6B9D),
-                      ),
-                    );
-                  },
-                );
-                
-                // Exit tutorial and sign in
-                final success = await authService.exitTutorialAndSignIn();
-                
-                if (mounted) {
-                  Navigator.of(context).pop(); // Remove loading
-                  
-                  if (!success) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('로그인에 실패했습니다. 다시 시도해주세요.'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                  } else {
-                    // Navigate to chat list after successful login
-                    Navigator.of(context).pushReplacementNamed('/chat-list');
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B9D),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                '로그인하기',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   void _showAttachmentMenu() {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    if (authService.isTutorialMode) {
-      _showPremiumFeatureDialog();
-      return;
-    }
     // Show attachment menu implementation
   }
 
   void _showEmotionPicker() {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    if (authService.isTutorialMode) {
-      _showPremiumFeatureDialog();
-      return;
-    }
-    
     showDialog(
       context: context,
       barrierColor: Colors.black.withOpacity(0.3),
@@ -594,91 +292,11 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void _showPremiumFeatureDialog() {
-    // Implementation remains the same
-  }
 
-  List<TutorialStep> _getTutorialSteps(BuildContext context) {
-    // 🔧 FIX: 채팅 화면용 기본 튜토리얼 스텝 제공
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    
-    return [
-      TutorialStep(
-        title: '채팅을 시작해보세요 💬',
-        description: '하단의 메시지 입력창에 메시지를 입력하고 전송해보세요.\n소나가 응답해줄 거예요!',
-        messagePosition: Offset(screenWidth * 0.5, screenHeight * 0.4),
-        highlightArea: HighlightArea(
-          left: 16,
-          top: screenHeight - 100,
-          width: screenWidth - 32,
-          height: 60,
-        ),
-      ),
-      TutorialStep(
-        title: 'Like 시스템 📊',
-        description: '대화를 나누면서 소나와의 Like가 변화해요.\n좋은 대화를 나누면 관계가 발전할 수 있답니다!',
-        messagePosition: Offset(screenWidth * 0.5, screenHeight * 0.5),
-        highlightArea: null,
-      ),
-    ];
-  }
 }
 
 // Separate widgets for better performance
 
-class _TutorialBanner extends StatelessWidget {
-  const _TutorialBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFF6B9D).withValues(alpha: 0.1),
-        border: const Border(
-          bottom: BorderSide(
-            color: Color(0xFFFF6B9D),
-            width: 1,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.info_outline,
-            color: Color(0xFFFF6B9D),
-            size: 20,
-          ),
-          const SizedBox(width: 8),
-          const Expanded(
-            child: Text(
-              '튜토리얼 모드입니다.',
-              style: TextStyle(
-                color: Color(0xFFFF6B9D),
-                fontSize: 12,
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text(
-              'Login',
-              style: TextStyle(
-                color: Color(0xFFFF6B9D),
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle();
@@ -690,7 +308,7 @@ class _AppBarTitle extends StatelessWidget {
         final persona = personaService.currentPersona;
         
         if (persona == null) {
-          return const _TutorialPersonaTitle();
+          return const Text('페르소나를 선택해주세요');
         }
         
         return _PersonaTitle(persona: persona);
@@ -699,40 +317,6 @@ class _AppBarTitle extends StatelessWidget {
   }
 }
 
-class _TutorialPersonaTitle extends StatelessWidget {
-  const _TutorialPersonaTitle();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Row(
-      children: [
-        _ProfileImage(photoUrl: null),
-        SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '튜토리얼님과의 대화',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                'On',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.green,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _PersonaTitle extends StatelessWidget {
   final Persona persona;
@@ -1004,18 +588,12 @@ class _MessageInput extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               // Attachment button
-                Consumer<AuthService>(
-                  builder: (context, authService, child) {
-                    return ModernIconButton(
-                      icon: Icons.add_rounded,
-                      onPressed: onAttachment,
-                      color: authService.isTutorialMode 
-                          ? Colors.grey[400] 
-                          : AppTheme.accentColor,
-                      tooltip: '파일 첨부',
-                    );
-                  },
-                ),
+              ModernIconButton(
+                icon: Icons.add_rounded,
+                onPressed: onAttachment,
+                color: AppTheme.accentColor,
+                tooltip: '파일 첨부',
+              ),
               const SizedBox(width: 8),
               
               // Message input field
@@ -1059,21 +637,15 @@ class _MessageInput extends StatelessWidget {
               const SizedBox(width: 8),
               
               // Emotion button
-              Consumer<AuthService>(
-                  builder: (context, authService, child) {
-                    return AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      child: ModernIconButton(
-                        icon: Icons.mood_rounded,
-                        onPressed: onEmotion,
-                        color: authService.isTutorialMode 
-                            ? Colors.grey[400] 
-                            : AppTheme.primaryColor,
-                        tooltip: '감정 선택',
-                      ),
-                    );
-                  },
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                child: ModernIconButton(
+                  icon: Icons.mood_rounded,
+                  onPressed: onEmotion,
+                  color: AppTheme.primaryColor,
+                  tooltip: '감정 선택',
                 ),
+              ),
               const SizedBox(width: 8),
               
               // Send button

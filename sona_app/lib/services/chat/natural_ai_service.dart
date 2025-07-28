@@ -1,44 +1,26 @@
 import 'dart:math';
 import '../../models/message.dart';
 import '../../models/persona.dart';
+import '../relationship/relation_score_service.dart';
 
 /// AI 응답의 자연스러움을 높이는 서비스
 class NaturalAIService {
   static final Random _random = Random();
 
-  /// 친밀도 기반 응답 계산
+  /// 친밀도 기반 응답 계산 (RelationScoreService로 위임)
   static int calculateScoreChange({
     required EmotionType emotion,
     required String userMessage,
     required Persona persona,
     required List<Message> chatHistory,
   }) {
-    // 랜덤 요소 추가 (70% 확률로만 친밀도 변화)
-    if (_random.nextDouble() > 0.7) {
-      return 0;
-    }
-
-    // 감정과 대화 내용에 따른 친밀도 변화
-    switch (emotion) {
-      case EmotionType.happy:
-        return _random.nextInt(3) + 2; // 2~4
-      case EmotionType.love:
-        return _random.nextInt(4) + 3; // 3~6
-      case EmotionType.surprised:
-        return _random.nextInt(3) + 1; // 1~3
-      case EmotionType.angry:
-        return -(_random.nextInt(3) + 1); // -1~-3
-      case EmotionType.sad:
-        return _random.nextInt(2) - 1; // -1~0
-      case EmotionType.neutral:
-        return _random.nextInt(2); // 0~1
-      case EmotionType.shy:
-      case EmotionType.jealous:
-      case EmotionType.thoughtful:
-      case EmotionType.anxious:
-      case EmotionType.concerned:
-        return _random.nextInt(2); // 0~1
-    }
+    return RelationScoreService.instance.calculateScoreChange(
+      emotion: emotion,
+      userMessage: userMessage,
+      persona: persona,
+      chatHistory: chatHistory,
+      currentScore: persona.relationshipScore,
+    );
   }
 
   /// 자연스러운 AI 응답 생성

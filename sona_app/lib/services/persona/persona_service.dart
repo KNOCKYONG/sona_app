@@ -9,6 +9,7 @@ import '../base/base_service.dart';
 import '../../helpers/firebase_helper.dart';
 import '../../core/constants.dart';
 import '../../core/preferences_manager.dart';
+import '../relationship/relation_score_service.dart';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
 /// 
@@ -438,12 +439,6 @@ class PersonaService extends BaseService {
       return;
     }
     
-    // 전문가 페르소나는 친밀도 업데이트하지 않음
-    final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
-    final currentPersona = _currentPersona;
-    
-    // 모든 페르소나는 일반 페르소나로 처리하여 관계 점수 업데이트
-    
     debugPrint('🔄 Starting relationship score update: personaId=$personaId, change=$change, userId=$userId');
     
     try {
@@ -463,12 +458,25 @@ class PersonaService extends BaseService {
           currentScore = matchedPersona.relationshipScore;
           debugPrint('💕 Using matched persona score: $currentScore');
         } else {
-          debugPrint('⚠️ Using default score: $currentScore');
+          // Get from RelationScoreService
+          currentScore = await RelationScoreService.instance.getRelationshipScore(
+            userId: userId,
+            personaId: personaId,
+          );
+          debugPrint('📈 Using score from RelationScoreService: $currentScore');
         }
       }
       
+      // Use RelationScoreService to update score
+      await RelationScoreService.instance.updateRelationshipScore(
+        userId: userId,
+        personaId: personaId,
+        scoreChange: change,
+        currentScore: currentScore,
+      );
+      
       final newScore = (currentScore + change).clamp(0, 1000);
-      final relationshipType = _getRelationshipTypeFromScore(newScore);
+      final relationshipType = RelationScoreService.instance.getRelationshipType(newScore);
       
       debugPrint('📊 Score calculation: $currentScore + $change = $newScore (${relationshipType.displayName})');
       
@@ -909,10 +917,7 @@ class PersonaService extends BaseService {
   // Other helper methods remain the same...
   
   RelationshipType _getRelationshipTypeFromScore(int score) {
-    if (score >= 800) return RelationshipType.perfectLove;
-    if (score >= 500) return RelationshipType.dating;
-    if (score >= 200) return RelationshipType.crush;
-    return RelationshipType.friend;
+    return RelationScoreService.instance.getRelationshipType(score);
   }
 
   Future<Map<String, dynamic>?> _loadUserPersonaRelationship(String personaId) async {

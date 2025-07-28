@@ -16,6 +16,7 @@ import '../storage/local_storage_service.dart';
 import 'conversation_memory_service.dart';
 import '../auth/user_service.dart';
 import 'security_filter_service.dart';
+import '../relationship/relation_score_service.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -623,10 +624,7 @@ class ChatService extends BaseService {
   
   
   String _getRelationshipTypeString(int score) {
-    if (score >= 800) return '완벽한 사랑';
-    if (score >= 500) return '연인';
-    if (score >= 200) return '썸';
-    return '친구';
+    return RelationScoreService.instance.getRelationshipTypeString(score);
   }
   
   String _buildBasicContext(List<Message> messages) {
@@ -763,88 +761,14 @@ class ChatService extends BaseService {
   }
 
   int _calculateScoreChangeWithRelationship(EmotionType emotion, String userMessage, Persona persona) {
-    final random = Random();
-    final currentScore = persona.relationshipScore;
-    final currentRelationship = persona.currentRelationship;
-    
-    // Check for rude/insulting messages first
-    final rudeWords = [
-      '바보', '멍청이', '멍청', '병신', '시발', '씨발', '개새끼', '새끼',
-      '닥쳐', '꺼져', '지랄', '좆', '좆같', '개같', '미친', '또라이',
-      '쓰레기', '찐따', '한심', '재수없', '짜증', '싫어', '싫다',
-      '꺼져', '죽어', '뒤져', '개짜증', '존나', '뭐야', '뭔데'
-    ];
-    
-    final lowerMessage = userMessage.toLowerCase();
-    bool isRude = false;
-    
-    for (final word in rudeWords) {
-      if (lowerMessage.contains(word)) {
-        isRude = true;
-        break;
-      }
-    }
-    
-    // If rude message detected, apply heavy penalty
-    if (isRude) {
-      // Higher relationship = more hurt by rudeness
-      switch (currentRelationship) {
-        case RelationshipType.perfectLove:
-          return -(random.nextInt(20) + 30); // -30~-50
-        case RelationshipType.dating:
-          return -(random.nextInt(15) + 20); // -20~-35
-        case RelationshipType.crush:
-          return -(random.nextInt(10) + 15); // -15~-25
-        case RelationshipType.friend:
-          return -(random.nextInt(10) + 10); // -10~-20
-      }
-    }
-    
-    // Base score calculation for normal messages
-    int baseChange = 0;
-    switch (emotion) {
-      case EmotionType.love:
-      case EmotionType.happy:
-        baseChange = random.nextInt(3) + 2; // +2~4
-        break;
-      case EmotionType.shy:
-        baseChange = random.nextInt(2) + 1; // +1~2
-        break;
-      case EmotionType.surprised:
-      case EmotionType.thoughtful:
-        baseChange = random.nextInt(3); // 0~2
-        break;
-      case EmotionType.jealous:
-        baseChange = random.nextInt(2) - 1; // -1~0
-        break;
-      case EmotionType.angry:
-      case EmotionType.sad:
-        baseChange = -(random.nextInt(3) + 1); // -1~-3
-        break;
-      default:
-        baseChange = 0;
-    }
-    
-    // Apply relationship multipliers
-    double intensityMultiplier = 1.0;
-    switch (currentRelationship) {
-      case RelationshipType.friend:
-        intensityMultiplier = 1.2;
-        break;
-      case RelationshipType.crush:
-        intensityMultiplier = 1.0;
-        break;
-      case RelationshipType.dating:
-        intensityMultiplier = 0.8;
-        break;
-      case RelationshipType.perfectLove:
-        intensityMultiplier = 0.6;
-        break;
-    }
-    
-    // Calculate final change
-    final finalChange = (baseChange * intensityMultiplier).round();
-    return finalChange.clamp(-50, 15);
+    // RelationScoreService를 사용하여 점수 변화 계산
+    return RelationScoreService.instance.calculateScoreChange(
+      emotion: emotion,
+      userMessage: userMessage,
+      persona: persona,
+      chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+      currentScore: persona.relationshipScore,
+    );
   }
   
   /// 무례한 메시지 체크

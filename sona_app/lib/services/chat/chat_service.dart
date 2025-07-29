@@ -17,6 +17,8 @@ import 'conversation_memory_service.dart';
 import '../auth/user_service.dart';
 import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
+import '../relationship/negative_behavior_system.dart';
+import '../relationship/like_cooldown_system.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -221,7 +223,17 @@ class ChatService extends BaseService {
         if (rudeCheck.isRude) {
           aiResponseContent = _generateDefensiveResponse(persona, userMessage, rudeCheck.severity);
           emotion = rudeCheck.severity == 'high' ? EmotionType.angry : EmotionType.sad;
-          scoreChange = _calculateScoreChangeWithRelationship(emotion, userMessage, persona);
+          
+          // 새로운 Like 시스템 사용 (부정적 행동)
+          final likeResult = await RelationScoreService.instance.calculateLikes(
+            emotion: emotion,
+            userMessage: userMessage,
+            persona: persona,
+            chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+            currentLikes: persona.relationshipScore ?? 0,
+            userId: userId,
+          );
+          scoreChange = likeResult.likeChange;
           
           // Cache and send response
           _addToCache(cacheKey, _CachedResponse(
@@ -347,7 +359,21 @@ class ChatService extends BaseService {
           emotion = _analyzeEmotionFromResponse(aiResponseContent);
         }
         
-        scoreChange = _calculateScoreChangeWithRelationship(emotion, userMessage, persona);
+        // 새로운 Like 시스템 사용
+        final likeResult = await RelationScoreService.instance.calculateLikes(
+          emotion: emotion,
+          userMessage: userMessage,
+          persona: persona,
+          chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+          currentLikes: persona.relationshipScore ?? 0,
+          userId: userId,
+        );
+        scoreChange = likeResult.likeChange;
+        
+        // 쿨다운 메시지가 있으면 추가
+        if (likeResult.message != null) {
+          aiResponseContent = '${aiResponseContent}\n\n${likeResult.message}';
+        }
         
         // Cache the response
         _addToCache(cacheKey, _CachedResponse(
@@ -377,12 +403,21 @@ class ChatService extends BaseService {
         );
         aiResponseContent = naturalResponse;
         emotion = EmotionType.happy; // Default emotion since method doesn't return emotion
-        scoreChange = NaturalAIService.calculateScoreChange(
-          emotion: emotion,
-          userMessage: userMessage,
-          persona: persona,
-          chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-        );
+        // 새로운 Like 시스템 사용 (에러 시에도)
+        try {
+          final likeResult = await RelationScoreService.instance.calculateLikes(
+            emotion: emotion,
+            userMessage: userMessage,
+            persona: persona,
+            chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
+            currentLikes: persona.relationshipScore ?? 0,
+            userId: userId,
+          );
+          scoreChange = likeResult.likeChange;
+        } catch (likeError) {
+          debugPrint('Like calculation error: $likeError');
+          scoreChange = 0;
+        }
       }
       
       _isTyping = false;
@@ -760,16 +795,7 @@ class ChatService extends BaseService {
     return dominantEmotion;
   }
 
-  int _calculateScoreChangeWithRelationship(EmotionType emotion, String userMessage, Persona persona) {
-    // RelationScoreService를 사용하여 점수 변화 계산
-    return RelationScoreService.instance.calculateScoreChange(
-      emotion: emotion,
-      userMessage: userMessage,
-      persona: persona,
-      chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-      currentScore: persona.relationshipScore,
-    );
-  }
+  // 이 메서드는 새로운 Like 시스템으로 대체됨
   
   /// 무례한 메시지 체크
   RudeMessageCheck _checkRudeMessage(String message) {

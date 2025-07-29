@@ -5,6 +5,10 @@ import '../../services/auth/auth_service.dart';
 import '../../services/persona/persona_service.dart';
 import '../../services/chat/chat_service.dart';
 import '../../services/purchase/subscription_service.dart';
+import '../../services/relationship/relation_score_service.dart';
+import '../../services/relationship/relationship_visual_system.dart';
+import '../../services/relationship/like_cooldown_system.dart';
+import '../../utils/like_formatter.dart';
 import '../../models/persona.dart';
 import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
@@ -334,41 +338,66 @@ class _PersonaTitle extends StatelessWidget {
         // Get the updated persona with latest relationship score
         final updatedPersona = personaService.currentPersona ?? persona;
         
-        return Row(
-      children: [
-        GestureDetector(
-          onTap: () => _showPersonaProfile(context, updatedPersona),
-          child: Builder(
-            builder: (context) {
-              final thumbnailUrl = updatedPersona.getThumbnailUrl();
-              debugPrint('🖼️ Profile Image URL: $thumbnailUrl');
-              debugPrint('📦 ImageUrls data: ${updatedPersona.imageUrls}');
-              return _ProfileImage(
-                photoUrl: thumbnailUrl,
-              );
-            },
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${updatedPersona.name}님과의 대화',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+        return FutureBuilder<int>(
+          future: _getLikes(context, updatedPersona),
+          builder: (context, snapshot) {
+            final likes = snapshot.data ?? updatedPersona.relationshipScore ?? 0;
+            
+            return Row(
+              children: [
+                GestureDetector(
+                  onTap: () => _showPersonaProfile(context, updatedPersona),
+                  child: Builder(
+                    builder: (context) {
+                      final thumbnailUrl = updatedPersona.getThumbnailUrl();
+                      debugPrint('🖼️ Profile Image URL: $thumbnailUrl');
+                      debugPrint('📦 ImageUrls data: ${updatedPersona.imageUrls}');
+                      
+                      // 링 시스템으로 감싼 프로필 이미지
+                      return RelationshipRingSystem.buildRing(
+                        likes: likes,
+                        size: 44,
+                        child: _ProfileImage(
+                          photoUrl: thumbnailUrl,
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                overflow: TextOverflow.ellipsis,
-              ),
-              _OnlineStatus(persona: updatedPersona),
-            ],
-          ),
-        ),
-      ],
-    );
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${updatedPersona.name}님과의 대화',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      _OnlineStatus(persona: updatedPersona),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       },
+    );
+  }
+  
+  Future<int> _getLikes(BuildContext context, Persona persona) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId == null) return persona.relationshipScore ?? 0;
+    
+    return await RelationScoreService.instance.getLikes(
+      userId: userId,
+      personaId: persona.id,
     );
   }
 
@@ -405,22 +434,18 @@ class _ProfileImage extends StatelessWidget {
     debugPrint('🔍 _ProfileImage build - photoUrl: $photoUrl');
     
     return Container(
-      width: 40,
-      height: 40,
+      width: 44,
+      height: 44,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color(0xFFFF6B9D),
-          width: 2,
-        ),
       ),
       child: ClipOval(
         child: photoUrl != null && photoUrl!.isNotEmpty
             ? CachedNetworkImage(
                 imageUrl: photoUrl!,
                 fit: BoxFit.cover,
-                memCacheWidth: 80,
-                memCacheHeight: 80,
+                memCacheWidth: 88,
+                memCacheHeight: 88,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[200],
                   child: const Center(
@@ -459,70 +484,70 @@ class _OnlineStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🔍 DEBUG: 전문가 페르소나 확인
-    debugPrint('🩺 _OnlineStatus - Persona: ${persona.name}');
-    debugPrint('   - Should NOT show for experts!');
-    
-    // Use currentRelationship if available, otherwise calculate from score
-    final relationshipType = persona.currentRelationship != RelationshipType.friend || persona.relationshipScore > 0
-        ? persona.currentRelationship 
-        : persona.getRelationshipType();
-    final colors = _getRelationshipColors(relationshipType);
-    
-    return Row(
-      children: [
-        Text(
-          'On',
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.green[600],
-          ),
-        ),
-        const Text(
-          ' • ',
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-          decoration: BoxDecoration(
-            color: colors['background'],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            relationshipType.displayName,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
-              color: colors['text'],
+    return FutureBuilder<int>(
+      future: _getLikes(context),
+      builder: (context, snapshot) {
+        final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+        final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
+        
+        return Row(
+          children: [
+            // 온라인 표시
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: Colors.green[500],
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.4),
+                    blurRadius: 4,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(
-          'Like ${persona.relationshipScore}',
-          style: const TextStyle(
-            fontSize: 10,
-            color: Colors.grey,
-          ),
-        ),
-      ],
+            const SizedBox(width: 8),
+            // 하트 아이콘
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: visualInfo.heart,
+            ),
+            const SizedBox(width: 4),
+            // Like 수 (포맷팅됨)
+            Text(
+              visualInfo.formattedLikes,
+              style: TextStyle(
+                fontSize: 12,
+                color: visualInfo.color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 뱃지
+            SizedBox(
+              width: 12,
+              height: 12,
+              child: visualInfo.badge,
+            ),
+          ],
+        );
+      },
     );
   }
-
-  Map<String, Color> _getRelationshipColors(RelationshipType type) {
-    switch (type) {
-      case RelationshipType.friend:
-        return {'background': Colors.blue[100]!, 'text': Colors.blue[700]!};
-      case RelationshipType.crush:
-        return {'background': Colors.orange[100]!, 'text': Colors.orange[700]!};
-      case RelationshipType.dating:
-        return {'background': Colors.pink[100]!, 'text': Colors.pink[700]!};
-      case RelationshipType.perfectLove:
-        return {'background': Colors.red[100]!, 'text': Colors.red[700]!};
-    }
+  
+  Future<int> _getLikes(BuildContext context) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId == null) return persona.relationshipScore ?? 0;
+    
+    return await RelationScoreService.instance.getLikes(
+      userId: userId,
+      personaId: persona.id,
+    );
   }
 }
 

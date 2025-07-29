@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/persona.dart';
+import '../../services/relationship/relationship_visual_system.dart';
+import '../../utils/like_formatter.dart';
 
 /// Optimized PersonaCard with performance improvements and R2 image support:
 /// - R2 image loading with fallback to photoUrls
@@ -829,31 +831,50 @@ class _RelationshipBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final likes = persona.relationshipScore ?? 0;
+    final color = RelationshipColorSystem.getRelationshipColor(likes);
+    
     return Positioned(
       top: hasMultiplePhotos ? 50 : 16,
       right: 16,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: const Color(0xFFFF6B9D),
-          borderRadius: BorderRadius.circular(15),
+          color: color.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.4),
+              blurRadius: 8,
+              spreadRadius: 1,
+            ),
+          ],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // 하트 아이콘
+            SizedBox(
+              width: 16,
+              height: 16,
+              child: HeartEvolutionSystem.getHeart(likes, size: 16),
+            ),
+            const SizedBox(width: 6),
+            // Like 수
             Text(
-              persona.getRelationshipType().displayName,
+              LikeFormatter.format(likes),
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 12,
+                fontSize: 13,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(width: 4),
-            const Icon(
-              Icons.favorite,
-              color: Colors.white,
-              size: 14,
+            const SizedBox(width: 6),
+            // 뱃지
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: RelationshipBadgeSystem.getBadge(likes, size: 14),
             ),
           ],
         ),

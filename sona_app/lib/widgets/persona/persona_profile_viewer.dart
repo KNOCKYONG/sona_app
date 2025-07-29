@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/persona.dart';
+import '../../services/relationship/relationship_visual_system.dart';
+import '../../utils/like_formatter.dart';
 
 class PersonaProfileViewer extends StatefulWidget {
   final Persona persona;
@@ -265,37 +267,12 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                 ),
                               ),
                               
-                              // 관계 상태 배지
+                              // 관계 상태 배지 (시각적 요소)
                               if (widget.persona.relationshipScore > 0)
                                 Positioned(
                                   top: 16,
                                   right: 16,
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFF6B9D),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Text(
-                                          widget.persona.getRelationshipType().displayName,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        const Icon(
-                                          Icons.favorite,
-                                          color: Colors.white,
-                                          size: 14,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  child: _buildRelationshipBadge(),
                                 ),
                             ],
                           ),
@@ -504,6 +481,54 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
           const SizedBox(height: 12),
         ],
       ],
+    );
+  }
+  
+  Widget _buildRelationshipBadge() {
+    final likes = widget.persona.relationshipScore ?? 0;
+    final color = RelationshipColorSystem.getRelationshipColor(likes);
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.4),
+            blurRadius: 8,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // 하트 아이콘
+          SizedBox(
+            width: 16,
+            height: 16,
+            child: HeartEvolutionSystem.getHeart(likes, size: 16),
+          ),
+          const SizedBox(width: 6),
+          // Like 수
+          Text(
+            LikeFormatter.format(likes),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 6),
+          // 뱃지
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: RelationshipBadgeSystem.getBadge(likes, size: 14),
+          ),
+        ],
+      ),
     );
   }
 } 

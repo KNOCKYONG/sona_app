@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../services/auth/auth_service.dart';
-import '../../services/persona/persona_service.dart';
-import '../../services/chat/chat_service.dart';
-import '../../services/purchase/subscription_service.dart';
-import '../../services/relationship/relation_score_service.dart';
-import '../../services/relationship/relationship_visual_system.dart';
-import '../../services/relationship/like_cooldown_system.dart';
-import '../../utils/like_formatter.dart';
-import '../../models/persona.dart';
+import '../services/auth/auth_service.dart';
+import '../services/persona/persona_service.dart';
+import '../services/chat/chat_service.dart';
+import '../services/purchase/subscription_service.dart';
+import '../services/relationship/relation_score_service.dart';
+import '../services/relationship/relationship_visual_system.dart';
+import '../models/persona.dart';
 import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
@@ -77,6 +75,12 @@ class _ChatScreenState extends State<ChatScreen> {
         // Only load chat history if user is authenticated
         if (userId.isNotEmpty) {
           await chatService.loadChatHistory(
+            userId,
+            personaService.currentPersona!.id
+          );
+          
+          // 🔵 채팅방 진입 시 모든 페르소나 메시지를 읽음으로 표시
+          await chatService.markAllMessagesAsRead(
             userId,
             personaService.currentPersona!.id
           );
@@ -169,6 +173,22 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Check if persona changed
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args is Persona && _currentPersonaId != args.id) {
+      _currentPersonaId = args.id;
+      // Reload chat for new persona
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _initializeChat();
+      });
+    }
+  }
+  
+  String? _currentPersonaId;
+
+  @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
@@ -196,18 +216,25 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 final messages = chatService.messages;
+                final currentPersona = personaService.currentPersona;
                 
                 if (messages.isEmpty) {
                   return const _EmptyState();
+                }
+                
+                if (currentPersona == null) {
+                  return const Center(
+                    child: Text('No persona selected'),
+                  );
                 }
                 
                 // Use ListView.builder for better performance
                 return ListView.builder(
                   controller: _scrollController,
                   padding: const EdgeInsets.all(16),
-                  itemCount: messages.length + (chatService.isTyping ? 1 : 0),
+                  itemCount: messages.length + (chatService.isPersonaTyping(currentPersona.id) ? 1 : 0),
                   itemBuilder: (context, index) {
-                    if (index == messages.length && chatService.isTyping) {
+                    if (index == messages.length && chatService.isPersonaTyping(currentPersona.id)) {
                       return const Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: TypingIndicator(),

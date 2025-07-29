@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import '../services/chat/chat_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
@@ -198,7 +197,22 @@ class _ChatListScreenState extends State<ChatListScreen> {
       ),
       body: Consumer2<PersonaService, ChatService>(
         builder: (context, personaService, chatService, child) {
-          final matchedPersonas = personaService.matchedPersonas;
+          final matchedPersonas = List<Persona>.from(personaService.matchedPersonas);
+          
+          // Sort personas by last message time
+          matchedPersonas.sort((a, b) {
+            final messagesA = chatService.getMessages(a.id);
+            final messagesB = chatService.getMessages(b.id);
+            
+            if (messagesA.isEmpty && messagesB.isEmpty) return 0;
+            if (messagesA.isEmpty) return 1;
+            if (messagesB.isEmpty) return -1;
+            
+            final lastTimeA = messagesA.last.timestamp;
+            final lastTimeB = messagesB.last.timestamp;
+            
+            return lastTimeB.compareTo(lastTimeA); // Descending order
+          });
           
           if (matchedPersonas.isEmpty) {
             return Center(
@@ -268,13 +282,18 @@ class _ChatListScreenState extends State<ChatListScreen> {
               
               // 🔧 FIX: 안전한 hasUnread 계산
               bool hasUnread = false;
+              int unreadPersonaMessageCount = 0;
               try {
-                hasUnread = messages.isNotEmpty && 
-                           messages.any((msg) => !msg.isFromUser && (msg.isRead == false));
+                // Count unread messages from persona (not user)
+                unreadPersonaMessageCount = messages.where((msg) => 
+                  !msg.isFromUser && msg.isRead != true
+                ).length;
+                hasUnread = unreadPersonaMessageCount > 0;
               } catch (e) {
                 debugPrint('❌ Error calculating hasUnread: $e');
                 hasUnread = false;
               }
+              final isTyping = chatService.isPersonaTyping(persona.id);
               
               return InkWell(
                 onTap: () {
@@ -373,16 +392,34 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    _getLastMessagePreview(messages, persona.name),
+                                    isTyping ? '${persona.name}님이 입력 중...' : _getLastMessagePreview(messages, persona.name),
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: hasUnread ? Colors.black87 : Colors.grey,
-                                      fontWeight: hasUnread ? FontWeight.w500 : FontWeight.normal,
+                                      color: hasUnread || isTyping ? Colors.black87 : Colors.grey,
+                                      fontWeight: hasUnread || isTyping ? FontWeight.w500 : FontWeight.normal,
+                                      fontStyle: isTyping ? FontStyle.italic : FontStyle.normal,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
+                                if (unreadPersonaMessageCount > 0 && !isTyping)
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 8),
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFF6B9D),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      unreadPersonaMessageCount.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 if (hasUnread)
                                   Container(
                                     margin: const EdgeInsets.only(left: 8),

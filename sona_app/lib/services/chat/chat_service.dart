@@ -52,6 +52,12 @@ class ChatService extends BaseService {
   Timer? _batchWriteTimer;
   static const int _maxBatchSize = 10;
   
+  // AI Response Delay System
+  final Map<String, _ChatResponseQueue> _responseQueues = {};
+  final Map<String, Timer> _responseDelayTimers = {};
+  final Map<String, bool> _personaIsTyping = {};
+  final Map<String, int> _unreadMessageCounts = {};
+  
   // Service references
   PersonaService? _personaService;
   UserService? _userService;
@@ -60,11 +66,13 @@ class ChatService extends BaseService {
   // Data storage
   List<Message> _messages = [];
   final Map<String, List<Message>> _messagesByPersona = {};
-  bool _isTyping = false;
+  // Replaced by _personaIsTyping map
 
   // Getters
-  List<Message> get messages => _messages;
-  bool get isTyping => _isTyping;
+  List<Message> get messages => _currentPersonaId != null ? getMessages(_currentPersonaId!) : _messages;
+  
+  // Current persona ID for tracking active chat
+  String? _currentPersonaId;
   
   void setPersonaService(PersonaService personaService) {
     _personaService = personaService;
@@ -80,6 +88,7 @@ class ChatService extends BaseService {
   
   /// Get messages with memory optimization
   List<Message> getMessages(String personaId) {
+    // Always return messages for the specific persona
     final messages = _messagesByPersona[personaId] ?? [];
     // Return only recent messages to save memory
     if (messages.length > AppConstants.maxMessagesInMemory) {
@@ -87,9 +96,62 @@ class ChatService extends BaseService {
     }
     return messages;
   }
+  
+  /// 🔵 채팅방 진입 시 모든 메시지를 읽음으로 표시
+  Future<void> markAllMessagesAsRead(String userId, String personaId) async {
+    debugPrint('📖 Marking all messages as read for persona: $personaId');
+    
+    final messages = _messagesByPersona[personaId] ?? [];
+    bool hasUnreadMessages = false;
+    final updatedMessages = <Message>[];
+    
+    // 읽지 않은 페르소나 메시지만 읽음 처리
+    for (final message in messages) {
+      if (!message.isFromUser && (message.isRead == false || message.isRead == null)) {
+        // copyWith를 사용하여 새로운 Message 객체 생성
+        final updatedMessage = message.copyWith(isRead: true);
+        updatedMessages.add(updatedMessage);
+        hasUnreadMessages = true;
+        
+        // Firebase에 읽음 상태 업데이트
+        if (userId.isNotEmpty) {
+          try {
+            await FirebaseHelper.userChats(userId)
+                .doc(personaId)
+                .collection('messages')
+                .doc(message.id)
+                .update({'isRead': true});
+          } catch (e) {
+            debugPrint('❌ Error updating read status for message ${message.id}: $e');
+          }
+        }
+      } else {
+        // 변경이 필요 없는 메시지는 그대로 추가
+        updatedMessages.add(message);
+      }
+    }
+    
+    // 읽지 않은 메시지가 있었다면 메시지 리스트 업데이트
+    if (hasUnreadMessages) {
+      _messagesByPersona[personaId] = updatedMessages;
+      
+      // 현재 페르소나의 메시지라면 전역 메시지도 업데이트
+      if (_currentPersonaId == personaId) {
+        _messages = List.from(updatedMessages);
+      }
+      
+      notifyListeners();
+    }
+  }
 
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
+    // Set current persona ID
+    _currentPersonaId = personaId;
+    
+    // Don't cancel timers when loading chat history - let responses continue
+    // _cleanupPersonaTimers(personaId);
+    
     await executeWithLoading(() async {
       // Load messages and preload memory in parallel
       final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
@@ -97,15 +159,40 @@ class ChatService extends BaseService {
       
       // Wait for both operations but handle them separately
       try {
-        _messages = await messagesLoading;
+        final loadedMessages = await messagesLoading;
         await memoryLoading; // Memory loading doesn't return data, just processes
+        
+        // Store messages for this specific persona
+        _messagesByPersona[personaId] = loadedMessages;
+        
+        // Update global messages if this is the current persona
+        if (_currentPersonaId == personaId) {
+          _messages = List.from(loadedMessages);
+        }
       } catch (e) {
         debugPrint('⚠️ Error during parallel loading: $e');
-        _messages = <Message>[];
+        _messagesByPersona[personaId] = <Message>[];
+        if (_currentPersonaId == personaId) {
+          _messages = <Message>[];
+        }
       }
-      
-      _messagesByPersona[personaId] = List.from(_messages);
     }, errorContext: 'loadChatHistory');
+  }
+  
+  /// Clean up timers and queues for a specific persona
+  void _cleanupPersonaTimers(String personaId) {
+    // Cancel response timer
+    _responseDelayTimers[personaId]?.cancel();
+    _responseDelayTimers.remove(personaId);
+    
+    // Clear queue
+    _responseQueues.remove(personaId);
+    
+    // Reset typing status
+    _personaIsTyping[personaId] = false;
+    
+    // Reset unread count
+    _unreadMessageCounts[personaId] = 0;
   }
 
   /// Optimized message loading with pagination
@@ -152,9 +239,6 @@ class ChatService extends BaseService {
     MessageType type = MessageType.text,
   }) async {
     try {
-      // Cancel any pending API calls
-      _debounceTimer?.cancel();
-      
       // Create user message
       final userMessage = Message(
         id: _uuid.v4(),
@@ -162,20 +246,31 @@ class ChatService extends BaseService {
         content: content,
         type: type,
         isFromUser: true,
+        isRead: false, // AI hasn't read this yet
       );
 
-             // Add to local state immediately
-       _messages.add(userMessage);
-       _messagesByPersona[persona.id] = List.from(_messages);
-       notifyListeners();
+      // Add to local state immediately
+      // Update persona-specific messages
+      if (!_messagesByPersona.containsKey(persona.id)) {
+        _messagesByPersona[persona.id] = [];
+      }
+      _messagesByPersona[persona.id]!.add(userMessage);
+      
+      // Update global messages if this is the current persona
+      if (_currentPersonaId == persona.id) {
+        _messages = List.from(_messagesByPersona[persona.id]!);
+      }
+      
+      // Increment unread count for this persona
+      _unreadMessageCounts[persona.id] = (_unreadMessageCounts[persona.id] ?? 0) + 1;
+      
+      notifyListeners();
 
-       // 사용자 메시지 저장
-       _queueMessageForSaving(userId, persona.id, userMessage);
+      // 사용자 메시지 저장
+      _queueMessageForSaving(userId, persona.id, userMessage);
 
-      // Debounce AI response generation
-      _debounceTimer = Timer(AppConstants.batchDelay, () {
-        _generateAIResponse(userId, persona, content);
-      });
+      // Queue the message for delayed AI response
+      _queueMessageForDelayedResponse(userId, persona, userMessage);
 
       return true;
     } catch (e) {
@@ -186,9 +281,9 @@ class ChatService extends BaseService {
 
   /// Generate AI response with caching
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
+    debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
     try {
-      _isTyping = true;
-      notifyListeners();
+      // Typing indicator is now handled by _queueMessageForDelayedResponse
 
       // Check cache first
       final cacheKey = _getCacheKey(persona.id, userMessage);
@@ -203,8 +298,6 @@ class ChatService extends BaseService {
           emotion: cachedResponse.emotion,
           scoreChange: cachedResponse.scoreChange,
         );
-        _isTyping = false;
-        notifyListeners();
         return;
       }
 
@@ -243,7 +336,6 @@ class ChatService extends BaseService {
             timestamp: DateTime.now(),
           ));
           
-          _isTyping = false;
           await _sendSplitMessages(
             content: aiResponseContent,
             persona: persona,
@@ -420,8 +512,6 @@ class ChatService extends BaseService {
         }
       }
       
-      _isTyping = false;
-      
       // Send response messages
       await _sendSplitMessages(
         content: aiResponseContent,
@@ -432,7 +522,6 @@ class ChatService extends BaseService {
       );
 
     } catch (e) {
-      _isTyping = false;
       notifyListeners();
       debugPrint('Error generating AI response: $e');
     }
@@ -702,10 +791,131 @@ class ChatService extends BaseService {
   // Existing methods like _analyzeEmotionFromResponse, _calculateScoreChangeWithRelationship,
   // _sendSplitMessages, etc. remain the same...
   
+  /// Queue message for delayed AI response
+  void _queueMessageForDelayedResponse(String userId, Persona persona, Message userMessage) {
+    final personaId = persona.id;
+    
+    // Initialize queue if needed
+    if (!_responseQueues.containsKey(personaId)) {
+      _responseQueues[personaId] = _ChatResponseQueue();
+    }
+    
+    // Add message to queue
+    _responseQueues[personaId]!.messages.add(userMessage);
+    
+    // Cancel existing timer if any
+    _responseDelayTimers[personaId]?.cancel();
+    
+    // Calculate delay (5-20 seconds base + 5 seconds per additional message)
+    final baseDelay = 5 + _random.nextInt(16); // 5-20 seconds
+    final additionalDelay = (_responseQueues[personaId]!.messages.length - 1) * 5;
+    final totalDelay = baseDelay + additionalDelay;
+    
+    debugPrint('📱 Setting AI response delay for ${persona.name}: ${totalDelay}s');
+    
+    // Schedule response - no typing indicator during delay
+    _responseDelayTimers[personaId] = Timer(Duration(seconds: totalDelay), () {
+      _processDelayedResponse(userId, persona);
+    });
+  }
+  
+  /// Process accumulated messages and generate AI response
+  Future<void> _processDelayedResponse(String userId, Persona persona) async {
+    debugPrint('⏱️ _processDelayedResponse called for ${persona.name}');
+    final personaId = persona.id;
+    final queue = _responseQueues[personaId];
+    
+    if (queue == null || queue.messages.isEmpty) {
+      debugPrint('⚠️ No messages in queue for ${persona.name}');
+      return;
+    }
+    
+    // Mark all queued messages as read
+    final messagesToProcess = List<Message>.from(queue.messages);
+    queue.messages.clear();
+    
+    // Update messages to mark as read
+    for (final msg in messagesToProcess) {
+      // Update in persona-specific messages
+      final personaMessages = _messagesByPersona[personaId] ?? [];
+      final indexInPersona = personaMessages.indexWhere((m) => m.id == msg.id);
+      if (indexInPersona != -1) {
+        personaMessages[indexInPersona] = personaMessages[indexInPersona].copyWith(isRead: true);
+      }
+      
+      // Update in global messages if current persona
+      if (_currentPersonaId == personaId) {
+        final index = _messages.indexWhere((m) => m.id == msg.id);
+        if (index != -1) {
+          _messages[index] = _messages[index].copyWith(isRead: true);
+        }
+      }
+      
+      // Update read status in Firebase
+      if (userId != '') {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('chats')
+              .doc(personaId)
+              .collection('messages')
+              .doc(msg.id)
+              .update({'isRead': true});
+        } catch (e) {
+          debugPrint('Error updating read status: $e');
+        }
+      }
+    }
+    
+    // Reset unread count for this persona
+    _unreadMessageCounts[personaId] = 0;
+    notifyListeners();
+    
+    // Show typing indicator for 2 seconds after marking as read
+    debugPrint('⏳ Waiting 1 second before showing typing indicator...');
+    await Future.delayed(Duration(seconds: 1));
+    _personaIsTyping[personaId] = true;
+    notifyListeners();
+    debugPrint('💬 Showing typing indicator for ${persona.name}');
+    
+    // Wait 2 seconds while showing typing indicator
+    await Future.delayed(Duration(seconds: 2));
+    
+    // Combine all messages for context
+    final combinedContent = messagesToProcess.map((m) => m.content).join(' ');
+    debugPrint('📝 Combined message content: $combinedContent');
+    
+    // Generate AI response
+    await _generateAIResponse(userId, persona, combinedContent);
+    
+    // Stop typing indicator
+    _personaIsTyping[personaId] = false;
+    notifyListeners();
+    debugPrint('✅ Response process completed for ${persona.name}');
+  }
+  
+  /// Get unread count for a persona
+  int getUnreadCount(String personaId) {
+    return _unreadMessageCounts[personaId] ?? 0;
+  }
+  
+  /// Check if persona is typing
+  bool isPersonaTyping(String personaId) {
+    return _personaIsTyping[personaId] ?? false;
+  }
+
   @override
   void dispose() {
     _debounceTimer?.cancel();
     _batchWriteTimer?.cancel();
+    
+    // Cancel all response delay timers
+    for (final timer in _responseDelayTimers.values) {
+      timer.cancel();
+    }
+    _responseDelayTimers.clear();
+    
     _processBatchWrite(); // Process any pending messages
     super.dispose();
   }
@@ -919,8 +1129,20 @@ class ChatService extends BaseService {
           relationshipScoreChange: isLastMessage ? scoreChange : null,
         );
 
-        _messages.add(aiMessage);
-        _messagesByPersona[persona.id] = List.from(_messages);
+        // Update persona-specific messages
+        if (!_messagesByPersona.containsKey(persona.id)) {
+          _messagesByPersona[persona.id] = [];
+        }
+        _messagesByPersona[persona.id]!.add(aiMessage);
+        
+        // Always update global messages when it's the current persona
+        // This ensures the message appears even if user switches chats
+        if (_currentPersonaId == persona.id) {
+          _messages = List.from(_messagesByPersona[persona.id]!);
+        }
+        
+        // Notify listeners to update UI in chat list
+        notifyListeners();
         
                  // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
             
@@ -1219,7 +1441,16 @@ class ChatService extends BaseService {
     _messagesByPersona.clear();
     _responseCache.clear();
     _pendingMessages.clear();
-    _isTyping = false;
+    
+    // Clear all response timers and queues
+    for (final timer in _responseDelayTimers.values) {
+      timer.cancel();
+    }
+    _responseDelayTimers.clear();
+    _responseQueues.clear();
+    _personaIsTyping.clear();
+    _unreadMessageCounts.clear();
+    
     // isLoading is managed by BaseService
     notifyListeners();
   }
@@ -1241,8 +1472,16 @@ class ChatService extends BaseService {
          emotion: EmotionType.neutral,
        );
 
-       _messages.add(systemMessage);
-       _messagesByPersona[personaId] = List.from(_messages);
+       // Update persona-specific messages
+       if (!_messagesByPersona.containsKey(personaId)) {
+         _messagesByPersona[personaId] = [];
+       }
+       _messagesByPersona[personaId]!.add(systemMessage);
+       
+       // Update global messages if this is the current persona
+       if (_currentPersonaId == personaId) {
+         _messages = List.from(_messagesByPersona[personaId]!);
+       }
        notifyListeners();
 
        // 튜토리얼 모드가 아닐 때만 Firebase에 저장
@@ -1257,8 +1496,16 @@ class ChatService extends BaseService {
    /// 튜토리얼 모드에서 사용자 메시지 추가 (로컬 스토리지에 저장)
    Future<void> addTutorialUserMessage(Message message) async {
      try {
-       _messages.add(message);
-       _messagesByPersona[message.personaId] = List.from(_messages);
+       // Update persona-specific messages
+       if (!_messagesByPersona.containsKey(message.personaId)) {
+         _messagesByPersona[message.personaId] = [];
+       }
+       _messagesByPersona[message.personaId]!.add(message);
+       
+       // Update global messages if this is the current persona
+       if (_currentPersonaId == message.personaId) {
+         _messages = List.from(_messagesByPersona[message.personaId]!);
+       }
        
        // 로컬 스토리지에 저장
        await LocalStorageService.saveTutorialMessage(message.personaId, message);
@@ -1419,8 +1666,15 @@ class ChatService extends BaseService {
       );
 
       // 메시지 저장
-      _messages.add(greetingMessage);
-      _messagesByPersona[personaId] = [greetingMessage];
+      if (!_messagesByPersona.containsKey(personaId)) {
+        _messagesByPersona[personaId] = [];
+      }
+      _messagesByPersona[personaId]!.add(greetingMessage);
+      
+      // Update global messages if this is the current persona
+      if (_currentPersonaId == personaId) {
+        _messages = List.from(_messagesByPersona[personaId]!);
+      }
       
       // Firebase에 저장
       if (userId != '') {
@@ -1553,4 +1807,11 @@ class _PendingMessage {
     required this.personaId,
     required this.message,
   });
+}
+
+class _ChatResponseQueue {
+  final List<Message> messages = [];
+  DateTime? lastMessageTime;
+  
+  _ChatResponseQueue();
 }

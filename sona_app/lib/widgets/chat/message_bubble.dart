@@ -193,6 +193,16 @@ class _TimeAndScore extends StatelessWidget {
           ),
         ),
         
+        // Read status for user messages
+        if (isFromUser) ...[
+          const SizedBox(width: 4),
+          Icon(
+            message.isRead ? Icons.done_all : Icons.done,
+            size: 14,
+            color: message.isRead ? Colors.green : Colors.white54,
+          ),
+        ],
+        
         // Score change (only rebuild this part when subscription changes)
         Consumer<SubscriptionService>(
           builder: (context, subscriptionService, child) {

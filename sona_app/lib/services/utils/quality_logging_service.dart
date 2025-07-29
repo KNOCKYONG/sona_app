@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../models/persona.dart';
+import '../../models/persona.dart';
 
 /// 🔍 품질 로깅 서비스
 /// 

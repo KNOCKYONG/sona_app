@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/persona.dart';
-import 'optimized_persona_image.dart';
+import '../../models/persona.dart';
+import '../persona/optimized_persona_image.dart';
 
 /// 채팅 리스트용 최적화된 아이템 위젯
 class ChatListItem extends StatelessWidget {

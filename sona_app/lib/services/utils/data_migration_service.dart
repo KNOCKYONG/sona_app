@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../models/persona.dart';
-import 'firebase_persona_service.dart';
-import 'firebase_storage_service.dart';
+import '../../models/persona.dart';
+import '../persona/firebase_persona_service.dart';
+import '../storage/firebase_storage_service.dart';
 
 class DataMigrationService {
   static final FirebasePersonaService _personaService = FirebasePersonaService();

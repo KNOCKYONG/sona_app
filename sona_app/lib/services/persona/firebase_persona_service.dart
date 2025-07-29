@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../models/persona.dart';
-import 'firebase_storage_service.dart';
+import '../../models/persona.dart';
+import '../storage/firebase_storage_service.dart';
 
 class FirebasePersonaService extends ChangeNotifier {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;

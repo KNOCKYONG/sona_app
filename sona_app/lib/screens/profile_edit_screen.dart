@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../services/auth/user_service.dart';
+import '../services/persona/persona_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/permission_helper.dart';
 
@@ -22,6 +23,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   bool _isCheckingNickname = false;
   bool _isNicknameAvailable = true;
   String? _selectedGender;
+  bool _genderAll = false;
   
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       _nicknameController.text = user.nickname;
       _introController.text = user.intro ?? '';
       _selectedGender = user.gender;
+      _genderAll = user.genderAll;
     }
   }
   
@@ -97,9 +100,18 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       gender: _selectedGender,
       intro: _introController.text.isEmpty ? null : _introController.text,
       profileImage: _profileImage,
+      genderAll: _genderAll,
     );
     
     if (success && mounted) {
+      // Update PersonaService with new user data
+      final personaService = context.read<PersonaService>();
+      if (userService.currentUser != null) {
+        personaService.setCurrentUser(userService.currentUser!);
+        // Force reshuffle to apply new gender preferences
+        personaService.reshuffleAvailablePersonas();
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('프로필이 업데이트되었습니다'),
@@ -344,6 +356,34 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           _selectedGender = value;
                         });
                       },
+                    ),
+                    const SizedBox(height: 16),
+                    
+                    // Gender All checkbox
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: CheckboxListTile(
+                        title: const Text(
+                          '모든 성별 페르소나 보기',
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        subtitle: const Text(
+                          '체크하지 않으면 이성 페르소나만 표시됩니다',
+                          style: TextStyle(fontSize: 12),
+                        ),
+                        value: _genderAll,
+                        onChanged: (value) {
+                          setState(() {
+                            _genderAll = value ?? false;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                        contentPadding: EdgeInsets.zero,
+                      ),
                     ),
                     const SizedBox(height: 24),
                     

@@ -36,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Form data
   String? _selectedGender;
   DateTime? _selectedBirth;
-  String _preferredGender = 'female';
+  bool _genderAll = false;
   RangeValues _preferredAgeRange = const RangeValues(20, 35);
   List<String> _selectedInterests = [];
   File? _profileImage;
@@ -159,6 +159,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
     
+    if (_selectedGender == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('성별을 선택해주세요')),
+      );
+      return;
+    }
+    
     if (_selectedBirth == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('생년월일을 선택해주세요')),
@@ -186,9 +193,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // 구글 로그인 후 추가 정보 저장
       final user = await userService.completeGoogleSignUp(
         nickname: _nicknameController.text,
-        gender: _selectedGender,
+        gender: _selectedGender!,
         birth: _selectedBirth!,
-        preferredGender: _preferredGender,
         preferredAgeRange: [
           _preferredAgeRange.start.toInt(),
           _preferredAgeRange.end.toInt(),
@@ -201,6 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        genderAll: _genderAll,
       );
       
       if (user != null && mounted) {
@@ -212,9 +219,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text,
         password: _passwordController.text,
         nickname: _nicknameController.text,
-        gender: _selectedGender,
+        gender: _selectedGender!,
         birth: _selectedBirth!,
-        preferredGender: _preferredGender,
         preferredAgeRange: [
           _preferredAgeRange.start.toInt(),
           _preferredAgeRange.end.toInt(),
@@ -227,6 +233,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        genderAll: _genderAll,
       );
       
       if (user != null && mounted) {
@@ -733,7 +740,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 32),
           
           // Gender
-          const Text('성별', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('성별 *', style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -840,39 +847,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 32),
           
-          // Preferred gender
+          // Gender All checkbox
           const Text(
-            '선호하는 페르소나 성별 *',
+            '페르소나 성별 선호',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: RadioListTile<String>(
-                  title: const Text('여성'),
-                  value: 'female',
-                  groupValue: _preferredGender,
-                  onChanged: (value) {
-                    setState(() {
-                      _preferredGender = value!;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: RadioListTile<String>(
-                  title: const Text('남성'),
-                  value: 'male',
-                  groupValue: _preferredGender,
-                  onChanged: (value) {
-                    setState(() {
-                      _preferredGender = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
+          CheckboxListTile(
+            title: const Text('모든 성별 페르소나 보기'),
+            subtitle: const Text('체크하지 않으면 이성 페르소나만 표시됩니다'),
+            value: _genderAll,
+            onChanged: (value) {
+              setState(() {
+                _genderAll = value ?? false;
+              });
+            },
+            controlAffinity: ListTileControlAffinity.leading,
           ),
           const SizedBox(height: 24),
           

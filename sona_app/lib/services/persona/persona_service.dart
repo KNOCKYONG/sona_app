@@ -150,6 +150,7 @@ class PersonaService extends BaseService {
     final results = await Future.wait([
       _loadFromFirebaseOrFallback(),
       _loadSwipedPersonas(),
+      _loadActionedPersonaIds(),
     ]);
     
     // Lazy load matched personas
@@ -291,6 +292,9 @@ class PersonaService extends BaseService {
         timestamp: DateTime.now(),
       ));
       
+      // Update user's actionedPersonaIds
+      await _updateActionedPersonaIds(personaId);
+      
       notifyListeners();
       return true;
     } catch (e) {
@@ -370,6 +374,10 @@ class PersonaService extends BaseService {
       ));
       
       debugPrint('✅ Super like processed successfully: ${persona.name} → 200 (썸)');
+      
+      // Update user's actionedPersonaIds
+      await _updateActionedPersonaIds(personaId);
+      
       notifyListeners();
       return true;
     } catch (e) {
@@ -1006,8 +1014,40 @@ class PersonaService extends BaseService {
       return personas;
     }
     
+    // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링)
+    List<Persona> filteredPersonas = personas;
+    if (!_currentUser!.genderAll && _currentUser!.gender != null) {
+      // 사용자가 남성이면 여성 페르소나만, 여성이면 남성 페르소나만
+      final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
+      filteredPersonas = personas.where((persona) => 
+        persona.gender == targetGender
+      ).toList();
+      
+      debugPrint('🎯 Gender filtering: User(${_currentUser!.gender}) → Showing only $targetGender personas');
+      debugPrint('   Filtered from ${personas.length} to ${filteredPersonas.length} personas');
+    } else {
+      debugPrint('🌈 Gender All enabled or no gender specified - showing all personas');
+    }
+    
+    // 2. 액션한 페르소나 제외 (좋아요, 슈퍼좋아요, 취소한 페르소나)
+    if (_actionedPersonaIds.isNotEmpty) {
+      final beforeCount = filteredPersonas.length;
+      filteredPersonas = filteredPersonas.where((persona) => 
+        !_actionedPersonaIds.contains(persona.id)
+      ).toList();
+      
+      debugPrint('🚫 Excluding ${beforeCount - filteredPersonas.length} actioned personas');
+      debugPrint('   Remaining: ${filteredPersonas.length} personas');
+    }
+    
+    // 필터링 후 페르소나가 없으면 빈 리스트 반환
+    if (filteredPersonas.isEmpty) {
+      debugPrint('⚠️ No personas available after filtering');
+      return [];
+    }
+    
     // 각 페르소나에 대한 추천 점수 계산
-    final scoredPersonas = personas.map((persona) {
+    final scoredPersonas = filteredPersonas.map((persona) {
       double score = 0.0;
       
       // 1. 관심사 매칭 점수 (40%)
@@ -1037,17 +1077,13 @@ class PersonaService extends BaseService {
             score += 0.3;
             break;
           case 'dating':
-            // 연애/데이팅 - 일반 페르소나 중 나이/성별 선호도 반영
+            // 연애/데이팅 - 나이 선호도 반영 (성별은 이미 필터링됨)
             score += 0.2;
-            // 선호 성별 매칭
-            if (_currentUser!.preferredPersona != null && persona.gender == _currentUser!.preferredPersona!.gender) {
-              score += 0.05;
-            }
             // 선호 나이대 매칭
             if (_currentUser!.preferredPersona != null && _currentUser!.preferredPersona!.ageRange != null) {
               final ageRange = _currentUser!.preferredPersona!.ageRange!;
               if (persona.age >= ageRange[0] && persona.age <= ageRange[1]) {
-                score += 0.05;
+                score += 0.1;
               }
             }
             break;
@@ -1101,7 +1137,7 @@ class PersonaService extends BaseService {
     scoredPersonas.sort((a, b) => b.value.compareTo(a.value));
     
     // 상위 20%는 추천순, 나머지는 랜덤하게 섞어서 다양성 확보
-    final topCount = (personas.length * 0.2).ceil();
+    final topCount = (filteredPersonas.length * 0.2).ceil();
     final topPersonas = scoredPersonas.take(topCount).map((e) => e.key).toList();
     final otherPersonas = scoredPersonas.skip(topCount).map((e) => e.key).toList();
     otherPersonas.shuffle();
@@ -1111,12 +1147,34 @@ class PersonaService extends BaseService {
   
   // 현재 사용자 정보 설정 (추천 알고리즘을 위해)
   AppUser? _currentUser;
+  List<String> _actionedPersonaIds = [];
   
   void setCurrentUser(AppUser? user) {
     _currentUser = user;
+    if (user != null) {
+      _actionedPersonaIds = List<String>.from(user.actionedPersonaIds);
+    }
     // 사용자 정보가 변경되면 페르소나 순서 재정렬
     _shuffledAvailablePersonas = null;
     notifyListeners();
+  }
+  
+  /// Load actionedPersonaIds from Firebase if not already loaded
+  Future<void> _loadActionedPersonaIds() async {
+    if (_currentUserId == null) return;
+    
+    try {
+      final userDoc = await FirebaseHelper.users.doc(_currentUserId).get();
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        if (data != null && data['actionedPersonaIds'] != null) {
+          _actionedPersonaIds = List<String>.from(data['actionedPersonaIds']);
+          debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from Firebase');
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error loading actionedPersonaIds: $e');
+    }
   }
 
   Future<bool> _likeTutorialPersona(String personaId) async {
@@ -1202,6 +1260,9 @@ class PersonaService extends BaseService {
           .set(passData);
 
       _sessionSwipedPersonas[personaId] = DateTime.now();
+      
+      // Update user's actionedPersonaIds
+      await _updateActionedPersonaIds(personaId);
       
       notifyListeners();
       return true;
@@ -1323,6 +1384,62 @@ class PersonaService extends BaseService {
     } catch (e) {
       debugPrint('Error batch loading relationships: $e');
       return {};
+    }
+  }
+
+  /// Update user's actionedPersonaIds list
+  Future<void> _updateActionedPersonaIds(String personaId) async {
+    if (_currentUserId == null) {
+      debugPrint('⚠️ No user ID available for updating actionedPersonaIds');
+      return;
+    }
+    
+    try {
+      // Update local list
+      if (!_actionedPersonaIds.contains(personaId)) {
+        _actionedPersonaIds.add(personaId);
+        debugPrint('📝 Added persona $personaId to local actionedPersonaIds list');
+      }
+      
+      // Also update currentUser if available
+      if (_currentUser != null) {
+        if (!_currentUser!.actionedPersonaIds.contains(personaId)) {
+          _currentUser = _currentUser!.copyWith(
+            actionedPersonaIds: [..._currentUser!.actionedPersonaIds, personaId],
+          );
+          debugPrint('📝 Added persona $personaId to currentUser actionedPersonaIds');
+        }
+      }
+      
+      // Always update Firebase to ensure persistence
+      await FirebaseHelper.users.doc(_currentUserId).update({
+        'actionedPersonaIds': FieldValue.arrayUnion([personaId]),
+      });
+      
+      debugPrint('✅ Updated actionedPersonaIds in Firebase for persona: $personaId');
+      
+      // Force reshuffle to immediately exclude this persona
+      _shuffledAvailablePersonas = null;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Error updating actionedPersonaIds: $e');
+      // If the user document doesn't exist yet (e.g., guest user), create it
+      if (e.toString().contains('NOT_FOUND')) {
+        try {
+          await FirebaseHelper.users.doc(_currentUserId).set({
+            'actionedPersonaIds': [personaId],
+            'updatedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+          debugPrint('✅ Created user document with actionedPersonaIds');
+          
+          // Also update local list
+          if (!_actionedPersonaIds.contains(personaId)) {
+            _actionedPersonaIds.add(personaId);
+          }
+        } catch (createError) {
+          debugPrint('❌ Error creating user document: $createError');
+        }
+      }
     }
   }
 

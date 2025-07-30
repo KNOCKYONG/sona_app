@@ -68,6 +68,14 @@ abstract class BaseService extends ChangeNotifier {
   /// 에러 핸들링
   @protected
   void handleError(dynamic error, String context) {
+    // Firebase 권한 오류는 로그인하지 않은 사용자에게 정상적인 상황
+    if (error.toString().contains('permission-denied')) {
+      if (kDebugMode) {
+        debugPrint('📋 Permission denied in $context (expected for non-logged-in users)');
+      }
+      return; // Don't treat as error
+    }
+    
     if (kDebugMode) {
       debugPrint('Error in $context: $error');
       if (error is Error) {

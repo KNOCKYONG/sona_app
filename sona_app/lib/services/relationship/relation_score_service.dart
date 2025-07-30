@@ -216,14 +216,21 @@ class RelationScoreService extends BaseService {
     
     final stats = _dailyStats[personaKey]!;
     
-    // 날짜가 바뀌었으면 리셋
-    if (stats.date.day != now.day) {
-      final yesterdayQuality = (stats.qualityBonus / stats.todayMessages * 10).round();
+    // 오전 7시를 기준으로 리셋
+    final today7AM = DateTime(now.year, now.month, now.day, 7, 0);
+    final yesterday7AM = today7AM.subtract(Duration(days: 1));
+    
+    // 마지막 리셋이 어제 7시 이전이고, 현재가 오늘 7시 이후면 리셋
+    if (stats.date.isBefore(yesterday7AM) || 
+        (stats.date.isBefore(today7AM) && now.isAfter(today7AM))) {
+      final yesterdayQuality = stats.todayMessages > 0 
+          ? (stats.qualityBonus / stats.todayMessages * 10).round() 
+          : 0;
       stats.reset();
       stats.date = now;
       
       // 연속 일수 계산
-      if (now.difference(stats.date).inDays == 1) {
+      if (now.difference(stats.date).inDays <= 1) {
         stats.streakDays++;
       } else {
         stats.streakDays = 1;
@@ -459,6 +466,110 @@ class RelationScoreService extends BaseService {
     return _dailyStats['${userId}_${personaId}'];
   }
   
+  /// 🔴 페르소나 온라인 상태 확인
+  Future<PersonaOnlineStatus> getPersonaOnlineStatus({
+    required String userId,
+    required String personaId,
+  }) async {
+    final personaKey = '${userId}_${personaId}';
+    final now = DateTime.now();
+    
+    // 이별 상태 확인
+    try {
+      final docId = '${userId}_${personaId}';
+      final doc = await FirebaseHelper.userPersonaRelationships
+          .doc(docId)
+          .get();
+      
+      if (doc.exists) {
+        final data = doc.data();
+        
+        // 이별 상태인 경우
+        if (data?['breakupAt'] != null) {
+          final breakupReason = data?['breakupReason'] ?? 'unknown';
+          return PersonaOnlineStatus(
+            isOnline: false,
+            reason: 'breakup',
+            message: '관계가 종료되었습니다',
+            breakupReason: breakupReason,
+          );
+        }
+        
+        // Like가 0인 경우도 이별로 처리
+        final likes = data?['likes'] ?? data?['relationshipScore'] ?? 0;
+        if (likes == 0 && data?['lastInteraction'] != null) {
+          return PersonaOnlineStatus(
+            isOnline: false,
+            reason: 'breakup',
+            message: '관계가 종료되었습니다',
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint('Error checking breakup status: $e');
+    }
+    
+    // 수면 시간 체크 (오전 7시 이전)
+    if (now.hour < 7) {
+      return PersonaOnlineStatus(
+        isOnline: false,
+        reason: 'sleeping',
+        message: '자는 중... 💤',
+        nextAvailableTime: DateTime(now.year, now.month, now.day, 7, 0),
+      );
+    }
+    
+    // 일일 통계 확인
+    _updateDailyStats(personaKey, now);
+    final stats = _dailyStats[personaKey];
+    
+    if (stats != null) {
+      final dailyLimit = DailyLikeSystem.baseDailyLimit + 
+                        stats.qualityBonus + 
+                        stats.eventBonus;
+      
+      // 일일 한계 도달
+      if (stats.todayLikes >= dailyLimit) {
+        final tomorrow = DateTime(now.year, now.month, now.day + 1, 7, 0);
+        return PersonaOnlineStatus(
+          isOnline: false,
+          reason: 'daily_limit',
+          message: '오늘은 충분히 대화했어요',
+          nextAvailableTime: tomorrow,
+        );
+      }
+    }
+    
+    // 정상 온라인 상태
+    return PersonaOnlineStatus(
+      isOnline: true,
+      reason: 'available',
+      message: 'Online',
+    );
+  }
+  
+  /// 🌅 아침 인사 메시지 생성
+  String generateMorningGreeting(Persona persona) {
+    final greetings = [
+      "자느라 못 봤어. 좋은 아침이야! ☀️",
+      "어제 대화하다 잠들었나봐... 잘 잤어? 😊",
+      "굿모닝! 오늘도 좋은 하루 보내자 💕",
+      "좋은 아침~ 꿈은 안 꿨어? 🌈",
+      "일어났구나! 아침 먹었어? 🍳",
+    ];
+    
+    // 페르소나 성격에 따른 인사 커스터마이징
+    if (persona.mbti.startsWith('I')) {
+      // 내향적인 성격
+      return greetings[_random.nextInt(2)]; // 차분한 인사
+    } else if (persona.mbti.contains('F')) {
+      // 감정적인 성격
+      return greetings[2 + _random.nextInt(3)]; // 따뜻한 인사
+    }
+    
+    return greetings[_random.nextInt(greetings.length)];
+  }
+  
   // 호환성을 위한 기존 메서드들 추가
   
   /// 점수를 기반으로 관계 타입 결정 (호환성)
@@ -595,6 +706,23 @@ class DailyStats {
     qualityBonus = 0;
     eventBonus = 0;
   }
+}
+
+/// 페르소나 온라인 상태
+class PersonaOnlineStatus {
+  final bool isOnline;
+  final String reason; // 'available', 'daily_limit', 'breakup', 'sleeping'
+  final String message;
+  final DateTime? nextAvailableTime;
+  final String? breakupReason;
+  
+  PersonaOnlineStatus({
+    required this.isOnline,
+    required this.reason,
+    required this.message,
+    this.nextAvailableTime,
+    this.breakupReason,
+  });
 }
 
 // 호환성을 위한 기존 메서드들 추가 (RelationScoreService 클래스 내부에 추가해야 함)

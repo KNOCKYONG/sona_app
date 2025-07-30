@@ -19,6 +19,7 @@ import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
 import '../relationship/like_cooldown_system.dart';
+import 'local_chat_storage.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -40,6 +41,19 @@ class ChatService extends BaseService {
   final ConversationMemoryService _memoryService = ConversationMemoryService();
   final Uuid _uuid = const Uuid();
   final Random _random = Random();
+  
+  // Local storage for non-logged-in users
+  final LocalChatStorage _localChatStorage = LocalChatStorage();
+  
+  ChatService() {
+    // Initialize local storage immediately
+    _initializeLocalStorage();
+  }
+  
+  Future<void> _initializeLocalStorage() async {
+    await _localChatStorage.initialize();
+    debugPrint('✅ LocalChatStorage initialized');
+  }
   
   // Performance optimization: Response cache
   final Map<String, _CachedResponse> _responseCache = {};
@@ -70,6 +84,7 @@ class ChatService extends BaseService {
 
   // Getters
   List<Message> get messages => _currentPersonaId != null ? getMessages(_currentPersonaId!) : _messages;
+  LocalChatStorage get localChatStorage => _localChatStorage;
   
   // Current persona ID for tracking active chat
   String? _currentPersonaId;
@@ -154,8 +169,19 @@ class ChatService extends BaseService {
     
     await executeWithLoading(() async {
       // Load messages and preload memory in parallel
-      final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
-      final memoryLoading = _preloadConversationMemory(userId, personaId);
+      final Future<List<Message>> messagesLoading;
+      
+      if (userId.isEmpty) {
+        // Load from local storage for non-logged-in users
+        messagesLoading = _localChatStorage.getMessages(personaId);
+      } else {
+        // Load from Firebase for logged-in users
+        messagesLoading = _loadMessagesFromFirebase(userId, personaId);
+      }
+      
+      final memoryLoading = userId.isNotEmpty 
+          ? _preloadConversationMemory(userId, personaId)
+          : Future.value();
       
       // Wait for both operations but handle them separately
       try {
@@ -168,6 +194,11 @@ class ChatService extends BaseService {
         // Update global messages if this is the current persona
         if (_currentPersonaId == personaId) {
           _messages = List.from(loadedMessages);
+        }
+        
+        // Check if we need to add morning greeting (only for logged-in users)
+        if (userId.isNotEmpty) {
+          await _checkAndAddMorningGreeting(userId, personaId);
         }
       } catch (e) {
         debugPrint('⚠️ Error during parallel loading: $e');
@@ -239,6 +270,29 @@ class ChatService extends BaseService {
     MessageType type = MessageType.text,
   }) async {
     try {
+      // Check message limit for non-logged-in users
+      if (userId.isEmpty) {
+        final remainingMessages = await _localChatStorage.getRemainingMessages();
+        if (remainingMessages <= 0) {
+          // Show login prompt message
+          final loginPromptMessage = Message(
+            id: _uuid.v4(),
+            personaId: persona.id,
+            content: '무료 대화 100개를 모두 사용하셨어요! 계속 대화하려면 로그인해주세요 😊',
+            type: MessageType.system,
+            isFromUser: false,
+            timestamp: DateTime.now(),
+          );
+          
+          _messagesByPersona[persona.id]!.add(loginPromptMessage);
+          if (_currentPersonaId == persona.id) {
+            _messages = List.from(_messagesByPersona[persona.id]!);
+          }
+          notifyListeners();
+          return false;
+        }
+      }
+      
       // Create user message
       final userMessage = Message(
         id: _uuid.v4(),
@@ -267,10 +321,26 @@ class ChatService extends BaseService {
       notifyListeners();
 
       // 사용자 메시지 저장
-      _queueMessageForSaving(userId, persona.id, userMessage);
+      if (userId.isEmpty) {
+        // Save to local storage for non-logged-in users
+        await _localChatStorage.saveMessage(persona.id, userMessage);
+      } else {
+        // Queue for Firebase saving for logged-in users
+        _queueMessageForSaving(userId, persona.id, userMessage);
+      }
 
-      // Queue the message for delayed AI response
-      _queueMessageForDelayedResponse(userId, persona, userMessage);
+      // Check if persona is online before queuing AI response
+      final onlineStatus = await RelationScoreService.instance.getPersonaOnlineStatus(
+        userId: userId,
+        personaId: persona.id,
+      );
+      
+      if (onlineStatus.isOnline) {
+        // Queue the message for delayed AI response only if online
+        _queueMessageForDelayedResponse(userId, persona, userMessage);
+      } else {
+        debugPrint('📴 Persona ${persona.name} is offline - no AI response will be generated');
+      }
 
       return true;
     } catch (e) {
@@ -1147,7 +1217,13 @@ class ChatService extends BaseService {
                  // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
             
          // Queue message for batch saving
-         _queueMessageForSaving(userId, persona.id, aiMessage);
+         if (userId.isEmpty) {
+           // Save to local storage for non-logged-in users
+           await _localChatStorage.saveMessage(persona.id, aiMessage);
+         } else {
+           // Queue for Firebase saving for logged-in users
+           _queueMessageForSaving(userId, persona.id, aiMessage);
+         }
          
          // 마지막 메시지에서만 친밀도 변화 반영
          if (isLastMessage) {
@@ -1155,9 +1231,12 @@ class ChatService extends BaseService {
            
            if (scoreChange != 0) {
              // Update Firebase relationship score
-             if (userId != '') {
+             if (userId.isNotEmpty) {
                debugPrint('🔥 Normal mode - calling PersonaService for score update');
                _notifyScoreChange(persona.id, scoreChange, userId);
+             } else {
+               // For non-logged-in users, just update the local UI
+               debugPrint('👤 Guest mode - updating local score only');
              }
            } else {
              debugPrint('⏭️ No score change to process');
@@ -1779,6 +1858,66 @@ class ChatService extends BaseService {
     
     final index = userMessage.hashCode.abs() % responses.length;
     return responses[index];
+  }
+  
+  /// 🌅 아침 인사 체크 및 추가
+  Future<void> _checkAndAddMorningGreeting(String userId, String personaId) async {
+    try {
+      final now = DateTime.now();
+      final persona = _getPersonaFromService(personaId);
+      if (persona == null) return;
+      
+      // 오전 7시 이후인지 확인
+      if (now.hour < 7) return;
+      
+      // 오늘 날짜 기준
+      final today = DateTime(now.year, now.month, now.day);
+      final todayStart = today.toUtc();
+      final todayEnd = today.add(Duration(days: 1)).toUtc();
+      
+      // 오늘 이미 대화가 있었는지 확인
+      final todayMessages = await FirebaseHelper.userChatMessages(userId, personaId)
+          .where('timestamp', isGreaterThanOrEqualTo: todayStart)
+          .where('timestamp', isLessThan: todayEnd)
+          .limit(1)
+          .get();
+      
+      // 오늘 대화가 없고, 이전에 대화 기록이 있다면 아침 인사 추가
+      if (todayMessages.docs.isEmpty && _messagesByPersona[personaId]?.isNotEmpty == true) {
+        // 아침 인사 메시지 생성
+        final greetingMessage = RelationScoreService.instance.generateMorningGreeting(persona);
+        
+        // AI 메시지로 추가
+        final aiMessage = Message(
+          id: _uuid.v4(),
+          personaId: personaId,
+          content: greetingMessage,
+          type: MessageType.text,
+          isFromUser: false,
+          isRead: true,
+          timestamp: now,
+          emotion: EmotionType.happy,
+        );
+        
+        // 로컬 상태에 추가
+        _messagesByPersona[personaId]!.add(aiMessage);
+        if (_currentPersonaId == personaId) {
+          _messages = List.from(_messagesByPersona[personaId]!);
+        }
+        
+        // Firebase에 저장
+        await FirebaseHelper.userChatMessages(userId, personaId).add({
+          ...aiMessage.toJson(),
+          'timestamp': FieldValue.serverTimestamp(),
+          'scoreChange': 0, // 아침 인사는 점수 변화 없음
+        });
+        
+        debugPrint('🌅 Morning greeting added for ${persona.name}');
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error checking morning greeting: $e');
+    }
   }
 }
 

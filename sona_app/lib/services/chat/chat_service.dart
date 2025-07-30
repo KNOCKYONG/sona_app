@@ -806,9 +806,9 @@ class ChatService extends BaseService {
     // Cancel existing timer if any
     _responseDelayTimers[personaId]?.cancel();
     
-    // Calculate delay (5-20 seconds base + 5 seconds per additional message)
-    final baseDelay = 5 + _random.nextInt(16); // 5-20 seconds
-    final additionalDelay = (_responseQueues[personaId]!.messages.length - 1) * 5;
+    // Calculate delay (2-5 seconds base + 2 seconds per additional message)
+    final baseDelay = 2 + _random.nextInt(4); // 2-5 seconds
+    final additionalDelay = (_responseQueues[personaId]!.messages.length - 1) * 2;
     final totalDelay = baseDelay + additionalDelay;
     
     debugPrint('📱 Setting AI response delay for ${persona.name}: ${totalDelay}s');
@@ -872,15 +872,15 @@ class ChatService extends BaseService {
     _unreadMessageCounts[personaId] = 0;
     notifyListeners();
     
-    // Show typing indicator for 2 seconds after marking as read
-    debugPrint('⏳ Waiting 1 second before showing typing indicator...');
-    await Future.delayed(Duration(seconds: 1));
+    // Show typing indicator after marking as read
+    debugPrint('⏳ Waiting 0.5 second before showing typing indicator...');
+    await Future.delayed(Duration(milliseconds: 500));
     _personaIsTyping[personaId] = true;
     notifyListeners();
     debugPrint('💬 Showing typing indicator for ${persona.name}');
     
-    // Wait 2 seconds while showing typing indicator
-    await Future.delayed(Duration(seconds: 2));
+    // Wait 1 second while showing typing indicator
+    await Future.delayed(Duration(seconds: 1));
     
     // Combine all messages for context
     final combinedContent = messagesToProcess.map((m) => m.content).join(' ');

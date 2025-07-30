@@ -43,6 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     _setupScrollListener();
+    _setupKeyboardListener();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeChat();
     });
@@ -82,6 +83,18 @@ class _ChatScreenState extends State<ChatScreen> {
               _isUserScrolling = false;
             });
           }
+        });
+      }
+    });
+  }
+  
+  void _setupKeyboardListener() {
+    // 키보드 상태 감지를 위한 FocusNode 리스너
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        // 키보드가 올라올 때 자동으로 맨 아래로 스크롤
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _scrollToBottom(force: true);
         });
       }
     });
@@ -259,6 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
       appBar: _buildAppBar(),
+      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
       body: Column(
         children: [
           
@@ -314,18 +328,39 @@ class _ChatScreenState extends State<ChatScreen> {
                   
                   _previousMessageCount = messages.length;
                   
-                  // AI 메시지가 추가되었고 마지막 메시지이며 자동 스크롤 조건을 만족하면 스크롤
-                  if (hasNewAIMessage && isLastAIMessage) {
+                  // AI 메시지가 추가되었을 때 스크롤
+                  if (hasNewAIMessage) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      _scrollToBottom();
+                      // 마지막 메시지가 아니면 즉시 스크롤, 마지막 메시지면 딜레이 후 스크롤
+                      if (!isLastAIMessage) {
+                        // 중간 메시지들은 즉시 스크롤
+                        _scrollToBottom(smooth: false);
+                      } else {
+                        // 마지막 메시지는 부드럽게 스크롤
+                        _scrollToBottom();
+                      }
                     });
                   }
+                }
+                
+                // 타이핑 인디케이터 상태 변경 감지
+                final isTyping = chatService.isPersonaTyping(currentPersona.id);
+                if (isTyping) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _scrollToBottom();
+                  });
                 }
                 
                 // Use ListView.builder for better performance
                 return ListView.builder(
                   controller: _scrollController,
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                    bottom: 16 + MediaQuery.of(context).viewInsets.bottom, // 키보드 높이만큼 패딩 추가
+                  ),
+                  keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // 스크롤 시 키보드 숨김
                   itemCount: messages.length + (chatService.isPersonaTyping(currentPersona.id) ? 1 : 0),
                   itemBuilder: (context, index) {
                     if (index == messages.length && chatService.isPersonaTyping(currentPersona.id)) {

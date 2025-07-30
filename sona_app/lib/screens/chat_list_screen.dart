@@ -280,15 +280,30 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 }
               }
               
-              // 🔧 FIX: 안전한 hasUnread 계산
+              // 🔧 FIX: 안전한 hasUnread 계산 및 마지막 메시지 그룹 카운트
               bool hasUnread = false;
               int unreadPersonaMessageCount = 0;
+              int lastPersonaMessageGroupCount = 0;
+              
               try {
                 // Count unread messages from persona (not user)
                 unreadPersonaMessageCount = messages.where((msg) => 
                   !msg.isFromUser && msg.isRead != true
                 ).length;
                 hasUnread = unreadPersonaMessageCount > 0;
+                
+                // 마지막 페르소나 메시지 그룹의 개수 계산
+                if (messages.isNotEmpty && hasUnread) {
+                  // 뒤에서부터 연속된 페르소나 메시지 개수 세기
+                  for (int i = messages.length - 1; i >= 0; i--) {
+                    if (!messages[i].isFromUser && messages[i].isRead != true) {
+                      lastPersonaMessageGroupCount++;
+                    } else {
+                      // 사용자 메시지나 읽은 메시지를 만나면 중단
+                      break;
+                    }
+                  }
+                }
               } catch (e) {
                 debugPrint('❌ Error calculating hasUnread: $e');
                 hasUnread = false;
@@ -403,7 +418,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (unreadPersonaMessageCount > 0 && !isTyping)
+                                if (lastPersonaMessageGroupCount > 0 && !isTyping)
                                   Container(
                                     margin: const EdgeInsets.only(left: 8),
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -412,7 +427,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
-                                      unreadPersonaMessageCount.toString(),
+                                      lastPersonaMessageGroupCount.toString(),
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,

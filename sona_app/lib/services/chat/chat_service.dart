@@ -1127,6 +1127,12 @@ class ChatService extends BaseService {
           isFromUser: false,
           emotion: emotion,
           relationshipScoreChange: isLastMessage ? scoreChange : null,
+          // 마지막 메시지인지 표시하는 메타데이터 추가
+          metadata: {
+            'isLastInSequence': isLastMessage,
+            'messageIndex': i,
+            'totalMessages': splitMessages.length,
+          },
         );
 
         // Update persona-specific messages

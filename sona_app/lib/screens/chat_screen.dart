@@ -34,12 +34,56 @@ class _ChatScreenState extends State<ChatScreen> {
   final FocusNode _focusNode = FocusNode();
   
   String _selectedEmotion = 'neutral';
+  bool _isUserScrolling = false;
+  bool _isNearBottom = true;
+  int _previousMessageCount = 0;
+  int _unreadAIMessageCount = 0;
 
   @override
   void initState() {
     super.initState();
+    _setupScrollListener();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeChat();
+    });
+  }
+
+  void _setupScrollListener() {
+    _scrollController.addListener(() {
+      final maxScroll = _scrollController.position.maxScrollExtent;
+      final currentScroll = _scrollController.position.pixels;
+      final scrollThreshold = 100.0;
+      
+      // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
+      final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
+      
+      if (_isNearBottom != isNearBottom) {
+        setState(() {
+          _isNearBottom = isNearBottom;
+          // 맨 아래로 돌아왔으면 읽지 않은 메시지 카운트 초기화
+          if (isNearBottom) {
+            _unreadAIMessageCount = 0;
+          }
+        });
+      }
+      
+      // 사용자가 스크롤 중인지 감지
+      if (_scrollController.position.isScrollingNotifier.value) {
+        if (!_isUserScrolling) {
+          setState(() {
+            _isUserScrolling = true;
+          });
+        }
+      } else {
+        // 스크롤이 멈췄을 때
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted && !_scrollController.position.isScrollingNotifier.value) {
+            setState(() {
+              _isUserScrolling = false;
+            });
+          }
+        });
+      }
     });
   }
 
@@ -146,7 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
     
     if (success) {
-      _scrollToBottom();
+      _scrollToBottom(force: true);
     } else {
       _messageController.text = content;
       if (mounted) {
@@ -160,14 +204,29 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void _scrollToBottom() {
+  void _scrollToBottom({bool force = false, bool smooth = true}) {
+    // 자동 스크롤 조건 체크
+    // 1. force가 true이거나
+    // 2. 사용자가 스크롤 중이 아니고 맨 아래에 가까이 있을 때만 자동 스크롤
+    if (!force && (_isUserScrolling || !_isNearBottom)) {
+      return;
+    }
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
+        final targetScroll = _scrollController.position.maxScrollExtent;
+        
+        if (smooth) {
+          // 부드러운 스크롤 애니메이션
+          _scrollController.animateTo(
+            targetScroll,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOutCubic, // 더 부드러운 커브 사용
+          );
+        } else {
+          // 즉시 이동
+          _scrollController.jumpTo(targetScroll);
+        }
       }
     });
   }
@@ -205,8 +264,10 @@ class _ChatScreenState extends State<ChatScreen> {
           
           // Chat messages list
           Expanded(
-            child: Consumer2<ChatService, PersonaService>(
-              builder: (context, chatService, personaService, child) {
+            child: Stack(
+              children: [
+                Consumer2<ChatService, PersonaService>(
+                  builder: (context, chatService, personaService, child) {
                 if (chatService.isLoading) {
                   return const Center(
                     child: CircularProgressIndicator(
@@ -226,6 +287,39 @@ class _ChatScreenState extends State<ChatScreen> {
                   return const Center(
                     child: Text('No persona selected'),
                   );
+                }
+                
+                // 메시지 수 변화 감지 및 AI 메시지 추가 시 처리
+                if (messages.length > _previousMessageCount) {
+                  final newMessageCount = messages.length - _previousMessageCount;
+                  bool hasNewAIMessage = false;
+                  bool isLastAIMessage = false;
+                  
+                  // 새로 추가된 메시지들 중 AI 메시지가 있는지 확인
+                  for (int i = messages.length - newMessageCount; i < messages.length; i++) {
+                    if (!messages[i].isFromUser) {
+                      hasNewAIMessage = true;
+                      // 사용자가 위로 스크롤 중이면 읽지 않은 AI 메시지 카운트 증가
+                      if (!_isNearBottom) {
+                        _unreadAIMessageCount++;
+                      }
+                      
+                      // 마지막 AI 메시지인지 확인
+                      final metadata = messages[i].metadata;
+                      if (metadata != null && metadata['isLastInSequence'] == true) {
+                        isLastAIMessage = true;
+                      }
+                    }
+                  }
+                  
+                  _previousMessageCount = messages.length;
+                  
+                  // AI 메시지가 추가되었고 마지막 메시지이며 자동 스크롤 조건을 만족하면 스크롤
+                  if (hasNewAIMessage && isLastAIMessage) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _scrollToBottom();
+                    });
+                  }
                 }
                 
                 // Use ListView.builder for better performance
@@ -253,7 +347,84 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               },
             ),
+            // 스크롤 상태 표시기 (맨 아래로 이동 버튼)
+            if (!_isNearBottom)
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: AnimatedOpacity(
+                  opacity: _isNearBottom ? 0.0 : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(24),
+                        onTap: () {
+                          _scrollToBottom(force: true);
+                          setState(() {
+                            _unreadAIMessageCount = 0;
+                          });
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(12),
+                              child: const Icon(
+                                Icons.keyboard_arrow_down_rounded,
+                                color: Color(0xFFFF6B9D),
+                                size: 24,
+                              ),
+                            ),
+                            // 읽지 않은 AI 메시지 개수 표시
+                            if (_unreadAIMessageCount > 0)
+                              Positioned(
+                                top: 4,
+                                right: 4,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFFFF6B9D),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  constraints: const BoxConstraints(
+                                    minWidth: 18,
+                                    minHeight: 18,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      _unreadAIMessageCount.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+        ),
           
           // Message input
           Consumer<PersonaService>(

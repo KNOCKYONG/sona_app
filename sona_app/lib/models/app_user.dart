@@ -20,6 +20,8 @@ class AppUser {
   final List<String>? preferredMbti; // 선호하는 MBTI 유형들
   final String? communicationStyle; // 'casual', 'formal', 'adaptive'
   final List<String>? preferredTopics; // 선호하는 대화 주제들
+  final bool genderAll; // Gender All 체크박스 - 모든 성별 페르소나 보기
+  final List<String> actionedPersonaIds; // 액션(좋아요, 슈퍼좋아요, 취소)한 페르소나 ID 목록
 
   AppUser({
     required this.uid,
@@ -39,7 +41,9 @@ class AppUser {
     this.preferredMbti,
     this.communicationStyle,
     this.preferredTopics,
-  });
+    this.genderAll = false,
+    List<String>? actionedPersonaIds,
+  }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
   static int calculateAge(DateTime birth) {
@@ -72,6 +76,8 @@ class AppUser {
       'preferredMbti': preferredMbti,
       'communicationStyle': communicationStyle,
       'preferredTopics': preferredTopics,
+      'genderAll': genderAll,
+      'actionedPersonaIds': actionedPersonaIds,
     };
   }
 
@@ -104,6 +110,10 @@ class AppUser {
       preferredTopics: data['preferredTopics'] != null 
           ? List<String>.from(data['preferredTopics'])
           : null,
+      genderAll: data['genderAll'] ?? false,
+      actionedPersonaIds: data['actionedPersonaIds'] != null 
+          ? List<String>.from(data['actionedPersonaIds'])
+          : [],
     );
   }
 
@@ -123,6 +133,8 @@ class AppUser {
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
+    bool? genderAll,
+    List<String>? actionedPersonaIds,
   }) {
     return AppUser(
       uid: uid,
@@ -142,29 +154,27 @@ class AppUser {
       preferredMbti: preferredMbti ?? this.preferredMbti,
       communicationStyle: communicationStyle ?? this.communicationStyle,
       preferredTopics: preferredTopics ?? this.preferredTopics,
+      genderAll: genderAll ?? this.genderAll,
+      actionedPersonaIds: actionedPersonaIds ?? this.actionedPersonaIds,
     );
   }
 }
 
 class PreferredPersona {
-  final String gender;
   final List<int> ageRange;
 
   PreferredPersona({
-    required this.gender,
     required this.ageRange,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'gender': gender,
       'ageRange': ageRange,
     };
   }
 
   factory PreferredPersona.fromMap(Map<String, dynamic> map) {
     return PreferredPersona(
-      gender: map['gender'] ?? 'female',
       ageRange: List<int>.from(map['ageRange'] ?? [20, 35]),
     );
   }

@@ -38,9 +38,8 @@ class UserService extends BaseService {
     required String email,
     required String password,
     required String nickname,
-    String? gender,
+    required String gender,
     required DateTime birth,
-    required String preferredGender,
     required List<int> preferredAgeRange,
     required List<String> interests,
     String? intro,
@@ -50,6 +49,7 @@ class UserService extends BaseService {
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
+    bool genderAll = false,
   }) async {
     return await executeWithLoading<AppUser?>(() async {
       // 1. Firebase Auth로 사용자 생성
@@ -80,7 +80,6 @@ class UserService extends BaseService {
         birth: birth,
         age: AppUser.calculateAge(birth),
         preferredPersona: PreferredPersona(
-          gender: preferredGender,
           ageRange: preferredAgeRange,
         ),
         interests: interests,
@@ -92,6 +91,7 @@ class UserService extends BaseService {
         preferredMbti: preferredMbti,
         communicationStyle: communicationStyle,
         preferredTopics: preferredTopics,
+        genderAll: genderAll,
       );
 
       await FirebaseHelper.user(newUser.uid).set(
@@ -139,9 +139,8 @@ class UserService extends BaseService {
   // 구글 로그인 후 추가 정보 저장
   Future<AppUser?> completeGoogleSignUp({
     required String nickname,
-    String? gender,
+    required String gender,
     required DateTime birth,
-    required String preferredGender,
     required List<int> preferredAgeRange,
     required List<String> interests,
     String? intro,
@@ -151,6 +150,7 @@ class UserService extends BaseService {
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
+    bool genderAll = false,
   }) async {
     return await executeWithLoading<AppUser?>(() async {
       if (_firebaseUser == null) {
@@ -175,7 +175,6 @@ class UserService extends BaseService {
         birth: birth,
         age: AppUser.calculateAge(birth),
         preferredPersona: PreferredPersona(
-          gender: preferredGender,
           ageRange: preferredAgeRange,
         ),
         interests: interests,
@@ -187,6 +186,7 @@ class UserService extends BaseService {
         preferredMbti: preferredMbti,
         communicationStyle: communicationStyle,
         preferredTopics: preferredTopics,
+        genderAll: genderAll,
       );
 
       await FirebaseHelper.user(newUser.uid).set(
@@ -235,11 +235,11 @@ class UserService extends BaseService {
     String? nickname,
     String? gender,
     DateTime? birth,
-    String? preferredGender,
     List<int>? preferredAgeRange,
     List<String>? interests,
     String? intro,
     File? profileImage,
+    bool? genderAll,
   }) async {
     final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
@@ -264,10 +264,9 @@ class UserService extends BaseService {
         updates['birth'] = Timestamp.fromDate(birth);
         updates['age'] = AppUser.calculateAge(birth);
       }
-      if (preferredGender != null || preferredAgeRange != null) {
+      if (preferredAgeRange != null) {
         updates['preferredPersona'] = {
-          'gender': preferredGender ?? _currentUser!.preferredPersona.gender,
-          'ageRange': preferredAgeRange ?? _currentUser!.preferredPersona.ageRange,
+          'ageRange': preferredAgeRange,
         };
       }
       if (interests != null) updates['interests'] = interests;
@@ -275,6 +274,7 @@ class UserService extends BaseService {
       if (newProfileImageUrl != null) {
         updates['profileImageUrl'] = newProfileImageUrl;
       }
+      if (genderAll != null) updates['genderAll'] = genderAll;
 
       // Firestore 업데이트
       await FirebaseHelper.user(_currentUser!.uid).update(updates);

@@ -11,8 +11,6 @@ import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
 import '../widgets/persona/optimized_persona_image.dart';
 import '../services/relationship/relation_score_service.dart';
-import '../services/relationship/relationship_visual_system.dart';
-import '../utils/like_formatter.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -469,21 +467,40 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      // 관계 단계 표시
+                                      // 친밀도 표시 (like score와 뱃지)
                                       FutureBuilder<int>(
                                         future: _getLikes(context, persona),
                                         builder: (context, snapshot) {
                                           final likes = snapshot.data ?? persona.relationshipScore ?? 0;
-                                          final relationshipType = RelationshipType.fromScore(likes);
-                                          final color = RelationshipColorSystem.getRelationshipColor(likes);
+                                          final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
                                           
-                                          return Text(
-                                            relationshipType.displayName,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              color: color,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                          return Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              // 하트 아이콘
+                                              SizedBox(
+                                                width: 14,
+                                                height: 14,
+                                                child: visualInfo.heart,
+                                              ),
+                                              const SizedBox(width: 4),
+                                              // 친밀도 숫자
+                                              Text(
+                                                visualInfo.formattedLikes,
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: visualInfo.color,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 4),
+                                              // 뱃지
+                                              SizedBox(
+                                                width: 12,
+                                                height: 12,
+                                                child: visualInfo.badge,
+                                              ),
+                                            ],
                                           );
                                         },
                                       ),
@@ -515,43 +532,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                                // 친밀도 표시
-                                FutureBuilder<int>(
-                                  future: _getLikes(context, persona),
-                                  builder: (context, snapshot) {
-                                    final likes = snapshot.data ?? persona.relationshipScore ?? 0;
-                                    final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
-                                    
-                                    return Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        // 하트 아이콘
-                                        SizedBox(
-                                          width: 14,
-                                          height: 14,
-                                          child: visualInfo.heart,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        // 친밀도 숫자
-                                        Text(
-                                          visualInfo.formattedLikes,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            color: visualInfo.color,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 4),
-                                        // 뱃지
-                                        SizedBox(
-                                          width: 12,
-                                          height: 12,
-                                          child: visualInfo.badge,
-                                        ),
-                                      ],
-                                    );
-                                  },
                                 ),
                                 if (hasUnread && lastPersonaMessageGroupCount > 0 && !isTyping)
                                   Container(

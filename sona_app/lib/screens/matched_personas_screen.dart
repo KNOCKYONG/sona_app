@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../services/persona/persona_service.dart';
 import '../models/persona.dart';
+import '../services/relationship/relation_score_service.dart';
+import '../services/auth/auth_service.dart';
 
 class MatchedPersonasScreen extends StatelessWidget {
   const MatchedPersonasScreen({super.key});
@@ -82,6 +84,18 @@ class _PersonaCard extends StatelessWidget {
   final Persona persona;
   
   const _PersonaCard({required this.persona});
+  
+  Future<int> _getLikes(BuildContext context, Persona persona) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId == null) return persona.relationshipScore ?? 0;
+    
+    return await RelationScoreService.instance.getLikes(
+      userId: userId,
+      personaId: persona.id,
+    );
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -174,23 +188,42 @@ class _PersonaCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: _getRelationshipColor(persona.currentRelationship).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              persona.currentRelationship.displayName,
-                              style: TextStyle(
-                                fontSize: 11,
-                                color: _getRelationshipColor(persona.currentRelationship),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                          // 친밀도 표시 (like score와 뱃지)
+                          FutureBuilder<int>(
+                            future: _getLikes(context, persona),
+                            builder: (context, snapshot) {
+                              final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+                              final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
+                              
+                              return Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // 하트 아이콘
+                                  SizedBox(
+                                    width: 14,
+                                    height: 14,
+                                    child: visualInfo.heart,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  // 친밀도 숫자
+                                  Text(
+                                    visualInfo.formattedLikes,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: visualInfo.color,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  // 뱃지
+                                  SizedBox(
+                                    width: 12,
+                                    height: 12,
+                                    child: visualInfo.badge,
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                         ],
                       ),
@@ -201,24 +234,6 @@ class _PersonaCard extends StatelessWidget {
                           fontSize: 13,
                           color: Colors.grey[600],
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.favorite,
-                            size: 14,
-                            color: Colors.pink[300],
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '친밀도 ${persona.relationshipScore}',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -236,18 +251,5 @@ class _PersonaCard extends StatelessWidget {
         ),
       ),
     );
-  }
-  
-  Color _getRelationshipColor(RelationshipType type) {
-    switch (type) {
-      case RelationshipType.friend:
-        return Colors.blue;
-      case RelationshipType.crush:
-        return Colors.orange;
-      case RelationshipType.dating:
-        return Colors.pink;
-      case RelationshipType.perfectLove:
-        return Colors.red;
-    }
   }
 }

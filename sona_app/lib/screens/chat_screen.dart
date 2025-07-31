@@ -10,7 +10,6 @@ import '../services/relationship/relationship_visual_system.dart';
 import '../models/persona.dart';
 import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
-import '../widgets/chat/offline_guide_widget.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
 import '../widgets/common/modern_emotion_picker.dart';
 import '../theme/app_theme.dart';
@@ -143,12 +142,9 @@ class _ChatScreenState extends State<ChatScreen> {
             personaService.currentPersona!.id
           );
         } else {
-          debugPrint('⚠️ User not authenticated, loading from local storage');
-          // Load chat history from local storage for guest users
-          await chatService.loadChatHistory(
-            '',
-            personaService.currentPersona!.id
-          );
+          debugPrint('⚠️ User not authenticated, skipping chat history load');
+          // Clear any existing messages for guest users
+          chatService.clearMessages();
         }
         
         if (chatService.messages.isEmpty) {
@@ -189,6 +185,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final authService = Provider.of<AuthService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     
+    
+    _messageController.clear();
+    
     final persona = personaService.currentPersona;
     if (persona == null) {
       debugPrint('No persona selected');
@@ -197,42 +196,6 @@ class _ChatScreenState extends State<ChatScreen> {
     
     final userId = authService.user?.uid ?? '';
     
-    // Check if persona is online
-    final onlineStatus = await RelationScoreService.instance.getPersonaOnlineStatus(
-      userId: userId,
-      personaId: persona.id,
-    );
-    
-    // Clear input immediately for better UX
-    _messageController.clear();
-    
-    // If offline, still show user message but don't send to AI
-    if (!onlineStatus.isOnline) {
-      // Add user message to local display even if offline
-      final success = await chatService.sendMessage(
-        content: content,
-        userId: userId,
-        persona: persona,
-      );
-      
-      if (success) {
-        _scrollToBottom();
-        
-        // Show offline notice after user message is displayed
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${persona.name}님이 현재 오프라인이에요. 온라인이 되면 답장할 거예요!'),
-              backgroundColor: Colors.orange[700],
-              duration: const Duration(seconds: 3),
-            ),
-          );
-        }
-      }
-      return;
-    }
-    
-    // If online, send message normally
     final success = await chatService.sendMessage(
       content: content,
       userId: userId,
@@ -498,87 +461,15 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
           
-          // Offline guide or message input
-          Consumer3<PersonaService, AuthService, ChatService>(
-            builder: (context, personaService, authService, chatService, child) {
-              final userId = authService.user?.uid ?? '';
-              final persona = personaService.currentPersona;
-              
-              return FutureBuilder<PersonaOnlineStatus>(
-                future: persona != null
-                    ? RelationScoreService.instance.getPersonaOnlineStatus(
-                        userId: userId,
-                        personaId: persona.id,
-                      )
-                    : Future.value(PersonaOnlineStatus(
-                        isOnline: true,
-                        reason: 'always_online',
-                        message: '',
-                      )),
-                builder: (context, snapshot) {
-                  final isOnline = snapshot.data?.isOnline ?? true;
-                  
-                  // Show offline guide if persona is offline
-                  if (!isOnline && persona != null) {
-                    return OfflineGuideWidget(
-                      persona: persona,
-                      onSubscribe: () {
-                        Navigator.pushNamed(context, '/subscription');
-                      },
-                    );
-                  }
-                  
-                  return Column(
-                children: [
-                  // Show remaining messages count for non-logged-in users
-                  if (userId.isEmpty)
-                    FutureBuilder<int>(
-                      future: context.read<ChatService>().localChatStorage.getRemainingMessages(),
-                      builder: (context, snapshot) {
-                        final remaining = snapshot.data ?? 100;
-                        if (remaining > 0 && remaining < 20) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            color: Colors.orange[50],
-                            child: Row(
-                              children: [
-                                Icon(Icons.info_outline, size: 16, color: Colors.orange[700]),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '무료 메시지 ${remaining}개 남음',
-                                  style: TextStyle(
-                                    color: Colors.orange[700],
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const Spacer(),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/login');
-                                  },
-                                  child: const Text(
-                                    '로그인',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  _MessageInput(
-                    controller: _messageController,
-                    focusNode: _focusNode,
-                    onSend: _sendMessage,
-                    onAttachment: _showAttachmentMenu,
-                    onEmotion: _showEmotionPicker,
-                  ),
-                ],
-              );
-                },
+          // Message input
+          Consumer<PersonaService>(
+            builder: (context, personaService, child) {
+              return _MessageInput(
+                controller: _messageController,
+                focusNode: _focusNode,
+                onSend: _sendMessage,
+                onAttachment: _showAttachmentMenu,
+                onEmotion: _showEmotionPicker,
               );
             },
           ),
@@ -827,78 +718,55 @@ class _OnlineStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = authService.user?.uid ?? '';
-    
-    return FutureBuilder<PersonaOnlineStatus>(
-      future: RelationScoreService.instance.getPersonaOnlineStatus(
-        userId: userId,
-        personaId: persona.id,
-      ),
-      builder: (context, statusSnapshot) {
-        final status = statusSnapshot.data;
-        final isOnline = status?.isOnline ?? true;
+    return FutureBuilder<int>(
+      future: _getLikes(context),
+      builder: (context, snapshot) {
+        final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+        final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
         
-        return FutureBuilder<int>(
-          future: _getLikes(context),
-          builder: (context, likesSnapshot) {
-            final likes = likesSnapshot.data ?? persona.relationshipScore ?? 0;
-            final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
-            
-            return Row(
-              children: [
-                // 온라인/오프라인 표시
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: isOnline ? Colors.green[500] : Colors.red[500],
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: (isOnline ? Colors.green : Colors.red).withOpacity(0.4),
-                        blurRadius: 4,
-                        spreadRadius: 1,
-                      ),
-                    ],
+        return Row(
+          children: [
+            // 온라인 표시
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: Colors.green[500],
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.4),
+                    blurRadius: 4,
+                    spreadRadius: 1,
                   ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  isOnline ? 'Online' : 'Offline',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isOnline ? Colors.green[600] : Colors.red[600],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // 하트 아이콘
-                SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: visualInfo.heart,
-                ),
-                const SizedBox(width: 4),
-                // Like 수 (포맷팅됨)
-                Text(
-                  visualInfo.formattedLikes,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: visualInfo.color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // 뱃지
-                SizedBox(
-                  width: 12,
-                  height: 12,
-                  child: visualInfo.badge,
-                ),
-              ],
-            );
-          },
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 하트 아이콘
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: visualInfo.heart,
+            ),
+            const SizedBox(width: 4),
+            // Like 수 (포맷팅됨)
+            Text(
+              visualInfo.formattedLikes,
+              style: TextStyle(
+                fontSize: 12,
+                color: visualInfo.color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 뱃지
+            SizedBox(
+              width: 12,
+              height: 12,
+              child: visualInfo.badge,
+            ),
+          ],
         );
       },
     );

@@ -276,6 +276,7 @@ class PersonaService extends BaseService {
         currentRelationship: RelationshipType.friend,
         isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
+        matchedAt: DateTime.now(),  // Set matched time
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -350,6 +351,8 @@ class PersonaService extends BaseService {
         relationshipScore: 200, // 🌟 Super like relationship score
         currentRelationship: RelationshipType.crush, // 🌟 Super like relationship type
         isCasualSpeech: false,
+        imageUrls: persona.imageUrls,  // Preserve imageUrls
+        matchedAt: DateTime.now(),  // Set matched time
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -663,11 +666,21 @@ class PersonaService extends BaseService {
         final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
         if (persona != null) {
           final relationshipScore = data['relationshipScore'] ?? 50;
+          
+          // Get matchedAt timestamp from Firebase
+          DateTime? matchedAt;
+          if (data['matchedAt'] != null) {
+            if (data['matchedAt'] is Timestamp) {
+              matchedAt = (data['matchedAt'] as Timestamp).toDate();
+            }
+          }
+          
           final matchedPersona = persona.copyWith(
             relationshipScore: relationshipScore,
             currentRelationship: _getRelationshipTypeFromScore(relationshipScore),
             isCasualSpeech: data['isCasualSpeech'] ?? false,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
+            matchedAt: matchedAt,
           );
           
           _matchedPersonas.add(matchedPersona);

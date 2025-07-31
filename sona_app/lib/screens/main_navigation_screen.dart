@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
 import '../services/storage/cache_manager.dart';
+import '../services/chat/chat_service.dart';
+import '../services/auth/auth_service.dart';
+import '../services/persona/persona_service.dart';
 import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  final int initialIndex;
+  
+  const MainNavigationScreen({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -26,7 +35,26 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialIndex;
     _checkFirstTimeUser();
+    
+    // 채팅 목록 탭으로 시작하는 경우 페르소나 서비스 새로고침
+    if (_selectedIndex == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final personaService = context.read<PersonaService>();
+        final authService = context.read<AuthService>();
+        final chatService = context.read<ChatService>();
+        
+        // 매칭된 페르소나 최신 상태로 새로고침
+        final userId = authService.user?.uid ?? '';
+        if (userId.isNotEmpty) {
+          await personaService.initialize(userId: userId);
+        }
+        
+        // UI 새로고침
+        chatService.notifyListeners();
+      });
+    }
   }
 
   Future<void> _checkFirstTimeUser() async {
@@ -43,6 +71,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     setState(() {
       _selectedIndex = index;
     });
+    
+    // 채팅 목록 탭을 선택했을 때 페르소나 서비스 새로고침
+    if (index == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        final personaService = context.read<PersonaService>();
+        final authService = context.read<AuthService>();
+        final chatService = context.read<ChatService>();
+        
+        // 매칭된 페르소나 최신 상태로 새로고침
+        final userId = authService.user?.uid ?? '';
+        if (userId.isNotEmpty) {
+          await personaService.initialize(userId: userId);
+        }
+        
+        // UI 새로고침
+        chatService.notifyListeners();
+      });
+    }
   }
 
   @override

@@ -17,7 +17,12 @@ class ChatListScreen extends StatefulWidget {
   State<ChatListScreen> createState() => _ChatListScreenState();
 }
 
-class _ChatListScreenState extends State<ChatListScreen> {
+class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => false; // false로 설정하여 매번 새로고침
+  
+  bool _isRefreshing = false;
+  
   @override
   void initState() {
     super.initState();
@@ -25,6 +30,25 @@ class _ChatListScreenState extends State<ChatListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeChatList();
     });
+  }
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 화면이 표시될 때마다 데이터 새로고침
+    if (!_isRefreshing) {
+      _isRefreshing = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _initializeChatList();
+        _isRefreshing = false;
+      });
+    }
+  }
+  
+  void _refreshChatList() {
+    // Firebase에서 다시 로드하지 않고 UI만 새로고침
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    chatService.notifyListeners();
   }
 
   /// 🔄 채팅 목록 초기화 및 새로고침
@@ -69,6 +93,11 @@ class _ChatListScreenState extends State<ChatListScreen> {
       if (matchedPersonas.isEmpty) {
         debugPrint('⚠️ No matched personas found - user might need to swipe more');
       }
+      
+      // 4. UI 강제 새로고침
+      if (mounted) {
+        setState(() {});
+      }
     } catch (e) {
       debugPrint('❌ Error initializing chat list: $e');
     }
@@ -84,12 +113,20 @@ class _ChatListScreenState extends State<ChatListScreen> {
       return '$personaName님이 대화를 기다리고 있어요.';
     }
     
-    if (lastMessage.type == MessageType.image) {
-      return '📷 사진';
-    } else if (lastMessage.type == MessageType.voice) {
-      return '🎤 음성 메시지';
+    String preview = '';
+    if (lastMessage.isFromUser) {
+      preview = '나: ';
     }
-    return lastMessage.content;
+    
+    if (lastMessage.type == MessageType.image) {
+      preview += '📷 사진';
+    } else if (lastMessage.type == MessageType.voice) {
+      preview += '🎤 음성 메시지';
+    } else {
+      preview += lastMessage.content;
+    }
+    
+    return preview;
   }
 
   String _getLastMessageTime(List<Message> messages) {
@@ -119,6 +156,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // AutomaticKeepAliveClientMixin 사용 시 필요
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -199,19 +237,33 @@ class _ChatListScreenState extends State<ChatListScreen> {
         builder: (context, personaService, chatService, child) {
           final matchedPersonas = List<Persona>.from(personaService.matchedPersonas);
           
-          // Sort personas by last message time
+          // Sort personas by last interaction (message or match time)
           matchedPersonas.sort((a, b) {
             final messagesA = chatService.getMessages(a.id);
             final messagesB = chatService.getMessages(b.id);
             
-            if (messagesA.isEmpty && messagesB.isEmpty) return 0;
-            if (messagesA.isEmpty) return 1;
-            if (messagesB.isEmpty) return -1;
+            // Get last interaction time for A
+            DateTime? lastTimeA;
+            if (messagesA.isNotEmpty) {
+              lastTimeA = messagesA.last.timestamp;
+            } else if (a.matchedAt != null) {
+              lastTimeA = a.matchedAt;
+            }
             
-            final lastTimeA = messagesA.last.timestamp;
-            final lastTimeB = messagesB.last.timestamp;
+            // Get last interaction time for B
+            DateTime? lastTimeB;
+            if (messagesB.isNotEmpty) {
+              lastTimeB = messagesB.last.timestamp;
+            } else if (b.matchedAt != null) {
+              lastTimeB = b.matchedAt;
+            }
             
-            return lastTimeB.compareTo(lastTimeA); // Descending order
+            // If both have no interaction time, maintain original order
+            if (lastTimeA == null && lastTimeB == null) return 0;
+            if (lastTimeA == null) return 1;
+            if (lastTimeB == null) return -1;
+            
+            return lastTimeB.compareTo(lastTimeA); // Descending order (newest first)
           });
           
           if (matchedPersonas.isEmpty) {
@@ -270,11 +322,16 @@ class _ChatListScreenState extends State<ChatListScreen> {
             itemCount: matchedPersonas.length,
             itemBuilder: (context, index) {
               final persona = matchedPersonas[index];
-              final messages = chatService.getMessages(persona.id);
+              // 매번 최신 메시지를 가져오도록 함
+              final messages = List<Message>.from(chatService.getMessages(persona.id));
               debugPrint('Chat list - Persona: ${persona.name}, Messages: ${messages.length}');
               if (messages.isNotEmpty) {
                 try {
                   debugPrint('Last message: ${messages.last.content}');
+                  final unreadCount = messages.where((m) => !m.isFromUser && m.isRead != true).length;
+                  if (unreadCount > 0) {
+                    debugPrint('🔴 Still have $unreadCount unread messages for ${persona.name}');
+                  }
                 } catch (e) {
                   debugPrint('❌ Error accessing last message: $e');
                 }
@@ -288,15 +345,22 @@ class _ChatListScreenState extends State<ChatListScreen> {
               try {
                 // Count unread messages from persona (not user)
                 unreadPersonaMessageCount = messages.where((msg) => 
-                  !msg.isFromUser && msg.isRead != true
+                  !msg.isFromUser && (msg.isRead == false || msg.isRead == null)
                 ).length;
                 hasUnread = unreadPersonaMessageCount > 0;
+                
+                if (hasUnread) {
+                  debugPrint('🔴 Unread messages for ${persona.name}: $unreadPersonaMessageCount');
+                  messages.where((msg) => !msg.isFromUser && (msg.isRead == false || msg.isRead == null)).forEach((msg) {
+                    debugPrint('  - Unread: ${msg.content.substring(0, 30 < msg.content.length ? 30 : msg.content.length)}... isRead: ${msg.isRead}');
+                  });
+                }
                 
                 // 마지막 페르소나 메시지 그룹의 개수 계산
                 if (messages.isNotEmpty && hasUnread) {
                   // 뒤에서부터 연속된 페르소나 메시지 개수 세기
                   for (int i = messages.length - 1; i >= 0; i--) {
-                    if (!messages[i].isFromUser && messages[i].isRead != true) {
+                    if (!messages[i].isFromUser && (messages[i].isRead == false || messages[i].isRead == null)) {
                       lastPersonaMessageGroupCount++;
                     } else {
                       // 사용자 메시지나 읽은 메시지를 만나면 중단
@@ -418,7 +482,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                if (lastPersonaMessageGroupCount > 0 && !isTyping)
+                                if (hasUnread && lastPersonaMessageGroupCount > 0 && !isTyping)
                                   Container(
                                     margin: const EdgeInsets.only(left: 8),
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -433,16 +497,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                       ),
-                                    ),
-                                  ),
-                                if (hasUnread)
-                                  Container(
-                                    margin: const EdgeInsets.only(left: 8),
-                                    width: 8,
-                                    height: 8,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
-                                      shape: BoxShape.circle,
                                     ),
                                   ),
                               ],

@@ -90,6 +90,16 @@ class ChatService extends BaseService {
   List<Message> getMessages(String personaId) {
     // Always return messages for the specific persona
     final messages = _messagesByPersona[personaId] ?? [];
+    
+    // Debug: 읽지 않은 메시지 확인
+    final unreadCount = messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+    if (unreadCount > 0) {
+      debugPrint('🔍 getMessages for $personaId: Found $unreadCount unread messages');
+      for (final msg in messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null))) {
+        debugPrint('  - Unread msg: ${msg.content.substring(0, 20 < msg.content.length ? 20 : msg.content.length)}... isRead: ${msg.isRead}');
+      }
+    }
+    
     // Return only recent messages to save memory
     if (messages.length > AppConstants.maxMessagesInMemory) {
       return messages.sublist(messages.length - AppConstants.maxMessagesInMemory);
@@ -97,17 +107,80 @@ class ChatService extends BaseService {
     return messages;
   }
   
+  /// Mark all user messages as read when AI responds
+  void _markUserMessagesAsRead(String personaId) {
+    final messages = _messagesByPersona[personaId] ?? [];
+    bool hasUpdates = false;
+    final messagesToUpdate = <Message>[];
+    final updatedMessages = <Message>[];
+    
+    for (int i = 0; i < messages.length; i++) {
+      final message = messages[i];
+      if (message.isFromUser && !message.isRead) {
+        final updatedMessage = message.copyWith(isRead: true);
+        messages[i] = updatedMessage;
+        hasUpdates = true;
+        messagesToUpdate.add(updatedMessage);
+        updatedMessages.add(updatedMessage);
+      }
+    }
+    
+    if (hasUpdates) {
+      notifyListeners();
+      
+      // Update read status in Firebase
+      if (_currentUserId != null && _currentUserId!.isNotEmpty) {
+        _updateReadStatusInFirebase(_currentUserId!, personaId, messagesToUpdate);
+      }
+    }
+  }
+  
+  /// Update read status in Firebase for multiple messages
+  Future<void> _updateReadStatusInFirebase(String userId, String personaId, List<Message> messages) async {
+    if (messages.isEmpty) return;
+    
+    try {
+      final batch = FirebaseHelper.batch();
+      
+      for (final message in messages) {
+        final docRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('chats')
+            .doc(personaId)
+            .collection('messages')
+            .doc(message.id);
+            
+        batch.update(docRef, {'isRead': true});
+      }
+      
+      await batch.commit();
+      debugPrint('✅ Updated read status for ${messages.length} messages in Firebase');
+    } catch (e) {
+      debugPrint('❌ Error updating read status in Firebase: $e');
+    }
+  }
+
   /// 🔵 채팅방 진입 시 모든 메시지를 읽음으로 표시
   Future<void> markAllMessagesAsRead(String userId, String personaId) async {
-    debugPrint('📖 Marking all messages as read for persona: $personaId');
+    debugPrint('📖 Marking all messages as read for persona: $personaId, userId: $userId');
     
-    final messages = _messagesByPersona[personaId] ?? [];
+    final messages = _messagesByPersona[personaId];
+    if (messages == null || messages.isEmpty) {
+      debugPrint('⚠️ No messages found for persona: $personaId');
+      return;
+    }
+    
+    debugPrint('📊 Total messages for persona: ${messages.length}');
+    
     bool hasUnreadMessages = false;
     final updatedMessages = <Message>[];
     
-    // 읽지 않은 페르소나 메시지만 읽음 처리
+    // 모든 읽지 않은 메시지를 읽음 처리 (사용자 메시지와 페르소나 메시지 모두)
     for (final message in messages) {
-      if (!message.isFromUser && (message.isRead == false || message.isRead == null)) {
+      if (message.isRead == false || message.isRead == null) {
+        debugPrint('📌 Found unread message: ${message.id}, isFromUser: ${message.isFromUser}, content: ${message.content.substring(0, 20 < message.content.length ? 20 : message.content.length)}...');
+        
         // copyWith를 사용하여 새로운 Message 객체 생성
         final updatedMessage = message.copyWith(isRead: true);
         updatedMessages.add(updatedMessage);
@@ -126,13 +199,15 @@ class ChatService extends BaseService {
           }
         }
       } else {
-        // 변경이 필요 없는 메시지는 그대로 추가
         updatedMessages.add(message);
       }
     }
     
-    // 읽지 않은 메시지가 있었다면 메시지 리스트 업데이트
+    // 읽지 않은 메시지가 있었다면 메시지 리스트를 완전히 교체
     if (hasUnreadMessages) {
+      debugPrint('✅ Updating ${updatedMessages.length} messages as read for persona $personaId');
+      
+      // 메시지 리스트를 완전히 새로운 리스트로 교체
       _messagesByPersona[personaId] = updatedMessages;
       
       // 현재 페르소나의 메시지라면 전역 메시지도 업데이트
@@ -140,7 +215,12 @@ class ChatService extends BaseService {
         _messages = List.from(updatedMessages);
       }
       
+      // 강제로 notifyListeners 호출하여 UI 업데이트
       notifyListeners();
+      
+      debugPrint('🔄 After update - Unread count: ${updatedMessages.where((m) => !m.isFromUser && m.isRead != true).length}');
+    } else {
+      debugPrint('ℹ️ No unread messages found for persona $personaId');
     }
   }
 
@@ -283,6 +363,9 @@ class ChatService extends BaseService {
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
     debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
     try {
+      // Mark all user messages as read when AI responds
+      _markUserMessagesAsRead(persona.id);
+      
       // Typing indicator is now handled by _queueMessageForDelayedResponse
 
       // Check cache first

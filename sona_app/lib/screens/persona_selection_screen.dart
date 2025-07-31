@@ -1094,8 +1094,18 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.of(context).pop();
+                          
+                          // 페르소나 서비스 새로고침을 트리거
+                          final personaService = Provider.of<PersonaService>(screenContext, listen: false);
+                          final authService = Provider.of<AuthService>(screenContext, listen: false);
+                          final userId = authService.user?.uid ?? '';
+                          
+                          if (userId.isNotEmpty) {
+                            // 매칭된 페르소나 새로고침
+                            await personaService.initialize(userId: userId);
+                          }
                         },
                         style: OutlinedButton.styleFrom(
                           foregroundColor: Colors.white,

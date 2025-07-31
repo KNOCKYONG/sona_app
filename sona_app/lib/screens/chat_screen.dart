@@ -28,7 +28,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
@@ -38,10 +38,12 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isNearBottom = true;
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
+  bool _previousIsTyping = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _setupScrollListener();
     _setupKeyboardListener();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -141,6 +143,10 @@ class _ChatScreenState extends State<ChatScreen> {
             userId,
             personaService.currentPersona!.id
           );
+          
+          // Force refresh to ensure UI updates
+          await Future.delayed(const Duration(milliseconds: 100));
+          chatService.notifyListeners();
         } else {
           debugPrint('⚠️ User not authenticated, skipping chat history load');
           // Clear any existing messages for guest users
@@ -225,7 +231,8 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
     
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // force가 true면 즉시 실행, 아니면 다음 프레임에서 실행
+    if (force) {
       if (_scrollController.hasClients) {
         final targetScroll = _scrollController.position.maxScrollExtent;
         
@@ -233,15 +240,33 @@ class _ChatScreenState extends State<ChatScreen> {
           // 부드러운 스크롤 애니메이션
           _scrollController.animateTo(
             targetScroll,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubic, // 더 부드러운 커브 사용
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
           );
         } else {
           // 즉시 이동
           _scrollController.jumpTo(targetScroll);
         }
       }
-    });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          final targetScroll = _scrollController.position.maxScrollExtent;
+          
+          if (smooth) {
+            // 부드러운 스크롤 애니메이션
+            _scrollController.animateTo(
+              targetScroll,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+            );
+          } else {
+            // 즉시 이동
+            _scrollController.jumpTo(targetScroll);
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -261,7 +286,32 @@ class _ChatScreenState extends State<ChatScreen> {
   String? _currentPersonaId;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      // Mark messages as read when app goes to background
+      _markMessagesAsReadOnExit();
+    }
+  }
+  
+  void _markMessagesAsReadOnExit() {
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    final userId = authService.user?.uid ?? '';
+    final currentPersona = personaService.currentPersona;
+    
+    if (userId.isNotEmpty && currentPersona != null) {
+      chatService.markAllMessagesAsRead(userId, currentPersona.id);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    // Mark all messages as read when leaving chat
+    _markMessagesAsReadOnExit();
+    
     _messageController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
@@ -328,26 +378,34 @@ class _ChatScreenState extends State<ChatScreen> {
                   
                   _previousMessageCount = messages.length;
                   
-                  // AI 메시지가 추가되었을 때 스크롤
+                  // AI 메시지가 추가되었을 때 처리
                   if (hasNewAIMessage) {
+                    // 채팅방에 있을 때는 즉시 읽음 처리
+                    final authService = Provider.of<AuthService>(context, listen: false);
+                    final userId = authService.user?.uid ?? '';
+                    if (userId.isNotEmpty && mounted) {
+                      // Mark messages as read after a short delay to ensure they're saved
+                      Future.delayed(const Duration(milliseconds: 300), () async {
+                        if (mounted) {
+                          await chatService.markAllMessagesAsRead(userId, currentPersona.id);
+                          chatService.notifyListeners();
+                        }
+                      });
+                    }
+                    
+                    // 스크롤 처리
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      // 마지막 메시지가 아니면 즉시 스크롤, 마지막 메시지면 딜레이 후 스크롤
-                      if (!isLastAIMessage) {
-                        // 중간 메시지들은 즉시 스크롤
-                        _scrollToBottom(smooth: false);
-                      } else {
-                        // 마지막 메시지는 부드럽게 스크롤
-                        _scrollToBottom();
-                      }
+                      _scrollToBottom(force: true);
                     });
                   }
                 }
                 
                 // 타이핑 인디케이터 상태 변경 감지
                 final isTyping = chatService.isPersonaTyping(currentPersona.id);
-                if (isTyping) {
+                if (isTyping && _previousIsTyping != isTyping) {
+                  _previousIsTyping = isTyping;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _scrollToBottom();
+                    _scrollToBottom(force: true);
                   });
                 }
                 
@@ -487,8 +545,48 @@ class _ChatScreenState extends State<ChatScreen> {
       leading: Center(
         child: ModernIconButton(
           icon: Icons.arrow_back_ios_rounded,
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/chat-list');
+          onPressed: () async {
+            // Mark all messages as read before leaving
+            final chatService = Provider.of<ChatService>(context, listen: false);
+            final authService = Provider.of<AuthService>(context, listen: false);
+            final personaService = Provider.of<PersonaService>(context, listen: false);
+            
+            final userId = authService.user?.uid ?? '';
+            final currentPersona = personaService.currentPersona;
+            
+            debugPrint('🔙 Back button pressed - userId: $userId, persona: ${currentPersona?.name}');
+            
+            if (userId.isNotEmpty && currentPersona != null) {
+              // First, get current messages
+              final messagesBefore = chatService.getMessages(currentPersona.id);
+              final unreadBefore = messagesBefore.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+              debugPrint('📊 Before marking - Unread count: $unreadBefore');
+              
+              // Wait for messages to be marked as read
+              await chatService.markAllMessagesAsRead(userId, currentPersona.id);
+              
+              // 메시지 상태 확인
+              final messagesAfter = chatService.getMessages(currentPersona.id);
+              final unreadAfter = messagesAfter.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+              debugPrint('📊 After marking as read - Unread count: $unreadAfter');
+              
+              // 추가 딜레이를 주어 확실히 업데이트되도록 함
+              await Future.delayed(const Duration(milliseconds: 300));
+              
+              // Force refresh multiple times to ensure update
+              chatService.notifyListeners();
+              await Future.delayed(const Duration(milliseconds: 100));
+              chatService.notifyListeners();
+            }
+            
+            // Navigate back to chat list tab
+            if (mounted) {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/chat-list',
+                (route) => false,
+              );
+            }
           },
           tooltip: '뒤로가기',
         ),

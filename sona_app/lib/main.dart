@@ -142,7 +142,7 @@ class SonaApp extends StatelessWidget {
           '/main': (context) => const MainNavigationScreen(),
           '/persona-selection': (context) => const MainNavigationScreen(),
           '/chat': (context) => const ChatScreen(),
-          '/chat-list': (context) => const MainNavigationScreen(),
+          '/chat-list': (context) => const MainNavigationScreen(initialIndex: 1),
           '/profile': (context) => const MainNavigationScreen(),
           '/privacy-policy': (context) => const PrivacyPolicyScreen(),
           '/terms-of-service': (context) => const TermsOfServiceScreen(),

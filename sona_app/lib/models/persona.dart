@@ -237,6 +237,7 @@ class Persona {
       'imageUrls': imageUrls, // 새로운 이미지 URL 구조
       'topics': topics,
       'keywords': keywords,
+      if (matchedAt != null) 'matchedAt': matchedAt!.toIso8601String(),
     };
   }
 
@@ -267,6 +268,9 @@ class Persona {
       keywords: json['keywords'] != null 
         ? List<String>.from(json['keywords'])
         : null,
+      matchedAt: json['matchedAt'] != null 
+        ? DateTime.parse(json['matchedAt'])
+        : null,
     );
   }
 
@@ -285,6 +289,7 @@ class Persona {
     Map<String, dynamic>? imageUrls,
     List<String>? topics,
     List<String>? keywords,
+    DateTime? matchedAt,
   }) {
     return Persona(
       id: id,
@@ -301,6 +306,7 @@ class Persona {
       gender: gender ?? this.gender,
       mbti: mbti ?? this.mbti,
       imageUrls: imageUrls ?? this.imageUrls,
+      matchedAt: matchedAt ?? this.matchedAt,
       topics: topics ?? this.topics,
       keywords: keywords ?? this.keywords,
     );

@@ -21,7 +21,6 @@ import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
 import '../relationship/like_cooldown_system.dart';
-import 'local_chat_storage.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -61,7 +60,7 @@ class ChatService extends BaseService {
     PersonaRelationshipCache.instance.initialize();
     debugPrint('✅ PersonaRelationshipCache initialized');
   }
-  
+>>>>>>> a021dc852a449d0c6c1e70480ccfcccec1568bb6
   // Performance optimization: Response cache
   final Map<String, _CachedResponse> _responseCache = {};
   
@@ -91,7 +90,6 @@ class ChatService extends BaseService {
 
   // Getters
   List<Message> get messages => _currentPersonaId != null ? getMessages(_currentPersonaId!) : _messages;
-  LocalChatStorage get localChatStorage => _localChatStorage;
   
   // Current persona ID for tracking active chat
   String? _currentPersonaId;
@@ -112,6 +110,16 @@ class ChatService extends BaseService {
   List<Message> getMessages(String personaId) {
     // Always return messages for the specific persona
     final messages = _messagesByPersona[personaId] ?? [];
+    
+    // Debug: 읽지 않은 메시지 확인
+    final unreadCount = messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+    if (unreadCount > 0) {
+      debugPrint('🔍 getMessages for $personaId: Found $unreadCount unread messages');
+      for (final msg in messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null))) {
+        debugPrint('  - Unread msg: ${msg.content.substring(0, 20 < msg.content.length ? 20 : msg.content.length)}... isRead: ${msg.isRead}');
+      }
+    }
+    
     // Return only recent messages to save memory
     if (messages.length > AppConstants.maxMessagesInMemory) {
       return messages.sublist(messages.length - AppConstants.maxMessagesInMemory);
@@ -119,17 +127,80 @@ class ChatService extends BaseService {
     return messages;
   }
   
+  /// Mark all user messages as read when AI responds
+  void _markUserMessagesAsRead(String personaId) {
+    final messages = _messagesByPersona[personaId] ?? [];
+    bool hasUpdates = false;
+    final messagesToUpdate = <Message>[];
+    final updatedMessages = <Message>[];
+    
+    for (int i = 0; i < messages.length; i++) {
+      final message = messages[i];
+      if (message.isFromUser && !message.isRead) {
+        final updatedMessage = message.copyWith(isRead: true);
+        messages[i] = updatedMessage;
+        hasUpdates = true;
+        messagesToUpdate.add(updatedMessage);
+        updatedMessages.add(updatedMessage);
+      }
+    }
+    
+    if (hasUpdates) {
+      notifyListeners();
+      
+      // Update read status in Firebase
+      if (_currentUserId != null && _currentUserId!.isNotEmpty) {
+        _updateReadStatusInFirebase(_currentUserId!, personaId, messagesToUpdate);
+      }
+    }
+  }
+  
+  /// Update read status in Firebase for multiple messages
+  Future<void> _updateReadStatusInFirebase(String userId, String personaId, List<Message> messages) async {
+    if (messages.isEmpty) return;
+    
+    try {
+      final batch = FirebaseHelper.batch();
+      
+      for (final message in messages) {
+        final docRef = FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('chats')
+            .doc(personaId)
+            .collection('messages')
+            .doc(message.id);
+            
+        batch.update(docRef, {'isRead': true});
+      }
+      
+      await batch.commit();
+      debugPrint('✅ Updated read status for ${messages.length} messages in Firebase');
+    } catch (e) {
+      debugPrint('❌ Error updating read status in Firebase: $e');
+    }
+  }
+
   /// 🔵 채팅방 진입 시 모든 메시지를 읽음으로 표시
   Future<void> markAllMessagesAsRead(String userId, String personaId) async {
-    debugPrint('📖 Marking all messages as read for persona: $personaId');
+    debugPrint('📖 Marking all messages as read for persona: $personaId, userId: $userId');
     
-    final messages = _messagesByPersona[personaId] ?? [];
+    final messages = _messagesByPersona[personaId];
+    if (messages == null || messages.isEmpty) {
+      debugPrint('⚠️ No messages found for persona: $personaId');
+      return;
+    }
+    
+    debugPrint('📊 Total messages for persona: ${messages.length}');
+    
     bool hasUnreadMessages = false;
     final updatedMessages = <Message>[];
     
-    // 읽지 않은 페르소나 메시지만 읽음 처리
+    // 모든 읽지 않은 메시지를 읽음 처리 (사용자 메시지와 페르소나 메시지 모두)
     for (final message in messages) {
-      if (!message.isFromUser && (message.isRead == false || message.isRead == null)) {
+      if (message.isRead == false || message.isRead == null) {
+        debugPrint('📌 Found unread message: ${message.id}, isFromUser: ${message.isFromUser}, content: ${message.content.substring(0, 20 < message.content.length ? 20 : message.content.length)}...');
+        
         // copyWith를 사용하여 새로운 Message 객체 생성
         final updatedMessage = message.copyWith(isRead: true);
         updatedMessages.add(updatedMessage);
@@ -148,13 +219,15 @@ class ChatService extends BaseService {
           }
         }
       } else {
-        // 변경이 필요 없는 메시지는 그대로 추가
         updatedMessages.add(message);
       }
     }
     
-    // 읽지 않은 메시지가 있었다면 메시지 리스트 업데이트
+    // 읽지 않은 메시지가 있었다면 메시지 리스트를 완전히 교체
     if (hasUnreadMessages) {
+      debugPrint('✅ Updating ${updatedMessages.length} messages as read for persona $personaId');
+      
+      // 메시지 리스트를 완전히 새로운 리스트로 교체
       _messagesByPersona[personaId] = updatedMessages;
       
       // 현재 페르소나의 메시지라면 전역 메시지도 업데이트
@@ -162,7 +235,12 @@ class ChatService extends BaseService {
         _messages = List.from(updatedMessages);
       }
       
+      // 강제로 notifyListeners 호출하여 UI 업데이트
       notifyListeners();
+      
+      debugPrint('🔄 After update - Unread count: ${updatedMessages.where((m) => !m.isFromUser && m.isRead != true).length}');
+    } else {
+      debugPrint('ℹ️ No unread messages found for persona $personaId');
     }
   }
 
@@ -176,19 +254,8 @@ class ChatService extends BaseService {
     
     await executeWithLoading(() async {
       // Load messages and preload memory in parallel
-      final Future<List<Message>> messagesLoading;
-      
-      if (userId.isEmpty) {
-        // Load from local storage for non-logged-in users
-        messagesLoading = _localChatStorage.getMessages(personaId);
-      } else {
-        // Load from Firebase for logged-in users
-        messagesLoading = _loadMessagesFromFirebase(userId, personaId);
-      }
-      
-      final memoryLoading = userId.isNotEmpty 
-          ? _preloadConversationMemory(userId, personaId)
-          : Future.value();
+      final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
+      final memoryLoading = _preloadConversationMemory(userId, personaId);
       
       // Wait for both operations but handle them separately
       try {
@@ -201,11 +268,6 @@ class ChatService extends BaseService {
         // Update global messages if this is the current persona
         if (_currentPersonaId == personaId) {
           _messages = List.from(loadedMessages);
-        }
-        
-        // Check if we need to add morning greeting (only for logged-in users)
-        if (userId.isNotEmpty) {
-          await _checkAndAddMorningGreeting(userId, personaId);
         }
       } catch (e) {
         debugPrint('⚠️ Error during parallel loading: $e');
@@ -277,29 +339,6 @@ class ChatService extends BaseService {
     MessageType type = MessageType.text,
   }) async {
     try {
-      // Check message limit for non-logged-in users
-      if (userId.isEmpty) {
-        final remainingMessages = await _localChatStorage.getRemainingMessages();
-        if (remainingMessages <= 0) {
-          // Show login prompt message
-          final loginPromptMessage = Message(
-            id: _uuid.v4(),
-            personaId: persona.id,
-            content: '무료 대화 100개를 모두 사용하셨어요! 계속 대화하려면 로그인해주세요 😊',
-            type: MessageType.system,
-            isFromUser: false,
-            timestamp: DateTime.now(),
-          );
-          
-          _messagesByPersona[persona.id]!.add(loginPromptMessage);
-          if (_currentPersonaId == persona.id) {
-            _messages = List.from(_messagesByPersona[persona.id]!);
-          }
-          notifyListeners();
-          return false;
-        }
-      }
-      
       // Create user message
       final userMessage = Message(
         id: _uuid.v4(),
@@ -328,26 +367,10 @@ class ChatService extends BaseService {
       notifyListeners();
 
       // 사용자 메시지 저장
-      if (userId.isEmpty) {
-        // Save to local storage for non-logged-in users
-        await _localChatStorage.saveMessage(persona.id, userMessage);
-      } else {
-        // Queue for Firebase saving for logged-in users
-        _queueMessageForSaving(userId, persona.id, userMessage);
-      }
+      _queueMessageForSaving(userId, persona.id, userMessage);
 
-      // Check if persona is online before queuing AI response
-      final onlineStatus = await RelationScoreService.instance.getPersonaOnlineStatus(
-        userId: userId,
-        personaId: persona.id,
-      );
-      
-      if (onlineStatus.isOnline) {
-        // Queue the message for delayed AI response only if online
-        _queueMessageForDelayedResponse(userId, persona, userMessage);
-      } else {
-        debugPrint('📴 Persona ${persona.name} is offline - no AI response will be generated');
-      }
+      // Queue the message for delayed AI response
+      _queueMessageForDelayedResponse(userId, persona, userMessage);
 
       return true;
     } catch (e) {
@@ -360,6 +383,10 @@ class ChatService extends BaseService {
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
     debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
     try {
+      // Mark all user messages as read when AI responds
+      _markUserMessagesAsRead(persona.id);
+      
+      // Typing indicator is now handled by _queueMessageForDelayedResponse
       // Check cache first
       final cacheKey = _getCacheKey(persona.id, userMessage);
       final cachedResponse = _getFromCache(cacheKey);
@@ -1114,13 +1141,7 @@ class ChatService extends BaseService {
                  // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
             
          // Queue message for batch saving
-         if (userId.isEmpty) {
-           // Save to local storage for non-logged-in users
-           await _localChatStorage.saveMessage(persona.id, aiMessage);
-         } else {
-           // Queue for Firebase saving for logged-in users
-           _queueMessageForSaving(userId, persona.id, aiMessage);
-         }
+         _queueMessageForSaving(userId, persona.id, aiMessage);
          
          // 마지막 메시지에서만 친밀도 변화 반영
          if (isLastMessage) {
@@ -1128,12 +1149,9 @@ class ChatService extends BaseService {
            
            if (scoreChange != 0) {
              // Update Firebase relationship score
-             if (userId.isNotEmpty) {
+             if (userId != '') {
                debugPrint('🔥 Normal mode - calling PersonaService for score update');
                _notifyScoreChange(persona.id, scoreChange, userId);
-             } else {
-               // For non-logged-in users, just update the local UI
-               debugPrint('👤 Guest mode - updating local score only');
              }
            } else {
              debugPrint('⏭️ No score change to process');
@@ -1755,66 +1773,6 @@ class ChatService extends BaseService {
     
     final index = userMessage.hashCode.abs() % responses.length;
     return responses[index];
-  }
-  
-  /// 🌅 아침 인사 체크 및 추가
-  Future<void> _checkAndAddMorningGreeting(String userId, String personaId) async {
-    try {
-      final now = DateTime.now();
-      final persona = _getPersonaFromService(personaId);
-      if (persona == null) return;
-      
-      // 오전 7시 이후인지 확인
-      if (now.hour < 7) return;
-      
-      // 오늘 날짜 기준
-      final today = DateTime(now.year, now.month, now.day);
-      final todayStart = today.toUtc();
-      final todayEnd = today.add(Duration(days: 1)).toUtc();
-      
-      // 오늘 이미 대화가 있었는지 확인
-      final todayMessages = await FirebaseHelper.userChatMessages(userId, personaId)
-          .where('timestamp', isGreaterThanOrEqualTo: todayStart)
-          .where('timestamp', isLessThan: todayEnd)
-          .limit(1)
-          .get();
-      
-      // 오늘 대화가 없고, 이전에 대화 기록이 있다면 아침 인사 추가
-      if (todayMessages.docs.isEmpty && _messagesByPersona[personaId]?.isNotEmpty == true) {
-        // 아침 인사 메시지 생성
-        final greetingMessage = RelationScoreService.instance.generateMorningGreeting(persona);
-        
-        // AI 메시지로 추가
-        final aiMessage = Message(
-          id: _uuid.v4(),
-          personaId: personaId,
-          content: greetingMessage,
-          type: MessageType.text,
-          isFromUser: false,
-          isRead: true,
-          timestamp: now,
-          emotion: EmotionType.happy,
-        );
-        
-        // 로컬 상태에 추가
-        _messagesByPersona[personaId]!.add(aiMessage);
-        if (_currentPersonaId == personaId) {
-          _messages = List.from(_messagesByPersona[personaId]!);
-        }
-        
-        // Firebase에 저장
-        await FirebaseHelper.userChatMessages(userId, personaId).add({
-          ...aiMessage.toJson(),
-          'timestamp': FieldValue.serverTimestamp(),
-          'scoreChange': 0, // 아침 인사는 점수 변화 없음
-        });
-        
-        debugPrint('🌅 Morning greeting added for ${persona.name}');
-        notifyListeners();
-      }
-    } catch (e) {
-      debugPrint('Error checking morning greeting: $e');
-    }
   }
 }
 

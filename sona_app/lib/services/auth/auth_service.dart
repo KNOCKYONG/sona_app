@@ -22,6 +22,12 @@ class AuthService extends BaseService {
       notifyListeners();
     });
   }
+  
+  /// Auth 상태가 초기화될 때까지 대기
+  Future<void> waitForAuthState() async {
+    // authStateChanges의 첫 번째 이벤트를 기다림
+    await _auth.authStateChanges().first;
+  }
 
   Future<bool> signInWithGoogle() async {
     final result = await executeWithLoading<bool>(() async {

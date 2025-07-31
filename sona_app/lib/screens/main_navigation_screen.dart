@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
 import '../services/storage/cache_manager.dart';
+import '../services/chat/chat_service.dart';
+import '../services/auth/auth_service.dart';
+import '../services/persona/persona_service.dart';
 import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  final int initialIndex;
+  
+  const MainNavigationScreen({
+    super.key,
+    this.initialIndex = 0,
+  });
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
@@ -26,7 +35,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex = widget.initialIndex;
     _checkFirstTimeUser();
+    
+    // 채팅 목록 탭으로 시작하는 경우 처리는 ChatListScreen의 initState에서 처리됨
   }
 
   Future<void> _checkFirstTimeUser() async {
@@ -43,6 +55,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     setState(() {
       _selectedIndex = index;
     });
+    
+    // 채팅 목록 탭을 선택했을 때 처리는 ChatListScreen에서 자동으로 처리됨
   }
 
   @override

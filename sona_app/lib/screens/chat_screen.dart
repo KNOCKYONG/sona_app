@@ -10,7 +10,6 @@ import '../services/relationship/relationship_visual_system.dart';
 import '../models/persona.dart';
 import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
-import '../widgets/chat/offline_guide_widget.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
 import '../widgets/common/modern_emotion_picker.dart';
 import '../theme/app_theme.dart';
@@ -29,7 +28,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
@@ -39,10 +38,12 @@ class _ChatScreenState extends State<ChatScreen> {
   bool _isNearBottom = true;
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
+  bool _previousIsTyping = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _setupScrollListener();
     _setupKeyboardListener();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -142,13 +143,14 @@ class _ChatScreenState extends State<ChatScreen> {
             userId,
             personaService.currentPersona!.id
           );
+          
+          // Force refresh to ensure UI updates
+          await Future.delayed(const Duration(milliseconds: 100));
+          chatService.notifyListeners();
         } else {
-          debugPrint('⚠️ User not authenticated, loading from local storage');
-          // Load chat history from local storage for guest users
-          await chatService.loadChatHistory(
-            '',
-            personaService.currentPersona!.id
-          );
+          debugPrint('⚠️ User not authenticated, skipping chat history load');
+          // Clear any existing messages for guest users
+          chatService.clearMessages();
         }
         
         if (chatService.messages.isEmpty) {
@@ -189,6 +191,9 @@ class _ChatScreenState extends State<ChatScreen> {
     final authService = Provider.of<AuthService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     
+    
+    _messageController.clear();
+    
     final persona = personaService.currentPersona;
     if (persona == null) {
       debugPrint('No persona selected');
@@ -197,42 +202,6 @@ class _ChatScreenState extends State<ChatScreen> {
     
     final userId = authService.user?.uid ?? '';
     
-    // Check if persona is online
-    final onlineStatus = await RelationScoreService.instance.getPersonaOnlineStatus(
-      userId: userId,
-      personaId: persona.id,
-    );
-    
-    // Clear input immediately for better UX
-    _messageController.clear();
-    
-    // If offline, still show user message but don't send to AI
-    if (!onlineStatus.isOnline) {
-      // Add user message to local display even if offline
-      final success = await chatService.sendMessage(
-        content: content,
-        userId: userId,
-        persona: persona,
-      );
-      
-      if (success) {
-        _scrollToBottom();
-        
-        // Show offline notice after user message is displayed
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${persona.name}님이 현재 오프라인이에요. 온라인이 되면 답장할 거예요!'),
-              backgroundColor: Colors.orange[700],
-              duration: const Duration(seconds: 3),
-            ),
-          );
-        }
-      }
-      return;
-    }
-    
-    // If online, send message normally
     final success = await chatService.sendMessage(
       content: content,
       userId: userId,
@@ -262,7 +231,8 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
     
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    // force가 true면 즉시 실행, 아니면 다음 프레임에서 실행
+    if (force) {
       if (_scrollController.hasClients) {
         final targetScroll = _scrollController.position.maxScrollExtent;
         
@@ -270,15 +240,33 @@ class _ChatScreenState extends State<ChatScreen> {
           // 부드러운 스크롤 애니메이션
           _scrollController.animateTo(
             targetScroll,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOutCubic, // 더 부드러운 커브 사용
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
           );
         } else {
           // 즉시 이동
           _scrollController.jumpTo(targetScroll);
         }
       }
-    });
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          final targetScroll = _scrollController.position.maxScrollExtent;
+          
+          if (smooth) {
+            // 부드러운 스크롤 애니메이션
+            _scrollController.animateTo(
+              targetScroll,
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeOutCubic,
+            );
+          } else {
+            // 즉시 이동
+            _scrollController.jumpTo(targetScroll);
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -298,7 +286,32 @@ class _ChatScreenState extends State<ChatScreen> {
   String? _currentPersonaId;
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      // Mark messages as read when app goes to background
+      _markMessagesAsReadOnExit();
+    }
+  }
+  
+  void _markMessagesAsReadOnExit() {
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    final userId = authService.user?.uid ?? '';
+    final currentPersona = personaService.currentPersona;
+    
+    if (userId.isNotEmpty && currentPersona != null) {
+      chatService.markAllMessagesAsRead(userId, currentPersona.id);
+    }
+  }
+
+  @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    // Mark all messages as read when leaving chat
+    _markMessagesAsReadOnExit();
+    
     _messageController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
@@ -365,26 +378,34 @@ class _ChatScreenState extends State<ChatScreen> {
                   
                   _previousMessageCount = messages.length;
                   
-                  // AI 메시지가 추가되었을 때 스크롤
+                  // AI 메시지가 추가되었을 때 처리
                   if (hasNewAIMessage) {
+                    // 채팅방에 있을 때는 즉시 읽음 처리
+                    final authService = Provider.of<AuthService>(context, listen: false);
+                    final userId = authService.user?.uid ?? '';
+                    if (userId.isNotEmpty && mounted) {
+                      // Mark messages as read after a short delay to ensure they're saved
+                      Future.delayed(const Duration(milliseconds: 300), () async {
+                        if (mounted) {
+                          await chatService.markAllMessagesAsRead(userId, currentPersona.id);
+                          chatService.notifyListeners();
+                        }
+                      });
+                    }
+                    
+                    // 스크롤 처리
                     WidgetsBinding.instance.addPostFrameCallback((_) {
-                      // 마지막 메시지가 아니면 즉시 스크롤, 마지막 메시지면 딜레이 후 스크롤
-                      if (!isLastAIMessage) {
-                        // 중간 메시지들은 즉시 스크롤
-                        _scrollToBottom(smooth: false);
-                      } else {
-                        // 마지막 메시지는 부드럽게 스크롤
-                        _scrollToBottom();
-                      }
+                      _scrollToBottom(force: true);
                     });
                   }
                 }
                 
                 // 타이핑 인디케이터 상태 변경 감지
                 final isTyping = chatService.isPersonaTyping(currentPersona.id);
-                if (isTyping) {
+                if (isTyping && _previousIsTyping != isTyping) {
+                  _previousIsTyping = isTyping;
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    _scrollToBottom();
+                    _scrollToBottom(force: true);
                   });
                 }
                 
@@ -498,87 +519,15 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
           
-          // Offline guide or message input
-          Consumer3<PersonaService, AuthService, ChatService>(
-            builder: (context, personaService, authService, chatService, child) {
-              final userId = authService.user?.uid ?? '';
-              final persona = personaService.currentPersona;
-              
-              return FutureBuilder<PersonaOnlineStatus>(
-                future: persona != null
-                    ? RelationScoreService.instance.getPersonaOnlineStatus(
-                        userId: userId,
-                        personaId: persona.id,
-                      )
-                    : Future.value(PersonaOnlineStatus(
-                        isOnline: true,
-                        reason: 'always_online',
-                        message: '',
-                      )),
-                builder: (context, snapshot) {
-                  final isOnline = snapshot.data?.isOnline ?? true;
-                  
-                  // Show offline guide if persona is offline
-                  if (!isOnline && persona != null) {
-                    return OfflineGuideWidget(
-                      persona: persona,
-                      onSubscribe: () {
-                        Navigator.pushNamed(context, '/subscription');
-                      },
-                    );
-                  }
-                  
-                  return Column(
-                children: [
-                  // Show remaining messages count for non-logged-in users
-                  if (userId.isEmpty)
-                    FutureBuilder<int>(
-                      future: context.read<ChatService>().localChatStorage.getRemainingMessages(),
-                      builder: (context, snapshot) {
-                        final remaining = snapshot.data ?? 100;
-                        if (remaining > 0 && remaining < 20) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            color: Colors.orange[50],
-                            child: Row(
-                              children: [
-                                Icon(Icons.info_outline, size: 16, color: Colors.orange[700]),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '무료 메시지 ${remaining}개 남음',
-                                  style: TextStyle(
-                                    color: Colors.orange[700],
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const Spacer(),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, '/login');
-                                  },
-                                  child: const Text(
-                                    '로그인',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  _MessageInput(
-                    controller: _messageController,
-                    focusNode: _focusNode,
-                    onSend: _sendMessage,
-                    onAttachment: _showAttachmentMenu,
-                    onEmotion: _showEmotionPicker,
-                  ),
-                ],
-              );
-                },
+          // Message input
+          Consumer<PersonaService>(
+            builder: (context, personaService, child) {
+              return _MessageInput(
+                controller: _messageController,
+                focusNode: _focusNode,
+                onSend: _sendMessage,
+                onAttachment: _showAttachmentMenu,
+                onEmotion: _showEmotionPicker,
               );
             },
           ),
@@ -591,12 +540,53 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.95),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0.5,
       leading: Center(
         child: ModernIconButton(
           icon: Icons.arrow_back_ios_rounded,
-          onPressed: () {
-            Navigator.pushReplacementNamed(context, '/chat-list');
+          onPressed: () async {
+            // Mark all messages as read before leaving
+            final chatService = Provider.of<ChatService>(context, listen: false);
+            final authService = Provider.of<AuthService>(context, listen: false);
+            final personaService = Provider.of<PersonaService>(context, listen: false);
+            
+            final userId = authService.user?.uid ?? '';
+            final currentPersona = personaService.currentPersona;
+            
+            debugPrint('🔙 Back button pressed - userId: $userId, persona: ${currentPersona?.name}');
+            
+            if (userId.isNotEmpty && currentPersona != null) {
+              // First, get current messages
+              final messagesBefore = chatService.getMessages(currentPersona.id);
+              final unreadBefore = messagesBefore.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+              debugPrint('📊 Before marking - Unread count: $unreadBefore');
+              
+              // Wait for messages to be marked as read
+              await chatService.markAllMessagesAsRead(userId, currentPersona.id);
+              
+              // 메시지 상태 확인
+              final messagesAfter = chatService.getMessages(currentPersona.id);
+              final unreadAfter = messagesAfter.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+              debugPrint('📊 After marking as read - Unread count: $unreadAfter');
+              
+              // 추가 딜레이를 주어 확실히 업데이트되도록 함
+              await Future.delayed(const Duration(milliseconds: 300));
+              
+              // Force refresh multiple times to ensure update
+              chatService.notifyListeners();
+              await Future.delayed(const Duration(milliseconds: 100));
+              chatService.notifyListeners();
+            }
+            
+            // Navigate back to main navigation with chat list tab
+            if (mounted) {
+              Navigator.pushReplacementNamed(
+                context,
+                '/main',
+                arguments: {'initialIndex': 1}, // 채팅 목록 탭
+              );
+            }
           },
           tooltip: '뒤로가기',
         ),
@@ -826,78 +816,55 @@ class _OnlineStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = authService.user?.uid ?? '';
-    
-    return FutureBuilder<PersonaOnlineStatus>(
-      future: RelationScoreService.instance.getPersonaOnlineStatus(
-        userId: userId,
-        personaId: persona.id,
-      ),
-      builder: (context, statusSnapshot) {
-        final status = statusSnapshot.data;
-        final isOnline = status?.isOnline ?? true;
+    return FutureBuilder<int>(
+      future: _getLikes(context),
+      builder: (context, snapshot) {
+        final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+        final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
         
-        return FutureBuilder<int>(
-          future: _getLikes(context),
-          builder: (context, likesSnapshot) {
-            final likes = likesSnapshot.data ?? persona.relationshipScore ?? 0;
-            final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
-            
-            return Row(
-              children: [
-                // 온라인/오프라인 표시
-                Container(
-                  width: 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: isOnline ? Colors.green[500] : Colors.red[500],
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: (isOnline ? Colors.green : Colors.red).withOpacity(0.4),
-                        blurRadius: 4,
-                        spreadRadius: 1,
-                      ),
-                    ],
+        return Row(
+          children: [
+            // 온라인 표시
+            Container(
+              width: 8,
+              height: 8,
+              decoration: BoxDecoration(
+                color: Colors.green[500],
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.green.withOpacity(0.4),
+                    blurRadius: 4,
+                    spreadRadius: 1,
                   ),
-                ),
-                const SizedBox(width: 4),
-                Text(
-                  isOnline ? 'Online' : 'Offline',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isOnline ? Colors.green[600] : Colors.red[600],
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // 하트 아이콘
-                SizedBox(
-                  width: 14,
-                  height: 14,
-                  child: visualInfo.heart,
-                ),
-                const SizedBox(width: 4),
-                // Like 수 (포맷팅됨)
-                Text(
-                  visualInfo.formattedLikes,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: visualInfo.color,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                // 뱃지
-                SizedBox(
-                  width: 12,
-                  height: 12,
-                  child: visualInfo.badge,
-                ),
-              ],
-            );
-          },
+                ],
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 하트 아이콘
+            SizedBox(
+              width: 14,
+              height: 14,
+              child: visualInfo.heart,
+            ),
+            const SizedBox(width: 4),
+            // Like 수 (포맷팅됨)
+            Text(
+              visualInfo.formattedLikes,
+              style: TextStyle(
+                fontSize: 12,
+                color: visualInfo.color,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            // 뱃지
+            SizedBox(
+              width: 12,
+              height: 12,
+              child: visualInfo.badge,
+            ),
+          ],
         );
       },
     );

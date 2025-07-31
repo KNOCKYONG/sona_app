@@ -43,6 +43,9 @@ class ChatService extends BaseService {
   final Uuid _uuid = const Uuid();
   final Random _random = Random();
   
+  // Debouncing timer for notifyListeners
+  Timer? _notifyTimer;
+  
   ChatService() {
     // Initialize persona relationship cache
     PersonaRelationshipCache.instance.initialize();
@@ -92,6 +95,21 @@ class ChatService extends BaseService {
   void setCurrentUserId(String userId) {
     _currentUserId = userId;
   }
+  
+  /// Debounced notifyListeners to reduce UI updates
+  void _debouncedNotify() {
+    _notifyTimer?.cancel();
+    _notifyTimer = Timer(const Duration(milliseconds: 50), () {
+      super.notifyListeners();
+    });
+  }
+  
+  @override
+  void notifyListeners() {
+    // Use debounced notify instead of direct call
+    _debouncedNotify();
+  }
+  
   
   /// Get messages with memory optimization
   List<Message> getMessages(String personaId) {
@@ -182,6 +200,7 @@ class ChatService extends BaseService {
     
     bool hasUnreadMessages = false;
     final updatedMessages = <Message>[];
+    final batch = FirebaseFirestore.instance.batch();
     
     // 모든 읽지 않은 메시지를 읽음 처리 (사용자 메시지와 페르소나 메시지 모두)
     for (final message in messages) {
@@ -193,23 +212,29 @@ class ChatService extends BaseService {
         updatedMessages.add(updatedMessage);
         hasUnreadMessages = true;
         
-        // Firebase에 읽음 상태 업데이트
+        // Firebase 배치 업데이트에 추가
         if (userId.isNotEmpty) {
-          try {
-            await FirebaseHelper.userChats(userId)
-                .doc(personaId)
-                .collection('messages')
-                .doc(message.id)
-                .update({'isRead': true});
-          } catch (e) {
-            // Ignore NOT_FOUND errors as messages might not exist yet
-            if (!e.toString().contains('NOT_FOUND')) {
-              debugPrint('❌ Error updating read status for message ${message.id}: $e');
-            }
-          }
+          final docRef = FirebaseHelper.userChats(userId)
+              .doc(personaId)
+              .collection('messages')
+              .doc(message.id);
+          batch.update(docRef, {'isRead': true});
         }
       } else {
         updatedMessages.add(message);
+      }
+    }
+    
+    // 배치 업데이트 실행
+    if (hasUnreadMessages && userId.isNotEmpty) {
+      try {
+        await batch.commit();
+        debugPrint('✅ Batch updated ${updatedMessages.where((m) => m.isRead == true).length} messages as read');
+      } catch (e) {
+        // Ignore NOT_FOUND errors as messages might not exist yet
+        if (!e.toString().contains('NOT_FOUND')) {
+          debugPrint('❌ Error batch updating read status: $e');
+        }
       }
     }
     
@@ -488,8 +513,24 @@ class ChatService extends BaseService {
         scoreChange: finalScoreChange,
       );
 
-    } catch (e) {
-      debugPrint('Error generating AI response: $e');
+    } catch (e, stackTrace) {
+      debugPrint('❌ Error generating AI response: $e');
+      debugPrint('📍 Error type: ${e.runtimeType}');
+      debugPrint('📚 Stack trace: $stackTrace');
+      
+      // 더 구체적인 에러 분석
+      String errorMessage = e.toString();
+      if (errorMessage.contains('API key') || errorMessage.contains('Invalid API key')) {
+        debugPrint('🔑 API Key issue detected');
+      } else if (errorMessage.contains('timeout')) {
+        debugPrint('⏱️ Request timeout');
+      } else if (errorMessage.contains('401')) {
+        debugPrint('🚫 Authentication failed - API key may be invalid');
+      } else if (errorMessage.contains('429')) {
+        debugPrint('🚦 Rate limit exceeded');
+      } else if (errorMessage.contains('500') || errorMessage.contains('503')) {
+        debugPrint('🔥 OpenAI server error');
+      }
       
       // Fallback response
       final fallbackResponse = _getFallbackResponse();
@@ -887,7 +928,9 @@ class ChatService extends BaseService {
   }
 
   @override
+  @override
   void dispose() {
+    _notifyTimer?.cancel();
     _debounceTimer?.cancel();
     _batchWriteTimer?.cancel();
     

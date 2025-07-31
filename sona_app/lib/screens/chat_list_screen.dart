@@ -10,6 +10,9 @@ import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
 import '../widgets/persona/optimized_persona_image.dart';
+import '../services/relationship/relation_score_service.dart';
+import '../services/relationship/relationship_visual_system.dart';
+import '../utils/like_formatter.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -112,9 +115,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     
     final lastMessage = messages.last;
     
-    // 디버그: 마지막 메시지 정보 출력
-    debugPrint('📱 Last message for $personaName: isFromUser=${lastMessage.isFromUser}, content="${lastMessage.content}"');
-    
     // 튜토리얼 시작 메시지인 경우 개인화된 메시지로 변경
     if (lastMessage.content == '대화를 시작해보세요!') {
       return '$personaName님이 대화를 기다리고 있어요.';
@@ -132,8 +132,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     } else {
       preview += lastMessage.content;
     }
-    
-    debugPrint('📱 Final preview: "$preview"');
     
     return preview;
   }
@@ -161,6 +159,18 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     } else {
       return '방금 전';
     }
+  }
+
+  Future<int> _getLikes(BuildContext context, Persona persona) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId == null) return persona.relationshipScore ?? 0;
+    
+    return await RelationScoreService.instance.getLikes(
+      userId: userId,
+      personaId: persona.id,
+    );
   }
 
   @override
@@ -339,19 +349,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
               final persona = matchedPersonas[index];
               // 매번 최신 메시지를 가져오도록 함
               final messages = List<Message>.from(chatService.getMessages(persona.id));
-              debugPrint('Chat list - Persona: ${persona.name}, Messages: ${messages.length}');
-              if (messages.isNotEmpty) {
-                try {
-                  final lastMsg = messages.last;
-                  debugPrint('Last message: "${lastMsg.content}" isFromUser: ${lastMsg.isFromUser}');
-                  final unreadCount = messages.where((m) => !m.isFromUser && m.isRead != true).length;
-                  if (unreadCount > 0) {
-                    debugPrint('🔴 Still have $unreadCount unread messages for ${persona.name}');
-                  }
-                } catch (e) {
-                  debugPrint('❌ Error accessing last message: $e');
-                }
-              }
               
               // 🔧 FIX: 안전한 hasUnread 계산 및 마지막 메시지 그룹 카운트
               bool hasUnread = false;
@@ -364,13 +361,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                   !msg.isFromUser && (msg.isRead == false || msg.isRead == null)
                 ).length;
                 hasUnread = unreadPersonaMessageCount > 0;
-                
-                if (hasUnread) {
-                  debugPrint('🔴 Unread messages for ${persona.name}: $unreadPersonaMessageCount');
-                  messages.where((msg) => !msg.isFromUser && (msg.isRead == false || msg.isRead == null)).forEach((msg) {
-                    debugPrint('  - Unread: ${msg.content.substring(0, 30 < msg.content.length ? 30 : msg.content.length)}... isRead: ${msg.isRead}');
-                  });
-                }
                 
                 // 마지막 페르소나 메시지 그룹의 개수 계산
                 if (messages.isNotEmpty && hasUnread) {
@@ -464,12 +454,40 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  persona.name,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
-                                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          persona.name,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
+                                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      // 관계 단계 표시
+                                      FutureBuilder<int>(
+                                        future: _getLikes(context, persona),
+                                        builder: (context, snapshot) {
+                                          final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+                                          final relationshipType = RelationshipType.fromScore(likes);
+                                          final color = RelationshipColorSystem.getRelationshipColor(likes);
+                                          
+                                          return Text(
+                                            relationshipType.displayName,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              color: color,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 if (messages.isNotEmpty)
@@ -497,6 +515,43 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
+                                ),
+                                // 친밀도 표시
+                                FutureBuilder<int>(
+                                  future: _getLikes(context, persona),
+                                  builder: (context, snapshot) {
+                                    final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+                                    final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
+                                    
+                                    return Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        // 하트 아이콘
+                                        SizedBox(
+                                          width: 14,
+                                          height: 14,
+                                          child: visualInfo.heart,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        // 친밀도 숫자
+                                        Text(
+                                          visualInfo.formattedLikes,
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: visualInfo.color,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        // 뱃지
+                                        SizedBox(
+                                          width: 12,
+                                          height: 12,
+                                          child: visualInfo.badge,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
                                 if (hasUnread && lastPersonaMessageGroupCount > 0 && !isTyping)
                                   Container(

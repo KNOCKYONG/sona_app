@@ -282,6 +282,32 @@ class NewService extends BaseService {
 
 ---
 
+## Firebase 인덱스 관리
+
+### 인덱스 자동 생성
+Firebase Firestore의 복합 인덱스는 `firestore.indexes.json` 파일에 정의되어 있습니다.
+
+**현재 정의된 인덱스:**
+1. **conversation_memories** 컬렉션
+   - userId (ASC) + personaId (ASC) + importance (DESC) + timestamp (DESC)
+   - 용도: 대화 기억 검색 및 정렬
+
+2. **conversation_summaries** 컬렉션
+   - userId (ASC) + personaId (ASC) + endDate (DESC)
+   - 용도: 대화 요약 검색 및 최신 요약 조회
+
+**인덱스 배포 명령어:**
+```bash
+firebase deploy --only firestore:indexes
+```
+
+**주의사항:**
+- 단일 필드 인덱스는 Firebase가 자동으로 생성합니다 (예: messages.timestamp)
+- 새로운 복합 쿼리 추가 시 firestore.indexes.json 업데이트 필요
+- 페르소나와 유저 조합이 무한해도 인덱스는 동일하게 적용됩니다
+
+---
+
 ### 이미지 반영
 **명령어**: `이미지 반영`
 

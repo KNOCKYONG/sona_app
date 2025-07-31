@@ -51,11 +51,6 @@ class _PersonaCardState extends State<PersonaCard> {
     // 모든 이미지 URL 가져오기 (medium 크기)
     final allImageUrls = widget.persona.getAllImageUrls(size: 'medium');
     
-    // 디버그 정보 출력
-    debugPrint('=== PersonaCard Image Debug ===');
-    debugPrint('Persona: ${widget.persona.name}');
-    debugPrint('getAllImageUrls count: ${allImageUrls.length}');
-    debugPrint('URLs: $allImageUrls');
     
     // 이미지가 없는 경우 플레이스홀더 표시
     if (allImageUrls.isEmpty) {
@@ -671,10 +666,6 @@ class _SwipeOverlayState extends State<_SwipeOverlay> with SingleTickerProviderS
       final safeHorizontal = widget.horizontal.clamp(-1.0, 1.0);
       final safeVertical = widget.vertical.clamp(-1.0, 1.0);
       
-      // Debug logging
-      if (safeHorizontal.abs() > 0.05 || safeVertical.abs() > 0.05) {
-        debugPrint('Swipe threshold: H=$safeHorizontal, V=$safeVertical');
-      }
       
       // Safe opacity calculation (0.0 to 0.7 for better visibility)
       double calculateSafeOpacity(double value) {

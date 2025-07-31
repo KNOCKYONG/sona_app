@@ -95,10 +95,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // 키보드 상태 감지를 위한 FocusNode 리스너
     _focusNode.addListener(() {
       if (_focusNode.hasFocus) {
-        // 키보드가 올라올 때 자동으로 맨 아래로 스크롤
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _scrollToBottom(force: true);
-        });
+        // 키보드가 올라올 때 자동 스크롤 하지 않음
+        // 사용자가 위의 메시지를 보면서 타이핑할 수 있도록 함
       }
     });
   }
@@ -147,7 +145,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           
           // Force refresh to ensure UI updates
           await Future.delayed(const Duration(milliseconds: 100));
-          chatService.notifyListeners();
         } else {
           debugPrint('⚠️ User not authenticated');
           // 로그인하지 않은 사용자는 채팅 불가
@@ -242,7 +239,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     );
     
     if (success) {
-      _scrollToBottom(force: true);
+      // 메시지가 실제로 화면에 추가되고 렌더링된 후에 스크롤
+      // 두 번의 프레임 후에 실행하여 확실하게 렌더링이 완료되도록 함
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _scrollController.hasClients) {
+          // 한 번 더 다음 프레임에서 실행하여 확실하게 처리
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _scrollController.hasClients) {
+              // 최대 스크롤 위치로 이동 (패딩이 이미 설정되어 있음)
+              final targetScroll = _scrollController.position.maxScrollExtent;
+              
+              _scrollController.animateTo(
+                targetScroll,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeOutCubic,
+              );
+            }
+          });
+        }
+      });
     } else {
       _messageController.text = content;
       if (mounted) {
@@ -421,7 +436,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       Future.delayed(const Duration(milliseconds: 300), () async {
                         if (mounted) {
                           await chatService.markAllMessagesAsRead(userId, currentPersona.id);
-                          chatService.notifyListeners();
                         }
                       });
                     }
@@ -449,7 +463,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     left: 16,
                     right: 16,
                     top: 16,
-                    bottom: 16 + MediaQuery.of(context).viewInsets.bottom, // 키보드 높이만큼 패딩 추가
+                    bottom: 80 + MediaQuery.of(context).viewInsets.bottom, // 메시지 박스가 완전히 보이도록 패딩 증가
                   ),
                   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // 스크롤 시 키보드 숨김
                   itemCount: messages.length + (chatService.isPersonaTyping(currentPersona.id) ? 1 : 0),
@@ -606,10 +620,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               // 추가 딜레이를 주어 확실히 업데이트되도록 함
               await Future.delayed(const Duration(milliseconds: 300));
               
-              // Force refresh multiple times to ensure update
-              chatService.notifyListeners();
+              // Wait to ensure update is complete
               await Future.delayed(const Duration(milliseconds: 100));
-              chatService.notifyListeners();
             }
             
             // Navigate back to main navigation with chat list tab
@@ -715,8 +727,6 @@ class _PersonaTitle extends StatelessWidget {
                   child: Builder(
                     builder: (context) {
                       final thumbnailUrl = updatedPersona.getThumbnailUrl();
-                      debugPrint('🖼️ Profile Image URL: $thumbnailUrl');
-                      debugPrint('📦 ImageUrls data: ${updatedPersona.imageUrls}');
                       
                       // 링 시스템으로 감싼 프로필 이미지
                       return RelationshipRingSystem.buildRing(
@@ -796,7 +806,6 @@ class _ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('🔍 _ProfileImage build - photoUrl: $photoUrl');
     
     return Container(
       width: 44,

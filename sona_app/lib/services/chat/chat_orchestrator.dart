@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../models/persona.dart';
 import '../../models/message.dart';
 import '../../core/constants.dart';
@@ -24,7 +25,7 @@ class ChatOrchestrator {
   final ConversationMemoryService _memoryService = ConversationMemoryService();
   
   // API 설정
-  static const String _apiKey = AppConstants.openAIKey;
+  static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static const String _model = 'gpt-4o-mini-2025-04-14';
   
@@ -141,6 +142,14 @@ class ChatOrchestrator {
     required String prompt,
     required String userMessage,
   }) async {
+    final apiKey = _apiKey;
+    debugPrint('🔑 API Key loaded: ${apiKey.isNotEmpty ? "Yes (${apiKey.substring(0, 10)}...)" : "No"}');
+    
+    if (apiKey.isEmpty) {
+      debugPrint('❌ API Key is empty!');
+      throw Exception('OpenAI API key not configured');
+    }
+    
     final messages = [
       {
         'role': 'system',
@@ -152,11 +161,15 @@ class ChatOrchestrator {
       },
     ];
     
+    debugPrint('🌐 Calling OpenAI API...');
+    debugPrint('📝 Model: $_model');
+    debugPrint('💬 User message: ${userMessage.substring(0, userMessage.length > 50 ? 50 : userMessage.length)}...');
+    
     final response = await _httpClient.post(
       Uri.parse(_baseUrl),
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $_apiKey',
+        'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
         'model': _model,
@@ -172,11 +185,16 @@ class ChatOrchestrator {
       onTimeout: () => throw TimeoutException('API timeout'),
     );
     
+    debugPrint('📨 Response status: ${response.statusCode}');
+    
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      debugPrint('✅ API call successful');
       return data['choices'][0]['message']['content'].toString().trim();
     } else {
-      throw Exception('API error: ${response.statusCode}');
+      debugPrint('❌ API error: ${response.statusCode}');
+      debugPrint('📄 Response body: ${response.body}');
+      throw Exception('API error: ${response.statusCode} - ${response.body}');
     }
   }
   

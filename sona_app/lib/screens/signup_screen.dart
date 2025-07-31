@@ -36,6 +36,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Form data
   String? _selectedGender;
   DateTime? _selectedBirth;
+  int? _selectedYear;
+  int? _selectedMonth;
+  int? _selectedDay;
   bool _genderAll = false;
   RangeValues _preferredAgeRange = const RangeValues(20, 35);
   List<String> _selectedInterests = [];
@@ -98,62 +101,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-  Future<void> _selectBirthDate() async {
-    final now = DateTime.now();
-    final initialDate = _selectedBirth ?? DateTime(now.year - 25, now.month, now.day);
-    
-    if (Platform.isIOS) {
-      await showCupertinoModalPopup(
-        context: context,
-        builder: (context) => Container(
-          height: 300,
-          color: Colors.white,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('취소'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('완료'),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.date,
-                  initialDateTime: initialDate,
-                  maximumDate: DateTime(now.year - 18, now.month, now.day),
-                  minimumDate: DateTime(now.year - 100, now.month, now.day),
-                  onDateTimeChanged: (date) {
-                    setState(() {
-                      _selectedBirth = date;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      final picked = await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(now.year - 100, now.month, now.day),
-        lastDate: DateTime(now.year - 18, now.month, now.day),
-      );
-      
-      if (picked != null) {
-        setState(() {
-          _selectedBirth = picked;
-        });
-      }
+  void _updateSelectedBirth() {
+    if (_selectedYear != null && _selectedMonth != null && _selectedDay != null) {
+      setState(() {
+        _selectedBirth = DateTime(_selectedYear!, _selectedMonth!, _selectedDay!);
+      });
     }
+  }
+  
+  List<int> _getValidDays() {
+    if (_selectedYear == null || _selectedMonth == null) {
+      return List.generate(31, (index) => index + 1);
+    }
+    
+    // 해당 년월의 마지막 날 계산
+    final lastDay = DateTime(_selectedYear!, _selectedMonth! + 1, 0).day;
+    return List.generate(lastDay, (index) => index + 1);
   }
 
   Future<void> _signUp() async {
@@ -785,29 +748,90 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // Birth date
           const Text('생년월일 *', style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          InkWell(
-            onTap: _selectBirthDate,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(8),
+          Row(
+            children: [
+              // 년도 드롭다운
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  decoration: const InputDecoration(
+                    labelText: '년',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  value: _selectedYear,
+                  items: List.generate(
+                    82, // 18세부터 99세까지
+                    (index) {
+                      final year = DateTime.now().year - 18 - index;
+                      return DropdownMenuItem(
+                        value: year,
+                        child: Text('$year'),
+                      );
+                    },
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedYear = value;
+                      // 선택된 날짜가 유효하지 않으면 초기화
+                      if (_selectedDay != null && _selectedDay! > _getValidDays().length) {
+                        _selectedDay = null;
+                      }
+                      _updateSelectedBirth();
+                    });
+                  },
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    _selectedBirth != null
-                        ? DateFormat('yyyy년 MM월 dd일').format(_selectedBirth!)
-                        : '생년월일을 선택해주세요',
-                    style: TextStyle(
-                      color: _selectedBirth != null ? Colors.black : Colors.grey,
+              const SizedBox(width: 8),
+              // 월 드롭다운
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  decoration: const InputDecoration(
+                    labelText: '월',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  value: _selectedMonth,
+                  items: List.generate(
+                    12,
+                    (index) => DropdownMenuItem(
+                      value: index + 1,
+                      child: Text('${index + 1}'),
                     ),
                   ),
-                  const Icon(Icons.calendar_today, color: Colors.grey),
-                ],
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedMonth = value;
+                      // 선택된 날짜가 유효하지 않으면 초기화
+                      if (_selectedDay != null && _selectedDay! > _getValidDays().length) {
+                        _selectedDay = null;
+                      }
+                      _updateSelectedBirth();
+                    });
+                  },
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              // 일 드롭다운
+              Expanded(
+                child: DropdownButtonFormField<int>(
+                  decoration: const InputDecoration(
+                    labelText: '일',
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  value: _selectedDay,
+                  items: _getValidDays()
+                      .map((day) => DropdownMenuItem(
+                            value: day,
+                            child: Text('$day'),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedDay = value;
+                      _updateSelectedBirth();
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 24),
           

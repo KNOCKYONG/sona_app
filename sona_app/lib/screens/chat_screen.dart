@@ -591,7 +591,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.95),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 0.5,
       leading: Center(
         child: ModernIconButton(
           icon: Icons.arrow_back_ios_rounded,

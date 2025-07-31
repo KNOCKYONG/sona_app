@@ -18,7 +18,7 @@ class SecurityAwarePostProcessor {
   }) async {
     // 1단계: 보안 검증 (인젝션 공격 감지)
     final injectionAnalysis = await PromptInjectionDefense.analyzeInjection(userMessage);
-    if (injectionAnalysis.isHighRisk) {
+    if (injectionAnalysis.isInjectionAttempt || injectionAnalysis.riskScore > 0.7) {
       debugPrint('🚨 High risk injection detected - returning safe response');
       return _generateSafeResponse(persona, 'injection');
     }
@@ -277,7 +277,7 @@ class SecurityAwarePostProcessor {
       case RelationshipType.dating:
       case RelationshipType.perfectLove:
         // 애정 표현 자연스럽게
-        if (context.userNickname != null && !text.contains(context.userNickname)) {
+        if (context.userNickname != null && !text.contains(context.userNickname!)) {
           // 가끔 이름 부르기
           if (DateTime.now().millisecond % 3 == 0) {
             text = '${context.userNickname}${context.persona.isCasualSpeech ? '아' : '님'}, $text';

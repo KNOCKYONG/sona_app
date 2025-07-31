@@ -148,9 +148,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           await Future.delayed(const Duration(milliseconds: 100));
           chatService.notifyListeners();
         } else {
-          debugPrint('⚠️ User not authenticated, skipping chat history load');
-          // Clear any existing messages for guest users
-          chatService.clearMessages();
+          debugPrint('⚠️ User not authenticated');
+          // 로그인하지 않은 사용자는 채팅 불가
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('로그인이 필요한 서비스입니다'),
+                backgroundColor: Colors.red,
+              ),
+            );
+            Navigator.of(context).pushReplacementNamed('/auth');
+          }
+          return;
         }
         
         if (chatService.messages.isEmpty) {
@@ -172,10 +181,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final authService = Provider.of<AuthService>(context, listen: false);
     final persona = personaService.currentPersona;
     
+    final userId = authService.user?.uid;
+    if (userId == null || userId.isEmpty) {
+      // 로그인하지 않은 사용자는 웰컴 메시지 생략
+      return;
+    }
+    
     if (persona != null) {
       // 초기 인사 메시지 전송
       await chatService.sendInitialGreeting(
-        userId: authService.user?.uid ?? '',
+        userId: userId,
         personaId: persona.id,
         persona: persona,
       );
@@ -200,7 +215,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return;
     }
     
-    final userId = authService.user?.uid ?? '';
+    final userId = authService.user?.uid;
+    
+    if (userId == null || userId.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('로그인이 필요한 서비스입니다'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
     
     final success = await chatService.sendMessage(
       content: content,

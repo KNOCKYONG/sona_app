@@ -47,7 +47,7 @@ class PersonaRelationshipCache extends BaseService {
     }
     
     // 캐시 미스 - Firebase에서 로드
-    return await executeWithLoading(() async {
+    final result = await executeWithLoading(() async {
       final completePersona = await _loadPersonaRelationship(userId, basePersona);
       
       // 캐시에 저장
@@ -59,6 +59,9 @@ class PersonaRelationshipCache extends BaseService {
       debugPrint('📥 Loaded and cached persona relationship for ${basePersona.name}');
       return completePersona;
     });
+    
+    // executeWithLoading이 null을 반환할 수 있으므로 기본값 처리
+    return result ?? basePersona;
   }
   
   /// Firebase에서 페르소나 관계 정보 로드
@@ -83,12 +86,6 @@ class PersonaRelationshipCache extends BaseService {
         isCasualSpeech: data['isCasualSpeech'] ?? false,
         relationshipScore: data['relationshipScore'] ?? 0,
         currentRelationship: _parseRelationshipType(data['currentRelationship']),
-        metadata: {
-          ...basePersona.metadata ?? {},
-          'lastChatDate': data['lastChatDate'],
-          'totalChatCount': data['totalChatCount'] ?? 0,
-          'isOnline': data['isOnline'] ?? true,
-        },
       );
     } catch (e) {
       debugPrint('❌ Error loading persona relationship: $e');

@@ -43,24 +43,11 @@ class ChatService extends BaseService {
   final Uuid _uuid = const Uuid();
   final Random _random = Random();
   
-  // Local storage for non-logged-in users
-  final LocalChatStorage _localChatStorage = LocalChatStorage();
-  
   ChatService() {
-    // Initialize services
-    _initializeServices();
-  }
-  
-  Future<void> _initializeServices() async {
-    // Initialize local storage
-    await _localChatStorage.initialize();
-    debugPrint('✅ LocalChatStorage initialized');
-    
     // Initialize persona relationship cache
     PersonaRelationshipCache.instance.initialize();
     debugPrint('✅ PersonaRelationshipCache initialized');
   }
->>>>>>> a021dc852a449d0c6c1e70480ccfcccec1568bb6
   // Performance optimization: Response cache
   final Map<String, _CachedResponse> _responseCache = {};
   
@@ -1611,6 +1598,13 @@ class ChatService extends BaseService {
         debugPrint('Messages already exist for persona $personaId, skipping initial greeting');
         return;
       }
+      
+      // 5초 동안 타이핑 표시
+      _personaIsTyping[personaId] = true;
+      notifyListeners();
+      
+      // 5초 대기
+      await Future.delayed(const Duration(seconds: 5));
 
       // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;
@@ -1647,6 +1641,9 @@ class ChatService extends BaseService {
         emotion = EmotionType.happy;
       }
 
+      // 타이핑 종료
+      _personaIsTyping[personaId] = false;
+      
       // 인사 메시지 생성 (일반 텍스트 메시지로)
       final greetingMessage = Message(
         id: _uuid.v4(),
@@ -1679,6 +1676,9 @@ class ChatService extends BaseService {
       debugPrint('✅ Sent initial greeting from ${persona.name}');
     } catch (e) {
       debugPrint('❌ Error sending initial greeting: $e');
+      // 에러 발생 시에도 타이핑 상태 해제
+      _personaIsTyping[personaId] = false;
+      notifyListeners();
     }
   }
 

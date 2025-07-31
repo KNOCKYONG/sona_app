@@ -120,20 +120,20 @@ class _SplashScreenState extends State<SplashScreen>
               ),
             ],
           ),
-          content: const Column(
+          content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'AI랑 연애하면 어떤 기분일까?\n당신만의 페르소나를 만나보세요.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
-              Row(
+              const SizedBox(height: 10),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly
               ),
             ],

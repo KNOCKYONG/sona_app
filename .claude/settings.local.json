@@ -28,7 +28,8 @@
       "mcp__cloudflare-r2__r2_delete_object",
       "mcp__cloudflare-r2__r2_get_object",
       "mcp",
-      "mcp__cloudflare-r2__r2_list_buckets"
+      "mcp__cloudflare-r2__r2_list_buckets",
+      "WebFetch(domain:docs.flutter.dev)"
     ],
     "deny": []
   }

@@ -11,6 +11,8 @@ import '../../helpers/firebase_helper.dart';
 import '../base/base_service.dart';
 import 'openai_service.dart';
 import 'natural_ai_service.dart';
+import 'chat_orchestrator.dart';
+import 'persona_relationship_cache.dart';
 import '../persona/persona_service.dart';
 import '../storage/local_storage_service.dart';
 import 'conversation_memory_service.dart';
@@ -46,13 +48,18 @@ class ChatService extends BaseService {
   final LocalChatStorage _localChatStorage = LocalChatStorage();
   
   ChatService() {
-    // Initialize local storage immediately
-    _initializeLocalStorage();
+    // Initialize services
+    _initializeServices();
   }
   
-  Future<void> _initializeLocalStorage() async {
+  Future<void> _initializeServices() async {
+    // Initialize local storage
     await _localChatStorage.initialize();
     debugPrint('✅ LocalChatStorage initialized');
+    
+    // Initialize persona relationship cache
+    PersonaRelationshipCache.instance.initialize();
+    debugPrint('✅ PersonaRelationshipCache initialized');
   }
   
   // Performance optimization: Response cache
@@ -349,12 +356,10 @@ class ChatService extends BaseService {
     }
   }
 
-  /// Generate AI response with caching
+  /// Generate AI response using new orchestrator
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
     debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
     try {
-      // Typing indicator is now handled by _queueMessageForDelayedResponse
-
       // Check cache first
       final cacheKey = _getCacheKey(persona.id, userMessage);
       final cachedResponse = _getFromCache(cacheKey);
@@ -374,154 +379,12 @@ class ChatService extends BaseService {
       // Check if user was rude and generate appropriate response
       final rudeCheck = _checkRudeMessage(userMessage);
       
-      String aiResponseContent;
-      EmotionType? emotion = EmotionType.neutral;
-      int scoreChange = 0;
-      
-      // Declare isPaidConsultation outside try block
-      bool isPaidConsultation = false;
-      
-      try {
-        // If user was rude, generate defensive response immediately
-        if (rudeCheck.isRude) {
-          aiResponseContent = _generateDefensiveResponse(persona, userMessage, rudeCheck.severity);
-          emotion = rudeCheck.severity == 'high' ? EmotionType.angry : EmotionType.sad;
-          
-          // 새로운 Like 시스템 사용 (부정적 행동)
-          final likeResult = await RelationScoreService.instance.calculateLikes(
-            emotion: emotion,
-            userMessage: userMessage,
-            persona: persona,
-            chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-            currentLikes: persona.relationshipScore ?? 0,
-            userId: userId,
-          );
-          scoreChange = likeResult.likeChange;
-          
-          // Cache and send response
-          _addToCache(cacheKey, _CachedResponse(
-            content: aiResponseContent,
-            emotion: emotion,
-            scoreChange: scoreChange,
-            timestamp: DateTime.now(),
-          ));
-          
-          await _sendSplitMessages(
-            content: aiResponseContent,
-            persona: persona,
-            userId: userId,
-            emotion: emotion,
-            scoreChange: scoreChange,
-          );
-          
-          return;
-        }
-        // Use enhanced OpenAI service for regular personas
-        final relationshipType = _getRelationshipTypeString(persona.relationshipScore);
+      if (rudeCheck.isRude) {
+        // Handle rude message immediately
+        final aiResponseContent = _generateDefensiveResponse(persona, userMessage, rudeCheck.severity);
+        final emotion = rudeCheck.severity == 'high' ? EmotionType.angry : EmotionType.sad;
         
-        // Get isCasualSpeech from user_persona_relationships
-        bool isCasualSpeech = false;
-        try {
-            final docId = '${userId}_${persona.id}';
-            final relationshipDoc = await FirebaseFirestore.instance
-                .collection('user_persona_relationships')
-                .doc(docId)
-                .get();
-            
-            if (relationshipDoc.exists) {
-              isCasualSpeech = relationshipDoc.data()?['isCasualSpeech'] ?? false;
-            }
-        } catch (e) {
-          debugPrint('Error getting casual speech setting: $e');
-        }
-        
-        // Create persona with correct isCasualSpeech value
-        final personaWithCorrectSpeech = persona.copyWith(isCasualSpeech: isCasualSpeech);
-          
-        // 💭 메모리 서비스를 통한 스마트 컨텍스트 구성
-        final smartContext = await _memoryService.buildSmartContext(
-            userId: userId,
-            personaId: persona.id,
-            recentMessages: _messages.where((m) => m.personaId == persona.id).toList(),
-            persona: personaWithCorrectSpeech,
-            maxTokens: 800, // 향상된 컨텍스트 용량
-        );
-        
-        // 최근 AI 메시지 추출 (질문 시스템용)
-        final recentAIMessages = _messages
-              .where((m) => m.personaId == persona.id && !m.isFromUser)
-              .take(3)
-              .map((m) => m.content)
-            .toList();
-        
-        // 메시지 개수 계산 (첫 만남 감지용)
-        final messageCount = _messages.where((m) => m.personaId == persona.id).length;
-        
-        // Get user nickname for better personalization
-        String? userNickname;
-        if (_userService?.currentUser != null) {
-          userNickname = _userService!.currentUser!.nickname;
-        }
-        
-        aiResponseContent = await OpenAIService.generateResponse(
-            persona: personaWithCorrectSpeech,
-            chatHistory: messages,
-            userMessage: userMessage,
-            relationshipType: relationshipType,
-            userNickname: userNickname,
-        );
-        
-        // 🔒 Apply security filter to the AI response
-        aiResponseContent = SecurityFilterService.filterResponse(
-          response: aiResponseContent,
-          userMessage: userMessage,
-          persona: personaWithCorrectSpeech,
-        );
-        
-        // Additional validation to ensure no system info is leaked
-        if (!SecurityFilterService.validateResponseSafety(aiResponseContent)) {
-          debugPrint('🚨 Security validation failed - generating safe fallback');
-          aiResponseContent = _generateSecureFallbackResponse(personaWithCorrectSpeech, userMessage);
-        }
-        
-        // Check if user message was rude before analyzing emotion
-        final rudeWords = [
-            '바보', '멍청이', '멍청', '병신', '시발', '씨발', '개새끼', '새끼',
-            '닥쳐', '꺼져', '지랄', '좆', '좆같', '개같', '미친', '또라이',
-            '쓰레기', '찐따', '한심', '재수없', '짜증', '싫어', '싫다',
-            '꺼져', '죽어', '뒤져', '개짜증', '존나', '뭐야', '뭔데',
-            '왜', '어쩌라고', '장난하냐', '장난해', '웃기네', '웃겨',
-            '어이없', '헐', '에휴', '하', '아니', '진짜', '실화냐',
-            '미쳤', '돌았', '정신', '제정신', '이상해', '이상한',
-            '별로', '구려', '못생겼', '못생긴', '더러워', '더럽',
-            '역겨워', '역겹', '토나와', '토할것', '징그러워', '징그럽'
-        ];
-        
-        bool userWasRude = false;
-        final lowerUserMessage = userMessage.toLowerCase();
-        for (final word in rudeWords) {
-          if (lowerUserMessage.contains(word)) {
-            userWasRude = true;
-            break;
-          }
-        }
-        
-        // If user was rude, set emotion to sad/angry regardless of AI's response
-        if (userWasRude) {
-          // 무례한 정도에 따라 다른 감정 설정
-          if (lowerUserMessage.contains('미안') || lowerUserMessage.contains('죄송')) {
-            emotion = EmotionType.neutral; // 사과가 포함된 경우
-          } else if (lowerUserMessage.contains('시발') || lowerUserMessage.contains('씨발') || 
-                     lowerUserMessage.contains('병신') || lowerUserMessage.contains('새끼')) {
-            emotion = EmotionType.angry; // 심한 욕설
-          } else {
-            emotion = EmotionType.sad; // 일반적인 무례함
-          }
-        } else {
-          emotion = _analyzeEmotionFromResponse(aiResponseContent);
-        }
-        
-        // 새로운 Like 시스템 사용
+        // Calculate score change for rude behavior
         final likeResult = await RelationScoreService.instance.calculateLikes(
           emotion: emotion,
           userMessage: userMessage,
@@ -530,70 +393,98 @@ class ChatService extends BaseService {
           currentLikes: persona.relationshipScore ?? 0,
           userId: userId,
         );
-        scoreChange = likeResult.likeChange;
         
-        // 쿨다운 메시지가 있으면 추가
-        if (likeResult.message != null) {
-          aiResponseContent = '${aiResponseContent}\n\n${likeResult.message}';
-        }
-        
-        // Cache the response
+        // Cache and send response
         _addToCache(cacheKey, _CachedResponse(
           content: aiResponseContent,
           emotion: emotion,
-          scoreChange: scoreChange,
+          scoreChange: likeResult.likeChange,
           timestamp: DateTime.now(),
         ));
         
-      } catch (e) {
-        debugPrint('AI Response Generation Error: $e');
-        // Get user nickname
-        String? userNickname;
-        if (_userService?.currentUser != null) {
-          userNickname = _userService!.currentUser!.nickname;
-        }
-        
-        // Fallback to persona-aware natural response
-        final naturalResponse = NaturalAIService.generateNaturalResponse(
-          userMessage: userMessage,
-          emotion: EmotionType.happy, // Default emotion
-          relationshipType: 'normal',
+        await _sendSplitMessages(
+          content: aiResponseContent,
           persona: persona,
-          chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-          relationshipScore: 0, // Default relationship score since expert scoring removed
-          userNickname: userNickname,
+          userId: userId,
+          emotion: emotion,
+          scoreChange: likeResult.likeChange,
         );
-        aiResponseContent = naturalResponse;
-        emotion = EmotionType.happy; // Default emotion since method doesn't return emotion
-        // 새로운 Like 시스템 사용 (에러 시에도)
-        try {
-          final likeResult = await RelationScoreService.instance.calculateLikes(
-            emotion: emotion,
-            userMessage: userMessage,
-            persona: persona,
-            chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-            currentLikes: persona.relationshipScore ?? 0,
-            userId: userId,
-          );
-          scoreChange = likeResult.likeChange;
-        } catch (likeError) {
-          debugPrint('Like calculation error: $likeError');
-          scoreChange = 0;
-        }
+        
+        return;
       }
+      
+      // Get user nickname
+      String? userNickname;
+      if (_userService?.currentUser != null) {
+        userNickname = _userService!.currentUser!.nickname;
+      }
+      
+      // Use new ChatOrchestrator for normal messages
+      final chatHistory = _messages.where((m) => m.personaId == persona.id).toList();
+      
+      final response = await ChatOrchestrator.instance.generateResponse(
+        userId: userId,
+        basePersona: persona,
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        userNickname: userNickname,
+      );
+      
+      // Handle Like system integration
+      String finalContent = response.content;
+      int finalScoreChange = response.scoreChange;
+      
+      // Additional Like calculation if needed
+      final likeResult = await RelationScoreService.instance.calculateLikes(
+        emotion: response.emotion,
+        userMessage: userMessage,
+        persona: persona,
+        chatHistory: chatHistory,
+        currentLikes: persona.relationshipScore ?? 0,
+        userId: userId,
+      );
+      
+      // Use Like system's score if it differs
+      if (likeResult.likeChange != response.scoreChange) {
+        finalScoreChange = likeResult.likeChange;
+      }
+      
+      // Add cooldown message if present
+      if (likeResult.message != null) {
+        finalContent = '${finalContent}\n\n${likeResult.message}';
+      }
+      
+      // Cache the response
+      _addToCache(cacheKey, _CachedResponse(
+        content: finalContent,
+        emotion: response.emotion,
+        scoreChange: finalScoreChange,
+        timestamp: DateTime.now(),
+      ));
       
       // Send response messages
       await _sendSplitMessages(
-        content: aiResponseContent,
+        content: finalContent,
         persona: persona,
         userId: userId,
-        emotion: emotion,
-        scoreChange: scoreChange,
+        emotion: response.emotion,
+        scoreChange: finalScoreChange,
       );
 
     } catch (e) {
-      notifyListeners();
       debugPrint('Error generating AI response: $e');
+      
+      // Fallback response
+      final fallbackResponse = _getFallbackResponse();
+      await _sendSplitMessages(
+        content: fallbackResponse,
+        persona: persona,
+        userId: userId,
+        emotion: EmotionType.neutral,
+        scoreChange: 0,
+      );
+      
+      notifyListeners();
     }
   }
 

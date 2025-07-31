@@ -1511,22 +1511,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       },
                     ),
                     
-                    // Super Like 버튼 (전문가가 아닐 때만 활성화)
-                    Consumer<PersonaService>(
-                      builder: (context, personaService, child) {
-                        final personas = personaService.availablePersonas;
-                        final currentPersona = personas.isNotEmpty ? personas[0] : null;
-                        
-                        return AnimatedActionButton(
-                          onTap: _isLoading ? null : _onSuperLikePressed,
-                          size: 70,
-                          gradientColors: [const Color(0xFF00BCD4), const Color(0xFF2196F3)],
-                          shadowColor: const Color(0xFF2196F3),
-                          icon: Icons.star_rounded,
-                          iconSize: 35,
-                          tooltip: 'Super Like (바로 썸 단계)',
-                        );
-                      },
+                    // Super Like 버튼
+                    AnimatedActionButton(
+                      onTap: _isLoading ? null : _onSuperLikePressed,
+                      size: 70,
+                      gradientColors: [const Color(0xFF00BCD4), const Color(0xFF2196F3)],
+                      shadowColor: const Color(0xFF2196F3),
+                      icon: Icons.star_rounded,
+                      iconSize: 35,
+                      tooltip: 'Super Like (바로 썸 단계)',
                     ),
                     
                     // Like 버튼

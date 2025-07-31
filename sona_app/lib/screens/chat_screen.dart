@@ -39,6 +39,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
   bool _previousIsTyping = false;
+  bool _hasShownWelcome = false;
 
   @override
   void initState() {
@@ -162,13 +163,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return;
         }
         
-        if (chatService.messages.isEmpty) {
+        // Check if we need to show initial greeting
+        final messages = chatService.getMessages(personaService.currentPersona!.id);
+        if (messages.isEmpty) {
           _showWelcomeMessage();
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
-        // Show welcome message as fallback
-        _showWelcomeMessage();
+        // Don't show welcome message on error to prevent duplicates
       }
     } else {
       debugPrint('⚠️ No current persona available for chat');
@@ -176,6 +178,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _showWelcomeMessage() async {
+    // Add flag to prevent duplicate calls
+    if (_hasShownWelcome) return;
+    _hasShownWelcome = true;
+    
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);

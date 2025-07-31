@@ -127,7 +127,9 @@ class _SplashScreenState extends State<SplashScreen>
                 'AI랑 연애하면 어떤 기분일까?\n당신만의 페르소나를 만나보세요.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                  color: Theme.of(context).brightness == Brightness.dark 
+                      ? Colors.white 
+                      : Colors.black87,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,

@@ -202,7 +202,10 @@ class ChatService extends BaseService {
                 .doc(message.id)
                 .update({'isRead': true});
           } catch (e) {
-            debugPrint('❌ Error updating read status for message ${message.id}: $e');
+            // Ignore NOT_FOUND errors as messages might not exist yet
+            if (!e.toString().contains('NOT_FOUND')) {
+              debugPrint('❌ Error updating read status for message ${message.id}: $e');
+            }
           }
         }
       } else {
@@ -838,7 +841,10 @@ class ChatService extends BaseService {
               .doc(msg.id)
               .update({'isRead': true});
         } catch (e) {
-          debugPrint('Error updating read status: $e');
+          // Ignore NOT_FOUND errors as messages might not exist yet
+          if (!e.toString().contains('NOT_FOUND')) {
+            debugPrint('Error updating read status: $e');
+          }
         }
       }
     }
@@ -1599,12 +1605,12 @@ class ChatService extends BaseService {
         return;
       }
       
-      // 5초 동안 타이핑 표시
+      // 3초 동안 타이핑 표시
       _personaIsTyping[personaId] = true;
       notifyListeners();
       
-      // 5초 대기
-      await Future.delayed(const Duration(seconds: 5));
+      // 3초 대기
+      await Future.delayed(const Duration(seconds: 3));
 
       // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;

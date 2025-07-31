@@ -19,6 +19,7 @@ import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/theme_settings_screen.dart';
 import 'screens/purchase_screen.dart';
 import 'screens/purchase_policy_screen.dart';
 
@@ -30,7 +31,9 @@ import 'services/purchase/subscription_service.dart';
 import 'services/purchase/purchase_service.dart';
 import 'services/purchase/mock_purchase_service.dart';
 import 'services/storage/cache_manager.dart';
+import 'services/theme/theme_service.dart';
 import 'theme/app_theme.dart';
+import 'core/preferences_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -82,17 +85,27 @@ void main() async {
 
   // 캐시 매니저 초기화
   await CacheManager.instance.initialize();
+  
+  // PreferencesManager 초기화
+  await PreferencesManager.initialize();
+  
+  // ThemeService 초기화
+  final themeService = ThemeService();
+  await themeService.initialize();
 
-  runApp(const SonaApp());
+  runApp(SonaApp(themeService: themeService));
 }
 
 class SonaApp extends StatelessWidget {
-  const SonaApp({super.key});
+  final ThemeService themeService;
+  
+  const SonaApp({super.key, required this.themeService});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: themeService),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
@@ -114,12 +127,15 @@ class SonaApp extends StatelessWidget {
           },
         ),
       ],
-      child: MaterialApp(
-        title: 'SONA',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(),
-        initialRoute: '/',
-        routes: {
+      child: Consumer<ThemeService>(
+        builder: (context, themeService, child) => MaterialApp(
+          title: 'SONA',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: themeService.themeMode,
+          initialRoute: '/',
+          routes: {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/welcome': (context) => const WelcomeScreen(),
@@ -132,9 +148,11 @@ class SonaApp extends StatelessWidget {
           '/terms-of-service': (context) => const TermsOfServiceScreen(),
           '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
           '/settings': (context) => const SettingsScreen(),
+          '/theme-settings': (context) => const ThemeSettingsScreen(),
           '/purchase': (context) => const PurchaseScreen(),
           '/purchase-policy': (context) => const PurchasePolicyScreen(),
-        },
+          },
+        ),
       ),
     );
   }

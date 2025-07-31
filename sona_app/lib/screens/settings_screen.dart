@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth/auth_service.dart';
+import '../services/theme/theme_service.dart';
 import '../utils/account_deletion_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -38,21 +39,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
-        title: const Text(
+        title: Text(
           '설정',
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -88,6 +92,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _soundEnabled = value;
                 });
                 _saveSettings();
+              },
+            ),
+            
+            // 테마 설정
+            _buildSectionTitle('테마'),
+            Consumer<ThemeService>(
+              builder: (context, themeService, child) {
+                return _buildMenuItem(
+                  icon: themeService.getThemeIcon(themeService.currentTheme),
+                  title: '테마 설정',
+                  subtitle: themeService.getThemeDisplayName(themeService.currentTheme),
+                  onTap: () {
+                    Navigator.pushNamed(context, '/theme-settings');
+                  },
+                );
               },
             ),
             
@@ -158,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: Colors.grey[600],
+          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.7),
         ),
       ),
     );
@@ -174,7 +193,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -189,12 +208,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFFF6B9D).withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             icon,
-            color: const Color(0xFFFF6B9D),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         title: Text(
@@ -209,14 +228,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                 ),
               )
             : null,
         trailing: Switch(
           value: value,
           onChanged: onChanged,
-          activeColor: const Color(0xFFFF6B9D),
+          activeColor: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
@@ -231,7 +250,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -246,12 +265,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFFF6B9D).withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             icon,
-            color: const Color(0xFFFF6B9D),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         title: Text(
@@ -266,14 +285,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).textTheme.bodySmall?.color,
                 ),
               )
             : null,
-        trailing: const Icon(
+        trailing: Icon(
           Icons.arrow_forward_ios,
           size: 16,
-          color: Colors.grey,
+          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
         ),
         onTap: onTap,
       ),
@@ -322,9 +341,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               '확인',
-              style: TextStyle(color: Color(0xFFFF6B9D)),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         ],
@@ -340,32 +359,32 @@ class _SettingsScreenState extends State<SettingsScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         title: const Text('앱 정보'),
-        content: const Column(
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               Icons.favorite,
               size: 60,
-              color: Color(0xFFFF6B9D),
+              color: Theme.of(context).colorScheme.primary,
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'SONA',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),
+            const Text(
               '버전 1.0.0',
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'AI와 함께하는 특별한 만남',
               style: TextStyle(
                 fontSize: 14,
@@ -377,9 +396,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
+            child: Text(
               '확인',
-              style: TextStyle(color: Color(0xFFFF6B9D)),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         ],

@@ -591,7 +591,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      backgroundColor: Colors.white.withOpacity(0.95),
+      backgroundColor: Theme.of(context).appBarTheme.backgroundColor?.withOpacity(0.95),
       leading: Center(
         child: ModernIconButton(
           icon: Icons.arrow_back_ios_rounded,
@@ -928,7 +928,7 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.chat_bubble_outline,
             size: 80,
-            color: Colors.grey[300],
+            color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.3),
           ),
           const SizedBox(height: 16),
           Text(
@@ -936,7 +936,7 @@ class _EmptyState extends StatelessWidget {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.grey[600],
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
           const SizedBox(height: 8),
@@ -944,7 +944,7 @@ class _EmptyState extends StatelessWidget {
             '첫 메시지를 보내보세요!',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[500],
+              color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
         ],
@@ -971,7 +971,7 @@ class _MessageInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         boxShadow: AppTheme.softShadow,
       ),
       child: SafeArea(
@@ -994,10 +994,10 @@ class _MessageInput extends StatelessWidget {
                 child: Container(
                   constraints: const BoxConstraints(maxHeight: 120),
                   decoration: BoxDecoration(
-                    color: AppTheme.backgroundColor,
+                    color: Theme.of(context).inputDecorationTheme.fillColor,
                     borderRadius: BorderRadius.circular(24),
                     border: Border.all(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Theme.of(context).dividerColor.withOpacity(0.1),
                       width: 1,
                     ),
                   ),
@@ -1007,7 +1007,7 @@ class _MessageInput extends StatelessWidget {
                     decoration: InputDecoration(
                       hintText: '메시지를 입력하세요...',
                       hintStyle: TextStyle(
-                        color: Colors.grey[500],
+                        color: Theme.of(context).textTheme.bodySmall?.color,
                         fontSize: 14,
                       ),
                       border: InputBorder.none,

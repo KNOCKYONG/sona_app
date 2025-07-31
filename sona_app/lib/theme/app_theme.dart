@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 /// Modern theme configuration for SONA app
 /// Features: Soft gradients, glassmorphism, smooth shadows, modern colors
 class AppTheme {
-  // Modern color palette
+  // Modern color palette (Light theme)
   static const Color primaryColor = Color(0xFFFF6B9D);
   static const Color secondaryColor = Color(0xFFC06C84);
   static const Color accentColor = Color(0xFF6C5CE7);
@@ -12,6 +12,14 @@ class AppTheme {
   static const Color surfaceColor = Colors.white;
   static const Color errorColor = Color(0xFFFF4757);
   static const Color successColor = Color(0xFF00D2D3);
+  
+  // Dark theme colors
+  static const Color darkBackgroundColor = Color(0xFF0D0D0D);
+  static const Color darkSurfaceColor = Color(0xFF1A1A1A);
+  static const Color darkCardColor = Color(0xFF242424);
+  static const Color darkPrimaryColor = Color(0xFFFF8FAD);
+  static const Color darkSecondaryColor = Color(0xFFD989A0);
+  static const Color darkAccentColor = Color(0xFF8E84FF);
   
   // Gradient colors
   static const LinearGradient primaryGradient = LinearGradient(
@@ -237,6 +245,206 @@ class AppTheme {
       ),
     );
   }
+  
+  static ThemeData darkTheme() {
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: const ColorScheme.dark(
+        primary: darkPrimaryColor,
+        secondary: darkSecondaryColor,
+        tertiary: darkAccentColor,
+        background: darkBackgroundColor,
+        surface: darkSurfaceColor,
+        error: errorColor,
+        onBackground: Colors.white,
+        onSurface: Colors.white,
+      ),
+      scaffoldBackgroundColor: darkBackgroundColor,
+      fontFamily: 'NotoSans',
+      
+      // AppBar theme
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.white,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'NotoSans',
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+          size: 24,
+        ),
+      ),
+      
+      // Card theme
+      cardTheme: CardThemeData(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        color: darkCardColor,
+        shadowColor: Colors.black.withOpacity(0.3),
+      ),
+      
+      // Button themes
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: modernButtonStyle(
+          backgroundColor: darkPrimaryColor,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      
+      textButtonTheme: TextButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all(darkPrimaryColor),
+          overlayColor: MaterialStateProperty.all(darkPrimaryColor.withOpacity(0.1)),
+          padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+      ),
+      
+      // Input decoration theme
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: darkCardColor,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.1),
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: darkPrimaryColor,
+            width: 2,
+          ),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(
+            color: errorColor,
+            width: 1,
+          ),
+        ),
+        hintStyle: TextStyle(
+          color: Colors.white.withOpacity(0.5),
+          fontSize: 14,
+        ),
+        labelStyle: const TextStyle(
+          color: Colors.white70,
+        ),
+      ),
+      
+      // Icon theme
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+        size: 24,
+      ),
+      
+      // Text theme
+      textTheme: const TextTheme(
+        headlineLarge: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        headlineSmall: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+        labelLarge: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: Colors.white,
+        ),
+      ),
+      
+      // Bottom navigation bar theme
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: darkSurfaceColor,
+        selectedItemColor: darkPrimaryColor,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+      ),
+      
+      // Dialog theme
+      dialogTheme: DialogThemeData(
+        backgroundColor: darkCardColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+      ),
+      
+      // Checkbox theme
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return darkPrimaryColor;
+          }
+          return Colors.transparent;
+        }),
+        checkColor: MaterialStateProperty.all(Colors.white),
+      ),
+      
+      // Radio theme
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return darkPrimaryColor;
+          }
+          return Colors.white.withOpacity(0.5);
+        }),
+      ),
+      
+      // Switch theme
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return darkPrimaryColor;
+          }
+          return Colors.white.withOpacity(0.5);
+        }),
+        trackColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return darkPrimaryColor.withOpacity(0.5);
+          }
+          return Colors.white.withOpacity(0.2);
+        }),
+      ),
+    );
+  }
 }
 
 // Modern UI components
@@ -270,9 +478,11 @@ class ModernCard extends StatelessWidget {
           child: Container(
             padding: padding ?? const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardTheme.color ?? Colors.white,
               borderRadius: BorderRadius.circular(borderRadius ?? 20),
-              boxShadow: boxShadow ?? AppTheme.softShadow,
+              boxShadow: boxShadow ?? (Theme.of(context).brightness == Brightness.dark 
+                ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 3))]
+                : AppTheme.softShadow),
             ),
             child: child,
           ),
@@ -372,11 +582,15 @@ class _ModernIconButtonState extends State<ModernIconButton>
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).brightness == Brightness.dark 
+                ? AppTheme.darkCardColor 
+                : Colors.white,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: (widget.color ?? AppTheme.primaryColor).withOpacity(0.2),
+                  color: (widget.color ?? (Theme.of(context).brightness == Brightness.dark 
+                    ? AppTheme.darkPrimaryColor 
+                    : AppTheme.primaryColor)).withOpacity(0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),

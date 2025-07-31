@@ -120,19 +120,19 @@ class _ChatListScreenState extends State<ChatListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Row(
           children: [
             const SonaLogoSmall(size: 32),
             const SizedBox(width: 12),
-            const Text(
+            Text(
               '채팅',
               style: TextStyle(
-                color: Colors.black87,
+                color: Theme.of(context).textTheme.headlineSmall?.color,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -141,7 +141,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.black87),
+            icon: Icon(Icons.refresh, color: Theme.of(context).iconTheme.color),
             onPressed: () async {
               // 🔄 수동 새로고침
               final personaService = Provider.of<PersonaService>(context, listen: false);
@@ -188,7 +188,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.search, color: Colors.black87),
+            icon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
             onPressed: () {
               // 검색 기능 추가 예정
             },
@@ -219,26 +219,26 @@ class _ChatListScreenState extends State<ChatListScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.chat_bubble_outline,
                     size: 80,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     '아직 매칭된 페르소나가 없어요',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.headlineSmall?.color,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
+                  Text(
                     '새로운 페르소나를 만나러 가볼까요?',
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey,
+                      color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -247,7 +247,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       Navigator.pushReplacementNamed(context, '/persona-selection');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6B9D),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -321,10 +321,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     border: Border(
                       bottom: BorderSide(
-                        color: Colors.grey.shade200,
+                        color: Theme.of(context).dividerColor.withOpacity(0.2),
                         width: 1,
                       ),
                     ),
@@ -340,7 +340,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: const Color(0xFFFF6B9D).withOpacity(0.2),
+                                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
                                 width: 2,
                               ),
                             ),
@@ -362,7 +362,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white, width: 2),
+                                  border: Border.all(color: Theme.of(context).cardColor, width: 2),
                                 ),
                                 child: const Center(
                                   child: Text(
@@ -389,7 +389,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
-                                    color: Colors.black87,
+                                    color: Theme.of(context).textTheme.bodyLarge?.color,
                                   ),
                                 ),
                                 if (messages.isNotEmpty)
@@ -397,7 +397,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     _getLastMessageTime(messages),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: hasUnread ? const Color(0xFFFF6B9D) : Colors.grey,
+                                      color: hasUnread ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodySmall?.color,
                                     ),
                                   ),
                               ],
@@ -410,7 +410,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     isTyping ? '${persona.name}님이 입력 중...' : _getLastMessagePreview(messages, persona.name),
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: hasUnread || isTyping ? Colors.black87 : Colors.grey,
+                                      color: hasUnread || isTyping ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodySmall?.color,
                                       fontWeight: hasUnread || isTyping ? FontWeight.w500 : FontWeight.normal,
                                       fontStyle: isTyping ? FontStyle.italic : FontStyle.normal,
                                     ),
@@ -423,7 +423,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     margin: const EdgeInsets.only(left: 8),
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFFF6B9D),
+                                      color: Theme.of(context).colorScheme.primary,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(
@@ -440,8 +440,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                     margin: const EdgeInsets.only(left: 8),
                                     width: 8,
                                     height: 8,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFFF6B9D),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).colorScheme.primary,
                                       shape: BoxShape.circle,
                                     ),
                                   ),

@@ -29,31 +29,31 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
-        title: const Text(
+        title: Text(
           '스토어',
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Consumer<PurchaseService>(
         builder: (context, purchaseService, child) {
           if (!purchaseService.isAvailable) {
-            return const Center(
+            return Center(
               child: Text(
                 '스토어를 사용할 수 없습니다',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+                style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
             );
           }
@@ -110,24 +110,36 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Theme.of(context).dividerColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: TabBar(
                   controller: _tabController,
                   indicator: BoxDecoration(
-                    color: AppTheme.primaryColor,
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  indicatorSize: TabBarIndicatorSize.tab,
                   labelColor: Colors.white,
-                  unselectedLabelColor: Colors.grey[600],
+                  unselectedLabelColor: Theme.of(context).textTheme.bodySmall?.color,
                   labelStyle: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
+                  labelPadding: EdgeInsets.zero,
                   tabs: const [
-                    Tab(text: '하트'),
-                    Tab(text: '프리미엄'),
+                    Tab(
+                      height: 48,
+                      child: Center(
+                        child: Text('하트'),
+                      ),
+                    ),
+                    Tab(
+                      height: 48,
+                      child: Center(
+                        child: Text('프리미엄'),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -186,8 +198,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
         .toList();
     
     if (heartProducts.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppTheme.primaryColor),
+      return Center(
+        child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
       );
     }
     
@@ -212,8 +224,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
         .toList();
     
     if (premiumProducts.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppTheme.primaryColor),
+      return Center(
+        child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
       );
     }
     
@@ -262,7 +274,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Material(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         elevation: 2,
         child: InkWell(
@@ -288,9 +300,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                     children: [
                       Text(
                         displayName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                       if (description != null) ...[
@@ -299,7 +312,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                           description,
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[600],
+                            color: Theme.of(context).textTheme.bodySmall?.color,
                           ),
                         ),
                       ],
@@ -311,10 +324,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                   children: [
                     Text(
                       product.price,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryColor,
+                        color: Theme.of(context).colorScheme.primary,
                       ),
                     ),
                     if (product.id.contains('3months') || product.id.contains('6months'))
@@ -378,9 +391,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text(
+            child: Text(
               '구매',
-              style: TextStyle(color: AppTheme.primaryColor),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         ],

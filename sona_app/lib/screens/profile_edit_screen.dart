@@ -135,21 +135,21 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     final user = userService.currentUser;
     
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
-        title: const Text(
+        title: Text(
           '프로필 편집',
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -159,8 +159,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               '완료',
               style: TextStyle(
                 color: userService.isLoading 
-                    ? Colors.grey 
-                    : AppTheme.primaryColor,
+                    ? Theme.of(context).textTheme.bodySmall?.color 
+                    : Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -186,7 +186,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFFF6B9D),
+                            color: Theme.of(context).colorScheme.primary,
                             width: 3,
                           ),
                         ),
@@ -228,10 +228,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B9D),
+                            color: Theme.of(context).colorScheme.primary,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               width: 2,
                             ),
                           ),
@@ -247,10 +247,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 '프로필 사진 변경',
                 style: TextStyle(
-                  color: Color(0xFFFF6B9D),
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
                 ),
               ),
@@ -310,12 +310,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     const SizedBox(height: 24),
                     
                     // 성별
-                    const Text(
+                    Text(
                       '성별',
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
-                        color: Colors.grey,
+                        color: Theme.of(context).textTheme.bodySmall?.color,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -363,7 +363,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: CheckboxListTile(

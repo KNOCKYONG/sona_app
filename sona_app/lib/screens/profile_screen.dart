@@ -78,15 +78,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // 로그인하지 않은 경우 로그인 유도 화면 표시
     if (!isLoggedIn) {
       return Scaffold(
-        backgroundColor: const Color(0xFFFAFAFA),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           elevation: 0,
           automaticallyImplyLeading: false,
-          title: const Text(
+          title: Text(
             'Profile',
             style: TextStyle(
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.headlineSmall?.color,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -99,26 +99,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.person_outline,
                   size: 100,
-                  color: Color(0xFFFF6B9D),
+                  color: Theme.of(context).colorScheme.primary,
                 ),
                 const SizedBox(height: 24),
-                const Text(
+                Text(
                   '로그인이 필요합니다',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Theme.of(context).textTheme.headlineMedium?.color,
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   '프로필을 보고 소나와의 기록을 확인하려면\n로그인이 필요해요',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -131,7 +131,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pushNamed(context, '/login');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF6B9D),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -167,15 +167,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : 0;
     
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           'Profile',
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -183,7 +183,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.settings, color: Colors.black87),
+            icon: Icon(
+              Icons.settings,
+              color: Theme.of(context).iconTheme.color,
+            ),
             onPressed: () {
               Navigator.pushNamed(context, '/settings');
             },
@@ -197,9 +200,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),
                 ),
@@ -215,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFFF6B9D),
+                            color: Theme.of(context).colorScheme.primary,
                             width: 3,
                           ),
                         ),
@@ -223,9 +226,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: _isUploadingImage
                               ? Container(
                                   color: Colors.grey[200],
-                                  child: const Center(
+                                  child: Center(
                                     child: CircularProgressIndicator(
-                                      color: Color(0xFFFF6B9D),
+                                      color: Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 )
@@ -250,10 +253,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 32,
                           height: 32,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFF6B9D),
+                            color: Theme.of(context).colorScheme.primary,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: Colors.white,
+                              color: Theme.of(context).cardColor,
                               width: 2,
                             ),
                           ),
@@ -275,10 +278,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // 사용자 이름
                   Text(
                     appUser?.nickname ?? firebaseUser?.displayName ?? '소나 친구',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: Theme.of(context).textTheme.headlineMedium?.color,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -383,8 +386,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red[50],
-                        foregroundColor: Colors.red,
+                        backgroundColor: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                        foregroundColor: Theme.of(context).colorScheme.error,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
@@ -414,10 +417,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       children: [
         Text(
           value,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Color(0xFFFF6B9D),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         const SizedBox(height: 4),
@@ -425,7 +428,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           label,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey[600],
+            color: Theme.of(context).textTheme.bodySmall?.color,
           ),
         ),
       ],
@@ -458,9 +461,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       fit: BoxFit.cover,
       placeholder: (context, url) => Container(
         color: Colors.grey[200],
-        child: const Center(
+        child: Center(
           child: CircularProgressIndicator(
-            color: Color(0xFFFF6B9D),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),
@@ -485,7 +488,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -500,12 +503,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: const Color(0xFFFF6B9D).withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Icon(
             icon,
-            color: const Color(0xFFFF6B9D),
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         title: Text(
@@ -526,10 +529,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             : null,
         trailing: trailing ??
             (onTap != null
-                ? const Icon(
+                ? Icon(
                     Icons.arrow_forward_ios,
                     size: 16,
-                    color: Colors.grey,
+                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
                   )
                 : null),
         onTap: onTap,

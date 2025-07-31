@@ -10,21 +10,21 @@ class MatchedPersonasScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
-        title: const Text(
+        title: Text(
           '매칭된 소나',
           style: TextStyle(
-            color: Colors.black87,
+            color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -40,14 +40,14 @@ class MatchedPersonasScreen extends StatelessWidget {
                   Icon(
                     Icons.favorite_border,
                     size: 100,
-                    color: Colors.grey[300],
+                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.3),
                   ),
                   const SizedBox(height: 24),
                   Text(
                     '아직 매칭된 소나가 없어요',
                     style: TextStyle(
                       fontSize: 18,
-                      color: Colors.grey[600],
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -56,7 +56,7 @@ class MatchedPersonasScreen extends StatelessWidget {
                     '새로운 소나를 만나보세요!',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.grey[500],
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
                 ],
@@ -88,7 +88,7 @@ class _PersonaCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -120,7 +120,7 @@ class _PersonaCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: const Color(0xFFFF6B9D),
+                      color: Theme.of(context).colorScheme.primary,
                       width: 2,
                     ),
                   ),
@@ -131,10 +131,10 @@ class _PersonaCard extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                               color: Colors.grey[200],
-                              child: const Center(
+                              child: Center(
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Color(0xFFFF6B9D),
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               ),
                             ),

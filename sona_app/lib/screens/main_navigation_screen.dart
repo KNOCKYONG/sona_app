@@ -38,23 +38,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _selectedIndex = widget.initialIndex;
     _checkFirstTimeUser();
     
-    // 채팅 목록 탭으로 시작하는 경우 페르소나 서비스 새로고침
-    if (_selectedIndex == 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final personaService = context.read<PersonaService>();
-        final authService = context.read<AuthService>();
-        final chatService = context.read<ChatService>();
-        
-        // 매칭된 페르소나 최신 상태로 새로고침
-        final userId = authService.user?.uid ?? '';
-        if (userId.isNotEmpty) {
-          await personaService.initialize(userId: userId);
-        }
-        
-        // UI 새로고침
-        chatService.notifyListeners();
-      });
-    }
+    // 채팅 목록 탭으로 시작하는 경우 처리는 ChatListScreen의 initState에서 처리됨
   }
 
   Future<void> _checkFirstTimeUser() async {
@@ -72,23 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       _selectedIndex = index;
     });
     
-    // 채팅 목록 탭을 선택했을 때 페르소나 서비스 새로고침
-    if (index == 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        final personaService = context.read<PersonaService>();
-        final authService = context.read<AuthService>();
-        final chatService = context.read<ChatService>();
-        
-        // 매칭된 페르소나 최신 상태로 새로고침
-        final userId = authService.user?.uid ?? '';
-        if (userId.isNotEmpty) {
-          await personaService.initialize(userId: userId);
-        }
-        
-        // UI 새로고침
-        chatService.notifyListeners();
-      });
-    }
+    // 채팅 목록 탭을 선택했을 때 처리는 ChatListScreen에서 자동으로 처리됨
   }
 
   @override

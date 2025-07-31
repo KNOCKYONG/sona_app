@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:animations/animations.dart';
 import '../services/auth/auth_service.dart';
+import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../widgets/common/sona_logo.dart';
 
@@ -48,18 +49,48 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _startAnimation() async {
     await _animationController.forward();
-    await Future.delayed(const Duration(seconds: 1));
     
     if (mounted) {
       final authService = Provider.of<AuthService>(context, listen: false);
+      
+      // Firebase Auth 상태가 초기화될 때까지 대기
+      await Future.delayed(const Duration(seconds: 1));
+      
+      // Auth 상태가 아직 로드되지 않았으면 추가 대기
+      if (authService.user == null) {
+        // authStateChanges 스트림이 첫 번째 이벤트를 발생시킬 때까지 대기
+        await authService.waitForAuthState();
+      }
+      
+      final userService = Provider.of<UserService>(context, listen: false);
       final personaService = Provider.of<PersonaService>(context, listen: false);
       
-      // PersonaService 초기화 (로컬 데이터만 사용)
-      await personaService.initialize(userId: authService.currentUser?.uid);
-      
-      if (authService.isAuthenticated) {
+      // 로그인된 사용자가 있으면 UserService가 사용자 정보를 로드할 때까지 대기
+      if (authService.isAuthenticated && authService.currentUser != null) {
+        debugPrint('🔐 User is authenticated: ${authService.currentUser!.uid}');
+        
+        // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌
+        int retries = 0;
+        while (userService.currentUser == null && retries < 10) {
+          await Future.delayed(const Duration(milliseconds: 200));
+          retries++;
+        }
+        
+        // UserService에서 사용자 정보 설정
+        if (userService.currentUser != null) {
+          debugPrint('🔐 Setting user info for PersonaService: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
+          personaService.setCurrentUser(userService.currentUser!);
+        } else {
+          debugPrint('⚠️ UserService.currentUser is still null after waiting');
+        }
+        
+        // PersonaService 초기화
+        await personaService.initialize(userId: authService.currentUser!.uid);
+        
         Navigator.of(context).pushReplacementNamed('/main');
       } else {
+        debugPrint('🔐 User is not authenticated, showing welcome dialog');
+        // 로그인되지 않은 경우
         _showWelcomeDialog();
       }
     }

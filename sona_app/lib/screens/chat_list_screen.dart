@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../services/chat/chat_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
+import '../services/auth/user_service.dart';
 import '../services/purchase/subscription_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../models/persona.dart';
@@ -21,41 +22,29 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   @override
   bool get wantKeepAlive => false; // false로 설정하여 매번 새로고침
   
-  bool _isRefreshing = false;
+  bool _isLoading = false;
+  bool _hasInitialized = false;
   
   @override
   void initState() {
     super.initState();
-    // 채팅 목록 로드
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initializeChatList();
-    });
+    // 초기 데이터 로드를 지연시켜서 context가 준비된 후 실행
+    Future.microtask(() => _loadInitialData());
   }
   
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // 화면이 표시될 때마다 데이터 새로고침
-    if (!_isRefreshing) {
-      _isRefreshing = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await _initializeChatList();
-        _isRefreshing = false;
-      });
-    }
+  Future<void> _loadInitialData() async {
+    if (!mounted || _hasInitialized) return;
+    _hasInitialized = true;
+    await _initializeChatList();
   }
   
-  void _refreshChatList() {
-    // Firebase에서 다시 로드하지 않고 UI만 새로고침
-    final chatService = Provider.of<ChatService>(context, listen: false);
-    chatService.notifyListeners();
-  }
 
   /// 🔄 채팅 목록 초기화 및 새로고침
   Future<void> _initializeChatList() async {
     final chatService = Provider.of<ChatService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+    final userService = Provider.of<UserService>(context, listen: false);
     final subscriptionService = Provider.of<SubscriptionService>(context, listen: false);
     
     try {
@@ -77,27 +66,42 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
         subscriptionService.loadSubscription(currentUserId);
       }
       
-      // 2. 🔥 PersonaService 완전 새로고침 (매칭된 페르소나 최신 상태 로드)
-      debugPrint('🔄 Refreshing PersonaService for chat list...');
-      await personaService.initialize(userId: currentUserId);
+      // 2. UserService에서 사용자 정보 설정
+      if (userService.currentUser != null && authService.user != null) {
+        debugPrint('🔐 Setting user info for chat list: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
+        personaService.setCurrentUser(userService.currentUser!);
+      }
       
-      // 3. 매칭된 페르소나들의 채팅 메시지 로드
+      // 3. 🔥 PersonaService가 초기화되지 않았으면 초기화
+      if (personaService.matchedPersonas.isEmpty) {
+        debugPrint('🔄 Initializing PersonaService for chat list...');
+        await personaService.initialize(userId: currentUserId);
+      }
+      
+      // 4. 매칭된 페르소나들의 채팅 메시지 로드
       final matchedPersonas = personaService.matchedPersonas;
       debugPrint('📱 Loading messages for ${matchedPersonas.length} matched personas');
       
-      for (final persona in matchedPersonas) {
-        debugPrint('📨 Loading messages for persona: ${persona.name} (${persona.id})');
-        await chatService.loadChatHistory(currentUserId, persona.id);
-      }
-      
-      if (matchedPersonas.isEmpty) {
+      // 병렬로 모든 페르소나의 메시지 로드 (성능 개선)
+      if (matchedPersonas.isNotEmpty) {
+        final loadFutures = <Future<void>>[];
+        for (final persona in matchedPersonas) {
+          debugPrint('📨 Loading messages for persona: ${persona.name} (${persona.id})');
+          // loadChatHistory를 사용하여 전체 채팅 기록 로드
+          loadFutures.add(chatService.loadChatHistory(currentUserId, persona.id));
+        }
+        
+        // 모든 메시지 로드 대기
+        await Future.wait(loadFutures);
+      } else {
         debugPrint('⚠️ No matched personas found - user might need to swipe more');
       }
       
-      // 4. UI 강제 새로고침
+      // 5. UI 강제 새로고침
       if (mounted) {
         setState(() {});
       }
+      
     } catch (e) {
       debugPrint('❌ Error initializing chat list: $e');
     }
@@ -107,6 +111,9 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     if (messages.isEmpty) return '$personaName님이 대화를 기다리고 있어요.';
     
     final lastMessage = messages.last;
+    
+    // 디버그: 마지막 메시지 정보 출력
+    debugPrint('📱 Last message for $personaName: isFromUser=${lastMessage.isFromUser}, content="${lastMessage.content}"');
     
     // 튜토리얼 시작 메시지인 경우 개인화된 메시지로 변경
     if (lastMessage.content == '대화를 시작해보세요!') {
@@ -125,6 +132,8 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     } else {
       preview += lastMessage.content;
     }
+    
+    debugPrint('📱 Final preview: "$preview"');
     
     return preview;
   }
@@ -157,6 +166,18 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context); // AutomaticKeepAliveClientMixin 사용 시 필요
+    
+    // 화면이 처음 빌드될 때 데이터 로드
+    if (!_hasInitialized && !_isLoading) {
+      _isLoading = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (mounted) {
+          await _loadInitialData();
+          _isLoading = false;
+        }
+      });
+    }
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -182,26 +203,20 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
             icon: Icon(Icons.refresh, color: Theme.of(context).iconTheme.color),
             onPressed: () async {
               // 🔄 수동 새로고침
-              final personaService = Provider.of<PersonaService>(context, listen: false);
-              final authService = Provider.of<AuthService>(context, listen: false);
-              
               // 로딩 인디케이터 표시
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('매칭된 페르소나를 새로고침하는 중...'),
+                  content: Text('채팅 목록을 새로고침하는 중...'),
                   duration: Duration(seconds: 2),
                 ),
               );
               
               try {
-                // 🔧 DeviceIdService로 사용자 ID 확보
-                final currentUserId = await DeviceIdService.getCurrentUserId(
-                  firebaseUserId: authService.user?.uid,
-                );
-                
-                await personaService.initialize(userId: currentUserId);
+                // 전체 채팅 목록 새로고침
+                await _initializeChatList();
                 
                 if (mounted) {
+                  final personaService = Provider.of<PersonaService>(context, listen: false);
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -327,7 +342,8 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
               debugPrint('Chat list - Persona: ${persona.name}, Messages: ${messages.length}');
               if (messages.isNotEmpty) {
                 try {
-                  debugPrint('Last message: ${messages.last.content}');
+                  final lastMsg = messages.last;
+                  debugPrint('Last message: "${lastMsg.content}" isFromUser: ${lastMsg.isFromUser}');
                   final unreadCount = messages.where((m) => !m.isFromUser && m.isRead != true).length;
                   if (unreadCount > 0) {
                     debugPrint('🔴 Still have $unreadCount unread messages for ${persona.name}');

@@ -3,12 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animations/animations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth/auth_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/storage/cache_manager.dart';
 import '../models/persona.dart';
+import '../models/app_user.dart';
 import '../widgets/persona/persona_card.dart';
 import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
@@ -84,7 +86,33 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       debugPrint('📊 Setting current user for recommendation algorithm');
       personaService.setCurrentUser(userService.currentUser!);
     } else {
-      debugPrint('⚠️ No current user available for recommendation algorithm');
+      // 게스트 사용자의 경우 기본 설정 사용
+      debugPrint('⚠️ No current user available - checking local preferences');
+      
+      // SharedPreferences에서 성별 설정 확인
+      final prefs = await SharedPreferences.getInstance();
+      final gender = prefs.getString('user_gender');
+      final genderAll = prefs.getBool('user_gender_all') ?? false;
+      
+      if (gender != null) {
+        debugPrint('📊 Found local gender preference: $gender, genderAll: $genderAll');
+        // 게스트 사용자를 위한 기본 AppUser 객체 생성
+        final guestUser = AppUser(
+          uid: currentUserId,
+          email: '',
+          nickname: 'Guest',
+          gender: gender,
+          genderAll: genderAll,
+          birth: DateTime(2000, 1, 1),
+          age: AppUser.calculateAge(DateTime(2000, 1, 1)),
+          preferredPersona: PreferredPersona(ageRange: [20, 35]),
+          interests: [],
+          createdAt: DateTime.now(),
+        );
+        personaService.setCurrentUser(guestUser);
+      } else {
+        debugPrint('⚠️ No gender preference found');
+      }
     }
     
     // 일반 모드에서는 전체 초기화
@@ -341,8 +369,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 🔧 FIX: Pass 처리도 안전하게 비동기 처리
     Future.microtask(() async {
       debugPrint('👈 Processing persona pass: ${persona.name}');
-      await personaService.markPersonaAsSwiped(persona.id);
-      debugPrint('✅ Pass processing complete: ${persona.name}');
+      final success = await personaService.passPersona(persona.id);
+      if (success) {
+        debugPrint('✅ Pass processing complete: ${persona.name}');
+      } else {
+        debugPrint('❌ Pass processing failed: ${persona.name}');
+      }
     });
   }
 

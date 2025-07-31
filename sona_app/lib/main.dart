@@ -139,7 +139,10 @@ class SonaApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/welcome': (context) => const WelcomeScreen(),
-          '/main': (context) => const MainNavigationScreen(),
+          '/main': (context) {
+            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+            return MainNavigationScreen(initialIndex: args?['initialIndex'] ?? 0);
+          },
           '/persona-selection': (context) => const MainNavigationScreen(),
           '/chat': (context) => const ChatScreen(),
           '/chat-list': (context) => const MainNavigationScreen(initialIndex: 1),

@@ -579,12 +579,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               chatService.notifyListeners();
             }
             
-            // Navigate back to chat list tab
+            // Navigate back to main navigation with chat list tab
             if (mounted) {
-              Navigator.pushNamedAndRemoveUntil(
+              Navigator.pushReplacementNamed(
                 context,
-                '/chat-list',
-                (route) => false,
+                '/main',
+                arguments: {'initialIndex': 1}, // 채팅 목록 탭
               );
             }
           },

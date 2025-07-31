@@ -1043,14 +1043,18 @@ class PersonaService extends BaseService {
     }
     
     // 2. 액션한 페르소나 제외 (좋아요, 슈퍼좋아요, 취소한 페르소나)
+    debugPrint('📋 Checking actionedPersonaIds: ${_actionedPersonaIds.length} personas to exclude');
     if (_actionedPersonaIds.isNotEmpty) {
+      debugPrint('📋 ActionedPersonaIds: $_actionedPersonaIds');
       final beforeCount = filteredPersonas.length;
       filteredPersonas = filteredPersonas.where((persona) => 
         !_actionedPersonaIds.contains(persona.id)
       ).toList();
       
-      debugPrint('🚫 Excluding ${beforeCount - filteredPersonas.length} actioned personas');
+      debugPrint('🚫 Excluded ${beforeCount - filteredPersonas.length} actioned personas');
       debugPrint('   Remaining: ${filteredPersonas.length} personas');
+    } else {
+      debugPrint('📋 No actionedPersonaIds to exclude');
     }
     
     // 필터링 후 페르소나가 없으면 빈 리스트 반환
@@ -1174,17 +1178,53 @@ class PersonaService extends BaseService {
   
   /// Load actionedPersonaIds from Firebase if not already loaded
   Future<void> _loadActionedPersonaIds() async {
-    if (_currentUserId == null) return;
+    if (_currentUserId == null) {
+      debugPrint('⚠️ No user ID available for loading actionedPersonaIds');
+      return;
+    }
     
     try {
+      // 먼저 users 컨렉션에서 확인
       final userDoc = await FirebaseHelper.users.doc(_currentUserId).get();
       if (userDoc.exists) {
         final data = userDoc.data();
         if (data != null && data['actionedPersonaIds'] != null) {
           _actionedPersonaIds = List<String>.from(data['actionedPersonaIds']);
-          debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from Firebase');
+          debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from Firebase (users)');
+        } else {
+          debugPrint('📋 No actionedPersonaIds found in user document');
+        }
+      } else {
+        debugPrint('📋 User document does not exist, checking user_persona_relationships...');
+        
+        // user_persona_relationships에서 스와이프한 페르소나 확인
+        final relationshipsQuery = await FirebaseHelper.userPersonaRelationships
+            .where('userId', isEqualTo: _currentUserId)
+            .get();
+            
+        final actionedIds = <String>[];
+        for (final doc in relationshipsQuery.docs) {
+          final data = doc.data();
+          final personaId = data['personaId'] as String?;
+          if (personaId != null) {
+            actionedIds.add(personaId);
+          }
+        }
+        
+        _actionedPersonaIds = actionedIds;
+        debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from relationships');
+        
+        // users 컨렉션에 업데이트
+        if (_actionedPersonaIds.isNotEmpty) {
+          await FirebaseHelper.users.doc(_currentUserId).set({
+            'actionedPersonaIds': _actionedPersonaIds,
+            'updatedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+          debugPrint('✅ Migrated actionedPersonaIds to users collection');
         }
       }
+      
+      debugPrint('📋 Final actionedPersonaIds: $_actionedPersonaIds');
     } catch (e) {
       debugPrint('❌ Error loading actionedPersonaIds: $e');
     }

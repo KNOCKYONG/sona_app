@@ -15,6 +15,11 @@ class RelationshipVisualSystem {
 class RelationshipColorSystem {
   /// 관계 점수에 따른 색상 반환
   static Color getRelationshipColor(int likes) {
+    // like score가 0 이하면 회색
+    if (likes <= 0) {
+      return Colors.grey[400]!;
+    }
+    
     if (likes < 500) {
       // 친구: 파란색 → 하늘색
       return Color.lerp(
@@ -224,7 +229,16 @@ class RelationshipRingSystem {
 /// 하트 진화 시스템
 class HeartEvolutionSystem {
   static Widget getHeart(int likes, {double size = 16}) {
-    // 항상 꽉찬 하트를 반환하되, likes 수에 따라 색상만 변경
+    // like score가 0 이하면 회색 하트
+    if (likes <= 0) {
+      return Icon(
+        Icons.favorite,
+        color: Colors.grey[400],
+        size: size,
+      );
+    }
+    
+    // 양수일 때는 기존 색상 시스템 적용
     final color = RelationshipColorSystem.getRelationshipColor(likes);
     
     return Icon(

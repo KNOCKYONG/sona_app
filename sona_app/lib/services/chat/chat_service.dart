@@ -398,7 +398,21 @@ class ChatService extends BaseService {
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
     debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
     try {
-      // Mark all user messages as read when AI responds
+      // Check if like score is 0 or below BEFORE marking as read
+      final currentLikes = await RelationScoreService.instance.getLikes(
+        userId: userId,
+        personaId: persona.id,
+      );
+      
+      if (currentLikes <= 0) {
+        debugPrint('💔 Like score is $currentLikes, not marking as read or responding');
+        // Stop typing indicator
+        _personaIsTyping[persona.id] = false;
+        notifyListeners();
+        return; // Exit without marking as read or generating response
+      }
+      
+      // Only mark as read if like score > 0
       _markUserMessagesAsRead(persona.id);
       
       // Typing indicator is now handled by _queueMessageForDelayedResponse
@@ -849,10 +863,22 @@ class ChatService extends BaseService {
       return;
     }
     
-    // Mark all queued messages as read
+    // Get messages from queue
     final messagesToProcess = List<Message>.from(queue.messages);
     queue.messages.clear();
     
+    // Check like score BEFORE marking as read
+    final currentLikes = await RelationScoreService.instance.getLikes(
+      userId: userId,
+      personaId: persona.id,
+    );
+    
+    if (currentLikes <= 0) {
+      debugPrint('💔 Like score is $currentLikes, not marking as read or responding');
+      return; // Exit without marking as read, showing typing indicator, or generating response
+    }
+    
+    // Only mark as read if like score > 0
     // Update messages to mark as read
     for (final msg in messagesToProcess) {
       // Update in persona-specific messages
@@ -1648,6 +1674,17 @@ class ChatService extends BaseService {
         return;
       }
       
+      // Check like score before showing typing indicator
+      final currentLikes = await RelationScoreService.instance.getLikes(
+        userId: userId,
+        personaId: personaId,
+      );
+      
+      if (currentLikes <= 0) {
+        debugPrint('💔 Like score is $currentLikes, not sending initial greeting');
+        return; // Exit without showing typing indicator or sending greeting
+      }
+      
       // 3초 동안 타이핑 표시
       _personaIsTyping[personaId] = true;
       notifyListeners();
@@ -1822,6 +1859,31 @@ class ChatService extends BaseService {
     
     final index = userMessage.hashCode.abs() % responses.length;
     return responses[index];
+  }
+  
+  /// 채팅방 나가기 - 채팅 기록은 유지하되 목록에서만 숨김
+  Future<void> leaveChatRoom(String userId, String personaId) async {
+    try {
+      debugPrint('🚪 Leaving chat room for persona: $personaId');
+      
+      // Firebase에 채팅방 나가기 상태 저장
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('chats')
+          .doc(personaId)
+          .set({
+        'leftChat': true,
+        'leftAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+      
+      // 로컬 메시지는 유지 (나중에 다시 대화 시작할 수 있음)
+      // 단지 채팅 목록에서만 안 보이게 함
+      
+      debugPrint('✅ Successfully left chat room for persona: $personaId');
+    } catch (e) {
+      debugPrint('❌ Error leaving chat room: $e');
+    }
   }
 }
 

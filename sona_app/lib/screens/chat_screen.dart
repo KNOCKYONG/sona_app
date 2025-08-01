@@ -40,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   int _unreadAIMessageCount = 0;
   bool _previousIsTyping = false;
   bool _hasShownWelcome = false;
+  bool _showMoreMenu = false;
 
   @override
   void initState() {
@@ -371,11 +372,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     Widget scaffold = Scaffold(
       appBar: _buildAppBar(),
       resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
-      body: Column(
+      body: Stack(
         children: [
-          
-          // Chat messages list
-          Expanded(
+          Column(
+            children: [
+              
+              // Chat messages list
+              Expanded(
             child: Stack(
               children: [
                 Consumer2<ChatService, PersonaService>(
@@ -578,6 +581,95 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               );
             },
           ),
+            ],
+          ),
+          // More menu overlay
+          if (_showMoreMenu)
+            Positioned(
+              top: 0,
+              right: 16,
+              child: Material(
+                elevation: 4,
+                borderRadius: BorderRadius.circular(12),
+                color: Theme.of(context).cardColor,
+                child: InkWell(
+                  onTap: () async {
+                    setState(() {
+                      _showMoreMenu = false;
+                    });
+                    
+                    // Show confirmation dialog
+                    final shouldLeave = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('채팅방 나가기'),
+                        content: const Text('이 채팅방을 나가시겠습니까?\n채팅 목록에서 사라집니다.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: const Text('취소'),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: const Text(
+                              '나가기',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                    
+                    if (shouldLeave == true && mounted) {
+                      // Leave chat room
+                      final chatService = Provider.of<ChatService>(context, listen: false);
+                      final authService = Provider.of<AuthService>(context, listen: false);
+                      final personaService = Provider.of<PersonaService>(context, listen: false);
+                      
+                      final userId = authService.user?.uid ?? '';
+                      final currentPersona = personaService.currentPersona;
+                      
+                      if (userId.isNotEmpty && currentPersona != null) {
+                        await chatService.leaveChatRoom(userId, currentPersona.id);
+                        
+                        // Navigate back to main navigation
+                        if (mounted) {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            '/main',
+                            arguments: {'initialIndex': 1}, // 채팅 목록 탭
+                          );
+                        }
+                      }
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.exit_to_app,
+                          color: Colors.red[400],
+                          size: 20,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '채팅방 나가기',
+                          style: TextStyle(
+                            color: Colors.red[400],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -644,7 +736,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             child: ModernIconButton(
               icon: Icons.more_horiz_rounded,
               onPressed: () {
-                // Menu options
+                setState(() {
+                  _showMoreMenu = !_showMoreMenu;
+                });
               },
               tooltip: '더보기',
             ),
@@ -866,16 +960,18 @@ class _OnlineStatus extends StatelessWidget {
         
         return Row(
           children: [
-            // 온라인 표시
+            // 온라인 표시 (like score가 0 이하면 회색)
             Container(
               width: 8,
               height: 8,
               decoration: BoxDecoration(
-                color: Colors.green[500],
+                color: likes <= 0 ? Colors.grey[400] : Colors.green[500],
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.green.withOpacity(0.4),
+                    color: likes <= 0 
+                        ? Colors.grey.withOpacity(0.4) 
+                        : Colors.green.withOpacity(0.4),
                     blurRadius: 4,
                     spreadRadius: 1,
                   ),
@@ -883,12 +979,12 @@ class _OnlineStatus extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            // Online 텍스트
-            const Text(
-              'Online',
+            // Online 텍스트 (like score가 0 이하면 Offline)
+            Text(
+              likes <= 0 ? 'Offline' : 'Online',
               style: TextStyle(
                 fontSize: 12,
-                color: Colors.green,
+                color: likes <= 0 ? Colors.grey : Colors.green,
                 fontWeight: FontWeight.w500,
               ),
             ),

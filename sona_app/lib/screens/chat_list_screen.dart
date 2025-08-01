@@ -25,6 +25,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   
   bool _isLoading = false;
   bool _hasInitialized = false;
+  final Map<String, bool> _leftChatStatus = {};
   
   @override
   void initState() {
@@ -98,7 +99,29 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
         debugPrint('⚠️ No matched personas found - user might need to swipe more');
       }
       
-      // 5. UI 강제 새로고침
+      // 5. 채팅방 나가기 상태 확인
+      if (userId != null && userId.isNotEmpty) {
+        try {
+          final chatsSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('chats')
+              .get();
+              
+          _leftChatStatus.clear();
+          for (var doc in chatsSnapshot.docs) {
+            final data = doc.data();
+            if (data['leftChat'] == true) {
+              _leftChatStatus[doc.id] = true;
+            }
+          }
+          debugPrint('📋 Left chat status loaded: ${_leftChatStatus.length} chats left');
+        } catch (e) {
+          debugPrint('Error loading leftChat status: $e');
+        }
+      }
+      
+      // 6. UI 강제 새로고침
       if (mounted) {
         setState(() {});
       }
@@ -258,7 +281,10 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
       ),
       body: Consumer2<PersonaService, ChatService>(
         builder: (context, personaService, chatService, child) {
-          final matchedPersonas = List<Persona>.from(personaService.matchedPersonas);
+          // leftChat 상태가 아닌 페르소나만 필터링
+          final matchedPersonas = List<Persona>.from(personaService.matchedPersonas)
+              .where((persona) => _leftChatStatus[persona.id] != true)
+              .toList();
           
           // Sort personas by last interaction (message or match time)
           matchedPersonas.sort((a, b) {

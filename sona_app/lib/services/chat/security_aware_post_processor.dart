@@ -88,10 +88,7 @@ class SecurityAwarePostProcessor {
     // 3. 이름 패턴 제거
     line = _removeNamePatterns(line, context.persona.name);
     
-    // 4. 말투 교정 (casual/formal)
-    line = _correctSpeechStyle(line, context.persona.isCasualSpeech);
-    
-    // 5. 자연스러운 한국어 표현으로 변환
+    // 4. 자연스러운 한국어 표현으로 변환
     line = _naturalizeKorean(line, context);
     
     return line;
@@ -110,20 +107,6 @@ class SecurityAwarePostProcessor {
     
     // 4. 관계별 톤 미세 조정
     text = _adjustRelationshipTone(text, context);
-    
-    // 5. 최종 존댓말 중복 체크 (안전장치)
-    text = _finalPoliteCheck(text);
-    
-    return text;
-  }
-  
-  /// 최종 존댓말 중복 체크
-  static String _finalPoliteCheck(String text) {
-    // 모든 가능한 존댓말 중복 패턴 제거
-    text = text.replaceAll(RegExp(r'(요|죠|네요|어요|아요|에요|예요|세요|습니다)\1+'), r'$1');
-    
-    // 문장 중간에 나타날 수 있는 중복도 제거
-    text = text.replaceAll(RegExp(r'(\S요)요'), r'$1');
     
     return text;
   }
@@ -162,61 +145,6 @@ class SecurityAwarePostProcessor {
     return text;
   }
   
-  /// 말투 교정
-  static String _correctSpeechStyle(String text, bool isCasual) {
-    if (isCasual) {
-      // 반말로 변환
-      final replacements = {
-        '해요': '해',
-        '했어요': '했어',
-        '할까요': '할까',
-        '있어요': '있어',
-        '없어요': '없어',
-        '봤어요': '봤어',
-        '먹어요': '먹어',
-        '가요': '가',
-        '와요': '와',
-        '네요': '네',
-        '군요': '군',
-        '는데요': '는데',
-        '거든요': '거든',
-        '죠': '지',
-        '하세요': '해',
-        '세요': '어',
-        '으세요': '어',
-        '습니다': '어',
-        '합니다': '해',
-      };
-      
-      for (final entry in replacements.entries) {
-        text = text.replaceAll(entry.key, entry.value);
-      }
-    } else {
-      // 존댓말 유지/교정
-      // 먼저 이미 존댓말로 끝나는지 확인
-      final endsWithPolite = RegExp(r'(요|죠|네요|어요|아요|에요|예요|세요|습니다)$').hasMatch(text);
-      
-      if (!endsWithPolite) {
-        // 존댓말로 끝나지 않는 경우만 변환
-        final replacements = {
-          RegExp(r'(\w)야(\s|$)'): r'$1요$2',
-          RegExp(r'해(\s|$)'): r'해요$1',
-          RegExp(r'했어(\s|$)'): r'했어요$1',
-          RegExp(r'할까(\s|$)'): r'할까요$1',
-          RegExp(r'있어(\s|$)'): r'있어요$1',
-          RegExp(r'없어(\s|$)'): r'없어요$1',
-          RegExp(r'봤어(\s|$)'): r'봤어요$1',
-        };
-        
-        for (final entry in replacements.entries) {
-          text = text.replaceAllMapped(entry.key, 
-            (match) => entry.value.replaceAll(r'$1', match.group(1) ?? '').replaceAll(r'$2', match.group(2) ?? ''));
-        }
-      }
-    }
-    
-    return text;
-  }
   
   /// 자연스러운 한국어로 변환
   static String _naturalizeKorean(String text, _ProcessingContext context) {
@@ -258,17 +186,6 @@ class SecurityAwarePostProcessor {
     // 불필요한 마침표 제거
     text = text.replaceAll(RegExp(r'\.\s*ㅋㅋ'), ' ㅋㅋ');
     text = text.replaceAll(RegExp(r'\.\s*ㅎㅎ'), ' ㅎㅎ');
-    
-    // 존댓말 중복 제거
-    text = text.replaceAll(RegExp(r'요요'), '요');
-    text = text.replaceAll(RegExp(r'요\s+요'), '요');
-    text = text.replaceAll(RegExp(r'어요요'), '어요');
-    text = text.replaceAll(RegExp(r'아요요'), '아요');
-    text = text.replaceAll(RegExp(r'에요요'), '에요');
-    text = text.replaceAll(RegExp(r'예요요'), '예요');
-    text = text.replaceAll(RegExp(r'네요요'), '네요');
-    text = text.replaceAll(RegExp(r'죠요'), '죠');
-    text = text.replaceAll(RegExp(r'요죠'), '죠');
     
     return text;
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/chat/chat_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
@@ -100,11 +101,11 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
       }
       
       // 5. 채팅방 나가기 상태 확인
-      if (userId != null && userId.isNotEmpty) {
+      if (currentUserId != null && currentUserId.isNotEmpty) {
         try {
           final chatsSnapshot = await FirebaseFirestore.instance
               .collection('users')
-              .doc(userId)
+              .doc(currentUserId)
               .collection('chats')
               .get();
               

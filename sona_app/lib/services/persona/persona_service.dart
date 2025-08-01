@@ -324,13 +324,13 @@ class PersonaService extends BaseService {
       
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
       
-      // Create relationship data with super like relationship score (200)
+      // Create relationship data with super like relationship score (1000)
       final relationshipData = {
         'userId': _currentUserId!,
         'personaId': personaId,
-        'relationshipScore': 200, // 🌟 Super like starts with 200 (crush level)
-        'relationshipType': 'crush',
-        'relationshipDisplayName': '썸',
+        'relationshipScore': 1000, // 🌟 Super like starts with 1000 (perfect love level)
+        'relationshipType': 'perfectLove',
+        'relationshipDisplayName': '완벽한 사랑',
         'isCasualSpeech': false,
         'swipeAction': 'super_like',
         'isMatched': true,
@@ -348,8 +348,8 @@ class PersonaService extends BaseService {
 
       // Update local state immediately with super like score
       final matchedPersona = persona.copyWith(
-        relationshipScore: 200, // 🌟 Super like relationship score
-        currentRelationship: RelationshipType.crush, // 🌟 Super like relationship type
+        relationshipScore: 1000, // 🌟 Super like relationship score
+        currentRelationship: RelationshipType.perfectLove, // 🌟 Super like relationship type
         isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
@@ -371,12 +371,12 @@ class PersonaService extends BaseService {
       
       // Cache the relationship with super like score
       _addToCache(personaId, _CachedRelationship(
-        score: 200, // 🌟 Super like score
+        score: 1000, // 🌟 Super like score
         isCasualSpeech: false,
         timestamp: DateTime.now(),
       ));
       
-      debugPrint('✅ Super like processed successfully: ${persona.name} → 200 (썸)');
+      debugPrint('✅ Super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
       
       // Update user's actionedPersonaIds
       await _updateActionedPersonaIds(personaId);
@@ -417,8 +417,8 @@ class PersonaService extends BaseService {
       
       // Super like creates crush relationship (200 score)
       final matchedPersona = persona.copyWith(
-        relationshipScore: 200, // 🌟 Super like relationship score
-        currentRelationship: RelationshipType.crush, // 🌟 Super like relationship type
+        relationshipScore: 1000, // 🌟 Super like relationship score
+        currentRelationship: RelationshipType.perfectLove, // 🌟 Super like relationship type
         isCasualSpeech: false,
       );
       
@@ -434,7 +434,7 @@ class PersonaService extends BaseService {
       
       _sessionSwipedPersonas[personaId] = DateTime.now();
       
-      debugPrint('✅ Tutorial super like processed successfully: ${persona.name} → 200 (썸)');
+      debugPrint('✅ Tutorial super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
       notifyListeners();
       return true;
     } catch (e) {
@@ -1327,6 +1327,35 @@ class PersonaService extends BaseService {
 
   Future<void> markPersonaAsSwiped(String personaId) async {
     _sessionSwipedPersonas[personaId] = DateTime.now();
+    notifyListeners();
+  }
+
+  /// 스와이프한 페르소나 목록 초기화 (새로고침 기능)
+  Future<void> resetSwipedPersonas() async {
+    debugPrint('🔄 Resetting swiped personas...');
+    
+    // 세션 스와이프 기록 초기화
+    _sessionSwipedPersonas.clear();
+    
+    // SharedPreferences에서도 삭제
+    await PreferencesManager.remove('swiped_personas');
+    
+    // actionedPersonaIds도 초기화 (Firebase에서)
+    if (_currentUserId != null) {
+      try {
+        await FirebaseHelper.users.doc(_currentUserId).update({
+          'actionedPersonaIds': [],
+        });
+        _actionedPersonaIds.clear();
+      } catch (e) {
+        debugPrint('Error clearing actionedPersonaIds: $e');
+      }
+    }
+    
+    // shuffled 리스트 초기화하여 다시 생성되도록 함
+    _shuffledAvailablePersonas = null;
+    
+    debugPrint('✅ Swiped personas reset complete');
     notifyListeners();
   }
 

@@ -192,12 +192,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
     
     if (persona != null) {
-      // 초기 인사 메시지 전송
-      await chatService.sendInitialGreeting(
-        userId: userId,
-        personaId: persona.id,
-        persona: persona,
-      );
+      // 이전 메시지가 없을 때만 초기 인사 메시지 전송
+      final existingMessages = chatService.getMessages(persona.id);
+      if (existingMessages.isEmpty) {
+        await chatService.sendInitialGreeting(
+          userId: userId,
+          personaId: persona.id,
+          persona: persona,
+        );
+      } else {
+        debugPrint('📝 Previous messages exist for ${persona.name}, skipping initial greeting');
+      }
     }
   }
 
@@ -586,11 +591,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           // More menu overlay
           if (_showMoreMenu)
             Positioned(
-              top: 0,
-              right: 16,
+              top: MediaQuery.of(context).padding.top + kToolbarHeight + 8, // AppBar 바로 아래
+              right: 8,
               child: Material(
-                elevation: 4,
+                elevation: 8,
                 borderRadius: BorderRadius.circular(12),
+                shadowColor: Colors.black.withOpacity(0.2),
                 color: Theme.of(context).cardColor,
                 child: InkWell(
                   onTap: () async {
@@ -736,9 +742,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             child: ModernIconButton(
               icon: Icons.more_horiz_rounded,
               onPressed: () {
+                debugPrint('🔘 More button pressed, current state: $_showMoreMenu');
                 setState(() {
                   _showMoreMenu = !_showMoreMenu;
                 });
+                debugPrint('🔘 New state: $_showMoreMenu');
               },
               tooltip: '더보기',
             ),

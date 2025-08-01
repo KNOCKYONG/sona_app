@@ -137,11 +137,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             ),
             textAlign: TextAlign.center,
           ),
-          content: const Text(
+          content: Text(
             '튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.black87,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
+                  : Colors.black87,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
@@ -1056,9 +1058,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           ),
           child: Container(
             constraints: const BoxConstraints(
-              maxWidth: 320, // Dialog 최대 너비 제한
+              maxWidth: 340, // Dialog 최대 너비를 약간 늘림
             ),
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(20), // padding을 줄여 더 많은 공간 확보
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
@@ -1216,22 +1218,29 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(25),
                           ),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (isSuperLike) ...[
-                              const Icon(Icons.favorite, size: 16),
-                              const SizedBox(width: 4),
-                              const Text('5', style: TextStyle(fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 8),
-                            ],
-                            const Text(
-                              '대화방으로 가기',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                        child: isSuperLike 
+                          ? FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.favorite, size: 14),
+                                  const SizedBox(width: 3),
+                                  const Text('5', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                                  const SizedBox(width: 6),
+                                  const Text(
+                                    '채팅하기',
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const Text(
+                              '채팅 시작',
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                             ),
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -1520,12 +1529,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                   const SizedBox(height: 24),
                                   
                                   // 타이틀
-                                  const Text(
+                                  Text(
                                     '새로운 만남을 원하시나요?',
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: Color(0xFF2D2D2D),
+                                      color: Theme.of(context).brightness == Brightness.dark
+                                          ? Colors.white
+                                          : const Color(0xFF2D2D2D),
                                     ),
                                   ),
                                   const SizedBox(height: 16),
@@ -1536,7 +1547,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontSize: 16,
-                                      color: Colors.grey[600],
+                                      color: Theme.of(context).brightness == Brightness.dark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
                                       height: 1.5,
                                     ),
                                   ),
@@ -1582,8 +1595,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                         child: OutlinedButton(
                                           onPressed: () => Navigator.of(context).pop(false),
                                           style: OutlinedButton.styleFrom(
-                                            foregroundColor: Colors.grey[600],
-                                            side: BorderSide(color: Colors.grey[300]!),
+                                            foregroundColor: Theme.of(context).brightness == Brightness.dark
+                                                ? Colors.grey[400]
+                                                : Colors.grey[600],
+                                            side: BorderSide(
+                                              color: Theme.of(context).brightness == Brightness.dark
+                                                  ? Colors.grey[700]!
+                                                  : Colors.grey[300]!,
+                                            ),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(25),
                                             ),

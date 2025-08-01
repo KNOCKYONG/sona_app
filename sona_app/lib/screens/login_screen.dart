@@ -166,7 +166,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   Container(
                     constraints: const BoxConstraints(maxWidth: 400),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: Theme.of(context).brightness == Brightness.dark 
+                          ? AppTheme.darkCardColor 
+                          : Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
@@ -181,7 +183,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         // 탭 바
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: Theme.of(context).brightness == Brightness.dark 
+                                ? AppTheme.darkSurfaceColor 
+                                : Colors.grey[100],
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
@@ -189,9 +193,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                           child: TabBar(
                             controller: _tabController,
-                            labelColor: AppTheme.primaryColor,
-                            unselectedLabelColor: Colors.grey,
-                            indicatorColor: AppTheme.primaryColor,
+                            labelColor: Theme.of(context).brightness == Brightness.dark 
+                                ? AppTheme.darkPrimaryColor 
+                                : AppTheme.primaryColor,
+                            unselectedLabelColor: Theme.of(context).brightness == Brightness.dark 
+                                ? Colors.grey[600] 
+                                : Colors.grey,
+                            indicatorColor: Theme.of(context).brightness == Brightness.dark 
+                                ? AppTheme.darkPrimaryColor 
+                                : AppTheme.primaryColor,
                             indicatorWeight: 3,
                             tabs: const [
                               Tab(text: '로그인'),
@@ -334,15 +344,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               Expanded(
                 child: Container(
                   height: 1,
-                  color: Colors.grey[300],
+                  color: Theme.of(context).brightness == Brightness.dark 
+                      ? Colors.grey[700] 
+                      : Colors.grey[300],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   '또는',
                   style: TextStyle(
-                    color: Colors.grey,
+                    color: Theme.of(context).brightness == Brightness.dark 
+                        ? Colors.grey[400] 
+                        : Colors.grey,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -350,7 +364,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               Expanded(
                 child: Container(
                   height: 1,
-                  color: Colors.grey[300],
+                  color: Theme.of(context).brightness == Brightness.dark 
+                      ? Colors.grey[700] 
+                      : Colors.grey[300],
                 ),
               ),
             ],
@@ -364,7 +380,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               onPressed: _isLoading ? null : _handleGoogleSignIn,
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                side: BorderSide(color: Colors.grey[300]!),
+                side: BorderSide(
+                  color: Theme.of(context).brightness == Brightness.dark 
+                      ? Colors.grey[700]! 
+                      : Colors.grey[300]!,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -391,12 +411,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Google로 로그인',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black87,
+                      color: Theme.of(context).brightness == Brightness.dark 
+                          ? Colors.white 
+                          : Colors.black87,
                     ),
                   ),
                 ],
@@ -419,11 +441,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           color: AppTheme.primaryColor,
         ),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'AI 페르소나와의 매칭을 위해\n간단한 정보가 필요해요',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey,
+            color: Theme.of(context).brightness == Brightness.dark 
+                ? Colors.grey[400] 
+                : Colors.grey,
           ),
           textAlign: TextAlign.center,
         ),
@@ -477,17 +501,23 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               ),
             ),
           ),
-          label: const Text(
+          label: Text(
             'Google로 시작하기',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).brightness == Brightness.dark 
+                  ? Colors.white 
+                  : Colors.black87,
             ),
           ),
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(double.infinity, 56),
-            side: BorderSide(color: Colors.grey[300]!),
+            side: BorderSide(
+              color: Theme.of(context).brightness == Brightness.dark 
+                  ? Colors.grey[700]! 
+                  : Colors.grey[300]!,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),

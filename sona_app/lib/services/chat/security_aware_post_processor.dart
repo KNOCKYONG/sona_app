@@ -111,6 +111,20 @@ class SecurityAwarePostProcessor {
     // 4. 관계별 톤 미세 조정
     text = _adjustRelationshipTone(text, context);
     
+    // 5. 최종 존댓말 중복 체크 (안전장치)
+    text = _finalPoliteCheck(text);
+    
+    return text;
+  }
+  
+  /// 최종 존댓말 중복 체크
+  static String _finalPoliteCheck(String text) {
+    // 모든 가능한 존댓말 중복 패턴 제거
+    text = text.replaceAll(RegExp(r'(요|죠|네요|어요|아요|에요|예요|세요|습니다)\1+'), r'$1');
+    
+    // 문장 중간에 나타날 수 있는 중복도 제거
+    text = text.replaceAll(RegExp(r'(\S요)요'), r'$1');
+    
     return text;
   }
   
@@ -179,23 +193,24 @@ class SecurityAwarePostProcessor {
       }
     } else {
       // 존댓말 유지/교정
-      final replacements = {
-        '해': '해요',
-        '했어': '했어요',
-        '할까': '할까요',
-        '있어': '있어요',
-        '없어': '없어요',
-        '봤어': '봤어요',
-        '야': '요',
-        RegExp(r'(\w)야(\s|$)'): r'$1요$2',
-      };
+      // 먼저 이미 존댓말로 끝나는지 확인
+      final endsWithPolite = RegExp(r'(요|죠|네요|어요|아요|에요|예요|세요|습니다)$').hasMatch(text);
       
-      for (final entry in replacements.entries) {
-        if (entry.key is RegExp) {
-          text = text.replaceAllMapped(entry.key as RegExp, 
-            (match) => entry.value.toString().replaceAll(r'$1', match.group(1)!).replaceAll(r'$2', match.group(2)!));
-        } else {
-          text = text.replaceAll(entry.key.toString(), entry.value.toString());
+      if (!endsWithPolite) {
+        // 존댓말로 끝나지 않는 경우만 변환
+        final replacements = {
+          RegExp(r'(\w)야(\s|$)'): r'$1요$2',
+          RegExp(r'해(\s|$)'): r'해요$1',
+          RegExp(r'했어(\s|$)'): r'했어요$1',
+          RegExp(r'할까(\s|$)'): r'할까요$1',
+          RegExp(r'있어(\s|$)'): r'있어요$1',
+          RegExp(r'없어(\s|$)'): r'없어요$1',
+          RegExp(r'봤어(\s|$)'): r'봤어요$1',
+        };
+        
+        for (final entry in replacements.entries) {
+          text = text.replaceAllMapped(entry.key, 
+            (match) => entry.value.replaceAll(r'$1', match.group(1) ?? '').replaceAll(r'$2', match.group(2) ?? ''));
         }
       }
     }
@@ -243,6 +258,17 @@ class SecurityAwarePostProcessor {
     // 불필요한 마침표 제거
     text = text.replaceAll(RegExp(r'\.\s*ㅋㅋ'), ' ㅋㅋ');
     text = text.replaceAll(RegExp(r'\.\s*ㅎㅎ'), ' ㅎㅎ');
+    
+    // 존댓말 중복 제거
+    text = text.replaceAll(RegExp(r'요요'), '요');
+    text = text.replaceAll(RegExp(r'요\s+요'), '요');
+    text = text.replaceAll(RegExp(r'어요요'), '어요');
+    text = text.replaceAll(RegExp(r'아요요'), '아요');
+    text = text.replaceAll(RegExp(r'에요요'), '에요');
+    text = text.replaceAll(RegExp(r'예요요'), '예요');
+    text = text.replaceAll(RegExp(r'네요요'), '네요');
+    text = text.replaceAll(RegExp(r'죠요'), '죠');
+    text = text.replaceAll(RegExp(r'요죠'), '죠');
     
     return text;
   }

@@ -991,8 +991,8 @@ class ChatService extends BaseService {
     if (lowerResponse.contains('ㅋㅋ')) happyScore += 2;
     if (lowerResponse.contains('ㅎㅎ')) happyScore += 2;
     if (lowerResponse.contains('기뻐')) happyScore += 3;
-    if (lowerResponse.contains('좋아')) happyScore += 2;
-    if (lowerResponse.contains('행복')) happyScore += 3;
+    if (lowerResponse.contains('좋아')) happyScore += 5;
+    if (lowerResponse.contains('행복')) happyScore += 7;
     if (lowerResponse.contains('신나')) happyScore += 2;
     if (lowerResponse.contains('재밌')) happyScore += 2;
     if (lowerResponse.contains('웃')) happyScore += 1;
@@ -1002,17 +1002,17 @@ class ChatService extends BaseService {
     if (lowerResponse.contains('ㅜㅜ')) sadScore += 3;
     if (lowerResponse.contains('슬퍼')) sadScore += 3;
     if (lowerResponse.contains('서운')) sadScore += 3;
-    if (lowerResponse.contains('우울')) sadScore += 3;
+    if (lowerResponse.contains('우울')) sadScore += 7;
     if (lowerResponse.contains('속상')) sadScore += 2;
     if (lowerResponse.contains('힘들')) sadScore += 2;
     
     // Angry indicators
-    if (lowerResponse.contains('화나')) angryScore += 3;
-    if (lowerResponse.contains('짜증')) angryScore += 3;
-    if (lowerResponse.contains('질투')) angryScore += 2;
-    if (lowerResponse.contains('싫어')) angryScore += 2;
-    if (lowerResponse.contains('열받')) angryScore += 3;
-    if (lowerResponse.contains('빡치')) angryScore += 3;
+    if (lowerResponse.contains('화나')) angryScore += 8;
+    if (lowerResponse.contains('짜증')) angryScore += 7;
+    if (lowerResponse.contains('질투')) angryScore += 5;
+    if (lowerResponse.contains('싫어')) angryScore += 7;
+    if (lowerResponse.contains('열받')) angryScore += 7;
+    if (lowerResponse.contains('빡치')) angryScore += 7;
     
     // Love indicators
     if (lowerResponse.contains('사랑')) loveScore += 3;

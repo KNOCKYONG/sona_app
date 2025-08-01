@@ -330,7 +330,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // Check if persona changed
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona && _currentPersonaId != args.id) {
+      // Clear previous chat messages immediately
+      if (_currentPersonaId != null) {
+        final chatService = Provider.of<ChatService>(context, listen: false);
+        // This will trigger the immediate clear in ChatService.loadChatHistory
+        debugPrint('🔄 Persona changed from $_currentPersonaId to ${args.id}');
+      }
+      
       _currentPersonaId = args.id;
+      // Reset welcome message flag for new persona
+      _hasShownWelcome = false;
+      
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();

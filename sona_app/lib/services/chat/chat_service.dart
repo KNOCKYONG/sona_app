@@ -79,7 +79,7 @@ class ChatService extends BaseService {
   // Replaced by _personaIsTyping map
 
   // Getters
-  List<Message> get messages => _currentPersonaId != null ? getMessages(_currentPersonaId!) : _messages;
+  List<Message> get messages => _currentPersonaId != null ? getMessages(_currentPersonaId!) : [];
   
   // Current persona ID for tracking active chat
   String? _currentPersonaId;
@@ -261,6 +261,12 @@ class ChatService extends BaseService {
 
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
+    // Clear previous messages IMMEDIATELY to prevent old chat from showing
+    if (_currentPersonaId != null && _currentPersonaId != personaId) {
+      _messages.clear();
+      notifyListeners(); // Notify UI immediately to clear the view
+    }
+    
     // Set current persona ID
     _currentPersonaId = personaId;
     

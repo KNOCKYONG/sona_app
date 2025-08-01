@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
+import '../../core/constants.dart';
 import 'optimized_prompt_service.dart';
 import 'security_filter_service.dart';
 
@@ -18,7 +19,7 @@ import 'security_filter_service.dart';
 class OpenAIService {
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
-  static const String _model = 'gpt-4o-mini'; // 안정적인 모델로 변경
+  // OpenAI model is defined in AppConstants
   
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
@@ -134,7 +135,7 @@ class OpenAIService {
     }
     
     debugPrint('🔑 API Key validation: ${apiKey.substring(0, 10)}...${apiKey.substring(apiKey.length - 4)}');
-    debugPrint('🤖 Using model: $_model');
+    debugPrint('🤖 Using model: ${AppConstants.openAIModel}');
     
     // 최적화된 프롬프트 생성
     final personalizedPrompt = OptimizedPromptService.buildOptimizedPrompt(
@@ -162,7 +163,7 @@ class OpenAIService {
         'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
-        'model': _model, // GPT-4.1-mini-2025-04-14
+        'model': AppConstants.openAIModel,
         'messages': optimizedMessages,
         'max_tokens': _maxOutputTokens,
         'temperature': _temperature,
@@ -196,9 +197,9 @@ class OpenAIService {
       throw Exception('Invalid API key');
     } else if (response.statusCode == 404) {
       debugPrint('❓ Model not found - Status: 404');
-      debugPrint('❓ Model name: $_model');
+      debugPrint('❓ Model name: ${AppConstants.openAIModel}');
       debugPrint('❓ Response body: ${response.body}');
-      throw Exception('Model not found: $_model');
+      throw Exception('Model not found: ${AppConstants.openAIModel}');
     } else {
       debugPrint('❌ OpenAI API Error: ${response.statusCode}');
       debugPrint('❌ Response body: ${response.body}');

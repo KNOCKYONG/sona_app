@@ -27,7 +27,7 @@ class ChatOrchestrator {
   // API 설정
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
-  static const String _model = 'gpt-4o-mini';
+  // OpenAI model is defined in AppConstants
   
   // HTTP 클라이언트
   final http.Client _httpClient = http.Client();
@@ -162,7 +162,7 @@ class ChatOrchestrator {
     ];
     
     debugPrint('🌐 Calling OpenAI API...');
-    debugPrint('📝 Model: $_model');
+    debugPrint('📝 Model: ${AppConstants.openAIModel}');
     debugPrint('💬 User message: ${userMessage.substring(0, userMessage.length > 50 ? 50 : userMessage.length)}...');
     
     final response = await _httpClient.post(
@@ -172,7 +172,7 @@ class ChatOrchestrator {
         'Authorization': 'Bearer $apiKey',
       },
       body: jsonEncode({
-        'model': _model,
+        'model': AppConstants.openAIModel,
         'messages': messages,
         'max_tokens': AppConstants.maxOutputTokens,
         'temperature': 0.85,

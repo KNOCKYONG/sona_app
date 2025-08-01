@@ -1330,6 +1330,20 @@ class PersonaService extends BaseService {
     notifyListeners();
   }
 
+  /// 매칭된 페르소나 목록에서 제거
+  void removeFromMatchedPersonas(String personaId) {
+    debugPrint('🗑️ Removing persona from matched list: $personaId');
+    
+    // 매칭된 페르소나 목록에서 제거
+    _matchedPersonas.removeWhere((p) => p.id == personaId);
+    
+    // SharedPreferences에도 저장
+    _saveMatchedPersonas();
+    
+    // UI 업데이트
+    notifyListeners();
+  }
+
   /// 스와이프한 페르소나 목록 초기화 (새로고침 기능)
   Future<void> resetSwipedPersonas() async {
     debugPrint('🔄 Resetting swiped personas...');

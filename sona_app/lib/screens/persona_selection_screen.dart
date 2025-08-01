@@ -1055,6 +1055,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
+            constraints: const BoxConstraints(
+              maxWidth: 320, // Dialog 최대 너비 제한
+            ),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -1109,19 +1112,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                 ),
                 const SizedBox(height: 16),
                 
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    isSuperLike 
-                        ? '${persona.name}님이 당신을 특별히 좋아해요! 💕'
-                        : '${persona.name}님과 매칭되었어요!',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
+                Text(
+                  isSuperLike 
+                      ? '${persona.name}님이 당신을\n특별히 좋아해요! 💕'
+                      : '${persona.name}님과 매칭되었어요!',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 

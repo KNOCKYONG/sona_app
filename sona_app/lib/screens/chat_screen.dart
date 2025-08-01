@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../services/auth/auth_service.dart';
+import '../services/auth/device_id_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/chat/chat_service.dart';
 import '../services/purchase/subscription_service.dart';
@@ -591,8 +592,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           // More menu overlay
           if (_showMoreMenu)
             Positioned(
-              top: MediaQuery.of(context).padding.top + kToolbarHeight + 8, // AppBar 바로 아래
-              right: 8,
+              top: MediaQuery.of(context).padding.top + kToolbarHeight - 4, // 더보기 버튼에 더 가깝게
+              right: 4,
               child: Material(
                 elevation: 8,
                 borderRadius: BorderRadius.circular(12),
@@ -632,11 +633,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       final authService = Provider.of<AuthService>(context, listen: false);
                       final personaService = Provider.of<PersonaService>(context, listen: false);
                       
-                      final userId = authService.user?.uid ?? '';
+                      final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
                       final currentPersona = personaService.currentPersona;
                       
                       if (userId.isNotEmpty && currentPersona != null) {
+                        // 먼저 채팅방 나가기 처리
                         await chatService.leaveChatRoom(userId, currentPersona.id);
+                        
+                        // 매칭된 페르소나 목록에서도 제거
+                        personaService.removeFromMatchedPersonas(currentPersona.id);
                         
                         // Navigate back to main navigation
                         if (mounted) {

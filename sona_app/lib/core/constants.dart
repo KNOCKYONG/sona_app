@@ -42,7 +42,7 @@ class AppConstants {
   static const Duration heartCooldownDuration = Duration(minutes: 30);
   
   // API Configuration
-  static const String openAIModel = 'gpt-4o-mini-2025-04-14';
+  static const String openAIModel = 'gpt-4o-mini';
   static const String openAIKey = String.fromEnvironment('OPENAI_API_KEY', defaultValue: '');
   static const double openAITemperature = 0.8;
   static const int openAIMaxRetries = 3;

@@ -224,79 +224,14 @@ class RelationshipRingSystem {
 /// 하트 진화 시스템
 class HeartEvolutionSystem {
   static Widget getHeart(int likes, {double size = 16}) {
-    // 하트 모양과 효과가 진화
-    if (likes < 500) {
-      // 기본 하트 (윤곽선)
-      return Icon(
-        Icons.favorite_outline,
-        color: Colors.blue[400],
-        size: size,
-      );
-    } else if (likes < 2000) {
-      // 채워진 하트
-      return Icon(
-        Icons.favorite,
-        color: Colors.pink[300],
-        size: size,
-      );
-    } else if (likes < 5000) {
-      // 반짝이는 하트
-      return Stack(
-        alignment: Alignment.center,
-        children: [
-          Icon(
-            Icons.favorite,
-            color: Colors.red[400],
-            size: size,
-          ),
-          Positioned(
-            top: size * 0.1,
-            right: size * 0.1,
-            child: Icon(
-              Icons.auto_awesome,
-              color: Colors.white,
-              size: size * 0.4,
-            ),
-          ),
-        ],
-      );
-    } else if (likes < 10000) {
-      // 불타는 하트 (그라데이션)
-      return ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
-          colors: [
-            Colors.red[600]!,
-            Colors.orange[400]!,
-            Colors.yellow[600]!,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ).createShader(bounds),
-        child: Icon(
-          Icons.favorite,
-          size: size,
-          color: Colors.white,
-        ),
-      );
-    } else {
-      // 황금 하트
-      return ShaderMask(
-        shaderCallback: (bounds) => LinearGradient(
-          colors: [
-            const Color(0xFFFFD700),
-            const Color(0xFFFFA500),
-            const Color(0xFFFFD700),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ).createShader(bounds),
-        child: Icon(
-          Icons.favorite,
-          size: size,
-          color: Colors.white,
-        ),
-      );
-    }
+    // 항상 꽉찬 하트를 반환하되, likes 수에 따라 색상만 변경
+    final color = RelationshipColorSystem.getRelationshipColor(likes);
+    
+    return Icon(
+      Icons.favorite,
+      color: color,
+      size: size,
+    );
   }
 }
 

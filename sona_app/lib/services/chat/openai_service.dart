@@ -18,7 +18,7 @@ import 'security_filter_service.dart';
 class OpenAIService {
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
-  static const String _model = 'gpt-4.1-mini-2025-04-14'; // 🆕 업데이트된 모델
+  static const String _model = 'gpt-4o-mini'; // 안정적인 모델로 변경
   
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
@@ -109,10 +109,13 @@ class OpenAIService {
         retryCount++;
         
         if (retryCount >= _maxRetries) {
-          debugPrint('Max retries reached for OpenAI request: $e');
+          debugPrint('🔄 Max retries reached for OpenAI request');
+          debugPrint('🔄 Final error: $e');
           request.completer.complete(_getFallbackResponse(request.persona, request.userMessage));
           return;
         }
+        
+        debugPrint('🔄 Retry attempt $retryCount after error: $e');
         
         // 지수적 백오프
         final delay = _baseRetryDelay * (1 << (retryCount - 1));
@@ -126,8 +129,12 @@ class OpenAIService {
     final apiKey = _apiKey;
     
     if (apiKey.isEmpty) {
+      debugPrint('❌ OpenAI API key is empty');
       throw Exception('API key not configured');
     }
+    
+    debugPrint('🔑 API Key validation: ${apiKey.substring(0, 10)}...${apiKey.substring(apiKey.length - 4)}');
+    debugPrint('🤖 Using model: $_model');
     
     // 최적화된 프롬프트 생성
     final personalizedPrompt = OptimizedPromptService.buildOptimizedPrompt(
@@ -169,6 +176,8 @@ class OpenAIService {
       onTimeout: () => throw TimeoutException('OpenAI API timeout'),
     );
     
+    debugPrint('📡 OpenAI API Response Status: ${response.statusCode}');
+    
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final content = data['choices'][0]['message']['content'];
@@ -179,11 +188,20 @@ class OpenAIService {
       
       return content.toString().trim();
     } else if (response.statusCode == 429) {
+      debugPrint('⏰ Rate limited by OpenAI');
       throw Exception('Rate limited');
     } else if (response.statusCode == 401) {
+      debugPrint('🚫 Invalid API key - Status: 401');
+      debugPrint('🚫 Response body: ${response.body}');
       throw Exception('Invalid API key');
+    } else if (response.statusCode == 404) {
+      debugPrint('❓ Model not found - Status: 404');
+      debugPrint('❓ Model name: $_model');
+      debugPrint('❓ Response body: ${response.body}');
+      throw Exception('Model not found: $_model');
     } else {
-      debugPrint('OpenAI API Error: ${response.statusCode} - ${response.body}');
+      debugPrint('❌ OpenAI API Error: ${response.statusCode}');
+      debugPrint('❌ Response body: ${response.body}');
       throw Exception('API error: ${response.statusCode}');
     }
   }

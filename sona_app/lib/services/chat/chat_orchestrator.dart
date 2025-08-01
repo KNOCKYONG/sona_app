@@ -27,7 +27,7 @@ class ChatOrchestrator {
   // API 설정
   static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
-  static const String _model = 'gpt-4o-mini-2025-04-14';
+  static const String _model = 'gpt-4o-mini';
   
   // HTTP 클라이언트
   final http.Client _httpClient = http.Client();

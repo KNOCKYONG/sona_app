@@ -882,6 +882,16 @@ class _OnlineStatus extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 6),
+            // Online 텍스트
+            const Text(
+              'Online',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.green,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             const SizedBox(width: 8),
             // 하트 아이콘
             SizedBox(
@@ -898,13 +908,6 @@ class _OnlineStatus extends StatelessWidget {
                 color: visualInfo.color,
                 fontWeight: FontWeight.w600,
               ),
-            ),
-            const SizedBox(width: 8),
-            // 뱃지
-            SizedBox(
-              width: 12,
-              height: 12,
-              child: visualInfo.badge,
             ),
           ],
         );

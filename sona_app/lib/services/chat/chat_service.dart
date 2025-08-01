@@ -116,14 +116,14 @@ class ChatService extends BaseService {
     // Always return messages for the specific persona
     final messages = _messagesByPersona[personaId] ?? [];
     
-    // Debug: 읽지 않은 메시지 확인
-    final unreadCount = messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
-    if (unreadCount > 0) {
-      debugPrint('🔍 getMessages for $personaId: Found $unreadCount unread messages');
-      for (final msg in messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null))) {
-        debugPrint('  - Unread msg: ${msg.content.substring(0, 20 < msg.content.length ? 20 : msg.content.length)}... isRead: ${msg.isRead}');
-      }
-    }
+    // Debug: 읽지 않은 메시지 확인 (주석 처리 - 너무 많은 로그 방지)
+    // final unreadCount = messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
+    // if (unreadCount > 0) {
+    //   debugPrint('🔍 getMessages for $personaId: Found $unreadCount unread messages');
+    //   for (final msg in messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null))) {
+    //     debugPrint('  - Unread msg: ${msg.content.substring(0, 20 < msg.content.length ? 20 : msg.content.length)}... isRead: ${msg.isRead}');
+    //   }
+    // }
     
     // Return only recent messages to save memory
     if (messages.length > AppConstants.maxMessagesInMemory) {

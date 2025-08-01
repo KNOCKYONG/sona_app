@@ -214,13 +214,6 @@ class _PersonaCard extends StatelessWidget {
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
-                                  const SizedBox(width: 4),
-                                  // 뱃지
-                                  SizedBox(
-                                    width: 12,
-                                    height: 12,
-                                    child: visualInfo.badge,
-                                  ),
                                 ],
                               );
                             },

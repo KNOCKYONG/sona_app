@@ -493,13 +493,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                              const SizedBox(width: 4),
-                                              // 뱃지
-                                              SizedBox(
-                                                width: 12,
-                                                height: 12,
-                                                child: visualInfo.badge,
-                                              ),
                                             ],
                                           );
                                         },

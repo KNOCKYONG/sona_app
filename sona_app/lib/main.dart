@@ -110,11 +110,9 @@ class SonaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
         ChangeNotifierProvider(create: (_) => SubscriptionService()),
-        // 개발 환경에서는 Mock 서비스 사용
+        // 실제 PurchaseService 사용
         ChangeNotifierProvider<PurchaseService>(
-          create: (_) => const bool.fromEnvironment('dart.vm.product') 
-              ? PurchaseService() 
-              : MockPurchaseService(),
+          create: (_) => PurchaseService(),
         ),
         ChangeNotifierProxyProvider2<PersonaService, UserService, ChatService>(
           create: (_) => ChatService(),

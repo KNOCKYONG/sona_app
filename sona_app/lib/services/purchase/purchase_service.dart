@@ -8,18 +8,21 @@ import '../base/base_service.dart';
 
 /// 인앱 결제 상품 ID
 class ProductIds {
-  static const String premium1Month = 'com.nohbrother.teamsona.chatapp.premium_1month';
-  static const String premium3Months = 'com.nohbrother.teamsona.chatapp.premium_3months';
-  static const String premium6Months = 'com.nohbrother.teamsona.chatapp.premium_6months';
+  // 하트 상품 (소모성)
   static const String hearts10 = 'com.nohbrother.teamsona.chatapp.hearts_10';
   static const String hearts30 = 'com.nohbrother.teamsona.chatapp.hearts_30';
   static const String hearts50 = 'com.nohbrother.teamsona.chatapp.hearts_50';
   
+  // 프리미엄 구독 상품
+  static const String premium1Month = 'com.nohbrother.teamsona.chatapp.premium1';
+  static const String premium3Months = 'com.nohbrother.teamsona.chatapp.premium_3months';
+  static const String premium6Months = 'com.nohbrother.teamsona.chatapp.premium_6months';
+  
   // 구독 상품 목록
   static const List<String> subscriptions = [
     premium1Month,
-    premium3Months,
-    premium6Months,
+    // premium3Months,  // Google Play Console에 추가 후 활성화
+    // premium6Months,  // Google Play Console에 추가 후 활성화
   ];
   
   // 소모성 상품 목록

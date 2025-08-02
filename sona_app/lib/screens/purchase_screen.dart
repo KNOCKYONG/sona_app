@@ -197,9 +197,66 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
         .where((p) => ProductIds.consumables.contains(p.id))
         .toList();
     
+    // 디버그 정보 출력
+    debugPrint('🔍 Store available: ${purchaseService.isAvailable}');
+    debugPrint('🔍 All products: ${purchaseService.products.length}');
+    debugPrint('🔍 Heart products: ${heartProducts.length}');
+    debugPrint('🔍 Query error: ${purchaseService.queryProductError}');
+    
     if (heartProducts.isEmpty) {
+      // 에러 메시지가 있으면 표시
+      if (purchaseService.queryProductError != null) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '스토어 연결 오류',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  purchaseService.queryProductError!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    await purchaseService.loadProducts();
+                  },
+                  child: const Text('다시 시도'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      
       return Center(
-        child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+            const SizedBox(height: 16),
+            const Text('상품 정보를 불러오는 중...'),
+          ],
+        ),
       );
     }
     
@@ -224,8 +281,59 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
         .toList();
     
     if (premiumProducts.isEmpty) {
+      // 에러 메시지가 있으면 표시
+      if (purchaseService.queryProductError != null) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  size: 64,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  '스토어 연결 오류',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  purchaseService.queryProductError!,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () async {
+                    await purchaseService.loadProducts();
+                  },
+                  child: const Text('다시 시도'),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      
       return Center(
-        child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+            const SizedBox(height: 16),
+            const Text('상품 정보를 불러오는 중...'),
+          ],
+        ),
       );
     }
     
@@ -254,9 +362,15 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     String displayName = product.title;
     String? description;
     
-    if (product.id.contains('hearts')) {
-      final count = product.id.split('_').last;
-      displayName = '하트 $count개';
+    // Google Play Console의 상품 ID와 매칭
+    if (product.id == ProductIds.hearts10) {
+      displayName = '하트 10개';
+      description = '매칭과 채팅에 사용할 수 있는 하트';
+    } else if (product.id == ProductIds.hearts30) {
+      displayName = '하트 30개';
+      description = '매칭과 채팅에 사용할 수 있는 하트';
+    } else if (product.id == ProductIds.hearts50) {
+      displayName = '하트 50개';
       description = '매칭과 채팅에 사용할 수 있는 하트';
     } else if (product.id.contains('premium')) {
       if (product.id.contains('1month')) {

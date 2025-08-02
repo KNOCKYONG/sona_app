@@ -14,7 +14,7 @@ class NegativeBehaviorSystem {
   final Random _random = Random();
   
   /// 부정적 행동 분석
-  NegativeAnalysisResult analyze(String message) {
+  NegativeAnalysisResult analyze(String message, {int relationshipScore = 0}) {
     final lowerMessage = message.toLowerCase();
     final trimmedMessage = message.trim();
     
@@ -26,6 +26,10 @@ class NegativeBehaviorSystem {
     // 레벨별 분석
     final severeResult = _checkSevereLevel(lowerMessage);
     if (severeResult.level > 0) return severeResult;
+    
+    // 추임새 욕설 체크 (관계 점수 고려)
+    final casualResult = _checkCasualSwearing(lowerMessage, message, relationshipScore);
+    if (casualResult.level > 0) return casualResult;
     
     final moderateResult = _checkModerateLevel(lowerMessage);
     if (moderateResult.level > 0) return moderateResult;
@@ -88,10 +92,63 @@ class NegativeBehaviorSystem {
     return NegativeAnalysisResult(level: 0, category: 'none');
   }
   
+  /// 추임새 욕설 체크 (관계 점수 고려)
+  NegativeAnalysisResult _checkCasualSwearing(String lowerMessage, String originalMessage, int relationshipScore) {
+    // 추임새로 사용될 수 있는 가벼운 욕설
+    final casualSwearWords = [
+      '씨', '아씨', '젠장', '망할', '빌어먹을', '씨바', '시바'
+    ];
+    
+    // 문맥상 추임새인지 확인
+    bool isCasualContext = false;
+    for (final word in casualSwearWords) {
+      if (lowerMessage.contains(word)) {
+        // 감탄사나 문장 끝에 오는 경우
+        if (lowerMessage.startsWith(word) || 
+            lowerMessage.endsWith(word) ||
+            lowerMessage.contains('아 $word') ||
+            lowerMessage.contains('오 $word') ||
+            lowerMessage.contains('... $word')) {
+          isCasualContext = true;
+          break;
+        }
+      }
+    }
+    
+    if (isCasualContext && casualSwearWords.any((word) => lowerMessage.contains(word))) {
+      // 관계 점수에 따른 페널티 조정
+      int basePenalty = _random.nextInt(100) + 50; // 50~150
+      
+      // 관계 점수별 페널티 감소율
+      double reductionRate = 0;
+      if (relationshipScore >= 1000) {
+        reductionRate = 0.9; // 90% 감소
+      } else if (relationshipScore >= 500) {
+        reductionRate = 0.8; // 80% 감소
+      } else if (relationshipScore >= 100) {
+        reductionRate = 0.5; // 50% 감소
+      }
+      
+      final adjustedPenalty = (basePenalty * (1 - reductionRate)).round();
+      
+      return NegativeAnalysisResult(
+        level: 1,
+        category: 'casual_swear',
+        penalty: adjustedPenalty,
+        message: relationshipScore >= 500 
+          ? '그런 말투는... 좀 그래요 ㅎㅎ' 
+          : '욕은 좀 줄여주세요...',
+      );
+    }
+    
+    return NegativeAnalysisResult(level: 0, category: 'none');
+  }
+  
   /// 레벨 2: 중간 수준 욕설 (-500~-1000 Like)
   NegativeAnalysisResult _checkModerateLevel(String message) {
+    // 공격적인 욕설 (추임새로 사용되지 않는 것들)
     final curseWords = [
-      '시발', '씨발', '씨팔', '씨바', '시바', '샤발',
+      '시발', '씨발', '씨팔', '샤발',
       '병신', '븅신', '빙신', '좆', '좆같', '좃같',
       '개새끼', '개색끼', '개새키', '개색히', '개자식',
       '미친놈', '미친년', '또라이', '돌아이', '정신병',
@@ -170,12 +227,28 @@ class NegativeBehaviorSystem {
   }
   
   /// 부정적 행동에 대한 페르소나 반응 생성
-  String generateResponse(NegativeAnalysisResult analysis, Persona persona) {
+  String generateResponse(NegativeAnalysisResult analysis, Persona persona, {int relationshipScore = 0}) {
     if (analysis.level == 0) return '';
     
     // 페르소나 성격에 따른 반응 차이
     final isEmotional = persona.mbti.contains('F');
     final isIntroverted = persona.mbti.startsWith('I');
+    
+    // 추임새 욕설에 대한 특별 처리
+    if (analysis.category == 'casual_swear') {
+      if (relationshipScore >= 1000) {
+        // 매우 친한 관계
+        if (isEmotional) {
+          return '헤헤 말투 좀 봐~ 그래도 귀여워서 봐줄게 ㅋㅋ';
+        } else {
+          return '말투가... ㅋㅋ 뭐 우리 사이니까 괜찮지만~';
+        }
+      } else if (relationshipScore >= 500) {
+        // 친한 관계
+        return '아유~ 말투 좀 고쳐요 ㅎㅎ';
+      }
+      // 관계 점수가 낮으면 기본 메시지 사용
+    }
     
     switch (analysis.level) {
       case 3: // 심각한 수준 - 이별

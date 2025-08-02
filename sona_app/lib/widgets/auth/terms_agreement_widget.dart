@@ -70,17 +70,28 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         // 전체 동의
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: Theme.of(context).brightness == Brightness.dark 
+                ? Colors.grey[800] 
+                : Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
           child: CheckboxListTile(
-            title: const Text(
+            title: Text(
               '전체 동의합니다',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).brightness == Brightness.dark 
+                    ? Colors.black 
+                    : null,
+              ),
             ),
             value: _allAgreed,
             onChanged: _toggleAll,
             controlAffinity: ListTileControlAffinity.leading,
+            checkColor: Colors.white,
+            activeColor: Theme.of(context).brightness == Brightness.dark 
+                ? Colors.black 
+                : null,
           ),
         ),
         const SizedBox(height: 8),
@@ -91,7 +102,11 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         CheckboxListTile(
           title: RichText(
             text: TextSpan(
-              style: const TextStyle(color: Colors.black87),
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark 
+                    ? Colors.black87 
+                    : Colors.black87,
+              ),
               children: [
                 const TextSpan(text: '[필수] '),
                 TextSpan(
@@ -122,13 +137,21 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             }
           },
           controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Theme.of(context).brightness == Brightness.dark 
+              ? Colors.black 
+              : null,
         ),
         
         // 개인정보 처리방침 (필수)
         CheckboxListTile(
           title: RichText(
             text: TextSpan(
-              style: const TextStyle(color: Colors.black87),
+              style: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark 
+                    ? Colors.black87 
+                    : Colors.black87,
+              ),
               children: [
                 const TextSpan(text: '[필수] '),
                 TextSpan(
@@ -159,14 +182,30 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             }
           },
           controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Theme.of(context).brightness == Brightness.dark 
+              ? Colors.black 
+              : null,
         ),
         
         // 마케팅 수신 동의 (선택)
         CheckboxListTile(
-          title: const Text('[선택] 마케팅 정보 수신에 동의합니다'),
-          subtitle: const Text(
+          title: Text(
+            '[선택] 마케팅 정보 수신에 동의합니다',
+            style: TextStyle(
+              color: Theme.of(context).brightness == Brightness.dark 
+                  ? Colors.black87 
+                  : null,
+            ),
+          ),
+          subtitle: Text(
             '이벤트 및 혜택 정보를 받아보실 수 있습니다',
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(
+              fontSize: 12,
+              color: Theme.of(context).brightness == Brightness.dark 
+                  ? Colors.black54 
+                  : null,
+            ),
           ),
           value: widget.agreedToMarketing,
           onChanged: (value) {
@@ -176,6 +215,10 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             }
           },
           controlAffinity: ListTileControlAffinity.leading,
+          checkColor: Colors.white,
+          activeColor: Theme.of(context).brightness == Brightness.dark 
+              ? Colors.black 
+              : null,
         ),
         
         const SizedBox(height: 16),

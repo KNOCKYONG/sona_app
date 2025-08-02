@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message.dart';
-import '../common/emotion_indicator.dart';
+import '../../models/persona.dart';
+import '../../services/persona/persona_service.dart';
 import '../../services/purchase/subscription_service.dart';
 import '../../theme/app_theme.dart';
+import '../persona/persona_profile_viewer.dart';
 
 /// Optimized MessageBubble with performance improvements:
 /// - Const constructors where possible
@@ -85,16 +88,12 @@ class _TextMessage extends StatelessWidget {
         mainAxisAlignment: isFromUser
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (!isFromUser && _shouldShowEmotion) ...[
-            Padding(
-              padding: const EdgeInsets.only(right: 8, bottom: 8),
-              child: EmotionIndicator(
-                emotion: message.emotion!,
-                size: 24,
-              ),
-            ),
+          // Profile picture for AI messages
+          if (!isFromUser) ...[
+            _ProfileAvatar(),
+            const SizedBox(width: 8),
           ],
           
           // Modern message bubble with gradient and soft shadows
@@ -161,11 +160,6 @@ class _TextMessage extends StatelessWidget {
       ),
     );
   }
-
-  bool get _shouldShowEmotion =>
-      message.emotion != null && 
-      message.relationshipScoreChange != null &&
-      message.relationshipScoreChange!.abs() >= 3;
 }
 
 // Separate widget for time and score to optimize rebuilds
@@ -459,26 +453,109 @@ class _EmotionMessage extends StatelessWidget {
             color: _containerColor,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (message.emotion != null)
-                EmotionIndicator(
-                  emotion: message.emotion!,
-                  size: 20,
-                ),
-              const SizedBox(width: 8),
-              Text(
-                message.content,
-                style: const TextStyle(
-                  color: Color(0xFFFF6B9D),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
+          child: Text(
+            message.content,
+            style: const TextStyle(
+              color: Color(0xFFFF6B9D),
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+// Profile avatar widget for messages
+class _ProfileAvatar extends StatelessWidget {
+  const _ProfileAvatar();
+  
+  @override
+  Widget build(BuildContext context) {
+    // AI Persona avatar with click functionality
+    return Consumer<PersonaService>(
+      builder: (context, personaService, child) {
+        final persona = personaService.currentPersona;
+        final thumbnailUrl = persona?.getThumbnailUrl();
+        
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: persona != null
+                ? () => _showPersonaProfile(context, persona)
+                : null,
+            customBorder: const CircleBorder(),
+            child: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey[200],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: ClipOval(
+                child: thumbnailUrl != null && thumbnailUrl.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: thumbnailUrl,
+                        fit: BoxFit.cover,
+                        memCacheWidth: 72,
+                        memCacheHeight: 72,
+                        placeholder: (context, url) => Container(
+                          color: Colors.grey[200],
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Color(0xFFFF6B9D),
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => _buildDefaultAvatar(),
+                      )
+                    : _buildDefaultAvatar(),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+  
+  Widget _buildDefaultAvatar() {
+    return Container(
+      color: Colors.grey[200],
+      child: const Icon(
+        Icons.person,
+        color: Color(0xFFFF6B9D),
+        size: 20,
+      ),
+    );
+  }
+  
+  void _showPersonaProfile(BuildContext context, Persona persona) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return PersonaProfileViewer(
+            persona: persona,
+            onClose: () {},
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 300),
       ),
     );
   }

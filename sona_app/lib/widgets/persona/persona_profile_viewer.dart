@@ -308,8 +308,6 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       children: [
         Row(
           children: [
-            // 전문가 뱃지 제거됨
-            
             // 이름
             Flexible(
               child: Text(
@@ -394,8 +392,6 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       children: [
         Row(
           children: [
-            // 전문가 뱃지 제거됨
-            
             // 이름
             Flexible(
               child: Text(

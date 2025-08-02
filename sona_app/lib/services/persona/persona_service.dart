@@ -197,7 +197,6 @@ class PersonaService extends BaseService {
       if (cachedRelationship != null) {
         _currentPersona = persona.copyWith(
           relationshipScore: cachedRelationship.score,
-          currentRelationship: _getRelationshipTypeFromScore(cachedRelationship.score),
           isCasualSpeech: cachedRelationship.isCasualSpeech,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
@@ -210,7 +209,6 @@ class PersonaService extends BaseService {
       if (relationshipData != null) {
         _currentPersona = persona.copyWith(
           relationshipScore: relationshipData['relationshipScore'] ?? 50,
-          currentRelationship: _getRelationshipTypeFromScore(relationshipData['relationshipScore'] ?? 50),
           isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
@@ -253,8 +251,6 @@ class PersonaService extends BaseService {
         'userId': _currentUserId!,
         'personaId': personaId,
         'relationshipScore': 50,
-        'relationshipType': 'friend',
-        'relationshipDisplayName': '친구',
         'isCasualSpeech': false,
         'swipeAction': 'like',
         'isMatched': true,
@@ -273,7 +269,6 @@ class PersonaService extends BaseService {
       // Update local state immediately
       final matchedPersona = persona.copyWith(
         relationshipScore: 50,
-        currentRelationship: RelationshipType.friend,
         isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
@@ -329,8 +324,6 @@ class PersonaService extends BaseService {
         'userId': _currentUserId!,
         'personaId': personaId,
         'relationshipScore': 1000, // 🌟 Super like starts with 1000 (perfect love level)
-        'relationshipType': 'perfectLove',
-        'relationshipDisplayName': '완벽한 사랑',
         'isCasualSpeech': false,
         'swipeAction': 'super_like',
         'isMatched': true,
@@ -349,7 +342,6 @@ class PersonaService extends BaseService {
       // Update local state immediately with super like score
       final matchedPersona = persona.copyWith(
         relationshipScore: 1000, // 🌟 Super like relationship score
-        currentRelationship: RelationshipType.perfectLove, // 🌟 Super like relationship type
         isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
@@ -418,7 +410,6 @@ class PersonaService extends BaseService {
       // Super like creates crush relationship (200 score)
       final matchedPersona = persona.copyWith(
         relationshipScore: 1000, // 🌟 Super like relationship score
-        currentRelationship: RelationshipType.perfectLove, // 🌟 Super like relationship type
         isCasualSpeech: false,
       );
       
@@ -487,9 +478,7 @@ class PersonaService extends BaseService {
       );
       
       final newScore = (currentScore + change).clamp(0, 1000);
-      final relationshipType = RelationScoreService.instance.getRelationshipType(newScore);
-      
-      debugPrint('📊 Score calculation: $currentScore + $change = $newScore (${relationshipType.displayName})');
+      debugPrint('📊 Score calculation: $currentScore + $change = $newScore');
       
       // Update relationship in Firebase
       debugPrint('🔥 Normal mode - queuing Firebase update');
@@ -498,7 +487,6 @@ class PersonaService extends BaseService {
           userId: userId,
           personaId: personaId,
           newScore: newScore,
-          relationshipType: relationshipType,
         ));
         
         // 🔧 FIX: Immediately process batch if this is a significant change
@@ -511,7 +499,6 @@ class PersonaService extends BaseService {
       if (_currentPersona?.id == personaId) {
         _currentPersona = _currentPersona?.copyWith(
           relationshipScore: newScore,
-          currentRelationship: relationshipType,
           imageUrls: _currentPersona?.imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated current persona: ${_currentPersona!.name} → $newScore');
@@ -524,7 +511,6 @@ class PersonaService extends BaseService {
       if (index != -1) {
         _matchedPersonas[index] = _matchedPersonas[index].copyWith(
           relationshipScore: newScore,
-          currentRelationship: relationshipType,
           imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated matched persona: ${_matchedPersonas[index].name} → $newScore');
@@ -598,8 +584,6 @@ class PersonaService extends BaseService {
           'userId': update.userId,
           'personaId': update.personaId,
           'relationshipScore': update.newScore,
-          'relationshipType': update.relationshipType.name,
-          'relationshipDisplayName': update.relationshipType.displayName,
           'lastInteraction': FieldValue.serverTimestamp(),
           'totalInteractions': FieldValue.increment(1),
           'isMatched': true,
@@ -677,7 +661,6 @@ class PersonaService extends BaseService {
           
           final matchedPersona = persona.copyWith(
             relationshipScore: relationshipScore,
-            currentRelationship: _getRelationshipTypeFromScore(relationshipScore),
             isCasualSpeech: data['isCasualSpeech'] ?? false,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
             matchedAt: matchedAt,
@@ -896,7 +879,6 @@ class PersonaService extends BaseService {
         description: data['description'] ?? '',
         photoUrls: photoUrls,
         personality: data['personality'] ?? '',
-        currentRelationship: RelationshipType.friend,
         relationshipScore: 0,
         isCasualSpeech: false,
         gender: data['gender'] ?? 'female',
@@ -937,9 +919,6 @@ class PersonaService extends BaseService {
 
   // Other helper methods remain the same...
   
-  RelationshipType _getRelationshipTypeFromScore(int score) {
-    return RelationScoreService.instance.getRelationshipType(score);
-  }
 
   Future<Map<String, dynamic>?> _loadUserPersonaRelationship(String personaId) async {
     if (_currentUserId == null) return null;
@@ -1140,13 +1119,6 @@ class PersonaService extends BaseService {
         }
       }
       
-      // 5. 페르소나 타입 선호도 반영
-      if (_currentUser != null && _currentUser!.preferredPersonaTypes != null) {
-        if (_currentUser!.preferredPersonaTypes!.contains('normal')) {
-          score += 0.05;
-        }
-      }
-      
       return MapEntry(persona, score);
     }).toList();
     
@@ -1246,7 +1218,6 @@ class PersonaService extends BaseService {
       
       final matchedPersona = persona.copyWith(
         relationshipScore: 50,
-        currentRelationship: RelationshipType.friend,
         isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
@@ -1372,6 +1343,75 @@ class PersonaService extends BaseService {
     debugPrint('✅ Swiped personas reset complete');
     notifyListeners();
   }
+  
+  /// 반말/존댓말 모드 업데이트
+  Future<bool> updateCasualSpeech({
+    required String personaId,
+    required bool isCasualSpeech,
+  }) async {
+    if (_currentUserId == null) {
+      debugPrint('⚠️ No user ID available for updating casual speech');
+      return false;
+    }
+    
+    debugPrint('🗣️ Updating casual speech for persona $personaId to: $isCasualSpeech');
+    
+    try {
+      // 1. Firebase 업데이트
+      final docId = '${_currentUserId}_$personaId';
+      await FirebaseHelper.userPersonaRelationships
+          .doc(docId)
+          .update({
+        'isCasualSpeech': isCasualSpeech,
+        'casualSpeechUpdatedAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      
+      debugPrint('✅ Firebase updated successfully');
+      
+      // 2. 현재 페르소나 업데이트
+      if (_currentPersona?.id == personaId) {
+        _currentPersona = _currentPersona!.copyWith(
+          isCasualSpeech: isCasualSpeech,
+          imageUrls: _currentPersona!.imageUrls,  // Preserve imageUrls
+        );
+        debugPrint('✅ Current persona updated: ${_currentPersona!.name} → ${isCasualSpeech ? "반말" : "존댓말"}');
+      }
+      
+      // 3. 매칭된 페르소나 리스트 업데이트
+      final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
+      if (index != -1) {
+        _matchedPersonas[index] = _matchedPersonas[index].copyWith(
+          isCasualSpeech: isCasualSpeech,
+          imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
+        );
+        debugPrint('✅ Matched persona list updated');
+        
+        // Save to local storage
+        await _saveMatchedPersonas();
+      }
+      
+      // 4. 캐시 업데이트
+      final cachedRelationship = _getFromCache(personaId);
+      if (cachedRelationship != null) {
+        _addToCache(personaId, _CachedRelationship(
+          score: cachedRelationship.score,
+          isCasualSpeech: isCasualSpeech,
+          timestamp: DateTime.now(),
+        ));
+        debugPrint('✅ Cache updated');
+      }
+      
+      // 5. UI 즉시 업데이트
+      notifyListeners();
+      
+      debugPrint('🎯 Casual speech update completed successfully');
+      return true;
+    } catch (e) {
+      debugPrint('❌ Error updating casual speech: $e');
+      return false;
+    }
+  }
 
   Future<bool> matchWithPersona(String personaId, {bool isSuperLike = false}) async {
     if (isSuperLike) {
@@ -1398,7 +1438,6 @@ class PersonaService extends BaseService {
         if (relationshipData != null) {
           final refreshedPersona = persona.copyWith(
             relationshipScore: relationshipData['relationshipScore'] ?? persona.relationshipScore,
-            currentRelationship: _getRelationshipTypeFromScore(relationshipData['relationshipScore'] ?? persona.relationshipScore),
             isCasualSpeech: relationshipData['isCasualSpeech'] ?? persona.isCasualSpeech,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
@@ -1564,12 +1603,9 @@ class _PendingRelationshipUpdate {
   final String userId;
   final String personaId;
   final int newScore;
-  final RelationshipType relationshipType;
-  
   _PendingRelationshipUpdate({
     required this.userId,
     required this.personaId,
     required this.newScore,
-    required this.relationshipType,
   });
 }

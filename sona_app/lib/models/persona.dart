@@ -5,7 +5,6 @@ class Persona {
   final String description;
   final List<String> photoUrls;
   final String personality;
-  final RelationshipType currentRelationship;
   final int relationshipScore;
   final DateTime createdAt;
   final Map<String, dynamic> preferences;
@@ -28,7 +27,6 @@ class Persona {
     required this.description,
     required this.photoUrls,
     required this.personality,
-    this.currentRelationship = RelationshipType.friend,
     this.relationshipScore = 0,
     DateTime? createdAt,
     this.preferences = const {},
@@ -42,30 +40,18 @@ class Persona {
   }) : createdAt = createdAt ?? DateTime.now();
 
   // 관계 상태 확인 메서드
-  RelationshipType getRelationshipType() {
-    if (relationshipScore >= 1000) return RelationshipType.perfectLove;
-    if (relationshipScore >= 500) return RelationshipType.dating;
-    if (relationshipScore >= 200) return RelationshipType.crush;
-    return RelationshipType.friend;
-  }
 
-  // 감정 반응 강도 계산
+  // 감정 반응 강도 계산 (점수 기반)
   double getEmotionalIntensity() {
-    switch (getRelationshipType()) {
-      case RelationshipType.friend:
-        return 0.3;
-      case RelationshipType.crush:
-        return 0.6;
-      case RelationshipType.dating:
-        return 0.8;
-      case RelationshipType.perfectLove:
-        return 1.0;
-    }
+    if (relationshipScore >= 1000) return 1.0; // 완전한 연애
+    if (relationshipScore >= 500) return 0.8;  // 연애
+    if (relationshipScore >= 200) return 0.6;  // 썸
+    return 0.3; // 친구
   }
 
-  // 질투 반응 여부
+  // 질투 반응 여부 (점수 기반)
   bool canShowJealousy() {
-    return getRelationshipType().index >= RelationshipType.crush.index;
+    return relationshipScore >= 200; // 썸 이상부터 질투 반응
   }
   
   // 이미지 URL 헬퍼 메서드들 (Cloudflare R2 구조 대응)
@@ -227,7 +213,6 @@ class Persona {
       'description': description,
       'photoUrls': photoUrls,
       'personality': personality,
-      'currentRelationship': currentRelationship.name,
       'relationshipScore': relationshipScore,
       'createdAt': createdAt.toIso8601String(),
       'preferences': preferences,
@@ -249,10 +234,6 @@ class Persona {
       description: json['description'],
       photoUrls: List<String>.from(json['photoUrls']),
       personality: json['personality'],
-      currentRelationship: RelationshipType.values.firstWhere(
-        (e) => e.name == json['currentRelationship'],
-        orElse: () => RelationshipType.friend,
-      ),
       relationshipScore: json['relationshipScore'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
@@ -280,7 +261,6 @@ class Persona {
     String? description,
     List<String>? photoUrls,
     String? personality,
-    RelationshipType? currentRelationship,
     int? relationshipScore,
     Map<String, dynamic>? preferences,
     bool? isCasualSpeech,
@@ -298,7 +278,6 @@ class Persona {
       description: description ?? this.description,
       photoUrls: photoUrls ?? this.photoUrls,
       personality: personality ?? this.personality,
-      currentRelationship: currentRelationship ?? this.currentRelationship,
       relationshipScore: relationshipScore ?? this.relationshipScore,
       createdAt: createdAt,
       preferences: preferences ?? this.preferences,
@@ -313,24 +292,3 @@ class Persona {
   }
 }
 
-enum RelationshipType {
-  friend('친구', 0, 199),
-  crush('썸', 200, 499),
-  dating('연애', 500, 999),
-  perfectLove('완전 연애', 1000, 1000);
-
-  const RelationshipType(this.displayName, this.minScore, this.maxScore);
-
-  final String displayName;
-  final int minScore;
-  final int maxScore;
-
-  static RelationshipType fromScore(int score) {
-    for (var type in RelationshipType.values) {
-      if (score >= type.minScore && score <= type.maxScore) {
-        return type;
-      }
-    }
-    return RelationshipType.friend;
-  }
-}

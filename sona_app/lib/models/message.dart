@@ -18,7 +18,25 @@ enum EmotionType {
   thoughtful('🤔'),
   anxious('😰'),
   concerned('😟'),
-  neutral('😐');
+  neutral('😐'),
+  excited('🤗'),
+  caring('🥰'),
+  confident('😎'),
+  curious('🤔'),
+  calm('😌'),
+  grateful('🙏'),
+  proud('💪'),
+  sympathetic('🤝'),
+  disappointed('😞'),
+  confused('😕'),
+  bored('😑'),
+  tired('😴'),
+  lonely('😔'),
+  guilty('😣'),
+  embarrassed('😳'),
+  hopeful('🤞'),
+  frustrated('😤'),
+  relieved('😌');
 
   const EmotionType(this.emoji);
   final String emoji;

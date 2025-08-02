@@ -22,7 +22,7 @@ class AuthService extends BaseService {
       notifyListeners();
     });
   }
-  
+
   /// Auth 상태가 초기화될 때까지 대기
   Future<void> waitForAuthState() async {
     // authStateChanges의 첫 번째 이벤트를 기다림
@@ -33,7 +33,7 @@ class AuthService extends BaseService {
     final result = await executeWithLoading<bool>(() async {
       // Google 로그인 시작
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      
+
       // 사용자가 로그인을 취소한 경우
       if (googleUser == null) {
         return false;
@@ -60,7 +60,7 @@ class AuthService extends BaseService {
 
       return true;
     }, errorContext: 'signInWithGoogle');
-    
+
     return result ?? false;
   }
 
@@ -68,7 +68,7 @@ class AuthService extends BaseService {
     final result = await executeWithLoading<bool>(() async {
       final credential = await _auth.signInAnonymously();
       _user = credential.user;
-      
+
       // 첫 로그인 시 기본 설정 저장
       if (credential.additionalUserInfo?.isNewUser == true) {
         await _saveDefaultSettings();
@@ -76,7 +76,7 @@ class AuthService extends BaseService {
 
       return true;
     }, errorContext: 'signInAnonymously');
-    
+
     return result ?? false;
   }
 
@@ -88,25 +88,25 @@ class AuthService extends BaseService {
           email: email,
           password: password,
         );
-        
+
         _user = credential.user;
         return true;
       } on FirebaseAuthException catch (e) {
         // Firebase Auth 에러를 더 구체적으로 처리
         debugPrint('Firebase Auth Error Code: ${e.code}');
         debugPrint('Firebase Auth Error Message: ${e.message}');
-        
+
         // 네트워크 에러인 경우 추가 디버깅 정보
         if (e.code == 'network-request-failed') {
           debugPrint('Network error details: ${e.toString()}');
           debugPrint('Please check: 1) Internet connection 2) Firebase project setup 3) Email/Password auth enabled in Firebase Console');
         }
-        
+
         // BaseService의 _getErrorMessage가 처리하도록 에러를 다시 throw
         throw e;
       }
     }, errorContext: 'signInWithEmail');
-    
+
     return result ?? false;
   }
 
@@ -116,16 +116,16 @@ class AuthService extends BaseService {
         email: email,
         password: password,
       );
-      
+
       _user = credential.user;
-      
+
       // 첫 회원가입 시 기본 설정 저장
       await _saveDefaultSettings();
       await _saveUserProfile();
-      
+
       return true;
     }, errorContext: 'signUpWithEmail');
-    
+
     return result ?? false;
   }
 
@@ -146,7 +146,7 @@ class AuthService extends BaseService {
 
   Future<void> _saveUserProfile() async {
     if (_user == null) return;
-    
+
     try {
       // Firestore에 사용자 프로필 저장은 나중에 구현
       // final userDoc = {
@@ -172,7 +172,7 @@ class AuthService extends BaseService {
       //     .collection('users')
       //     .doc(_user!.uid)
       //     .set(userDoc);
-      
+
       debugPrint('User profile saved for: ${_user!.uid}');
     } catch (e) {
       debugPrint('Failed to save user profile: $e');
@@ -199,7 +199,7 @@ class AuthService extends BaseService {
         await PreferencesManager.setString(key, value);
       }
     }
-    
+
     notifyListeners();
   }
 
@@ -215,6 +215,23 @@ class AuthService extends BaseService {
     final newPoints = (currentPoints + amount).clamp(0, 9999);
     await PreferencesManager.setInt('emotion_points', newPoints);
     notifyListeners();
+  }
+
+  /// 비밀번호 재설정 이메일 발송
+  Future<bool> sendPasswordResetEmail(String email) async {
+    final result = await executeWithLoading<bool>(() async {
+      debugPrint('🔐 [AuthService] Sending password reset email to: $email');
+      await _auth.sendPasswordResetEmail(email: email);
+      debugPrint('✅ [AuthService] Password reset email sent successfully');
+      return true;
+    }, errorContext: 'sendPasswordResetEmail');
+    
+    return result ?? false;
+  }
+
+  /// 이메일 형식 검증
+  bool isValidEmail(String email) {
+    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(email);
   }
 
 }

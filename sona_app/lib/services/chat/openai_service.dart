@@ -23,7 +23,7 @@ class OpenAIService {
   
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
-  static const int _maxOutputTokens = 300; // 토큰 제한
+  static const int _maxOutputTokens = 150; // 토큰 제한
   static const double _temperature = 0.8;
   
   // 🔗 연결 풀링
@@ -948,26 +948,21 @@ class KoreanSpeechValidator {
     return text;
   }
 
-  /// 💝 관계별 톤 조정
+  /// 💝 점수별 톤 조정
   static String _adjustToneByRelationship(String text, String relationshipType, int score) {
-    switch (relationshipType.toLowerCase()) {
-      case 'perfectlove':
-      case '완전한 연애':
-        if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
-          text += ' ㅎㅎ';
-        }
-        break;
-        
-      case 'crush':
-      case '썸':
-        if (text.contains('!')) {
-          text = text.replaceAll('!', '~ ㅎㅎ');
-        }
-        break;
-        
-      default:
-        break;
+    // 점수 기반으로 톤 조정
+    if (score >= 900) {
+      // 완전한 연애: 더 친밀한 톤
+      if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
+        text += ' ㅎㅎ';
+      }
+    } else if (score >= 200) {
+      // 썸/호감: 설레는 톤
+      if (text.contains('!')) {
+        text = text.replaceAll('!', '~ ㅎㅎ');
+      }
     }
+    // 친구 관계는 기본 톤 유지
     
     return text;
   }

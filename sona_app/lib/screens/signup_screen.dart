@@ -46,7 +46,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   // 새로운 필드들
   String? _selectedPurpose;
-  List<String> _selectedPersonaTypes = ['normal']; // 기본값: 일반 페르소나
   List<String> _selectedPreferredMbti = [];
   String _communicationStyle = 'adaptive'; // 기본값: 적응형
   List<String> _selectedPreferredTopics = [];
@@ -166,7 +165,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
@@ -174,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/main');
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
     } else {
       // 이메일/비밀번호 회원가입
@@ -192,7 +190,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
@@ -200,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushReplacementNamed(context, '/main');
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       }
     }
     
@@ -232,12 +229,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 4: // 관심사 페이지
         canProceed = _validateInterests();
         break;
-      case 5: // 선호 주제 페이지
-        canProceed = _validateTopics();
-        break;
     }
     
-    if (canProceed && _currentPage < 6) {
+    if (canProceed && _currentPage < 5) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -274,8 +268,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _showErrorSnackBar('닉네임을 입력해주세요');
       return false;
     }
-    if (_nicknameController.text.length < 2 || _nicknameController.text.length > 10) {
-      _showErrorSnackBar('닉네임은 2-10자여야 합니다');
+    if (_nicknameController.text.length < 3 || _nicknameController.text.length > 10) {
+      _showErrorSnackBar('닉네임은 3-10자여야 합니다');
       return false;
     }
     if (!_isNicknameAvailable) {
@@ -321,10 +315,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
   
-  bool _validateTopics() {
-    // 선택사항이므로 항상 true
-    return true;
-  }
   
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
@@ -377,10 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 4: // 관심사 페이지
         return _selectedInterests.isNotEmpty;
         
-      case 5: // 선호 주제 페이지
-        return true; // 선택사항이므로 항상 true
-        
-      case 6: // 약관 동의 페이지
+      case 5: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
         
       default:
@@ -414,8 +401,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 7,
-                backgroundColor: Colors.grey[300],
+                value: (_currentPage + 1) / 6,
+                backgroundColor: Theme.of(context).dividerColor,
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
                 ),
@@ -434,10 +421,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     _buildBasicInfoPage(),
                     _buildProfileInfoPage(),
-                    _buildPurposePage(), // 새로운 페이지
+                    _buildPurposePage(),
                     _buildPreferencePage(),
                     _buildInterestsPage(),
-                    _buildTopicsPage(), // 새로운 페이지
                     _buildTermsAgreementPage(),
                   ],
                 ),
@@ -457,13 +443,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     else
                       const SizedBox(width: 60),
                     
-                    if (_currentPage < 6)
+                    if (_currentPage < 5)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _canProceedToNextPage() 
                               ? AppTheme.primaryColor 
-                              : Colors.grey[300],
+                              : Theme.of(context).disabledColor,
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
                             vertical: 12,
@@ -474,7 +460,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           style: TextStyle(
                             color: _canProceedToNextPage() 
                                 ? Colors.white 
-                                : Colors.grey[600],
+                                : Theme.of(context).textTheme.bodySmall?.color,
                           ),
                         ),
                       )
@@ -525,9 +511,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '계정 생성을 위한 기본 정보를 입력해주세요',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 32),
           
@@ -579,7 +565,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: _nicknameController,
             decoration: InputDecoration(
               labelText: '닉네임 *',
-              hintText: '2-10자',
+              hintText: '3-10자',
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
                   ? const SizedBox(
@@ -614,6 +600,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return;
               }
               
+              // 특수문자 체크
+              final validNickname = RegExp(r'^[가-힣a-zA-Z0-9]+$');
+              if (!validNickname.hasMatch(value)) {
+                setState(() {
+                  _isNicknameAvailable = false;
+                  _isCheckingNickname = false;
+                });
+                return;
+              }
+              
               // 500ms 후에 중복 확인
               setState(() {
                 _isCheckingNickname = true;
@@ -627,14 +623,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
               if (value == null || value.isEmpty) {
                 return '닉네임을 입력해주세요';
               }
-              if (value.length < 2 || value.length > 10) {
-                return '닉네임은 2-10자여야 합니다';
+              if (value.length < 3 || value.length > 10) {
+                return '닉네임은 3-10자여야 합니다';
+              }
+              final validNickname = RegExp(r'^[가-힣a-zA-Z0-9]+$');
+              if (!validNickname.hasMatch(value)) {
+                return '한글, 영문, 숫자만 사용 가능합니다';
               }
               if (!_isNicknameAvailable) {
                 return '이미 사용 중인 닉네임입니다';
               }
               return null;
             },
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.info_outline, size: 16, color: Theme.of(context).textTheme.bodySmall?.color),
+                    const SizedBox(width: 4),
+                    Text(
+                      '닉네임 사용 규칙',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '• 3-10자의 한글, 영문, 숫자만 사용 가능\n'
+                  '• 특수문자 및 공백 사용 불가\n'
+                  '• 중복된 닉네임은 사용할 수 없습니다',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -655,9 +689,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '프로필 사진과 기본 정보를 입력해주세요',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 32),
           
@@ -670,7 +704,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.grey[200],
+                  color: Theme.of(context).colorScheme.surfaceVariant,
                   image: _profileImage != null
                       ? DecorationImage(
                           image: FileImage(_profileImage!),
@@ -679,13 +713,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : null,
                 ),
                 child: _profileImage == null
-                    ? const Column(
+                    ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.camera_alt, size: 40, color: Colors.grey),
+                          Icon(Icons.camera_alt, size: 40, color: Theme.of(context).textTheme.bodySmall?.color),
                           Text(
                             '프로필 사진',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12),
                           ),
                         ],
                       )
@@ -694,10 +728,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Center(
+          Center(
             child: Text(
               '선택사항',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12),
             ),
           ),
           const SizedBox(height: 32),
@@ -865,9 +899,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'AI 페르소나 매칭을 위한 선호도를 설정해주세요',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 32),
           
@@ -915,264 +949,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               });
             },
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPurposePage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '사용 목적',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'SONA를 사용하시는 목적을 선택해주세요',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 32),
-          
-          ...PurposeOptions.purposes.entries.map((entry) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedPurpose = entry.key;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: _selectedPurpose == entry.key 
-                          ? AppTheme.primaryColor 
-                          : Colors.grey[300]!,
-                      width: _selectedPurpose == entry.key ? 2 : 1,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    color: _selectedPurpose == entry.key 
-                        ? AppTheme.primaryColor.withOpacity(0.05)
-                        : null,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        _getPurposeIcon(entry.key),
-                        size: 32,
-                        color: _selectedPurpose == entry.key 
-                            ? AppTheme.primaryColor 
-                            : Colors.grey[600],
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              entry.value,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: _selectedPurpose == entry.key 
-                                    ? AppTheme.primaryColor 
-                                    : Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _getPurposeDescription(entry.key),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (_selectedPurpose == entry.key)
-                        const Icon(
-                          Icons.check_circle,
-                          color: AppTheme.primaryColor,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-          
-          const SizedBox(height: 32),
-          
-          const Text(
-            '선호하는 페르소나 유형',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _buildPersonaTypeChip('normal', '일반 페르소나'),
-              _buildPersonaTypeChip('expert', '전문가 페르소나'),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildPersonaTypeChip(String type, String label) {
-    final isSelected = _selectedPersonaTypes.contains(type);
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          if (selected) {
-            _selectedPersonaTypes.add(type);
-          } else {
-            _selectedPersonaTypes.remove(type);
-          }
-        });
-      },
-      selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-      checkmarkColor: AppTheme.primaryColor,
-    );
-  }
-  
-  IconData _getPurposeIcon(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return Icons.people;
-      case 'dating':
-        return Icons.favorite;
-      case 'counseling':
-        return Icons.psychology;
-      case 'entertainment':
-        return Icons.theater_comedy;
-      default:
-        return Icons.chat;
-    }
-  }
-  
-  String _getPurposeDescription(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return '새로운 친구를 만나고 대화를 나누고 싶어요';
-      case 'dating':
-        return '연애 감정을 느끼며 로맨틱한 관계를 원해요';
-      case 'counseling':
-        return '전문가의 조언과 상담이 필요해요';
-      case 'entertainment':
-        return '재미있는 대화와 즐거운 시간을 보내고 싶어요';
-      default:
-        return '';
-    }
-  }
-
-  Widget _buildInterestsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '관심사',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            '관심사를 선택해주세요 (최소 1개)',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 24),
-          
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: InterestOptions.allInterests.map((interest) {
-              final isSelected = _selectedInterests.contains(interest);
-              return FilterChip(
-                label: Text(interest),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedInterests.add(interest);
-                    } else {
-                      _selectedInterests.remove(interest);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-  
-  Widget _buildTopicsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '선호하는 대화 주제',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            '어떤 주제로 대화하고 싶으신가요? (선택사항)',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 24),
-          
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: TopicOptions.allTopics.map((topic) {
-              final isSelected = _selectedPreferredTopics.contains(topic);
-              return FilterChip(
-                label: Text(topic),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedPreferredTopics.add(topic);
-                    } else {
-                      _selectedPreferredTopics.remove(topic);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-          
           const SizedBox(height: 40),
           
           const Text(
@@ -1232,11 +1008,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '특정 MBTI 유형의 페르소나를 선호하신다면 선택해주세요',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey,
+              color: Theme.of(context).textTheme.bodySmall?.color,
             ),
           ),
           const SizedBox(height: 16),
@@ -1267,6 +1043,180 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  Widget _buildPurposePage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '사용 목적',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'SONA를 사용하시는 목적을 선택해주세요',
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+          ),
+          const SizedBox(height: 32),
+          
+          ...PurposeOptions.purposes.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: InkWell(
+                onTap: () {
+                  setState(() {
+                    _selectedPurpose = entry.key;
+                  });
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: _selectedPurpose == entry.key 
+                          ? AppTheme.primaryColor 
+                          : Theme.of(context).dividerColor,
+                      width: _selectedPurpose == entry.key ? 2 : 1,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    color: _selectedPurpose == entry.key 
+                        ? AppTheme.primaryColor.withOpacity(0.05)
+                        : null,
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        _getPurposeIcon(entry.key),
+                        size: 32,
+                        color: _selectedPurpose == entry.key 
+                            ? AppTheme.primaryColor 
+                            : Theme.of(context).textTheme.bodySmall?.color,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              entry.value,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: _selectedPurpose == entry.key 
+                                    ? AppTheme.primaryColor 
+                                    : Theme.of(context).textTheme.titleLarge?.color,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              _getPurposeDescription(entry.key),
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).textTheme.bodySmall?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (_selectedPurpose == entry.key)
+                        const Icon(
+                          Icons.check_circle,
+                          color: AppTheme.primaryColor,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+          
+        ],
+      ),
+    );
+  }
+  
+  
+  IconData _getPurposeIcon(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return Icons.people;
+      case 'dating':
+        return Icons.favorite;
+      case 'counseling':
+        return Icons.psychology;
+      case 'entertainment':
+        return Icons.theater_comedy;
+      default:
+        return Icons.chat;
+    }
+  }
+  
+  String _getPurposeDescription(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return '새로운 친구를 만나고 대화를 나누고 싶어요';
+      case 'dating':
+        return '연애 감정을 느끼며 로맨틱한 관계를 원해요';
+      case 'counseling':
+        return '전문가의 조언과 상담이 필요해요';
+      case 'entertainment':
+        return '재미있는 대화와 즐거운 시간을 보내고 싶어요';
+      default:
+        return '';
+    }
+  }
+
+  Widget _buildInterestsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '관심사',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '관심사를 선택해주세요 (최소 1개)',
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+          ),
+          const SizedBox(height: 24),
+          
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: InterestOptions.allInterests.map((interest) {
+              final isSelected = _selectedInterests.contains(interest);
+              return FilterChip(
+                label: Text(interest),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedInterests.add(interest);
+                    } else {
+                      _selectedInterests.remove(interest);
+                    }
+                  });
+                },
+                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                checkmarkColor: AppTheme.primaryColor,
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+  
   
   Widget _buildTermsAgreementPage() {
     return SingleChildScrollView(
@@ -1282,9 +1232,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             '서비스 이용을 위한 약관에 동의해주세요',
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
           ),
           const SizedBox(height: 32),
           

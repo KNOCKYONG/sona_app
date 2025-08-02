@@ -16,7 +16,6 @@ class AppUser {
   
   // 새로운 필드들
   final String? purpose; // 'friendship', 'dating', 'counseling', 'entertainment'
-  final List<String>? preferredPersonaTypes; // 'normal', 'expert', 'both'
   final List<String>? preferredMbti; // 선호하는 MBTI 유형들
   final String? communicationStyle; // 'casual', 'formal', 'adaptive'
   final List<String>? preferredTopics; // 선호하는 대화 주제들
@@ -42,7 +41,6 @@ class AppUser {
     required this.createdAt,
     this.updatedAt,
     this.purpose,
-    this.preferredPersonaTypes,
     this.preferredMbti,
     this.communicationStyle,
     this.preferredTopics,
@@ -80,7 +78,6 @@ class AppUser {
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': updatedAt != null ? Timestamp.fromDate(updatedAt!) : null,
       'purpose': purpose,
-      'preferredPersonaTypes': preferredPersonaTypes,
       'preferredMbti': preferredMbti,
       'communicationStyle': communicationStyle,
       'preferredTopics': preferredTopics,
@@ -111,9 +108,6 @@ class AppUser {
           ? (data['updatedAt'] as Timestamp).toDate() 
           : null,
       purpose: data['purpose'],
-      preferredPersonaTypes: data['preferredPersonaTypes'] != null 
-          ? List<String>.from(data['preferredPersonaTypes'])
-          : null,
       preferredMbti: data['preferredMbti'] != null 
           ? List<String>.from(data['preferredMbti'])
           : null,
@@ -145,7 +139,6 @@ class AppUser {
     String? profileImageUrl,
     DateTime? updatedAt,
     String? purpose,
-    List<String>? preferredPersonaTypes,
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
@@ -169,7 +162,6 @@ class AppUser {
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       purpose: purpose ?? this.purpose,
-      preferredPersonaTypes: preferredPersonaTypes ?? this.preferredPersonaTypes,
       preferredMbti: preferredMbti ?? this.preferredMbti,
       communicationStyle: communicationStyle ?? this.communicationStyle,
       preferredTopics: preferredTopics ?? this.preferredTopics,
@@ -231,7 +223,6 @@ class PurposeOptions {
   static const Map<String, String> purposes = {
     'friendship': '친구 만들기',
     'dating': '연애/데이팅',
-    'counseling': '상담/조언',
     'entertainment': '엔터테인먼트',
   };
 }

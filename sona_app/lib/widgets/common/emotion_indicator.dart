@@ -85,6 +85,42 @@ class _EmotionIndicatorState extends State<EmotionIndicator>
         return Colors.orange[300]!;
       case EmotionType.neutral:
         return Colors.grey;
+      case EmotionType.excited:
+        return Colors.amber;
+      case EmotionType.caring:
+        return Colors.pink[300]!;
+      case EmotionType.confident:
+        return Colors.blue[700]!;
+      case EmotionType.curious:
+        return Colors.purple[400]!;
+      case EmotionType.calm:
+        return Colors.teal[300]!;
+      case EmotionType.grateful:
+        return Colors.green[400]!;
+      case EmotionType.proud:
+        return Colors.indigo[400]!;
+      case EmotionType.sympathetic:
+        return Colors.cyan[400]!;
+      case EmotionType.disappointed:
+        return Colors.brown[400]!;
+      case EmotionType.confused:
+        return Colors.deepOrange[300]!;
+      case EmotionType.bored:
+        return Colors.blueGrey[400]!;
+      case EmotionType.tired:
+        return Colors.indigo[200]!;
+      case EmotionType.lonely:
+        return Colors.blue[200]!;
+      case EmotionType.guilty:
+        return Colors.red[300]!;
+      case EmotionType.embarrassed:
+        return Colors.pink[200]!;
+      case EmotionType.hopeful:
+        return Colors.lightGreen[400]!;
+      case EmotionType.frustrated:
+        return Colors.deepOrange[400]!;
+      case EmotionType.relieved:
+        return Colors.lightBlue[300]!;
     }
   }
 
@@ -224,6 +260,42 @@ class EmotionBar extends StatelessWidget {
         return Colors.orange[300]!;
       case EmotionType.neutral:
         return Colors.grey;
+      case EmotionType.excited:
+        return Colors.amber;
+      case EmotionType.caring:
+        return Colors.pink[300]!;
+      case EmotionType.confident:
+        return Colors.blue[700]!;
+      case EmotionType.curious:
+        return Colors.purple[400]!;
+      case EmotionType.calm:
+        return Colors.teal[300]!;
+      case EmotionType.grateful:
+        return Colors.green[400]!;
+      case EmotionType.proud:
+        return Colors.indigo[400]!;
+      case EmotionType.sympathetic:
+        return Colors.cyan[400]!;
+      case EmotionType.disappointed:
+        return Colors.brown[400]!;
+      case EmotionType.confused:
+        return Colors.deepOrange[300]!;
+      case EmotionType.bored:
+        return Colors.blueGrey[400]!;
+      case EmotionType.tired:
+        return Colors.indigo[200]!;
+      case EmotionType.lonely:
+        return Colors.blue[200]!;
+      case EmotionType.guilty:
+        return Colors.red[300]!;
+      case EmotionType.embarrassed:
+        return Colors.pink[200]!;
+      case EmotionType.hopeful:
+        return Colors.lightGreen[400]!;
+      case EmotionType.frustrated:
+        return Colors.deepOrange[400]!;
+      case EmotionType.relieved:
+        return Colors.lightBlue[300]!;
     }
   }
 }

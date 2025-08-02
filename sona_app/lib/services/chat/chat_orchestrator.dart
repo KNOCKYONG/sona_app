@@ -295,10 +295,11 @@ class ChatOrchestrator {
     }
     
     // 관계 수준에 따른 보정
-    if (persona.currentRelationship == RelationshipType.dating || 
-        persona.currentRelationship == RelationshipType.perfectLove) {
-      baseChange = (baseChange * 0.7).round(); // 높은 관계에서는 변화폭 감소
-    }
+    // TODO: RelationshipType 정의 후 주석 해제
+    // if (persona.currentRelationship == RelationshipType.dating || 
+    //     persona.currentRelationship == RelationshipType.perfectLove) {
+    //   baseChange = (baseChange * 0.7).round(); // 높은 관계에서는 변화폭 감소
+    // }
     
     return baseChange.clamp(-5, 5);
   }

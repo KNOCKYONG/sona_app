@@ -175,8 +175,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         
         // Check if we need to show initial greeting
         final messages = chatService.getMessages(personaService.currentPersona!.id);
+        debugPrint('🔍 Checking messages for initial greeting: ${messages.length} messages found');
         if (messages.isEmpty) {
+          debugPrint('📢 No messages found, showing welcome message');
           _showWelcomeMessage();
+        } else {
+          debugPrint('💬 Messages exist, skipping welcome message');
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -188,8 +192,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _showWelcomeMessage() async {
+    debugPrint('🎉 _showWelcomeMessage called');
+    
     // Add flag to prevent duplicate calls
-    if (_hasShownWelcome) return;
+    if (_hasShownWelcome) {
+      debugPrint('⚠️ Welcome message already shown, skipping');
+      return;
+    }
     _hasShownWelcome = true;
     
     final personaService = Provider.of<PersonaService>(context, listen: false);
@@ -197,16 +206,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final authService = Provider.of<AuthService>(context, listen: false);
     final persona = personaService.currentPersona;
     
-    final userId = authService.user?.uid;
-    if (userId == null || userId.isEmpty) {
-      // 로그인하지 않은 사용자는 웰컴 메시지 생략
-      return;
-    }
+    // Get user ID (either Firebase or device ID)
+    final userId = await DeviceIdService.getCurrentUserId(
+      firebaseUserId: authService.user?.uid,
+    );
+    debugPrint('👤 User ID for welcome message: $userId');
     
     if (persona != null) {
+      debugPrint('🤖 Persona found: ${persona.name}');
       // 이전 메시지가 없을 때만 초기 인사 메시지 전송
       final existingMessages = chatService.getMessages(persona.id);
       if (existingMessages.isEmpty) {
+        debugPrint('✅ No existing messages, sending initial greeting');
         await chatService.sendInitialGreeting(
           userId: userId,
           personaId: persona.id,
@@ -215,6 +226,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       } else {
         debugPrint('📝 Previous messages exist for ${persona.name}, skipping initial greeting');
       }
+    } else {
+      debugPrint('❌ No persona available for welcome message');
     }
   }
 
@@ -1253,15 +1266,6 @@ class _MessageInput extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Attachment button
-              ModernIconButton(
-                icon: Icons.add_rounded,
-                onPressed: onAttachment,
-                color: AppTheme.accentColor,
-                tooltip: '파일 첨부',
-              ),
-              const SizedBox(width: 8),
-              
               // Message input field
               Expanded(
                 child: Container(
@@ -1300,18 +1304,6 @@ class _MessageInput extends StatelessWidget {
                 ),
               ),
               
-              const SizedBox(width: 8),
-              
-              // Emotion button
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                child: ModernIconButton(
-                  icon: Icons.mood_rounded,
-                  onPressed: onEmotion,
-                  color: AppTheme.primaryColor,
-                  tooltip: '감정 선택',
-                ),
-              ),
               const SizedBox(width: 8),
               
               // Send button

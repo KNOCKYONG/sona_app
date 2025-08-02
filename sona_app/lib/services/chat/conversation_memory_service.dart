@@ -414,7 +414,6 @@ class ConversationMemoryService {
     
     // 1. 현재 관계 상태 (필수, ~50 tokens)
     final relationshipInfo = '''
-현재 관계: ${_getRelationshipDisplayName(persona.relationshipScore)}
 친밀도: ${persona.relationshipScore}/1000
 대화 스타일: ${persona.isCasualSpeech ? '반말' : '존댓말'}
 ''';
@@ -510,13 +509,6 @@ class ConversationMemoryService {
         .join('\n');
   }
 
-  /// 🏷️ 관계 단계 표시명 가져오기
-  String _getRelationshipDisplayName(int score) {
-    if (score >= 900) return '완전한 연애';
-    if (score >= 600) return '연인';
-    if (score >= 200) return '썸';
-    return '친구';
-  }
 
   /// 💾 기억 저장
   Future<void> saveMemories(List<ConversationMemory> memories) async {
@@ -655,7 +647,7 @@ class ConversationSummary {
     startDate: DateTime.now(),
     endDate: DateTime.now(),
     messageCount: 0,
-    summaryText: '대화를 시작해보세요. 소나가 기다리고 있어요!',
+    summaryText: '소나와 친구처럼 대화를 시작해보세요!',
     relationshipProgression: [],
     mainTopics: {},
     emotionPatterns: {},

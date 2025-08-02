@@ -138,8 +138,8 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final lastMessage = messages.last;
     
     // 튜토리얼 시작 메시지인 경우 개인화된 메시지로 변경
-    if (lastMessage.content == '대화를 시작해보세요!') {
-      return '$personaName님이 대화를 기다리고 있어요.';
+    if (lastMessage.content == '대화를 시작해보세요!' || lastMessage.content == '소나와 친구처럼 대화를 시작해보세요!') {
+      return '$personaName님과 친구처럼 대화를 시작해보세요!';
     }
     
     String preview = '';
@@ -164,7 +164,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final lastMessage = messages.last;
     
     // 튜토리얼 시작 메시지인 경우 시간 표시하지 않음
-    if (lastMessage.content == '대화를 시작해보세요!') {
+    if (lastMessage.content == '대화를 시작해보세요!' || lastMessage.content == '소나와 친구처럼 대화를 시작해보세요!') {
       return '';
     }
     

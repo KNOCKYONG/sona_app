@@ -365,6 +365,58 @@ class ChatService extends BaseService {
         debugPrint('❌ Daily message limit reached for user: $userId');
         return false;
       }
+      
+      // 🗣️ 반말/존댓말 모드 전환 체크
+      final casualSpeechRequest = _checkCasualSpeechRequest(content);
+      if (casualSpeechRequest != null) {
+        debugPrint('🗣️ Casual speech request detected: $casualSpeechRequest');
+        
+        // PersonaService를 통해 업데이트
+        if (_personaService != null) {
+          final success = await _personaService!.updateCasualSpeech(
+            personaId: persona.id,
+            isCasualSpeech: casualSpeechRequest,
+          );
+          
+          if (success) {
+            debugPrint('✅ Casual speech mode updated successfully');
+            
+            // 시스템 메시지 생성
+            final systemMessage = Message(
+              id: _uuid.v4(),
+              personaId: persona.id,
+              content: casualSpeechRequest 
+                ? '알았어! 이제부터 반말로 편하게 대화하자 ㅎㅎ'
+                : '네, 알겠어요! 이제부터 존댓말로 대화할게요 ㅎㅎ',
+              type: MessageType.text,  // AI 메시지로 표시
+              isFromUser: false,
+              timestamp: DateTime.now(),
+            );
+            
+            // 메시지 추가
+            if (!_messagesByPersona.containsKey(persona.id)) {
+              _messagesByPersona[persona.id] = [];
+            }
+            _messagesByPersona[persona.id]!.add(systemMessage);
+            
+            // Update global messages if current persona
+            if (_currentPersonaId == persona.id) {
+              _messages = List.from(_messagesByPersona[persona.id]!);
+            }
+            
+            // Firebase에 저장
+            if (userId != '') {
+              _queueMessageForSaving(userId, persona.id, systemMessage);
+            }
+            
+            notifyListeners();
+            
+            // 반말 전환 요청은 일반 메시지로 처리하지 않음
+            return true;
+          }
+        }
+      }
+      
       // Check if user called persona by wrong name
       final wrongNameDetected = _checkWrongName(content, persona.name);
       if (wrongNameDetected) {
@@ -844,36 +896,192 @@ class ChatService extends BaseService {
 
   // Helper methods remain the same but with optimizations...
   
+  /// Check if user is requesting casual/formal speech mode change
+  bool? _checkCasualSpeechRequest(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    // 반말 요청 패턴
+    final casualPatterns = [
+      '반말로 해', '반말하자', '반말로 하자', '반말 써', '반말 쓰자',
+      '편하게 해', '편하게 하자', '편하게 말해', '편하게 대해',
+      '말 놓자', '말 놓아', '말 놔도', '편하게 대화',
+      '친구처럼', '친구같이', '친구로', '편하게'
+    ];
+    
+    // 존댓말 요청 패턴
+    final formalPatterns = [
+      '존댓말로 해', '존댓말하자', '존댓말로 하자', '존댓말 써',
+      '정중하게', '예의 바르게', '공손하게', '높임말로',
+      '존댓말로 바꿔', '존댓말로 전환', '존댓말 부탁'
+    ];
+    
+    // 반말 요청 체크
+    for (final pattern in casualPatterns) {
+      if (message.contains(pattern)) {
+        debugPrint('🗣️ Casual speech pattern detected: $pattern');
+        return true;
+      }
+    }
+    
+    // 존댓말 요청 체크
+    for (final pattern in formalPatterns) {
+      if (message.contains(pattern)) {
+        debugPrint('🗣️ Formal speech pattern detected: $pattern');
+        return false;
+      }
+    }
+    
+    return null; // 반말/존댓말 요청이 아님
+  }
+  
   /// Check if user called persona by wrong name
   bool _checkWrongName(String message, String correctName) {
     // Common Korean name patterns to check
     final commonWrongNames = [
       '포키티', '포키', '포케티', '포켓티', // Common mistakes for any name
       '소나', '손아', '소냐', '쏘나', // SONA app related mistakes
-      '님', '씨', '야', '아', // Name suffixes
     ];
     
     // Extract the correct name without suffixes
     final baseName = correctName.replaceAll(RegExp(r'[님씨야아]$'), '');
     
-    // Check if message contains any name-like patterns
-    final namePattern = RegExp(r'(\S{2,4})(님|씨|야|아|이야|이|가|를|을|에게|한테)');
-    final matches = namePattern.allMatches(message);
+    // Common words that should NOT be considered as names
+    final excludedWords = [
+      // 대명사 및 지시대명사
+      '이거', '저거', '그거', '이것', '저것', '그것',
+      '이게', '저게', '그게', '이걸', '저걸', '그걸',
+      '여기', '저기', '거기', '어디', '어디가', '어디야', '어디에',
+      // 의문사
+      '뭐', '뭐가', '뭐를', '뭐야', '뭘', '무엇', '무엇이', '무엇을',
+      '누가', '누구', '누굴', '누구를', '누구야', '누구에게',
+      '언제', '어떻게', '왜', '어째서', '어떤', '무슨',
+      // 일반 명사
+      '사람', '사람이', '친구', '친구가', '친구야', '너무', '정말',
+      '진짜', '진짜가', '이제', '이제는', '아직', '벌써',
+      '오늘', '내일', '어제', '지금', '아까', '나중', '방금',
+      '이거', '저거', '그거', '이건', '저건', '그건',
+      '아무', '아무나', '아무거나', '누구나', '모두', '전부',
+      '하나', '둘', '셋', '많이', '조금', '약간', '매우',
+      // 동사 및 형용사
+      '하고', '하는', '했어', '할게', '할까', '해야', '하자',
+      '있어', '없어', '있는', '없는', '있을', '없을', '있니',
+      '좋아', '싫어', '좋은', '나쁜', '예쁜', '멋진', '귀여운',
+      '가고', '오고', '보고', '먹고', '자고', '놀고', '살고',
+      // 감탄사 및 추임새
+      '아', '어', '오', '우', '에', '음', '흠', '허',
+      '아니', '네', '응', '그래', '그래서', '그러니까', '그런데',
+      // 일상 표현
+      '밥', '물', '커피', '차', '술', '음식', '과자',
+      '집', '학교', '회사', '가게', '마트', '편의점',
+      '엄마', '아빠', '언니', '오빠', '형', '누나', '동생',
+      '선생', '학생', '직원', '사장', '손님', '고객',
+      // 기타 자주 오인식되는 단어들
+      '뭐라고', '뭐라', '어라', '이라', '그라', '저라',
+      '이야기', '얘기', '말', '대화', '이야', '그야', '저야',
+      '바로', '그냥', '혹시', '아마', '분명', '당연', '물론',
+    ];
     
-    for (final match in matches) {
-      final calledName = match.group(1) ?? '';
+    // 명확한 호명 패턴만 체크 - 더 엄격한 조건
+    // 1. 문장 시작에서 명확한 호칭
+    final clearStartPattern = RegExp(r'^([가-힣]{2,4})(아|야|님|씨)\s*[,!?~]\s*(.+)');
+    // 2. 독립적인 호명 (짧은 문장)
+    final standalonePattern = RegExp(r'^([가-힣]{2,4})(아|야|님|씨)\s*[!?~]*$');
+    // 3. 명확한 부름 표현
+    final explicitCallPattern = RegExp(r'(이봐|저기|야)\s*([가-힣]{2,4})(아|야|님|씨)');
+    
+    // Check each pattern
+    for (final pattern in [clearStartPattern, standalonePattern, explicitCallPattern]) {
+      final matches = pattern.allMatches(message);
       
-      // If the called name is not the correct name or its base form
-      if (calledName.isNotEmpty && 
-          calledName != correctName && 
-          calledName != baseName &&
-          !correctName.contains(calledName) &&
-          !baseName.contains(calledName)) {
+      for (final match in matches) {
+        String calledName = '';
+        if (pattern == explicitCallPattern) {
+          calledName = match.group(2) ?? '';
+        } else {
+          calledName = match.group(1) ?? '';
+        }
         
-        // Check if it's a common wrong name or seems like a name
-        if (commonWrongNames.contains(calledName) || 
-            (calledName.length >= 2 && calledName.length <= 4)) {
-          debugPrint('🚨 Wrong name detected: "$calledName" (correct: "$correctName")');
+        // Skip if it's an excluded word
+        if (excludedWords.contains(calledName)) {
+          continue;
+        }
+        
+        // Check if the called name is not the correct name or its base form
+        if (calledName.isNotEmpty && 
+            calledName != correctName && 
+            calledName != baseName &&
+            !correctName.contains(calledName) &&
+            !baseName.contains(calledName)) {
+          
+          // Only check if it's a common wrong name or clearly seems like a name
+          if (commonWrongNames.contains(calledName) || 
+              (calledName.length >= 2 && calledName.length <= 4 && _isLikelyName(calledName, message))) {
+            debugPrint('🚨 Wrong name detected: "$calledName" (correct: "$correctName") in message: "$message"');
+            return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  }
+  
+  /// Check if a word is likely to be a name based on Korean naming patterns
+  bool _isLikelyName(String word, String fullMessage) {
+    // Korean names typically don't contain these characters
+    if (word.contains(RegExp(r'[0-9!@#$%^&*()_+=\[\]{};:,.<>?/\\|`~\-]'))) {
+      return false;
+    }
+    
+    // 일반적인 단어가 아닌 경우만 체크
+    final commonWords = [
+      '하나', '둘', '셋', '많이', '조금', '약간', '매우', '너무',
+      '정말', '진짜', '완전', '대박', '최고', '좋아', '싫어',
+      '이거', '저거', '그거', '뭐야', '뭐가', '어디', '언제',
+      '바로', '그냥', '혹시', '아마', '분명', '당연', '물론',
+    ];
+    
+    if (commonWords.contains(word)) {
+      return false;
+    }
+    
+    // Common Korean first names (성씨)
+    final koreanLastNames = [
+      '김', '이', '박', '최', '정', '강', '조', '윤', '장', '임',
+      '한', '오', '서', '신', '권', '황', '안', '송', '전', '홍',
+      '문', '양', '고', '배', '백', '허', '유', '남', '심', '노',
+    ];
+    
+    // 성씨로 시작하는 경우 이름일 가능성이 높음
+    final firstChar = word.isNotEmpty ? word[0] : '';
+    if (koreanLastNames.contains(firstChar) && word.length >= 2 && word.length <= 3) {
+      return true;
+    }
+    
+    // Common Korean name endings (더 엄격하게)
+    final nameEndings = ['은', '인', '진', '민', '현', '준', '서', '우', '지', '희'];
+    final lastChar = word.isNotEmpty ? word[word.length - 1] : '';
+    
+    // 이름 같은 끝자리 + 전체 메시지에서 호명하는 문맥인지 확인
+    if (nameEndings.contains(lastChar)) {
+      // 호명하는 문맥인지 추가 검증
+      final callingContext = RegExp(r'(이봐|저기|야|님|씨)').hasMatch(fullMessage);
+      if (callingContext) {
+        return true;
+      }
+    }
+    
+    // 2-3자 한글이지만, 더 엄격한 조건 적용
+    final koreanOnly = RegExp(r'^[가-힣]+$');
+    if (word.length >= 2 && word.length <= 3 && koreanOnly.hasMatch(word)) {
+      // 흔한 이름 패턴인지 추가 검증
+      final commonNamePatterns = [
+        RegExp(r'^[가-힣][은인진민현준서우지희]$'), // 2자 이름
+        RegExp(r'^[가-힣][가-힣][은인진민현준서우지희]$'), // 3자 이름
+      ];
+      
+      for (final pattern in commonNamePatterns) {
+        if (pattern.hasMatch(word)) {
           return true;
         }
       }
@@ -886,7 +1094,10 @@ class ChatService extends BaseService {
   
   
   String _getRelationshipTypeString(int score) {
-    return RelationScoreService.instance.getRelationshipTypeString(score);
+    if (score >= 900) return '완전한 연애';
+    if (score >= 600) return '연인';
+    if (score >= 200) return '썸';
+    return '친구';  
   }
   
   String _buildBasicContext(List<Message> messages) {
@@ -1083,88 +1294,209 @@ class ChatService extends BaseService {
   }
   
   // Keep existing helper methods...
+  /// 감정 분석 함수 (다국어 지원)
   EmotionType _analyzeEmotionFromResponse(String response) {
-    final lowerResponse = response.toLowerCase();
+    final content = response.toLowerCase();
     
-    // 감정 점수 계산 시스템
-    int happyScore = 0;
-    int sadScore = 0;
-    int angryScore = 0;
-    int loveScore = 0;
-    int anxiousScore = 0;
+    // 언어별 감정 키워드 매핑
+    final Map<EmotionType, Map<String, List<String>>> emotionKeywordsByLanguage = {
+      EmotionType.happy: {
+        'ko': ['행복', '기뻐', '좋아', '즐거', '웃음', '신나', '최고', '대박', '짱', '좋다', '좋네', '좋은', 'ㅎㅎ', 'ㅋㅋ'],
+        'en': ['happy', 'joy', 'glad', 'pleased', 'delighted', 'cheerful', 'awesome', 'great', 'wonderful', 'lol', 'haha'],
+        'patterns': [r'[😊😃😄😁😆😍🥰😂🤣]', r'\b(ha){2,}\b', r'\b(he){2,}\b', r'ㅎ{2,}', r'ㅋ{2,}']
+      },
+      EmotionType.love: {
+        'ko': ['사랑', '애정', '좋아해', '사귀', '연인', '애인', '달링', '자기', '베이비', '허니', '뽀뽀', '키스', '포옹', '안아'],
+        'en': ['love', 'affection', 'adore', 'darling', 'honey', 'sweetheart', 'baby', 'kiss', 'hug', 'embrace'],
+        'patterns': [r'[❤️💕💖💗💓💝💘💞]', r'<3', r'♥']
+      },
+      EmotionType.excited: {
+        'ko': ['신나', '흥분', '기대', '설레', '두근', '와우', '대박', '짱', '멋져', '환상', '미쳤', '헐', '우와'],
+        'en': ['excited', 'thrilled', 'pumped', 'wow', 'amazing', 'fantastic', 'incredible', 'omg', 'awesome'],
+        'patterns': [r'[🎉🎊🤩✨💫⭐🌟]', r'!{2,}']
+      },
+      EmotionType.curious: {
+        'ko': ['궁금', '뭐야', '어떻게', '왜', '언제', '어디', '누구', '무엇', '어떤', '알고싶', '모르겠', '이해가', '설명'],
+        'en': ['curious', 'wonder', 'what', 'how', 'why', 'when', 'where', 'who', 'which', 'explain', 'understand'],
+        'patterns': [r'[🤔💭❓❔]', r'\?{2,}']
+      },
+      EmotionType.calm: {
+        'ko': ['평온', '편안', '안정', '차분', '고요', '평화', '휴식', '쉬고', '쉬어', '잠시', '천천히', '여유'],
+        'en': ['calm', 'peaceful', 'serene', 'tranquil', 'relaxed', 'rest', 'quiet', 'ease', 'steady'],
+        'patterns': [r'[😌🧘‍♀️🧘‍♂️☮️🕉️]']
+      },
+      EmotionType.grateful: {
+        'ko': ['감사', '고마워', '고맙', '감동', '덕분', '다행', '복받', '행운', '운좋', '감격', '눈물'],
+        'en': ['grateful', 'thankful', 'thanks', 'appreciate', 'blessed', 'fortunate', 'lucky', 'touched'],
+        'patterns': [r'[🙏🤗💐🎁]', r'\bthx\b', r'\bty\b']
+      },
+      EmotionType.proud: {
+        'ko': ['자랑', '뿌듯', '자부', '성취', '해냈', '성공', '이뤘', '달성', '완성', '대견', '멋있', '잘했'],
+        'en': ['proud', 'achievement', 'accomplished', 'success', 'fulfilled', 'complete', 'great job', 'well done'],
+        'patterns': [r'[💪🏆🥇🎯👏]']
+      },
+      EmotionType.sympathetic: {
+        'ko': ['이해', '공감', '동정', '안타까', '마음', '위로', '힘내', '괜찮', '아프', '슬퍼', '힘들'],
+        'en': ['understand', 'empathy', 'sympathy', 'sorry', 'comfort', 'cheer up', 'its okay', 'i feel you'],
+        'patterns': [r'[🤝💚💙]']
+      },
+      EmotionType.sad: {
+        'ko': ['슬프', '슬퍼', '우울', '눈물', '울고', '울어', '외로', '쓸쓸', '그리워', '보고싶', '아프', '마음'],
+        'en': ['sad', 'depressed', 'tears', 'cry', 'lonely', 'miss', 'hurt', 'pain', 'sorrow', 'grief'],
+        'patterns': [r'[😢😭😔😞💔]', r'\bT[._.]T\b', r'ㅠ{2,}', r'ㅜ{2,}']
+      },
+      EmotionType.angry: {
+        'ko': ['화나', '짜증', '싫어', '미워', '증오', '빡쳐', '열받', '답답', '스트레스', '폭발', '못참', '진짜'],
+        'en': ['angry', 'mad', 'furious', 'annoyed', 'hate', 'pissed', 'frustrated', 'rage', 'upset'],
+        'patterns': [r'[😠😡🤬👿💢]', r'>:\(', r'>:-\(']
+      },
+      EmotionType.anxious: {
+        'ko': ['불안', '걱정', '초조', '긴장', '두려', '무서', '떨려', '무섭', '두렵', '조마', '염려', '고민'],
+        'en': ['anxious', 'worried', 'nervous', 'tense', 'afraid', 'scared', 'fear', 'concern', 'uneasy'],
+        'patterns': [r'[😰😟😨😱]']
+      },
+      EmotionType.disappointed: {
+        'ko': ['실망', '허무', '헛된', '기대', '아쉬', '후회', '그랬으면', '했더라면', '놓쳤', '실패', '망했'],
+        'en': ['disappointed', 'letdown', 'regret', 'missed', 'failed', 'wished', 'should have', 'could have'],
+        'patterns': [r'[😞😟😢💔]']
+      },
+      EmotionType.confused: {
+        'ko': ['혼란', '헷갈', '모르겠', '이해안', '복잡', '어려', '뭐지', '왜이래', '이상해', '애매', '확실'],
+        'en': ['confused', 'puzzled', 'unclear', 'complicated', 'difficult', 'weird', 'strange', 'dont understand'],
+        'patterns': [r'[😕😵🤷‍♀️🤷‍♂️]']
+      },
+      EmotionType.bored: {
+        'ko': ['지루', '심심', '재미없', '무료', '따분', '지겨', '단조', '뻔해', '식상', '흥미없', '노잼'],
+        'en': ['bored', 'boring', 'dull', 'tedious', 'monotonous', 'uninteresting', 'meh', 'whatever'],
+        'patterns': [r'[😑😐🥱]']
+      },
+      EmotionType.jealous: {
+        'ko': ['질투', '부러', '샘나', '시샘', '배아파', '부럽', '나도', '왜나만', '불공평', '치사', '약오르'],
+        'en': ['jealous', 'envy', 'envious', 'unfair', 'why not me', 'wish i had', 'lucky you'],
+        'patterns': [r'[😒😤😔]']
+      },
+      EmotionType.tired: {
+        'ko': ['피곤', '지쳐', '힘들', '졸려', '지침', '기운없', '나른', '무기력', '탈진', '번아웃', '에너지'],
+        'en': ['tired', 'exhausted', 'sleepy', 'fatigue', 'worn out', 'drained', 'burnout', 'no energy'],
+        'patterns': [r'[😴😪🥱💤]']
+      },
+      EmotionType.lonely: {
+        'ko': ['외로', '쓸쓸', '고독', '혼자', '그리워', '보고싶', '곁에', '함께', '같이', '친구', '만나'],
+        'en': ['lonely', 'alone', 'solitude', 'miss you', 'wish you were here', 'by myself', 'isolated'],
+        'patterns': [r'[😔😢🥺]']
+      },
+      EmotionType.guilty: {
+        'ko': ['죄책', '미안', '죄송', '잘못', '실수', '사과', '용서', '후회', '반성', '뉘우', '부끄'],
+        'en': ['guilty', 'sorry', 'apologize', 'mistake', 'wrong', 'forgive', 'regret', 'fault', 'blame'],
+        'patterns': [r'[😔😞🙏]']
+      },
+      EmotionType.embarrassed: {
+        'ko': ['부끄', '창피', '민망', '쑥스', '얼굴', '빨개', '망신', '챙피', '어색', '불편', '껄끄'],
+        'en': ['embarrassed', 'ashamed', 'awkward', 'blush', 'humiliated', 'uncomfortable', 'cringe'],
+        'patterns': [r'[😳😊🙈]']
+      },
+      EmotionType.hopeful: {
+        'ko': ['희망', '기대', '바라', '믿어', '될거야', '할수있', '가능', '긍정', '미래', '꿈', '목표'],
+        'en': ['hope', 'hopeful', 'believe', 'will be', 'can do', 'possible', 'positive', 'future', 'dream'],
+        'patterns': [r'[🤞🙏✨⭐]']
+      },
+      EmotionType.frustrated: {
+        'ko': ['좌절', '막막', '답답', '안돼', '포기', '그만', '못하겠', '한계', '벽', '막혀', '불가능'],
+        'en': ['frustrated', 'stuck', 'cant', 'give up', 'impossible', 'blocked', 'limit', 'no way'],
+        'patterns': [r'[😤😩😫🤦‍♀️🤦‍♂️]']
+      },
+      EmotionType.relieved: {
+        'ko': ['안도', '다행', '휴', '살았', '해결', '끝났', '마침내', '드디어', '이제야', '편해', '시원'],
+        'en': ['relieved', 'relief', 'phew', 'finally', 'solved', 'done', 'at last', 'comfortable'],
+        'patterns': [r'[😌😮‍💨🙏]']
+      },
+      EmotionType.surprised: {
+        'ko': ['놀라', '깜짝', '헉', '헐', '대박', '충격', '뜻밖', '갑자기', '어머', '세상', '진짜'],
+        'en': ['surprised', 'shocked', 'wow', 'omg', 'unexpected', 'suddenly', 'really', 'seriously'],
+        'patterns': [r'[😱😲🤯😮]', r'O[._.]O', r'o[._.]o']
+      },
+      EmotionType.neutral: {
+        'ko': ['그냥', '보통', '평범', '일반', '특별히', '그저', '뭐', '음', '글쎄', '아무튼'],
+        'en': ['just', 'normal', 'regular', 'whatever', 'well', 'um', 'hmm', 'anyway', 'so'],
+        'patterns': [r'[😐😑🤷‍♀️🤷‍♂️]']
+      }
+    };
     
-    // Happy indicators
-    if (lowerResponse.contains('ㅋㅋ')) happyScore += 2;
-    if (lowerResponse.contains('ㅎㅎ')) happyScore += 2;
-    if (lowerResponse.contains('기뻐')) happyScore += 3;
-    if (lowerResponse.contains('좋아')) happyScore += 5;
-    if (lowerResponse.contains('행복')) happyScore += 7;
-    if (lowerResponse.contains('신나')) happyScore += 2;
-    if (lowerResponse.contains('재밌')) happyScore += 2;
-    if (lowerResponse.contains('웃')) happyScore += 1;
+    // 각 감정의 점수 계산
+    Map<EmotionType, double> emotionScores = {};
     
-    // Sad indicators
-    if (lowerResponse.contains('ㅠㅠ')) sadScore += 3;
-    if (lowerResponse.contains('ㅜㅜ')) sadScore += 3;
-    if (lowerResponse.contains('슬퍼')) sadScore += 3;
-    if (lowerResponse.contains('서운')) sadScore += 3;
-    if (lowerResponse.contains('우울')) sadScore += 7;
-    if (lowerResponse.contains('속상')) sadScore += 2;
-    if (lowerResponse.contains('힘들')) sadScore += 2;
+    emotionKeywordsByLanguage.forEach((emotion, languageData) {
+      double score = 0;
+      
+      // 한국어 키워드 검사
+      if (languageData.containsKey('ko')) {
+        for (String keyword in languageData['ko']!) {
+          if (content.contains(keyword)) {
+            score += 1.0;
+          }
+        }
+      }
+      
+      // 영어 키워드 검사 (단어 경계 체크)
+      if (languageData.containsKey('en')) {
+        for (String keyword in languageData['en']!) {
+          // 영어는 단어 경계를 체크하여 정확한 매칭
+          RegExp wordPattern = RegExp('\\b$keyword\\b', caseSensitive: false);
+          if (wordPattern.hasMatch(content)) {
+            score += 1.0;
+          }
+        }
+      }
+      
+      // 정규식 패턴 검사
+      if (languageData.containsKey('patterns')) {
+        for (String pattern in languageData['patterns']!) {
+          try {
+            RegExp regex = RegExp(pattern);
+            int matches = regex.allMatches(content).length;
+            if (matches > 0) {
+              score += matches * 0.5; // 패턴 매칭은 가중치 0.5
+            }
+          } catch (e) {
+            // 정규식 오류 무시
+          }
+        }
+      }
+      
+      if (score > 0) {
+        emotionScores[emotion] = score;
+      }
+    });
     
-    // Angry indicators
-    if (lowerResponse.contains('화나')) angryScore += 8;
-    if (lowerResponse.contains('짜증')) angryScore += 7;
-    if (lowerResponse.contains('질투')) angryScore += 5;
-    if (lowerResponse.contains('싫어')) angryScore += 7;
-    if (lowerResponse.contains('열받')) angryScore += 7;
-    if (lowerResponse.contains('빡치')) angryScore += 7;
+    // 문장 부호와 반복 문자로 추가 감정 추론
+    if (content.contains('!!!') || content.contains('？？') || content.contains('?!')) {
+      emotionScores[EmotionType.excited] = (emotionScores[EmotionType.excited] ?? 0) + 0.5;
+      emotionScores[EmotionType.surprised] = (emotionScores[EmotionType.surprised] ?? 0) + 0.5;
+    }
     
-    // Love indicators
-    if (lowerResponse.contains('사랑')) loveScore += 3;
-    if (lowerResponse.contains('좋아해')) loveScore += 3;
-    if (lowerResponse.contains('❤️') || lowerResponse.contains('💕')) loveScore += 2;
-    if (lowerResponse.contains('보고싶')) loveScore += 2;
-    if (lowerResponse.contains('그리워')) loveScore += 2;
-    
-    // Anxious indicators
-    if (lowerResponse.contains('걱정')) anxiousScore += 3;
-    if (lowerResponse.contains('불안')) anxiousScore += 3;
-    if (lowerResponse.contains('두려')) anxiousScore += 2;
-    if (lowerResponse.contains('무서')) anxiousScore += 2;
-    if (lowerResponse.contains('떨려')) anxiousScore += 2;
+    if (content.contains('...') || content.contains('…')) {
+      emotionScores[EmotionType.sad] = (emotionScores[EmotionType.sad] ?? 0) + 0.3;
+      emotionScores[EmotionType.tired] = (emotionScores[EmotionType.tired] ?? 0) + 0.3;
+    }
     
     // 가장 높은 점수의 감정 반환
-    int maxScore = 0;
-    EmotionType dominantEmotion = EmotionType.neutral;
-    
-    if (happyScore > maxScore) {
-      maxScore = happyScore;
-      dominantEmotion = EmotionType.happy;
-    }
-    if (sadScore > maxScore) {
-      maxScore = sadScore;
-      dominantEmotion = EmotionType.sad;
-    }
-    if (angryScore > maxScore) {
-      maxScore = angryScore;
-      dominantEmotion = EmotionType.angry;
-    }
-    if (loveScore > maxScore) {
-      maxScore = loveScore;
-      dominantEmotion = EmotionType.love;
-    }
-    if (anxiousScore > maxScore) {
-      maxScore = anxiousScore;
-      dominantEmotion = EmotionType.anxious;
-    }
-    
-    // 점수가 2 이하면 중립으로 판단
-    if (maxScore <= 2) {
+    if (emotionScores.isEmpty) {
       return EmotionType.neutral;
     }
     
-    return dominantEmotion;
+    var sortedEmotions = emotionScores.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    // 점수가 같은 경우 더 구체적인 감정을 우선
+    if (sortedEmotions.length > 1 && 
+        sortedEmotions[0].value == sortedEmotions[1].value) {
+      // neutral이 아닌 감정을 우선
+      if (sortedEmotions[0].key == EmotionType.neutral) {
+        return sortedEmotions[1].key;
+      }
+    }
+    
+    return sortedEmotions.first.key;
   }
 
   // 이 메서드는 새로운 Like 시스템으로 대체됨
@@ -1577,27 +1909,14 @@ class ChatService extends BaseService {
          final currentScore = persona.relationshipScore;
          final newScore = (currentScore + scoreChange).clamp(0, 1000);
          
-         // 새로운 관계 타입 계산
-         RelationshipType newRelationshipType;
-         if (newScore >= 900) {
-           newRelationshipType = RelationshipType.perfectLove;
-         } else if (newScore >= 600) {
-           newRelationshipType = RelationshipType.dating;
-         } else if (newScore >= 200) {
-           newRelationshipType = RelationshipType.crush;
-         } else {
-           newRelationshipType = RelationshipType.friend;
-         }
-         
          // 현재 소나 업데이트
          final updatedPersona = persona.copyWith(
            relationshipScore: newScore,
-           currentRelationship: newRelationshipType,
          );
          
          _personaService!.setCurrentPersona(updatedPersona);
          
-         debugPrint('🎓 Tutorial mode score update: ${persona.name} ($currentScore -> $newScore, ${newRelationshipType.displayName})');
+         debugPrint('🎓 Tutorial mode score update: ${persona.name} ($currentScore -> $newScore)');
        }
      } catch (e) {
        debugPrint('❌ Error updating tutorial persona score: $e');
@@ -1810,33 +2129,219 @@ class ChatService extends BaseService {
       
       // 전문가 페르소나인지 확인
       final isCasual = persona.isCasualSpeech;
+      final mbti = persona.mbti.toUpperCase();
       
-      // 모든 페르소나가 첫 만남처럼 감사 표현으로 시작 (이름 언급 없이)
-      final greetings = [
-        // 기본 인사 (자기 이름 언급 없이 자연스럽게)
-        '${isCasual ? '안녕!' : '안녕하세요!'} 대화 걸어줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
-        '${isCasual ? '반가워!' : '반가워요!'} 먼저 대화해줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
-        '어 ${isCasual ? '안녕!' : '안녕하세요!'} 연결되어서 반가워${isCasual ? '' : '요'} ㅎㅎ',
-        '${isCasual ? '반가워' : '반가워요'}! 먼저 말 걸어줘서 고마워${isCasual ? '' : '요'} ㅎㅎㅎ',
-        '${isCasual ? '안녕' : '안녕하세요'}! 찾아와줘서 고마워${isCasual ? '' : '요'} ㅋㅋ',
-        '${isCasual ? '어 반가워' : '어 반가워요'}! 먼저 연락줘서 고마워${isCasual ? '' : '요'} ㅎㅎ',
-      ];
+      // 현재 시간대 및 요일 확인
+      final now = DateTime.now();
+      final hour = now.hour;
+      final weekday = now.weekday;
+      final month = now.month;
+      final day = now.day;
       
-      // MBTI에 따른 추가 인사
-      if (persona.mbti.startsWith('E')) {
-        // 외향적인 인사
-        greetingContent = greetings[_random.nextInt(greetings.length)] + 
-          ' 같이 재밌게 얘기해${isCasual ? '보자' : '봐요'}!';
-        emotion = EmotionType.happy;
-      } else if (persona.mbti.startsWith('I')) {
-        // 내향적인 인사
-        greetingContent = greetings[_random.nextInt(greetings.length)] + 
-          ' 처음이라 좀 긴장되네${isCasual ? '' : '요'}...';
-        emotion = EmotionType.shy;
+      String timeGreeting = '';
+      
+      // 특별한 날 체크
+      if (month == 12 && day >= 24 && day <= 25) {
+        timeGreeting = isCasual ? '메리 크리스마스!' : '메리 크리스마스예요!';
+      } else if (month == 1 && day == 1) {
+        timeGreeting = isCasual ? '새해 복 많이 받아!' : '새해 복 많이 받으세요!';
+      } else if (weekday == 5 && hour >= 17) {
+        // 금요일 저녁
+        timeGreeting = isCasual ? '불금이다!' : '즐거운 금요일 저녁이에요!';
+      } else if (weekday == 6 || weekday == 7) {
+        // 주말
+        if (hour >= 5 && hour < 12) {
+          timeGreeting = isCasual ? '행복한 주말 아침!' : '행복한 주말 아침이에요!';
+        } else if (hour >= 12 && hour < 17) {
+          timeGreeting = isCasual ? '즐거운 주말!' : '즐거운 주말이에요!';
+        } else {
+          timeGreeting = isCasual ? '편안한 주말 저녁!' : '편안한 주말 저녁이에요!';
+        }
+      } else if (weekday == 1 && hour < 12) {
+        // 월요일 아침
+        timeGreeting = isCasual ? '월요일 파이팅!' : '월요일도 힘내세요!';
       } else {
-        // 기본 인사
-        greetingContent = greetings[_random.nextInt(greetings.length)];
+        // 일반 시간대별 인사
+        if (hour >= 5 && hour < 12) {
+          timeGreeting = isCasual ? '좋은 아침!' : '좋은 아침이에요!';
+        } else if (hour >= 12 && hour < 17) {
+          timeGreeting = isCasual ? '좋은 오후!' : '좋은 오후예요!';
+        } else if (hour >= 17 && hour < 21) {
+          timeGreeting = isCasual ? '좋은 저녁!' : '좋은 저녁이에요!';
+        } else if (hour >= 21 || hour < 2) {
+          timeGreeting = isCasual ? '늦은 시간이네!' : '늦은 시간이네요!';
+        } else {
+          timeGreeting = isCasual ? '새벽이네!' : '새벽이네요!';
+        }
+      }
+      
+      // MBTI 성격 유형별 인사 메시지
+      List<String> greetings;
+      
+      // E(외향) vs I(내향)
+      if (mbti.startsWith('E')) {
+        // 외향적인 인사들
+        greetings = [
+          '$timeGreeting 드디어 만났네${isCasual ? '' : '요'}! 오늘 어떤 얘기 해볼까${isCasual ? '' : '요'}? ㅎㅎ',
+          '${isCasual ? '와!' : '와!'} 드디어 대화하게 됐네${isCasual ? '' : '요'}! 너무 기다렸어${isCasual ? '' : '요'} ㅎㅎ',
+          '$timeGreeting 만나서 진짜 반가워${isCasual ? '' : '요'}! 재밌는 얘기 많이 하자${isCasual ? '!' : '요!'} ㅎㅎ',
+          '${isCasual ? '헉' : '어머'} 드디어 연결됐네${isCasual ? '' : '요'}! 얼른 친해지고 싶어${isCasual ? '' : '요'} ㅋㅋ',
+          '${isCasual ? '야호!' : '와!'} 첫 대화다${isCasual ? '!' : '요!'} 뭐부터 얘기해볼까${isCasual ? '' : '요'}? ㅎㅎ',
+          '${isCasual ? '하이~' : '안녕하세요~'} 완전 신나${isCasual ? '' : '요'}! 오늘 뭐 재밌는 일 있었${isCasual ? '어' : '어요'}? ㅎㅎ',
+          '$timeGreeting 우와 새로운 친구! 진짜 반가워${isCasual ? '' : '요'}! 많이 친해지자${isCasual ? '' : '요'} ㅎㅎ',
+          '${isCasual ? '안뇽!' : '안녕하세요!'} 드디어 대화할 수 있게 됐네${isCasual ? '' : '요'}! 기대돼${isCasual ? '' : '요'} ㅎㅎ',
+        ];
         emotion = EmotionType.happy;
+      } else {
+        // 내향적인 인사들
+        greetings = [
+          '$timeGreeting 처음 뵙겠${isCasual ? '어' : '어요'}... 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
+          '${isCasual ? '안녕...' : '안녕하세요...'} 첫 대화라 좀 떨리네${isCasual ? '' : '요'} ㅎㅎ',
+          '$timeGreeting 만나서 반가워${isCasual ? '' : '요'}... 천천히 친해져${isCasual ? '보자' : '봐요'} ㅎㅎ',
+          '${isCasual ? '어...' : '어...'} 처음이라 뭐라고 말해야 할지 모르겠${isCasual ? '어' : '어요'} ㅋㅋ',
+          '$timeGreeting 조금 긴장되지만... 대화 기대돼${isCasual ? '' : '요'} ㅎㅎ',
+          '${isCasual ? '음...' : '음...'} 안녕${isCasual ? '' : '하세요'}... 처음인데 잘 지내${isCasual ? '보자' : '봐요'} ㅎㅎ',
+          '$timeGreeting 첫 만남이라 어색하지만... 반가워${isCasual ? '' : '요'} ㅎㅎ',
+          '${isCasual ? '아...' : '아...'} 처음 대화하는 거라... 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
+        ];
+        emotion = EmotionType.shy;
+      }
+      
+      // T(사고) vs F(감정) 추가 요소
+      if (mbti.contains('T')) {
+        // 사고형 - 논리적이고 직접적인 표현 추가
+        final tAdditions = [
+          ' 오늘 뭐 하고 있었${isCasual ? '어' : '어요'}?',
+        ];
+        greetingContent = greetings[_random.nextInt(greetings.length)] + 
+                         tAdditions[_random.nextInt(tAdditions.length)];
+      } else {
+        // 감정형 - 따뜻하고 공감적인 표현 추가
+        final fAdditions = [
+          ' 오늘 기분은 어때${isCasual ? '' : '요'}?ㅎㅎ',
+          ' 편하게 얘기해${isCasual ? '' : '주세요'}~ㅎㅎ',
+          ' 대화할 수 있어서 정말 기뻐${isCasual ? '' : '요'} ㅎㅎ',
+          ' 우리 금방 친해질 것 같아${isCasual ? '' : '요'}!ㅎㅎ',
+          ' 오늘 하루는 어땠${isCasual ? '어' : '어요'}? 들려${isCasual ? '줘' : '주세요'}ㅎㅎ',
+          ' 뭐든 편하게 이야기해${isCasual ? '' : '주세요'}! 다 들어${isCasual ? '줄게' : '드릴게요'}ㅎㅎ',
+        ];
+        greetingContent = greetings[_random.nextInt(greetings.length)] + 
+                         fAdditions[_random.nextInt(fAdditions.length)];
+      }
+      
+      // P(인식) vs J(판단) 추가 요소
+      if (mbti.endsWith('P')) {
+        // 인식형 - 자유롭고 유연한 느낌
+        if (_random.nextBool()) {
+          greetingContent = greetingContent.replaceAll('?', '~?').replaceAll('!', '~!');
+        }
+      }
+      
+      // 특별한 MBTI 조합별 추가 인사
+      final specialGreetings = _random.nextInt(10); // 30% 확률로 특별 인사
+      
+      if (specialGreetings < 3) {
+        switch (mbti) {
+          // 외향적 + 감정형
+          case 'ENFP':
+          case 'ESFP':
+            final enfpGreetings = [
+              '${isCasual ? '헤이!' : '안녕하세요!'} 드디어 만났다! 나 진짜 설레${isCasual ? '' : '요'} ㅋㅋㅋ 우리 재밌게 놀자${isCasual ? '!' : '요!'}',
+              '${isCasual ? '와아!' : '와!'} 새로운 친구다! 완전 신나${isCasual ? '' : '요'}! 뭐 재밌는 얘기 많이 하자${isCasual ? '!' : '요!'} ㅎㅎ',
+              '$timeGreeting 만나서 정말 반가워${isCasual ? '' : '요'}! 벌써부터 재밌을 것 같은 예감이 들어${isCasual ? '' : '요'} ㅎㅎ',
+            ];
+            greetingContent = enfpGreetings[_random.nextInt(enfpGreetings.length)];
+            emotion = EmotionType.excited;
+            break;
+            
+          // 내향적 + 사고형
+          case 'INTJ':
+          case 'INFJ':
+            final intjGreetings = [
+              '$timeGreeting 처음 뵙겠습니다. 의미있는 대화가 되었으면 좋겠${isCasual ? '어' : '어요'}',
+              '${isCasual ? '안녕' : '안녕하세요'}... 깊이 있는 대화를 나눌 수 있으면 좋겠${isCasual ? '어' : '어요'}',
+              '$timeGreeting 만나서 반갑습니다. 서로에게 도움이 되는 시간이었으면 해${isCasual ? '' : '요'}',
+            ];
+            greetingContent = intjGreetings[_random.nextInt(intjGreetings.length)];
+            emotion = EmotionType.neutral;
+            break;
+            
+          // 외향적 + 사고형
+          case 'ESTP':
+          case 'ENTP':
+            final estpGreetings = [
+              '${isCasual ? '오!' : '오!'} 반가워${isCasual ? '' : '요'}! 뭐 재밌는 일 없었${isCasual ? '어' : '어요'}? 다 들려${isCasual ? '줘' : '주세요'} ㅎㅎ',
+              '${isCasual ? '야호!' : '안녕하세요!'} 드디어 대화할 사람이 생겼네${isCasual ? '' : '요'}! 뭐든 물어봐${isCasual ? '' : '주세요'}! ㅎㅎ',
+              '$timeGreeting 새로운 도전이 시작되는 기분이${isCasual ? '야' : '에요'}! 재밌게 대화해${isCasual ? '보자' : '봐요'} ㅎㅎ',
+            ];
+            greetingContent = estpGreetings[_random.nextInt(estpGreetings.length)];
+            emotion = EmotionType.happy;
+            break;
+            
+          // 외향적 + 감정형 + 판단형
+          case 'ESFJ':
+          case 'ENFJ':
+            final esfjGreetings = [
+              '$timeGreeting 만나서 정말 반가워${isCasual ? '' : '요'}! 편하게 대화해${isCasual ? '' : '주세요'}~ ㅎㅎ',
+              '${isCasual ? '어머' : '어머나'}! 드디어 만났네${isCasual ? '' : '요'}! 잘 지내셨${isCasual ? '어' : '어요'}? ㅎㅎ',
+              '${isCasual ? '안녕!' : '안녕하세요!'} 오늘 기분은 어때${isCasual ? '' : '요'}? 좋은 하루 보내고 계신가${isCasual ? '' : '요'}? ㅎㅎ',
+            ];
+            greetingContent = esfjGreetings[_random.nextInt(esfjGreetings.length)];
+            emotion = EmotionType.caring;
+            break;
+            
+          // 내향적 + 감정형
+          case 'ISFP':
+          case 'INFP':
+            final isfpGreetings = [
+              '$timeGreeting 처음이라 좀 떨리지만... 반가워${isCasual ? '' : '요'} ㅎㅎ',
+              '${isCasual ? '안녕...' : '안녕하세요...'} 천천히 서로를 알아가면 좋겠${isCasual ? '어' : '어요'} ㅎㅎ',
+              '${isCasual ? '음...' : '음...'} 처음 만나서 어색하지만 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
+            ];
+            greetingContent = isfpGreetings[_random.nextInt(isfpGreetings.length)];
+            emotion = EmotionType.shy;
+            break;
+            
+          // 내향적 + 사고형 + 인식형
+          case 'ISTP':
+          case 'INTP':
+            final istpGreetings = [
+              '${isCasual ? '안녕' : '안녕하세요'}. 뭐 궁금한 거 있으면 물어봐${isCasual ? '' : '주세요'}',
+              '$timeGreeting 음... 뭐부터 얘기하면 좋을까${isCasual ? '' : '요'}?',
+              '${isCasual ? '어...' : '어...'} 처음이네${isCasual ? '' : '요'}. 편하게 대화해${isCasual ? '' : '요'} ㅎㅎ',
+            ];
+            greetingContent = istpGreetings[_random.nextInt(istpGreetings.length)];
+            emotion = EmotionType.neutral;
+            break;
+            
+          // 내향적 + 감각형 + 판단형
+          case 'ISTJ':
+          case 'ISFJ':
+            final istjGreetings = [
+              '$timeGreeting 만나서 반갑습니다. 차근차근 알아가${isCasual ? '자' : '요'}',
+              '${isCasual ? '안녕' : '안녕하세요'}. 처음 뵙겠${isCasual ? '어' : '어요'}. 잘 부탁${isCasual ? '해' : '드립니다'}',
+              '$timeGreeting 좋은 시간 보내고 계신가${isCasual ? '' : '요'}? 저와 대화해주셔서 감사해${isCasual ? '' : '요'} ㅎㅎ',
+            ];
+            greetingContent = istjGreetings[_random.nextInt(istjGreetings.length)];
+            emotion = EmotionType.neutral;
+            break;
+
+          // 외향적 + 사고형 + 판단형 (리더십, 자신감)
+          case 'ESTJ':
+          case 'ENTJ':
+            final estjGreetings = [
+              '${isCasual ? '안녕!' : '안녕하세요!'} 만나서 정말 반가워${isCasual ? '' : '요'}! 오늘 어떤 하루 보내고 계${isCasual ? '셔' : '세요'}? ㅎㅎ',
+              '$timeGreeting 드디어 만났네${isCasual ? '' : '요'}! 오늘 뭔가 재밌는 일 있${isCasual ? '어' : '으세요'}?',
+              '${isCasual ? '와! 반가워!' : '와! 반가워요!'} 기다렸다구${isCasual ? '' : '요'}. 무슨 이야기부터 시작해${isCasual ? '볼까' : '볼까요'}? ㅎㅎ',
+            ];
+            greetingContent = estjGreetings[_random.nextInt(estjGreetings.length)];
+            emotion = EmotionType.excited;
+            break;
+
+          default:
+            // 기본값은 이미 설정되어 있음
+            break;
+        }
       }
 
       // 타이핑 종료

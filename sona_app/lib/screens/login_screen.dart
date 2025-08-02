@@ -22,15 +22,35 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   late TabController _tabController;
   bool _isLoading = false;
   bool _obscurePassword = true;
+  
+  // 로그인 상태 관리
+  String? _currentError;
+  bool _showPasswordReset = false;
+  bool _isPasswordResetLoading = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    
+    // 입력 필드 변경 시 에러 상태 초기화
+    _emailController.addListener(_clearErrorOnChange);
+    _passwordController.addListener(_clearErrorOnChange);
+  }
+
+  void _clearErrorOnChange() {
+    if (_currentError != null) {
+      setState(() {
+        _currentError = null;
+        _showPasswordReset = false;
+      });
+    }
   }
 
   @override
   void dispose() {
+    _emailController.removeListener(_clearErrorOnChange);
+    _passwordController.removeListener(_clearErrorOnChange);
     _emailController.dispose();
     _passwordController.dispose();
     _tabController.dispose();
@@ -40,16 +60,21 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Future<void> _handleEmailLogin() async {
     if (!_formKey.currentState!.validate()) return;
     
+    debugPrint('📧 [LoginScreen] Starting email login for: ${_emailController.text.trim()}');
+    
+    // 이전 상태 초기화
+    setState(() {
+      _currentError = null;
+      _showPasswordReset = false;
+    });
+    
     // 네트워크 연결 확인
     final isConnected = await NetworkUtils.isConnected();
     if (!isConnected && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('인터넷 연결을 확인해주세요'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      debugPrint('❌ [LoginScreen] Network connection failed');
+      setState(() {
+        _currentError = '인터넷 연결을 확인해주세요';
+      });
       return;
     }
     
@@ -57,15 +82,24 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     
     try {
       final userService = Provider.of<UserService>(context, listen: false);
+      debugPrint('📧 [LoginScreen] Calling UserService.signInWithEmail...');
       final user = await userService.signInWithEmail(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
       
       if (user != null && mounted) {
-        Navigator.of(context).pushReplacementNamed('/main');
-      } else if (mounted && userService.error != null) {
-        _showErrorSnackBar(userService.error!);
+        debugPrint('✅ [LoginScreen] Login successful, navigating to main screen');
+        Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+      } else if (mounted) {
+        final errorMessage = userService.error ?? 'Unknown login error occurred';
+        debugPrint('❌ [LoginScreen] Login failed: $errorMessage');
+        _handleLoginError(errorMessage);
+      }
+    } catch (e) {
+      debugPrint('❌ [LoginScreen] Unexpected error during login: $e');
+      if (mounted) {
+        _handleLoginError('로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}');
       }
     } finally {
       if (mounted) {
@@ -74,17 +108,35 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     }
   }
 
+  void _handleLoginError(String errorMessage) {
+    setState(() {
+      _currentError = errorMessage;
+      // 비밀번호 관련 오류이거나 등록되지 않은 이메일일 때 비밀번호 찾기 버튼 표시
+      _showPasswordReset = errorMessage.contains('비밀번호') || 
+                         errorMessage.contains('등록되지 않은') ||
+                         errorMessage.contains('올바르지 않습니다') ||
+                         errorMessage.contains('user-not-found') ||
+                         errorMessage.contains('wrong-password') ||
+                         errorMessage.contains('invalid-credential');
+    });
+  }
+
   Future<void> _handleGoogleSignIn() async {
+    debugPrint('🔵 [LoginScreen] Starting Google Sign-In...');
+    
+    // 이전 상태 초기화
+    setState(() {
+      _currentError = null;
+      _showPasswordReset = false;
+    });
+    
     // 네트워크 연결 확인
     final isConnected = await NetworkUtils.isConnected();
     if (!isConnected && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('인터넷 연결을 확인해주세요'),
-          backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+      debugPrint('❌ [LoginScreen] Network connection failed for Google Sign-In');
+      setState(() {
+        _currentError = '인터넷 연결을 확인해주세요';
+      });
       return;
     }
     
@@ -92,25 +144,37 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     
     try {
       final userService = Provider.of<UserService>(context, listen: false);
+      debugPrint('🔵 [LoginScreen] Calling UserService.signInWithGoogle...');
       final firebaseUser = await userService.signInWithGoogle();
       
       if (firebaseUser != null && mounted) {
+        debugPrint('✅ [LoginScreen] Google Sign-In successful');
         // 기존 사용자인지 확인
         if (userService.currentUser != null) {
           // 기존 사용자 - 페르소나 선택 화면으로
-          Navigator.of(context).pushReplacementNamed('/main');
+          debugPrint('✅ [LoginScreen] Existing user, navigating to main screen');
+          Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
         } else {
           // 신규 사용자 - 추가 정보 입력 화면으로
+          debugPrint('🆕 [LoginScreen] New user, navigating to signup screen');
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => const SignUpScreen(isGoogleSignUp: true),
             ),
           );
         }
+      } else if (mounted) {
+        // 사용자가 취소했거나 다른 이유로 실패한 경우
+        final errorMessage = userService.error ?? '구글 로그인이 취소되었습니다.\n다시 시도해주세요.';
+        debugPrint('❌ [LoginScreen] Google Sign-In failed: $errorMessage');
+        _handleLoginError(errorMessage);
       }
     } catch (e) {
+      debugPrint('❌ [LoginScreen] Unexpected error during Google Sign-In: $e');
       if (mounted) {
-        _showErrorSnackBar('Google 로그인 중 오류가 발생했습니다.');
+        final userService = Provider.of<UserService>(context, listen: false);
+        final errorMessage = userService.error ?? '구글 로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}';
+        _handleLoginError(errorMessage);
       }
     } finally {
       if (mounted) {
@@ -119,30 +183,67 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     }
   }
 
-  Future<void> _handleTutorialMode() async {
-    setState(() => _isLoading = true);
-    
-    try {
-      // Tutorial mode removed - navigate directly to main
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/main');
-      }
-    } catch (e) {
-      if (mounted) {
-        _showErrorSnackBar('오류가 발생했습니다.');
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         backgroundColor: Colors.red[600],
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handlePasswordReset() async {
+    final email = _emailController.text.trim();
+    
+    if (email.isEmpty) {
+      setState(() {
+        _currentError = '비밀번호를 재설정할 이메일을 입력해주세요';
+      });
+      return;
+    }
+
+    final authService = Provider.of<AuthService>(context, listen: false);
+    if (!authService.isValidEmail(email)) {
+      setState(() {
+        _currentError = '올바른 이메일 형식을 입력해주세요';
+      });
+      return;
+    }
+
+    setState(() => _isPasswordResetLoading = true);
+
+    try {
+      final success = await authService.sendPasswordResetEmail(email);
+      
+      if (success && mounted) {
+        _showSuccessSnackBar('비밀번호 재설정 이메일을 발송했습니다. 이메일을 확인해주세요.');
+        setState(() {
+          _currentError = null;
+          _showPasswordReset = false;
+        });
+      } else if (mounted && authService.error != null) {
+        setState(() {
+          _currentError = authService.error!;
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isPasswordResetLoading = false);
+      }
+    }
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green[600],
         behavior: SnackBarBehavior.floating,
         margin: const EdgeInsets.all(16),
         shape: RoundedRectangleBorder(
@@ -363,7 +464,76 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     ),
                   ),
           ),
-          const SizedBox(height: 8),
+          
+          // 에러 메시지 표시
+          if (_currentError != null) ...[
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.red[50],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.red[200]!),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: Colors.red[600],
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _currentError!,
+                      style: TextStyle(
+                        color: Colors.red[700],
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          
+          // 비밀번호 찾기 버튼
+          if (_showPasswordReset) ...[
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _isPasswordResetLoading ? null : _handlePasswordReset,
+                icon: _isPasswordResetLoading
+                    ? const SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Icon(Icons.email_outlined),
+                label: Text(
+                  _isPasswordResetLoading ? '이메일 발송 중...' : '비밀번호 찾기',
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primaryColor,
+                  side: BorderSide(color: AppTheme.primaryColor),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ],
+          
+          SizedBox(height: _showPasswordReset || _currentError != null ? 8 : 16),
           
           // 구분선
           Row(

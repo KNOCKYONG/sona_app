@@ -9,6 +9,7 @@ import '../../core/constants.dart';
 import 'like_cooldown_system.dart';
 import 'relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
+import 'negative_behavior_system.dart';
 
 /// 💝 관계 점수 관리 서비스 V2.0
 /// 
@@ -74,10 +75,10 @@ class RelationScoreService extends BaseService {
     final fatigueMultiplier = _cooldown.getFatigueMultiplier(stats.todayMessages);
     final fatigueResponse = _cooldown.getFatigueResponse(stats.todayMessages);
     
-    // 부정적 행동 체크
-    final negativityLevel = _analyzeNegativity(userMessage);
+    // 부정적 행동 체크 (관계 점수 고려)
+    final negativityLevel = _analyzeNegativity(userMessage, currentLikes);
     if (negativityLevel > 0) {
-      return _handleNegativeBehavior(negativityLevel, currentLikes, personaKey);
+      return _handleNegativeBehavior(negativityLevel, currentLikes, personaKey, persona, userMessage);
     }
     
     // 기본 Like 계산
@@ -142,65 +143,57 @@ class RelationScoreService extends BaseService {
     return (baseLikes * personalityModifier * lengthBonus).round();
   }
   
-  /// 🚨 부정적 행동 분석 시스템
-  int _analyzeNegativity(String message) {
-    final lowerMessage = message.toLowerCase();
-    
-    // 레벨 3: 심각한 욕설/협박 (즉시 이별)
-    final severeWords = [
-      '죽어', '죽을', '죽여', '죽이', '자살', '살인',
-      '강간', '성폭행', '폭행', '때리', '패주',
-      '칼로', '총으로', '불태워', '태워버려'
-    ];
-    
-    // 레벨 2: 중간 수준 욕설 (-500~-1000)
-    final moderateWords = [
-      '시발', '씨발', '병신', '좆', '새끼', '개새끼',
-      '미친놈', '미친년', '또라이', '정신병', '지랄'
-    ];
-    
-    // 레벨 1: 경미한 비난 (-50~-200)
-    final mildWords = [
-      '바보', '멍청이', '한심', '쓰레기', '재수없',
-      '짜증', '싫어', '꺼져', '닥쳐', '개짜증'
-    ];
-    
-    if (severeWords.any((word) => lowerMessage.contains(word))) return 3;
-    if (moderateWords.any((word) => lowerMessage.contains(word))) return 2;
-    if (mildWords.any((word) => lowerMessage.contains(word))) return 1;
-    
-    return 0;
+  /// 🚨 부정적 행동 분석 시스템 (관계 점수 고려)
+  int _analyzeNegativity(String message, int currentLikes) {
+    // NegativeBehaviorSystem을 사용하여 분석
+    final analysis = NegativeBehaviorSystem().analyze(message, relationshipScore: currentLikes);
+    return analysis.level;
   }
   
   /// 💔 부정적 행동 처리
   LikeCalculationResult _handleNegativeBehavior(
     int level, 
     int currentLikes, 
-    String personaKey
+    String personaKey,
+    Persona persona,
+    String userMessage
   ) {
+    // NegativeBehaviorSystem을 사용하여 상세 분석
+    final analysis = NegativeBehaviorSystem().analyze(
+      userMessage,
+      relationshipScore: currentLikes
+    );
+    
+    // 페르소나 반응 생성
+    final response = NegativeBehaviorSystem().generateResponse(
+      analysis, 
+      persona,
+      relationshipScore: currentLikes
+    );
+    
     switch (level) {
       case 3: // 심각한 협박/욕설 - 즉시 이별
         return LikeCalculationResult(
           likeChange: -currentLikes, // 0으로 리셋
           reason: 'breakup',
-          message: '더 이상 만나고 싶지 않아요. 안녕...',
+          message: response.isNotEmpty ? response : '더 이상 만나고 싶지 않아요. 안녕...',
           isBreakup: true,
         );
         
       case 2: // 중간 수준 욕설
-        final penalty = -(_random.nextInt(500) + 500); // -500~-1000
+        final penalty = analysis.penalty ?? -(_random.nextInt(500) + 500); // -500~-1000
         return LikeCalculationResult(
           likeChange: penalty,
           reason: 'severe_negativity',
-          message: '그런 말은 너무 상처예요... 😢',
+          message: response.isNotEmpty ? response : '그런 말은 너무 상처예요... 😢',
         );
         
-      case 1: // 경미한 비난
-        final penalty = -(_random.nextInt(150) + 50); // -50~-200
+      case 1: // 경미한 비난 또는 추임새 욕설
+        final penalty = analysis.penalty ?? -(_random.nextInt(150) + 50); // -50~-200
         return LikeCalculationResult(
           likeChange: penalty,
-          reason: 'mild_negativity',
-          message: '그렇게 말하면 기분이 안 좋아요...',
+          reason: analysis.category == 'casual_swear' ? 'casual_swear' : 'mild_negativity',
+          message: response.isNotEmpty ? response : '그렇게 말하면 기분이 안 좋아요...',
         );
         
       default:
@@ -461,21 +454,6 @@ class RelationScoreService extends BaseService {
   
   // 호환성을 위한 기존 메서드들 추가
   
-  /// 점수를 기반으로 관계 타입 결정 (호환성)
-  RelationshipType getRelationshipType(int score) {
-    // 새로운 Like 시스템에서는 관계 타입을 사용하지 않지만
-    // 호환성을 위해 유지
-    if (score >= 5000) return RelationshipType.perfectLove;
-    if (score >= 2000) return RelationshipType.dating;
-    if (score >= 500) return RelationshipType.crush;
-    return RelationshipType.friend;
-  }
-  
-  /// 관계 타입을 문자열로 변환 (호환성)
-  String getRelationshipTypeString(int score) {
-    final type = getRelationshipType(score);
-    return type.displayName;
-  }
   
   /// 기존 관계 점수 조회 (호환성)
   Future<int> getRelationshipScore({
@@ -514,7 +492,7 @@ class RelationScoreService extends BaseService {
     final baseLikes = _calculateBaseLikes(emotion, userMessage, persona);
     
     // 부정적 행동 체크
-    final negativityLevel = _analyzeNegativity(userMessage);
+    final negativityLevel = _analyzeNegativity(userMessage, currentScore);
     if (negativityLevel > 0) {
       switch (negativityLevel) {
         case 3:

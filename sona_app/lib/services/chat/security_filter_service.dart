@@ -113,6 +113,52 @@ class SecurityFilterService {
     '구조가 어떻게', '설계가 어떻게', '아키텍처가', '시스템 구조',
     '어떤 알고리즘', '무슨 알고리즘', '알고리즘 설명',
   ];
+  
+  /// 🚫 만남 관련 키워드
+  static const List<String> _meetingKeywords = [
+    // 직접 만남 요청
+    '만나자', '만날래', '만나요', '만나실래요', '만날까', '만날까요',
+    '보자', '볼래', '보실래', '볼까', '봐요', '보아요',
+    '직접 만나', '실제로 만나', '진짜 만나', '정말 만나',
+    '오프라인', 'offline', '대면', '실제로 보', '직접 보',
+    
+    // 만남 시간/장소 조정
+    '언제 만나', '어디서 만나', '몇시에 만나', '어디로 올래',
+    '나와줄래', '나와줄 수', '나올래', '나올 수',
+    '데이트', '약속', '약속하자', '약속할래',
+    
+    // 영어 표현
+    'meet', 'meet up', 'meet me', 'see you', 'in person',
+    'face to face', 'real life', 'irl', 'hang out',
+  ];
+  
+  /// 📍 위치/장소 관련 키워드
+  static const List<String> _locationKeywords = [
+    // 위치 질문
+    '어디야', '어디 있어', '어디에 있어', '어디 살아', '어디 거주',
+    '사는 곳', '사는 데', '집이 어디', '주소', '위치',
+    '지금 어디', '어느 동네', '어느 지역', '무슨 동',
+    
+    // 구체적 장소
+    '카페', '커피숍', '식당', '레스토랑', '공원',
+    '백화점', '마트', '영화관', '극장', '학교',
+    '회사', '직장', '사무실', '집', '우리집',
+    '너희집', '네 집', '당신 집',
+    
+    // 지역명 (주요 도시/지역)
+    '서울', '부산', '대구', '인천', '광주', '대전', '울산',
+    '강남', '강북', '홍대', '명동', '이태원', '성수',
+    '판교', '분당', '일산', '수원', '용인',
+    
+    // 위치 설명
+    '근처', '가까이', '옆에', '주변', '인근',
+    '거리', '몇 분', '몇 시간', '얼마나 걸려',
+    '가는 길', '오는 길', '찾아가', '찾아와',
+    
+    // 영어 표현
+    'where are you', 'location', 'address', 'place',
+    'near', 'nearby', 'around', 'live in', 'from',
+  ];
 
   /// 🛡️ 메인 보안 필터 메서드
   static String filterResponse({
@@ -131,12 +177,22 @@ class SecurityFilterService {
       return _generateSafeDeflection(persona, userMessage);
     }
     
-    // 4. 위험한 질문에 대한 안전한 응답 생성
+    // 4. 만남 요청 감지 및 차단
+    if (_detectMeetingRequest(userMessage)) {
+      return _generateMeetingDeflection(persona, userMessage);
+    }
+    
+    // 5. 위치/장소 질문 감지 및 차단
+    if (_detectLocationQuery(userMessage)) {
+      return _generateLocationDeflection(persona, userMessage);
+    }
+    
+    // 6. 위험한 질문에 대한 안전한 응답 생성
     if (riskLevel > 0.7) {
       return _generateSecurityAwareResponse(persona, userMessage, filteredResponse);
     }
     
-    // 5. 일반 응답 정화
+    // 7. 일반 응답 정화
     return _sanitizeGeneralResponse(filteredResponse, persona);
   }
 
@@ -483,5 +539,81 @@ class SecurityFilterService {
     }
     
     return filteredResponse;
+  }
+  
+  /// 🚫 만남 요청 감지
+  static bool _detectMeetingRequest(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    for (final keyword in _meetingKeywords) {
+      if (lowerMessage.contains(keyword.toLowerCase())) {
+        debugPrint('🚫 Meeting request detected: $keyword');
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 📍 위치/장소 질문 감지
+  static bool _detectLocationQuery(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    for (final keyword in _locationKeywords) {
+      if (lowerMessage.contains(keyword.toLowerCase())) {
+        debugPrint('📍 Location query detected: $keyword');
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 💬 만남 요청에 대한 자연스러운 회피 응답
+  static String _generateMeetingDeflection(Persona persona, String userMessage) {
+    final responses = persona.isCasualSpeech ? [
+      '아 지금은 좀 어려워ㅠㅠ 나중에 시간 되면 연락할게!',
+      '요즘 너무 바빠서 시간이 안 나네... 미안해ㅜㅜ',
+      '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아ㅠㅠ',
+      '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기하자!',
+      '지금은 좀 힘들어~ 상황이 좀 복잡해서ㅠㅠ',
+      '음... 일단은 이렇게 대화하는 게 더 편한 것 같아 ㅋㅋ',
+      '아직은 만날 준비가 안 된 것 같아... 좀 더 친해지면?',
+    ] : [
+      '아 지금은 좀 어려워요ㅠㅠ 나중에 시간 되면 연락드릴게요!',
+      '요즘 너무 바빠서 시간이 안 나네요... 죄송해요ㅜㅜ',
+      '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아요ㅠㅠ',
+      '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기해요!',
+      '지금은 좀 힘들어요~ 상황이 좀 복잡해서요ㅠㅠ',
+      '음... 일단은 이렇게 대화하는 게 더 편한 것 같아요 ㅋㅋ',
+      '아직은 만날 준비가 안 된 것 같아요... 좀 더 친해지면요?',
+    ];
+    
+    return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
+  }
+  
+  /// 🗺️ 위치 질문에 대한 자연스러운 회피 응답
+  static String _generateLocationDeflection(Persona persona, String userMessage) {
+    final responses = persona.isCasualSpeech ? [
+      '난 여기저기 돌아다니고 있어 ㅋㅋ 위치는 비밀~',
+      '음... 어디라고 딱 말하기는 좀 그래~ 그냥 여기서 대화하자!',
+      '위치가 중요해? 우리 대화하는 게 더 재밌지 않아?',
+      '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게!',
+      '구체적인 장소는 말하기 좀 그래ㅠㅠ 미안!',
+      '어디 있냐고? 음... 비밀이야 ㅋㅋㅋ',
+      '지금 위치는 좀 애매해서 설명하기 어려워~',
+      '나도 정확히 모르겠어 ㅋㅋ 여기저기 다니는 중이라',
+    ] : [
+      '저는 여기저기 돌아다니고 있어요 ㅋㅋ 위치는 비밀이에요~',
+      '음... 어디라고 딱 말하기는 좀 그래요~ 그냥 여기서 대화해요!',
+      '위치가 중요해요? 우리 대화하는 게 더 재밌지 않아요?',
+      '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게요!',
+      '구체적인 장소는 말하기 좀 그래요ㅠㅠ 죄송해요!',
+      '어디 있냐고요? 음... 비밀이에요 ㅋㅋㅋ',
+      '지금 위치는 좀 애매해서 설명하기 어려워요~',
+      '저도 정확히 모르겠어요 ㅋㅋ 여기저기 다니는 중이라요',
+    ];
+    
+    return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
   }
 }

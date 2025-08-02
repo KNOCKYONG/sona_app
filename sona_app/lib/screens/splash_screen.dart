@@ -51,46 +51,66 @@ class _SplashScreenState extends State<SplashScreen>
     await _animationController.forward();
     
     if (mounted) {
+      debugPrint('🚀 [SplashScreen] Animation completed, starting auth check...');
+      
       final authService = Provider.of<AuthService>(context, listen: false);
-      
-      // Firebase Auth 상태가 초기화될 때까지 대기
-      await Future.delayed(const Duration(seconds: 1));
-      
-      // Auth 상태가 아직 로드되지 않았으면 추가 대기
-      if (authService.user == null) {
-        // authStateChanges 스트림이 첫 번째 이벤트를 발생시킬 때까지 대기
-        await authService.waitForAuthState();
-      }
-      
       final userService = Provider.of<UserService>(context, listen: false);
       final personaService = Provider.of<PersonaService>(context, listen: false);
       
-      // 로그인된 사용자가 있으면 UserService가 사용자 정보를 로드할 때까지 대기
-      if (authService.isAuthenticated && authService.currentUser != null) {
-        debugPrint('🔐 User is authenticated: ${authService.currentUser!.uid}');
+      try {
+        // Firebase Auth 상태가 초기화될 때까지 대기
+        debugPrint('🚀 [SplashScreen] Waiting for Firebase Auth initialization...');
+        await Future.delayed(const Duration(seconds: 1));
         
-        // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌
-        int retries = 0;
-        while (userService.currentUser == null && retries < 10) {
-          await Future.delayed(const Duration(milliseconds: 200));
-          retries++;
+        // Auth 상태가 아직 로드되지 않았으면 추가 대기
+        if (authService.user == null) {
+          debugPrint('🚀 [SplashScreen] Auth user is null, waiting for auth state...');
+          await authService.waitForAuthState();
         }
         
-        // UserService에서 사용자 정보 설정
-        if (userService.currentUser != null) {
-          debugPrint('🔐 Setting user info for PersonaService: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
-          personaService.setCurrentUser(userService.currentUser!);
+        debugPrint('🚀 [SplashScreen] Auth state check completed. Authenticated: ${authService.isAuthenticated}');
+        
+        // 로그인된 사용자가 있으면 UserService가 사용자 정보를 로드할 때까지 대기
+        if (authService.isAuthenticated && authService.currentUser != null) {
+          debugPrint('🔐 [SplashScreen] User is authenticated: ${authService.currentUser!.uid}');
+          
+          // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌 (최대 5초)
+          int retries = 0;
+          const maxRetries = 25; // 200ms * 25 = 5초
+          
+          debugPrint('🔐 [SplashScreen] Waiting for UserService to load user data...');
+          while (userService.currentUser == null && retries < maxRetries) {
+            await Future.delayed(const Duration(milliseconds: 200));
+            retries++;
+            if (retries % 5 == 0) { // 1초마다 로그 출력
+              debugPrint('🔐 [SplashScreen] Still waiting for user data... ($retries/$maxRetries)');
+            }
+          }
+          
+          // UserService에서 사용자 정보 설정
+          if (userService.currentUser != null) {
+            debugPrint('✅ [SplashScreen] User data loaded successfully: ${userService.currentUser!.nickname}');
+            debugPrint('🔐 [SplashScreen] Setting user info for PersonaService: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
+            personaService.setCurrentUser(userService.currentUser!);
+            
+            // PersonaService 초기화
+            debugPrint('🔐 [SplashScreen] Initializing PersonaService...');
+            await personaService.initialize(userId: authService.currentUser!.uid);
+            
+            debugPrint('✅ [SplashScreen] All services initialized, navigating to main screen');
+            Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+          } else {
+            debugPrint('❌ [SplashScreen] UserService.currentUser is still null after waiting. This might indicate a Firestore issue.');
+            debugPrint('❌ [SplashScreen] Showing welcome dialog to allow re-login');
+            _showWelcomeDialog();
+          }
         } else {
-          debugPrint('⚠️ UserService.currentUser is still null after waiting');
+          debugPrint('🔐 [SplashScreen] User is not authenticated, showing welcome dialog');
+          // 로그인되지 않은 경우
+          _showWelcomeDialog();
         }
-        
-        // PersonaService 초기화
-        await personaService.initialize(userId: authService.currentUser!.uid);
-        
-        Navigator.of(context).pushReplacementNamed('/main');
-      } else {
-        debugPrint('🔐 User is not authenticated, showing welcome dialog');
-        // 로그인되지 않은 경우
+      } catch (e) {
+        debugPrint('❌ [SplashScreen] Error during auth initialization: $e');
         _showWelcomeDialog();
       }
     }
@@ -226,7 +246,7 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
       
       if (success) {
-        Navigator.of(context).pushReplacementNamed('/main');
+        Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

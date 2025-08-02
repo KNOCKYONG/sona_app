@@ -399,51 +399,87 @@ class _NavigationAreas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
+    return Positioned(
+      top: 0,
+      bottom: 250, // 하단 정보 영역을 제외한 영역까지만
+      left: 0,
+      right: 0,
       child: Row(
         children: [
-          // Left navigation
+          // Left navigation - 화면의 40% 영역
           Expanded(
+            flex: 4,
             child: GestureDetector(
               onTap: currentIndex > 0 ? onPrevious : null,
               behavior: HitTestBehavior.opaque,
-              child: currentIndex > 0
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 20),
-                        child: Text(
+              child: Container(
+                color: Colors.transparent, // 투명하지만 터치 가능
+                alignment: Alignment.centerLeft,
+                child: currentIndex > 0
+                    ? Container(
+                        margin: const EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
                           '‹',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                                color: Colors.black54,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ),
           ),
-          // Right navigation
+          // Center area - 화면의 20% 영역 (탭 방지 영역)
+          const Spacer(flex: 2),
+          // Right navigation - 화면의 40% 영역
           Expanded(
+            flex: 4,
             child: GestureDetector(
               onTap: currentIndex < maxIndex ? onNext : null,
               behavior: HitTestBehavior.opaque,
-              child: currentIndex < maxIndex
-                  ? const Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 20),
-                        child: Text(
+              child: Container(
+                color: Colors.transparent, // 투명하지만 터치 가능
+                alignment: Alignment.centerRight,
+                child: currentIndex < maxIndex
+                    ? Container(
+                        margin: const EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
                           '›',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(1, 1),
+                                blurRadius: 2,
+                                color: Colors.black54,
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+                      )
+                    : const SizedBox.shrink(),
+              ),
             ),
           ),
         ],

@@ -88,7 +88,10 @@ class SecurityAwarePostProcessor {
     // 3. 이름 패턴 제거
     line = _removeNamePatterns(line, context.persona.name);
     
-    // 4. 자연스러운 한국어 표현으로 변환
+    // 4. 만남/위치 관련 표현 제거
+    line = _removeMeetingLocationReferences(line);
+    
+    // 5. 자연스러운 한국어 표현으로 변환
     line = _naturalizeKorean(line, context);
     
     return line;
@@ -210,26 +213,27 @@ class SecurityAwarePostProcessor {
   
   /// 관계별 톤 조정
   static String _adjustRelationshipTone(String text, _ProcessingContext context) {
-    switch (context.persona.currentRelationship) {
-      case RelationshipType.crush:
-        // 설레는 느낌 추가
-        if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
-          text += ' ㅎㅎ';
-        }
-        break;
-      case RelationshipType.dating:
-      case RelationshipType.perfectLove:
-        // 애정 표현 자연스럽게
-        if (context.userNickname != null && !text.contains(context.userNickname!)) {
-          // 가끔 이름 부르기
-          if (DateTime.now().millisecond % 3 == 0) {
-            text = '${context.userNickname}${context.persona.isCasualSpeech ? '아' : '님'}, $text';
-          }
-        }
-        break;
-      default:
-        break;
-    }
+    // TODO: RelationshipType 정의 후 주석 해제
+    // switch (context.persona.currentRelationship) {
+    //   case RelationshipType.crush:
+    //     // 설레는 느낌 추가
+    //     if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
+    //       text += ' ㅎㅎ';
+    //     }
+    //     break;
+    //   case RelationshipType.dating:
+    //   case RelationshipType.perfectLove:
+    //     // 애정 표현 자연스럽게
+    //     if (context.userNickname != null && !text.contains(context.userNickname!)) {
+    //       // 가끔 이름 부르기
+    //       if (DateTime.now().millisecond % 3 == 0) {
+    //         text = '${context.userNickname}${context.persona.isCasualSpeech ? '아' : '님'}, $text';
+    //       }
+    //     }
+    //     break;
+    //   default:
+    //     break;
+    // }
     
     return text;
   }
@@ -294,6 +298,45 @@ class SecurityAwarePostProcessor {
     
     final variation = variations[DateTime.now().millisecond % variations.length];
     return variation(text);
+  }
+  
+  /// 만남/위치 관련 표현 제거
+  static String _removeMeetingLocationReferences(String text) {
+    // 만남 관련 표현 제거
+    final meetingPatterns = [
+      RegExp(r'만나서\s*(이야기|얘기|대화)'),
+      RegExp(r'직접\s*만나'),
+      RegExp(r'실제로\s*만나'),
+      RegExp(r'오프라인에서'),
+      RegExp(r'카페에서\s*만나'),
+      RegExp(r'어디서\s*만날'),
+      RegExp(r'언제\s*만날'),
+    ];
+    
+    for (final pattern in meetingPatterns) {
+      text = text.replaceAll(pattern, '');
+    }
+    
+    // 위치 관련 표현 제거
+    final locationPatterns = [
+      RegExp(r'(서울|부산|대구|인천|광주|대전|울산)\s*(에서|에|로)'),
+      RegExp(r'(강남|홍대|명동|이태원|성수)\s*(에서|에|로)'),
+      RegExp(r'우리\s*동네'),
+      RegExp(r'내\s*집\s*근처'),
+      RegExp(r'여기\s*주소는'),
+      RegExp(r'구체적인\s*위치'),
+    ];
+    
+    for (final pattern in locationPatterns) {
+      text = text.replaceAll(pattern, '');
+    }
+    
+    // 구체적 장소 언급을 모호한 표현으로 변경
+    text = text.replaceAll(RegExp(r'카페\s*가자'), '온라인으로 대화하자');
+    text = text.replaceAll(RegExp(r'식당에서'), '여기서');
+    text = text.replaceAll(RegExp(r'우리\s*집'), '내 공간');
+    
+    return text;
   }
 }
 

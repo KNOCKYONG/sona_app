@@ -85,7 +85,8 @@ class PersonaRelationshipCache extends BaseService {
       return basePersona.copyWith(
         isCasualSpeech: data['isCasualSpeech'] ?? false,
         relationshipScore: data['relationshipScore'] ?? 0,
-        currentRelationship: _parseRelationshipType(data['currentRelationship']),
+        // TODO: RelationshipType 정의 후 주석 해제
+        // currentRelationship: _parseRelationshipType(data['currentRelationship']),
       );
     } catch (e) {
       debugPrint('❌ Error loading persona relationship: $e');
@@ -134,20 +135,21 @@ class PersonaRelationshipCache extends BaseService {
   }
   
   /// 관계 타입 파싱
-  RelationshipType _parseRelationshipType(String? type) {
-    switch (type) {
-      case 'friend':
-        return RelationshipType.friend;
-      case 'crush':
-        return RelationshipType.crush;
-      case 'dating':
-        return RelationshipType.dating;
-      case 'perfectLove':
-        return RelationshipType.perfectLove;
-      default:
-        return RelationshipType.friend;
-    }
-  }
+  // TODO: RelationshipType 정의 후 주석 해제
+  // RelationshipType _parseRelationshipType(String? type) {
+  //   switch (type) {
+  //     case 'friend':
+  //       return RelationshipType.friend;
+  //     case 'crush':
+  //       return RelationshipType.crush;
+  //     case 'dating':
+  //       return RelationshipType.dating;
+  //     case 'perfectLove':
+  //       return RelationshipType.perfectLove;
+  //     default:
+  //       return RelationshipType.friend;
+  //   }
+  // }
   
   /// 캐시 상태 정보
   Map<String, dynamic> getCacheStats() {

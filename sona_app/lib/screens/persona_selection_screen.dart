@@ -19,6 +19,9 @@ import '../widgets/common/sona_logo.dart';
 import '../widgets/navigation/animated_action_button.dart';
 import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
+import '../models/tip_data.dart';
+import '../widgets/tutorial/tip_card.dart';
+import 'dart:math';
 
 class PersonaSelectionScreen extends StatefulWidget {
   const PersonaSelectionScreen({super.key});
@@ -36,6 +39,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   int _currentIndex = 0;
   bool _isLoading = false;
   bool _isFirstTimeUser = false;
+  List<dynamic> _cardItems = []; // Personas와 Tips를 함께 담을 리스트
+  final Random _random = Random();
 
   @override
   void initState() {
@@ -63,6 +68,36 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       setState(() {
         _isFirstTimeUser = isFirstTime;
       });
+    }
+  }
+
+  // 카드 아이템 리스트 준비 (Personas + Tips)
+  void _prepareCardItems(List<Persona> personas) {
+    if (personas.isEmpty) {
+      _cardItems = [];
+      return;
+    }
+
+    _cardItems = [];
+    final tips = TipData.allTips;
+    final usedTips = <TipData>[];
+    
+    for (int i = 0; i < personas.length; i++) {
+      _cardItems.add(personas[i]);
+      
+      // 4~8번 사이에 랜덤하게 Tip 카드 삽입
+      if (i >= 3 && i <= 7 && tips.length > usedTips.length) {
+        // 30% 확률로 Tip 카드 삽입
+        if (_random.nextDouble() < 0.3) {
+          final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
+          if (availableTips.isNotEmpty) {
+            final tipIndex = _random.nextInt(availableTips.length);
+            final selectedTip = availableTips[tipIndex];
+            usedTips.add(selectedTip);
+            _cardItems.add(selectedTip);
+          }
+        }
+      }
     }
   }
 
@@ -249,31 +284,34 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   }
 
   bool _onSwipe(int previousIndex, int? currentIndex, CardSwiperDirection direction) {
-    final personaService = Provider.of<PersonaService>(context, listen: false);
-    // 🔧 FIX: 스와이프 시점에 고정된 스냅샷 사용 (실시간 변경 방지)
-    final personas = List<Persona>.from(personaService.availablePersonas);
-    
     debugPrint('🎯 Swipe detected: previousIndex=$previousIndex, currentIndex=$currentIndex, direction=$direction');
-    debugPrint('📊 Personas snapshot length: ${personas.length}');
+    debugPrint('📊 Card items length: ${_cardItems.length}');
     
-    if (previousIndex >= 0 && previousIndex < personas.length) {
-      final persona = personas[previousIndex];
+    if (previousIndex >= 0 && previousIndex < _cardItems.length) {
+      final item = _cardItems[previousIndex];
       
-      if (direction == CardSwiperDirection.right) {
-        debugPrint('💕 Right swipe - Liking persona: ${persona.name}');
-        _onPersonaLiked(persona, isSuperLike: false);
-      } else if (direction == CardSwiperDirection.left) {
-        debugPrint('👈 Left swipe - Passing persona: ${persona.name}');
-        _onPersonaPassed(persona);
-      } else if (direction == CardSwiperDirection.top) {
-        debugPrint('⭐ Top swipe - Super liking persona: ${persona.name}');
-        _onPersonaLiked(persona, isSuperLike: true);
+      // Tip 카드인 경우 - 어떤 방향으로든 스와이프 허용, 매칭 처리 없음
+      if (item is TipData) {
+        debugPrint('💡 Tip card swiped: ${item.title}');
+        // Tip 카드는 그냥 넘어가기만 함
+      } else if (item is Persona) {
+        // 페르소나 카드인 경우 - 기존 로직대로 처리
+        if (direction == CardSwiperDirection.right) {
+          debugPrint('💕 Right swipe - Liking persona: ${item.name}');
+          _onPersonaLiked(item, isSuperLike: false);
+        } else if (direction == CardSwiperDirection.left) {
+          debugPrint('👈 Left swipe - Passing persona: ${item.name}');
+          _onPersonaPassed(item);
+        } else if (direction == CardSwiperDirection.top) {
+          debugPrint('⭐ Top swipe - Super liking persona: ${item.name}');
+          _onPersonaLiked(item, isSuperLike: true);
+        }
       }
     } else {
-      debugPrint('❌ Index out of bounds: $previousIndex (total: ${personas.length})');
+      debugPrint('❌ Index out of bounds: $previousIndex (total: ${_cardItems.length})');
     }
     
-    // 🔧 FIX: currentIndex 업데이트를 지연시켜 UI 안정성 확보
+    // currentIndex 업데이트
     if (currentIndex != null && mounted) {
       Future.microtask(() {
         if (mounted) {
@@ -1059,9 +1097,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           ),
           child: Container(
             constraints: const BoxConstraints(
-              maxWidth: 340, // Dialog 최대 너비를 약간 늘림
+              maxWidth: 340,
+              maxHeight: 480, // 최대 높이 제한 추가
             ),
-            padding: const EdgeInsets.all(20), // padding을 줄여 더 많은 공간 확보
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               gradient: const LinearGradient(
@@ -1070,109 +1108,107 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                 colors: [Color(0xFFFF6B9D), Color(0xFFFF8FA3)],
               ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  isSuperLike 
-                      ? '💫 슈퍼 라이크 매칭! 💫' 
-                      : '✨ 매칭 성공! ✨',
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                // 소나 프로필 이미지
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                  ),
-                  child: ClipOval(
-                    child: persona.getThumbnailUrl() != null
-                        ? CachedNetworkImage(
-                            imageUrl: persona.getThumbnailUrl()!,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.person, size: 40),
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                Text(
-                  isSuperLike 
-                      ? '${persona.name}님이 당신을\n특별히 좋아해요! 💕'
-                      : '${persona.name}님과 매칭되었어요!',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                
-                Text(
-                  isSuperLike 
-                      ? 'Like 1,000점으로 시작됩니다! 🎉'
-                      : 'Like 50점(친구)부터 시작해보세요 💕',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white70,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                Row(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          
-                          // Super like의 경우에도 나중에 버튼에서는 매칭 처리하지 않음
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text('나중에'),
+                    Text(
+                      isSuperLike 
+                          ? '💫 슈퍼 라이크 매칭! 💫' 
+                          : '✨ 매칭 성공! ✨',
+                      style: const TextStyle(
+                        fontSize: 22, // 24 -> 22
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          if (isSuperLike) {
-                            // Super like인 경우 여기서 매칭 처리
-                            Navigator.of(context).pop(); // Close match dialog first
-                            
-                            // Show heart usage dialog
-                            final shouldUseHeart = await HeartUsageDialog.show(
-                              context: screenContext,
-                              title: '슈퍼 라이크',
-                              description: '${persona.name}님에게 슈퍼 라이크를 보내시겠습니까?\n1,000 Like로 시작하게 됩니다!',
-                              heartCost: 5,
-                              onConfirm: () async {
+                    const SizedBox(height: 12), // 16 -> 12
+                    
+                    // 소나 프로필 이미지
+                    Container(
+                      width: 90, // 100 -> 90
+                      height: 90, // 100 -> 90
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 3),
+                      ),
+                      child: ClipOval(
+                        child: persona.getThumbnailUrl() != null
+                            ? CachedNetworkImage(
+                                imageUrl: persona.getThumbnailUrl()!,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.person, size: 40),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.person, size: 40),
+                                ),
+                              )
+                            : Container(
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.person, size: 40),
+                              ),
+                      ),
+                    ),
+                    const SizedBox(height: 12), // 16 -> 12
+                    
+                    Text(
+                      isSuperLike 
+                          ? '${persona.name}님이 당신을\n특별히 좋아해요! 💕'
+                          : '${persona.name}님과 매칭되었어요!',
+                      style: const TextStyle(
+                        fontSize: 16, // 18 -> 16
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 6), // 8 -> 6
+                    
+                    Text(
+                      isSuperLike 
+                          ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요 💫'
+                          : '소나와 친구처럼 대화를 시작해보세요 💕',
+                      style: const TextStyle(
+                        fontSize: 13, // 14 -> 13
+                        color: Colors.white70,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20), // 24 -> 20
+                    
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              
+                              // Super like의 경우에도 나중에 버튼에서는 매칭 처리하지 않음
+                            },
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              side: const BorderSide(color: Colors.white),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 10), // 버튼 패딩 조정
+                            ),
+                            child: const Text('나중에'),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              if (isSuperLike) {
+                                // Super like인 경우 팝업 없이 바로 처리
+                                Navigator.of(context).pop(); // Close match dialog first
+                                
                                 setState(() => _isLoading = true);
                                 
                                 try {
@@ -1194,7 +1230,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                   
                                   // 매칭 처리
                                   final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: true);
-                                  
+                              
                                   if (matchSuccess) {
                                     debugPrint('✅ Super like matching complete: ${persona.name}');
                                     await _navigateToChat(persona, screenContext, true);
@@ -1212,33 +1248,65 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                 } finally {
                                   setState(() => _isLoading = false);
                                 }
-                              },
-                              icon: Icons.star,
-                              additionalInfo: '슈퍼 라이크는 특별한 관심을 표현합니다',
-                            );
-                          } else {
-                            // 일반 like는 이미 매칭되어 있으므로 바로 채팅으로 이동
-                            Navigator.of(context).pop();
-                            await _navigateToChat(persona, screenContext, false);
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFFFF6B9D),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
+                              } else {
+                                // 일반 like도 하트 1개 차감 후 채팅으로 이동
+                                Navigator.of(context).pop();
+                                
+                                setState(() => _isLoading = true);
+                                
+                                try {
+                                  final purchaseService = Provider.of<PurchaseService>(screenContext, listen: false);
+                                  
+                                  // 하트 1개 차감
+                                  final hasEnoughHearts = await purchaseService.useHearts(1);
+                                  if (!hasEnoughHearts) {
+                                    ScaffoldMessenger.of(screenContext).showSnackBar(
+                                      const SnackBar(content: Text('하트가 부족합니다.')),
+                                    );
+                                    setState(() => _isLoading = false);
+                                    return;
+                                  }
+                                  
+                                  await _navigateToChat(persona, screenContext, false);
+                                } catch (e) {
+                                  debugPrint('❌ Error in normal like: $e');
+                                  ScaffoldMessenger.of(screenContext).showSnackBar(
+                                    const SnackBar(content: Text('오류가 발생했습니다.')),
+                                  );
+                                } finally {
+                                  setState(() => _isLoading = false);
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: const Color(0xFFFF6B9D),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10), // 패딩 조정
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (isSuperLike) ...[
+                                  const Text('💖×5 ', style: TextStyle(fontSize: 14)), // 16 -> 14
+                                ] else ...[
+                                  const Text('💖×1 ', style: TextStyle(fontSize: 14)), // 16 -> 14
+                                ],
+                                const Text(
+                                  '채팅 시작',
+                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14), // 15 -> 14
+                                ),
+                              ],
+                            ),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         ),
-                        child: const Text(
-                          '채팅 시작',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                        ),
-                      ),
+                      ],
                     ),
-                  ],
+                    ],
                 ),
-              ],
+              ),
             ),
           ),
         );
@@ -1305,12 +1373,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           final updatedPersona = isSuperLike 
               ? persona.copyWith(
                   relationshipScore: 200, 
-                  currentRelationship: RelationshipType.crush,
+                  // currentRelationship: RelationshipType.crush, // RelationshipType 정의 필요
                   imageUrls: persona.imageUrls,  // Preserve imageUrls
                 )
               : persona.copyWith(
                   relationshipScore: 50, 
-                  currentRelationship: RelationshipType.friend,
+                  // currentRelationship: RelationshipType.friend, // RelationshipType 정의 필요
                   imageUrls: persona.imageUrls,  // Preserve imageUrls
                 );
           
@@ -1414,11 +1482,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
           final personas = personaService.availablePersonas;
           
+          // 카드 아이템 리스트 준비 (Personas + Tips)
+          _prepareCardItems(personas);
+          
           debugPrint('🎯 PersonaSelectionScreen: Available personas count: ${personas.length}');
+          debugPrint('🎯 PersonaSelectionScreen: Card items count: ${_cardItems.length}');
           debugPrint('🎯 PersonaSelectionScreen: All personas count: ${personaService.allPersonas.length}');
           
           // CardSwiper는 최소 1개의 카드가 필요하므로 빈 배열 체크
-          if (personas.isEmpty || personas.length == 0) {
+          if (_cardItems.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1579,11 +1651,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: personas.length > 0 
+                  child: _cardItems.isNotEmpty 
                     ? CardSwiper(
-                        key: ValueKey('cardswiper_${personas.length}'), // 🔧 FIX: 리스트 길이 기반 안정적 키
+                        key: ValueKey('cardswiper_${_cardItems.length}'), // 리스트 길이 기반 안정적 키
                         controller: _cardController,
-                        cardsCount: personas.length > 0 ? personas.length : 1,
+                        cardsCount: _cardItems.length,
                     onSwipe: _onSwipe,
                     onEnd: () {
                       // 모든 카드를 스와이프했을 때
@@ -1593,27 +1665,41 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         ),
                       );
                     },
-                    numberOfCardsDisplayed: personas.length >= 2 ? 2 : personas.length,
+                    numberOfCardsDisplayed: _cardItems.length >= 2 ? 2 : _cardItems.length,
                     backCardOffset: const Offset(0, -20),
                     padding: const EdgeInsets.all(8),
                     allowedSwipeDirection: const AllowedSwipeDirection.only(
                       left: true,
                       right: true,
-                      up: true,
+                      up: true, // 모든 카드에 대해 위로 스와이프 허용
                       down: false,
                     ),
                     cardBuilder: (context, index, horizontalThresholdPercentage, verticalThresholdPercentage) {
                       // index 범위 검사
-                      if (index < 0 || index >= personas.length) {
+                      if (index < 0 || index >= _cardItems.length) {
                         return const SizedBox.shrink();
                       }
-                      // 소나 ID를 키로 사용하여 안정적인 렌더링 보장
-                      return PersonaCard(
-                        key: ValueKey(personas[index].id),
-                        persona: personas[index],
-                        horizontalThresholdPercentage: horizontalThresholdPercentage.toDouble(),
-                        verticalThresholdPercentage: verticalThresholdPercentage.toDouble(),
-                      );
+                      
+                      final item = _cardItems[index];
+                      
+                      // Tip 카드인 경우
+                      if (item is TipData) {
+                        return TipCard(
+                          key: ValueKey('tip_${item.title}'),
+                          tipData: item,
+                        );
+                      } 
+                      // Persona 카드인 경우
+                      else if (item is Persona) {
+                        return PersonaCard(
+                          key: ValueKey(item.id),
+                          persona: item,
+                          horizontalThresholdPercentage: horizontalThresholdPercentage.toDouble(),
+                          verticalThresholdPercentage: verticalThresholdPercentage.toDouble(),
+                        );
+                      }
+                      
+                      return const SizedBox.shrink();
                     },
                   )
                   : Center(

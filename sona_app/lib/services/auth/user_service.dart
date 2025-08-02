@@ -24,10 +24,13 @@ class UserService extends BaseService {
   UserService() {
     // Auth 상태 리스너
     _auth.authStateChanges().listen((User? user) async {
+      debugPrint('👤 [UserService] Auth state changed: ${user != null ? 'User logged in (${user.uid})' : 'User logged out'}');
       _firebaseUser = user;
       if (user != null) {
+        debugPrint('👤 [UserService] Loading user data for: ${user.uid}');
         await _loadUserData(user.uid);
       } else {
+        debugPrint('👤 [UserService] Clearing user data');
         _currentUser = null;
       }
       notifyListeners();
@@ -46,7 +49,6 @@ class UserService extends BaseService {
     String? intro,
     File? profileImage,
     String? purpose,
-    List<String>? preferredPersonaTypes,
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
@@ -88,11 +90,13 @@ class UserService extends BaseService {
         profileImageUrl: profileImageUrl,
         createdAt: DateTime.now(),
         purpose: purpose,
-        preferredPersonaTypes: preferredPersonaTypes,
         preferredMbti: preferredMbti,
         communicationStyle: communicationStyle,
         preferredTopics: preferredTopics,
         genderAll: genderAll,
+        dailyMessageCount: 0,
+        dailyMessageLimit: AppConstants.dailyMessageLimit,
+        lastMessageCountReset: DateTime.now(),
       );
 
       await FirebaseHelper.user(newUser.uid).set(
@@ -106,34 +110,56 @@ class UserService extends BaseService {
 
   // 구글 로그인 및 추가 정보 입력
   Future<User?> signInWithGoogle() async {
+    debugPrint('🔵 [UserService] Starting Google Sign-In process...');
     return await executeWithLoading<User?>(() async {
-      // 1. Google 로그인 진행
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-      if (googleUser == null) {
-        return null;
-      }
+      try {
+        // 1. Google 로그인 진행
+        debugPrint('🔵 [UserService] Step 1: Initiating Google Sign-In...');
+        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+        
+        if (googleUser == null) {
+          debugPrint('⚠️ [UserService] Google Sign-In canceled by user');
+          return null; // 사용자가 로그인을 취소한 경우
+        }
+        
+        debugPrint('✅ [UserService] Google Sign-In successful: ${googleUser.email}');
+        debugPrint('🔵 [UserService] Step 2: Getting Google authentication...');
+        
+        final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+        debugPrint('✅ [UserService] Google authentication obtained');
+        
+        debugPrint('🔵 [UserService] Step 3: Creating Firebase credential...');
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+        // 2. Firebase Auth로 로그인
+        debugPrint('🔵 [UserService] Step 4: Signing in with Firebase...');
+        final userCredential = await _auth.signInWithCredential(credential);
+        debugPrint('✅ [UserService] Firebase Auth successful: ${userCredential.user?.uid}');
+        
+        // 3. 기존 사용자인지 확인
+        debugPrint('🔵 [UserService] Step 5: Checking if user exists in Firestore...');
+        final userDoc = await FirebaseHelper.user(userCredential.user!.uid).get();
 
-      // 2. Firebase Auth로 로그인
-      final userCredential = await _auth.signInWithCredential(credential);
-      
-      // 3. 기존 사용자인지 확인
-      final userDoc = await FirebaseHelper.user(userCredential.user!.uid).get();
+        if (!userDoc.exists) {
+          // 신규 사용자 - 추가 정보 입력 필요
+          debugPrint('🆕 [UserService] New user detected, additional info required');
+          return userCredential.user;
+        }
 
-      if (!userDoc.exists) {
-        // 신규 사용자 - 추가 정보 입력 필요
+        // 기존 사용자 - 사용자 정보 로드
+        debugPrint('👤 [UserService] Existing user found, loading user data...');
+        await _loadUserData(userCredential.user!.uid);
+        debugPrint('✅ [UserService] Google Sign-In completed successfully');
+        
         return userCredential.user;
+      } catch (e) {
+        debugPrint('❌ [UserService] Google Sign-In error: $e');
+        debugPrint('❌ [UserService] Error type: ${e.runtimeType}');
+        rethrow; // BaseService에서 에러 메시지 처리하도록 전달
       }
-
-      // 기존 사용자 - 사용자 정보 로드
-      await _loadUserData(userCredential.user!.uid);
-      
-      return userCredential.user;
     }, errorContext: 'signInWithGoogle');
   }
 
@@ -147,7 +173,6 @@ class UserService extends BaseService {
     String? intro,
     File? profileImage,
     String? purpose,
-    List<String>? preferredPersonaTypes,
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
@@ -183,11 +208,13 @@ class UserService extends BaseService {
         profileImageUrl: profileImageUrl,
         createdAt: DateTime.now(),
         purpose: purpose,
-        preferredPersonaTypes: preferredPersonaTypes,
         preferredMbti: preferredMbti,
         communicationStyle: communicationStyle,
         preferredTopics: preferredTopics,
         genderAll: genderAll,
+        dailyMessageCount: 0,
+        dailyMessageLimit: AppConstants.dailyMessageLimit,
+        lastMessageCountReset: DateTime.now(),
       );
 
       await FirebaseHelper.user(newUser.uid).set(
@@ -204,14 +231,19 @@ class UserService extends BaseService {
     required String email,
     required String password,
   }) async {
+    debugPrint('👤 [UserService] Starting email sign in for: $email');
     return await executeWithLoading<AppUser?>(() async {
+      debugPrint('👤 [UserService] Attempting Firebase Auth signInWithEmailAndPassword...');
       final credential = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
 
+      debugPrint('👤 [UserService] Firebase Auth successful, user ID: ${credential.user?.uid}');
       if (credential.user != null) {
+        debugPrint('👤 [UserService] Loading user data from Firestore...');
         await _loadUserData(credential.user!.uid);
+        debugPrint('👤 [UserService] Current user after loading: ${_currentUser?.nickname}');
       }
 
       return _currentUser;
@@ -221,19 +253,29 @@ class UserService extends BaseService {
 
   // Firestore에서 사용자 데이터 로드
   Future<void> _loadUserData(String uid) async {
+    debugPrint('👤 [UserService] Starting to load user data from Firestore for: $uid');
     try {
       final doc = await FirebaseHelper.user(uid).get();
+      debugPrint('👤 [UserService] Firestore document exists: ${doc.exists}');
+      
       if (doc.exists) {
+        debugPrint('👤 [UserService] Converting Firestore document to AppUser...');
         _currentUser = AppUser.fromFirestore(doc);
+        debugPrint('👤 [UserService] User data loaded successfully: ${_currentUser?.nickname} (${_currentUser?.email})');
         
         // 기존 사용자 데이터 마이그레이션 (일일 메시지 제한 필드가 없는 경우)
         final data = doc.data() as Map<String, dynamic>;
         if (data['dailyMessageLimit'] == null || data['dailyMessageCount'] == null) {
+          debugPrint('👤 [UserService] User data needs migration, updating...');
           await _migrateUserData(uid);
         }
+      } else {
+        debugPrint('⚠️ [UserService] User document does not exist in Firestore for uid: $uid');
+        _currentUser = null;
       }
     } catch (e) {
-      debugPrint('사용자 데이터 로드 실패: $e');
+      debugPrint('❌ [UserService] Failed to load user data: $e');
+      _currentUser = null;
     }
   }
   
@@ -386,10 +428,14 @@ class UserService extends BaseService {
   
   // 일일 메시지 제한에 도달했는지 확인
   bool isDailyMessageLimitReached() {
-    if (_currentUser == null) return true;
+    if (_currentUser == null) return false; // 로그인하지 않은 경우 제한 없음
     
-    // 리셋이 필요한지 확인
+    // 리셋이 필요한지 확인하고 필요하면 자동 리셋
     if (_shouldResetMessageCount()) {
+      // 비동기 작업이므로 바로 리셋은 못하지만 false 반환
+      _resetMessageCount().then((_) {
+        debugPrint('✅ 일일 메시지 카운트 자동 리셋됨');
+      });
       return false;
     }
     

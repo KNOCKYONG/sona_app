@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBDAB8M2j6qL5V0Emg7WeIy3PionY5aKeQ',
-    appId: '1:874385422837:android:c01e4e00787c6076abc8bc',
+    appId: '1:874385422837:android:2c30f090413a7f7dabc8bc',
     messagingSenderId: '874385422837',
     projectId: 'sona-app-89598',
     authDomain: 'sona-app-89598.firebaseapp.com',
@@ -69,7 +69,7 @@ class DefaultFirebaseOptions {
     authDomain: 'sona-app-89598.firebaseapp.com',
     storageBucket: 'sona-app-89598.firebasestorage.app',
     iosClientId: '874385422837-iosapp1234567890.apps.googleusercontent.com',
-    iosBundleId: 'com.company.sonaapp',
+    iosBundleId: 'com.nohbrother.teamsona.chatapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -80,6 +80,6 @@ class DefaultFirebaseOptions {
     authDomain: 'sona-app-89598.firebaseapp.com',
     storageBucket: 'sona-app-89598.firebasestorage.app',
     iosClientId: '874385422837-macosapp1234567890.apps.googleusercontent.com',
-    iosBundleId: 'com.company.sonaapp',
+    iosBundleId: 'com.nohbrother.teamsona.chatapp',
   );
 }

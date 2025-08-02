@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(echo $OS)",
@@ -31,11 +32,7 @@
       "mcp__cloudflare-r2__r2_list_buckets",
       "WebFetch(domain:docs.flutter.dev)",
       "WebFetch(domain:127.0.0.1)",
-      "mcp__context7__resolve-library-id",
-      "WebFetch(domain:docs.flutter.dev)",
-      "mcp__serena-mcp__activate_project",
-      "mcp__serena-mcp__list_dir",
-      "mcp__serena-mcp__find_symbol"
+      "mcp__context7__resolve-library-id"
     ],
     "deny": []
   }

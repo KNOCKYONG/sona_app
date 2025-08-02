@@ -79,7 +79,9 @@ class FirebasePersonaService extends ChangeNotifier {
         'personality': personality,
         'photoUrls': photoUrls,
         'preferences': preferences,
-        'currentRelationship': RelationshipType.friend.name,
+        // TODO: RelationshipType 정의 후 주석 해제
+        // 'currentRelationship': RelationshipType.friend.name,
+        'currentRelationship': 'friend', // 임시로 문자열 사용
         'relationshipScore': 0,
         'isCasualSpeech': false,
         'gender': 'female', // 기본값

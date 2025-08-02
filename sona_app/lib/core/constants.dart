@@ -26,6 +26,8 @@ class AppConstants {
   static const int maxCacheSize = 50;
   static const int maxBatchSize = 500;
   static const int recentMessagesLimit = 10;
+  static const int dailyMessageLimit = 100;
+  static const int dailyMessageWarningThreshold = 10;
   
   // Token Limits
   static const int maxInputTokens = 3000;

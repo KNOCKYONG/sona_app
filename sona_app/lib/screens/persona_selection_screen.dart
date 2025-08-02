@@ -17,6 +17,7 @@ import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 import '../widgets/common/sona_logo.dart';
 import '../widgets/navigation/animated_action_button.dart';
+import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
 
 class PersonaSelectionScreen extends StatefulWidget {
@@ -1163,49 +1164,58 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         onPressed: () async {
                           if (isSuperLike) {
                             // Super like인 경우 여기서 매칭 처리
-                            setState(() => _isLoading = true);
+                            Navigator.of(context).pop(); // Close match dialog first
                             
-                            try {
-                              final personaService = Provider.of<PersonaService>(screenContext, listen: false);
-                              final authService = Provider.of<AuthService>(screenContext, listen: false);
-                              final purchaseService = Provider.of<PurchaseService>(screenContext, listen: false);
-                              
-                              final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
-                              
-                              // 하트 5개 차감
-                              final hasEnoughHearts = await purchaseService.useHearts(5);
-                              if (!hasEnoughHearts) {
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(screenContext).showSnackBar(
-                                  const SnackBar(content: Text('하트가 부족합니다.')),
-                                );
-                                setState(() => _isLoading = false);
-                                return;
-                              }
-                              
-                              // 매칭 처리
-                              final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: true);
-                              
-                              if (matchSuccess) {
-                                debugPrint('✅ Super like matching complete: ${persona.name}');
-                                Navigator.of(context).pop();
-                                await _navigateToChat(persona, screenContext, true);
-                              } else {
-                                debugPrint('❌ Super like matching failed: ${persona.name}');
-                                Navigator.of(context).pop();
-                                ScaffoldMessenger.of(screenContext).showSnackBar(
-                                  const SnackBar(content: Text('매칭에 실패했습니다.')),
-                                );
-                              }
-                            } catch (e) {
-                              debugPrint('❌ Error in super like matching: $e');
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(screenContext).showSnackBar(
-                                const SnackBar(content: Text('오류가 발생했습니다.')),
-                              );
-                            } finally {
-                              setState(() => _isLoading = false);
-                            }
+                            // Show heart usage dialog
+                            final shouldUseHeart = await HeartUsageDialog.show(
+                              context: screenContext,
+                              title: '슈퍼 라이크',
+                              description: '${persona.name}님에게 슈퍼 라이크를 보내시겠습니까?\n1,000 Like로 시작하게 됩니다!',
+                              heartCost: 5,
+                              onConfirm: () async {
+                                setState(() => _isLoading = true);
+                                
+                                try {
+                                  final personaService = Provider.of<PersonaService>(screenContext, listen: false);
+                                  final authService = Provider.of<AuthService>(screenContext, listen: false);
+                                  final purchaseService = Provider.of<PurchaseService>(screenContext, listen: false);
+                                  
+                                  final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+                                  
+                                  // 하트 5개 차감
+                                  final hasEnoughHearts = await purchaseService.useHearts(5);
+                                  if (!hasEnoughHearts) {
+                                    ScaffoldMessenger.of(screenContext).showSnackBar(
+                                      const SnackBar(content: Text('하트가 부족합니다.')),
+                                    );
+                                    setState(() => _isLoading = false);
+                                    return;
+                                  }
+                                  
+                                  // 매칭 처리
+                                  final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: true);
+                                  
+                                  if (matchSuccess) {
+                                    debugPrint('✅ Super like matching complete: ${persona.name}');
+                                    await _navigateToChat(persona, screenContext, true);
+                                  } else {
+                                    debugPrint('❌ Super like matching failed: ${persona.name}');
+                                    ScaffoldMessenger.of(screenContext).showSnackBar(
+                                      const SnackBar(content: Text('매칭에 실패했습니다.')),
+                                    );
+                                  }
+                                } catch (e) {
+                                  debugPrint('❌ Error in super like matching: $e');
+                                  ScaffoldMessenger.of(screenContext).showSnackBar(
+                                    const SnackBar(content: Text('오류가 발생했습니다.')),
+                                  );
+                                } finally {
+                                  setState(() => _isLoading = false);
+                                }
+                              },
+                              icon: Icons.star,
+                              additionalInfo: '슈퍼 라이크는 특별한 관심을 표현합니다',
+                            );
                           } else {
                             // 일반 like는 이미 매칭되어 있으므로 바로 채팅으로 이동
                             Navigator.of(context).pop();
@@ -1220,27 +1230,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                           ),
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         ),
-                        child: isSuperLike 
-                          ? FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.favorite, size: 14),
-                                  const SizedBox(width: 3),
-                                  const Text('5', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                                  const SizedBox(width: 6),
-                                  const Text(
-                                    '채팅하기',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : const Text(
-                              '채팅 시작',
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                            ),
+                        child: const Text(
+                          '채팅 시작',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
                       ),
                     ),
                   ],
@@ -1476,207 +1469,44 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       child: InkWell(
                         borderRadius: BorderRadius.circular(30),
                         onTap: () async {
-                      // 하트 차감 확인 다이얼로그 표시
-                      final shouldRefresh = await showDialog<bool>(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(24),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    const Color(0xFFFF6B9D).withOpacity(0.1),
-                                    const Color(0xFFFFC0CB).withOpacity(0.05),
-                                  ],
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // 애니메이션 하트 아이콘
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      gradient: const LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [Color(0xFFFF6B9D), Color(0xFFFF8FA3)],
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: const Color(0xFFFF6B9D).withOpacity(0.3),
-                                          blurRadius: 20,
-                                          offset: const Offset(0, 10),
-                                        ),
-                                      ],
+                          // 하트 차감 확인 다이얼로그 표시
+                          final shouldRefresh = await HeartUsageDialog.show(
+                            context: context,
+                            title: '새로운 만남을 원하시나요?',
+                            description: '이전에 스와이프한 페르소나들을\n다시 만날 수 있어요!',
+                            heartCost: 1,
+                            onConfirm: () async {
+                              // 하트 차감
+                              final purchaseService = Provider.of<PurchaseService>(context, listen: false);
+                              final hasEnoughHearts = await purchaseService.useHearts(1);
+                              
+                              if (hasEnoughHearts) {
+                                // 애니메이션 컨트롤러 정지
+                                _heartAnimationController.stop();
+                                _passAnimationController.stop();
+                                
+                                // 스와이프한 페르소나 초기화
+                                final personaService = Provider.of<PersonaService>(context, listen: false);
+                                await personaService.resetSwipedPersonas();
+                                
+                                // 페이지 새로고침
+                                if (mounted) {
+                                  Navigator.of(context).pushReplacementNamed('/persona-selection');
+                                }
+                              } else {
+                                // 하트 부족 메시지
+                                if (mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('하트가 부족합니다. 하트를 충전해주세요.'),
+                                      backgroundColor: Colors.red,
                                     ),
-                                    child: const Icon(
-                                      Icons.refresh,
-                                      color: Colors.white,
-                                      size: 40,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  
-                                  // 타이틀
-                                  Text(
-                                    '새로운 만남을 원하시나요?',
-                                    style: TextStyle(
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).brightness == Brightness.dark
-                                          ? Colors.white
-                                          : const Color(0xFF2D2D2D),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  
-                                  // 설명 텍스트
-                                  Text(
-                                    '이전에 스와이프한 페르소나들을\n다시 만날 수 있어요!',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Theme.of(context).brightness == Brightness.dark
-                                          ? Colors.grey[400]
-                                          : Colors.grey[600],
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-                                  
-                                  // 하트 비용 표시
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFFFF6B9D).withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                        color: const Color(0xFFFF6B9D).withOpacity(0.3),
-                                        width: 1,
-                                      ),
-                                    ),
-                                    child: const Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          Icons.favorite,
-                                          color: Color(0xFFFF6B9D),
-                                          size: 20,
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          '1개 필요',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xFFFF6B9D),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 32),
-                                  
-                                  // 버튼들
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: OutlinedButton(
-                                          onPressed: () => Navigator.of(context).pop(false),
-                                          style: OutlinedButton.styleFrom(
-                                            foregroundColor: Theme.of(context).brightness == Brightness.dark
-                                                ? Colors.grey[400]
-                                                : Colors.grey[600],
-                                            side: BorderSide(
-                                              color: Theme.of(context).brightness == Brightness.dark
-                                                  ? Colors.grey[700]!
-                                                  : Colors.grey[300]!,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(vertical: 14),
-                                          ),
-                                          child: const Text(
-                                            '다음에',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Expanded(
-                                        child: ElevatedButton(
-                                          onPressed: () => Navigator.of(context).pop(true),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: const Color(0xFFFF6B9D),
-                                            foregroundColor: Colors.white,
-                                            elevation: 0,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(25),
-                                            ),
-                                            padding: const EdgeInsets.symmetric(vertical: 14),
-                                          ),
-                                          child: const Text(
-                                            '새로고침',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                                  );
+                                }
+                              }
+                            },
+                            icon: Icons.refresh,
                           );
-                        },
-                      );
-
-                      if (shouldRefresh == true) {
-                        // 하트 차감
-                        final purchaseService = Provider.of<PurchaseService>(context, listen: false);
-                        final hasEnoughHearts = await purchaseService.useHearts(1);
-                        
-                        if (hasEnoughHearts) {
-                          // 애니메이션 컨트롤러 정지
-                          _heartAnimationController.stop();
-                          _passAnimationController.stop();
-                          
-                          // 스와이프한 페르소나 초기화
-                          await personaService.resetSwipedPersonas();
-                          
-                          // 페이지 새로고침
-                          if (mounted) {
-                            Navigator.of(context).pushReplacementNamed('/persona-selection');
-                          }
-                        } else {
-                          // 하트 부족 메시지
-                          if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('하트가 부족합니다. 하트를 충전해주세요.'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        }
-                      }
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),

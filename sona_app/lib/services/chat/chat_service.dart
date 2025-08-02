@@ -360,6 +360,32 @@ class ChatService extends BaseService {
     MessageType type = MessageType.text,
   }) async {
     try {
+      // Check daily message limit
+      if (_userService != null && _userService!.isDailyMessageLimitReached()) {
+        debugPrint('❌ Daily message limit reached for user: $userId');
+        return false;
+      }
+      // Check if user called persona by wrong name
+      final wrongNameDetected = _checkWrongName(content, persona.name);
+      if (wrongNameDetected) {
+        debugPrint('⚠️ Wrong name detected in message for ${persona.name}');
+        
+        // Deduct like score immediately
+        final currentLikes = await RelationScoreService.instance.getLikes(
+          userId: userId,
+          personaId: persona.id,
+        );
+        
+        await RelationScoreService.instance.updateLikes(
+          userId: userId,
+          personaId: persona.id,
+          likeChange: -10, // Deduct 10 points for wrong name
+          currentLikes: currentLikes,
+        );
+        
+        // Note: SnackBar will be shown from the UI layer instead
+      }
+      
       // Create user message
       final userMessage = Message(
         id: _uuid.v4(),
@@ -390,8 +416,8 @@ class ChatService extends BaseService {
       // 사용자 메시지 저장
       _queueMessageForSaving(userId, persona.id, userMessage);
 
-      // Queue the message for delayed AI response
-      _queueMessageForDelayedResponse(userId, persona, userMessage);
+      // Queue the message for delayed AI response (pass wrong name info)
+      _queueMessageForDelayedResponse(userId, persona, userMessage, wrongNameDetected: wrongNameDetected);
 
       return true;
     } catch (e) {
@@ -401,8 +427,8 @@ class ChatService extends BaseService {
   }
 
   /// Generate AI response using new orchestrator
-  Future<void> _generateAIResponse(String userId, Persona persona, String userMessage) async {
-    debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage');
+  Future<void> _generateAIResponse(String userId, Persona persona, String userMessage, {bool wrongNameDetected = false}) async {
+    debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage${wrongNameDetected ? " (WRONG NAME DETECTED)" : ""}');
     try {
       // Check if like score is 0 or below BEFORE marking as read
       final currentLikes = await RelationScoreService.instance.getLikes(
@@ -438,6 +464,34 @@ class ChatService extends BaseService {
         return;
       }
 
+      // Check if user called persona by wrong name
+      if (wrongNameDetected) {
+        debugPrint('🚨 Handling wrong name response for ${persona.name}');
+        
+        // Generate upset response about wrong name
+        final wrongNameResponses = [
+          '제 이름은 ${persona.name}예요... 😢',
+          '${persona.name}라고 불러주세요... 💔',
+          '아니에요, 저는 ${persona.name}인걸요... 😞',
+          '왜 제 이름을 잘못 부르시는 거예요? 저는 ${persona.name}예요... 😔',
+          '${persona.name}... 제 이름을 기억해주세요... 😭',
+        ];
+        
+        final aiResponseContent = wrongNameResponses[_random.nextInt(wrongNameResponses.length)];
+        final emotion = EmotionType.sad;
+        
+        // Send the upset response
+        await _sendSplitMessages(
+          content: aiResponseContent,
+          persona: persona,
+          userId: userId,
+          emotion: emotion,
+          scoreChange: -10, // Already deducted in sendMessage
+        );
+        
+        return;
+      }
+      
       // Check if user was rude and generate appropriate response
       final rudeCheck = _checkRudeMessage(userMessage);
       
@@ -532,6 +586,12 @@ class ChatService extends BaseService {
         emotion: response.emotion,
         scoreChange: finalScoreChange,
       );
+      
+      // Increment daily message count after successful response
+      if (_userService != null) {
+        await _userService!.incrementMessageCount();
+        debugPrint('✅ Daily message count incremented');
+      }
 
     } catch (e, stackTrace) {
       debugPrint('❌ Error generating AI response: $e');
@@ -783,6 +843,45 @@ class ChatService extends BaseService {
   
 
   // Helper methods remain the same but with optimizations...
+  
+  /// Check if user called persona by wrong name
+  bool _checkWrongName(String message, String correctName) {
+    // Common Korean name patterns to check
+    final commonWrongNames = [
+      '포키티', '포키', '포케티', '포켓티', // Common mistakes for any name
+      '소나', '손아', '소냐', '쏘나', // SONA app related mistakes
+      '님', '씨', '야', '아', // Name suffixes
+    ];
+    
+    // Extract the correct name without suffixes
+    final baseName = correctName.replaceAll(RegExp(r'[님씨야아]$'), '');
+    
+    // Check if message contains any name-like patterns
+    final namePattern = RegExp(r'(\S{2,4})(님|씨|야|아|이야|이|가|를|을|에게|한테)');
+    final matches = namePattern.allMatches(message);
+    
+    for (final match in matches) {
+      final calledName = match.group(1) ?? '';
+      
+      // If the called name is not the correct name or its base form
+      if (calledName.isNotEmpty && 
+          calledName != correctName && 
+          calledName != baseName &&
+          !correctName.contains(calledName) &&
+          !baseName.contains(calledName)) {
+        
+        // Check if it's a common wrong name or seems like a name
+        if (commonWrongNames.contains(calledName) || 
+            (calledName.length >= 2 && calledName.length <= 4)) {
+          debugPrint('🚨 Wrong name detected: "$calledName" (correct: "$correctName")');
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  }
+  
   String? _getCurrentUserId() => _currentUserId;
   
   
@@ -831,7 +930,7 @@ class ChatService extends BaseService {
   // _sendSplitMessages, etc. remain the same...
   
   /// Queue message for delayed AI response
-  void _queueMessageForDelayedResponse(String userId, Persona persona, Message userMessage) {
+  void _queueMessageForDelayedResponse(String userId, Persona persona, Message userMessage, {bool wrongNameDetected = false}) {
     final personaId = persona.id;
     
     // Initialize queue if needed
@@ -841,6 +940,11 @@ class ChatService extends BaseService {
     
     // Add message to queue
     _responseQueues[personaId]!.messages.add(userMessage);
+    
+    // Store wrong name detected flag
+    if (wrongNameDetected) {
+      _responseQueues[personaId]!.wrongNameDetected = true;
+    }
     
     // Cancel existing timer if any
     _responseDelayTimers[personaId]?.cancel();
@@ -869,9 +973,11 @@ class ChatService extends BaseService {
       return;
     }
     
-    // Get messages from queue
+    // Get messages from queue and wrong name flag
     final messagesToProcess = List<Message>.from(queue.messages);
+    final wrongNameDetected = queue.wrongNameDetected;
     queue.messages.clear();
+    queue.wrongNameDetected = false; // Reset flag
     
     // Check like score BEFORE marking as read
     final currentLikes = await RelationScoreService.instance.getLikes(
@@ -940,8 +1046,8 @@ class ChatService extends BaseService {
     final combinedContent = messagesToProcess.map((m) => m.content).join(' ');
     debugPrint('📝 Combined message content: $combinedContent');
     
-    // Generate AI response
-    await _generateAIResponse(userId, persona, combinedContent);
+    // Generate AI response (pass wrong name flag)
+    await _generateAIResponse(userId, persona, combinedContent, wrongNameDetected: wrongNameDetected);
     
     // Stop typing indicator
     _personaIsTyping[personaId] = false;
@@ -1923,6 +2029,7 @@ class _PendingMessage {
 class _ChatResponseQueue {
   final List<Message> messages = [];
   DateTime? lastMessageTime;
+  bool wrongNameDetected = false;
   
   _ChatResponseQueue();
 }

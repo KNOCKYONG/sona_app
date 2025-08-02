@@ -339,4 +339,102 @@ class UserService extends BaseService {
     
     return result ?? false;
   }
+
+  /// 일일 메시지 제한 관련 메서드들
+  
+  // 현재 남은 메시지 수 가져오기
+  int getRemainingMessages() {
+    if (_currentUser == null) return 0;
+    
+    // 리셋이 필요한지 확인
+    if (_shouldResetMessageCount()) {
+      return _currentUser!.dailyMessageLimit;
+    }
+    
+    return _currentUser!.dailyMessageLimit - _currentUser!.dailyMessageCount;
+  }
+  
+  // 일일 메시지 제한에 도달했는지 확인
+  bool isDailyMessageLimitReached() {
+    if (_currentUser == null) return true;
+    
+    // 리셋이 필요한지 확인
+    if (_shouldResetMessageCount()) {
+      return false;
+    }
+    
+    return _currentUser!.dailyMessageCount >= _currentUser!.dailyMessageLimit;
+  }
+  
+  // 메시지 카운트 증가
+  Future<void> incrementMessageCount() async {
+    if (_currentUser == null) return;
+    
+    await executeWithLoading(() async {
+      // 리셋이 필요한지 확인
+      if (_shouldResetMessageCount()) {
+        await _resetMessageCount();
+      }
+      
+      // 카운트 증가
+      await FirebaseHelper.user(_currentUser!.uid).update({
+        'dailyMessageCount': FieldValue.increment(1),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      
+      // 로컬 상태 업데이트
+      _currentUser = _currentUser!.copyWith(
+        dailyMessageCount: _currentUser!.dailyMessageCount + 1,
+      );
+      notifyListeners();
+    }, errorContext: 'incrementMessageCount');
+  }
+  
+  // 하트를 사용해서 메시지 카운트 리셋
+  Future<bool> resetMessageCountWithHeart() async {
+    if (_currentUser == null) return false;
+    
+    final result = await executeWithLoading<bool>(() async {
+      // 하트가 충분한지 확인 (PurchaseService에서 처리되므로 여기서는 리셋만)
+      await _resetMessageCount();
+      return true;
+    }, errorContext: 'resetMessageCountWithHeart');
+    
+    return result ?? false;
+  }
+  
+  // 메시지 카운트 리셋 (내부 메서드)
+  Future<void> _resetMessageCount() async {
+    if (_currentUser == null) return;
+    
+    final now = DateTime.now();
+    await FirebaseHelper.user(_currentUser!.uid).update({
+      'dailyMessageCount': 0,
+      'lastMessageCountReset': Timestamp.fromDate(now),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+    
+    // 로컬 상태 업데이트
+    _currentUser = _currentUser!.copyWith(
+      dailyMessageCount: 0,
+      lastMessageCountReset: now,
+    );
+    notifyListeners();
+  }
+  
+  // 메시지 카운트 리셋이 필요한지 확인 (한국 시간 기준 자정)
+  bool _shouldResetMessageCount() {
+    if (_currentUser == null || _currentUser!.lastMessageCountReset == null) {
+      return true;
+    }
+    
+    // 한국 시간대 (UTC+9) 기준으로 자정 체크
+    final now = DateTime.now().toUtc().add(const Duration(hours: 9));
+    final lastReset = _currentUser!.lastMessageCountReset!.toUtc().add(const Duration(hours: 9));
+    
+    // 날짜가 바뀌었으면 리셋 필요
+    return now.year != lastReset.year ||
+           now.month != lastReset.month ||
+           now.day != lastReset.day;
+  }
 }

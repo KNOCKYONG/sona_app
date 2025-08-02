@@ -3,9 +3,11 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/device_id_service.dart';
+import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/chat/chat_service.dart';
 import '../services/purchase/subscription_service.dart';
+import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
 import '../models/persona.dart';
@@ -13,6 +15,7 @@ import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
 import '../widgets/common/modern_emotion_picker.dart';
+import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
 
 /// Optimized ChatScreen with performance improvements:
@@ -214,8 +217,48 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
+    final userService = Provider.of<UserService>(context, listen: false);
+    final purchaseService = Provider.of<PurchaseService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     
+    // Check daily message limit first
+    if (userService.isDailyMessageLimitReached()) {
+      final shouldUseHeart = await HeartUsageDialog.show(
+        context: context,
+        title: '일일 메시지 한도 도달',
+        description: '오늘의 메시지 100개를 모두 사용하셨습니다.\n하트 1개를 사용하여 다시 100개의 메시지를 보낼 수 있습니다.',
+        heartCost: 1,
+        onConfirm: () async {
+          // Use heart to reset message count
+          final success = await purchaseService.useHearts(1);
+          if (success) {
+            await userService.resetMessageCountWithHeart();
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('메시지 한도가 리셋되었습니다!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('하트가 부족합니다'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          }
+        },
+        icon: Icons.message,
+      );
+      
+      if (!shouldUseHeart) {
+        return;
+      }
+    }
     
     _messageController.clear();
     
@@ -804,15 +847,26 @@ class _AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<PersonaService, AuthService>(
-      builder: (context, personaService, authService, child) {
+    return Consumer3<PersonaService, AuthService, UserService>(
+      builder: (context, personaService, authService, userService, child) {
         final persona = personaService.currentPersona;
         
         if (persona == null) {
           return const Text('페르소나를 선택해주세요');
         }
         
-        return _PersonaTitle(persona: persona);
+        return Row(
+          children: [
+            Expanded(
+              child: _PersonaTitle(persona: persona),
+            ),
+            // Show message limit indicator if 10 or fewer messages remain
+            if (userService.getRemainingMessages() <= 10)
+              _MessageLimitIndicator(
+                remainingMessages: userService.getRemainingMessages(),
+              ),
+          ],
+        );
       },
     );
   }
@@ -1043,6 +1097,91 @@ class _OnlineStatus extends StatelessWidget {
     return await RelationScoreService.instance.getLikes(
       userId: userId,
       personaId: persona.id,
+    );
+  }
+}
+
+class _MessageLimitIndicator extends StatelessWidget {
+  final int remainingMessages;
+  
+  const _MessageLimitIndicator({
+    required this.remainingMessages,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // Determine color based on remaining messages
+    Color indicatorColor;
+    if (remainingMessages <= 2) {
+      indicatorColor = Colors.red;
+    } else if (remainingMessages <= 5) {
+      indicatorColor = Colors.orange;
+    } else {
+      indicatorColor = Colors.green;
+    }
+    
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: indicatorColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: indicatorColor.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Battery-like icon showing fill level
+          Container(
+            width: 20,
+            height: 12,
+            decoration: BoxDecoration(
+              border: Border.all(color: indicatorColor, width: 1.5),
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: Stack(
+              children: [
+                // Battery fill
+                FractionallySizedBox(
+                  widthFactor: remainingMessages / 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: indicatorColor,
+                      borderRadius: BorderRadius.circular(1),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Battery tip
+          Container(
+            width: 2,
+            height: 6,
+            margin: const EdgeInsets.only(left: 1),
+            decoration: BoxDecoration(
+              color: indicatorColor,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(1),
+                bottomRight: Radius.circular(1),
+              ),
+            ),
+          ),
+          const SizedBox(width: 6),
+          // Remaining count
+          Text(
+            remainingMessages.toString(),
+            style: TextStyle(
+              color: indicatorColor,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

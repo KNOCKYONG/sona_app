@@ -22,6 +22,11 @@ class AppUser {
   final List<String>? preferredTopics; // 선호하는 대화 주제들
   final bool genderAll; // Gender All 체크박스 - 모든 성별 페르소나 보기
   final List<String> actionedPersonaIds; // 액션(좋아요, 슈퍼좋아요, 취소)한 페르소나 ID 목록
+  
+  // 일일 메시지 제한 관련 필드
+  final int dailyMessageCount; // 오늘 보낸 메시지 수
+  final DateTime? lastMessageCountReset; // 마지막 리셋 시간
+  final int dailyMessageLimit; // 일일 메시지 제한 (기본값: 100)
 
   AppUser({
     required this.uid,
@@ -43,6 +48,9 @@ class AppUser {
     this.preferredTopics,
     this.genderAll = false,
     List<String>? actionedPersonaIds,
+    this.dailyMessageCount = 0,
+    this.lastMessageCountReset,
+    this.dailyMessageLimit = 100,
   }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
@@ -78,6 +86,9 @@ class AppUser {
       'preferredTopics': preferredTopics,
       'genderAll': genderAll,
       'actionedPersonaIds': actionedPersonaIds,
+      'dailyMessageCount': dailyMessageCount,
+      'lastMessageCountReset': lastMessageCountReset != null ? Timestamp.fromDate(lastMessageCountReset!) : null,
+      'dailyMessageLimit': dailyMessageLimit,
     };
   }
 
@@ -114,6 +125,11 @@ class AppUser {
       actionedPersonaIds: data['actionedPersonaIds'] != null 
           ? List<String>.from(data['actionedPersonaIds'])
           : [],
+      dailyMessageCount: data['dailyMessageCount'] ?? 0,
+      lastMessageCountReset: data['lastMessageCountReset'] != null 
+          ? (data['lastMessageCountReset'] as Timestamp).toDate()
+          : null,
+      dailyMessageLimit: data['dailyMessageLimit'] ?? 100,
     );
   }
 
@@ -135,6 +151,9 @@ class AppUser {
     List<String>? preferredTopics,
     bool? genderAll,
     List<String>? actionedPersonaIds,
+    int? dailyMessageCount,
+    DateTime? lastMessageCountReset,
+    int? dailyMessageLimit,
   }) {
     return AppUser(
       uid: uid,
@@ -156,6 +175,9 @@ class AppUser {
       preferredTopics: preferredTopics ?? this.preferredTopics,
       genderAll: genderAll ?? this.genderAll,
       actionedPersonaIds: actionedPersonaIds ?? this.actionedPersonaIds,
+      dailyMessageCount: dailyMessageCount ?? this.dailyMessageCount,
+      lastMessageCountReset: lastMessageCountReset ?? this.lastMessageCountReset,
+      dailyMessageLimit: dailyMessageLimit ?? this.dailyMessageLimit,
     );
   }
 }

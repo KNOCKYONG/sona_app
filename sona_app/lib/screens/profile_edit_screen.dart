@@ -6,6 +6,7 @@ import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../theme/app_theme.dart';
 import '../utils/permission_helper.dart';
+import '../l10n/app_localizations.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -113,8 +114,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       }
       
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('프로필이 업데이트되었습니다'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.profileUpdated),
           backgroundColor: Colors.green,
         ),
       );
@@ -122,7 +123,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(userService.error ?? '프로필 업데이트 실패'),
+          content: Text(userService.error ?? AppLocalizations.of(context)!.profileUpdateFailed),
           backgroundColor: Colors.red,
         ),
       );
@@ -140,7 +141,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          '프로필 편집',
+          AppLocalizations.of(context)!.profileEdit,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -156,7 +157,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           TextButton(
             onPressed: userService.isLoading ? null : _saveProfile,
             child: Text(
-              '완료',
+              AppLocalizations.of(context)!.complete,
               style: TextStyle(
                 color: userService.isLoading 
                     ? Theme.of(context).textTheme.bodySmall?.color 
@@ -248,7 +249,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                '프로필 사진 변경',
+                AppLocalizations.of(context)!.changeProfilePhoto,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontSize: 14,
@@ -266,8 +267,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     TextFormField(
                       controller: _nicknameController,
                       decoration: InputDecoration(
-                        labelText: '닉네임',
-                        hintText: '2-10자',
+                        labelText: AppLocalizations.of(context)!.nicknameLabel,
+                        hintText: AppLocalizations.of(context)!.nicknameHint,
                         prefixIcon: const Icon(Icons.person_outline),
                         suffixIcon: _isCheckingNickname
                             ? const SizedBox(
@@ -296,13 +297,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       },
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return '닉네임을 입력해주세요';
+                          return AppLocalizations.of(context)!.enterNickname;
                         }
                         if (value.length < 3 || value.length > 10) {
-                          return '닉네임은 3-10자여야 합니다';
+                          return AppLocalizations.of(context)!.nicknameLengthError;
                         }
                         if (!_isNicknameAvailable) {
-                          return '이미 사용 중인 닉네임입니다';
+                          return AppLocalizations.of(context)!.nicknameInUse;
                         }
                         return null;
                       },
@@ -311,7 +312,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     
                     // 성별
                     Text(
-                      '성별',
+                      AppLocalizations.of(context)!.gender,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -323,7 +324,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       children: [
                         Expanded(
                           child: RadioListTile<String>(
-                            title: const Text('남성'),
+                            title: Text(AppLocalizations.of(context)!.male),
                             value: 'male',
                             groupValue: _selectedGender,
                             onChanged: (value) {
@@ -335,7 +336,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         ),
                         Expanded(
                           child: RadioListTile<String>(
-                            title: const Text('여성'),
+                            title: Text(AppLocalizations.of(context)!.female),
                             value: 'female',
                             groupValue: _selectedGender,
                             onChanged: (value) {
@@ -348,7 +349,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ],
                     ),
                     RadioListTile<String>(
-                      title: const Text('기타'),
+                      title: Text(AppLocalizations.of(context)!.other),
                       value: 'other',
                       groupValue: _selectedGender,
                       onChanged: (value) {
@@ -367,13 +368,13 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: CheckboxListTile(
-                        title: const Text(
-                          '모든 성별 페르소나 보기',
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                        title: Text(
+                          AppLocalizations.of(context)!.showAllGenderPersonas,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
-                        subtitle: const Text(
-                          '체크하지 않으면 이성 페르소나만 표시됩니다',
-                          style: TextStyle(fontSize: 12),
+                        subtitle: Text(
+                          AppLocalizations.of(context)!.onlyOppositeGenderNote,
+                          style: const TextStyle(fontSize: 12),
                         ),
                         value: _genderAll,
                         onChanged: (value) {
@@ -390,9 +391,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     // 자기소개
                     TextFormField(
                       controller: _introController,
-                      decoration: const InputDecoration(
-                        labelText: '자기소개',
-                        hintText: '간단한 자기소개를 작성해주세요',
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.selfIntroduction,
+                        hintText: AppLocalizations.of(context)!.selfIntroductionHint,
                         alignLabelWithHint: true,
                       ),
                       maxLines: 3,

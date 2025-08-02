@@ -6,6 +6,7 @@ import '../widgets/common/sona_logo.dart';
 import '../theme/app_theme.dart';
 import 'signup_screen.dart';
 import '../utils/network_utils.dart';
+import '../l10n/app_localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   late TabController _tabController;
   bool _isLoading = false;
   bool _obscurePassword = true;
-  
+
   // 로그인 상태 관리
   String? _currentError;
   bool _showPasswordReset = false;
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    
+
     // 입력 필드 변경 시 에러 상태 초기화
     _emailController.addListener(_clearErrorOnChange);
     _passwordController.addListener(_clearErrorOnChange);
@@ -61,19 +62,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     if (!_formKey.currentState!.validate()) return;
     
     debugPrint('📧 [LoginScreen] Starting email login for: ${_emailController.text.trim()}');
-    
+
     // 이전 상태 초기화
     setState(() {
       _currentError = null;
       _showPasswordReset = false;
     });
-    
+
     // 네트워크 연결 확인
     final isConnected = await NetworkUtils.isConnected();
     if (!isConnected && mounted) {
       debugPrint('❌ [LoginScreen] Network connection failed');
       setState(() {
-        _currentError = '인터넷 연결을 확인해주세요';
+        _currentError = AppLocalizations.of(context)!.checkInternetConnection;
       });
       return;
     }
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     } catch (e) {
       debugPrint('❌ [LoginScreen] Unexpected error during login: $e');
       if (mounted) {
-        _handleLoginError('로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}');
+        _handleLoginError('${AppLocalizations.of(context)!.unexpectedLoginError}: ${e.toString()}');
       }
     } finally {
       if (mounted) {
@@ -112,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     setState(() {
       _currentError = errorMessage;
       // 비밀번호 관련 오류이거나 등록되지 않은 이메일일 때 비밀번호 찾기 버튼 표시
-      _showPasswordReset = errorMessage.contains('비밀번호') || 
+      _showPasswordReset = errorMessage.contains('비밀번호') ||
                          errorMessage.contains('등록되지 않은') ||
                          errorMessage.contains('올바르지 않습니다') ||
                          errorMessage.contains('user-not-found') ||
@@ -123,19 +124,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   Future<void> _handleGoogleSignIn() async {
     debugPrint('🔵 [LoginScreen] Starting Google Sign-In...');
-    
+
     // 이전 상태 초기화
     setState(() {
       _currentError = null;
       _showPasswordReset = false;
     });
-    
+
     // 네트워크 연결 확인
     final isConnected = await NetworkUtils.isConnected();
     if (!isConnected && mounted) {
       debugPrint('❌ [LoginScreen] Network connection failed for Google Sign-In');
       setState(() {
-        _currentError = '인터넷 연결을 확인해주세요';
+        _currentError = AppLocalizations.of(context)!.checkInternetConnection;
       });
       return;
     }
@@ -165,16 +166,14 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         }
       } else if (mounted) {
         // 사용자가 취소했거나 다른 이유로 실패한 경우
-        final errorMessage = userService.error ?? '구글 로그인이 취소되었습니다.\n다시 시도해주세요.';
+        final errorMessage = userService.error ?? AppLocalizations.of(context)!.googleLoginCanceled;
         debugPrint('❌ [LoginScreen] Google Sign-In failed: $errorMessage');
         _handleLoginError(errorMessage);
       }
     } catch (e) {
       debugPrint('❌ [LoginScreen] Unexpected error during Google Sign-In: $e');
       if (mounted) {
-        final userService = Provider.of<UserService>(context, listen: false);
-        final errorMessage = userService.error ?? '구글 로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}';
-        _handleLoginError(errorMessage);
+        _showErrorSnackBar(AppLocalizations.of(context)!.googleLoginError);
       }
     } finally {
       if (mounted) {
@@ -203,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     
     if (email.isEmpty) {
       setState(() {
-        _currentError = '비밀번호를 재설정할 이메일을 입력해주세요';
+        _currentError = AppLocalizations.of(context)!.passwordResetEmailPrompt;
       });
       return;
     }
@@ -211,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     final authService = Provider.of<AuthService>(context, listen: false);
     if (!authService.isValidEmail(email)) {
       setState(() {
-        _currentError = '올바른 이메일 형식을 입력해주세요';
+        _currentError = AppLocalizations.of(context)!.invalidEmailFormatError;
       });
       return;
     }
@@ -220,9 +219,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
     try {
       final success = await authService.sendPasswordResetEmail(email);
-      
+
       if (success && mounted) {
-        _showSuccessSnackBar('비밀번호 재설정 이메일을 발송했습니다. 이메일을 확인해주세요.');
+        _showSuccessSnackBar(AppLocalizations.of(context)!.passwordResetEmailSent);
         setState(() {
           _currentError = null;
           _showPasswordReset = false;
@@ -279,9 +278,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   const SizedBox(height: 16),
                   
                   // 환영 메시지 통합
-                  const Text(
-                    'AI 페르소나를 만나보세요',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.meetAIPersonas,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -331,9 +330,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 ? AppTheme.darkPrimaryColor 
                                 : AppTheme.primaryColor,
                             indicatorWeight: 3,
-                            tabs: const [
-                              Tab(text: '로그인'),
-                              Tab(text: '회원가입'),
+                            tabs: [
+                              Tab(text: AppLocalizations.of(context)!.login),
+                              Tab(text: AppLocalizations.of(context)!.signUp),
                             ],
                           ),
                         ),
@@ -391,18 +390,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           // 이메일 입력
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: '이메일',
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.email,
               hintText: 'example@email.com',
-              prefixIcon: Icon(Icons.email_outlined),
+              prefixIcon: const Icon(Icons.email_outlined),
             ),
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '이메일을 입력해주세요';
+                return AppLocalizations.of(context)!.enterEmail;
               }
               if (!value.contains('@')) {
-                return '올바른 이메일 형식이 아닙니다';
+                return AppLocalizations.of(context)!.invalidEmailFormat;
               }
               return null;
             },
@@ -413,7 +412,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           TextFormField(
             controller: _passwordController,
             decoration: InputDecoration(
-              labelText: '비밀번호',
+              labelText: AppLocalizations.of(context)!.password,
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
                 icon: Icon(
@@ -430,7 +429,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             obscureText: _obscurePassword,
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '비밀번호를 입력해주세요';
+                return AppLocalizations.of(context)!.enterPassword;
               }
               return null;
             },
@@ -456,15 +455,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
                   )
-                : const Text(
-                    '로그인',
-                    style: TextStyle(
+                : Text(
+                    AppLocalizations.of(context)!.login,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
           ),
-          
+
           // 에러 메시지 표시
           if (_currentError != null) ...[
             const SizedBox(height: 12),
@@ -497,7 +496,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               ),
             ),
           ],
-          
+
           // 비밀번호 찾기 버튼
           if (_showPasswordReset) ...[
             const SizedBox(height: 12),
@@ -515,7 +514,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       )
                     : const Icon(Icons.email_outlined),
                 label: Text(
-                  _isPasswordResetLoading ? '이메일 발송 중...' : '비밀번호 찾기',
+                  _isPasswordResetLoading ? AppLocalizations.of(context)!.sendingEmail : AppLocalizations.of(context)!.forgotPassword,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -532,7 +531,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               ),
             ),
           ],
-          
+
           SizedBox(height: _showPasswordReset || _currentError != null ? 8 : 16),
           
           // 구분선
@@ -549,7 +548,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  '또는',
+                  AppLocalizations.of(context)!.or,
                   style: TextStyle(
                     color: Theme.of(context).brightness == Brightness.dark 
                         ? Colors.grey[400] 
@@ -609,7 +608,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Google로 로그인',
+                    AppLocalizations.of(context)!.loginWithGoogle,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -639,7 +638,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         ),
         const SizedBox(height: 16),
         Text(
-          'AI 페르소나와의 매칭을 위해\n간단한 정보가 필요해요',
+          AppLocalizations.of(context)!.simpleInfoRequired,
           style: TextStyle(
             fontSize: 16,
             color: Theme.of(context).brightness == Brightness.dark 
@@ -667,9 +666,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const Text(
-            '이메일로 시작하기',
-            style: TextStyle(
+          child: Text(
+            AppLocalizations.of(context)!.startWithEmail,
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -699,7 +698,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             ),
           ),
           label: Text(
-            'Google로 시작하기',
+            AppLocalizations.of(context)!.startWithGoogle,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,

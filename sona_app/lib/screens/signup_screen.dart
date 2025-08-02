@@ -10,6 +10,7 @@ import '../models/app_user.dart';
 import '../theme/app_theme.dart';
 import '../widgets/auth/terms_agreement_widget.dart';
 import '../utils/permission_helper.dart';
+import '../l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isGoogleSignUp;
@@ -46,6 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   // 새로운 필드들
   String? _selectedPurpose;
+  List<String> _selectedPersonaTypes = [];
   List<String> _selectedPreferredMbti = [];
   String _communicationStyle = 'adaptive'; // 기본값: 적응형
   List<String> _selectedPreferredTopics = [];
@@ -123,28 +125,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
     
     if (_selectedGender == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('성별을 선택해주세요')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.selectGender)),
       );
       return;
     }
     
     if (_selectedBirth == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('생년월일을 선택해주세요')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.selectBirthDate)),
       );
       return;
     }
     
     if (_selectedInterests.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('관심사를 최소 1개 이상 선택해주세요')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.selectAtLeastOneInterest)),
       );
       return;
     }
     
     if (!_agreedToTerms || !_agreedToPrivacy) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('필수 약관에 동의해주세요')),
+        SnackBar(content: Text(AppLocalizations.of(context)!.requiredTermsAgreement)),
       );
       return;
     }
@@ -165,6 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
+        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
@@ -172,7 +175,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+        Navigator.pushReplacementNamed(context, '/main');
       }
     } else {
       // 이메일/비밀번호 회원가입
@@ -190,6 +193,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
+        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
         communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
@@ -197,7 +201,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
       
       if (user != null && mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+        Navigator.pushReplacementNamed(context, '/main');
       }
     }
     
@@ -229,9 +233,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 4: // 관심사 페이지
         canProceed = _validateInterests();
         break;
+      case 5: // 선호 주제 페이지
+        canProceed = _validateTopics();
+        break;
     }
     
-    if (canProceed && _currentPage < 5) {
+    if (canProceed && _currentPage < 6) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -244,36 +251,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!widget.isGoogleSignUp) {
       // 이메일 검사
       if (_emailController.text.isEmpty) {
-        _showErrorSnackBar('이메일을 입력해주세요');
+        _showErrorSnackBar(AppLocalizations.of(context)!.enterEmail);
         return false;
       }
       if (!_emailController.text.contains('@')) {
-        _showErrorSnackBar('올바른 이메일 형식이 아닙니다');
+        _showErrorSnackBar(AppLocalizations.of(context)!.invalidEmailFormat);
         return false;
       }
       
       // 비밀번호 검사
       if (_passwordController.text.isEmpty) {
-        _showErrorSnackBar('비밀번호를 입력해주세요');
+        _showErrorSnackBar(AppLocalizations.of(context)!.enterPassword);
         return false;
       }
       if (_passwordController.text.length < 6) {
-        _showErrorSnackBar('비밀번호는 6자 이상이어야 합니다');
+        _showErrorSnackBar(AppLocalizations.of(context)!.passwordTooShort);
         return false;
       }
     }
     
     // 닉네임 검사
     if (_nicknameController.text.isEmpty) {
-      _showErrorSnackBar('닉네임을 입력해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.enterNickname);
       return false;
     }
-    if (_nicknameController.text.length < 3 || _nicknameController.text.length > 10) {
-      _showErrorSnackBar('닉네임은 3-10자여야 합니다');
+    if (_nicknameController.text.length < 2 || _nicknameController.text.length > 10) {
+      _showErrorSnackBar(AppLocalizations.of(context)!.nicknameLengthError);
       return false;
     }
     if (!_isNicknameAvailable) {
-      _showErrorSnackBar('이미 사용 중인 닉네임입니다');
+      _showErrorSnackBar(AppLocalizations.of(context)!.nicknameAlreadyUsed);
       return false;
     }
     
@@ -285,7 +292,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     
     // 생년월일 검사 (필수)
     if (_selectedBirth == null) {
-      _showErrorSnackBar('생년월일을 선택해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.selectBirthDate);
       return false;
     }
     
@@ -301,7 +308,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   bool _validateInterests() {
     if (_selectedInterests.isEmpty) {
-      _showErrorSnackBar('관심사를 최소 1개 이상 선택해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.selectAtLeastOneInterest);
       return false;
     }
     return true;
@@ -309,20 +316,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   bool _validatePurpose() {
     if (_selectedPurpose == null) {
-      _showErrorSnackBar('사용 목적을 선택해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.selectPurpose);
       return false;
     }
     return true;
   }
   
+  bool _validateTopics() {
+    // 선택사항이므로 항상 true
+    return true;
+  }
   
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
-      _showErrorSnackBar('서비스 이용약관에 동의해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.serviceTermsAgreement);
       return false;
     }
     if (!_agreedToPrivacy) {
-      _showErrorSnackBar('개인정보 처리방침에 동의해주세요');
+      _showErrorSnackBar(AppLocalizations.of(context)!.privacyPolicyAgreement);
       return false;
     }
     return true;
@@ -367,7 +378,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 4: // 관심사 페이지
         return _selectedInterests.isNotEmpty;
         
-      case 5: // 약관 동의 페이지
+      case 5: // 선호 주제 페이지
+        return true; // 선택사항이므로 항상 true
+        
+      case 6: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
         
       default:
@@ -387,10 +401,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final userService = context.watch<UserService>();
-    
+    final localizations = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('회원가입'),
+        title: Text(localizations.signup),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -401,8 +416,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 6,
-                backgroundColor: Theme.of(context).dividerColor,
+                value: (_currentPage + 1) / 7,
+                backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
                 ),
@@ -421,9 +436,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     _buildBasicInfoPage(),
                     _buildProfileInfoPage(),
-                    _buildPurposePage(),
+                    _buildPurposePage(), // 새로운 페이지
                     _buildPreferencePage(),
                     _buildInterestsPage(),
+                    _buildTopicsPage(), // 새로운 페이지
                     _buildTermsAgreementPage(),
                   ],
                 ),
@@ -438,29 +454,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (_currentPage > 0)
                       TextButton(
                         onPressed: _previousPage,
-                        child: const Text('이전'),
+                        child: Text(AppLocalizations.of(context)!.previous),
                       )
                     else
                       const SizedBox(width: 60),
                     
-                    if (_currentPage < 5)
+                    if (_currentPage < 6)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: _canProceedToNextPage() 
                               ? AppTheme.primaryColor 
-                              : Theme.of(context).disabledColor,
+                              : Colors.grey[300],
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
                             vertical: 12,
                           ),
                         ),
                         child: Text(
-                          '다음',
+                          localizations.next,
                           style: TextStyle(
                             color: _canProceedToNextPage() 
                                 ? Colors.white 
-                                : Theme.of(context).textTheme.bodySmall?.color,
+                                : Colors.grey[600],
                           ),
                         ),
                       )
@@ -485,7 +501,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 ),
                               )
-                            : const Text('가입완료'),
+                            : Text(AppLocalizations.of(context)!.completeSignup),
                       ),
                   ],
                 ),
@@ -498,22 +514,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildBasicInfoPage() {
+    final localizations = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '기본 정보',
-            style: TextStyle(
+          Text(
+            localizations.basicInfo,
+            style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            '계정 생성을 위한 기본 정보를 입력해주세요',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+            AppLocalizations.of(context)!.basicInfoDescription,
+            style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
           
@@ -521,18 +538,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if (!widget.isGoogleSignUp) ...[
             TextFormField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: '이메일 *',
-                hintText: 'example@email.com',
+              decoration: InputDecoration(
+                labelText: localizations.emailRequired,
+                hintText: localizations.emailHint,
                 prefixIcon: Icon(Icons.email_outlined),
               ),
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return '이메일을 입력해주세요';
+                  return localizations.enterEmail;
                 }
                 if (!value.contains('@')) {
-                  return '올바른 이메일 형식이 아닙니다';
+                  return localizations.invalidEmailFormat;
                 }
                 return null;
               },
@@ -541,18 +558,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             
             TextFormField(
               controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: '비밀번호 *',
-                hintText: '6자 이상',
+              decoration: InputDecoration(
+                labelText: localizations.passwordRequired,
+                hintText: localizations.passwordHint,
                 prefixIcon: Icon(Icons.lock_outline),
               ),
               obscureText: true,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return '비밀번호를 입력해주세요';
+                  return localizations.enterPassword;
                 }
                 if (value.length < 6) {
-                  return '비밀번호는 6자 이상이어야 합니다';
+                  return localizations.passwordTooShort;
                 }
                 return null;
               },
@@ -564,8 +581,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TextFormField(
             controller: _nicknameController,
             decoration: InputDecoration(
-              labelText: '닉네임 *',
-              hintText: '3-10자',
+              labelText: AppLocalizations.of(context)!.nicknameLabel,
+              hintText: AppLocalizations.of(context)!.nicknameHint,
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
                   ? const SizedBox(
@@ -600,16 +617,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return;
               }
               
-              // 특수문자 체크
-              final validNickname = RegExp(r'^[가-힣a-zA-Z0-9]+$');
-              if (!validNickname.hasMatch(value)) {
-                setState(() {
-                  _isNicknameAvailable = false;
-                  _isCheckingNickname = false;
-                });
-                return;
-              }
-              
               // 500ms 후에 중복 확인
               setState(() {
                 _isCheckingNickname = true;
@@ -621,54 +628,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return '닉네임을 입력해주세요';
+                return localizations.enterNickname;
               }
-              if (value.length < 3 || value.length > 10) {
-                return '닉네임은 3-10자여야 합니다';
-              }
-              final validNickname = RegExp(r'^[가-힣a-zA-Z0-9]+$');
-              if (!validNickname.hasMatch(value)) {
-                return '한글, 영문, 숫자만 사용 가능합니다';
+              if (value.length < 2 || value.length > 10) {
+                return AppLocalizations.of(context)!.nicknameLengthError;
               }
               if (!_isNicknameAvailable) {
-                return '이미 사용 중인 닉네임입니다';
+                return localizations.nicknameAlreadyUsed;
               }
               return null;
             },
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.info_outline, size: 16, color: Theme.of(context).textTheme.bodySmall?.color),
-                    const SizedBox(width: 4),
-                    Text(
-                      '닉네임 사용 규칙',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '• 3-10자의 한글, 영문, 숫자만 사용 가능\n'
-                  '• 특수문자 및 공백 사용 불가\n'
-                  '• 중복된 닉네임은 사용할 수 없습니다',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
@@ -676,13 +645,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildProfileInfoPage() {
+    final localizations = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '프로필 정보',
+          Text(
+            AppLocalizations.of(context)!.profileInfo,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -690,8 +660,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            '프로필 사진과 기본 정보를 입력해주세요',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+            AppLocalizations.of(context)!.profileInfoDescription,
+            style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
           
@@ -704,7 +674,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 height: 120,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.surfaceVariant,
+                  color: Colors.grey[200],
                   image: _profileImage != null
                       ? DecorationImage(
                           image: FileImage(_profileImage!),
@@ -716,10 +686,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ? Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.camera_alt, size: 40, color: Theme.of(context).textTheme.bodySmall?.color),
+                          Icon(Icons.camera_alt, size: 40, color: Colors.grey),
                           Text(
-                            '프로필 사진',
-                            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12),
+                            AppLocalizations.of(context)!.profilePhoto,
+                            style: TextStyle(color: Colors.grey, fontSize: 12),
                           ),
                         ],
                       )
@@ -730,20 +700,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 8),
           Center(
             child: Text(
-              '선택사항',
-              style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color, fontSize: 12),
+              AppLocalizations.of(context)!.optional,
+              style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ),
           const SizedBox(height: 32),
           
           // Gender
-          const Text('성별 *', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(localizations.genderRequired, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
             children: [
               Expanded(
                 child: RadioListTile<String>(
-                  title: const Text('남성'),
+                  title: Text(localizations.male),
                   value: 'male',
                   groupValue: _selectedGender,
                   onChanged: (value) {
@@ -755,7 +725,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
               Expanded(
                 child: RadioListTile<String>(
-                  title: const Text('여성'),
+                  title: Text(localizations.female),
                   value: 'female',
                   groupValue: _selectedGender,
                   onChanged: (value) {
@@ -768,7 +738,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
           RadioListTile<String>(
-            title: const Text('기타'),
+            title: Text(localizations.other),
             value: 'other',
             groupValue: _selectedGender,
             onChanged: (value) {
@@ -780,15 +750,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 24),
           
           // Birth date
-          const Text('생년월일 *', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(localizations.birthDateRequired, style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
             children: [
               // 년도 드롭다운
               Expanded(
                 child: DropdownButtonFormField<int>(
-                  decoration: const InputDecoration(
-                    labelText: '년',
+                  decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.year,
                     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedYear,
@@ -818,8 +788,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // 월 드롭다운
               Expanded(
                 child: DropdownButtonFormField<int>(
-                  decoration: const InputDecoration(
-                    labelText: '월',
+                  decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.month,
                     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedMonth,
@@ -846,8 +816,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // 일 드롭다운
               Expanded(
                 child: DropdownButtonFormField<int>(
-                  decoration: const InputDecoration(
-                    labelText: '일',
+                  decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.day,
                     contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedDay,
@@ -872,9 +842,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           // Introduction
           TextFormField(
             controller: _introController,
-            decoration: const InputDecoration(
-              labelText: '자기소개',
-              hintText: '간단한 자기소개를 작성해주세요 (선택)',
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context)!.selfIntroduction,
+              hintText: AppLocalizations.of(context)!.selfIntroductionHint,
               alignLabelWithHint: true,
             ),
             maxLines: 3,
@@ -886,13 +856,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildPreferencePage() {
+    final localizations = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '선호 설정',
+          Text(
+            AppLocalizations.of(context)!.preferenceSettings,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -900,20 +871,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            'AI 페르소나 매칭을 위한 선호도를 설정해주세요',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+            AppLocalizations.of(context)!.aiPersonaPreferenceDescription,
+            style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
           
           // Gender All checkbox
-          const Text(
-            '페르소나 성별 선호',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            localizations.personaGenderPreference,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           CheckboxListTile(
-            title: const Text('모든 성별 페르소나 보기'),
-            subtitle: const Text('체크하지 않으면 이성 페르소나만 표시됩니다'),
+            title: Text(localizations.showAllGenders),
+            subtitle: Text(localizations.showOppositeGenderOnly),
             value: _genderAll,
             onChanged: (value) {
               setState(() {
@@ -925,13 +896,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 24),
           
           // Preferred age range
-          const Text(
-            '선호하는 페르소나 나이 범위 *',
+          Text(
+            AppLocalizations.of(context)!.preferredPersonaAgeRange,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
-            '${_preferredAgeRange.start.toInt()}세 ~ ${_preferredAgeRange.end.toInt()}세',
+            localizations.ageRange(_preferredAgeRange.start.toInt(), _preferredAgeRange.end.toInt()),
             style: const TextStyle(fontSize: 16),
           ),
           RangeSlider(
@@ -949,10 +920,332 @@ class _SignUpScreenState extends State<SignUpScreen> {
               });
             },
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPurposePage() {
+    final localizations = AppLocalizations.of(context)!;
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            localizations.usagePurpose,
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            AppLocalizations.of(context)!.sonaUsagePurpose,
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 32),
+          
+          ..._buildPurposeOptions(),
+          
+          const SizedBox(height: 32),
+          
+          Text(
+            AppLocalizations.of(context)!.preferredPersonaType,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [
+              _buildPersonaTypeChip('normal', AppLocalizations.of(context)!.generalPersona),
+              _buildPersonaTypeChip('expert', AppLocalizations.of(context)!.expertPersona),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildPersonaTypeChip(String type, String label) {
+    final isSelected = _selectedPersonaTypes.contains(type);
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (selected) {
+        setState(() {
+          if (selected) {
+            _selectedPersonaTypes.add(type);
+          } else {
+            _selectedPersonaTypes.remove(type);
+          }
+        });
+      },
+      selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+      checkmarkColor: AppTheme.primaryColor,
+    );
+  }
+  
+  List<Widget> _buildPurposeOptions() {
+    final localizations = AppLocalizations.of(context)!;
+    final purposes = [
+      {
+        'key': 'friendship',
+        'title': localizations.makeFriends,
+        'icon': Icons.people,
+      },
+      {
+        'key': 'dating',
+        'title': localizations.emotionalConnection,
+        'icon': Icons.favorite,
+      },
+      {
+        'key': 'entertainment',
+        'title': localizations.entertainmentFun,
+        'icon': Icons.theater_comedy,
+      },
+    ];
+    
+    return purposes.map((purpose) {
+      final key = purpose['key'] as String;
+      final title = purpose['title'] as String;
+      final icon = purpose['icon'] as IconData;
+      
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _selectedPurpose = key;
+            });
+          },
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: _selectedPurpose == key 
+                    ? AppTheme.primaryColor 
+                    : Colors.grey[300]!,
+                width: _selectedPurpose == key ? 2 : 1,
+              ),
+              borderRadius: BorderRadius.circular(12),
+              color: _selectedPurpose == key 
+                  ? AppTheme.primaryColor.withOpacity(0.05)
+                  : null,
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  icon,
+                  size: 32,
+                  color: _selectedPurpose == key 
+                      ? AppTheme.primaryColor 
+                      : Colors.grey[600],
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: _selectedPurpose == key 
+                              ? AppTheme.primaryColor 
+                              : Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        _getPurposeDescription(key),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (_selectedPurpose == key)
+                  const Icon(
+                    Icons.check_circle,
+                    color: AppTheme.primaryColor,
+                  ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }).toList();
+  }
+  
+  IconData _getPurposeIcon(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return Icons.people;
+      case 'dating':
+        return Icons.favorite;
+      case 'counseling':
+        return Icons.psychology;
+      case 'entertainment':
+        return Icons.theater_comedy;
+      default:
+        return Icons.chat;
+    }
+  }
+  
+  String _getPurposeDescription(String purpose) {
+    switch (purpose) {
+      case 'friendship':
+        return AppLocalizations.of(context)!.friendshipDescription;
+      case 'dating':
+        return AppLocalizations.of(context)!.datingDescription;
+      case 'counseling':
+        return AppLocalizations.of(context)!.counselingDescription;
+      case 'entertainment':
+        return AppLocalizations.of(context)!.entertainmentDescription;
+      default:
+        return '';
+    }
+  }
+
+  List<Map<String, String>> _getLocalizedInterests() {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      {'key': 'gaming', 'title': localizations.gaming},
+      {'key': 'movies', 'title': localizations.movies},
+      {'key': 'music', 'title': localizations.music},
+      {'key': 'travel', 'title': localizations.travel},
+      {'key': 'sports', 'title': localizations.sports},
+      {'key': 'reading', 'title': localizations.reading},
+      {'key': 'cooking', 'title': localizations.cooking},
+      {'key': 'photography', 'title': localizations.photography},
+      {'key': 'art', 'title': localizations.art},
+      {'key': 'fashion', 'title': localizations.fashion},
+      {'key': 'pets', 'title': localizations.pets},
+      {'key': 'technology', 'title': localizations.technology},
+    ];
+  }
+  
+  List<Map<String, String>> _getLocalizedTopics() {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      {'key': 'daily_chat', 'title': localizations.dailyChat},
+      {'key': 'dating_advice', 'title': localizations.datingAdvice},
+      {'key': 'hobby_talk', 'title': localizations.hobbyTalk},
+      {'key': 'emotional_support', 'title': localizations.emotionalSupport},
+      {'key': 'life_advice', 'title': localizations.lifeAdvice},
+      {'key': 'fun_chat', 'title': localizations.funChat},
+      {'key': 'deep_talk', 'title': localizations.deepTalk},
+      {'key': 'light_talk', 'title': localizations.lightTalk},
+    ];
+  }
+  
+  Widget _buildInterestsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.interests,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            AppLocalizations.of(context)!.selectInterests,
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+          
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _getLocalizedInterests().map((interest) {
+              final key = interest['key'] as String;
+              final title = interest['title'] as String;
+              final isSelected = _selectedInterests.contains(key);
+              return FilterChip(
+                label: Text(title),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedInterests.add(key);
+                    } else {
+                      _selectedInterests.remove(key);
+                    }
+                  });
+                },
+                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                checkmarkColor: AppTheme.primaryColor,
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTopicsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            AppLocalizations.of(context)!.preferredTopics,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            AppLocalizations.of(context)!.whatTopicsToTalk,
+            style: TextStyle(color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+          
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _getLocalizedTopics().map((topic) {
+              final key = topic['key'] as String;
+              final title = topic['title'] as String;
+              final isSelected = _selectedPreferredTopics.contains(key);
+              return FilterChip(
+                label: Text(title),
+                selected: isSelected,
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedPreferredTopics.add(key);
+                    } else {
+                      _selectedPreferredTopics.remove(key);
+                    }
+                  });
+                },
+                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
+                checkmarkColor: AppTheme.primaryColor,
+              );
+            }).toList(),
+          ),
+          
           const SizedBox(height: 40),
           
-          const Text(
-            '선호하는 대화 스타일',
+          Text(
+            AppLocalizations.of(context)!.preferredConversationStyle,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -963,8 +1256,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Column(
             children: [
               RadioListTile<String>(
-                title: const Text('편안하고 캐주얼한 대화'),
-                subtitle: const Text('친구처럼 편하게 대화해요'),
+                title: Text(AppLocalizations.of(context)!.casualConversation),
+                subtitle: Text(AppLocalizations.of(context)!.casualConversationDesc),
                 value: 'casual',
                 groupValue: _communicationStyle,
                 onChanged: (value) {
@@ -974,8 +1267,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               RadioListTile<String>(
-                title: const Text('정중하고 포멀한 대화'),
-                subtitle: const Text('존댓말로 예의 바르게 대화해요'),
+                title: Text(AppLocalizations.of(context)!.formalConversation),
+                subtitle: Text(AppLocalizations.of(context)!.formalConversationDesc),
                 value: 'formal',
                 groupValue: _communicationStyle,
                 onChanged: (value) {
@@ -985,8 +1278,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 },
               ),
               RadioListTile<String>(
-                title: const Text('상황에 맞게 조절'),
-                subtitle: const Text('관계가 발전함에 따라 자연스럽게 변해요'),
+                title: Text(AppLocalizations.of(context)!.adaptiveConversation),
+                subtitle: Text(AppLocalizations.of(context)!.adaptiveConversationDesc),
                 value: 'adaptive',
                 groupValue: _communicationStyle,
                 onChanged: (value) {
@@ -1000,8 +1293,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           
           const SizedBox(height: 32),
           
-          const Text(
-            '선호하는 MBTI (선택사항)',
+          Text(
+            AppLocalizations.of(context)!.preferredMbti,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -1009,10 +1302,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            '특정 MBTI 유형의 페르소나를 선호하신다면 선택해주세요',
+            AppLocalizations.of(context)!.selectPreferredMbti,
             style: TextStyle(
               fontSize: 14,
-              color: Theme.of(context).textTheme.bodySmall?.color,
+              color: Colors.grey,
             ),
           ),
           const SizedBox(height: 16),
@@ -1043,180 +1336,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-
-  Widget _buildPurposePage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '사용 목적',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'SONA를 사용하시는 목적을 선택해주세요',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
-          ),
-          const SizedBox(height: 32),
-          
-          ...PurposeOptions.purposes.entries.map((entry) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16),
-              child: InkWell(
-                onTap: () {
-                  setState(() {
-                    _selectedPurpose = entry.key;
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: _selectedPurpose == entry.key 
-                          ? AppTheme.primaryColor 
-                          : Theme.of(context).dividerColor,
-                      width: _selectedPurpose == entry.key ? 2 : 1,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    color: _selectedPurpose == entry.key 
-                        ? AppTheme.primaryColor.withOpacity(0.05)
-                        : null,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        _getPurposeIcon(entry.key),
-                        size: 32,
-                        color: _selectedPurpose == entry.key 
-                            ? AppTheme.primaryColor 
-                            : Theme.of(context).textTheme.bodySmall?.color,
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              entry.value,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: _selectedPurpose == entry.key 
-                                    ? AppTheme.primaryColor 
-                                    : Theme.of(context).textTheme.titleLarge?.color,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _getPurposeDescription(entry.key),
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Theme.of(context).textTheme.bodySmall?.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (_selectedPurpose == entry.key)
-                        const Icon(
-                          Icons.check_circle,
-                          color: AppTheme.primaryColor,
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-          
-        ],
-      ),
-    );
-  }
-  
-  
-  IconData _getPurposeIcon(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return Icons.people;
-      case 'dating':
-        return Icons.favorite;
-      case 'counseling':
-        return Icons.psychology;
-      case 'entertainment':
-        return Icons.theater_comedy;
-      default:
-        return Icons.chat;
-    }
-  }
-  
-  String _getPurposeDescription(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return '새로운 친구를 만나고 대화를 나누고 싶어요';
-      case 'dating':
-        return '연애 감정을 느끼며 로맨틱한 관계를 원해요';
-      case 'counseling':
-        return '전문가의 조언과 상담이 필요해요';
-      case 'entertainment':
-        return '재미있는 대화와 즐거운 시간을 보내고 싶어요';
-      default:
-        return '';
-    }
-  }
-
-  Widget _buildInterestsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '관심사',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            '관심사를 선택해주세요 (최소 1개)',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
-          ),
-          const SizedBox(height: 24),
-          
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: InterestOptions.allInterests.map((interest) {
-              final isSelected = _selectedInterests.contains(interest);
-              return FilterChip(
-                label: Text(interest),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedInterests.add(interest);
-                    } else {
-                      _selectedInterests.remove(interest);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-  
   
   Widget _buildTermsAgreementPage() {
     return SingleChildScrollView(
@@ -1224,8 +1343,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '약관 동의',
+          Text(
+            AppLocalizations.of(context)!.termsAgreement,
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -1233,8 +1352,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            '서비스 이용을 위한 약관에 동의해주세요',
-            style: TextStyle(color: Theme.of(context).textTheme.bodySmall?.color),
+            AppLocalizations.of(context)!.termsAgreementDescription,
+            style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
           

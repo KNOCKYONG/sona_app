@@ -57,6 +57,8 @@ class AppConstants {
   static const String deviceIdKey = 'device_id';
   static const String swipedPersonasKey = 'swiped_personas';
   static const String lastSyncKey = 'last_sync';
+  static const String languageCodeKey = 'language_code';
+  static const String useSystemLanguageKey = 'use_system_language';
   static const String cachedUserKey = 'cached_user';
   static const String cachedSubscriptionKey = 'cached_subscription';
   

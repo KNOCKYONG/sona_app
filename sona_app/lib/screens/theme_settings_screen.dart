@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/theme/theme_service.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          '테마 설정',
+          localizations.themeSettings,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -52,7 +55,7 @@ class ThemeSettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '테마를 선택하세요',
+                      localizations.selectTheme,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -61,7 +64,7 @@ class ThemeSettingsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '앱의 외관을 원하는 대로 설정할 수 있습니다',
+                      localizations.themeDescription,
                       style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).textTheme.bodySmall?.color,
@@ -74,8 +77,8 @@ class ThemeSettingsScreen extends StatelessWidget {
               _buildThemeOption(
                 context: context,
                 icon: Icons.brightness_auto,
-                title: '시스템 설정 따르기',
-                subtitle: '기기의 다크 모드 설정에 따라 자동으로 변경됩니다',
+                title: localizations.systemTheme,
+                subtitle: localizations.systemThemeDesc,
                 value: themeService.currentTheme == ThemeType.system,
                 onTap: () => themeService.setTheme(ThemeType.system),
               ),
@@ -83,8 +86,8 @@ class ThemeSettingsScreen extends StatelessWidget {
               _buildThemeOption(
                 context: context,
                 icon: Icons.light_mode,
-                title: '라이트 모드',
-                subtitle: '밝은 테마를 사용합니다',
+                title: localizations.lightTheme,
+                subtitle: localizations.lightThemeDesc,
                 value: themeService.currentTheme == ThemeType.light,
                 onTap: () => themeService.setTheme(ThemeType.light),
               ),
@@ -92,8 +95,8 @@ class ThemeSettingsScreen extends StatelessWidget {
               _buildThemeOption(
                 context: context,
                 icon: Icons.dark_mode,
-                title: '다크 모드',
-                subtitle: '어두운 테마를 사용합니다',
+                title: localizations.darkTheme,
+                subtitle: localizations.darkThemeDesc,
                 value: themeService.currentTheme == ThemeType.dark,
                 onTap: () => themeService.setTheme(ThemeType.dark),
               ),
@@ -116,7 +119,7 @@ class ThemeSettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '미리보기',
+                      localizations.preview,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -134,7 +137,7 @@ class ThemeSettingsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            '안녕하세요! 😊',
+                            localizations.helloEmoji,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -152,9 +155,9 @@ class ThemeSettingsScreen extends StatelessWidget {
                             gradient: AppTheme.primaryGradient,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: const Text(
-                            '반가워요!',
-                            style: TextStyle(
+                          child: Text(
+                            localizations.niceToMeetYou,
+                            style: const TextStyle(
                               color: Colors.white,
                             ),
                           ),

@@ -49,6 +49,7 @@ class UserService extends BaseService {
     String? intro,
     File? profileImage,
     String? purpose,
+    List<String>? preferredPersonaTypes,
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
@@ -100,7 +101,10 @@ class UserService extends BaseService {
       );
 
       await FirebaseHelper.user(newUser.uid).set(
-        newUser.toFirestore(),
+        FirebaseHelper.withTimestamps({
+          ...newUser.toFirestore(),
+          'hearts': 10, // 신규 가입 시 기본 하트 10개 지급
+        }),
       );
 
       _currentUser = newUser;
@@ -173,6 +177,7 @@ class UserService extends BaseService {
     String? intro,
     File? profileImage,
     String? purpose,
+    List<String>? preferredPersonaTypes,
     List<String>? preferredMbti,
     String? communicationStyle,
     List<String>? preferredTopics,
@@ -218,7 +223,10 @@ class UserService extends BaseService {
       );
 
       await FirebaseHelper.user(newUser.uid).set(
-        newUser.toFirestore(),
+        FirebaseHelper.withTimestamps({
+          ...newUser.toFirestore(),
+          'hearts': 10, // 신규 가입 시 기본 하트 10개 지급
+        }),
       );
 
       _currentUser = newUser;
@@ -265,9 +273,20 @@ class UserService extends BaseService {
         
         // 기존 사용자 데이터 마이그레이션 (일일 메시지 제한 필드가 없는 경우)
         final data = doc.data() as Map<String, dynamic>;
+        bool needsMigration = false;
+        
         if (data['dailyMessageLimit'] == null || data['dailyMessageCount'] == null) {
           debugPrint('👤 [UserService] User data needs migration, updating...');
-          await _migrateUserData(uid);
+          needsMigration = true;
+        }
+        
+        // hearts 필드가 없는 경우도 마이그레이션 필요
+        if (data['hearts'] == null) {
+          needsMigration = true;
+        }
+        
+        if (needsMigration) {
+          await _migrateUserData(uid, data);
         }
       } else {
         debugPrint('⚠️ [UserService] User document does not exist in Firestore for uid: $uid');
@@ -280,13 +299,29 @@ class UserService extends BaseService {
   }
   
   // 기존 사용자 데이터 마이그레이션
-  Future<void> _migrateUserData(String uid) async {
+  Future<void> _migrateUserData(String uid, Map<String, dynamic> currentData) async {
     try {
-      await FirebaseHelper.user(uid).update({
-        'dailyMessageLimit': AppConstants.dailyMessageLimit,
-        'dailyMessageCount': 0,
-        'lastMessageCountReset': FieldValue.serverTimestamp(),
-      });
+      final updates = <String, dynamic>{};
+      
+      // 일일 메시지 제한 필드 추가
+      if (currentData['dailyMessageLimit'] == null) {
+        updates['dailyMessageLimit'] = AppConstants.dailyMessageLimit;
+      }
+      if (currentData['dailyMessageCount'] == null) {
+        updates['dailyMessageCount'] = 0;
+      }
+      if (currentData['lastMessageCountReset'] == null) {
+        updates['lastMessageCountReset'] = FieldValue.serverTimestamp();
+      }
+      
+      // hearts 필드 추가 (기존 사용자에게는 5개 지급)
+      if (currentData['hearts'] == null) {
+        updates['hearts'] = 5;
+      }
+      
+      if (updates.isNotEmpty) {
+        await FirebaseHelper.user(uid).update(updates);
+      }
       
       // 로컬 데이터 재로드
       final doc = await FirebaseHelper.user(uid).get();

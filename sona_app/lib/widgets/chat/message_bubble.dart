@@ -8,6 +8,7 @@ import '../../services/persona/persona_service.dart';
 import '../../services/purchase/subscription_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Optimized MessageBubble with performance improvements:
 /// - Const constructors where possible
@@ -347,17 +348,17 @@ class _StoryEventMessage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(
+              Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.auto_stories,
                     color: Color(0xFFFF6B9D),
                     size: 20,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    '스토리 이벤트',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.storyEvent,
+                    style: const TextStyle(
                       color: Color(0xFFFF6B9D),
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -378,9 +379,9 @@ class _StoryEventMessage extends StatelessWidget {
               
               if (choices != null && choices.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                const Text(
-                  '선택하세요:',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.chooseOption,
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),

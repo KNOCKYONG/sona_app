@@ -32,7 +32,9 @@
       "mcp__cloudflare-r2__r2_list_buckets",
       "WebFetch(domain:docs.flutter.dev)",
       "WebFetch(domain:127.0.0.1)",
-      "mcp__context7__resolve-library-id"
+      "mcp__context7__resolve-library-id",
+      "mcp__serena-mcp__activate_project",
+      "mcp__serena-mcp__list_dir"
     ],
     "deny": []
   }

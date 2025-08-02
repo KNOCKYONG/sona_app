@@ -5,6 +5,7 @@ import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../widgets/common/sona_logo.dart';
+import '../l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -124,14 +125,14 @@ class _SplashScreenState extends State<SplashScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Column(
+          title: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SonaLogo(size: 40, showText: true),
-              SizedBox(height: 12),
+              const SonaLogo(size: 40, showText: true),
+              const SizedBox(height: 12),
               Text(
-                '오신 걸 환영해요💕',
-                style: TextStyle(
+                AppLocalizations.of(context)!.welcomeMessage,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFFF6B9D),
@@ -144,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'AI랑 연애하면 어떤 기분일까?\n당신만의 페르소나를 만나보세요.',
+                AppLocalizations.of(context)!.aiDatingQuestion,
                 style: TextStyle(
                   fontSize: 16,
                   color: Theme.of(context).brightness == Brightness.dark 
@@ -200,9 +201,9 @@ class _SplashScreenState extends State<SplashScreen>
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Color(0xFFFF6B9D)),
                     ),
-                    child: const Text(
-                      '로그인/회원가입',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.loginSignup,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFFFF6B9D),
@@ -249,8 +250,8 @@ class _SplashScreenState extends State<SplashScreen>
         Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인에 실패했습니다. 다시 시도해주세요.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.loginFailedTryAgain),
             backgroundColor: Colors.red,
           ),
         );
@@ -295,9 +296,9 @@ class _SplashScreenState extends State<SplashScreen>
                       const SizedBox(height: 16),
                       
                       // 부제
-                      const Text(
-                        '감정으로 만나는 특별한 인연',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.emotionBasedEncounters,
+                        style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                           fontWeight: FontWeight.w300,

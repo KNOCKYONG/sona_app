@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'language_settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/auth/auth_service.dart';
 import '../services/theme/theme_service.dart';
 import '../utils/account_deletion_dialog.dart';
+import '../l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -38,13 +40,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          '설정',
+          localizations.settings,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -66,11 +70,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 20),
             
             // 알림 설정
-            _buildSectionTitle('알림 설정'),
+            _buildSectionTitle(localizations.notificationSettings),
             _buildSwitchItem(
               icon: Icons.notifications_outlined,
-              title: '푸시 알림',
-              subtitle: '새로운 메시지 알림을 받습니다',
+              title: localizations.pushNotifications,
+              subtitle: localizations.newMessageNotification,
               value: _notificationsEnabled,
               onChanged: (value) {
                 setState(() {
@@ -81,11 +85,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             
             // 소리 설정
-            _buildSectionTitle('소리 설정'),
+            _buildSectionTitle(localizations.soundSettings),
             _buildSwitchItem(
               icon: Icons.volume_up_outlined,
-              title: '효과음',
-              subtitle: '앱 내 효과음을 켜거나 끕니다',
+              title: localizations.effectSound,
+              subtitle: localizations.effectSoundDescription,
               value: _soundEnabled,
               onChanged: (value) {
                 setState(() {
@@ -96,12 +100,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             
             // 테마 설정
-            _buildSectionTitle('테마'),
+            _buildSectionTitle(localizations.theme),
             Consumer<ThemeService>(
               builder: (context, themeService, child) {
                 return _buildMenuItem(
                   icon: themeService.getThemeIcon(themeService.currentTheme),
-                  title: '테마 설정',
+                  title: localizations.themeSettings,
                   subtitle: themeService.getThemeDisplayName(themeService.currentTheme),
                   onTap: () {
                     Navigator.pushNamed(context, '/theme-settings');
@@ -111,10 +115,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             
             // 기타
-            _buildSectionTitle('기타'),
+            _buildSectionTitle(localizations.others),
+            _buildMenuItem(
+              icon: Icons.language,
+              title: localizations.languageSettings,
+              subtitle: localizations.isKorean ? '한국어' : 'English',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LanguageSettingsScreen(),
+                  ),
+                );
+              },
+            ),
             _buildMenuItem(
               icon: Icons.help_outline,
-              title: '도움말',
+              title: localizations.help,
               onTap: () {
                 // 도움말 화면으로 이동
                 _showHelpDialog();
@@ -122,40 +139,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             _buildMenuItem(
               icon: Icons.info_outline,
-              title: '앱 정보',
-              subtitle: '버전 1.0.0',
+              title: localizations.about,
+              subtitle: '${localizations.version} 1.0.0',
               onTap: () {
                 _showAppInfoDialog();
               },
             ),
             _buildMenuItem(
               icon: Icons.privacy_tip_outlined,
-              title: '개인정보 처리방침',
+              title: localizations.privacy,
               onTap: () {
                 Navigator.pushNamed(context, '/privacy-policy');
               },
             ),
             _buildMenuItem(
               icon: Icons.description_outlined,
-              title: '이용약관',
+              title: localizations.terms,
               onTap: () {
                 Navigator.pushNamed(context, '/terms-of-service');
               },
             ),
             _buildMenuItem(
               icon: Icons.payment_outlined,
-              title: '구매 및 환불 정책',
+              title: localizations.purchasePolicy,
               onTap: () {
                 Navigator.pushNamed(context, '/purchase-policy');
               },
             ),
             
             // 계정 관리
-            _buildSectionTitle('계정 관리'),
+            _buildSectionTitle(localizations.accountManagement),
             _buildMenuItem(
               icon: Icons.delete_outline,
-              title: '계정 삭제',
-              subtitle: '모든 데이터가 삭제됩니다',
+              title: localizations.deleteAccount,
+              subtitle: localizations.deleteAccountWarning,
               onTap: () {
                 AccountDeletionDialog.show(context);
               },
@@ -300,41 +317,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showHelpDialog() {
+    final localizations = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text('도움말'),
-        content: const SingleChildScrollView(
+        title: Text(localizations.help),
+        content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'SONA 사용 방법',
-                style: TextStyle(
+                localizations.howToUse,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 12),
-              Text('1. 페르소나 매칭: 좌우로 스와이프하여 마음에 드는 AI 페르소나를 선택하세요.'),
-              SizedBox(height: 8),
-              Text('2. 대화 시작: 매칭된 페르소나와 자유롭게 대화를 나누세요.'),
-              SizedBox(height: 8),
-              Text('3. 관계 발전: 대화를 통해 친밀도를 쌓고 특별한 관계로 발전시켜보세요.'),
-              SizedBox(height: 16),
+              const SizedBox(height: 12),
+              Text(localizations.matchPersonaStep),
+              const SizedBox(height: 8),
+              Text(localizations.startConversationStep),
+              const SizedBox(height: 8),
+              Text(localizations.developRelationshipStep),
+              const SizedBox(height: 16),
               Text(
-                '문의사항',
-                style: TextStyle(
+                localizations.inquiries,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
-              Text('support@sona.app'),
+              const SizedBox(height: 8),
+              const Text('support@sona.app'),
             ],
           ),
         ),
@@ -342,7 +360,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              '확인',
+              localizations.confirm,
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
@@ -352,13 +370,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void _showAppInfoDialog() {
+    final localizations = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text('앱 정보'),
+        title: Text(localizations.about),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -376,17 +395,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              '버전 1.0.0',
-              style: TextStyle(
+            Text(
+              '${localizations.version} 1.0.0',
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'AI와 함께하는 특별한 만남',
-              style: TextStyle(
+            Text(
+              localizations.appTagline,
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.grey,
               ),
@@ -397,7 +416,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              '확인',
+              localizations.confirm,
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
+import '../l10n/app_localizations.dart';
 
 class AccountDeletionDialog {
   static Future<void> show(BuildContext context) async {
@@ -15,35 +16,35 @@ class AccountDeletionDialog {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('계정 삭제'),
-        content: const Column(
+        title: Text(AppLocalizations.of(context)!.accountDeletionTitle),
+        content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '정말로 계정을 삭제하시겠습니까?',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              AppLocalizations.of(context)!.accountDeletionContent.split('\n')[0],
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
-            Text('계정 삭제 시:'),
-            SizedBox(height: 8),
-            Text('• 모든 개인정보가 즉시 삭제됩니다'),
-            Text('• 모든 대화 내역이 삭제됩니다'),
-            Text('• 구매한 상품은 복구할 수 없습니다'),
-            Text('• 이 작업은 되돌릴 수 없습니다'),
+            const SizedBox(height: 16),
+            Text(AppLocalizations.of(context)!.accountDeletionInfo),
+            const SizedBox(height: 8),
+            Text(AppLocalizations.of(context)!.accountDeletionWarning1),
+            Text(AppLocalizations.of(context)!.accountDeletionWarning2),
+            Text(AppLocalizations.of(context)!.accountDeletionWarning3),
+            Text(AppLocalizations.of(context)!.accountDeletionWarning4),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
             ),
-            child: const Text('계속'),
+            child: Text(AppLocalizations.of(context)!.continueButton),
           ),
         ],
       ),
@@ -58,18 +59,18 @@ class AccountDeletionDialog {
       builder: (context) {
         final passwordController = TextEditingController();
         return AlertDialog(
-          title: const Text('비밀번호 확인'),
+          title: Text(AppLocalizations.of(context)!.passwordConfirmation),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('계정 삭제를 위해 비밀번호를 다시 입력해주세요.'),
+              Text(AppLocalizations.of(context)!.passwordConfirmationDesc),
               const SizedBox(height: 16),
               TextField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: '비밀번호',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.password,
+                  border: const OutlineInputBorder(),
                 ),
               ),
             ],
@@ -77,14 +78,14 @@ class AccountDeletionDialog {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, null),
-              child: const Text('취소'),
+              child: Text(AppLocalizations.of(context)!.cancel),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, passwordController.text),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
               ),
-              child: const Text('확인'),
+              child: Text(AppLocalizations.of(context)!.confirm),
             ),
           ],
         );
@@ -98,16 +99,16 @@ class AccountDeletionDialog {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(
+        builder: (context) => Center(
           child: Card(
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('계정을 삭제하는 중...'),
+                  const CircularProgressIndicator(),
+                  const SizedBox(height: 16),
+                  Text(AppLocalizations.of(context)!.deletingAccount),
                 ],
               ),
             ),
@@ -118,7 +119,7 @@ class AccountDeletionDialog {
     
     try {
       final user = FirebaseAuth.instance.currentUser;
-      if (user == null) throw Exception('사용자를 찾을 수 없습니다');
+      if (user == null) throw Exception(AppLocalizations.of(context)!.userNotFound);
       
       // 재인증
       final credential = EmailAuthProvider.credential(
@@ -170,8 +171,8 @@ class AccountDeletionDialog {
         Navigator.of(context).pushReplacementNamed('/login');
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('계정이 성공적으로 삭제되었습니다.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.accountDeletedSuccess),
             backgroundColor: Colors.green,
           ),
         );
@@ -180,11 +181,11 @@ class AccountDeletionDialog {
       if (context.mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
         
-        String errorMessage = '계정 삭제 중 오류가 발생했습니다.';
+        String errorMessage = AppLocalizations.of(context)!.accountDeletionError;
         if (e.toString().contains('wrong-password')) {
-          errorMessage = '비밀번호가 올바르지 않습니다.';
+          errorMessage = AppLocalizations.of(context)!.incorrectPassword;
         } else if (e.toString().contains('requires-recent-login')) {
-          errorMessage = '보안을 위해 다시 로그인해주세요.';
+          errorMessage = AppLocalizations.of(context)!.recentLoginRequired;
         }
         
         ScaffoldMessenger.of(context).showSnackBar(

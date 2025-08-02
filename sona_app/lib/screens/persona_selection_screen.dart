@@ -13,6 +13,7 @@ import '../services/storage/cache_manager.dart';
 import '../models/persona.dart';
 import '../models/app_user.dart';
 import '../widgets/persona/persona_card.dart';
+import '../l10n/app_localizations.dart';
 import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 import '../widgets/common/sona_logo.dart';
@@ -81,10 +82,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     _cardItems = [];
     final tips = TipData.allTips;
     final usedTips = <TipData>[];
-    
+
     for (int i = 0; i < personas.length; i++) {
       _cardItems.add(personas[i]);
-      
+
       // 4~8번 사이에 랜덤하게 Tip 카드 삽입
       if (i >= 3 && i <= 7 && tips.length > usedTips.length) {
         // 30% 확률로 Tip 카드 삽입
@@ -164,9 +165,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: const Text(
-            '튜토리얼 종료',
-            style: TextStyle(
+          title: Text(
+            AppLocalizations.of(context)!.endTutorial,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Color(0xFFFF6B9D),
@@ -174,7 +175,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             textAlign: TextAlign.center,
           ),
           content: Text(
-            '튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.',
+            AppLocalizations.of(context)!.endTutorialMessage,
             style: TextStyle(
               fontSize: 16,
               color: Theme.of(context).brightness == Brightness.dark
@@ -193,8 +194,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     style: OutlinedButton.styleFrom(
                       side: const BorderSide(color: Colors.grey),
                     ),
-                    child: const Text(
-                      '취소',
+                    child: Text(
+            AppLocalizations.of(context)!.cancel,
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),
@@ -248,15 +249,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인에 실패했습니다. 다시 시도해주세요.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.loginFailed),
             backgroundColor: Colors.red,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인이 완료되었습니다 🎉'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.loginComplete),
             backgroundColor: Colors.green,
           ),
         );
@@ -1115,8 +1116,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isSuperLike 
-                          ? '💫 슈퍼 라이크 매칭! 💫' 
+                      isSuperLike
+                          ? '💫 슈퍼 라이크 매칭! 💫'
                           : '✨ 매칭 성공! ✨',
                       style: const TextStyle(
                         fontSize: 22, // 24 -> 22
@@ -1125,7 +1126,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       ),
                     ),
                     const SizedBox(height: 12), // 16 -> 12
-                    
+
                     // 소나 프로필 이미지
                     Container(
                       width: 90, // 100 -> 90
@@ -1155,9 +1156,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       ),
                     ),
                     const SizedBox(height: 12), // 16 -> 12
-                    
+
                     Text(
-                      isSuperLike 
+                      isSuperLike
                           ? '${persona.name}님이 당신을\n특별히 좋아해요! 💕'
                           : '${persona.name}님과 매칭되었어요!',
                       style: const TextStyle(
@@ -1168,9 +1169,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 6), // 8 -> 6
-                    
+
                     Text(
-                      isSuperLike 
+                      isSuperLike
                           ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요 💫'
                           : '소나와 친구처럼 대화를 시작해보세요 💕',
                       style: const TextStyle(
@@ -1180,14 +1181,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20), // 24 -> 20
-                    
+
                     Row(
                       children: [
                         Expanded(
                           child: OutlinedButton(
                             onPressed: () async {
                               Navigator.of(context).pop();
-                              
+
                               // Super like의 경우에도 나중에 버튼에서는 매칭 처리하지 않음
                             },
                             style: OutlinedButton.styleFrom(
@@ -1208,7 +1209,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                               if (isSuperLike) {
                                 // Super like인 경우 팝업 없이 바로 처리
                                 Navigator.of(context).pop(); // Close match dialog first
-                                
+
                                 setState(() => _isLoading = true);
                                 
                                 try {
@@ -1230,7 +1231,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                   
                                   // 매칭 처리
                                   final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: true);
-                              
+
                                   if (matchSuccess) {
                                     debugPrint('✅ Super like matching complete: ${persona.name}');
                                     await _navigateToChat(persona, screenContext, true);
@@ -1251,12 +1252,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                               } else {
                                 // 일반 like도 하트 1개 차감 후 채팅으로 이동
                                 Navigator.of(context).pop();
-                                
+
                                 setState(() => _isLoading = true);
-                                
+
                                 try {
                                   final purchaseService = Provider.of<PurchaseService>(screenContext, listen: false);
-                                  
+
                                   // 하트 1개 차감
                                   final hasEnoughHearts = await purchaseService.useHearts(1);
                                   if (!hasEnoughHearts) {
@@ -1266,7 +1267,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                     setState(() => _isLoading = false);
                                     return;
                                   }
-                                  
+
                                   await _navigateToChat(persona, screenContext, false);
                                 } catch (e) {
                                   debugPrint('❌ Error in normal like: $e');
@@ -1484,7 +1485,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           
           // 카드 아이템 리스트 준비 (Personas + Tips)
           _prepareCardItems(personas);
-          
+
           debugPrint('🎯 PersonaSelectionScreen: Available personas count: ${personas.length}');
           debugPrint('🎯 PersonaSelectionScreen: Card items count: ${_cardItems.length}');
           debugPrint('🎯 PersonaSelectionScreen: All personas count: ${personaService.allPersonas.length}');
@@ -1651,7 +1652,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: _cardItems.isNotEmpty 
+                  child: _cardItems.isNotEmpty
                     ? CardSwiper(
                         key: ValueKey('cardswiper_${_cardItems.length}'), // 리스트 길이 기반 안정적 키
                         controller: _cardController,
@@ -1679,16 +1680,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       if (index < 0 || index >= _cardItems.length) {
                         return const SizedBox.shrink();
                       }
-                      
+
                       final item = _cardItems[index];
-                      
+
                       // Tip 카드인 경우
                       if (item is TipData) {
                         return TipCard(
                           key: ValueKey('tip_${item.title}'),
                           tipData: item,
                         );
-                      } 
+                      }
                       // Persona 카드인 경우
                       else if (item is Persona) {
                         return PersonaCard(
@@ -1698,7 +1699,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                           verticalThresholdPercentage: verticalThresholdPercentage.toDouble(),
                         );
                       }
-                      
+
                       return const SizedBox.shrink();
                     },
                   )

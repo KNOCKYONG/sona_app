@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import '../../screens/privacy_policy_screen.dart';
 import '../../screens/terms_of_service_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class TermsAgreementWidget extends StatefulWidget {
   final bool agreedToTerms;
@@ -55,12 +56,14 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '약관 동의',
-          style: TextStyle(
+        Text(
+          localizations.termsAgreement,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -77,7 +80,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           ),
           child: CheckboxListTile(
             title: Text(
-              '전체 동의합니다',
+              localizations.allAgree,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).brightness == Brightness.dark 
@@ -108,9 +111,9 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                     : Colors.black87,
               ),
               children: [
-                const TextSpan(text: '[필수] '),
+                TextSpan(text: localizations.required + ' '),
                 TextSpan(
-                  text: '서비스 이용약관',
+                  text: localizations.termsOfService,
                   style: const TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
@@ -125,7 +128,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                       );
                     },
                 ),
-                const TextSpan(text: '에 동의합니다'),
+                TextSpan(text: localizations.agreeToTerms),
               ],
             ),
           ),
@@ -153,9 +156,9 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                     : Colors.black87,
               ),
               children: [
-                const TextSpan(text: '[필수] '),
+                TextSpan(text: localizations.required + ' '),
                 TextSpan(
-                  text: '개인정보 처리방침',
+                  text: localizations.privacyPolicy,
                   style: const TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.blue,
@@ -170,7 +173,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                       );
                     },
                 ),
-                const TextSpan(text: '에 동의합니다'),
+                TextSpan(text: localizations.agreeToTerms),
               ],
             ),
           ),
@@ -191,7 +194,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         // 마케팅 수신 동의 (선택)
         CheckboxListTile(
           title: Text(
-            '[선택] 마케팅 정보 수신에 동의합니다',
+            localizations.marketingAgree,
             style: TextStyle(
               color: Theme.of(context).brightness == Brightness.dark 
                   ? Colors.black87 
@@ -199,7 +202,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             ),
           ),
           subtitle: Text(
-            '이벤트 및 혜택 정보를 받아보실 수 있습니다',
+            localizations.marketingDescription,
             style: TextStyle(
               fontSize: 12,
               color: Theme.of(context).brightness == Brightness.dark 
@@ -222,9 +225,9 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         ),
         
         const SizedBox(height: 16),
-        const Text(
-          '만 14세 이상이며, 위 내용을 확인했습니다.',
-          style: TextStyle(
+        Text(
+          localizations.ageConfirmation,
+          style: const TextStyle(
             fontSize: 12,
             color: Colors.grey,
           ),

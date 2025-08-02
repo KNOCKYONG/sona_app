@@ -159,4 +159,19 @@ class PreferencesManager {
   /// 마지막 동기화 시간 저장
   static Future<bool> setLastSyncTime(DateTime time) => 
       setInt(AppConstants.lastSyncKey, time.millisecondsSinceEpoch);
+  
+  /// 선택된 언어 코드 가져오기
+  static Future<String?> getLanguageCode() => getString(AppConstants.languageCodeKey);
+  
+  /// 선택된 언어 코드 저장
+  static Future<bool> setLanguageCode(String languageCode) => 
+      setString(AppConstants.languageCodeKey, languageCode);
+  
+  /// 시스템 언어 사용 여부 가져오기
+  static Future<bool> getUseSystemLanguage() async => 
+      await getBool(AppConstants.useSystemLanguageKey) ?? true;
+  
+  /// 시스템 언어 사용 여부 저장
+  static Future<bool> setUseSystemLanguage(bool useSystem) => 
+      setBool(AppConstants.useSystemLanguageKey, useSystem);
 }

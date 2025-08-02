@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/persona.dart';
 import '../persona/optimized_persona_image.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 채팅 리스트용 최적화된 아이템 위젯
 class ChatListItem extends StatelessWidget {
@@ -72,13 +73,13 @@ class ChatListItem extends StatelessWidget {
     final difference = now.difference(time);
     
     if (difference.inDays > 0) {
-      return '${difference.inDays}일 전';
+      return AppLocalizations.of(context)!.daysAgo(difference.inDays);
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}시간 전';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}분 전';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
     } else {
-      return '방금 전';
+      return AppLocalizations.of(context)!.justNow;
     }
   }
 }

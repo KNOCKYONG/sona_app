@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../services/purchase/purchase_service.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 
 class PurchaseScreen extends StatefulWidget {
   const PurchaseScreen({super.key});
@@ -28,13 +29,15 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
   
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          '스토어',
+          localizations.store,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -52,7 +55,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
           if (!purchaseService.isAvailable) {
             return Center(
               child: Text(
-                '스토어를 사용할 수 없습니다',
+                AppLocalizations.of(context)!.storeNotAvailable,
                 style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
             );
@@ -87,7 +90,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                   children: [
                     _buildStatusItem(
                       icon: Icons.favorite,
-                      label: '하트',
+                      label: localizations.hearts,
                       value: '${purchaseService.hearts}',
                     ),
                     Container(
@@ -97,10 +100,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                     ),
                     _buildStatusItem(
                       icon: Icons.star,
-                      label: '프리미엄',
+                      label: localizations.premium,
                       value: purchaseService.isPremium 
                           ? _formatExpiryDate(purchaseService.premiumExpiryDate!)
-                          : '미가입',
+                          : localizations.notSubscribed,
                     ),
                   ],
                 ),
@@ -127,17 +130,17 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                     fontWeight: FontWeight.bold,
                   ),
                   labelPadding: EdgeInsets.zero,
-                  tabs: const [
+                  tabs: [
                     Tab(
                       height: 48,
                       child: Center(
-                        child: Text('하트'),
+                        child: Text(localizations.hearts),
                       ),
                     ),
                     Tab(
                       height: 48,
                       child: Center(
-                        child: Text('프리미엄'),
+                        child: Text(localizations.premium),
                       ),
                     ),
                   ],
@@ -219,7 +222,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '스토어 연결 오류',
+                  AppLocalizations.of(context)!.storeConnectionError,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -240,7 +243,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                   onPressed: () async {
                     await purchaseService.loadProducts();
                   },
-                  child: const Text('다시 시도'),
+                  child: Text(AppLocalizations.of(context)!.retry),
                 ),
               ],
             ),
@@ -254,7 +257,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
           children: [
             CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
-            const Text('상품 정보를 불러오는 중...'),
+            Text(AppLocalizations.of(context)!.loadingProducts),
           ],
         ),
       );
@@ -296,7 +299,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '스토어 연결 오류',
+                  AppLocalizations.of(context)!.storeConnectionError,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -317,7 +320,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                   onPressed: () async {
                     await purchaseService.loadProducts();
                   },
-                  child: const Text('다시 시도'),
+                  child: Text(AppLocalizations.of(context)!.retry),
                 ),
               ],
             ),
@@ -331,7 +334,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
           children: [
             CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
-            const Text('상품 정보를 불러오는 중...'),
+            Text(AppLocalizations.of(context)!.loadingProducts),
           ],
         ),
       );
@@ -358,30 +361,32 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     required Color iconColor,
     required VoidCallback onTap,
   }) {
+    final localizations = AppLocalizations.of(context)!;
+    
     // 상품명에서 정보 추출
     String displayName = product.title;
     String? description;
     
     // Google Play Console의 상품 ID와 매칭
     if (product.id == ProductIds.hearts10) {
-      displayName = '하트 10개';
-      description = '매칭과 채팅에 사용할 수 있는 하트';
+      displayName = localizations.hearts10;
+      description = localizations.heartDescription;
     } else if (product.id == ProductIds.hearts30) {
-      displayName = '하트 30개';
-      description = '매칭과 채팅에 사용할 수 있는 하트';
+      displayName = localizations.hearts30;
+      description = localizations.heartDescription;
     } else if (product.id == ProductIds.hearts50) {
-      displayName = '하트 50개';
-      description = '매칭과 채팅에 사용할 수 있는 하트';
+      displayName = localizations.hearts50;
+      description = localizations.heartDescription;
     } else if (product.id.contains('premium')) {
       if (product.id.contains('1month')) {
-        displayName = '프리미엄 1개월';
-        description = '무제한 매칭, 광고 제거';
+        displayName = localizations.premium1Month;
+        description = localizations.premiumDescription;
       } else if (product.id.contains('3months')) {
-        displayName = '프리미엄 3개월';
-        description = '무제한 매칭, 광고 제거 (20% 할인)';
+        displayName = localizations.premium3Months;
+        description = localizations.premiumDescription20Off;
       } else if (product.id.contains('6months')) {
-        displayName = '프리미엄 6개월';
-        description = '무제한 매칭, 광고 제거 (30% 할인)';
+        displayName = localizations.premium6Months;
+        description = localizations.premiumDescription30Off;
       }
     }
     
@@ -456,7 +461,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          product.id.contains('3months') ? '20% 할인' : '30% 할인',
+                          product.id.contains('3months') ? localizations.discount20 : localizations.discount30,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -481,8 +486,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
   ) async {
     if (purchaseService.isPurchasePending) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('이미 구매가 진행 중입니다'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.purchasePending),
           backgroundColor: Colors.orange,
         ),
       );
@@ -496,17 +501,17 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text('구매 확인'),
-        content: Text('${product.title}을(를) ${product.price}에 구매하시겠습니까?'),
+        title: Text(AppLocalizations.of(context)!.purchaseConfirm),
+        content: Text(AppLocalizations.of(context)!.purchaseConfirmMessage(product.title, product.price)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(
-              '구매',
+              AppLocalizations.of(context)!.purchaseButton,
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
@@ -521,8 +526,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     
     if (!success && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('구매를 시작할 수 없습니다'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.purchaseFailed),
           backgroundColor: Colors.red,
         ),
       );
@@ -532,9 +537,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
   String _formatExpiryDate(DateTime date) {
     final remaining = date.difference(DateTime.now()).inDays;
     if (remaining > 0) {
-      return '$remaining일 남음';
+      return AppLocalizations.of(context)!.daysRemaining(remaining);
     } else {
-      return '만료됨';
+      return AppLocalizations.of(context)!.expired;
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/persona.dart';
 import '../../services/relationship/relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Optimized PersonaCard with performance improvements and R2 image support:
 /// - R2 image loading with fallback to photoUrls
@@ -597,19 +598,19 @@ class _PersonaInfo extends StatelessWidget {
             final allImageUrls = persona.getAllImageUrls(size: 'medium');
             if (allImageUrls.length > 1) {
               return Column(
-                children: const [
-                  SizedBox(height: 12),
+                children: [
+                  const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.touch_app,
                         color: Colors.white60,
                         size: 16,
                       ),
-                      SizedBox(width: 4),
+                      const SizedBox(width: 4),
                       Text(
-                        '좌우 탭으로 사진 넘기기',
-                        style: TextStyle(
+                        AppLocalizations.of(context)!.tapToSwipePhotos,
+                        style: const TextStyle(
                           color: Colors.white60,
                           fontSize: 12,
                         ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui';
+import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +36,9 @@ import 'services/storage/cache_manager.dart';
 import 'services/theme/theme_service.dart';
 import 'theme/app_theme.dart';
 import 'core/preferences_manager.dart';
+import 'core/constants.dart';
+import 'l10n/app_localizations.dart';
+import 'services/locale_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,20 +97,35 @@ void main() async {
   // ThemeService 초기화
   final themeService = ThemeService();
   await themeService.initialize();
+  
+  // LocaleService 초기화
+  debugPrint('🌐 [Main] Initializing LocaleService...');
+  final localeService = LocaleService();
+  await localeService.initialize();
+  debugPrint('🌐 [Main] LocaleService initialized. Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
 
-  runApp(SonaApp(themeService: themeService));
+  runApp(SonaApp(
+    themeService: themeService,
+    localeService: localeService,
+  ));
 }
 
 class SonaApp extends StatelessWidget {
   final ThemeService themeService;
+  final LocaleService localeService;
   
-  const SonaApp({super.key, required this.themeService});
+  const SonaApp({
+    super.key, 
+    required this.themeService,
+    required this.localeService,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(value: themeService),
+        ChangeNotifierProvider.value(value: localeService),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
@@ -125,13 +145,28 @@ class SonaApp extends StatelessWidget {
           },
         ),
       ],
-      child: Consumer<ThemeService>(
-        builder: (context, themeService, child) => MaterialApp(
+      child: Consumer2<ThemeService, LocaleService>(
+        builder: (context, themeService, localeService, child) => MaterialApp(
           title: 'SONA',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme(),
           darkTheme: AppTheme.darkTheme(),
           themeMode: themeService.themeMode,
+          // 다국어 지원 설정
+          locale: localeService.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          builder: (context, child) {
+            // 로케일 변경 감지
+            final currentLocale = Localizations.localeOf(context);
+            debugPrint('🌐 MaterialApp locale: $currentLocale');
+            return child!;
+          },
           initialRoute: '/',
           routes: {
           '/': (context) => const SplashScreen(),

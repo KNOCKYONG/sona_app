@@ -12,6 +12,7 @@ import '../services/chat/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
 import 'matched_personas_screen.dart';
 import 'profile_edit_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -42,15 +43,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (mounted) {
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('프로필 사진이 업데이트되었습니다'),
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.profilePhotoUpdated),
                 backgroundColor: Colors.green,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('프로필 사진 업데이트에 실패했습니다'),
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.profilePhotoUpdateFailed),
                 backgroundColor: Colors.red,
               ),
             );
@@ -86,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           elevation: 0,
           automaticallyImplyLeading: false,
           title: Text(
-            'Profile',
+            AppLocalizations.of(context)!.profile,
             style: TextStyle(
               color: Theme.of(context).textTheme.headlineSmall?.color,
               fontSize: 20,
@@ -108,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  '로그인이 필요합니다',
+                  AppLocalizations.of(context)!.loginRequired,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -117,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  '프로필을 보고 소나와의 기록을 확인하려면\n로그인이 필요해요',
+                  AppLocalizations.of(context)!.loginRequiredForProfile,
                   style: TextStyle(
                     fontSize: 16,
                     color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
@@ -139,9 +140,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      '로그인 / 회원가입',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.loginSignup,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -171,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Text(
-          'Profile',
+          AppLocalizations.of(context)!.profile,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -275,7 +276,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   
                   // 사용자 이름
                   Text(
-                    appUser?.nickname ?? firebaseUser?.displayName ?? '소나 친구',
+                    appUser?.nickname ?? firebaseUser?.displayName ?? AppLocalizations.of(context)!.sonaFriend,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -299,8 +300,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatItem('총 Like', '$totalLikes'),
-                      _buildStatItem('보유 하트', '$hearts'),
+                      _buildStatItem(AppLocalizations.of(context)!.totalLikes, '$totalLikes'),
+                      _buildStatItem(AppLocalizations.of(context)!.ownedHearts, '$hearts'),
                     ],
                   ),
                 ],
@@ -316,8 +317,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   _buildMenuItem(
                     icon: Icons.favorite,
-                    title: '매칭된 소나',
-                    subtitle: '${personaService.matchedPersonas.length}명의 소나와 대화중',
+                    title: AppLocalizations.of(context)!.matchedPersonas,
+                    subtitle: AppLocalizations.of(context)!.chattingWithPersonas(personaService.matchedPersonas.length),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -329,7 +330,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   _buildMenuItem(
                     icon: Icons.edit,
-                    title: '프로필 편집',
+                    title: AppLocalizations.of(context)!.editProfile,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -341,8 +342,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   _buildMenuItem(
                     icon: Icons.shopping_bag,
-                    title: '스토어',
-                    subtitle: '하트 구매 및 프리미엄 가입',
+                    title: AppLocalizations.of(context)!.store,
+                    subtitle: AppLocalizations.of(context)!.purchaseHeartsPremium,
                     onTap: () {
                       Navigator.pushNamed(context, '/purchase');
                     },
@@ -360,12 +361,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            title: const Text('로그아웃'),
-                            content: const Text('정말 로그아웃하시겠습니까?'),
+                            title: Text(AppLocalizations.of(context)!.logout),
+                            content: Text(AppLocalizations.of(context)!.logoutConfirm),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: const Text('취소'),
+                                child: Text(AppLocalizations.of(context)!.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -373,9 +374,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   await authService.signOut();
                                   // 상태가 자동으로 업데이트되어 로그인 유도 화면이 표시됨
                                 },
-                                child: const Text(
-                                  '로그아웃',
-                                  style: TextStyle(color: Colors.red),
+                                child: Text(
+                                  AppLocalizations.of(context)!.logout,
+                                  style: const TextStyle(color: Colors.red),
                                 ),
                               ),
                             ],
@@ -391,9 +392,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        '로그아웃',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context)!.logout,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),

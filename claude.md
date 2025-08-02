@@ -1,5 +1,81 @@
 # Claude.md
 
+## 국제화(i18n) 가이드라인
+
+### 중요: 모든 UI 텍스트는 한글/영어 쌍으로 작업하세요
+
+앱은 한국어와 영어를 지원합니다. **절대 하드코딩된 텍스트를 사용하지 마세요.**
+app_localizations.dart 참고
+
+#### 1. 새로운 UI 텍스트 추가 시
+
+1. **AppLocalizations에 추가** (`lib/l10n/app_localizations.dart`):
+```dart
+// 예시: 새로운 기능 추가
+String get newFeature => isKorean ? '새 기능' : 'New Feature';
+String get featureDescription => isKorean ? '이것은 새로운 기능입니다' : 'This is a new feature';
+```
+
+2. **화면에서 사용**:
+```dart
+// ❌ 잘못된 예시 - 하드코딩
+Text('새 기능')
+
+// ✅ 올바른 예시 - AppLocalizations 사용
+Text(AppLocalizations.of(context)!.newFeature)
+```
+
+#### 2. 카테고리별 번역 구조
+
+AppLocalizations의 번역은 다음 카테고리로 구성되어 있습니다:
+- 공통 (loading, error, confirm 등)
+- 로그인/회원가입
+- 감정/페르소나
+- 채팅
+- 스토어/구매
+- 설정
+- 에러 메시지
+- 권한
+- 날짜/시간
+
+새로운 번역 추가 시 적절한 카테고리에 추가하세요.
+
+#### 3. 동적 텍스트 처리
+
+파라미터가 필요한 경우:
+```dart
+// AppLocalizations에 추가
+String welcomeUser(String name) => isKorean ? '$name님, 환영합니다!' : 'Welcome, $name!';
+String itemCount(int count) => isKorean ? '아이템 $count개' : '$count items';
+
+// 사용
+Text(localizations.welcomeUser(userName))
+```
+
+#### 4. 모든 화면에서 필수 import
+
+```dart
+import '../l10n/app_localizations.dart';
+
+// build 메서드 시작 부분에 추가
+@override
+Widget build(BuildContext context) {
+  final localizations = AppLocalizations.of(context)!;
+  // ...
+}
+```
+
+#### 5. 체크리스트
+
+새로운 화면이나 기능 추가 시:
+- [ ] 모든 텍스트가 AppLocalizations를 통해 표시되는가?
+- [ ] 한글과 영어 번역이 모두 추가되었는가?
+- [ ] 에러 메시지도 번역되었는가?
+- [ ] 다이얼로그 텍스트도 번역되었는가?
+- [ ] 스낵바 메시지도 번역되었는가?
+
+---
+
 ## 리팩토링된 아키텍처 구조
 
 ### 1. BaseService 패턴

@@ -17,6 +17,7 @@ import '../widgets/persona/persona_profile_viewer.dart';
 import '../widgets/common/modern_emotion_picker.dart';
 import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
+import '../l10n/app_localizations.dart';
 
 /// Optimized ChatScreen with performance improvements:
 /// - Uses ListView.builder for efficient message list
@@ -163,8 +164,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           // 로그인하지 않은 사용자는 채팅 불가
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('로그인이 필요한 서비스입니다'),
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.loginRequiredService),
                 backgroundColor: Colors.red,
               ),
             );
@@ -246,8 +247,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (userService.isDailyMessageLimitReached()) {
       final shouldUseHeart = await HeartUsageDialog.show(
         context: context,
-        title: '일일 메시지 한도 도달',
-        description: '오늘의 메시지 100개를 모두 사용하셨습니다.\n하트 1개를 사용하여 다시 100개의 메시지를 보낼 수 있습니다.',
+        title: AppLocalizations.of(context)!.dailyLimitTitle,
+        description: AppLocalizations.of(context)!.dailyLimitDescription,
         heartCost: 1,
         onConfirm: () async {
           // Use heart to reset message count
@@ -256,8 +257,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             await userService.resetMessageCountWithHeart();
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('메시지 한도가 리셋되었습니다!'),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.messageLimitReset),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -265,8 +266,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           } else {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('하트가 부족합니다'),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.heartInsufficient),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -333,8 +334,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       _messageController.text = content;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('메시지 전송에 실패했습니다. 다시 시도해주세요.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.messageSendFailed),
             backgroundColor: Colors.red,
           ),
         );
@@ -678,17 +679,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     final shouldLeave = await showDialog<bool>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('채팅방 나가기'),
-                        content: const Text('이 채팅방을 나가시겠습니까?\n채팅 목록에서 사라집니다.'),
+                        title: Text(AppLocalizations.of(context)!.leaveChatTitle),
+                        content: Text(AppLocalizations.of(context)!.leaveChatConfirm),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(false),
-                            child: const Text('취소'),
+                            child: Text(AppLocalizations.of(context)!.cancel),
                           ),
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(true),
-                            child: const Text(
-                              '나가기',
+                            child: Text(
+                              AppLocalizations.of(context)!.leave,
                               style: TextStyle(color: Colors.red),
                             ),
                           ),
@@ -738,7 +739,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '채팅방 나가기',
+                          AppLocalizations.of(context)!.leaveChatRoom,
                           style: TextStyle(
                             color: Colors.red[400],
                             fontWeight: FontWeight.w500,
@@ -805,7 +806,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               );
             }
           },
-          tooltip: '뒤로가기',
+          tooltip: AppLocalizations.of(context)!.backButton,
         ),
       ),
       title: const _AppBarTitle(),
@@ -822,7 +823,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 });
                 debugPrint('🔘 New state: $_showMoreMenu');
               },
-              tooltip: '더보기',
+              tooltip: AppLocalizations.of(context)!.moreButton,
             ),
           ),
         ),
@@ -868,7 +869,7 @@ class _AppBarTitle extends StatelessWidget {
         final persona = personaService.currentPersona;
         
         if (persona == null) {
-          return const Text('페르소나를 선택해주세요');
+          return Text(AppLocalizations.of(context)!.selectPersona);
         }
         
         return Row(
@@ -932,7 +933,7 @@ class _PersonaTitle extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${updatedPersona.name}님과의 대화',
+                        AppLocalizations.of(context)!.conversationWith(updatedPersona.name),
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -1218,7 +1219,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            '아직 대화가 없어요',
+            AppLocalizations.of(context)!.noConversationYet,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -1227,7 +1228,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            '첫 메시지를 보내보세요!',
+            AppLocalizations.of(context)!.sendFirstMessage,
             style: TextStyle(
               fontSize: 14,
               color: Theme.of(context).textTheme.bodySmall?.color,
@@ -1282,7 +1283,7 @@ class _MessageInput extends StatelessWidget {
                     controller: controller,
                     focusNode: focusNode,
                     decoration: InputDecoration(
-                      hintText: '메시지를 입력하세요...',
+                      hintText: AppLocalizations.of(context)!.typeMessage,
                       hintStyle: TextStyle(
                         color: Theme.of(context).textTheme.bodySmall?.color,
                         fontSize: 14,

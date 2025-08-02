@@ -12,6 +12,7 @@ import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
 import '../widgets/persona/optimized_persona_image.dart';
 import '../services/relationship/relation_score_service.dart';
+import '../l10n/app_localizations.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -133,24 +134,26 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   }
 
   String _getLastMessagePreview(List<Message> messages, String personaName) {
-    if (messages.isEmpty) return '$personaName님이 대화를 기다리고 있어요.';
+    final localizations = AppLocalizations.of(context)!;
+
+    if (messages.isEmpty) return localizations.waitingForChat(personaName);
     
     final lastMessage = messages.last;
     
     // 튜토리얼 시작 메시지인 경우 개인화된 메시지로 변경
-    if (lastMessage.content == '대화를 시작해보세요!' || lastMessage.content == '소나와 친구처럼 대화를 시작해보세요!') {
-      return '$personaName님과 친구처럼 대화를 시작해보세요!';
+    if (lastMessage.content == localizations.startConversation || lastMessage.content == localizations.startConversationWithSona) {
+      return localizations.waitingForChat(personaName);
     }
     
     String preview = '';
     if (lastMessage.isFromUser) {
-      preview = '나: ';
+      preview = '${AppLocalizations.of(context)!.me}: ';
     }
     
     if (lastMessage.type == MessageType.image) {
-      preview += '📷 사진';
+      preview += '📷 ${AppLocalizations.of(context)!.photo}';
     } else if (lastMessage.type == MessageType.voice) {
-      preview += '🎤 음성 메시지';
+      preview += localizations.voiceMessage;
     } else {
       preview += lastMessage.content;
     }
@@ -164,7 +167,8 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final lastMessage = messages.last;
     
     // 튜토리얼 시작 메시지인 경우 시간 표시하지 않음
-    if (lastMessage.content == '대화를 시작해보세요!' || lastMessage.content == '소나와 친구처럼 대화를 시작해보세요!') {
+    final localizations = AppLocalizations.of(context)!;
+    if (lastMessage.content == localizations.startConversation || lastMessage.content == localizations.startConversationWithSona) {
       return '';
     }
     
@@ -173,13 +177,13 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final difference = now.difference(messageTime);
     
     if (difference.inDays > 0) {
-      return '${difference.inDays}일 전';
+      return AppLocalizations.of(context)!.daysAgo(difference.inDays);
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}시간 전';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}분 전';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
     } else {
-      return '방금 전';
+      return AppLocalizations.of(context)!.justNow;
     }
   }
 
@@ -221,7 +225,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
             const SonaLogoSmall(size: 32),
             const SizedBox(width: 12),
             Text(
-              '채팅',
+              AppLocalizations.of(context)!.chats,
               style: TextStyle(
                 color: Theme.of(context).textTheme.headlineSmall?.color,
                 fontSize: 24,
@@ -237,9 +241,9 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
               // 🔄 수동 새로고침
               // 로딩 인디케이터 표시
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('채팅 목록을 새로고침하는 중...'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.refreshingChatList),
+                  duration: const Duration(seconds: 2),
                 ),
               );
               
@@ -252,7 +256,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('새로고침 완료! ${personaService.matchedPersonas.length}명의 매칭된 페르소나'),
+                      content: Text(AppLocalizations.of(context)!.refreshComplete(personaService.matchedPersonas.length)),
                       duration: const Duration(seconds: 2),
                       backgroundColor: Colors.green,
                     ),
@@ -262,9 +266,9 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                 if (mounted) {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('새로고침 실패. 다시 시도해주세요.'),
-                      duration: Duration(seconds: 2),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.refreshFailed),
+                      duration: const Duration(seconds: 2),
                       backgroundColor: Colors.red,
                     ),
                   );
@@ -328,7 +332,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    '아직 매칭된 페르소나가 없어요',
+                    AppLocalizations.of(context)!.noMatchedPersonas,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -337,7 +341,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    '새로운 페르소나를 만나러 가볼까요?',
+                    AppLocalizations.of(context)!.meetNewPersonas,
                     style: TextStyle(
                       fontSize: 16,
                       color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
@@ -355,9 +359,9 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
-                      '페르소나 만나기',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.meetPersonas,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -542,7 +546,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                               children: [
                                 Expanded(
                                   child: Text(
-                                    isTyping ? '${persona.name}님이 입력 중...' : _getLastMessagePreview(messages, persona.name),
+                                    isTyping ? AppLocalizations.of(context)!.isTyping(persona.name) : _getLastMessagePreview(messages, persona.name),
                                     style: TextStyle(
                                       fontSize: 14,
                                       color: hasUnread || isTyping ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodySmall?.color,

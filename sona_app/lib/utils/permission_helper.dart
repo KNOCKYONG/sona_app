@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show File;
+import '../l10n/app_localizations.dart';
 
 // Only import permission_handler for non-web platforms
 import 'package:permission_handler/permission_handler.dart'
@@ -39,8 +40,8 @@ class PermissionHelper {
       
       if (source == ImageSource.camera) {
         permission = Permission.camera;
-        permissionName = '카메라';
-        permissionDescription = '프로필 사진 촬영을 위해 카메라 접근이 필요합니다.';
+        permissionName = AppLocalizations.of(context)!.cameraPermission;
+        permissionDescription = AppLocalizations.of(context)!.cameraPermissionDesc;
       } else {
         // Platform check using defaultTargetPlatform for web compatibility
         if (Theme.of(context).platform == TargetPlatform.iOS) {
@@ -48,8 +49,8 @@ class PermissionHelper {
         } else {
           permission = Permission.storage;
         }
-        permissionName = '사진 라이브러리';
-        permissionDescription = '프로필 사진 선택을 위해 갤러리 접근이 필요합니다.';
+        permissionName = AppLocalizations.of(context)!.galleryPermission;
+        permissionDescription = AppLocalizations.of(context)!.galleryPermissionDesc;
       }
       
       // 권한 상태 확인
@@ -61,16 +62,16 @@ class PermissionHelper {
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            title: Text('$permissionName 권한 필요'),
+            title: Text(AppLocalizations.of(context)!.permissionRequired),
             content: Text(permissionDescription),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('취소'),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text('권한 허용'),
+                child: Text(AppLocalizations.of(context)!.grantPermission),
               ),
             ],
           ),
@@ -121,22 +122,21 @@ class PermissionHelper {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('$permissionName 권한 거부됨'),
+        title: Text(AppLocalizations.of(context)!.permissionDenied),
         content: Text(
-          '$permissionName 권한이 거부되었습니다.\n'
-          '설정에서 권한을 허용해주세요.',
+          AppLocalizations.of(context)!.permissionDeniedMessage(permissionName),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('확인'),
+            child: Text(AppLocalizations.of(context)!.confirm),
           ),
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               openAppSettings();
             },
-            child: const Text('설정으로 이동'),
+            child: Text(AppLocalizations.of(context)!.goToSettings),
           ),
         ],
       ),
@@ -156,19 +156,18 @@ class PermissionHelper {
       final shouldRequest = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('알림 권한 필요'),
-          content: const Text(
-            '새로운 메시지와 매칭 알림을 받으시려면\n'
-            '알림 권한이 필요합니다.',
+          title: Text(AppLocalizations.of(context)!.notificationPermissionRequired),
+          content: Text(
+            AppLocalizations.of(context)!.notificationPermissionDesc,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('나중에'),
+              child: Text(AppLocalizations.of(context)!.later),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('권한 허용'),
+              child: Text(AppLocalizations.of(context)!.allowPermission),
             ),
           ],
         ),

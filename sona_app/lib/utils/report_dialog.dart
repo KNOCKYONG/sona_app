@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../l10n/app_localizations.dart';
 
 class ReportDialog {
   static Future<void> show(BuildContext context, {
@@ -11,16 +12,17 @@ class ReportDialog {
     String? selectedReason;
     String customReason = '';
     
+    final localizations = AppLocalizations.of(context)!;
     final reasons = [
-      '부적절한 콘텐츠',
-      '스팸/광고',
-      '혐오 발언',
-      '성적인 콘텐츠',
-      '폭력적인 콘텐츠',
-      '괴롭힘/따돌림',
-      '개인정보 노출',
-      '저작권 침해',
-      '기타',
+      localizations.inappropriateContent,
+      localizations.spamAdvertising,
+      localizations.hateSpeech,
+      localizations.sexualContent,
+      localizations.violentContent,
+      localizations.harassmentBullying,
+      localizations.personalInfoExposure,
+      localizations.copyrightInfringement,
+      localizations.other,
     ];
     
     final result = await showDialog<Map<String, String>>(
@@ -29,15 +31,15 @@ class ReportDialog {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('${targetName ?? targetType} 신고'),
+              title: Text('${targetName ?? targetType} ${localizations.report}'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '신고 사유를 선택해주세요:',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    Text(
+                      localizations.selectReportReason,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     ...reasons.map((reason) => RadioListTile<String>(
@@ -50,13 +52,13 @@ class ReportDialog {
                         });
                       },
                     )),
-                    if (selectedReason == '기타') ...[
+                    if (selectedReason == localizations.other) ...[
                       const SizedBox(height: 16),
                       TextField(
-                        decoration: const InputDecoration(
-                          labelText: '상세 사유',
-                          hintText: '신고 사유를 자세히 설명해주세요',
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          labelText: localizations.detailedReason,
+                          hintText: localizations.explainReportReason,
+                          border: const OutlineInputBorder(),
                         ),
                         maxLines: 3,
                         onChanged: (value) {
@@ -70,7 +72,7 @@ class ReportDialog {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context, null),
-                  child: const Text('취소'),
+                  child: Text(localizations.cancel),
                 ),
                 ElevatedButton(
                   onPressed: selectedReason == null ? null : () {
@@ -82,7 +84,7 @@ class ReportDialog {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
-                  child: const Text('신고하기'),
+                  child: Text(localizations.report),
                 ),
               ],
             );
@@ -116,8 +118,8 @@ class ReportDialog {
       if (user == null) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('신고하려면 로그인이 필요합니다'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.loginRequiredToReport),
               backgroundColor: Colors.red,
             ),
           );
@@ -130,16 +132,16 @@ class ReportDialog {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(
+          builder: (context) => Center(
             child: Card(
               child: Padding(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('신고를 접수하는 중...'),
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    Text(AppLocalizations.of(context)!.reportInProgress),
                   ],
                 ),
               ),
@@ -166,8 +168,8 @@ class ReportDialog {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
         
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('신고가 접수되었습니다. 검토 후 조치하겠습니다.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.reportSubmitted),
             backgroundColor: Colors.green,
           ),
         );
@@ -178,7 +180,7 @@ class ReportDialog {
         
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('신고 접수 중 오류가 발생했습니다: ${e.toString()}'),
+            content: Text(AppLocalizations.of(context)!.reportError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );

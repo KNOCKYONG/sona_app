@@ -144,15 +144,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (personaService.currentPersona != null) {
       try {
         // Only load chat history if user is authenticated
-        if (userId.isNotEmpty) {
+        if (_userId!.isNotEmpty) {
           await chatService.loadChatHistory(
-            userId,
+            _userId!,
             personaService.currentPersona!.id
           );
           
           // 🔵 채팅방 진입 시 모든 페르소나 메시지를 읽음으로 표시
           await chatService.markAllMessagesAsRead(
-            userId,
+            _userId!,
             personaService.currentPersona!.id
           );
           

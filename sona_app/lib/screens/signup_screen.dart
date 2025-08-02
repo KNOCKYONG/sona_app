@@ -350,7 +350,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         }
         // 닉네임 검사
-        return _nicknameController.text.length >= 2 && 
+        return _nicknameController.text.length >= 3 && 
                _nicknameController.text.length <= 10 &&
                _isNicknameAvailable &&
                !_isCheckingNickname;
@@ -592,7 +592,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               _nicknameCheckTimer?.cancel();
               
               // 닉네임이 비어있거나 너무 짧으면 검사하지 않음
-              if (value.isEmpty || value.length < 2) {
+              if (value.isEmpty || value.length < 3) {
                 setState(() {
                   _isNicknameAvailable = true;
                   _isCheckingNickname = false;

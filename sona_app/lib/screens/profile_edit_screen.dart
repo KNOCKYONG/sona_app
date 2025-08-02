@@ -290,7 +290,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 : null,
                       ),
                       onChanged: (value) {
-                        if (value.length >= 2) {
+                        if (value.length >= 3) {
                           _checkNicknameAvailability(value);
                         }
                       },
@@ -298,8 +298,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         if (value == null || value.isEmpty) {
                           return '닉네임을 입력해주세요';
                         }
-                        if (value.length < 2 || value.length > 10) {
-                          return '닉네임은 2-10자여야 합니다';
+                        if (value.length < 3 || value.length > 10) {
+                          return '닉네임은 3-10자여야 합니다';
                         }
                         if (!_isNicknameAvailable) {
                           return '이미 사용 중인 닉네임입니다';

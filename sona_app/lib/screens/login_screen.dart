@@ -5,6 +5,7 @@ import '../services/auth/user_service.dart';
 import '../widgets/common/sona_logo.dart';
 import '../theme/app_theme.dart';
 import 'signup_screen.dart';
+import '../utils/network_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -39,6 +40,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   Future<void> _handleEmailLogin() async {
     if (!_formKey.currentState!.validate()) return;
     
+    // 네트워크 연결 확인
+    final isConnected = await NetworkUtils.isConnected();
+    if (!isConnected && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('인터넷 연결을 확인해주세요'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    
     setState(() => _isLoading = true);
     
     try {
@@ -61,6 +75,19 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   }
 
   Future<void> _handleGoogleSignIn() async {
+    // 네트워크 연결 확인
+    final isConnected = await NetworkUtils.isConnected();
+    if (!isConnected && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('인터넷 연결을 확인해주세요'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+    
     setState(() => _isLoading = true);
     
     try {

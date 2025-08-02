@@ -29,8 +29,10 @@
       "mcp__cloudflare-r2__r2_get_object",
       "mcp",
       "mcp__cloudflare-r2__r2_list_buckets",
-      "WebFetch(domain:docs.flutter.dev)"
+      "WebFetch(domain:docs.flutter.dev)",
+      "WebFetch(domain:127.0.0.1)"
     ],
     "deny": []
-  }
+  },
+  "$schema": "https://json.schemastore.org/claude-code-settings.json"
 }

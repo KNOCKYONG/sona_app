@@ -46,6 +46,7 @@ class PurchaseService extends BaseService {
   List<ProductDetails> _products = [];
   List<PurchaseDetails> _purchases = [];
   StreamSubscription<List<PurchaseDetails>>? _subscription;
+  StreamSubscription<User?>? _authSubscription;
   
   // Getters
   bool get isAvailable => _isAvailable;
@@ -98,6 +99,20 @@ class PurchaseService extends BaseService {
         debugPrint('❌ Purchase stream error: $error');
       },
     );
+    
+    // Auth 상태 변경 리스너 설정
+    _authSubscription = _auth.authStateChanges().listen((user) {
+      debugPrint('🔄 Auth state changed: ${user?.uid ?? "logged out"}');
+      if (user != null) {
+        _loadUserPurchaseData();
+      } else {
+        // 로그아웃 시 상태 초기화
+        _isPremium = false;
+        _premiumExpiryDate = null;
+        _hearts = 0;
+        notifyListeners();
+      }
+    });
     
     // 상품 정보 로드
     await loadProducts();
@@ -363,7 +378,10 @@ class PurchaseService extends BaseService {
   /// 하트 사용
   Future<bool> useHearts(int amount) async {
     final user = _auth.currentUser;
-    if (user == null) return false;
+    if (user == null) {
+      debugPrint('❌ Cannot use hearts: User not logged in');
+      return false;
+    }
     
     if (_hearts < amount) {
       debugPrint('❌ Not enough hearts: $_hearts < $amount');
@@ -371,18 +389,28 @@ class PurchaseService extends BaseService {
     }
     
     try {
+      // 먼저 로컬 상태 업데이트
+      final previousHearts = _hearts;
+      _hearts -= amount;
+      notifyListeners();
+      
+      // Firebase 업데이트
       await _firestore.collection('users').doc(user.uid).update({
         'hearts': FieldValue.increment(-amount),
         'updatedAt': FieldValue.serverTimestamp(),
       });
       
-      _hearts -= amount;
-      notifyListeners();
+      debugPrint('✅ Hearts used: $amount (Remaining: $_hearts)');
       
-      debugPrint('✅ Hearts used: $amount');
+      // Firebase에서 최신 데이터 다시 로드하여 동기화
+      await _loadUserPurchaseData();
+      
       return true;
     } catch (e) {
       debugPrint('❌ Error using hearts: $e');
+      // 에러 발생 시 로컬 상태 롤백
+      _hearts += amount;
+      notifyListeners();
       return false;
     }
   }
@@ -390,6 +418,7 @@ class PurchaseService extends BaseService {
   @override
   void dispose() {
     _subscription?.cancel();
+    _authSubscription?.cancel();
     super.dispose();
   }
 }

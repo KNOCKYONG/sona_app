@@ -83,13 +83,28 @@ class AuthService extends BaseService {
 
   Future<bool> signInWithEmail(String email, String password) async {
     final result = await executeWithLoading<bool>(() async {
-      final credential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      
-      _user = credential.user;
-      return true;
+      try {
+        final credential = await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        
+        _user = credential.user;
+        return true;
+      } on FirebaseAuthException catch (e) {
+        // Firebase Auth 에러를 더 구체적으로 처리
+        debugPrint('Firebase Auth Error Code: ${e.code}');
+        debugPrint('Firebase Auth Error Message: ${e.message}');
+        
+        // 네트워크 에러인 경우 추가 디버깅 정보
+        if (e.code == 'network-request-failed') {
+          debugPrint('Network error details: ${e.toString()}');
+          debugPrint('Please check: 1) Internet connection 2) Firebase project setup 3) Email/Password auth enabled in Firebase Console');
+        }
+        
+        // BaseService의 _getErrorMessage가 처리하도록 에러를 다시 throw
+        throw e;
+      }
     }, errorContext: 'signInWithEmail');
     
     return result ?? false;

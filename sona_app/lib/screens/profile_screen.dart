@@ -9,6 +9,7 @@ import '../utils/permission_helper.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/chat/chat_service.dart';
+import '../services/purchase/purchase_service.dart';
 import 'matched_personas_screen.dart';
 import 'profile_edit_screen.dart';
 
@@ -71,6 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final userService = Provider.of<UserService>(context);
     final personaService = Provider.of<PersonaService>(context);
     final chatService = Provider.of<ChatService>(context);
+    final purchaseService = Provider.of<PurchaseService>(context);
     final firebaseUser = authService.user;
     final appUser = userService.currentUser;
     final isLoggedIn = authService.isAuthenticated;
@@ -155,16 +157,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
     
     // 통계 계산
-    int totalMessages = 0;
-    int totalRelationshipScore = 0;
+    final matchedPersonaCount = personaService.matchedPersonas.length;
+    int totalLikes = 0;
     for (final persona in personaService.matchedPersonas) {
-      final messages = chatService.getMessages(persona.id);
-      totalMessages += messages.length;
-      totalRelationshipScore += persona.relationshipScore;
+      totalLikes += persona.relationshipScore;
     }
-    final avgScore = personaService.matchedPersonas.isNotEmpty 
-        ? (totalRelationshipScore / personaService.matchedPersonas.length).round()
-        : 0;
+    final hearts = purchaseService.hearts;
     
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -301,9 +299,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatItem('매칭', '${personaService.matchedPersonas.length}'),
-                      _buildStatItem('대화', '$totalMessages'),
-                      _buildStatItem('친밀도', '$avgScore'),
+                      _buildStatItem('총 Like', '$totalLikes'),
+                      _buildStatItem('보유 하트', '$hearts'),
                     ],
                   ),
                 ],

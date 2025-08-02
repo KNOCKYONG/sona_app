@@ -7,6 +7,7 @@ import '../../models/app_user.dart';
 import '../base/base_service.dart';
 import '../../helpers/firebase_helper.dart';
 import '../storage/firebase_storage_service.dart';
+import '../../core/constants.dart';
 
 class UserService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -224,9 +225,34 @@ class UserService extends BaseService {
       final doc = await FirebaseHelper.user(uid).get();
       if (doc.exists) {
         _currentUser = AppUser.fromFirestore(doc);
+        
+        // 기존 사용자 데이터 마이그레이션 (일일 메시지 제한 필드가 없는 경우)
+        final data = doc.data() as Map<String, dynamic>;
+        if (data['dailyMessageLimit'] == null || data['dailyMessageCount'] == null) {
+          await _migrateUserData(uid);
+        }
       }
     } catch (e) {
       debugPrint('사용자 데이터 로드 실패: $e');
+    }
+  }
+  
+  // 기존 사용자 데이터 마이그레이션
+  Future<void> _migrateUserData(String uid) async {
+    try {
+      await FirebaseHelper.user(uid).update({
+        'dailyMessageLimit': AppConstants.dailyMessageLimit,
+        'dailyMessageCount': 0,
+        'lastMessageCountReset': FieldValue.serverTimestamp(),
+      });
+      
+      // 로컬 데이터 재로드
+      final doc = await FirebaseHelper.user(uid).get();
+      if (doc.exists) {
+        _currentUser = AppUser.fromFirestore(doc);
+      }
+    } catch (e) {
+      debugPrint('사용자 데이터 마이그레이션 실패: $e');
     }
   }
 
@@ -346,12 +372,16 @@ class UserService extends BaseService {
   int getRemainingMessages() {
     if (_currentUser == null) return 0;
     
+    // 기본값 설정 (null safety를 위한 추가 체크)
+    final dailyLimit = _currentUser!.dailyMessageLimit;
+    final dailyCount = _currentUser!.dailyMessageCount;
+    
     // 리셋이 필요한지 확인
     if (_shouldResetMessageCount()) {
-      return _currentUser!.dailyMessageLimit;
+      return dailyLimit;
     }
     
-    return _currentUser!.dailyMessageLimit - _currentUser!.dailyMessageCount;
+    return dailyLimit - dailyCount;
   }
   
   // 일일 메시지 제한에 도달했는지 확인
@@ -363,7 +393,11 @@ class UserService extends BaseService {
       return false;
     }
     
-    return _currentUser!.dailyMessageCount >= _currentUser!.dailyMessageLimit;
+    // 기본값 설정 (null safety를 위한 추가 체크)
+    final dailyCount = _currentUser!.dailyMessageCount;
+    final dailyLimit = _currentUser!.dailyMessageLimit;
+    
+    return dailyCount >= dailyLimit;
   }
   
   // 메시지 카운트 증가

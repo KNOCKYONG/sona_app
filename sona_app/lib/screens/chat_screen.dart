@@ -45,6 +45,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _previousIsTyping = false;
   bool _hasShownWelcome = false;
   bool _showMoreMenu = false;
+  
+  // Service references for dispose method
+  ChatService? _chatService;
+  String? _userId;
+  Persona? _currentPersona;
 
   @override
   void initState() {
@@ -114,12 +119,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final authService = Provider.of<AuthService>(context, listen: false);
     final subscriptionService = Provider.of<SubscriptionService>(context, listen: false);
     
+    // Store service references for dispose method
+    _chatService = chatService;
+    _userId = authService.user?.uid ?? '';
+    
     chatService.setPersonaService(personaService);
+    chatService.setCurrentUserId(_userId!);
     
-    final userId = authService.user?.uid ?? '';
-    chatService.setCurrentUserId(userId);
-    
-    debugPrint('🔗 ChatService initialized with PersonaService and userId: $userId');
+    debugPrint('🔗 ChatService initialized with PersonaService and userId: $_userId');
     
     if (authService.user != null) {
       await subscriptionService.loadSubscription(authService.user!.uid);
@@ -128,6 +135,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona) {
       await personaService.selectPersona(args);
+      _currentPersona = args; // Store current persona for dispose method
       // 🔧 FIX: Force refresh relationship data from Firebase for accurate display
       debugPrint('🔄 Forcing relationship refresh for persona: ${args.name}');
       await personaService.refreshMatchedPersonasRelationships();
@@ -381,6 +389,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
       
       _currentPersonaId = args.id;
+      _currentPersona = args; // Update stored persona reference
       // Reset welcome message flag for new persona
       _hasShownWelcome = false;
       
@@ -402,15 +411,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
   
   void _markMessagesAsReadOnExit() {
-    final chatService = Provider.of<ChatService>(context, listen: false);
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final personaService = Provider.of<PersonaService>(context, listen: false);
-    
-    final userId = authService.user?.uid ?? '';
-    final currentPersona = personaService.currentPersona;
-    
-    if (userId.isNotEmpty && currentPersona != null) {
-      chatService.markAllMessagesAsRead(userId, currentPersona.id);
+    // Use stored references instead of Provider to avoid widget lifecycle issues
+    if (_chatService != null && _userId != null && _userId!.isNotEmpty && _currentPersona != null) {
+      _chatService!.markAllMessagesAsRead(_userId!, _currentPersona!.id);
     }
   }
 

@@ -1663,12 +1663,28 @@ class ChatService extends BaseService {
           timestamp: DateTime.now(),
         );
         
-        _addMessageToList(persona.id, aiMessage);
+        // Update persona-specific messages
+        if (!_messagesByPersona.containsKey(persona.id)) {
+          _messagesByPersona[persona.id] = [];
+        }
+        _messagesByPersona[persona.id]!.add(aiMessage);
         
+        // Always update global messages when it's the current persona
+        if (_currentPersonaId == persona.id) {
+          _messages = List.from(_messagesByPersona[persona.id]!);
+        }
+        
+        // Queue message for batch saving
         if (userId != '') {
           _queueMessageForSaving(userId, persona.id, aiMessage);
-        } else {
-          await LocalStorageService.addTutorialMessage(aiMessage);
+        }
+        
+        // Handle score change on last message
+        if (isLastMessage && scoreChange != 0) {
+          debugPrint('📊 Processing relationship score change: $scoreChange for ${persona.name}');
+          if (userId != '') {
+            _notifyScoreChange(persona.id, scoreChange, userId);
+          }
         }
         
         notifyListeners();

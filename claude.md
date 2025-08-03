@@ -639,18 +639,40 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
 **명령어**: `대화 오류 확인`
 
 **기능**: 
-- Firebase `chat_error_fix` 컬렉션에서 체크되지 않은(is_check가 없거나 false) 오류 보고서를 읽어옴
-- 각 보고서의 대화 내용을 분석하여 문제 패턴 파악
+- Firebase `chat_error_fix` 컬렉션에서 체크되지 않은 오류 보고서를 읽어옴
+- **대화 맥락 분석 (최우선)**:
+  - 질문-답변 관련성 평가
+  - 주제 일관성 점수 (0-100)
+  - 대화 흐름 자연스러움 점수 (0-100)
+  - 갑작스러운 주제 변경 감지
+- 문제 패턴 분석:
+  - 인사말 반복
+  - 동일 응답 반복 (매크로 패턴)
+  - 관련 없는 답변
+  - 감정 표현 일관성
 - 분석 완료된 문서에 is_check: true 표시
 
-**분석 항목**:
-1. 첫인사 반복 여부
-2. 대화 흐름의 자연스러움
-3. AI 응답의 적절성
-4. 사용자 불만족 신호 (같은 말 반복, 짧은 응답 등)
+**실행 스크립트**: 
+```bash
+# 기본 실행 (체크되지 않은 문서만)
+python scripts/analyze_chat_errors.py
 
-**실행 프로세스**:
-1. `chat_error_fix` 컬렉션에서 미확인 문서 조회
-2. 각 문서의 대화 내용 분석
-3. 문제 패턴 식별 및 보고
-4. 분석 완료 문서에 is_check: true 표시
+# 모든 문서 재분석
+python scripts/analyze_chat_errors.py --recheck
+```
+
+**분석 결과**:
+- **콘솔 출력**: 전체 통계, 심각한 문제 요약, 페르소나별 분석
+- **JSON 파일 저장**:
+  - `analysis_results/summary_YYYYMMDD_HHMMSS.json`: 요약 통계
+  - `analysis_results/detailed_YYYYMMDD_HHMMSS.json`: 상세 분석 결과
+
+**심각도 레벨**:
+- **CRITICAL**: 대화 완전 이탈, 의미 없는 응답
+- **HIGH**: 주제 벗어남, 부자연스러운 응답
+- **MEDIUM**: 약간의 맥락 불일치
+- **LOW**: 미미한 문제
+
+**주의사항**:
+- Firebase Admin SDK 사용을 위해 `firebase-service-account-key.json` 파일 필요
+- 맥락 분석은 키워드 추출 및 의미론적 유사도 기반으로 수행됨

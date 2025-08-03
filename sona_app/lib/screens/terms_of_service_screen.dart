@@ -10,8 +10,8 @@ class TermsOfServiceScreen extends StatelessWidget {
         title: const Text('서비스 이용약관'),
         elevation: 0,
       ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(20.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

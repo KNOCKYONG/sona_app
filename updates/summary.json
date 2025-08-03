@@ -1,0 +1,28 @@
+{
+  "total_personas": 52,
+  "total_batches": 6,
+  "batch_size": 10,
+  "generated_at": "2025-08-03T00:35:34.623071Z",
+  "personas_with_additional_images": {
+    "yeseul": [
+      "image1",
+      "image2"
+    ],
+    "hayeon": [
+      "image1",
+      "image2",
+      "image3"
+    ],
+    "minjun": [
+      "image1"
+    ]
+  },
+  "batch_files": [
+    "updates/batch_01.json",
+    "updates/batch_02.json",
+    "updates/batch_03.json",
+    "updates/batch_04.json",
+    "updates/batch_05.json",
+    "updates/batch_06.json"
+  ]
+}

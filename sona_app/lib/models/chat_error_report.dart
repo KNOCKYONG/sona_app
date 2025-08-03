@@ -61,7 +61,7 @@ class ChatErrorReport {
           timestamp: (chat['timestamp'] as Timestamp).toDate(),
           personaId: chat['personaId'] ?? '',
           emotion: chat['emotion'] ?? 'neutral',
-          messageType: MessageType.text,
+          type: MessageType.text,
         )
       ).toList() ?? [],
       createdAt: (map['created_at'] as Timestamp).toDate(),

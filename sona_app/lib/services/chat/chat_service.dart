@@ -21,6 +21,7 @@ import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
 import '../relationship/like_cooldown_system.dart';
+import '../../models/chat_error_report.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -2637,9 +2638,6 @@ class ChatService extends BaseService {
     try {
       debugPrint('🚨 Sending chat error report for persona: $personaId');
       
-      // Import ChatErrorReport model
-      final chatErrorReport = await import('../../models/chat_error_report.dart');
-      
       // 현재 페르소나 정보 가져오기
       final persona = _getPersonaFromService(personaId);
       if (persona == null) {
@@ -2657,8 +2655,8 @@ class ChatService extends BaseService {
       final deviceInfo = await _getDeviceInfo();
       
       // 에러 리포트 생성
-      final errorReport = chatErrorReport.ChatErrorReport(
-        errorKey: chatErrorReport.ChatErrorReport.generateErrorKey(),
+      final errorReport = ChatErrorReport(
+        errorKey: ChatErrorReport.generateErrorKey(),
         userId: userId,
         personaId: personaId,
         personaName: persona.name,

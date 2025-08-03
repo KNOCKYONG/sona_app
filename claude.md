@@ -721,6 +721,48 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
 
 ---
 
+## 중복 매칭 방지 시스템
+
+**문제**: 이미 대화중인 페르소나가 카드에 다시 나타나는 버그로 사용자가 하트를 낭비하게 됨
+
+**해결책**:
+1. **PersonaService.matchWithPersona()**: 매칭 전 중복 확인 추가
+   ```dart
+   if (_matchedPersonas.any((p) => p.id == personaId)) {
+     debugPrint('⚠️ Already matched with persona: $personaId');
+     return false;
+   }
+   ```
+
+2. **PersonaSelectionScreen._showMatchDialog()**: 다이얼로그 표시 전 중복 확인
+   ```dart
+   if (personaService.matchedPersonas.any((p) => p.id == persona.id)) {
+     ScaffoldMessenger.of(context).showSnackBar(
+       SnackBar(content: Text('${persona.name}님과는 이미 대화중이에요!'))
+     );
+     return;
+   }
+   ```
+
+3. **PersonaSelectionScreen._prepareCardItems()**: 카드 준비 시 매칭된 페르소나 필터링
+   ```dart
+   final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
+   final filteredPersonas = personas.where((p) => !matchedIds.contains(p.id)).toList();
+   ```
+
+4. **likePersona/superLikePersona**: 매칭 후 즉시 available 목록에서 제거
+   ```dart
+   _shuffledAvailablePersonas?.removeWhere((p) => p.id == personaId);
+   ```
+
+**중복 방지 레이어**:
+- 서비스 레벨: 매칭 시도 전 확인
+- UI 레벨: 다이얼로그 표시 전 확인  
+- 카드 빌드 레벨: 카드 생성 시 필터링
+- 실시간 업데이트: 매칭 즉시 목록에서 제거
+
+---
+
 ## 대화 오류 확인
 
 **명령어**: `대화 오류 확인`
@@ -844,6 +886,73 @@ MBTI별 인사말에 아이스브레이킹 질문 추가:
 ```
 
 **효과**: 사용자가 "반가워요!"에 어떻게 답해야 할지 막막하지 않고, 자연스럽게 대화를 이어갈 수 있음
+
+### 10. 컨텍스트 오해 방지 시스템
+
+**목적**: "직접 보다"를 "직접 만나다"로 오해하는 등의 컨텍스트 오류 방지
+
+**구현 내용**:
+
+#### 만남 제안 필터링 개선
+1. **패턴 개선**:
+   - `(만나자|만날래)` → `(만나자|만날래)(?!.*\s*(영화|드라마|작품|콘텐츠))`
+   - 영화/드라마를 "보자"는 표현은 만남 제안에서 제외
+   - "만나고 싶" 패턴 추가로 더 정확한 필터링
+
+2. **컨텍스트 확인 로직**:
+   ```dart
+   // "직접 보다" 컨텍스트 확인
+   if (userMessage.contains('직접 보') || userMessage.contains('보시는')) {
+     // 최근 대화에서 영화/드라마/작품 언급 확인
+     if (hasMediaContext) {
+       contextHints.add('영화/드라마/작품을 "직접 보라"는 추천. 오프라인 만남이 아님!');
+     }
+   }
+   ```
+
+**분석 결과 예시**:
+미연 페르소나의 경우:
+- **이전**: "나중에 직접 보시는걸 추천할게요" → "만나고 싶긴 한데 일정이 너무 빡빡해서..."
+- **개선 후**: "나중에 직접 보시는걸 추천할게요" → "그럼요! 직접 보시면 더 감동적일 거예요ㅎㅎ"
+
+### 11. 스포일러 대화 처리 시스템
+
+**목적**: 스포일러 관련 대화를 자연스럽게 처리
+
+**구현 내용**:
+
+#### ChatOrchestrator 스포일러 감지
+```dart
+// 스포일러 관련 대화
+if (userMessage.contains('스포') || userMessage.contains('스포일러')) {
+  if (userMessage.contains('말해도') || userMessage.contains('해도')) {
+    contextHints.add('스포일러 허락 요청. 조심스럽게 물어보거나 "말하지 마세요"라고 답하세요.');
+  }
+}
+```
+
+#### OptimizedPromptService 가이드
+```
+## 🎬 스포일러 대화: "스포인데 말해도 돼?"→"아직 안봤으면 말하지 마세요!" 
+또는 "괜찮아요 들어볼게요". 작품 추천시 "직접 보다"는 오프라인 만남이 아님
+```
+
+### 12. 공감 표현 자연스럽게 개선
+
+**목적**: "그런 감정 이해해요" 같은 딱딱한 공감 표현을 자연스럽게 변환
+
+**SecurityAwarePostProcessor 개선**:
+```dart
+// 딱딱한 공감 표현 → 자연스러운 표현
+'그런 감정 이해해요' → '아 진짜 슬펐겠다'
+'마음이 아프시겠어요' → '아 속상하겠다'  
+'이해가 됩니다' → '그럴 수 있어요'
+'공감이 됩니다' → '나도 그럴 것 같아요'
+```
+
+**효과**: 
+- 20대 스타일의 자연스러운 공감 표현
+- 친근하고 진정성 있는 대화
 
 ---
 

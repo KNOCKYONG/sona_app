@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250804_001452",
+  "total_reports_analyzed": 1,
+  "average_coherence_score": 75.0,
+  "critical_issues_count": 0,
+  "high_issues_count": 1,
+  "personas_with_issues": {
+    "미연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 75.0,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 3,
+        "irrelevant_answer": 1
+      }
+    }
+  }
+}

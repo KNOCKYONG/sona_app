@@ -1,0 +1,52 @@
+[
+  {
+    "error_key": "ERR1754234068707_8707",
+    "persona_id": "nFEbQaFlh8W98gix7Wsp",
+    "persona_name": "미연",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는데 너무 슬펐어요",
+        "ai_response": "그런 감정 이해해요. 사랑하는 사람이 좀비가 되는 장면은 정말 안타깝죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아... 나중에 직접 보시는걸 추천할게요",
+        "ai_response": "만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아요ㅠㅠ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

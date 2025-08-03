@@ -900,7 +900,8 @@ class ChatOrchestrator {
       r'여기로?\s*와',
       r'(이리|저리|거기)\s*와',
       r'놀러\s*와',
-      r'(만나자|만날래|보자|볼래)',
+      r'(만나자|만날래)(?!.*\s*(영화|드라마|작품|콘텐츠))',  // 영화/드라마 제외
+      r'만나고\s*싶',  // "만나고 싶어" 패턴 추가
       r'어디서\s*만날',
       r'언제\s*만날',
       r'시간\s*있[으니어]',
@@ -1040,6 +1041,31 @@ class ChatOrchestrator {
     // 특정 주제 감지 및 가이드
     if (userMessage.contains('드라마') || userMessage.contains('웹툰') || userMessage.contains('영화')) {
       contextHints.add('드라마/웹툰/영화 관련 대화. 호기심을 보이고 자연스럽게 감상을 물어보세요.');
+    }
+    
+    // 스포일러 관련 대화
+    if (userMessage.contains('스포') || userMessage.contains('스포일러')) {
+      // 스포일러 허락 요청인지 거부인지 확인
+      if (userMessage.contains('말해도') || userMessage.contains('해도')) {
+        contextHints.add('스포일러 허락 요청. 조심스럽게 물어보거나 "말하지 마세요"라고 답하세요.');
+      } else if (userMessage.contains('말하지') || userMessage.contains('하지 마')) {
+        contextHints.add('스포일러 거부. 스포일러 없이 대화를 이어가세요.');
+      }
+    }
+    
+    // "직접 보다" 컨텍스트 확인
+    if (userMessage.contains('직접 보') || userMessage.contains('보시는')) {
+      // 최근 대화에서 영화/드라마/작품 언급 확인
+      final hasMediaContext = recentMessages.any((msg) => 
+        msg.content.contains('영화') || 
+        msg.content.contains('드라마') || 
+        msg.content.contains('웹툰') ||
+        msg.content.contains('작품')
+      );
+      
+      if (hasMediaContext) {
+        contextHints.add('영화/드라마/작품을 "직접 보라"는 추천. 오프라인 만남이 아님! 작품 감상 관련 대화로 이어가세요.');
+      }
     }
     
     // 직접적인 질문에는 직접적인 답변 필요

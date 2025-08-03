@@ -373,6 +373,9 @@ class PersonaService extends BaseService {
         await _saveMatchedPersonas();
       }
       
+      // 🔥 즉시 사용 가능한 페르소나 목록에서 제거
+      _shuffledAvailablePersonas?.removeWhere((p) => p.id == personaId);
+      
       _sessionSwipedPersonas[personaId] = DateTime.now();
       
       // Cache the relationship
@@ -451,6 +454,9 @@ class PersonaService extends BaseService {
           await _saveMatchedPersonas();
         }
       }
+      
+      // 🔥 즉시 사용 가능한 페르소나 목록에서 제거
+      _shuffledAvailablePersonas?.removeWhere((p) => p.id == personaId);
       
       _sessionSwipedPersonas[personaId] = DateTime.now();
       
@@ -1855,6 +1861,12 @@ class PersonaService extends BaseService {
   }
 
   Future<bool> matchWithPersona(String personaId, {bool isSuperLike = false}) async {
+    // 🔥 이미 매칭된 페르소나인지 먼저 확인
+    if (_matchedPersonas.any((p) => p.id == personaId)) {
+      debugPrint('⚠️ Already matched with persona: $personaId - preventing duplicate match');
+      return false;
+    }
+    
     if (isSuperLike) {
       debugPrint('⭐ Processing as SUPER LIKE: $personaId');
       return await superLikePersona(personaId);

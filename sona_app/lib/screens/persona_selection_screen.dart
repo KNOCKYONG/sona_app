@@ -163,16 +163,30 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       return;
     }
 
+    // 🔥 매칭된 페르소나 추가 필터링
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
+    final filteredPersonas = personas.where((p) => !matchedIds.contains(p.id)).toList();
+    
+    if (filteredPersonas.isEmpty) {
+      debugPrint('⚠️ All available personas are already matched');
+      _cardItems = [];
+      _cardsKey = '';
+      return;
+    }
+    
+    debugPrint('🔥 Filtered out ${personas.length - filteredPersonas.length} already matched personas');
+
     // 중복 페르소나 체크
     final uniquePersonas = <String, Persona>{};
-    for (final persona in personas) {
+    for (final persona in filteredPersonas) {
       if (!uniquePersonas.containsKey(persona.id)) {
         uniquePersonas[persona.id] = persona;
       } else {
         debugPrint('⚠️ Duplicate persona found: ${persona.name} (ID: ${persona.id})');
       }
     }
-    debugPrint('📊 Unique personas: ${uniquePersonas.length} (from ${personas.length} total)');
+    debugPrint('📊 Unique personas: ${uniquePersonas.length} (from ${filteredPersonas.length} filtered)');
 
     _cardItems = [];
     final tips = TipData.allTips;
@@ -1253,6 +1267,20 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   }
 
   void _showMatchDialog(Persona persona, {bool isSuperLike = false}) {
+    // 🔥 이미 매칭된 페르소나인지 확인
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    if (personaService.matchedPersonas.any((p) => p.id == persona.id)) {
+      debugPrint('⚠️ Already matched with ${persona.name} - showing warning');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${persona.name}님과는 이미 대화중이에요!'),
+          backgroundColor: Colors.orange,
+          duration: const Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+    
     // 🔧 FIX: 메인 화면의 context를 미리 저장
     final BuildContext screenContext = context;
     

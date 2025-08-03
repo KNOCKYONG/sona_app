@@ -103,6 +103,12 @@ class SecurityAwarePostProcessor {
       RegExp(r'그러십니까'): '그래요',
       RegExp(r'그렇습니까'): '그래요',
       RegExp(r'아니십니까'): '아니에요',
+      
+      // 딱딱한 공감 표현
+      RegExp(r'그런\s*감정\s*이해해요'): '아 진짜 슬펐겠다',
+      RegExp(r'마음이\s*아프시겠어요'): '아 속상하겠다',
+      RegExp(r'이해가\s*됩니다'): '그럴 수 있어요',
+      RegExp(r'공감이\s*됩니다'): '나도 그럴 것 같아요',
     };
     
     String result = text;

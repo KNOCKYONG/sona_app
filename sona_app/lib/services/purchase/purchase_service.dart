@@ -193,6 +193,12 @@ class PurchaseService extends BaseService {
         // 소모성 상품 구매
         success = await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
       }
+      
+      // 구매 시작 실패 시 pending 상태 리셋
+      if (!success) {
+        _isPurchasePending = false;
+        notifyListeners();
+      }
     } catch (e) {
       debugPrint('❌ Purchase error: $e');
       _isPurchasePending = false;
@@ -415,6 +421,15 @@ class PurchaseService extends BaseService {
       _hearts += amount;
       notifyListeners();
       return false;
+    }
+  }
+  
+  /// 구매 대기 상태 리셋
+  void resetPurchasePending() {
+    if (_isPurchasePending) {
+      debugPrint('🔄 Resetting purchase pending state');
+      _isPurchasePending = false;
+      notifyListeners();
     }
   }
   

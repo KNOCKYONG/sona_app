@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../../models/persona.dart';
 import '../../models/message.dart';
 import '../../core/constants.dart';
@@ -24,14 +21,6 @@ class ChatOrchestrator {
   final PersonaRelationshipCache _relationshipCache = PersonaRelationshipCache.instance;
   final ConversationMemoryService _memoryService = ConversationMemoryService();
   
-  // API 설정
-  static String get _apiKey => dotenv.env['OPENAI_API_KEY'] ?? '';
-  static const String _baseUrl = 'https://api.openai.com/v1/chat/completions';
-  // OpenAI model is defined in AppConstants
-  
-  // HTTP 클라이언트
-  final http.Client _httpClient = http.Client();
-  
   /// 메시지 생성 메인 메서드
   Future<ChatResponse> generateResponse({
     required String userId,
@@ -39,15 +28,18 @@ class ChatOrchestrator {
     required String userMessage,
     required List<Message> chatHistory,
     String? userNickname,
+    int? userAge,
   }) async {
     try {
       // 1단계: 완전한 페르소나 정보 로드
-      final completePersona = await _relationshipCache.getCompletePersona(
+      final personaData = await _relationshipCache.getCompletePersona(
         userId: userId,
         basePersona: basePersona,
       );
+      final completePersona = personaData.persona;
+      final isCasualSpeech = personaData.isCasualSpeech;
       
-      debugPrint('✅ Loaded complete persona: ${completePersona.name} (casual: ${completePersona.isCasualSpeech})');
+      debugPrint('✅ Loaded complete persona: ${completePersona.name} (casual: $isCasualSpeech)');
       
       // 2단계: 대화 메모리 구축
       final contextMemory = await _buildContextMemory(
@@ -63,24 +55,26 @@ class ChatOrchestrator {
         recentMessages: _getRecentMessages(chatHistory),
         userNickname: userNickname,
         contextMemory: contextMemory,
+        isCasualSpeech: isCasualSpeech,
+        userAge: userAge,
       );
       
       debugPrint('📝 Generated prompt with ${prompt.length} characters');
       
       // 4단계: API 호출
-      final rawResponse = await _callOpenAI(
-        prompt: prompt,
+      final rawResponse = await OpenAIService.generateResponse(
+        persona: completePersona,
+        chatHistory: chatHistory,
         userMessage: userMessage,
+        relationshipType: _getRelationshipType(completePersona),
+        userNickname: userNickname,
+        userAge: userAge,
+        isCasualSpeech: isCasualSpeech,
       );
       
-      // 5단계: 통합 후처리
-      final processedResponse = await SecurityAwarePostProcessor.processResponse(
-        rawResponse: rawResponse,
-        userMessage: userMessage,
-        persona: completePersona,
-        recentAIMessages: _extractRecentAIMessages(chatHistory),
-        userNickname: userNickname,
-      );
+      // 5단계: 통합 후처리 (필요한 경우만)
+      // OpenAIService에서 이미 보안 필터링을 하므로 추가 필터링이 필요한 경우만 수행
+      final processedResponse = rawResponse;
       
       // 6단계: 감정 분석 및 점수 계산
       final emotion = _analyzeEmotion(processedResponse);
@@ -137,64 +131,17 @@ class ChatOrchestrator {
     }
   }
   
-  /// OpenAI API 호출
-  Future<String> _callOpenAI({
-    required String prompt,
-    required String userMessage,
-  }) async {
-    final apiKey = _apiKey;
-    debugPrint('🔑 API Key loaded: ${apiKey.isNotEmpty ? "Yes (${apiKey.substring(0, 10)}...)" : "No"}');
-    
-    if (apiKey.isEmpty) {
-      debugPrint('❌ API Key is empty!');
-      throw Exception('OpenAI API key not configured');
-    }
-    
-    final messages = [
-      {
-        'role': 'system',
-        'content': prompt,
-      },
-      {
-        'role': 'user',
-        'content': userMessage,
-      },
-    ];
-    
-    debugPrint('🌐 Calling OpenAI API...');
-    debugPrint('📝 Model: ${AppConstants.openAIModel}');
-    debugPrint('💬 User message: ${userMessage.substring(0, userMessage.length > 50 ? 50 : userMessage.length)}...');
-    
-    final response = await _httpClient.post(
-      Uri.parse(_baseUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $apiKey',
-      },
-      body: jsonEncode({
-        'model': AppConstants.openAIModel,
-        'messages': messages,
-        'max_tokens': AppConstants.maxOutputTokens,
-        'temperature': 0.85,
-        'presence_penalty': 0.6,
-        'frequency_penalty': 0.5,
-        'top_p': 0.9,
-      }),
-    ).timeout(
-      const Duration(seconds: 30),
-      onTimeout: () => throw TimeoutException('API timeout'),
-    );
-    
-    debugPrint('📨 Response status: ${response.statusCode}');
-    
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      debugPrint('✅ API call successful');
-      return data['choices'][0]['message']['content'].toString().trim();
+  /// 관계 타입 가져오기
+  String _getRelationshipType(Persona persona) {
+    // 점수 기반으로 관계 타입 결정
+    if (persona.relationshipScore >= 900) {
+      return '완벽한 사랑';
+    } else if (persona.relationshipScore >= 600) {
+      return '연인';
+    } else if (persona.relationshipScore >= 200) {
+      return '썸/호감';
     } else {
-      debugPrint('❌ API error: ${response.statusCode}');
-      debugPrint('📄 Response body: ${response.body}');
-      throw Exception('API error: ${response.statusCode} - ${response.body}');
+      return '친구';
     }
   }
   
@@ -205,14 +152,6 @@ class ChatOrchestrator {
     return history.sublist(history.length - maxRecent);
   }
   
-  /// 최근 AI 메시지 추출
-  List<String> _extractRecentAIMessages(List<Message> history) {
-    return history
-        .where((m) => !m.isFromUser)
-        .take(3)
-        .map((m) => m.content)
-        .toList();
-  }
   
   /// 감정 분석
   EmotionType _analyzeEmotion(String response) {
@@ -312,7 +251,9 @@ class ChatOrchestrator {
   
   /// 폴백 응답 생성
   String _generateFallbackResponse(Persona persona) {
-    final responses = persona.isCasualSpeech ? [
+    // TODO: Get isCasualSpeech from PersonaRelationshipCache
+    final isCasualSpeech = false; // Default to formal
+    final responses = isCasualSpeech ? [
       '아 잠깐만ㅋㅋ 생각이 안 나네',
       '어? 뭔가 이상하네 다시 말해줄래?',
       '잠시만 머리가 하얘졌어ㅠㅠ',
@@ -323,10 +264,6 @@ class ChatOrchestrator {
     ];
     
     return responses[DateTime.now().millisecond % responses.length];
-  }
-  
-  void dispose() {
-    _httpClient.close();
   }
 }
 

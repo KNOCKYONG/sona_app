@@ -62,6 +62,7 @@ void main() {
     final optimizedPrompt = OptimizedPromptService.buildOptimizedPrompt(
       persona: persona,
       relationshipType: relationshipType,
+      userNickname: '테스터',
     );
     
     // 기존 프롬프트 시뮬레이션 (압축 전 예상 크기)

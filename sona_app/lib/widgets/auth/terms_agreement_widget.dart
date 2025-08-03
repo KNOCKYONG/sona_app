@@ -83,18 +83,12 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
               localizations.allAgree,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).brightness == Brightness.dark 
-                    ? Colors.black 
-                    : null,
               ),
             ),
             value: _allAgreed,
             onChanged: _toggleAll,
             controlAffinity: ListTileControlAffinity.leading,
             checkColor: Colors.white,
-            activeColor: Theme.of(context).brightness == Brightness.dark 
-                ? Colors.black 
-                : null,
           ),
         ),
         const SizedBox(height: 8),
@@ -106,9 +100,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           title: RichText(
             text: TextSpan(
               style: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark 
-                    ? Colors.black87 
-                    : Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
               children: [
                 TextSpan(text: localizations.required + ' '),
@@ -141,9 +133,6 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           },
           controlAffinity: ListTileControlAffinity.leading,
           checkColor: Colors.white,
-          activeColor: Theme.of(context).brightness == Brightness.dark 
-              ? Colors.black 
-              : null,
         ),
         
         // 개인정보 처리방침 (필수)
@@ -151,9 +140,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           title: RichText(
             text: TextSpan(
               style: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark 
-                    ? Colors.black87 
-                    : Colors.black87,
+                color: Theme.of(context).textTheme.bodyLarge?.color,
               ),
               children: [
                 TextSpan(text: localizations.required + ' '),
@@ -186,9 +173,6 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           },
           controlAffinity: ListTileControlAffinity.leading,
           checkColor: Colors.white,
-          activeColor: Theme.of(context).brightness == Brightness.dark 
-              ? Colors.black 
-              : null,
         ),
         
         // 마케팅 수신 동의 (선택)
@@ -205,9 +189,6 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             localizations.marketingDescription,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).brightness == Brightness.dark 
-                  ? Colors.black54 
-                  : null,
             ),
           ),
           value: widget.agreedToMarketing,
@@ -219,9 +200,6 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           },
           controlAffinity: ListTileControlAffinity.leading,
           checkColor: Colors.white,
-          activeColor: Theme.of(context).brightness == Brightness.dark 
-              ? Colors.black 
-              : null,
         ),
         
         const SizedBox(height: 16),

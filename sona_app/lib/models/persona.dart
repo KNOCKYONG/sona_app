@@ -8,7 +8,6 @@ class Persona {
   final int relationshipScore;
   final DateTime createdAt;
   final Map<String, dynamic> preferences;
-  final bool isCasualSpeech; // 반말 사용 플래그
   final String gender; // 성별 ('male', 'female')
   final String mbti; // MBTI 성격 유형 (예: 'ENFP', 'INTJ')
   final DateTime? matchedAt; // 매칭된 시간
@@ -30,7 +29,6 @@ class Persona {
     this.relationshipScore = 0,
     DateTime? createdAt,
     this.preferences = const {},
-    this.isCasualSpeech = false, // 기본값은 존댓말
     this.gender = 'female', // 기본값은 여성
     this.mbti = 'ENFP', // 기본값은 ENFP
     this.matchedAt, // 매칭된 시간
@@ -216,7 +214,6 @@ class Persona {
       'relationshipScore': relationshipScore,
       'createdAt': createdAt.toIso8601String(),
       'preferences': preferences,
-      'isCasualSpeech': isCasualSpeech,
       'gender': gender,
       'mbti': mbti,
       'imageUrls': imageUrls, // 새로운 이미지 URL 구조
@@ -227,17 +224,27 @@ class Persona {
   }
 
   factory Persona.fromJson(Map<String, dynamic> json) {
+    // photoUrls 파싱 처리 - 문자열 "[]" 문제 해결
+    List<String> photoUrlsList = [];
+    if (json['photoUrls'] != null) {
+      if (json['photoUrls'] is List) {
+        photoUrlsList = List<String>.from(json['photoUrls']);
+      } else if (json['photoUrls'] is String && json['photoUrls'] == '[]') {
+        // Firebase에서 잘못 저장된 문자열 "[]" 처리
+        photoUrlsList = [];
+      }
+    }
+    
     return Persona(
       id: json['id'],
       name: json['name'],
       age: json['age'],
       description: json['description'],
-      photoUrls: List<String>.from(json['photoUrls']),
+      photoUrls: photoUrlsList,
       personality: json['personality'],
       relationshipScore: json['relationshipScore'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
-      isCasualSpeech: json['isCasualSpeech'] ?? false,
       gender: json['gender'] ?? 'female',
       mbti: json['mbti'] ?? 'ENFP',
       imageUrls: json['imageUrls'] != null 
@@ -263,7 +270,6 @@ class Persona {
     String? personality,
     int? relationshipScore,
     Map<String, dynamic>? preferences,
-    bool? isCasualSpeech,
     String? gender,
     String? mbti,
     Map<String, dynamic>? imageUrls,
@@ -281,7 +287,6 @@ class Persona {
       relationshipScore: relationshipScore ?? this.relationshipScore,
       createdAt: createdAt,
       preferences: preferences ?? this.preferences,
-      isCasualSpeech: isCasualSpeech ?? this.isCasualSpeech,
       gender: gender ?? this.gender,
       mbti: mbti ?? this.mbti,
       imageUrls: imageUrls ?? this.imageUrls,

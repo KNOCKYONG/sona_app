@@ -214,9 +214,10 @@ class SafeResponseGenerator {
     required Persona persona,
     required String category,
     String? userMessage,
+    bool isCasualSpeech = false,
   }) {
     // 적절한 템플릿 선택
-    final templates = persona.isCasualSpeech 
+    final templates = isCasualSpeech 
         ? _casualResponseTemplates 
         : _politeResponseTemplates;
     
@@ -336,16 +337,17 @@ class SafeResponseGenerator {
     required Persona persona,
     required String baseResponse,
     required String userMessage,
+    bool isCasualSpeech = false,
   }) {
     // 이모티콘 추가 (페르소나에 따라)
-    if (persona.isCasualSpeech && _random.nextDouble() > 0.5) {
+    if (isCasualSpeech && _random.nextDouble() > 0.5) {
       final emojis = ['😅', '😊', '😄', '🤔', '😆', '😁', '🙈'];
       baseResponse += ' ${emojis[_random.nextInt(emojis.length)]}';
     }
     
     // 추가 멘트 (30% 확률)
     if (_random.nextDouble() > 0.7) {
-      final additions = persona.isCasualSpeech
+      final additions = isCasualSpeech
           ? [' 헤헤', ' ㅋㅋㅋ', ' 히히', ' 흐흐']
           : [' 😊', ' ^^', ' :)', ''];
       baseResponse += additions[_random.nextInt(additions.length)];
@@ -358,8 +360,9 @@ class SafeResponseGenerator {
   static String addTopicSuggestion({
     required Persona persona,
     required String response,
+    bool isCasualSpeech = false,
   }) {
-    final suggestions = persona.isCasualSpeech
+    final suggestions = isCasualSpeech
         ? [
             ' 근데 오늘 뭐 했어?',
             ' 요즘 뭐가 재밌어?',

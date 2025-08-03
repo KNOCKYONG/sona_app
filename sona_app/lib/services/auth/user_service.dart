@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../models/app_user.dart';
 import '../base/base_service.dart';
 import '../../helpers/firebase_helper.dart';
-import '../storage/firebase_storage_service.dart';
+import '../storage/local_profile_image_service.dart';
 import '../../core/constants.dart';
 
 class UserService extends BaseService {
@@ -66,10 +66,10 @@ class UserService extends BaseService {
         throw Exception('회원가입에 실패했습니다.');
       }
 
-      // 2. 프로필 이미지 업로드 (선택사항)
-      String? profileImageUrl;
+      // 2. 프로필 이미지 저장 (선택사항)
+      String? profileImagePath;
       if (profileImage != null) {
-        profileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+        profileImagePath = await LocalProfileImageService.saveProfileImage(
           userId: credential.user!.uid,
           imageFile: profileImage,
         );
@@ -88,7 +88,7 @@ class UserService extends BaseService {
         ),
         interests: interests,
         intro: intro,
-        profileImageUrl: profileImageUrl,
+        profileImageUrl: profileImagePath,
         createdAt: DateTime.now(),
         purpose: purpose,
         preferredMbti: preferredMbti,
@@ -188,10 +188,10 @@ class UserService extends BaseService {
         throw Exception('로그인된 사용자가 없습니다.');
       }
 
-      // 프로필 이미지 업로드
-      String? profileImageUrl;
+      // 프로필 이미지 저장
+      String? profileImagePath;
       if (profileImage != null) {
-        profileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+        profileImagePath = await LocalProfileImageService.saveProfileImage(
           userId: _firebaseUser!.uid,
           imageFile: profileImage,
         );
@@ -210,7 +210,7 @@ class UserService extends BaseService {
         ),
         interests: interests,
         intro: intro,
-        profileImageUrl: profileImageUrl,
+        profileImageUrl: profileImagePath,
         createdAt: DateTime.now(),
         purpose: purpose,
         preferredMbti: preferredMbti,
@@ -347,13 +347,24 @@ class UserService extends BaseService {
     final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
 
-      // 새 프로필 이미지 업로드
-      String? newProfileImageUrl = _currentUser!.profileImageUrl;
+      // 새 프로필 이미지 저장
+      String? newProfileImagePath = _currentUser!.profileImageUrl;
       if (profileImage != null) {
-        newProfileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
-          userId: _currentUser!.uid,
-          imageFile: profileImage,
-        );
+        try {
+          debugPrint('🖼️ Saving profile image for user: ${_currentUser!.uid}');
+          debugPrint('📁 Image file path: ${profileImage.path}');
+          debugPrint('📏 Image file exists: ${await profileImage.exists()}');
+          debugPrint('📊 Image file size: ${await profileImage.length()} bytes');
+          
+          newProfileImagePath = await LocalProfileImageService.saveProfileImage(
+            userId: _currentUser!.uid,
+            imageFile: profileImage,
+          );
+          debugPrint('✅ Profile image saved successfully: $newProfileImagePath');
+        } catch (e) {
+          debugPrint('❌ Failed to save profile image: $e');
+          throw Exception('프로필 사진 저장 중 오류가 발생했습니다.');
+        }
       }
 
       // 업데이트할 데이터 준비
@@ -374,8 +385,8 @@ class UserService extends BaseService {
       }
       if (interests != null) updates['interests'] = interests;
       if (intro != null) updates['intro'] = intro;
-      if (newProfileImageUrl != null) {
-        updates['profileImageUrl'] = newProfileImageUrl;
+      if (newProfileImagePath != null) {
+        updates['profileImageUrl'] = newProfileImagePath;
       }
       if (genderAll != null) updates['genderAll'] = genderAll;
 
@@ -422,15 +433,19 @@ class UserService extends BaseService {
     final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
       
-      // 프로필 이미지 업로드
-      final newProfileImageUrl = await FirebaseStorageService.uploadUserProfileImage(
+      // 프로필 이미지 저장 (기존 이미지는 자동 삭제됨)
+      final newProfileImagePath = await LocalProfileImageService.saveProfileImage(
         userId: _currentUser!.uid,
         imageFile: profileImage,
       );
       
+      if (newProfileImagePath == null) {
+        throw Exception('프로필 이미지 저장에 실패했습니다.');
+      }
+      
       // Firestore 업데이트
       await FirebaseHelper.user(_currentUser!.uid).update({
-        'profileImageUrl': newProfileImageUrl,
+        'profileImageUrl': newProfileImagePath,
         'updatedAt': FieldValue.serverTimestamp(),
       });
       
@@ -465,6 +480,12 @@ class UserService extends BaseService {
   bool isDailyMessageLimitReached() {
     if (_currentUser == null) return false; // 로그인하지 않은 경우 제한 없음
     
+    // 프리미엄 사용자는 무제한
+    if (_currentUser!.isPremium) {
+      debugPrint('✅ 프리미엄 사용자 - 메시지 무제한');
+      return false;
+    }
+    
     // 리셋이 필요한지 확인하고 필요하면 자동 리셋
     if (_shouldResetMessageCount()) {
       // 비동기 작업이므로 바로 리셋은 못하지만 false 반환
@@ -484,6 +505,12 @@ class UserService extends BaseService {
   // 메시지 카운트 증가
   Future<void> incrementMessageCount() async {
     if (_currentUser == null) return;
+    
+    // 프리미엄 사용자는 카운트 증가 안함
+    if (_currentUser!.isPremium) {
+      debugPrint('✅ 프리미엄 사용자 - 메시지 카운트 증가 스킵');
+      return;
+    }
     
     await executeWithLoading(() async {
       // 리셋이 필요한지 확인

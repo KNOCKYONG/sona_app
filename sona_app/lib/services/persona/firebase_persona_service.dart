@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../models/persona.dart';
 import '../storage/firebase_storage_service.dart';
+import '../chat/persona_relationship_cache.dart';
 
 class FirebasePersonaService extends ChangeNotifier {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -324,15 +325,8 @@ class FirebasePersonaService extends ChangeNotifier {
             'casualSpeechUpdatedAt': FieldValue.serverTimestamp(),
           });
       
-      // 로컬에서도 업데이트
-      if (_currentPersona?.id == personaId) {
-        _currentPersona = _currentPersona!.copyWith(isCasualSpeech: isCasualSpeech);
-      }
-      
-      final index = _myPersonas.indexWhere((p) => p.id == personaId);
-      if (index != -1) {
-        _myPersonas[index] = _myPersonas[index].copyWith(isCasualSpeech: isCasualSpeech);
-      }
+      // 로컬에서도 업데이트 - PersonaRelationshipCache가 처리하므로 여기서는 캐시 무효화만
+      PersonaRelationshipCache.instance.invalidatePersona(userId, personaId);
       
       notifyListeners();
       return true;

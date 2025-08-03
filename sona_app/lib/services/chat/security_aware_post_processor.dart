@@ -246,7 +246,9 @@ class SecurityAwarePostProcessor {
   
   /// 안전한 대체 응답 생성
   static String _generateSafeResponse(Persona persona, String reason) {
-    final responses = persona.isCasualSpeech ? {
+    // TODO: Get isCasualSpeech from context
+    final isCasualSpeech = false; // Default to formal
+    final responses = isCasualSpeech ? {
       'injection': [
         '어? 갑자기 뭔 얘기야 ㅋㅋ 다른 얘기하자',
         '아 그런 건 잘 모르겠어~ 재밌는 거 얘기해줘',

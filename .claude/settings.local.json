@@ -34,7 +34,9 @@
       "WebFetch(domain:127.0.0.1)",
       "mcp__context7__resolve-library-id",
       "mcp__serena-mcp__activate_project",
-      "mcp__serena-mcp__list_dir"
+      "mcp__serena-mcp__list_dir",
+      "WebFetch(domain:teamsona.work)",
+      "WebFetch(domain:pub-ad4e2b5b2765401f808d655de4f2ad43.r2.dev)"
     ],
     "deny": []
   }

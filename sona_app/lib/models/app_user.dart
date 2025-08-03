@@ -27,6 +27,10 @@ class AppUser {
   final int dailyMessageCount; // 오늘 보낸 메시지 수
   final DateTime? lastMessageCountReset; // 마지막 리셋 시간
   final int dailyMessageLimit; // 일일 메시지 제한 (기본값: 100)
+  
+  // 프리미엄 관련 필드
+  final bool isPremium; // 프리미엄 구독 여부
+  final DateTime? premiumExpiryDate; // 프리미엄 만료일
 
   AppUser({
     required this.uid,
@@ -51,6 +55,8 @@ class AppUser {
     this.dailyMessageCount = 0,
     this.lastMessageCountReset,
     this.dailyMessageLimit = 100,
+    this.isPremium = false,
+    this.premiumExpiryDate,
   }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
@@ -89,6 +95,8 @@ class AppUser {
       'dailyMessageCount': dailyMessageCount,
       'lastMessageCountReset': lastMessageCountReset != null ? Timestamp.fromDate(lastMessageCountReset!) : null,
       'dailyMessageLimit': dailyMessageLimit,
+      'isPremium': isPremium,
+      'premiumExpiryDate': premiumExpiryDate != null ? Timestamp.fromDate(premiumExpiryDate!) : null,
     };
   }
 
@@ -130,6 +138,10 @@ class AppUser {
           ? (data['lastMessageCountReset'] as Timestamp).toDate()
           : null,
       dailyMessageLimit: data['dailyMessageLimit'] ?? 100,
+      isPremium: data['isPremium'] ?? false,
+      premiumExpiryDate: data['premiumExpiryDate'] != null 
+          ? (data['premiumExpiryDate'] as Timestamp).toDate()
+          : null,
     );
   }
 
@@ -154,6 +166,8 @@ class AppUser {
     int? dailyMessageCount,
     DateTime? lastMessageCountReset,
     int? dailyMessageLimit,
+    bool? isPremium,
+    DateTime? premiumExpiryDate,
   }) {
     return AppUser(
       uid: uid,
@@ -178,6 +192,8 @@ class AppUser {
       dailyMessageCount: dailyMessageCount ?? this.dailyMessageCount,
       lastMessageCountReset: lastMessageCountReset ?? this.lastMessageCountReset,
       dailyMessageLimit: dailyMessageLimit ?? this.dailyMessageLimit,
+      isPremium: isPremium ?? this.isPremium,
+      premiumExpiryDate: premiumExpiryDate ?? this.premiumExpiryDate,
     );
   }
 }

@@ -54,10 +54,20 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
 
   void _onPhotoTap(TapUpDetails details) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final tapPosition = details.localPosition.dx;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final tapX = details.localPosition.dx;
+    final tapY = details.localPosition.dy;
     
-    if (tapPosition < screenWidth * 0.3) {
-      // 왼쪽 탭 - 이전 사진
+    // 카드 하단 정보 영역 (이름부터 카드 아래까지) - 화면 높이의 60% 지점부터
+    final infoAreaStart = screenHeight * 0.6;
+    
+    if (tapY >= infoAreaStart) {
+      // 하단 정보 영역 전체가 상세보기 토글 (이름부터 카드 끝까지)
+      setState(() {
+        _showDetails = !_showDetails;
+      });
+    } else if (tapX < screenWidth * 0.3) {
+      // 상단 좌측 탭 - 이전 사진 (기존 로직 유지)
       if (_currentPhotoIndex > 0) {
         setState(() {
           _currentPhotoIndex--;
@@ -68,8 +78,8 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
           curve: Curves.easeInOut,
         );
       }
-    } else if (tapPosition > screenWidth * 0.7) {
-      // 오른쪽 탭 - 다음 사진
+    } else if (tapX > screenWidth * 0.7) {
+      // 상단 우측 탭 - 다음 사진 (기존 로직 유지)
       final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
       if (_currentPhotoIndex < allImageUrls.length - 1) {
         setState(() {
@@ -82,7 +92,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
         );
       }
     } else {
-      // 중앙 탭 - 상세 정보 토글
+      // 상단 중앙 탭 - 상세보기 토글 (기존 로직 유지)
       setState(() {
         _showDetails = !_showDetails;
       });
@@ -364,22 +374,32 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
           overflow: TextOverflow.ellipsis,
         ),
         const SizedBox(height: 12),
-        const Row(
-          children: [
-            Icon(
-              Icons.touch_app,
-              color: Colors.white60,
-              size: 16,
-            ),
-            SizedBox(width: 4),
-            Text(
-              '탭하여 자세히 보기',
-              style: TextStyle(
-                color: Colors.white60,
-                fontSize: 12,
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.touch_app,
+                color: Colors.white70,
+                size: 16,
               ),
-            ),
-          ],
+              SizedBox(width: 4),
+              Text(
+                '이 영역 탭하여 자세히 보기',
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

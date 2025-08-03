@@ -26,6 +26,7 @@ class PersonaService extends BaseService {
   List<Persona> _allPersonas = [];
   List<Persona> _matchedPersonas = [];
   Persona? _currentPersona;
+  bool? _currentPersonaCasualSpeech; // 현재 페르소나의 반말 모드 별도 저장
   
   // Stable shuffled list for swipe session
   List<Persona>? _shuffledAvailablePersonas;
@@ -99,6 +100,7 @@ class PersonaService extends BaseService {
   }
   
   Persona? get currentPersona => _currentPersona;
+  bool? get currentPersonaCasualSpeech => _currentPersonaCasualSpeech;
   @override
   bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
@@ -197,9 +199,9 @@ class PersonaService extends BaseService {
       if (cachedRelationship != null) {
         _currentPersona = persona.copyWith(
           relationshipScore: cachedRelationship.score,
-          isCasualSpeech: cachedRelationship.isCasualSpeech,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
+        _currentPersonaCasualSpeech = cachedRelationship.isCasualSpeech;
         notifyListeners();
         return;
       }
@@ -209,9 +211,9 @@ class PersonaService extends BaseService {
       if (relationshipData != null) {
         _currentPersona = persona.copyWith(
           relationshipScore: relationshipData['relationshipScore'] ?? 50,
-          isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
+        _currentPersonaCasualSpeech = relationshipData['isCasualSpeech'] ?? false;
         
         // Cache the relationship
         _addToCache(persona.id, _CachedRelationship(
@@ -221,9 +223,11 @@ class PersonaService extends BaseService {
         ));
       } else {
         _currentPersona = persona;
+        _currentPersonaCasualSpeech = false; // 기본값
       }
     } else {
       _currentPersona = persona;
+      _currentPersonaCasualSpeech = false; // 기본값
     }
     notifyListeners();
   }
@@ -269,7 +273,6 @@ class PersonaService extends BaseService {
       // Update local state immediately
       final matchedPersona = persona.copyWith(
         relationshipScore: 50,
-        isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
       );
@@ -342,7 +345,6 @@ class PersonaService extends BaseService {
       // Update local state immediately with super like score
       final matchedPersona = persona.copyWith(
         relationshipScore: 1000, // 🌟 Super like relationship score
-        isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
       );
@@ -410,7 +412,6 @@ class PersonaService extends BaseService {
       // Super like creates crush relationship (200 score)
       final matchedPersona = persona.copyWith(
         relationshipScore: 1000, // 🌟 Super like relationship score
-        isCasualSpeech: false,
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -661,7 +662,6 @@ class PersonaService extends BaseService {
           
           final matchedPersona = persona.copyWith(
             relationshipScore: relationshipScore,
-            isCasualSpeech: data['isCasualSpeech'] ?? false,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
             matchedAt: matchedAt,
           );
@@ -880,7 +880,6 @@ class PersonaService extends BaseService {
         photoUrls: photoUrls,
         personality: data['personality'] ?? '',
         relationshipScore: 0,
-        isCasualSpeech: false,
         gender: data['gender'] ?? 'female',
         mbti: data['mbti'] ?? 'ENFP',
         imageUrls: imageUrls,  // Add R2 image URLs
@@ -1218,7 +1217,6 @@ class PersonaService extends BaseService {
       
       final matchedPersona = persona.copyWith(
         relationshipScore: 50,
-        isCasualSpeech: false,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
       
@@ -1371,21 +1369,16 @@ class PersonaService extends BaseService {
       
       // 2. 현재 페르소나 업데이트
       if (_currentPersona?.id == personaId) {
-        _currentPersona = _currentPersona!.copyWith(
-          isCasualSpeech: isCasualSpeech,
-          imageUrls: _currentPersona!.imageUrls,  // Preserve imageUrls
-        );
-        debugPrint('✅ Current persona updated: ${_currentPersona!.name} → ${isCasualSpeech ? "반말" : "존댓말"}');
+        _currentPersonaCasualSpeech = isCasualSpeech;
+        debugPrint('✅ Current persona casual speech updated: ${_currentPersona!.name} → ${isCasualSpeech ? "반말" : "존댓말"}');
       }
       
       // 3. 매칭된 페르소나 리스트 업데이트
       final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
-        _matchedPersonas[index] = _matchedPersonas[index].copyWith(
-          isCasualSpeech: isCasualSpeech,
-          imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
-        );
-        debugPrint('✅ Matched persona list updated');
+        // 매칭된 페르소나 리스트에서는 relationshipScore만 관리
+        // isCasualSpeech는 캐시에서 별도 관리
+        debugPrint('✅ Matched persona found in list');
         
         // Save to local storage
         await _saveMatchedPersonas();
@@ -1438,7 +1431,6 @@ class PersonaService extends BaseService {
         if (relationshipData != null) {
           final refreshedPersona = persona.copyWith(
             relationshipScore: relationshipData['relationshipScore'] ?? persona.relationshipScore,
-            isCasualSpeech: relationshipData['isCasualSpeech'] ?? persona.isCasualSpeech,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           refreshedPersonas.add(refreshedPersona);
@@ -1446,7 +1438,7 @@ class PersonaService extends BaseService {
           // Update cache
           _addToCache(persona.id, _CachedRelationship(
             score: relationshipData['relationshipScore'] ?? persona.relationshipScore,
-            isCasualSpeech: relationshipData['isCasualSpeech'] ?? persona.isCasualSpeech,
+            isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
             timestamp: DateTime.now(),
           ));
         } else {

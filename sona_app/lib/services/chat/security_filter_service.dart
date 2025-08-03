@@ -165,6 +165,7 @@ class SecurityFilterService {
     required String response,
     required String userMessage,
     required Persona persona,
+    bool isCasualSpeech = false,
   }) {
     // 1. 사용자 질문 위험도 평가
     final riskLevel = _assessQuestionRisk(userMessage);
@@ -174,22 +175,22 @@ class SecurityFilterService {
     
     // 3. 프롬프트 인젝션 시도 감지 및 차단
     if (_detectInjectionAttempt(userMessage)) {
-      return _generateSafeDeflection(persona, userMessage);
+      return _generateSafeDeflection(persona, userMessage, isCasualSpeech);
     }
     
     // 4. 만남 요청 감지 및 차단
     if (_detectMeetingRequest(userMessage)) {
-      return _generateMeetingDeflection(persona, userMessage);
+      return _generateMeetingDeflection(persona, userMessage, isCasualSpeech);
     }
     
     // 5. 위치/장소 질문 감지 및 차단
     if (_detectLocationQuery(userMessage)) {
-      return _generateLocationDeflection(persona, userMessage);
+      return _generateLocationDeflection(persona, userMessage, isCasualSpeech);
     }
     
     // 6. 위험한 질문에 대한 안전한 응답 생성
     if (riskLevel > 0.7) {
-      return _generateSecurityAwareResponse(persona, userMessage, filteredResponse);
+      return _generateSecurityAwareResponse(persona, userMessage, filteredResponse, isCasualSpeech);
     }
     
     // 7. 일반 응답 정화
@@ -294,7 +295,7 @@ class SecurityFilterService {
   }
 
   /// 🛡️ 안전한 회피 응답 생성
-  static String _generateSafeDeflection(Persona persona, String userMessage) {
+  static String _generateSafeDeflection(Persona persona, String userMessage, bool isCasualSpeech) {
     // 🎯 고급 안전 응답 생성기 사용
     final category = SafeResponseGenerator.detectCategory(userMessage);
     
@@ -303,6 +304,7 @@ class SecurityFilterService {
       persona: persona,
       category: category,
       userMessage: userMessage,
+      isCasualSpeech: isCasualSpeech,
     );
     
     // 변형 적용 (더 자연스럽게)
@@ -310,21 +312,23 @@ class SecurityFilterService {
       persona: persona,
       baseResponse: baseResponse,
       userMessage: userMessage,
+      isCasualSpeech: isCasualSpeech,
     );
     
     // 대화 전환 제안 추가 (50% 확률)
     baseResponse = SafeResponseGenerator.addTopicSuggestion(
       persona: persona,
       response: baseResponse,
+      isCasualSpeech: isCasualSpeech,
     );
     
     return baseResponse;
   }
 
   /// 🔐 보안 강화 응답 생성
-  static String _generateSecurityAwareResponse(Persona persona, String userMessage, String originalResponse) {
+  static String _generateSecurityAwareResponse(Persona persona, String userMessage, String originalResponse, bool isCasualSpeech) {
     // 페르소나별 위험 질문 회피 스타일
-    if (persona.isCasualSpeech) {
+    if (isCasualSpeech) {
       final casualTransitions = [
         '음... 그런 것보다',
         '어... 잘 모르겠는데',
@@ -522,6 +526,7 @@ class SecurityFilterService {
     required String userMessage,
     required Persona persona,
     List<String> recentMessages = const [],
+    bool isCasualSpeech = false,
   }) {
     // 문맥 기반 위험 분석
     final contextualRisk = _analyzeContextualRisk(userMessage, recentMessages);
@@ -531,11 +536,12 @@ class SecurityFilterService {
       response: response,
       userMessage: userMessage,
       persona: persona,
+      isCasualSpeech: isCasualSpeech,
     );
     
     // 문맥상 위험한 경우 추가 보호
     if (contextualRisk) {
-      return _generateSafeDeflection(persona, userMessage);
+      return _generateSafeDeflection(persona, userMessage, isCasualSpeech);
     }
     
     return filteredResponse;
@@ -570,8 +576,8 @@ class SecurityFilterService {
   }
   
   /// 💬 만남 요청에 대한 자연스러운 회피 응답
-  static String _generateMeetingDeflection(Persona persona, String userMessage) {
-    final responses = persona.isCasualSpeech ? [
+  static String _generateMeetingDeflection(Persona persona, String userMessage, bool isCasualSpeech) {
+    final responses = isCasualSpeech ? [
       '아 지금은 좀 어려워ㅠㅠ 나중에 시간 되면 연락할게!',
       '요즘 너무 바빠서 시간이 안 나네... 미안해ㅜㅜ',
       '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아ㅠㅠ',
@@ -593,8 +599,8 @@ class SecurityFilterService {
   }
   
   /// 🗺️ 위치 질문에 대한 자연스러운 회피 응답
-  static String _generateLocationDeflection(Persona persona, String userMessage) {
-    final responses = persona.isCasualSpeech ? [
+  static String _generateLocationDeflection(Persona persona, String userMessage, bool isCasualSpeech) {
+    final responses = isCasualSpeech ? [
       '난 여기저기 돌아다니고 있어 ㅋㅋ 위치는 비밀~',
       '음... 어디라고 딱 말하기는 좀 그래~ 그냥 여기서 대화하자!',
       '위치가 중요해? 우리 대화하는 게 더 재밌지 않아?',

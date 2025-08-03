@@ -4,10 +4,18 @@ Local Image Optimizer with English folder names - Creates optimized images in as
 """
 
 import os
+import sys
 from PIL import Image
 from pathlib import Path
 from persona_name_mapping import get_english_name
 import numpy as np
+
+# Set UTF-8 encoding for Windows console
+if sys.platform.startswith('win'):
+    import locale
+    if sys.stdout.encoding != 'utf-8':
+        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stderr.reconfigure(encoding='utf-8')
 
 # Configuration
 PERSONAS_SOURCE_DIR = r"C:\Users\yong\Documents\personas"

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -42,6 +43,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   bool _isFirstTimeUser = false;
   List<dynamic> _cardItems = []; // Personas와 Tips를 함께 담을 리스트
   final Random _random = Random();
+  List<Persona>? _lastPersonas; // 이전 페르소나 리스트 추적
+  bool _isPreparingCards = false; // 카드 준비 중 플래그
+  String _cardsKey = ''; // 안정적인 카드 키를 위한 변수
+  bool _isSwipeInProgress = false; // 스와이프 진행 중 플래그
+  final Set<String> _processingPersonas = {}; // 처리 중인 페르소나 추적
 
   @override
   void initState() {
@@ -76,30 +82,123 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   void _prepareCardItems(List<Persona> personas) {
     if (personas.isEmpty) {
       _cardItems = [];
+      _cardsKey = '';
       return;
     }
+
+    // 중복 페르소나 체크
+    final uniquePersonas = <String, Persona>{};
+    for (final persona in personas) {
+      if (!uniquePersonas.containsKey(persona.id)) {
+        uniquePersonas[persona.id] = persona;
+      } else {
+        debugPrint('⚠️ Duplicate persona found: ${persona.name} (ID: ${persona.id})');
+      }
+    }
+    debugPrint('📊 Unique personas: ${uniquePersonas.length} (from ${personas.length} total)');
 
     _cardItems = [];
     final tips = TipData.allTips;
     final usedTips = <TipData>[];
-
-    for (int i = 0; i < personas.length; i++) {
-      _cardItems.add(personas[i]);
-
-      // 4~8번 사이에 랜덤하게 Tip 카드 삽입
-      if (i >= 3 && i <= 7 && tips.length > usedTips.length) {
-        // 30% 확률로 Tip 카드 삽입
-        if (_random.nextDouble() < 0.3) {
+    
+    // uniquePersonasList를 먼저 선언
+    final uniquePersonasList = uniquePersonas.values.toList();
+    
+    // 최소 2~3개의 팁은 반드시 보여주기
+    int insertedTipCount = 0;
+    final targetTipCount = 2 + (_random.nextBool() ? 1 : 0); // 2 or 3
+    
+    // 팁 카드 삽입 위치를 미리 결정
+    final guaranteedTipPositions = <int>[];
+    if (uniquePersonasList.length >= 5) {
+      guaranteedTipPositions.add(4); // 5번째 위치 (0,1,2,3,[TIP],4,...)
+      if (uniquePersonasList.length >= 10) {
+        guaranteedTipPositions.add(9); // 10번째 위치
+      }
+      if (uniquePersonasList.length >= 15) {
+        guaranteedTipPositions.add(14); // 15번째 위치
+      }
+    }
+    
+    // 현재 추가된 아이템의 인덱스 추적
+    int currentItemIndex = 0;
+    
+    for (int i = 0; i < uniquePersonasList.length; i++) {
+      // 현재 위치가 팁 카드 위치인지 확인
+      if (guaranteedTipPositions.contains(currentItemIndex) && 
+          insertedTipCount < targetTipCount && 
+          tips.length > usedTips.length) {
+        // 팁 카드 삽입
+        final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
+        if (availableTips.isNotEmpty) {
+          final tipIndex = _random.nextInt(availableTips.length);
+          final selectedTip = availableTips[tipIndex];
+          usedTips.add(selectedTip);
+          _cardItems.add(selectedTip);
+          insertedTipCount++;
+          currentItemIndex++;
+          debugPrint('💡 Inserted tip at position $currentItemIndex: ${selectedTip.title.substring(0, 10)}...');
+        }
+      }
+      
+      // 페르소나 추가
+      _cardItems.add(uniquePersonasList[i]);
+      currentItemIndex++;
+      
+      // 추가 랜덤 팁 카드 (보장된 위치가 아닌 경우)
+      if (i >= 5 && i < uniquePersonasList.length - 3 && // 마지막 3장에는 팁 넣지 않음
+          insertedTipCount < targetTipCount && 
+          tips.length > usedTips.length &&
+          !guaranteedTipPositions.contains(currentItemIndex)) {
+        // 20% 확률로 팁 카드 삽입
+        if (_random.nextDouble() < 0.2) {
           final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
           if (availableTips.isNotEmpty) {
             final tipIndex = _random.nextInt(availableTips.length);
             final selectedTip = availableTips[tipIndex];
             usedTips.add(selectedTip);
             _cardItems.add(selectedTip);
+            insertedTipCount++;
+            currentItemIndex++;
+            debugPrint('💡 Inserted random tip at position $currentItemIndex: ${selectedTip.title.substring(0, 10)}...');
           }
         }
       }
     }
+    
+    // 만약 목표 팁 개수를 채우지 못했다면 마지막에 추가
+    while (insertedTipCount < targetTipCount && tips.length > usedTips.length) {
+      final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
+      if (availableTips.isNotEmpty) {
+        final tipIndex = _random.nextInt(availableTips.length);
+        final selectedTip = availableTips[tipIndex];
+        usedTips.add(selectedTip);
+        _cardItems.add(selectedTip);
+        insertedTipCount++;
+        debugPrint('💡 Added tip at end: ${selectedTip.title.substring(0, 10)}...');
+      } else {
+        break;
+      }
+    }
+    
+    // 안정적인 키 생성 - personas의 ID 조합으로 유니크한 키 생성
+    _cardsKey = 'cards_${uniquePersonasList.map((p) => p.id.substring(0, 4)).join('_')}_${DateTime.now().millisecondsSinceEpoch}';
+    
+    debugPrint('📊 Prepared ${_cardItems.length} cards: ${uniquePersonasList.length} personas, $insertedTipCount tips (target: $targetTipCount)');
+    
+    // 팁 카드 위치 확인 (디버깅용)
+    final tipPositions = <int>[];
+    final personaPositions = <String>[];
+    for (int i = 0; i < _cardItems.length; i++) {
+      if (_cardItems[i] is TipData) {
+        tipPositions.add(i);
+      } else if (_cardItems[i] is Persona) {
+        final persona = _cardItems[i] as Persona;
+        personaPositions.add('[$i] ${persona.name} (${persona.id.substring(0, 8)})');
+      }
+    }
+    debugPrint('💡 Tip card positions: $tipPositions');
+    debugPrint('👥 Persona positions: ${personaPositions.take(5).join(', ')}...');
   }
 
   Future<void> _loadPersonas() async {
@@ -267,6 +366,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
   @override
   void dispose() {
+    // 플래그 리셋
+    _isPreparingCards = false;
+    
     // 애니메이션 컨트롤러를 먼저 정리
     _heartAnimationController.stop();
     _passAnimationController.stop();
@@ -285,8 +387,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   }
 
   bool _onSwipe(int previousIndex, int? currentIndex, CardSwiperDirection direction) {
+    // 스와이프가 진행 중이면 무시
+    if (_isSwipeInProgress) {
+      debugPrint('⚠️ Swipe already in progress, ignoring');
+      return false;
+    }
+    
     debugPrint('🎯 Swipe detected: previousIndex=$previousIndex, currentIndex=$currentIndex, direction=$direction');
     debugPrint('📊 Card items length: ${_cardItems.length}');
+    
+    // 스와이프 방향이 null이거나 유효하지 않은 경우 (취소된 경우)
+    if (direction == null) {
+      debugPrint('❌ Swipe cancelled');
+      return true; // 스와이프를 허용하여 다음 카드로 이동
+    }
+    
+    // 스와이프 진행 중 플래그 설정
+    _isSwipeInProgress = true;
     
     if (previousIndex >= 0 && previousIndex < _cardItems.length) {
       final item = _cardItems[previousIndex];
@@ -297,14 +414,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         // Tip 카드는 그냥 넘어가기만 함
       } else if (item is Persona) {
         // 페르소나 카드인 경우 - 기존 로직대로 처리
+        debugPrint('🎯 Persona at index $previousIndex: ${item.name} (ID: ${item.id})');
+        
         if (direction == CardSwiperDirection.right) {
-          debugPrint('💕 Right swipe - Liking persona: ${item.name}');
+          debugPrint('💕 Right swipe - Liking persona: ${item.name} (ID: ${item.id})');
           _onPersonaLiked(item, isSuperLike: false);
         } else if (direction == CardSwiperDirection.left) {
-          debugPrint('👈 Left swipe - Passing persona: ${item.name}');
+          debugPrint('👈 Left swipe - Passing persona: ${item.name} (ID: ${item.id})');
           _onPersonaPassed(item);
         } else if (direction == CardSwiperDirection.top) {
-          debugPrint('⭐ Top swipe - Super liking persona: ${item.name}');
+          debugPrint('⭐ Top swipe - Super liking persona: ${item.name} (ID: ${item.id})');
           _onPersonaLiked(item, isSuperLike: true);
         }
       }
@@ -312,22 +431,32 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       debugPrint('❌ Index out of bounds: $previousIndex (total: ${_cardItems.length})');
     }
     
-    // currentIndex 업데이트
+    // currentIndex 업데이트 - 즉시 업데이트하여 UI 반응성 향상
     if (currentIndex != null && mounted) {
-      Future.microtask(() {
-        if (mounted) {
-          setState(() {
-            _currentIndex = currentIndex;
-          });
-        }
+      setState(() {
+        _currentIndex = currentIndex;
       });
     }
     
-    return true; // Allow swipe to proceed
+    // 스와이프 진행 플래그 해제 (짧은 지연 후)
+    Future.delayed(const Duration(milliseconds: 300), () {
+      if (mounted) {
+        _isSwipeInProgress = false;
+      }
+    });
+    
+    return true; // Always allow swipe to proceed
   }
 
   void _onPersonaLiked(Persona persona, {bool isSuperLike = false}) async {
     if (!mounted) return;
+    
+    // 이미 처리 중인 페르소나인지 확인
+    if (_processingPersonas.contains(persona.id)) {
+      debugPrint('⚠️ Already processing persona: ${persona.name} (ID: ${persona.id})');
+      return;
+    }
+    _processingPersonas.add(persona.id);
     
     _heartAnimationController.forward().then((_) {
       if (mounted && _heartAnimationController != null) {
@@ -346,26 +475,18 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     // Super like의 경우 매칭을 지연시키고 다이얼로그에서 처리
     if (isSuperLike) {
-      // 스와이프만 마킹하고 매칭은 하지 않음
-      await personaService.markPersonaAsSwiped(persona.id);
-      if (mounted) {
-        _showMatchDialog(persona, isSuperLike: true);
+      try {
+        // 스와이프만 마킹하고 매칭은 하지 않음
+        await personaService.markPersonaAsSwiped(persona.id);
+        if (mounted) {
+          _showMatchDialog(persona, isSuperLike: true);
+        }
+      } finally {
+        // Super like의 경우 여기서 처리 완료
+        _processingPersonas.remove(persona.id);
       }
     } else {
-      // 일반 like는 즉시 매칭 처리
-      Future.microtask(() async {
-        debugPrint('🔄 Processing persona match: ${persona.name}');
-        
-        // 먼저 스와이프 마킹
-        await personaService.markPersonaAsSwiped(persona.id);
-        
-        // 그 다음 매칭 처리 (내부적으로 이미 스와이프 체크함)
-        final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: false);
-        
-        debugPrint('✅ Match processing complete: ${persona.name} (success: $matchSuccess, isSuperLike: false)');
-      });
-      
-      // 🔧 DeviceIdService 기반 매칭 (로그인 없이도 작동)
+      // 일반 like 매칭 처리
       setState(() => _isLoading = true);
       
       try {
@@ -374,6 +495,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           firebaseUserId: authService.user?.uid,
         );
         
+        debugPrint('🔄 Processing persona match: ${persona.name} (ID: ${persona.id})');
         debugPrint('🆔 Matching with userId: $currentUserId');
         
         // PersonaService가 currentUserId를 가지고 있는지 확인
@@ -381,16 +503,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           personaService.setCurrentUserId(currentUserId);
         }
         
-        // 매칭 수행
-        final success = await personaService.likePersona(persona.id);
+        // 먼저 스와이프 마킹
+        await personaService.markPersonaAsSwiped(persona.id);
+        
+        // 매칭 처리
+        final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: false);
+        
+        debugPrint('✅ Match processing complete: ${persona.name} (ID: ${persona.id}, success: $matchSuccess)');
         
         setState(() => _isLoading = false);
         
-        if (success && mounted) {
-          _showMatchDialog(persona, isSuperLike: false);
-        } else if (mounted) {
-          debugPrint('❌ Matching failed for persona: ${persona.id}');
-          // 실패해도 다이얼로그는 표시 (UX)
+        if (mounted) {
           _showMatchDialog(persona, isSuperLike: false);
         }
       } catch (e) {
@@ -400,6 +523,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         if (mounted) {
           _showMatchDialog(persona, isSuperLike: false);
         }
+      } finally {
+        // 처리 완료 후 목록에서 제거
+        _processingPersonas.remove(persona.id);
       }
     }
   }
@@ -1097,9 +1223,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(
-            constraints: const BoxConstraints(
+            constraints: BoxConstraints(
               maxWidth: 340,
-              maxHeight: 480, // 최대 높이 제한 추가
+              maxHeight: MediaQuery.of(context).size.height * 0.8, // 화면 높이의 80%로 동적 조정
             ),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -1110,6 +1236,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               ),
             ),
             child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(), // 스크롤 물리 효과 개선
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
@@ -1483,12 +1610,21 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
           final personas = personaService.availablePersonas;
           
-          // 카드 아이템 리스트 준비 (Personas + Tips)
-          _prepareCardItems(personas);
-
-          debugPrint('🎯 PersonaSelectionScreen: Available personas count: ${personas.length}');
-          debugPrint('🎯 PersonaSelectionScreen: Card items count: ${_cardItems.length}');
-          debugPrint('🎯 PersonaSelectionScreen: All personas count: ${personaService.allPersonas.length}');
+          // 카드 아이템 리스트 준비 (Personas + Tips) - 무한 루프 방지
+          if (!_isPreparingCards && (!listEquals(_lastPersonas, personas) || _cardItems.isEmpty)) {
+            _isPreparingCards = true;
+            _lastPersonas = List.from(personas); // 새 List 인스턴스로 복사
+            debugPrint('🔄 Personas changed, preparing ${personas.length} personas...');
+            
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _isPreparingCards) {
+                setState(() {
+                  _prepareCardItems(personas);
+                  _isPreparingCards = false;
+                });
+              }
+            });
+          }
           
           // CardSwiper는 최소 1개의 카드가 필요하므로 빈 배열 체크
           if (_cardItems.isEmpty) {
@@ -1654,17 +1790,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   padding: const EdgeInsets.all(16),
                   child: _cardItems.isNotEmpty
                     ? CardSwiper(
-                        key: ValueKey('cardswiper_${_cardItems.length}'), // 리스트 길이 기반 안정적 키
+                        key: ValueKey(_cardsKey), // 안정적인 키 사용
                         controller: _cardController,
                         cardsCount: _cardItems.length,
                     onSwipe: _onSwipe,
                     onEnd: () {
-                      // 모든 카드를 스와이프했을 때
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('모든 소나를 확인했습니다!'),
-                        ),
-                      );
+                      // 모든 카드를 스와이프했을 때 - 카드 리스트를 비워서 새로고침 화면 표시
+                      debugPrint('🔚 All cards swiped - showing refresh screen');
+                      setState(() {
+                        _cardItems = [];
+                        _cardsKey = '';
+                      });
                     },
                     numberOfCardsDisplayed: _cardItems.length >= 2 ? 2 : _cardItems.length,
                     backCardOffset: const Offset(0, -20),
@@ -1675,9 +1811,28 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                       up: true, // 모든 카드에 대해 위로 스와이프 허용
                       down: false,
                     ),
+                    // 스와이프 임계값 조정 - 더 낮은 값으로 설정하여 쉽게 스와이프되도록 함
+                    threshold: 30, // 기본값 50에서 30으로 감소
+                    scale: 0.9, // 뒤 카드 크기
+                    isLoop: false, // 무한 루프 비활성화
+                    duration: const Duration(milliseconds: 150), // 스와이프 애니메이션 시간 더 단축
+                    maxAngle: 20, // 최대 회전 각도 감소
+                    isDisabled: false,
+                    onUndo: (previousIndex, currentIndex, direction) {
+                      // 스와이프 취소 시 처리
+                      debugPrint('⏪ Undo detected: prev=$previousIndex, curr=$currentIndex');
+                      // 취소 시에도 상태 업데이트
+                      if (mounted && currentIndex != null) {
+                        setState(() {
+                          _currentIndex = currentIndex;
+                        });
+                      }
+                      return true;
+                    },
                     cardBuilder: (context, index, horizontalThresholdPercentage, verticalThresholdPercentage) {
                       // index 범위 검사
                       if (index < 0 || index >= _cardItems.length) {
+                        debugPrint('⚠️ Card builder index out of bounds: $index (total: ${_cardItems.length})');
                         return const SizedBox.shrink();
                       }
 

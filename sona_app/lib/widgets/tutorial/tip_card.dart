@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/tip_data.dart';
 
-class TipCard extends StatelessWidget {
+class TipCard extends StatefulWidget {
   final TipData tipData;
 
   const TipCard({
@@ -10,24 +10,73 @@ class TipCard extends StatelessWidget {
   });
 
   @override
+  State<TipCard> createState() => _TipCardState();
+}
+
+class _TipCardState extends State<TipCard> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _rotationAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    
+    _scaleAnimation = Tween<double>(
+      begin: 0.95,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _rotationAnimation = Tween<double>(
+      begin: -0.02,
+      end: 0.02,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _animationController.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: tipData.gradientColors,
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: tipData.gradientColors.first.withOpacity(0.4),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: _scaleAnimation.value,
+          child: Transform.rotate(
+            angle: _rotationAnimation.value,
+            child: Container(
+              margin: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: widget.tipData.gradientColors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: widget.tipData.gradientColors.first.withOpacity(0.4),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
       child: Stack(
         children: [
           // Background pattern
@@ -35,14 +84,14 @@ class TipCard extends StatelessWidget {
             right: -50,
             top: -50,
             child: Icon(
-              tipData.icon,
+              widget.tipData.icon,
               size: 200,
               color: Colors.white.withOpacity(0.1),
             ),
           ),
           // Content
           Padding(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -72,7 +121,7 @@ class TipCard extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    tipData.icon,
+                    widget.tipData.icon,
                     size: 48,
                     color: Colors.white,
                   ),
@@ -80,7 +129,7 @@ class TipCard extends StatelessWidget {
                 const SizedBox(height: 32),
                 // Title
                 Text(
-                  tipData.title,
+                  widget.tipData.title,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -92,17 +141,17 @@ class TipCard extends StatelessWidget {
                 const SizedBox(height: 16),
                 // Content
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    tipData.content,
+                    widget.tipData.content,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
-                      height: 1.6,
+                      fontSize: 15,
+                      height: 1.5,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -132,6 +181,10 @@ class TipCard extends StatelessWidget {
           ),
         ],
       ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

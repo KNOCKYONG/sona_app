@@ -8,8 +8,6 @@ class TermsOfServiceScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('서비스 이용약관'),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
         elevation: 0,
       ),
       body: const SingleChildScrollView(
@@ -144,7 +142,7 @@ class TermsOfServiceScreen extends StatelessWidget {
               ''',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.black54,
+                color: Theme.of(context).textTheme.bodyMedium?.color,
                 height: 1.6,
               ),
             ),
@@ -175,18 +173,18 @@ class _SectionWidget extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             content,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              color: Colors.black54,
+              color: Theme.of(context).textTheme.bodyMedium?.color,
               height: 1.6,
             ),
           ),

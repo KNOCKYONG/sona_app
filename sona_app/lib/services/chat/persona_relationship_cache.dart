@@ -5,6 +5,17 @@ import '../../models/persona.dart';
 import '../../core/constants.dart';
 import '../base/base_service.dart';
 
+/// 페르소나와 casual speech 설정을 함께 반환하는 클래스
+class PersonaWithSpeechStyle {
+  final Persona persona;
+  final bool isCasualSpeech;
+  
+  PersonaWithSpeechStyle({
+    required this.persona,
+    required this.isCasualSpeech,
+  });
+}
+
 /// 페르소나 관계 정보를 캐싱하여 빠른 접근을 제공하는 서비스
 /// Firebase 호출을 최소화하고 완전한 persona 정보를 유지
 class PersonaRelationshipCache extends BaseService {
@@ -33,7 +44,7 @@ class PersonaRelationshipCache extends BaseService {
   }
   
   /// 페르소나의 완전한 관계 정보를 가져옴 (캐시 우선)
-  Future<Persona> getCompletePersona({
+  Future<PersonaWithSpeechStyle> getCompletePersona({
     required String userId,
     required Persona basePersona,
   }) async {
@@ -43,29 +54,36 @@ class PersonaRelationshipCache extends BaseService {
     final cached = _cache[cacheKey];
     if (cached != null && !cached.isExpired) {
       debugPrint('✅ Using cached persona relationship for ${basePersona.name}');
-      return cached.persona;
+      return PersonaWithSpeechStyle(
+        persona: cached.persona,
+        isCasualSpeech: cached.isCasualSpeech,
+      );
     }
     
     // 캐시 미스 - Firebase에서 로드
     final result = await executeWithLoading(() async {
-      final completePersona = await _loadPersonaRelationship(userId, basePersona);
+      final personaData = await _loadPersonaRelationship(userId, basePersona);
       
       // 캐시에 저장
       _cache[cacheKey] = _CachedPersonaRelationship(
-        persona: completePersona,
+        persona: personaData.persona,
+        isCasualSpeech: personaData.isCasualSpeech,
         timestamp: DateTime.now(),
       );
       
       debugPrint('📥 Loaded and cached persona relationship for ${basePersona.name}');
-      return completePersona;
+      return personaData;
     });
     
     // executeWithLoading이 null을 반환할 수 있으므로 기본값 처리
-    return result ?? basePersona;
+    return result ?? PersonaWithSpeechStyle(
+      persona: basePersona,
+      isCasualSpeech: false,
+    );
   }
   
   /// Firebase에서 페르소나 관계 정보 로드
-  Future<Persona> _loadPersonaRelationship(String userId, Persona basePersona) async {
+  Future<PersonaWithSpeechStyle> _loadPersonaRelationship(String userId, Persona basePersona) async {
     try {
       final docId = '${userId}_${basePersona.id}';
       final relationshipDoc = await FirebaseFirestore.instance
@@ -76,21 +94,32 @@ class PersonaRelationshipCache extends BaseService {
       if (!relationshipDoc.exists) {
         // 관계 문서가 없으면 기본값 반환
         debugPrint('⚠️ No relationship document found for ${basePersona.name}');
-        return basePersona;
+        return PersonaWithSpeechStyle(
+          persona: basePersona,
+          isCasualSpeech: false,
+        );
       }
       
       final data = relationshipDoc.data()!;
+      final isCasualSpeech = data['isCasualSpeech'] ?? false;
       
       // 관계 정보로 페르소나 업데이트
-      return basePersona.copyWith(
-        isCasualSpeech: data['isCasualSpeech'] ?? false,
+      final updatedPersona = basePersona.copyWith(
         relationshipScore: data['relationshipScore'] ?? 0,
         // TODO: RelationshipType 정의 후 주석 해제
         // currentRelationship: _parseRelationshipType(data['currentRelationship']),
       );
+      
+      return PersonaWithSpeechStyle(
+        persona: updatedPersona,
+        isCasualSpeech: isCasualSpeech,
+      );
     } catch (e) {
       debugPrint('❌ Error loading persona relationship: $e');
-      return basePersona;
+      return PersonaWithSpeechStyle(
+        persona: basePersona,
+        isCasualSpeech: false,
+      );
     }
   }
   
@@ -176,10 +205,12 @@ class PersonaRelationshipCache extends BaseService {
 /// 캐시된 페르소나 관계 정보
 class _CachedPersonaRelationship {
   final Persona persona;
+  final bool isCasualSpeech;
   final DateTime timestamp;
   
   _CachedPersonaRelationship({
     required this.persona,
+    required this.isCasualSpeech,
     required this.timestamp,
   });
   

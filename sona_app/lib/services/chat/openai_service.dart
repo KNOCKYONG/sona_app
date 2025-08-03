@@ -46,6 +46,8 @@ class OpenAIService {
     required String userMessage,
     required String relationshipType,
     String? userNickname,
+    int? userAge,
+    bool isCasualSpeech = false,
   }) async {
     // 성능 최적화를 위한 요청 큐잉
     final request = _PendingRequest(
@@ -54,6 +56,8 @@ class OpenAIService {
       userMessage: userMessage,
       relationshipType: relationshipType,
       userNickname: userNickname,
+      userAge: userAge,
+      isCasualSpeech: isCasualSpeech,
       completer: Completer<String>(),
     );
     
@@ -141,6 +145,9 @@ class OpenAIService {
     final personalizedPrompt = OptimizedPromptService.buildOptimizedPrompt(
       persona: request.persona,
       relationshipType: request.relationshipType,
+      userNickname: request.userNickname,
+      userAge: request.userAge,
+      isCasualSpeech: request.isCasualSpeech,
     );
     
     // 토큰 최적화된 메시지 구성
@@ -392,7 +399,9 @@ class OpenAIService {
 
   /// 🔒 보안 폴백 응답 생성
   static String _getSecureFallbackResponse(Persona persona, String userMessage) {
-    final secureResponses = persona.isCasualSpeech ? [
+    // TODO: Get isCasualSpeech from context
+    final isCasualSpeech = false; // Default to formal
+    final secureResponses = isCasualSpeech ? [
       '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
       '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
       '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',
@@ -431,6 +440,8 @@ class _PendingRequest {
   final String userMessage;
   final String relationshipType;
   final String? userNickname;
+  final int? userAge;
+  final bool isCasualSpeech;
   final Completer<String> completer;
 
   _PendingRequest({
@@ -439,6 +450,8 @@ class _PendingRequest {
     required this.userMessage,
     required this.relationshipType,
     this.userNickname,
+    this.userAge,
+    this.isCasualSpeech = false,
     required this.completer,
   });
 }
@@ -643,8 +656,10 @@ class KoreanSpeechValidator {
       (match) => ''
     );
     
-    // 3. 복수 표현 제거/변환
-    if (persona.isCasualSpeech) {
+    // 3. 복수 표현 제거/변혈
+    // TODO: Get isCasualSpeech from context
+    final isCasualSpeech = false; // Default to formal
+    if (isCasualSpeech) {
       validated = validated.replaceAll('여러분', '너');
       validated = validated.replaceAll('다들', '너');
       validated = validated.replaceAll('모두', '');
@@ -662,7 +677,7 @@ class KoreanSpeechValidator {
     validated = _convertEmojisToKorean(validated);
     
     // 5. 말투 교정 (반말/존댓말)
-    validated = _correctSpeechStyle(validated, persona.isCasualSpeech);
+    validated = _correctSpeechStyle(validated, isCasualSpeech);
     
     // 6. 관계별 톤 조정
     validated = _adjustToneByRelationship(validated, relationshipType, persona.relationshipScore);

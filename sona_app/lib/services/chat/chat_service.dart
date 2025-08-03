@@ -381,6 +381,22 @@ class ChatService extends BaseService {
           if (success) {
             debugPrint('✅ Casual speech mode updated successfully');
             
+            // 먼저 사용자 메시지를 추가
+            final userMessage = Message(
+              id: _uuid.v4(),
+              personaId: persona.id,
+              content: content,
+              type: type,
+              isFromUser: true,
+              isRead: false,
+            );
+
+            // 사용자 메시지를 로컬 상태에 추가
+            if (!_messagesByPersona.containsKey(persona.id)) {
+              _messagesByPersona[persona.id] = [];
+            }
+            _messagesByPersona[persona.id]!.add(userMessage);
+            
             // 시스템 메시지 생성
             final systemMessage = Message(
               id: _uuid.v4(),
@@ -393,10 +409,7 @@ class ChatService extends BaseService {
               timestamp: DateTime.now(),
             );
             
-            // 메시지 추가
-            if (!_messagesByPersona.containsKey(persona.id)) {
-              _messagesByPersona[persona.id] = [];
-            }
+            // 시스템 메시지 추가
             _messagesByPersona[persona.id]!.add(systemMessage);
             
             // Update global messages if current persona
@@ -404,14 +417,15 @@ class ChatService extends BaseService {
               _messages = List.from(_messagesByPersona[persona.id]!);
             }
             
-            // Firebase에 저장
+            // Firebase에 저장 (사용자 메시지와 시스템 메시지 모두)
             if (userId != '') {
+              _queueMessageForSaving(userId, persona.id, userMessage);
               _queueMessageForSaving(userId, persona.id, systemMessage);
             }
             
             notifyListeners();
             
-            // 반말 전환 요청은 일반 메시지로 처리하지 않음
+            // 반말 전환 요청은 별도 AI 응답 생성하지 않음
             return true;
           }
         }
@@ -581,10 +595,12 @@ class ChatService extends BaseService {
         return;
       }
       
-      // Get user nickname
+      // Get user nickname and age
       String? userNickname;
+      int? userAge;
       if (_userService?.currentUser != null) {
         userNickname = _userService!.currentUser!.nickname;
+        userAge = _userService!.currentUser!.age;
       }
       
       // Use new ChatOrchestrator for normal messages
@@ -596,6 +612,7 @@ class ChatService extends BaseService {
         userMessage: userMessage,
         chatHistory: chatHistory,
         userNickname: userNickname,
+        userAge: userAge,
       );
       
       // Handle Like system integration
@@ -1534,9 +1551,13 @@ class ChatService extends BaseService {
   
   /// 방어적 응답 생성
   String _generateDefensiveResponse(Persona persona, String userMessage, String severity) {
+    // TODO: Get isCasualSpeech from PersonaRelationshipCache
+    // For now, default to formal speech
+    final isCasualSpeech = false;
+    
     if (severity == 'high') {
       // 심한 욕설에 대한 응답
-      final severeResponses = persona.isCasualSpeech ? [
+      final severeResponses = isCasualSpeech ? [
         '그렇게 말하면 너무 서운한데... ㅠㅠ',
         '왜 그렇게 화가 났어? 무슨 일 있어?',
         '아... 그런 말은 좀 아프다...',
@@ -1554,7 +1575,7 @@ class ChatService extends BaseService {
       return severeResponses[index];
     } else {
       // 일반적인 무례함에 대한 응답
-      final mildResponses = persona.isCasualSpeech ? [
+      final mildResponses = isCasualSpeech ? [
         '어? 왜 그래? 기분 안 좋아?',
         '음... 뭔가 기분이 안 좋은가보네',
         '아 그래? 그럼 다른 얘기하자',
@@ -2128,7 +2149,8 @@ class ChatService extends BaseService {
       EmotionType emotion;
       
       // 전문가 페르소나인지 확인
-      final isCasual = persona.isCasualSpeech;
+      // TODO: Get isCasualSpeech from PersonaRelationshipCache
+      final isCasual = false; // Default to formal
       final mbti = persona.mbti.toUpperCase();
       
       // 현재 시간대 및 요일 확인
@@ -2392,7 +2414,8 @@ class ChatService extends BaseService {
       return '안녕하세요! 대화해봐요 ㅎㅎ';
     }
     
-    final isCasual = persona.isCasualSpeech;
+    // TODO: Get isCasualSpeech from PersonaRelationshipCache
+    final isCasual = false; // Default to formal
     final mbti = persona.mbti.toUpperCase();
     
     // MBTI와 말투에 따른 개성있는 인사 메시지들
@@ -2458,7 +2481,9 @@ class ChatService extends BaseService {
   
   /// 🔒 보안 폴백 응답 생성
   String _generateSecureFallbackResponse(Persona persona, String userMessage) {
-    final responses = persona.isCasualSpeech ? [
+    // TODO: Get isCasualSpeech from PersonaRelationshipCache
+    final isCasualSpeech = false; // Default to formal
+    final responses = isCasualSpeech ? [
       '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
       '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
       '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',

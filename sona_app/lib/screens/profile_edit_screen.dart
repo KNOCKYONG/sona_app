@@ -198,20 +198,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                   fit: BoxFit.cover,
                                 )
                               : (user?.profileImageUrl != null
-                                  ? Image.network(
-                                      user!.profileImageUrl!,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return Container(
-                                          color: Colors.grey[200],
-                                          child: Icon(
-                                            Icons.person,
-                                            size: 50,
-                                            color: Colors.grey[400],
-                                          ),
-                                        );
-                                      },
-                                    )
+                                  ? _buildProfileImage(user!.profileImageUrl!)
                                   : Container(
                                       color: Colors.grey[200],
                                       child: Icon(
@@ -406,6 +393,43 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildProfileImage(String imageUrl) {
+    // 로컬 파일 경로인 경우
+    if (imageUrl.startsWith('/')) {
+      final file = File(imageUrl);
+      return Image.file(
+        file,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: Icon(
+              Icons.person,
+              size: 50,
+              color: Colors.grey[400],
+            ),
+          );
+        },
+      );
+    }
+    
+    // 일반 URL인 경우
+    return Image.network(
+      imageUrl,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: Colors.grey[200],
+          child: Icon(
+            Icons.person,
+            size: 50,
+            color: Colors.grey[400],
+          ),
+        );
+      },
     );
   }
 }

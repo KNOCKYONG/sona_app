@@ -7,6 +7,7 @@ Persona name mapping - Korean to English
 PERSONA_NAME_MAPPING = {
     "상훈": "sanghoon",
     "Dr. 박지은": "dr-park-jieun",
+    "Dr. 김민서": "dr-kim-minseo",
     "수진": "sujin",
     "예림": "yerim",
     "예슬": "yeseul",
@@ -32,7 +33,30 @@ PERSONA_NAME_MAPPING = {
     "준영": "junyoung",
     "준호": "junho",
     "진욱": "jinwook",
-    "효진": "hyojin"
+    "효진": "hyojin",
+    "나나": "nana",
+    "다은": "daeun",
+    "동수": "dongsu",
+    "리나": "rina",
+    "민정": "minjung",
+    "범준": "beomjun",
+    "석진": "seokjin",
+    "소영": "soyoung",
+    "수빈": "subin",
+    "수아": "sua",
+    "연지": "yeonji",
+    "윤성": "yoonsung",
+    "은수": "eunsu",
+    "주은": "jueun",
+    "준석": "junseok",
+    "지윤": "jiyoon",
+    "지은": "jieun",
+    "진호": "jinho",
+    "태윤": "taeyoon",
+    "태준": "taejun",
+    "태호": "taeho",
+    "현주": "hyeonju",
+    "혜원": "hyewon"
 }
 
 def get_english_name(korean_name: str) -> str:

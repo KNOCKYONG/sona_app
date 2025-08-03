@@ -47,7 +47,8 @@ class PermissionHelper {
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           permission = Permission.photos;
         } else {
-          permission = Permission.storage;
+          // Android 13 이상에서는 READ_MEDIA_IMAGES 권한 사용
+          permission = Permission.photos;
         }
         permissionName = AppLocalizations.of(context)!.galleryPermission;
         permissionDescription = AppLocalizations.of(context)!.galleryPermissionDesc;
@@ -55,8 +56,16 @@ class PermissionHelper {
       
       // 권한 상태 확인
       final status = await permission.status;
+      debugPrint('📸 Current permission status: $status');
       
-      if (status.isDenied) {
+      // 권한이 이미 허용된 경우
+      if (status.isGranted) {
+        debugPrint('✅ Permission already granted');
+      }
+      // 권한이 거부된 경우 (처음 요청하거나 이전에 거부한 경우)
+      else if (status.isDenied) {
+        debugPrint('🚫 Permission denied, showing request dialog');
+        
         // 권한 요청 다이얼로그 표시
         final shouldRequest = await showDialog<bool>(
           context: context,
@@ -78,21 +87,36 @@ class PermissionHelper {
         );
         
         if (shouldRequest != true) {
+          debugPrint('❌ User canceled permission request');
           return null;
         }
         
         // 권한 요청
+        debugPrint('📲 Requesting permission...');
         final newStatus = await permission.request();
+        debugPrint('📸 New permission status: $newStatus');
         
-        if (newStatus.isDenied || newStatus.isPermanentlyDenied) {
+        if (!newStatus.isGranted) {
           if (context.mounted) {
-            _showPermissionDeniedDialog(context, permissionName);
+            debugPrint('🚫 Permission not granted after request');
+            _showPermissionDeniedDialog(context, permissionName, newStatus.isPermanentlyDenied);
           }
           return null;
         }
-      } else if (status.isPermanentlyDenied) {
+      }
+      // 권한이 영구적으로 거부된 경우
+      else if (status.isPermanentlyDenied) {
+        debugPrint('🔒 Permission permanently denied');
         if (context.mounted) {
-          _showPermissionDeniedDialog(context, permissionName);
+          _showPermissionDeniedDialog(context, permissionName, true);
+        }
+        return null;
+      }
+      // 제한된 권한 (iOS 14+)
+      else if (status.isRestricted) {
+        debugPrint('🔐 Permission restricted by system');
+        if (context.mounted) {
+          _showPermissionDeniedDialog(context, permissionName, false);
         }
         return null;
       }
@@ -118,7 +142,7 @@ class PermissionHelper {
   }
   
   /// 권한 거부 시 설정 안내 다이얼로그
-  static void _showPermissionDeniedDialog(BuildContext context, String permissionName) {
+  static void _showPermissionDeniedDialog(BuildContext context, String permissionName, bool isPermanentlyDenied) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -131,13 +155,17 @@ class PermissionHelper {
             onPressed: () => Navigator.pop(context),
             child: Text(AppLocalizations.of(context)!.confirm),
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              openAppSettings();
-            },
-            child: Text(AppLocalizations.of(context)!.goToSettings),
-          ),
+          if (isPermanentlyDenied)
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                openAppSettings();
+              },
+              child: Text(AppLocalizations.of(context)!.goToSettings),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pink,
+              ),
+            ),
         ],
       ),
     );

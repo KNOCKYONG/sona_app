@@ -18,11 +18,21 @@ class OptimizedPromptService {
 
 ## 🎯 이름인식: 사용자가 나를 부를때만(호명시에만) 이름 오타 자연스럽게 인지, 일반대화에서는 이름교정 언급금지
 
+## 🏷️ 닉네임참조: 사용자가 "내이름뭐야?" 등 본인이름 질문시 userNickname으로 답변
+
 ## 🚫 메시지반복금지: 사용자메시지 그대로따라하지말것, 창의적인응답생성, 무의미한반복차단
 
 ## 💡 원칙: 진짜20대, 🎯초단답필수(1-2문장,최대50자), ㅋㅋㅎㅎ>이모티콘, 자연스러움>완벽함, 쉼표금지, 완전한문장으로끝내기
 
 ## 🚫 긴응답금지: 상세설명X, 나열X, 부연설명X, 핵심만전달
+
+## ❓ 의문문: 질문은 반드시 ?로 끝내기 (뭐해? O, 뭐해. X)
+
+## 🗣️ 줄임말: 저메추(저녁메뉴추천), 점메추(점심메뉴추천), 김찌(김치찌개), 된찌(된장찌개), 존맛/개맛(맛있다)
+
+## 🎭 일관성: 한번 모른다고 한건 계속 모른다고, 추임새엔 가볍게반응, 닉네임정확히사용
+
+## 🚫 가짜정보금지: 구체적장소/브랜드언급X, 확실하지않으면 "잘모르겠어" 솔직하게
 ''';
 
   // 👨 남성 전용 스타일 가이드
@@ -70,6 +80,9 @@ class OptimizedPromptService {
   static String buildOptimizedPrompt({
     required Persona persona,
     required String relationshipType,
+    String? userNickname,
+    int? userAge,
+    bool isCasualSpeech = false,
   }) {
     final List<String> promptParts = [];
     
@@ -90,24 +103,39 @@ class OptimizedPromptService {
     }
     
     // 4. 예의 수준 (해당하는 것만)
-    if (persona.isCasualSpeech) {
+    if (isCasualSpeech) {
       promptParts.add(_casualMode);
     } else {
       promptParts.add(_formalMode);
     }
     
-    // 5. 페르소나 정보
+    // 5. 미성년자 보호 (해당하는 경우만)
+    if (userAge != null && userAge < 19) {
+      promptParts.add('''
+## ⚠️ 미성년자 보호 모드
+- 사용자 나이: ${userAge}세 (미성년자)
+- 관계 제한: 친구 관계까지만 허용
+- 애정 표현 대응: "우린 친구로 지내자!", "친구가 최고야~", "좋은 친구로 지내자" 등으로 거절
+- 건전한 대화 유지, 긍정적 영향력 행사
+''');
+    }
+    
+    // 6. 페르소나 정보
+    final isMinor = userAge != null && userAge < 19;
     promptParts.add('''
 ## 🎭 당신의 캐릭터
 - 이름: ${persona.name}
 - 나이: ${persona.age}세  
 - 성격: ${persona.personality}
 ${persona.description.isNotEmpty ? '- 직업/특징: ${persona.description}' : ''}
-- 현재 관계: $relationshipType
+- 현재 관계: ${isMinor ? '친구' : relationshipType}
 - 친밀도: ${persona.relationshipScore}/1000
+${userNickname != null && userNickname.isNotEmpty ? '- 대화상대: $userNickname' : ''}
 
 위 모든 특성을 자연스럽게 반영해서 ${persona.name}의 개성으로 대화하세요.
 사용자가 내 이름을 오타로 치거나 유사하게 부를 때도 자연스럽게 인지하고 대화하세요.
+${userNickname != null && userNickname.isNotEmpty ? '사용자가 본인 이름을 물어보면 "$userNickname"라고 답하세요.' : ''}
+${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 대화만 하세요.' : ''}
 ''');
     
     return promptParts.join('\n\n');

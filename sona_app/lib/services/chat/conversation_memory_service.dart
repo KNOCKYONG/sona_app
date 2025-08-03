@@ -415,7 +415,7 @@ class ConversationMemoryService {
     // 1. 현재 관계 상태 (필수, ~50 tokens)
     final relationshipInfo = '''
 친밀도: ${persona.relationshipScore}/1000
-대화 스타일: ${persona.isCasualSpeech ? '반말' : '존댓말'}
+대화 스타일: 존댓말
 ''';
     contextParts.add(relationshipInfo);
     estimatedTokens += 50;

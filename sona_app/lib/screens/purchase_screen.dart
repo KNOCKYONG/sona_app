@@ -24,6 +24,9 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
   @override
   void dispose() {
     _tabController.dispose();
+    // 구매 대기 상태 리셋
+    final purchaseService = Provider.of<PurchaseService>(context, listen: false);
+    purchaseService.resetPurchasePending();
     super.dispose();
   }
   

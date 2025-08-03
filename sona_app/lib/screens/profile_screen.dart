@@ -274,14 +274,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // 사용자 이름
-                  Text(
-                    appUser?.nickname ?? firebaseUser?.displayName ?? AppLocalizations.of(context)!.sonaFriend,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineMedium?.color,
-                    ),
+                  // 사용자 이름 및 프리미엄 배지
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        appUser?.nickname ?? firebaseUser?.displayName ?? AppLocalizations.of(context)!.sonaFriend,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.headlineMedium?.color,
+                        ),
+                      ),
+                      // 프리미엄 배지
+                      if (appUser?.isPremium == true) ...[
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFFFFD700), Color(0xFFFFA500)],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Icon(
+                                Icons.workspace_premium,
+                                size: 16,
+                                color: Colors.white,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'PREMIUM',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                   const SizedBox(height: 4),
                   
@@ -439,6 +479,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final base64String = imageUrl.split(',').last;
       return Image.memory(
         base64Decode(base64String),
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Container(
+            color: Colors.grey[200],
+            child: Icon(
+              Icons.person,
+              size: 50,
+              color: Colors.grey[400],
+            ),
+          );
+        },
+      );
+    }
+    
+    // 로컬 파일 경로인 경우
+    if (imageUrl.startsWith('/')) {
+      final file = File(imageUrl);
+      return Image.file(
+        file,
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) {
           return Container(

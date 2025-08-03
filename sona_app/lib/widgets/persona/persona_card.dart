@@ -407,7 +407,7 @@ class _NavigationAreas extends StatelessWidget {
       right: 0,
       child: Row(
         children: [
-          // Left navigation - 화면의 40% 영역
+          // Left navigation area - 화면의 40% 영역
           Expanded(
             flex: 4,
             child: GestureDetector(
@@ -415,38 +415,35 @@ class _NavigationAreas extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 color: Colors.transparent, // 투명하지만 터치 가능
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 child: currentIndex > 0
                     ? Container(
-                        margin: const EdgeInsets.only(left: 20),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(20),
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.7), // 투명도 추가
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          '‹',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 2,
-                                color: Colors.black54,
-                              ),
-                            ],
-                          ),
+                        child: Icon(
+                          Icons.chevron_left,
+                          size: 35,
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       )
-                    : const SizedBox.shrink(),
+                    : null,
               ),
             ),
           ),
           // Center area - 화면의 20% 영역 (탭 방지 영역)
           const Spacer(flex: 2),
-          // Right navigation - 화면의 40% 영역
+          // Right navigation area - 화면의 40% 영역
           Expanded(
             flex: 4,
             child: GestureDetector(
@@ -454,32 +451,29 @@ class _NavigationAreas extends StatelessWidget {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 color: Colors.transparent, // 투명하지만 터치 가능
-                alignment: Alignment.centerRight,
+                alignment: Alignment.center,
                 child: currentIndex < maxIndex
                     ? Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        width: 50,
+                        height: 50,
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.3),
-                          borderRadius: BorderRadius.circular(20),
+                          shape: BoxShape.circle,
+                          color: Colors.white.withValues(alpha: 0.7), // 투명도 추가
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.15),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        child: const Text(
-                          '›',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 2,
-                                color: Colors.black54,
-                              ),
-                            ],
-                          ),
+                        child: Icon(
+                          Icons.chevron_right,
+                          size: 35,
+                          color: Colors.black.withValues(alpha: 0.7),
                         ),
                       )
-                    : const SizedBox.shrink(),
+                    : null,
               ),
             ),
           ),

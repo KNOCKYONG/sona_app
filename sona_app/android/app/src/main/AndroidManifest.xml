@@ -11,6 +11,11 @@
     <!-- In-app billing permission -->
     <uses-permission android:name="com.android.vending.BILLING" />
     
+    <!-- 이미지/미디어 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    
     <application
         android:label="SONA"
         android:name="${applicationName}"

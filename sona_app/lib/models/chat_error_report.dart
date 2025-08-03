@@ -35,9 +35,9 @@ class ChatErrorReport {
       'chat': recentChats.map((msg) => {
         'content': msg.content,
         'isFromUser': msg.isFromUser,
-        'timestamp': msg.timestamp,
+        'timestamp': Timestamp.fromDate(msg.timestamp),
         'personaId': msg.personaId,
-        'emotion': msg.emotion,
+        'emotion': msg.emotion?.name,
       }).toList(),
       'created_at': Timestamp.fromDate(createdAt),
       'user_message': userMessage,

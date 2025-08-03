@@ -44,7 +44,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
   bool _previousIsTyping = false;
-  bool _hasShownWelcome = false;
+  // Track welcome messages per persona to prevent repetition
+  final Map<String, bool> _hasShownWelcomePerPersona = {};
   bool _showMoreMenu = false;
   
   // Service references for dispose method
@@ -195,13 +196,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void _showWelcomeMessage() async {
     debugPrint('🎉 _showWelcomeMessage called');
     
-    // Add flag to prevent duplicate calls
-    if (_hasShownWelcome) {
-      debugPrint('⚠️ Welcome message already shown, skipping');
-      return;
-    }
-    _hasShownWelcome = true;
-    
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -215,10 +209,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     
     if (persona != null) {
       debugPrint('🤖 Persona found: ${persona.name}');
+      
+      // Check if we've already shown welcome for this persona
+      if (_hasShownWelcomePerPersona[persona.id] == true) {
+        debugPrint('⚠️ Welcome message already shown for ${persona.name}, skipping');
+        return;
+      }
+      
       // 이전 메시지가 없을 때만 초기 인사 메시지 전송
       final existingMessages = chatService.getMessages(persona.id);
       if (existingMessages.isEmpty) {
         debugPrint('✅ No existing messages, sending initial greeting');
+        
+        // Mark that we've shown welcome for this persona
+        _hasShownWelcomePerPersona[persona.id] = true;
+        
         await chatService.sendInitialGreeting(
           userId: userId,
           personaId: persona.id,
@@ -226,6 +231,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         );
       } else {
         debugPrint('📝 Previous messages exist for ${persona.name}, skipping initial greeting');
+        // Also mark as shown since messages already exist
+        _hasShownWelcomePerPersona[persona.id] = true;
       }
     } else {
       debugPrint('❌ No persona available for welcome message');
@@ -404,8 +411,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       
       _currentPersonaId = args.id;
       _currentPersona = args; // Update stored persona reference
-      // Reset welcome message flag for new persona
-      _hasShownWelcome = false;
+      // No need to reset welcome flag - it's now tracked per persona
       
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {

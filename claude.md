@@ -631,3 +631,26 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
 ** scripts/process_persona_image.py 파일 활용하여 cloudflare mcp를 사용하기 전에 이미지 처리할 것 **
 
 ** test 용도로 생성한 파일들은 test가 끝나면 삭제할 것 **
+
+---
+
+## 대화 오류 확인
+
+**명령어**: `대화 오류 확인`
+
+**기능**: 
+- Firebase `chat_error_fix` 컬렉션에서 체크되지 않은(is_check가 없거나 false) 오류 보고서를 읽어옴
+- 각 보고서의 대화 내용을 분석하여 문제 패턴 파악
+- 분석 완료된 문서에 is_check: true 표시
+
+**분석 항목**:
+1. 첫인사 반복 여부
+2. 대화 흐름의 자연스러움
+3. AI 응답의 적절성
+4. 사용자 불만족 신호 (같은 말 반복, 짧은 응답 등)
+
+**실행 프로세스**:
+1. `chat_error_fix` 컬렉션에서 미확인 문서 조회
+2. 각 문서의 대화 내용 분석
+3. 문제 패턴 식별 및 보고
+4. 분석 완료 문서에 is_check: true 표시

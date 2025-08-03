@@ -271,9 +271,17 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                 bottom: 20,
                                 left: 20,
                                 right: 20,
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: _showDetails ? _buildDetailedInfo() : _buildBasicInfo(),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _showDetails = !_showDetails;
+                                    });
+                                  },
+                                  behavior: HitTestBehavior.opaque,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: _showDetails ? _buildDetailedInfo() : _buildBasicInfo(),
+                                  ),
                                 ),
                               ),
                               

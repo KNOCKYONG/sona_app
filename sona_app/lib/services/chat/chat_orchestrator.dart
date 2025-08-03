@@ -8,6 +8,7 @@ import 'persona_prompt_builder.dart';
 import 'security_aware_post_processor.dart';
 import 'conversation_memory_service.dart';
 import 'openai_service.dart';
+import '../relationship/negative_behavior_system.dart';
 
 /// 채팅 플로우를 조정하는 중앙 오케스트레이터
 /// 전체 메시지 생성 파이프라인을 관리
@@ -206,39 +207,77 @@ class ChatOrchestrator {
     required Persona persona,
     required List<Message> chatHistory,
   }) async {
-    // 간단한 점수 계산 로직
+    // NegativeBehaviorSystem을 사용하여 부정적 행동 분석
+    final negativeSystem = NegativeBehaviorSystem();
+    final negativeAnalysis = negativeSystem.analyze(
+      userMessage, 
+      relationshipScore: persona.relationshipScore
+    );
+    
+    // 부정적 행동이 감지되면 페널티 반환
+    if (negativeAnalysis.isNegative) {
+      // 레벨 3 (심각한 위협/욕설)은 즉시 이별
+      if (negativeAnalysis.level >= 3) {
+        return -persona.relationshipScore; // 0으로 리셋
+      }
+      
+      // 페널티가 지정되어 있으면 사용, 없으면 레벨에 따른 기본값
+      if (negativeAnalysis.penalty != null) {
+        return -negativeAnalysis.penalty!.abs(); // 음수로 변환
+      }
+      
+      // 레벨별 기본 페널티
+      switch (negativeAnalysis.level) {
+        case 2:
+          return -10; // 중간 수준
+        case 1:
+          return -5;  // 경미한 수준
+        default:
+          return -2;
+      }
+    }
+    
+    // 긍정적 메시지 분석
     int baseChange = 0;
     
+    // 감정 기반 기본 점수
     switch (emotion) {
       case EmotionType.happy:
       case EmotionType.love:
         baseChange = 2;
+        break;
+      case EmotionType.shy:
+      case EmotionType.thoughtful:
+        baseChange = 1;
         break;
       case EmotionType.sad:
       case EmotionType.anxious:
         baseChange = -1;
         break;
       case EmotionType.angry:
+      case EmotionType.jealous:
         baseChange = -2;
         break;
       default:
         baseChange = 0;
     }
     
-    // 사용자 메시지 긍정/부정 분석
+    // 긍정적 키워드 추가 점수
     final userLower = userMessage.toLowerCase();
-    if (userLower.contains('사랑') || userLower.contains('좋아') || userLower.contains('고마')) {
+    final positiveKeywords = [
+      '사랑', '좋아', '고마', '감사', '최고', '대박', 
+      '행복', '기뻐', '설레', '귀여', '예뻐', '멋있',
+      '보고싶', '그리워', '응원', '파이팅', '힘내'
+    ];
+    
+    if (positiveKeywords.any((keyword) => userLower.contains(keyword))) {
       baseChange += 1;
-    } else if (userLower.contains('싫어') || userLower.contains('짜증') || userLower.contains('바보')) {
-      baseChange -= 2;
     }
     
-    // 관계 수준에 따른 보정
-    // TODO: RelationshipType 정의 후 주석 해제
-    // if (persona.currentRelationship == RelationshipType.dating || 
-    //     persona.currentRelationship == RelationshipType.perfectLove) {
-    //   baseChange = (baseChange * 0.7).round(); // 높은 관계에서는 변화폭 감소
-    // }
+    // 관계 수준에 따른 보정 (높은 관계에서는 변화폭 감소)
+    if (persona.relationshipScore >= 600) {
+      baseChange = (baseChange * 0.7).round();
+    }
     
     return baseChange.clamp(-5, 5);
   }

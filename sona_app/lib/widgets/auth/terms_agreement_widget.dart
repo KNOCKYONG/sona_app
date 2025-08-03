@@ -96,83 +96,101 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         const SizedBox(height: 8),
         
         // 서비스 이용약관 (필수)
-        CheckboxListTile(
-          title: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Checkbox(
+                value: widget.agreedToTerms,
+                onChanged: (value) {
+                  if (value != null) {
+                    widget.onTermsChanged(value);
+                    _checkAllAgreed();
+                  }
+                },
+                checkColor: Colors.white,
               ),
-              children: [
-                TextSpan(text: localizations.required + ' '),
-                TextSpan(
-                  text: localizations.termsOfService,
-                  style: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TermsOfServiceScreen(),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                    children: [
+                      TextSpan(text: localizations.required + ' '),
+                      TextSpan(
+                        text: localizations.termsOfService,
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
                         ),
-                      );
-                    },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const TermsOfServiceScreen(),
+                              ),
+                            );
+                          },
+                      ),
+                      TextSpan(text: localizations.agreeToTerms),
+                    ],
+                  ),
                 ),
-                TextSpan(text: localizations.agreeToTerms),
-              ],
-            ),
+              ),
+            ],
           ),
-          value: widget.agreedToTerms,
-          onChanged: (value) {
-            if (value != null) {
-              widget.onTermsChanged(value);
-              _checkAllAgreed();
-            }
-          },
-          controlAffinity: ListTileControlAffinity.leading,
-          checkColor: Colors.white,
         ),
         
         // 개인정보 처리방침 (필수)
-        CheckboxListTile(
-          title: RichText(
-            text: TextSpan(
-              style: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Checkbox(
+                value: widget.agreedToPrivacy,
+                onChanged: (value) {
+                  if (value != null) {
+                    widget.onPrivacyChanged(value);
+                    _checkAllAgreed();
+                  }
+                },
+                checkColor: Colors.white,
               ),
-              children: [
-                TextSpan(text: localizations.required + ' '),
-                TextSpan(
-                  text: localizations.privacyPolicy,
-                  style: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.blue,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PrivacyPolicyScreen(),
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                    ),
+                    children: [
+                      TextSpan(text: localizations.required + ' '),
+                      TextSpan(
+                        text: localizations.privacyPolicy,
+                        style: const TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.blue,
                         ),
-                      );
-                    },
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PrivacyPolicyScreen(),
+                              ),
+                            );
+                          },
+                      ),
+                      TextSpan(text: localizations.agreeToTerms),
+                    ],
+                  ),
                 ),
-                TextSpan(text: localizations.agreeToTerms),
-              ],
-            ),
+              ),
+            ],
           ),
-          value: widget.agreedToPrivacy,
-          onChanged: (value) {
-            if (value != null) {
-              widget.onPrivacyChanged(value);
-              _checkAllAgreed();
-            }
-          },
-          controlAffinity: ListTileControlAffinity.leading,
-          checkColor: Colors.white,
         ),
         
         // 마케팅 수신 동의 (선택)

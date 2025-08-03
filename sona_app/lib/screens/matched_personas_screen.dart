@@ -139,9 +139,9 @@ class _PersonaCard extends StatelessWidget {
                     ),
                   ),
                   child: ClipOval(
-                    child: persona.photoUrls.isNotEmpty
+                    child: persona.getThumbnailUrl() != null
                         ? CachedNetworkImage(
-                            imageUrl: persona.photoUrls.first,
+                            imageUrl: persona.getThumbnailUrl()!,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                               color: Colors.grey[200],

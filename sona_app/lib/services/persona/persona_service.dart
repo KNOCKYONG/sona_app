@@ -1005,7 +1005,7 @@ class PersonaService extends BaseService {
       return personas;
     }
     
-    // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링)
+    // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링) - 이것만 필터링
     List<Persona> filteredPersonas = personas;
     if (!_currentUser!.genderAll && _currentUser!.gender != null) {
       // 사용자가 남성이면 여성 페르소나만, 여성이면 남성 페르소나만
@@ -1020,32 +1020,22 @@ class PersonaService extends BaseService {
       debugPrint('🌈 Gender All enabled or no gender specified - showing all personas');
     }
     
-    // 2. 액션한 페르소나 제외 (좋아요, 슈퍼좋아요, 취소한 페르소나)
-    debugPrint('📋 Checking actionedPersonaIds: ${_actionedPersonaIds.length} personas to exclude');
-    if (_actionedPersonaIds.isNotEmpty) {
-      debugPrint('📋 ActionedPersonaIds: $_actionedPersonaIds');
-      final beforeCount = filteredPersonas.length;
-      filteredPersonas = filteredPersonas.where((persona) => 
-        !_actionedPersonaIds.contains(persona.id)
-      ).toList();
-      
-      debugPrint('🚫 Excluded ${beforeCount - filteredPersonas.length} actioned personas');
-      debugPrint('   Remaining: ${filteredPersonas.length} personas');
-    } else {
-      debugPrint('📋 No actionedPersonaIds to exclude');
-    }
+    // 2. 액션한 페르소나 제외는 이미 availablePersonas에서 처리됨
+    // 여기서는 순서만 정렬하고 추가 필터링하지 않음
+    debugPrint('📋 Available personas for recommendation: ${filteredPersonas.length}');
     
     // 필터링 후 페르소나가 없으면 빈 리스트 반환
     if (filteredPersonas.isEmpty) {
-      debugPrint('⚠️ No personas available after filtering');
+      debugPrint('⚠️ No personas available after gender filtering');
       return [];
     }
     
     // 각 페르소나에 대한 추천 점수 계산
     final scoredPersonas = filteredPersonas.map((persona) {
-      double score = 0.0;
+      // 모든 페르소나에 기본 점수 부여 (0.1) - 아무도 배제되지 않도록
+      double score = 0.1;
       
-      // 1. 관심사 매칭 점수 (40%)
+      // 1. 관심사 매칭 점수 (30% 가중치)
       if (_currentUser != null && _currentUser!.interests.isNotEmpty && persona.keywords != null) {
         int matchingInterests = 0;
         for (final interest in _currentUser!.interests) {
@@ -1061,19 +1051,19 @@ class PersonaService extends BaseService {
             matchingInterests++;
           }
         }
-        score += (matchingInterests / _currentUser!.interests.length) * 0.4;
+        score += (matchingInterests / _currentUser!.interests.length) * 0.3;
       }
       
-      // 2. 용도 매칭 점수 (30%)
+      // 2. 용도 매칭 점수 (20% 가중치)
       if (_currentUser != null && _currentUser!.purpose != null) {
         switch (_currentUser!.purpose) {
           case 'friendship':
-            // 친구 만들기 - 모든 페르소나 동일하게 취급
-            score += 0.3;
+            // 친구 만들기 - 약간의 추가 점수
+            score += 0.1;
             break;
           case 'dating':
-            // 연애/데이팅 - 나이 선호도 반영 (성별은 이미 필터링됨)
-            score += 0.2;
+            // 연애/데이팅 - 나이 선호도 반영
+            score += 0.1;
             // 선호 나이대 매칭
             if (_currentUser!.preferredPersona != null && _currentUser!.preferredPersona!.ageRange != null) {
               final ageRange = _currentUser!.preferredPersona!.ageRange!;
@@ -1083,24 +1073,24 @@ class PersonaService extends BaseService {
             }
             break;
           case 'counseling':
-            // 상담 - 모든 페르소나 가능
-            score += 0.2;
+            // 상담 - 약간의 추가 점수
+            score += 0.1;
             break;
           case 'entertainment':
-            // 엔터테인먼트 - 다양한 페르소나
-            score += 0.15; // 기본 점수
+            // 엔터테인먼트 - 약간의 추가 점수
+            score += 0.1;
             break;
         }
       }
       
-      // 3. 성향 매칭 점수 (20%)
+      // 3. 성향 매칭 점수 (20% 가중치)
       if (_currentUser != null && _currentUser!.preferredMbti != null && _currentUser!.preferredMbti!.isNotEmpty) {
         if (_currentUser!.preferredMbti!.contains(persona.mbti)) {
           score += 0.2;
         }
       }
       
-      // 4. 주제 매칭 점수 (10%)
+      // 4. 주제 매칭 점수 (10% 가중치)
       if (_currentUser != null && _currentUser!.preferredTopics != null && 
           _currentUser!.preferredTopics!.isNotEmpty && 
           persona.topics != null) {
@@ -1118,19 +1108,25 @@ class PersonaService extends BaseService {
         }
       }
       
+      // 5. 랜덤 요소 추가 (10% 가중치) - 다양성 확보
+      score += (persona.hashCode % 100) / 1000.0;
+      
       return MapEntry(persona, score);
     }).toList();
     
     // 점수순으로 정렬 (높은 점수가 먼저)
     scoredPersonas.sort((a, b) => b.value.compareTo(a.value));
     
-    // 상위 20%는 추천순, 나머지는 랜덤하게 섞어서 다양성 확보
-    final topCount = (filteredPersonas.length * 0.2).ceil();
+    // 상위 30%는 추천순, 나머지는 랜덤하게 섞어서 다양성 확보
+    final topCount = (filteredPersonas.length * 0.3).ceil();
     final topPersonas = scoredPersonas.take(topCount).map((e) => e.key).toList();
     final otherPersonas = scoredPersonas.skip(topCount).map((e) => e.key).toList();
     otherPersonas.shuffle();
     
-    return [...topPersonas, ...otherPersonas];
+    // 모든 필터링된 페르소나 반환 (순서만 조정됨)
+    final result = [...topPersonas, ...otherPersonas];
+    debugPrint('✅ Recommendation complete: ${result.length} personas ordered');
+    return result;
   }
   
   // 현재 사용자 정보 설정 (추천 알고리즘을 위해)
@@ -1315,30 +1311,23 @@ class PersonaService extends BaseService {
 
   /// 스와이프한 페르소나 목록 초기화 (새로고침 기능)
   Future<void> resetSwipedPersonas() async {
-    debugPrint('🔄 Resetting swiped personas...');
+    debugPrint('🔄 Resetting swiped personas for refresh...');
     
-    // 세션 스와이프 기록 초기화
+    // 세션 스와이프 기록만 초기화 (일시적으로 스와이프한 것들)
     _sessionSwipedPersonas.clear();
     
     // SharedPreferences에서도 삭제
     await PreferencesManager.remove('swiped_personas');
     
-    // actionedPersonaIds도 초기화 (Firebase에서)
-    if (_currentUserId != null) {
-      try {
-        await FirebaseHelper.users.doc(_currentUserId).update({
-          'actionedPersonaIds': [],
-        });
-        _actionedPersonaIds.clear();
-      } catch (e) {
-        debugPrint('Error clearing actionedPersonaIds: $e');
-      }
-    }
+    // actionedPersonaIds는 유지해야 함 - 매칭된 페르소나들은 계속 숨겨져야 함
+    // 대신 매칭되지 않은 페르소나들만 다시 보여주기 위해 강제로 reshuffle
+    debugPrint('📋 Keeping actionedPersonaIds (matched personas): ${_actionedPersonaIds.length} personas');
     
     // shuffled 리스트 초기화하여 다시 생성되도록 함
     _shuffledAvailablePersonas = null;
+    _lastShuffleTime = null;
     
-    debugPrint('✅ Swiped personas reset complete');
+    debugPrint('✅ Refresh complete - all unmatched personas will be shown');
     notifyListeners();
   }
   

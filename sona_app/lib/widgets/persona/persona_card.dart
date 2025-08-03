@@ -4,6 +4,7 @@ import '../../models/persona.dart';
 import '../../services/relationship/relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
 import '../../l10n/app_localizations.dart';
+import 'persona_profile_viewer.dart';
 
 /// Optimized PersonaCard with performance improvements and R2 image support:
 /// - R2 image loading with fallback to photoUrls
@@ -400,85 +401,89 @@ class _NavigationAreas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 0,
-      bottom: 250, // 하단 정보 영역을 제외한 영역까지만
-      left: 0,
-      right: 0,
-      child: Row(
-        children: [
-          // Left navigation area - 화면의 40% 영역
-          Expanded(
-            flex: 4,
+    return Stack(
+      children: [
+        // 왼쪽 화살표
+        Positioned(
+          left: 10,
+          top: 0,
+          bottom: 0,
+          child: Center(
             child: GestureDetector(
               onTap: currentIndex > 0 ? onPrevious : null,
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                color: Colors.transparent, // 투명하지만 터치 가능
-                alignment: Alignment.center,
-                child: currentIndex > 0
-                    ? Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.7), // 투명도 추가
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.chevron_left,
-                          size: 35,
-                          color: Colors.black.withValues(alpha: 0.7),
-                        ),
-                      )
-                    : null,
-              ),
+              child: currentIndex > 0
+                  ? Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.chevron_left,
+                        size: 30,
+                        color: Colors.black.withValues(alpha: 0.8),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
-          // Center area - 화면의 20% 영역 (탭 방지 영역)
-          const Spacer(flex: 2),
-          // Right navigation area - 화면의 40% 영역
-          Expanded(
-            flex: 4,
+        ),
+        // 오른쪽 화살표
+        Positioned(
+          right: 10,
+          top: 0,
+          bottom: 0,
+          child: Center(
             child: GestureDetector(
               onTap: currentIndex < maxIndex ? onNext : null,
-              behavior: HitTestBehavior.opaque,
-              child: Container(
-                color: Colors.transparent, // 투명하지만 터치 가능
-                alignment: Alignment.center,
-                child: currentIndex < maxIndex
-                    ? Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white.withValues(alpha: 0.7), // 투명도 추가
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.15),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(
-                          Icons.chevron_right,
-                          size: 35,
-                          color: Colors.black.withValues(alpha: 0.7),
-                        ),
-                      )
-                    : null,
-              ),
+              child: currentIndex < maxIndex
+                  ? Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white.withValues(alpha: 0.8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        Icons.chevron_right,
+                        size: 30,
+                        color: Colors.black.withValues(alpha: 0.8),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
-        ],
-      ),
+        ),
+        // 중앙 터치 영역 (이미지 영역) - 터치 이벤트를 방지하기 위함
+        Positioned(
+          top: 0,
+          bottom: 250,
+          left: 60,
+          right: 60,
+          child: GestureDetector(
+            onTap: () {}, // 빈 탭 핸들러로 버튼 탭이 전파되지 않도록 함
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -519,16 +524,41 @@ class _PersonaInfo extends StatelessWidget {
     required this.persona,
   });
 
+  void _showPersonaProfile(BuildContext context, Persona persona) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return PersonaProfileViewer(
+            persona: persona,
+            onClose: () {},
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+        transitionDuration: const Duration(milliseconds: 300),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 20,
       left: 20,
       right: 20,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
+      child: GestureDetector(
+        onTap: () => _showPersonaProfile(context, persona),
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
           Row(
             children: [
               
@@ -618,7 +648,8 @@ class _PersonaInfo extends StatelessWidget {
           }),
         ],
       ),
-    );
+    ),
+  );
   }
 }
 

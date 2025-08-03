@@ -158,16 +158,8 @@ class Persona {
     final urls = <String>[];
     
     if (imageUrls != null) {
-      // 현재 Firebase 구조에서 직접 size 키 확인
-      if (imageUrls!.containsKey(size)) {
-        final sizeUrls = imageUrls![size] as Map<String, dynamic>?;
-        if (sizeUrls != null && sizeUrls.containsKey('jpg')) {
-          urls.add(sizeUrls['jpg'] as String);
-        }
-      }
-      
-      // 대체 구조: mainImageUrls가 있는 경우
-      else if (imageUrls!.containsKey('mainImageUrls')) {
+      // 우선순위 1: mainImageUrls/additionalImageUrls 구조 확인 (여러 이미지 지원)
+      if (imageUrls!.containsKey('mainImageUrls') && imageUrls!.containsKey('additionalImageUrls')) {
         final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
         if (mainUrls != null && mainUrls.containsKey(size)) {
           urls.add(mainUrls[size]);
@@ -191,6 +183,13 @@ class Persona {
               urls.add(urlMap[size]);
             }
           }
+        }
+      }
+      // 우선순위 2: 최상위 size 키만 있는 경우 (단일 이미지)
+      else if (imageUrls!.containsKey(size)) {
+        final sizeUrls = imageUrls![size] as Map<String, dynamic>?;
+        if (sizeUrls != null && sizeUrls.containsKey('jpg')) {
+          urls.add(sizeUrls['jpg'] as String);
         }
       }
     }

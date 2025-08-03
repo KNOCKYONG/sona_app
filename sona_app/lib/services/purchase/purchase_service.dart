@@ -104,12 +104,17 @@ class PurchaseService extends BaseService {
     );
     
     // Auth 상태 변경 리스너 설정
-    _authSubscription = _auth.authStateChanges().listen((user) {
-      debugPrint('🔄 Auth state changed: ${user?.uid ?? "logged out"}');
+    _authSubscription = _auth.authStateChanges().listen((user) async {
+      debugPrint('💰 [PurchaseService] Auth state changed: ${user?.uid ?? "logged out"}');
       if (user != null) {
+        debugPrint('💰 [PurchaseService] User logged in, waiting before loading purchase data...');
+        // 신규 가입 시 user document 생성 완료를 위한 짧은 대기
+        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('💰 [PurchaseService] Loading purchase data after delay...');
         _loadUserPurchaseData();
       } else {
         // 로그아웃 시 상태 초기화
+        debugPrint('💰 [PurchaseService] User logged out, resetting state');
         _isPremium = false;
         _premiumExpiryDate = null;
         _hearts = 0;
@@ -259,6 +264,11 @@ class PurchaseService extends BaseService {
       await _deliverProduct(purchase.productID);
       
       _isPurchasePending = false;
+      
+      // 구매 완료 후 데이터 새로고침
+      debugPrint('💰 [PurchaseService] Purchase completed, refreshing user data...');
+      await _loadUserPurchaseData();
+      
       notifyListeners();
     } catch (e) {
       debugPrint('❌ Error verifying purchase: $e');
@@ -272,7 +282,7 @@ class PurchaseService extends BaseService {
     final user = _auth.currentUser;
     if (user == null) return;
     
-    final userRef = _firestore.collection('users').doc(user.uid);
+    debugPrint('💰 [PurchaseService] Delivering product: $productId');
     
     switch (productId) {
       case ProductIds.premium1Month:
@@ -285,18 +295,20 @@ class PurchaseService extends BaseService {
         await _grantPremium(180);
         break;
       case ProductIds.hearts10:
+        debugPrint('💰 [PurchaseService] Delivering 10 hearts');
         await _grantHearts(10);
         break;
       case ProductIds.hearts30:
+        debugPrint('💰 [PurchaseService] Delivering 30 hearts');
         await _grantHearts(30);
         break;
       case ProductIds.hearts50:
+        debugPrint('💰 [PurchaseService] Delivering 50 hearts');
         await _grantHearts(50);
         break;
+      default:
+        debugPrint('⚠️ [PurchaseService] Unknown product ID: $productId');
     }
-    
-    // 사용자 데이터 다시 로드
-    await _loadUserPurchaseData();
   }
   
   /// 프리미엄 권한 부여
@@ -328,12 +340,34 @@ class PurchaseService extends BaseService {
     final user = _auth.currentUser;
     if (user == null) return;
     
-    await _firestore.collection('users').doc(user.uid).update({
-      'hearts': FieldValue.increment(amount),
-      'updatedAt': FieldValue.serverTimestamp(),
-    });
+    debugPrint('💰 [PurchaseService] Granting $amount hearts to user: ${user.uid}');
     
-    debugPrint('✅ Hearts granted: $amount');
+    try {
+      // 트랜잭션을 사용하여 원자적으로 처리
+      await _firestore.runTransaction((transaction) async {
+        final userDoc = await transaction.get(_firestore.collection('users').doc(user.uid));
+        
+        if (!userDoc.exists) {
+          debugPrint('❌ [PurchaseService] User document does not exist during heart grant');
+          throw Exception('User document not found');
+        }
+        
+        final currentHearts = userDoc.data()?['hearts'] ?? 0;
+        debugPrint('💰 [PurchaseService] Current hearts: $currentHearts, Adding: $amount');
+        
+        transaction.update(userDoc.reference, {
+          'hearts': currentHearts + amount,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+        
+        debugPrint('💰 [PurchaseService] Transaction completed - New hearts: ${currentHearts + amount}');
+      });
+      
+      debugPrint('✅ Hearts granted successfully: $amount');
+    } catch (e) {
+      debugPrint('❌ [PurchaseService] Error granting hearts: $e');
+      rethrow;
+    }
   }
   
   /// 구매 복원
@@ -351,15 +385,26 @@ class PurchaseService extends BaseService {
   /// 사용자 구매 데이터 로드
   Future<void> _loadUserPurchaseData() async {
     final user = _auth.currentUser;
-    if (user == null) return;
+    if (user == null) {
+      debugPrint('💰 [PurchaseService] Cannot load purchase data - no user logged in');
+      return;
+    }
+    
+    debugPrint('💰 [PurchaseService] Loading purchase data for user: ${user.uid}');
     
     try {
       final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      debugPrint('💰 [PurchaseService] User document exists: ${userDoc.exists}');
+      
       if (userDoc.exists) {
         final data = userDoc.data()!;
         
         _isPremium = data['isPremium'] ?? false;
+        final previousHearts = _hearts;
         _hearts = data['hearts'] ?? 0;
+        
+        debugPrint('💰 [PurchaseService] Hearts loaded - Previous: $previousHearts, Current: $_hearts');
+        debugPrint('💰 [PurchaseService] Raw hearts data from Firestore: ${data['hearts']}');
         
         if (data['premiumExpiryDate'] != null) {
           _premiumExpiryDate = (data['premiumExpiryDate'] as Timestamp).toDate();
@@ -377,10 +422,13 @@ class PurchaseService extends BaseService {
           }
         }
         
+        debugPrint('💰 [PurchaseService] Purchase data loaded successfully - Hearts: $_hearts, Premium: $_isPremium');
         notifyListeners();
+      } else {
+        debugPrint('⚠️ [PurchaseService] User document does not exist yet');
       }
     } catch (e) {
-      debugPrint('❌ Error loading user purchase data: $e');
+      debugPrint('❌ [PurchaseService] Error loading user purchase data: $e');
     }
   }
   
@@ -431,6 +479,12 @@ class PurchaseService extends BaseService {
       _isPurchasePending = false;
       notifyListeners();
     }
+  }
+  
+  /// 사용자 구매 데이터 강제 새로고침
+  Future<void> refreshUserData() async {
+    debugPrint('💰 [PurchaseService] Force refreshing user purchase data...');
+    await _loadUserPurchaseData();
   }
   
   @override

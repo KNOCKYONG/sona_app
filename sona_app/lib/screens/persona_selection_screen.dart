@@ -474,60 +474,22 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     // 전문가 기능 제거됨
     
-    // Super like의 경우 매칭을 지연시키고 다이얼로그에서 처리
-    if (isSuperLike) {
-      try {
-        // 스와이프만 마킹하고 매칭은 하지 않음
-        await personaService.markPersonaAsSwiped(persona.id);
-        if (mounted) {
-          _showMatchDialog(persona, isSuperLike: true);
-        }
-      } finally {
-        // Super like의 경우 여기서 처리 완료
-        _processingPersonas.remove(persona.id);
+    // 라이크/슈퍼라이크 모두 매칭을 지연시키고 다이얼로그에서 처리
+    try {
+      // 스와이프만 마킹하고 매칭은 하지 않음
+      await personaService.markPersonaAsSwiped(persona.id);
+      if (mounted) {
+        _showMatchDialog(persona, isSuperLike: isSuperLike);
       }
-    } else {
-      // 일반 like 매칭 처리
-      setState(() => _isLoading = true);
-      
-      try {
-        // DeviceIdService로 사용자 ID 확보
-        final currentUserId = await DeviceIdService.getCurrentUserId(
-          firebaseUserId: authService.user?.uid,
-        );
-        
-        debugPrint('🔄 Processing persona match: ${persona.name} (ID: ${persona.id})');
-        debugPrint('🆔 Matching with userId: $currentUserId');
-        
-        // PersonaService가 currentUserId를 가지고 있는지 확인
-        if (personaService.matchedPersonas.isEmpty) {
-          personaService.setCurrentUserId(currentUserId);
-        }
-        
-        // 먼저 스와이프 마킹
-        await personaService.markPersonaAsSwiped(persona.id);
-        
-        // 매칭 처리
-        final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: false);
-        
-        debugPrint('✅ Match processing complete: ${persona.name} (ID: ${persona.id}, success: $matchSuccess)');
-        
-        setState(() => _isLoading = false);
-        
-        if (mounted) {
-          _showMatchDialog(persona, isSuperLike: false);
-        }
-      } catch (e) {
-        setState(() => _isLoading = false);
-        debugPrint('❌ Error in matching process: $e');
-        // 에러가 발생해도 다이얼로그 표시 (UX)
-        if (mounted) {
-          _showMatchDialog(persona, isSuperLike: false);
-        }
-      } finally {
-        // 처리 완료 후 목록에서 제거
-        _processingPersonas.remove(persona.id);
+    } catch (e) {
+      debugPrint('❌ Error marking persona as swiped: $e');
+      // 에러가 발생해도 다이얼로그 표시 (UX)
+      if (mounted) {
+        _showMatchDialog(persona, isSuperLike: isSuperLike);
       }
+    } finally {
+      // 처리 완료 후 목록에서 제거
+      _processingPersonas.remove(persona.id);
     }
   }
 
@@ -1381,13 +1343,17 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                   setState(() => _isLoading = false);
                                 }
                               } else {
-                                // 일반 like도 하트 1개 차감 후 채팅으로 이동
+                                // 일반 like도 하트 1개 차감 후 매칭 처리
                                 Navigator.of(context).pop();
 
                                 setState(() => _isLoading = true);
 
                                 try {
+                                  final personaService = Provider.of<PersonaService>(screenContext, listen: false);
+                                  final authService = Provider.of<AuthService>(screenContext, listen: false);
                                   final purchaseService = Provider.of<PurchaseService>(screenContext, listen: false);
+                                  
+                                  final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
 
                                   // 하트 1개 차감
                                   final hasEnoughHearts = await purchaseService.useHearts(1);
@@ -1399,7 +1365,18 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                     return;
                                   }
 
-                                  await _navigateToChat(persona, screenContext, false);
+                                  // 매칭 처리
+                                  final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: false);
+
+                                  if (matchSuccess) {
+                                    debugPrint('✅ Normal like matching complete: ${persona.name}');
+                                    await _navigateToChat(persona, screenContext, false);
+                                  } else {
+                                    debugPrint('❌ Normal like matching failed: ${persona.name}');
+                                    ScaffoldMessenger.of(screenContext).showSnackBar(
+                                      const SnackBar(content: Text('매칭에 실패했습니다.')),
+                                    );
+                                  }
                                 } catch (e) {
                                   debugPrint('❌ Error in normal like: $e');
                                   ScaffoldMessenger.of(screenContext).showSnackBar(
@@ -1489,9 +1466,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       // 🔧 중요: 전문가 페르소나도 실제로 매칭 처리해야 채팅 목록에 나타남
       debugPrint('🩺 Processing persona match: ${persona.name}');
       
-      // 실제 매칭 처리 (전문가든 일반이든 모두 매칭 필요)
-      final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
-      debugPrint('✅ Match result: $matchSuccess for ${persona.name}');
+      // 실제 매칭 처리는 이미 버튼 클릭 시 처리되었으므로 여기서는 생략
+      // final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
+      // debugPrint('✅ Match result: $matchSuccess for ${persona.name}');
       
       // Firebase에서 최신 매칭 정보 다시 로드
       debugPrint('🔄 Refreshing matched personas after successful match...');

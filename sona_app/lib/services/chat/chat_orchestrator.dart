@@ -111,8 +111,15 @@ class ChatOrchestrator {
         userNickname: userNickname,
       );
       
+      // 6.5단계: 만남 제안 필터링 및 초기 인사 패턴 방지
+      final filteredResponse = _filterMeetingAndGreetingPatterns(
+        response: processedResponse,
+        chatHistory: chatHistory,
+        isCasualSpeech: isCasualSpeech,
+      );
+      
       // 7단계: 긴 응답 분리 처리
-      final responseContents = _splitLongResponse(processedResponse, completePersona.mbti);
+      final responseContents = _splitLongResponse(filteredResponse, completePersona.mbti);
       
       // 8단계: 감정 분석 및 점수 계산 (첫 번째 메시지 기준)
       final emotion = _analyzeEmotion(responseContents.first);
@@ -162,7 +169,7 @@ class ChatOrchestrator {
         personaId: personaId,
         recentMessages: recentMessages,
         persona: persona,
-        maxTokens: 500,
+        maxTokens: 1500, // 500 -> 1500으로 증가하여 더 많은 대화 기억
       );
       return memory;
     } catch (e) {
@@ -830,6 +837,110 @@ class ChatOrchestrator {
     }
     
     return [];
+  }
+
+  /// 만남 제안 및 부적절한 초기 인사 패턴 필터링
+  String _filterMeetingAndGreetingPatterns({
+    required String response,
+    required List<Message> chatHistory,
+    required bool isCasualSpeech,
+  }) {
+    String filtered = response;
+    
+    // 1. 오프라인 만남 제안 패턴 제거
+    final meetingPatterns = [
+      // 카페/장소 관련
+      r'우리\s*카페로?\s*와',
+      r'카페로?\s*오라고',
+      r'카페\s*어디',
+      r'여기로?\s*와',
+      r'(이리|저리|거기)\s*와',
+      r'놀러\s*와',
+      r'(만나자|만날래|보자|볼래)',
+      r'어디서\s*만날',
+      r'언제\s*만날',
+      r'시간\s*있[으니어]',
+      // 구체적 장소 언급
+      r'(강남|홍대|신촌|명동|이태원)',
+      r'(스타벅스|투썸|이디야|카페)',
+      r'(우리\s*집|내\s*집|너희\s*집)',
+      r'(학교|회사|사무실)',
+      // 시간 약속
+      r'[0-9]+시에?\s*(만나|보자)',
+      r'(내일|모레|주말에?)\s*(만나|보자)',
+      r'(월|화|수|목|금|토|일)요일에?\s*(만나|보자)',
+    ];
+    
+    for (final pattern in meetingPatterns) {
+      final regex = RegExp(pattern, caseSensitive: false);
+      if (regex.hasMatch(filtered)) {
+        // 만남 제안이 포함된 문장을 대체
+        filtered = filtered.replaceAllMapped(regex, (match) {
+          // 캐주얼 스피치에 따라 대체 메시지
+          if (isCasualSpeech) {
+            return '그런 얘기보다 다른 재밌는 얘기하자!';
+          } else {
+            return '그런 이야기보다 다른 재미있는 이야기를 해봐요!';
+          }
+        });
+      }
+    }
+    
+    // 2. 대화 중간에 나타나는 부적절한 초기 인사 패턴 방지
+    if (chatHistory.length > 4) { // 이미 대화가 진행된 상황
+      final greetingPatterns = [
+        r'^(오늘|요즘|어제|최근에?)\s*(무슨|뭔|어떤)\s*일\s*있',
+        r'^무슨\s*일\s*있으?셨',
+        r'^뭐\s*하고?\s*있',
+        r'^어떻게?\s*지내',
+        r'^(안녕|반가워|하이|헬로)',
+        r'처음\s*뵙겠',
+        r'(소개|인사)\s*드[리려]',
+      ];
+      
+      for (final pattern in greetingPatterns) {
+        final regex = RegExp(pattern, caseSensitive: false, multiLine: true);
+        if (regex.hasMatch(filtered)) {
+          // 대화가 이미 진행중인데 초기 인사를 하려고 하면 제거
+          filtered = filtered.replaceAllMapped(regex, (match) => '');
+        }
+      }
+    }
+    
+    // 3. 구체적 위치 정보 언급 방지
+    final locationPatterns = [
+      r'(정확한|구체적인?)\s*(위치|장소|주소)',
+      r'어디\s*(있는지|인지|야)',
+      r'위치\s*알려',
+      r'주소\s*알려',
+      r'찾아가',
+      r'(가는|오는)\s*길',
+    ];
+    
+    for (final pattern in locationPatterns) {
+      final regex = RegExp(pattern, caseSensitive: false);
+      if (regex.hasMatch(filtered)) {
+        filtered = filtered.replaceAllMapped(regex, (match) {
+          if (isCasualSpeech) {
+            return '자세한 건 말할 수 없어';
+          } else {
+            return '자세한 것은 말씀드릴 수 없어요';
+          }
+        });
+      }
+    }
+    
+    // 빈 문자열이 되지 않도록 보장
+    filtered = filtered.trim();
+    if (filtered.isEmpty) {
+      if (isCasualSpeech) {
+        filtered = '응, 다른 얘기하자!';
+      } else {
+        filtered = '네, 다른 이야기를 해봐요!';
+      }
+    }
+    
+    return filtered;
   }
 }
 

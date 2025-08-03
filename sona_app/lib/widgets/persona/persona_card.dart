@@ -17,12 +17,14 @@ class PersonaCard extends StatefulWidget {
   final Persona persona;
   final double horizontalThresholdPercentage;
   final double verticalThresholdPercentage;
+  final bool isEnabled;
 
   const PersonaCard({
     super.key,
     required this.persona,
     this.horizontalThresholdPercentage = 0.0,
     this.verticalThresholdPercentage = 0.0,
+    this.isEnabled = true,
   });
 
   @override
@@ -225,6 +227,7 @@ class _PersonaCardState extends State<PersonaCard> {
             // Persona info with expert badge - LAST to be on top for tap detection
             _PersonaInfo(
               persona: widget.persona,
+              isEnabled: widget.isEnabled,
             ),
           ],
         ),
@@ -505,9 +508,11 @@ class _GradientOverlay extends StatelessWidget {
 // Persona info widget with expert badge support
 class _PersonaInfo extends StatelessWidget {
   final Persona persona;
+  final bool isEnabled;
 
   const _PersonaInfo({
     required this.persona,
+    this.isEnabled = true,
   });
 
   void _showPersonaProfile(BuildContext context, Persona persona) {
@@ -539,7 +544,7 @@ class _PersonaInfo extends StatelessWidget {
       left: 20,
       right: 20,
       child: GestureDetector(
-        onTap: () => _showPersonaProfile(context, persona),
+        onTap: isEnabled ? () => _showPersonaProfile(context, persona) : null,
         behavior: HitTestBehavior.opaque,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

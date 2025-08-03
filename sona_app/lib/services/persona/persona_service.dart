@@ -54,6 +54,11 @@ class PersonaService extends BaseService {
   List<Persona> get availablePersonas {
     _cleanExpiredSwipes();
     
+    // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
+    if (!_matchedPersonasLoaded) {
+      _lazyLoadMatchedPersonas();
+    }
+    
     // Check if we need to reshuffle (every 30 minutes or if list is null)
     final now = DateTime.now();
     final shouldReshuffle = _shuffledAvailablePersonas == null ||
@@ -62,14 +67,20 @@ class PersonaService extends BaseService {
     
     if (shouldReshuffle) {
       debugPrint('🔀 Reshuffling available personas...');
+      debugPrint('📋 Total personas: ${_allPersonas.length}');
+      debugPrint('📋 Matched personas: ${_matchedPersonas.length}');
+      debugPrint('📋 Actioned personas: ${_actionedPersonaIds.length}');
       
       // Exclude both recently swiped and matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
       final filtered = _allPersonas.where((persona) => 
         !_isPersonaRecentlySwiped(persona.id) && 
         !matchedIds.contains(persona.id) &&
+        !_actionedPersonaIds.contains(persona.id) &&  // actionedPersonaIds도 제외
         _hasR2Image(persona)  // Only include personas with R2 images
       ).toList();
+      
+      debugPrint('📋 Filtered personas: ${filtered.length}');
       
       // Get recommended personas for current user
       final recommendedPersonas = getRecommendedPersonas(filtered);
@@ -182,10 +193,11 @@ class PersonaService extends BaseService {
       _loadFromFirebaseOrFallback(),
       _loadSwipedPersonas(),
       _loadActionedPersonaIds(),
+      _loadMatchedPersonas(),  // 매칭된 페르소나도 함께 로드
     ]);
     
-    // Lazy load matched personas
-    _matchedPersonasLoaded = false;
+    // Mark matched personas as loaded
+    _matchedPersonasLoaded = true;
     
     // isLoading is managed by BaseService
     notifyListeners();
@@ -1342,6 +1354,12 @@ class PersonaService extends BaseService {
   Future<void> resetSwipedPersonas() async {
     debugPrint('🔄 Resetting swiped personas for refresh...');
     
+    // 매칭된 페르소나 목록이 로드되지 않았다면 먼저 로드
+    if (!_matchedPersonasLoaded) {
+      debugPrint('📋 Loading matched personas first...');
+      await _loadMatchedPersonas();
+    }
+    
     // 세션 스와이프 기록만 초기화 (일시적으로 스와이프한 것들)
     _sessionSwipedPersonas.clear();
     
@@ -1351,6 +1369,7 @@ class PersonaService extends BaseService {
     // actionedPersonaIds는 유지해야 함 - 매칭된 페르소나들은 계속 숨겨져야 함
     // 대신 매칭되지 않은 페르소나들만 다시 보여주기 위해 강제로 reshuffle
     debugPrint('📋 Keeping actionedPersonaIds (matched personas): ${_actionedPersonaIds.length} personas');
+    debugPrint('📋 Matched personas count: ${_matchedPersonas.length}');
     
     // shuffled 리스트 초기화하여 다시 생성되도록 함
     _shuffledAvailablePersonas = null;

@@ -21,6 +21,7 @@ import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
 import '../relationship/like_cooldown_system.dart';
+import '../../models/chat_error_report.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -2625,6 +2626,64 @@ class ChatService extends BaseService {
       debugPrint('✅ Successfully left chat room for persona: $personaId');
     } catch (e) {
       debugPrint('❌ Error leaving chat room: $e');
+    }
+  }
+  
+  /// 🚨 대화 오류 리포트 전송
+  Future<void> sendChatErrorReport({
+    required String userId,
+    required String personaId,
+    String? userMessage,
+  }) async {
+    try {
+      debugPrint('🚨 Sending chat error report for persona: $personaId');
+      
+      // 현재 페르소나 정보 가져오기
+      final persona = _getPersonaFromService(personaId);
+      if (persona == null) {
+        debugPrint('❌ Persona not found for error report');
+        return;
+      }
+      
+      // 최근 10개 메시지 가져오기
+      final messages = getMessages(personaId);
+      final recentMessages = messages.length > 10 
+          ? messages.sublist(messages.length - 10)
+          : messages;
+      
+      // 디바이스 정보 가져오기
+      final deviceInfo = await _getDeviceInfo();
+      
+      // 에러 리포트 생성
+      final errorReport = ChatErrorReport(
+        errorKey: ChatErrorReport.generateErrorKey(),
+        userId: userId,
+        personaId: personaId,
+        personaName: persona.name,
+        recentChats: recentMessages,
+        createdAt: DateTime.now(),
+        userMessage: userMessage,
+        deviceInfo: deviceInfo,
+        appVersion: '1.0.0', // TODO: Get actual app version
+      );
+      
+      // Firebase에 저장
+      await FirebaseHelper.chatErrorFix.add(errorReport.toMap());
+      
+      debugPrint('✅ Chat error report sent successfully');
+    } catch (e) {
+      debugPrint('❌ Error sending chat error report: $e');
+      rethrow;
+    }
+  }
+  
+  /// 디바이스 정보 가져오기
+  Future<String> _getDeviceInfo() async {
+    try {
+      // Platform 정보 수집 (간단한 버전)
+      return 'Flutter App on ${DateTime.now().toIso8601String()}';
+    } catch (e) {
+      return 'Unknown device';
     }
   }
 }

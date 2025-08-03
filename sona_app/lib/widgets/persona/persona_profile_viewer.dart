@@ -271,9 +271,17 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                 bottom: 20,
                                 left: 20,
                                 right: 20,
-                                child: AnimatedSwitcher(
-                                  duration: const Duration(milliseconds: 300),
-                                  child: _showDetails ? _buildDetailedInfo() : _buildBasicInfo(),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      _showDetails = !_showDetails;
+                                    });
+                                  },
+                                  behavior: HitTestBehavior.opaque,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 300),
+                                    child: _showDetails ? _buildDetailedInfo() : _buildBasicInfo(),
+                                  ),
                                 ),
                               ),
                               
@@ -375,10 +383,10 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
         ),
         const SizedBox(height: 12),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(8),
+            color: Colors.white.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
           ),
           child: const Row(
@@ -389,12 +397,12 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                 color: Colors.white70,
                 size: 16,
               ),
-              SizedBox(width: 4),
+              SizedBox(width: 6),
               Text(
-                '이 영역 탭하여 자세히 보기',
+                '하단 영역을 탭하여 상세 정보 보기',
                 style: TextStyle(
                   color: Colors.white70,
-                  fontSize: 12,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
               ),

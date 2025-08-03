@@ -158,44 +158,61 @@ class Persona {
     final urls = <String>[];
     
     if (imageUrls != null) {
-      // 우선순위 1: mainImageUrls/additionalImageUrls 구조 확인 (여러 이미지 지원)
-      if (imageUrls!.containsKey('mainImageUrls') && imageUrls!.containsKey('additionalImageUrls')) {
+      // 디버그 로그 추가
+      print('[DEBUG] getAllImageUrls - name: $name, size: $size');
+      print('[DEBUG] imageUrls keys: ${imageUrls!.keys.toList()}');
+      
+      // 우선순위 1: mainImageUrls 구조 확인 (여러 이미지 지원)
+      if (imageUrls!.containsKey('mainImageUrls')) {
+        print('[DEBUG] Found mainImageUrls structure');
+        
         final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
         if (mainUrls != null && mainUrls.containsKey(size)) {
           urls.add(mainUrls[size]);
+          print('[DEBUG] Added main image: ${mainUrls[size]}');
         }
         
-        // 추가 이미지들 - 순서대로 정렬
-        final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
-        if (additionalUrls != null) {
-          // image1, image2, ... 순서로 정렬
-          final sortedKeys = additionalUrls.keys.toList()
-            ..sort((a, b) {
-              // 숫자 추출하여 정렬
-              final numA = int.tryParse(a.replaceAll('image', '')) ?? 0;
-              final numB = int.tryParse(b.replaceAll('image', '')) ?? 0;
-              return numA.compareTo(numB);
-            });
-          
-          for (final key in sortedKeys) {
-            final urlMap = additionalUrls[key] as Map<String, dynamic>;
-            if (urlMap.containsKey(size)) {
-              urls.add(urlMap[size]);
+        // 추가 이미지들 확인 - additionalImageUrls가 있는 경우
+        if (imageUrls!.containsKey('additionalImageUrls')) {
+          final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
+          if (additionalUrls != null) {
+            print('[DEBUG] additionalImageUrls keys: ${additionalUrls.keys.toList()}');
+            
+            // image1, image2, ... 순서로 정렬
+            final sortedKeys = additionalUrls.keys.toList()
+              ..sort((a, b) {
+                // 숫자 추출하여 정렬
+                final numA = int.tryParse(a.replaceAll('image', '')) ?? 0;
+                final numB = int.tryParse(b.replaceAll('image', '')) ?? 0;
+                return numA.compareTo(numB);
+              });
+            
+            for (final key in sortedKeys) {
+              final urlMap = additionalUrls[key] as Map<String, dynamic>;
+              if (urlMap.containsKey(size)) {
+                urls.add(urlMap[size]);
+                print('[DEBUG] Added additional image $key: ${urlMap[size]}');
+              }
             }
           }
         }
       }
       // 우선순위 2: 최상위 size 키만 있는 경우 (단일 이미지)
       else if (imageUrls!.containsKey(size)) {
+        print('[DEBUG] Found direct size key structure');
         final sizeUrls = imageUrls![size] as Map<String, dynamic>?;
         if (sizeUrls != null && sizeUrls.containsKey('jpg')) {
           urls.add(sizeUrls['jpg'] as String);
+          print('[DEBUG] Added single image: ${sizeUrls['jpg']}');
         }
       }
     }
     
+    print('[DEBUG] Total images found: ${urls.length}');
+    
     // 폴백: 기존 photoUrls 사용
     if (urls.isEmpty && photoUrls.isNotEmpty) {
+      print('[DEBUG] Falling back to photoUrls');
       return photoUrls;
     }
     

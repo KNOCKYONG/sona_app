@@ -48,6 +48,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   String _cardsKey = ''; // 안정적인 카드 키를 위한 변수
   bool _isSwipeInProgress = false; // 스와이프 진행 중 플래그
   final Set<String> _processingPersonas = {}; // 처리 중인 페르소나 추적
+  bool _isMatchDialogShowing = false; // 매칭 다이얼로그 표시 상태
 
   @override
   void initState() {
@@ -1175,6 +1176,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 🔧 FIX: 메인 화면의 context를 미리 저장
     final BuildContext screenContext = context;
     
+    // 매칭 다이얼로그 표시 상태 업데이트
+    setState(() => _isMatchDialogShowing = true);
+    
     // 전문가 기능 제거됨
     
     showModal<void>(
@@ -1416,7 +1420,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           ),
         );
       },
-    );
+    ).then((_) {
+      // 다이얼로그가 닫힐 때 상태 업데이트
+      if (mounted) {
+        setState(() => _isMatchDialogShowing = false);
+      }
+    });
   }
 
   void _onLikePressed() {
@@ -1829,6 +1838,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                           persona: item,
                           horizontalThresholdPercentage: horizontalThresholdPercentage.toDouble(),
                           verticalThresholdPercentage: verticalThresholdPercentage.toDouble(),
+                          isEnabled: !_isMatchDialogShowing,
                         );
                       }
 

@@ -669,85 +669,185 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 borderRadius: BorderRadius.circular(12),
                 shadowColor: Colors.black.withOpacity(0.2),
                 color: Theme.of(context).cardColor,
-                child: InkWell(
-                  onTap: () async {
-                    setState(() {
-                      _showMoreMenu = false;
-                    });
-                    
-                    // Show confirmation dialog
-                    final shouldLeave = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(AppLocalizations.of(context)!.leaveChatTitle),
-                        content: Text(AppLocalizations.of(context)!.leaveChatConfirm),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: Text(AppLocalizations.of(context)!.cancel),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(true),
-                            child: Text(
-                              AppLocalizations.of(context)!.leave,
-                              style: TextStyle(color: Colors.red),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Send Chat Error button
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _showMoreMenu = false;
+                        });
+                        
+                        final chatService = Provider.of<ChatService>(context, listen: false);
+                        final authService = Provider.of<AuthService>(context, listen: false);
+                        final personaService = Provider.of<PersonaService>(context, listen: false);
+                        
+                        final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+                        final currentPersona = personaService.currentPersona;
+                        
+                        if (userId.isNotEmpty && currentPersona != null) {
+                          // Show loading dialog
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFFFF6B9D),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                    
-                    if (shouldLeave == true && mounted) {
-                      // Leave chat room
-                      final chatService = Provider.of<ChatService>(context, listen: false);
-                      final authService = Provider.of<AuthService>(context, listen: false);
-                      final personaService = Provider.of<PersonaService>(context, listen: false);
-                      
-                      final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
-                      final currentPersona = personaService.currentPersona;
-                      
-                      if (userId.isNotEmpty && currentPersona != null) {
-                        // 먼저 채팅방 나가기 처리
-                        await chatService.leaveChatRoom(userId, currentPersona.id);
-                        
-                        // 매칭된 페르소나 목록에서도 제거
-                        personaService.removeFromMatchedPersonas(currentPersona.id);
-                        
-                        // Navigate back to main navigation
-                        if (mounted) {
-                          Navigator.pushReplacementNamed(
-                            context,
-                            '/main',
-                            arguments: {'initialIndex': 1}, // 채팅 목록 탭
                           );
+                          
+                          try {
+                            await chatService.sendChatErrorReport(
+                              userId: userId,
+                              personaId: currentPersona.id,
+                            );
+                            
+                            if (mounted) {
+                              Navigator.pop(context); // Close loading dialog
+                              
+                              // Show success message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('대화 오류가 성공적으로 전송되었습니다.'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            if (mounted) {
+                              Navigator.pop(context); // Close loading dialog
+                              
+                              // Show error message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('오류 전송 실패: ${e.toString()}'),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          }
                         }
-                      }
-                    }
-                  },
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.exit_to_app,
-                          color: Colors.red[400],
-                          size: 20,
+                      },
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          AppLocalizations.of(context)!.leaveChatRoom,
-                          style: TextStyle(
-                            color: Colors.red[400],
-                            fontWeight: FontWeight.w500,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.bug_report_outlined,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '대화 오류 전송하기',
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // Divider
+                    Container(
+                      height: 1,
+                      color: Theme.of(context).dividerColor.withOpacity(0.2),
+                    ),
+                    // Leave chat room button
+                    InkWell(
+                      onTap: () async {
+                        setState(() {
+                          _showMoreMenu = false;
+                        });
+                        
+                        // Show confirmation dialog
+                        final shouldLeave = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.leaveChatTitle),
+                            content: Text(AppLocalizations.of(context)!.leaveChatConfirm),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(false),
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(true),
+                                child: Text(
+                                  AppLocalizations.of(context)!.leave,
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ),
+                            ],
                           ),
+                        );
+                        
+                        if (shouldLeave == true && mounted) {
+                          // Leave chat room
+                          final chatService = Provider.of<ChatService>(context, listen: false);
+                          final authService = Provider.of<AuthService>(context, listen: false);
+                          final personaService = Provider.of<PersonaService>(context, listen: false);
+                          
+                          final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+                          final currentPersona = personaService.currentPersona;
+                          
+                          if (userId.isNotEmpty && currentPersona != null) {
+                            // 먼저 채팅방 나가기 처리
+                            await chatService.leaveChatRoom(userId, currentPersona.id);
+                            
+                            // 매칭된 페르소나 목록에서도 제거
+                            personaService.removeFromMatchedPersonas(currentPersona.id);
+                            
+                            // Navigate back to main navigation
+                            if (mounted) {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                '/main',
+                                arguments: {'initialIndex': 1}, // 채팅 목록 탭
+                              );
+                            }
+                          }
+                        }
+                      },
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
                         ),
-                      ],
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.red[400],
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.leaveChatRoom,
+                              style: TextStyle(
+                                color: Colors.red[400],
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
             ),

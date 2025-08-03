@@ -94,6 +94,11 @@ class NegativeBehaviorSystem {
   
   /// 추임새 욕설 체크 (관계 점수 고려)
   NegativeAnalysisResult _checkCasualSwearing(String lowerMessage, String originalMessage, int relationshipScore) {
+    // "씨"가 호칭으로 사용되는지 체크
+    if (_isHonorificSsi(originalMessage)) {
+      return NegativeAnalysisResult(level: 0, category: 'none');
+    }
+    
     // 추임새로 사용될 수 있는 가벼운 욕설
     final casualSwearWords = [
       '씨', '아씨', '젠장', '망할', '빌어먹을', '씨바', '시바',
@@ -248,6 +253,50 @@ class NegativeBehaviorSystem {
     }
     
     return NegativeAnalysisResult(level: 0, category: 'none');
+  }
+  
+  /// "씨"가 호칭으로 사용되는지 확인
+  bool _isHonorificSsi(String message) {
+    // 한글 이름 패턴 + "씨"
+    final honorificPattern = RegExp(r'[가-힣]+(씨|님|선생|선생님|양|군)', multiLine: true);
+    
+    // "씨"가 포함된 모든 위치 찾기
+    final ssiIndices = <int>[];
+    int searchStart = 0;
+    while (true) {
+      final index = message.indexOf('씨', searchStart);
+      if (index == -1) break;
+      ssiIndices.add(index);
+      searchStart = index + 1;
+    }
+    
+    // 각 "씨"가 호칭인지 확인
+    for (final index in ssiIndices) {
+      // "씨" 앞의 문자 확인
+      if (index > 0) {
+        // 한글 문자인지 확인 (이름의 마지막 글자)
+        final prevChar = message[index - 1];
+        if (RegExp(r'[가-힣]').hasMatch(prevChar)) {
+          // 앞에 최소 1글자 이상의 한글이 있는지 확인 (이름)
+          int nameStart = index - 1;
+          while (nameStart > 0 && RegExp(r'[가-힣]').hasMatch(message[nameStart - 1])) {
+            nameStart--;
+          }
+          
+          // 이름이 1글자 이상이면 호칭으로 간주
+          if (index - nameStart >= 1) {
+            return true;
+          }
+        }
+      }
+    }
+    
+    // 추가 패턴: "OO씨", "OOO씨" 등
+    if (honorificPattern.hasMatch(message)) {
+      return true;
+    }
+    
+    return false;
   }
   
   /// 부정적 행동에 대한 페르소나 반응 생성

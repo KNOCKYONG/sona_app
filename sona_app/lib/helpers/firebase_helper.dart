@@ -70,6 +70,10 @@ class FirebaseHelper {
       
   static CollectionReference<Map<String, dynamic>> get qualityAlerts => 
       _firestore.collection(AppConstants.qualityAlertsCollection);
+      
+  // Error Reporting Collection
+  static CollectionReference<Map<String, dynamic>> get chatErrorFix => 
+      _firestore.collection('chat_error_fix');
   
   // Common Fields
   static Map<String, dynamic> get serverTimestamp => {

@@ -1,0 +1,54 @@
+Korean Name -> English Name Mapping
+========================================
+Dr. 김민서 -> dr-kim-minseo
+Dr. 박지은 -> dr-park-jieun
+나나 -> nana
+나연 -> nayeon
+다은 -> daeun
+동수 -> dongsu
+동현 -> donghyun
+리나 -> rina
+미연 -> miyeon
+민수 -> minsu
+민정 -> minjung
+민준 -> minjun
+박준영 -> park-junyoung
+범준 -> beomjun
+상훈 -> sanghoon
+석진 -> seokjin
+성호 -> seongho
+세빈 -> sebin
+소영 -> soyoung
+소희 -> sohee
+수빈 -> subin
+수아 -> sua
+수진 -> sujin
+연지 -> yeonji
+영훈 -> younghoon
+예림 -> yerim
+예슬 -> yeseul
+윤미 -> yoonmi
+윤성 -> yoonsung
+은수 -> eunsu
+재성 -> jaesung
+재현 -> jaehyun
+정훈 -> jeonghoon
+종호 -> jongho
+주은 -> jueun
+준석 -> junseok
+준영 -> junyoung
+준호 -> junho
+지우 -> jiwoo
+지윤 -> jiyoon
+지은 -> jieun
+진욱 -> jinwook
+진호 -> jinho
+채연 -> chaeyeon
+태윤 -> taeyoon
+태준 -> taejun
+태호 -> taeho
+하연 -> hayeon
+현주 -> hyeonju
+혜원 -> hyewon
+혜진 -> hyejin
+효진 -> hyojin

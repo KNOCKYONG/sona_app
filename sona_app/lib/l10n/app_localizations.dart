@@ -358,7 +358,7 @@ class AppLocalizations {
   String get generalPersona => isKorean ? '일반 페르소나' : 'General Persona';
   String get expertPersona => isKorean ? '전문가 페르소나' : 'Expert Persona';
   String get friendshipDescription => isKorean ? '새로운 친구를 만나고 대화를 나누고 싶어요' : 'I want to meet new friends and have conversations';
-  String get datingDescription => isKorean ? '연애 감정을 느끼며 로맨틱한 관계를 원해요' : 'I want a romantic relationship with feelings of love';
+  String get datingDescription => isKorean ? '깊은 고민과 진솔한 대화를 나누고 싶어요' : 'I want to share deep thoughts and have sincere conversations';
   String get counselingDescription => isKorean ? '전문가의 조언과 상담이 필요해요' : 'I need expert advice and counseling';
   String get entertainmentDescription => isKorean ? '재미있는 대화와 즐거운 시간을 보내고 싶어요' : 'I want to have fun conversations and enjoy my time';
   String get interests => isKorean ? '관심사' : 'Interests';

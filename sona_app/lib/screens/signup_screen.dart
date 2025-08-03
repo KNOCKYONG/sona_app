@@ -47,9 +47,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   // 새로운 필드들
   String? _selectedPurpose;
-  List<String> _selectedPersonaTypes = [];
   List<String> _selectedPreferredMbti = [];
-  String _communicationStyle = 'adaptive'; // 기본값: 적응형
   List<String> _selectedPreferredTopics = [];
   
   // Terms agreement
@@ -59,7 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   
   int _currentPage = 0;
   bool _isCheckingNickname = false;
-  bool _isNicknameAvailable = true;
+  bool _isNicknameAvailable = false;  // 초기값을 false로 변경
   Timer? _nicknameCheckTimer;
 
   @override
@@ -167,9 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
-        communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
       );
@@ -193,9 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredPersonaTypes: _selectedPersonaTypes,
         preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
-        communicationStyle: _communicationStyle,
         preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
       );
@@ -582,7 +576,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: _nicknameController,
             decoration: InputDecoration(
               labelText: AppLocalizations.of(context)!.nicknameLabel,
-              hintText: AppLocalizations.of(context)!.nicknameHint,
+              hintText: '3~10자 한글/영문/숫자',
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
                   ? const SizedBox(
@@ -595,10 +589,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     )
                   : _nicknameController.text.isNotEmpty
                       ? Icon(
-                          _isNicknameAvailable
+                          _isNicknameAvailable && _nicknameController.text.length >= 3 && _nicknameController.text.length <= 10
                               ? Icons.check_circle
                               : Icons.error,
-                          color: _isNicknameAvailable
+                          color: _isNicknameAvailable && _nicknameController.text.length >= 3 && _nicknameController.text.length <= 10
                               ? Colors.green
                               : Colors.red,
                         )
@@ -608,10 +602,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // 타이머 취소
               _nicknameCheckTimer?.cancel();
               
-              // 닉네임이 비어있거나 너무 짧으면 검사하지 않음
-              if (value.isEmpty || value.length < 3) {
+              // 닉네임이 비어있거나 길이가 맞지 않으면 검사하지 않음
+              if (value.isEmpty || value.length < 3 || value.length > 10) {
                 setState(() {
-                  _isNicknameAvailable = true;
+                  _isNicknameAvailable = false;
                   _isCheckingNickname = false;
                 });
                 return;
@@ -630,10 +624,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               if (value == null || value.isEmpty) {
                 return localizations.enterNickname;
               }
-              if (value.length < 2 || value.length > 10) {
-                return AppLocalizations.of(context)!.nicknameLengthError;
+              if (value.length < 3 || value.length > 10) {
+                return '닉네임은 3~10자로 입력해주세요';
               }
-              if (!_isNicknameAvailable) {
+              if (!_isNicknameAvailable && value.length >= 3) {
                 return localizations.nicknameAlreadyUsed;
               }
               return null;
@@ -948,48 +942,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           
           ..._buildPurposeOptions(),
           
-          const SizedBox(height: 32),
-          
-          Text(
-            AppLocalizations.of(context)!.preferredPersonaType,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _buildPersonaTypeChip('normal', AppLocalizations.of(context)!.generalPersona),
-              _buildPersonaTypeChip('expert', AppLocalizations.of(context)!.expertPersona),
-            ],
-          ),
         ],
       ),
     );
   }
   
-  Widget _buildPersonaTypeChip(String type, String label) {
-    final isSelected = _selectedPersonaTypes.contains(type);
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (selected) {
-        setState(() {
-          if (selected) {
-            _selectedPersonaTypes.add(type);
-          } else {
-            _selectedPersonaTypes.remove(type);
-          }
-        });
-      },
-      selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-      checkmarkColor: AppTheme.primaryColor,
-    );
-  }
   
   List<Widget> _buildPurposeOptions() {
     final localizations = AppLocalizations.of(context)!;
@@ -1059,7 +1016,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fontWeight: FontWeight.bold,
                           color: _selectedPurpose == key 
                               ? AppTheme.primaryColor 
-                              : Colors.black87,
+                              : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -1067,7 +1024,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         _getPurposeDescription(key),
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[600],
+                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -1242,54 +1199,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             }).toList(),
           ),
           
-          const SizedBox(height: 40),
-          
-          Text(
-            AppLocalizations.of(context)!.preferredConversationStyle,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 16),
-          
-          Column(
-            children: [
-              RadioListTile<String>(
-                title: Text(AppLocalizations.of(context)!.casualConversation),
-                subtitle: Text(AppLocalizations.of(context)!.casualConversationDesc),
-                value: 'casual',
-                groupValue: _communicationStyle,
-                onChanged: (value) {
-                  setState(() {
-                    _communicationStyle = value!;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: Text(AppLocalizations.of(context)!.formalConversation),
-                subtitle: Text(AppLocalizations.of(context)!.formalConversationDesc),
-                value: 'formal',
-                groupValue: _communicationStyle,
-                onChanged: (value) {
-                  setState(() {
-                    _communicationStyle = value!;
-                  });
-                },
-              ),
-              RadioListTile<String>(
-                title: Text(AppLocalizations.of(context)!.adaptiveConversation),
-                subtitle: Text(AppLocalizations.of(context)!.adaptiveConversationDesc),
-                value: 'adaptive',
-                groupValue: _communicationStyle,
-                onChanged: (value) {
-                  setState(() {
-                    _communicationStyle = value!;
-                  });
-                },
-              ),
-            ],
-          ),
           
           const SizedBox(height: 32),
           

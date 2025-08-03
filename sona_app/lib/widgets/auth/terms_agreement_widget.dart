@@ -180,15 +180,14 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           title: Text(
             localizations.marketingAgree,
             style: TextStyle(
-              color: Theme.of(context).brightness == Brightness.dark 
-                  ? Colors.black87 
-                  : null,
+              color: Theme.of(context).textTheme.bodyLarge?.color,
             ),
           ),
           subtitle: Text(
             localizations.marketingDescription,
             style: TextStyle(
               fontSize: 12,
+              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
             ),
           ),
           value: widget.agreedToMarketing,

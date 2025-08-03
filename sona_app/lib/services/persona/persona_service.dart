@@ -105,6 +105,35 @@ class PersonaService extends BaseService {
   bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
   
+  /// 실제 대기 중인 페르소나 수 (전체에서 매칭된/액션된 페르소나 제외)
+  int get waitingPersonasCount {
+    // 전체 페르소나 중 R2 이미지가 있는 것만
+    final totalWithImages = _allPersonas.where((persona) => _hasR2Image(persona)).toList();
+    
+    // 성별 필터링 적용
+    List<Persona> filteredPersonas = totalWithImages;
+    if (_currentUser != null && !_currentUser!.genderAll && _currentUser!.gender != null) {
+      final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
+      filteredPersonas = totalWithImages.where((persona) => 
+        persona.gender == targetGender
+      ).toList();
+    }
+    
+    // 매칭된 페르소나 ID 목록
+    final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
+    
+    // 액션된 페르소나 ID 목록 (매칭, 패스 등 모든 액션)
+    final actionedIds = _actionedPersonaIds.toSet();
+    
+    // 전체에서 매칭되거나 액션된 페르소나 제외
+    final waitingPersonas = filteredPersonas.where((persona) => 
+      !matchedIds.contains(persona.id) && 
+      !actionedIds.contains(persona.id)
+    ).toList();
+    
+    return waitingPersonas.length;
+  }
+  
   // Additional getters for compatibility
   List<Persona> get sessionPersonas => _matchedPersonas;
   List<Persona> get myPersonas => _matchedPersonas;

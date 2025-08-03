@@ -1648,7 +1648,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    '24시간 후에 다시 만날 수 있어요.\n${personaService.swipedPersonasCount}명의 소나가 대기 중입니다.',
+                    '24시간 후에 다시 만날 수 있어요.\n${personaService.waitingPersonasCount}명의 소나가 대기 중입니다.',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 16,

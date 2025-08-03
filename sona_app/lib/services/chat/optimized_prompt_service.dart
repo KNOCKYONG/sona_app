@@ -92,7 +92,7 @@ class OptimizedPromptService {
     // 2. 성별별 스타일 (해당하는 것만)
     if (persona.gender == 'male') {
       promptParts.add(_maleStyle);
-    } else {
+    } else if (persona.gender == 'female') {
       promptParts.add(_femaleStyle);
     }
     

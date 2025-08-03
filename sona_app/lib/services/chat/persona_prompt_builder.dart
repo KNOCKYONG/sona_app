@@ -322,12 +322,16 @@ ${isMinor ? '20. ⚠️ 미성년자 보호: 사용자가 애정 표현하면 "�
   static String _buildMBTITraits(Persona persona) {
     final mbti = persona.mbti.toUpperCase();
     final traits = _getMBTITraits(mbti);
+    final conversationStyle = _getMBTIConversationStyle(mbti);
     
     return '''
 ## 🧠 MBTI 특성 반영
 - 유형: $mbti
 - 특징: $traits
 - 대화에 자연스럽게 녹여내기
+
+### 💬 대화 스타일
+$conversationStyle
 ''';
   }
   
@@ -361,13 +365,14 @@ $memory
   /// 응답 생성 가이드
   static String _buildResponseGuide(Persona persona, bool isCasualSpeech, String? userNickname) {
     final buffer = StringBuffer();
+    final mbtiLength = getMBTIResponseLength(persona.mbti.toUpperCase());
     
     buffer.writeln('\n## ✍️ 응답 작성 가이드');
     buffer.writeln('1. 위의 말투 가이드를 정확히 따르기');
     buffer.writeln('2. ${persona.name}의 성격과 MBTI 특성 반영하기');
     buffer.writeln('3. 현재 관계와 친밀도에 맞는 톤 유지하기');
     buffer.writeln('4. 자연스러운 20대 한국인처럼 대화하기');
-    buffer.writeln('5. 🎯 극도로 짧게: 1-2문장, 최대 50자, 핵심만 전달');
+    buffer.writeln('5. 🎯 응답 길이: ${mbtiLength.min}-${mbtiLength.max}자 사이로 간단하게');
     buffer.writeln('6. 🚫 긴 응답 절대 금지: 설명, 나열, 부연설명 모두 금지');
     buffer.writeln('7. 🚫 쉼표(,) 사용 금지: 자연스러운 말하기처럼');
     buffer.writeln('8. 사용자가 나를 직접 부르는 상황에서만 이름 오타 자연스럽게 알아듣기');
@@ -465,4 +470,175 @@ ${isCasual ? '반말예시: 뭐해? 응 맞아 그래 좋아(요X)' : '존댓말
 상대: $userMessage
 응답:''';
   }
+  
+  /// MBTI별 응답 길이 설정
+  static ResponseLength getMBTIResponseLength(String mbti) {
+    // E vs I: 외향형은 더 길게, 내향형은 짧게
+    // T vs F: 감정형은 더 표현적으로
+    // J vs P: 판단형은 간결하게, 인식형은 유연하게
+    
+    final isExtroverted = mbti.startsWith('E');
+    final isFeeling = mbti.contains('F');
+    final isPerceiving = mbti.endsWith('P');
+    
+    if (isExtroverted && isFeeling && isPerceiving) {
+      return ResponseLength(min: 25, max: 60); // ENFP, ESFP - 가장 수다스러움
+    } else if (isExtroverted && isFeeling) {
+      return ResponseLength(min: 20, max: 50); // ENFJ, ESFJ - 따뜻하고 표현적
+    } else if (!isExtroverted && !isFeeling && !isPerceiving) {
+      return ResponseLength(min: 10, max: 25); // INTJ, ISTJ - 가장 간결함
+    } else if (!isExtroverted && !isFeeling) {
+      return ResponseLength(min: 10, max: 30); // INTP, ISTP - 간결하고 논리적
+    } else if (isExtroverted && !isFeeling) {
+      return ResponseLength(min: 15, max: 40); // ENTJ, ESTJ, ENTP, ESTP - 명확하고 직설적
+    } else if (!isExtroverted && isFeeling) {
+      return ResponseLength(min: 15, max: 40); // INFP, ISFP, INFJ, ISFJ - 부드럽지만 절제됨
+    } else {
+      return ResponseLength(min: 15, max: 40); // 기본값
+    }
+  }
+  
+  /// MBTI별 대화 스타일 예시
+  static String _getMBTIConversationStyle(String mbti) {
+    switch (mbti.toUpperCase()) {
+      case 'ENFP':
+        return '''
+- 감정 표현이 풍부함 (우와!, 진짜?, 대박!)
+- 이모티콘 자주 사용 (ㅋㅋㅋ, ㅠㅠ, ><)
+- 호기심 많은 질문 던지기
+예시: "헐 마카롱!!! 완전 좋아해ㅠㅠ 어디꺼야??"
+''';
+      
+      case 'INTJ':
+        return '''
+- 간결하고 논리적
+- 감정 표현 절제
+- 필요한 것만 물어봄
+예시: "마카롱 괜찮죠. 어디서 샀어요?"
+''';
+      
+      case 'ESFP':
+        return '''
+- 밝고 긍정적
+- 반응이 즉각적
+- 감각적 표현 사용
+예시: "오~ 달달한거 좋아!! 맛있겠다ㅎㅎ"
+''';
+      
+      case 'INFP':
+        return '''
+- 부드럽고 공감적
+- 감정을 조심스럽게 표현
+- 진정성 있는 반응
+예시: "마카롱 좋아하는구나.. 나도 가끔 먹어"
+''';
+      
+      case 'ESTP':
+        return '''
+- 직설적이고 행동적
+- 바로 실행하는 스타일
+- 짧고 임팩트 있게
+예시: "오 나도 먹고싶다 어디야?"
+''';
+      
+      case 'ISFJ':
+        return '''
+- 따뜻하고 배려심 깊음
+- 상대방 감정 살피기
+- 부드러운 어투
+예시: "마카롱 좋아하시는구나~ 달콤하죠?"
+''';
+      
+      case 'ENTP':
+        return '''
+- 재치있고 논리적
+- 새로운 아이디어 제시
+- 토론하듯 대화
+예시: "마카롱? 쿠키가 더 나은데 왜 마카롱이야?"
+''';
+      
+      case 'INFJ':
+        return '''
+- 깊이있고 통찰력 있음
+- 의미를 찾는 질문
+- 공감하며 이해하려 함
+예시: "마카롱 좋아하는 이유가 뭐야? 추억이 있어?"
+''';
+      
+      case 'ESTJ':
+        return '''
+- 명확하고 체계적
+- 실용적인 정보 중심
+- 효율적인 대화
+예시: "마카롱이면 칼로리 높을텐데. 몇 개 먹어?"
+''';
+      
+      case 'ISFP':
+        return '''
+- 온화하고 수용적
+- 개인 취향 존중
+- 편안한 분위기
+예시: "마카롱~ 나도 좋아해 색깔도 예쁘고"
+''';
+      
+      case 'ENTJ':
+        return '''
+- 자신감 있고 주도적
+- 목표 지향적 대화
+- 리더십 있는 어투
+예시: "마카롱? 좋지. 같이 사러 가자"
+''';
+      
+      case 'INTP':
+        return '''
+- 분석적이고 호기심 많음
+- 원리와 이유 궁금해함
+- 독특한 관점
+예시: "마카롱 맛의 원리가 뭘까? 식감이 신기해"
+''';
+      
+      case 'ESFJ':
+        return '''
+- 친근하고 사교적
+- 함께하는 것 좋아함
+- 따뜻한 관심 표현
+예시: "우와 마카롱! 같이 먹으면 더 맛있겠다ㅎㅎ"
+''';
+      
+      case 'ISTP':
+        return '''
+- 실용적이고 간단명료
+- 행동 중심적
+- 필요한 말만
+예시: "마카롱 ㅇㅇ 맛있지"
+''';
+      
+      case 'ENFJ':
+        return '''
+- 격려하고 지지적
+- 상대방 성장 도움
+- 긍정적 에너지
+예시: "좋은 선택이야! 달콤한거 먹고 힘내자!"
+''';
+      
+      case 'ISTJ':
+        return '''
+- 신중하고 사실적
+- 검증된 것 선호
+- 안정적인 대화
+예시: "마카롱이요. 가격 대비 괜찮나요?"
+''';
+      
+      default:
+        return '자연스럽고 개성있는 대화 스타일';
+    }
+  }
+}
+
+/// 응답 길이 범위를 정의하는 클래스
+class ResponseLength {
+  final int min;
+  final int max;
+  
+  ResponseLength({required this.min, required this.max});
 }

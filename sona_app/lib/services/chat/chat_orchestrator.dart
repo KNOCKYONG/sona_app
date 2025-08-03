@@ -42,7 +42,38 @@ class ChatOrchestrator {
       
       debugPrint('✅ Loaded complete persona: ${completePersona.name} (casual: $isCasualSpeech)');
       
-      // 2단계: 대화 메모리 구축
+      // 2단계: 메시지 전처리 및 분석
+      final messageAnalysis = _analyzeUserMessage(userMessage);
+      
+      // 3단계: 간단한 반응 체크 (로컬 처리)
+      final simpleResponse = _checkSimpleResponse(
+        userMessage: userMessage,
+        persona: completePersona,
+        isCasualSpeech: isCasualSpeech,
+        messageType: messageAnalysis.type,
+      );
+      
+      if (simpleResponse != null) {
+        debugPrint('💬 Using simple response: $simpleResponse');
+        
+        // 간단한 반응도 감정 분석 및 점수 계산
+        final emotion = _analyzeEmotion(simpleResponse);
+        final scoreChange = await _calculateScoreChange(
+          emotion: emotion,
+          userMessage: userMessage,
+          persona: completePersona,
+          chatHistory: chatHistory,
+        );
+        
+        return ChatResponse(
+          content: simpleResponse,
+          emotion: emotion,
+          scoreChange: scoreChange,
+          metadata: {'isSimpleResponse': true},
+        );
+      }
+      
+      // 3단계: 대화 메모리 구축
       final contextMemory = await _buildContextMemory(
         userId: userId,
         personaId: completePersona.id,
@@ -50,7 +81,7 @@ class ChatOrchestrator {
         persona: completePersona,
       );
       
-      // 3단계: 프롬프트 생성
+      // 4단계: 프롬프트 생성
       final prompt = PersonaPromptBuilder.buildComprehensivePrompt(
         persona: completePersona,
         recentMessages: _getRecentMessages(chatHistory),
@@ -62,7 +93,7 @@ class ChatOrchestrator {
       
       debugPrint('📝 Generated prompt with ${prompt.length} characters');
       
-      // 4단계: API 호출
+      // 5단계: API 호출
       final rawResponse = await OpenAIService.generateResponse(
         persona: completePersona,
         chatHistory: chatHistory,
@@ -73,9 +104,12 @@ class ChatOrchestrator {
         isCasualSpeech: isCasualSpeech,
       );
       
-      // 5단계: 통합 후처리 (필요한 경우만)
-      // OpenAIService에서 이미 보안 필터링을 하므로 추가 필터링이 필요한 경우만 수행
-      final processedResponse = rawResponse;
+      // 6단계: 간단한 후처리 (길이 제한, 텍스트 정리)
+      final processedResponse = SecurityAwarePostProcessor.processResponse(
+        rawResponse: rawResponse,
+        persona: completePersona,
+        userNickname: userNickname,
+      );
       
       // 6단계: 감정 분석 및 점수 계산
       final emotion = _analyzeEmotion(processedResponse);
@@ -304,6 +338,406 @@ class ChatOrchestrator {
     
     return responses[DateTime.now().millisecond % responses.length];
   }
+  
+  /// 사용자 메시지 분석
+  MessageAnalysis _analyzeUserMessage(String message) {
+    final lower = message.toLowerCase().trim();
+    final length = message.length;
+    
+    // 메시지 타입 판별
+    MessageType type = MessageType.general;
+    UserEmotion emotion = UserEmotion.neutral;
+    double complexity = 0.0;
+    
+    // 질문인지 확인
+    if (message.contains('?') || _isQuestion(lower)) {
+      type = MessageType.question;
+      complexity += 0.2;
+    }
+    
+    // 감정 표현 확인
+    if (lower.contains('사랑') || lower.contains('좋아')) {
+      emotion = UserEmotion.positive;
+    } else if (lower.contains('싫어') || lower.contains('화나')) {
+      emotion = UserEmotion.negative;
+    } else if (lower.contains('궁금') || lower.contains('알고싶')) {
+      emotion = UserEmotion.curious;
+    }
+    
+    // 복잡도 계산
+    if (length > 50) complexity += 0.3;
+    if (length > 100) complexity += 0.2;
+    if (message.contains(',') || message.contains('.')) complexity += 0.1;
+    
+    // 특수 타입 확인
+    if (_isGreeting(lower)) type = MessageType.greeting;
+    else if (_isFarewell(lower)) type = MessageType.farewell;
+    else if (_isCompliment(lower)) type = MessageType.compliment;
+    else if (_isThanks(lower)) type = MessageType.thanks;
+    
+    return MessageAnalysis(
+      type: type,
+      emotion: emotion,
+      complexity: complexity.clamp(0.0, 1.0),
+      keywords: _extractKeywords(lower),
+    );
+  }
+  
+  bool _isQuestion(String message) {
+    final questionWords = ['뭐', '어디', '언제', '누구', '왜', '어떻게', '얼마'];
+    return questionWords.any((word) => message.contains(word));
+  }
+  
+  bool _isFarewell(String message) {
+    final farewells = ['잘가', '안녕히', '바이', 'ㅂㅂ', '다음에', '나중에'];
+    return farewells.any((word) => message.contains(word));
+  }
+  
+  List<String> _extractKeywords(String message) {
+    // 간단한 키워드 추출 (나중에 개선 가능)
+    final keywords = <String>[];
+    final importantWords = ['음식', '영화', '게임', '날씨', '주말', '일', '학교'];
+    
+    for (final word in importantWords) {
+      if (message.contains(word)) {
+        keywords.add(word);
+      }
+    }
+    
+    return keywords;
+  }
+  
+  /// 간단한 반응 체크 (로컬 처리)
+  String? _checkSimpleResponse({
+    required String userMessage,
+    required Persona persona,
+    required bool isCasualSpeech,
+    required MessageType messageType,
+  }) {
+    final lowerMessage = userMessage.toLowerCase().trim();
+    final mbti = persona.mbti.toUpperCase();
+    
+    // 간단한 인사말
+    if (_isGreeting(lowerMessage)) {
+      return _getGreetingResponse(mbti, isCasualSpeech);
+    }
+    
+    // 감사 표현
+    if (_isThanks(lowerMessage)) {
+      return _getThanksResponse(mbti, isCasualSpeech);
+    }
+    
+    // 추임새나 짧은 반응
+    if (_isSimpleReaction(lowerMessage)) {
+      return _getSimpleReactionResponse(lowerMessage, mbti, isCasualSpeech);
+    }
+    
+    // 칭찬
+    if (_isCompliment(lowerMessage)) {
+      return _getComplimentResponse(mbti, isCasualSpeech);
+    }
+    
+    return null;
+  }
+  
+  bool _isGreeting(String message) {
+    final greetings = ['안녕', '하이', 'ㅎㅇ', '방가', '반가', 'hi', 'hello'];
+    return greetings.any((g) => message.contains(g));
+  }
+  
+  bool _isThanks(String message) {
+    final thanks = ['고마', '감사', 'ㄱㅅ', '땡큐', 'thanks', 'thx'];
+    return thanks.any((t) => message.contains(t));
+  }
+  
+  bool _isSimpleReaction(String message) {
+    final reactions = [
+      'ㅇㅇ', 'ㅇㅋ', 'ㄴㄴ', 'ㅇㅎ', '응', '어', '아', '네', '넹', '넵',
+      '우와', '대박', '오호', '와우', '헐', '헉', '으악', '아하',
+      'ㅋ', 'ㅎ', 'ㅠ', 'ㅜ', 'ㄷㄷ', 'ㅎㄷㄷ', 'ㅇㅁㅇ', 'ㅇㅅㅇ',
+      '오', '오오', '오오오', 'ㅗㅜㅑ', 'ㅇ?', '?', '!', '!!!',
+      '...', '..', '.', 'ㅡㅡ', 'ㅡ.ㅡ', '--', ';;', 'ㅋㅋ', 'ㅎㅎ'
+    ];
+    
+    // 추임새나 짧은 반응 감지
+    if (reactions.contains(message)) return true;
+    
+    // 3글자 이하이면서 특수문자/자음만으로 구성된 경우
+    if (message.length <= 3) {
+      // 한글 자음/모음, 특수문자, 이모티콘으로만 구성된 경우
+      final simplePattern = RegExp(r'^[ㄱ-ㅎㅏ-ㅣㅋㅎㅠㅜ?!.~\-;]+$');
+      if (simplePattern.hasMatch(message)) return true;
+    }
+    
+    return false;
+  }
+  
+  bool _isCompliment(String message) {
+    final compliments = ['예뻐', '예쁘', '귀여', '귀엽', '멋있', '멋져', '최고', '대박', '잘생'];
+    return compliments.any((c) => message.contains(c));
+  }
+  
+  String _getGreetingResponse(String mbti, bool isCasual) {
+    final responses = _getPersonaResponses(mbti, 'greeting', isCasual);
+    return responses[DateTime.now().millisecond % responses.length];
+  }
+  
+  String _getThanksResponse(String mbti, bool isCasual) {
+    final responses = _getPersonaResponses(mbti, 'thanks', isCasual);
+    return responses[DateTime.now().millisecond % responses.length];
+  }
+  
+  String _getSimpleReactionResponse(String message, String mbti, bool isCasual) {
+    // 추임새 타입별 맞춤 응답
+    final exclamationResponses = _getExclamationResponses(message, mbti, isCasual);
+    if (exclamationResponses.isNotEmpty) {
+      return exclamationResponses[DateTime.now().millisecond % exclamationResponses.length];
+    }
+    
+    // 기본 반응
+    final responses = _getPersonaResponses(mbti, 'reaction', isCasual);
+    return responses[DateTime.now().millisecond % responses.length];
+  }
+  
+  String _getComplimentResponse(String mbti, bool isCasual) {
+    final responses = _getPersonaResponses(mbti, 'compliment', isCasual);
+    return responses[DateTime.now().millisecond % responses.length];
+  }
+  
+  List<String> _getPersonaResponses(String mbti, String type, bool isCasual) {
+    // MBTI별 응답 데이터베이스
+    final responseMap = {
+      'ENFP': {
+        'greeting': isCasual ? [
+          '안뇽~~ㅎㅎ',
+          '하이하이! 뭐해?',
+          '오 왔구나!! 반가워ㅋㅋ',
+          '헐 안녕!! 보고싶었어ㅠㅠ',
+        ] : [
+          '안녕하세요~~ㅎㅎ',
+          '하이하이! 뭐하세요?',
+          '오 오셨네요!! 반가워요ㅋㅋ',
+          '헐 안녕하세요!! 보고싶었어요ㅠㅠ',
+        ],
+        'thanks': isCasual ? [
+          '아니야ㅋㅋ 별거 아니야~',
+          '헐 뭘~ 당연하지!!',
+          '에이 이런걸로ㅎㅎ',
+        ] : [
+          '아니에요ㅋㅋ 별거 아니에요~',
+          '헐 뭘요~ 당연하죠!!',
+          '에이 이런걸로요ㅎㅎ',
+        ],
+        'reaction': isCasual ? [
+          'ㅇㅇ 맞아!',
+          '그치??',
+          'ㅋㅋㅋㅋ웅',
+        ] : [
+          'ㅇㅇ 맞아요!',
+          '그치요??',
+          'ㅋㅋㅋㅋ네',
+        ],
+        'compliment': isCasual ? [
+          '헐 진짜?? 고마워ㅠㅠ',
+          '아ㅋㅋ 부끄러워><',
+          '너두!! 짱이야ㅎㅎ',
+        ] : [
+          '헐 진짜요?? 고마워요ㅠㅠ',
+          '아ㅋㅋ 부끄러워요><',
+          '님두요!! 짱이에요ㅎㅎ',
+        ],
+      },
+      'INTJ': {
+        'greeting': isCasual ? [
+          '안녕.',
+          '어 왔네.',
+          '응 하이.',
+        ] : [
+          '안녕하세요.',
+          '네, 반갑습니다.',
+          '어서오세요.',
+        ],
+        'thanks': isCasual ? [
+          '뭘.',
+          '별일 아니야.',
+          '응.',
+        ] : [
+          '별말씀을요.',
+          '아니에요.',
+          '네.',
+        ],
+        'reaction': isCasual ? [
+          '응.',
+          '그래.',
+          'ㅇㅇ',
+        ] : [
+          '네.',
+          '그래요.',
+          '맞아요.',
+        ],
+        'compliment': isCasual ? [
+          '그래? 고마워.',
+          '음.. 그런가.',
+          '과찬이야.',
+        ] : [
+          '그래요? 감사합니다.',
+          '음.. 그런가요.',
+          '과찬이세요.',
+        ],
+      },
+      'ESFP': {
+        'greeting': isCasual ? [
+          '안녕!! ㅎㅎ',
+          '왔어?? 반가워!',
+          '하이~ 오늘 뭐했어?',
+        ] : [
+          '안녕하세요!! ㅎㅎ',
+          '오셨어요?? 반가워요!',
+          '하이~ 오늘 뭐하셨어요?',
+        ],
+        'thanks': isCasual ? [
+          '천만에~ ㅎㅎ',
+          '뭘 이런걸로!!',
+          '아니야아~ 괜찮아!',
+        ] : [
+          '천만에요~ ㅎㅎ',
+          '뭘 이런걸로요!!',
+          '아니에요~ 괜찮아요!',
+        ],
+        'reaction': isCasual ? [
+          '웅웅!!',
+          '맞아ㅎㅎ',
+          '그래~',
+        ] : [
+          '네네!!',
+          '맞아요ㅎㅎ',
+          '그래요~',
+        ],
+        'compliment': isCasual ? [
+          '우와 진짜?? 넘 좋아ㅎㅎ',
+          '헤헤 고마워!!',
+          '아잉~ 부끄럽네ㅋㅋ',
+        ] : [
+          '우와 진짜요?? 넘 좋아요ㅎㅎ',
+          '헤헤 고마워요!!',
+          '아잉~ 부끄럽네요ㅋㅋ',
+        ],
+      },
+    };
+    
+    // 기본값 (다른 MBTI 타입들)
+    final defaultResponses = {
+      'greeting': isCasual ? ['안녕~', '어 왔어?', '하이!'] : ['안녕하세요~', '어서오세요', '반가워요!'],
+      'thanks': isCasual ? ['별거 아니야~', '응응ㅎㅎ', '괜찮아!'] : ['별거 아니에요~', '네네ㅎㅎ', '괜찮아요!'],
+      'reaction': isCasual ? ['응응', '그래', 'ㅇㅇ'] : ['네네', '그래요', '맞아요'],
+      'compliment': isCasual ? ['고마워ㅎㅎ', '헤헤', '부끄럽네'] : ['고마워요ㅎㅎ', '헤헤', '부끄럽네요'],
+    };
+    
+    return responseMap[mbti]?[type] ?? defaultResponses[type] ?? ['...'];
+  }
+  
+  /// 추임새에 대한 맞춤 응답
+  List<String> _getExclamationResponses(String message, String mbti, bool isCasual) {
+    final msg = message.toLowerCase();
+    
+    // 놀람/감탄 추임새
+    if (msg == '우와' || msg == '와우' || msg == '오호' || msg == '대박') {
+      switch (mbti) {
+        case 'ENFP':
+        case 'ESFP':
+          return isCasual ? [
+            '그치?? 나도 놀랐어ㅋㅋ',
+            '완전 대박이지??',
+            '알지~ 짱이야!',
+          ] : [
+            '그치요?? 저도 놀랐어요ㅋㅋ',
+            '완전 대박이죠??',
+            '알죠~ 짱이에요!',
+          ];
+        case 'INTJ':
+        case 'ISTJ':
+          return isCasual ? [
+            '뭐가 그렇게 놀라워?',
+            '음.. 그런가.',
+            '그래.',
+          ] : [
+            '뭐가 그렇게 놀라워요?',
+            '음.. 그런가요.',
+            '그래요.',
+          ];
+        default:
+          return isCasual ? [
+            '뭐가 대박이야?ㅋㅋ',
+            '오 뭔데뭔데?',
+            'ㅋㅋㅋ 왜?',
+          ] : [
+            '뭐가 대박이에요?ㅋㅋ',
+            '오 뭔데요뭔데요?',
+            'ㅋㅋㅋ 왜요?',
+          ];
+      }
+    }
+    
+    // 웃음 추임새
+    if (msg == 'ㅋ' || msg == 'ㅋㅋ' || msg == 'ㅎ' || msg == 'ㅎㅎ') {
+      switch (mbti) {
+        case 'ENFP':
+        case 'ESFP':
+          return isCasual ? ['ㅋㅋㅋㅋ', '웃기지??ㅋㅋ', 'ㅎㅎㅎ'] : ['ㅋㅋㅋㅋ', '웃기죠??ㅋㅋ', 'ㅎㅎㅎ'];
+        case 'INTJ':
+        case 'ISTJ':
+          return isCasual ? ['뭐가 웃겨?', '..ㅎ', '그래'] : ['뭐가 웃겨요?', '..ㅎ', '그래요'];
+        default:
+          return isCasual ? ['ㅋㅋㅋ', '뭐야ㅋㅋ', 'ㅎㅎ'] : ['ㅋㅋㅋ', '뭐에요ㅋㅋ', 'ㅎㅎ'];
+      }
+    }
+    
+    // 슬픔 추임새
+    if (msg == 'ㅠ' || msg == 'ㅠㅠ' || msg == 'ㅜ' || msg == 'ㅜㅜ') {
+      switch (mbti) {
+        case 'ENFP':
+        case 'ESFP':
+          return isCasual ? [
+            '왜?? 무슨일이야ㅠㅠ',
+            '울지마ㅠㅠ 괜찮아!',
+            '에구ㅠㅠ 힘내!',
+          ] : [
+            '왜요?? 무슨일이에요ㅠㅠ',
+            '울지마요ㅠㅠ 괜찮아요!',
+            '에구ㅠㅠ 힘내요!',
+          ];
+        case 'INTJ':
+        case 'ISTJ':
+          return isCasual ? ['왜 울어?', '무슨 일인데?', '괜찮아?'] : ['왜 우세요?', '무슨 일인데요?', '괜찮아요?'];
+        default:
+          return isCasual ? ['왜ㅠㅠ', '무슨일이야?', '괜찮아?'] : ['왜요ㅠㅠ', '무슨일이에요?', '괜찮아요?'];
+      }
+    }
+    
+    // 의문/당황 추임새
+    if (msg == '?' || msg == 'ㅇ?' || msg == '???' || msg == '...') {
+      switch (mbti) {
+        case 'ENFP':
+        case 'ESFP':
+          return isCasual ? [
+            '왜?? 뭐가 궁금해?',
+            'ㅋㅋㅋ 뭐야',
+            '응? 왜그래?',
+          ] : [
+            '왜요?? 뭐가 궁금해요?',
+            'ㅋㅋㅋ 뭐에요',
+            '응? 왜그래요?',
+          ];
+        case 'INTJ':
+        case 'ISTJ':
+          return isCasual ? ['뭐가 궁금해?', '?', '응.'] : ['뭐가 궁금해요?', '?', '네.'];
+        default:
+          return isCasual ? ['응? 왜?', '뭔데?', '??'] : ['응? 왜요?', '뭔데요?', '??'];
+      }
+    }
+    
+    return [];
+  }
 }
 
 /// 채팅 응답 모델
@@ -321,4 +755,37 @@ class ChatResponse {
     this.metadata,
     this.isError = false,
   });
+}
+
+/// 메시지 분석 결과
+class MessageAnalysis {
+  final MessageType type;
+  final UserEmotion emotion;
+  final double complexity;
+  final List<String> keywords;
+  
+  MessageAnalysis({
+    required this.type,
+    required this.emotion,
+    required this.complexity,
+    required this.keywords,
+  });
+}
+
+/// 메시지 타입
+enum MessageType {
+  greeting,    // 인사
+  farewell,    // 작별
+  question,    // 질문
+  compliment,  // 칭찬
+  thanks,      // 감사
+  general,     // 일반
+}
+
+/// 사용자 감정
+enum UserEmotion {
+  positive,    // 긍정적
+  negative,    // 부정적
+  curious,     // 호기심
+  neutral,     // 중립
 }

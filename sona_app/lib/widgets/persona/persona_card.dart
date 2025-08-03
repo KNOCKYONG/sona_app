@@ -183,6 +183,15 @@ class _PersonaCardState extends State<PersonaCard> {
             // Photo display (PageView or single image)
             _buildPersonaImage(),
             
+            // Gradient overlay
+            const _GradientOverlay(),
+            
+            // Swipe overlay with safe color handling
+            _SwipeOverlay(
+              horizontal: widget.horizontalThresholdPercentage,
+              vertical: widget.verticalThresholdPercentage,
+            ),
+            
             // Photo counter (top right) - only for multiple photos
             if (hasMultipleImages)
               _PhotoCounter(
@@ -197,7 +206,14 @@ class _PersonaCardState extends State<PersonaCard> {
                 currentIndex: _currentPhotoIndex,
               ),
             
-            // Navigation areas - only for multiple photos
+            // Relationship badge
+            if (widget.persona.relationshipScore > 0)
+              _RelationshipBadge(
+                persona: widget.persona,
+                hasMultiplePhotos: hasMultipleImages,
+              ),
+            
+            // Navigation areas - only for multiple photos (moved before persona info)
             if (hasMultipleImages)
               _NavigationAreas(
                 currentIndex: _currentPhotoIndex,
@@ -206,26 +222,10 @@ class _PersonaCardState extends State<PersonaCard> {
                 onNext: _nextPhoto,
               ),
             
-            // Gradient overlay
-            const _GradientOverlay(),
-            
-            // Persona info with expert badge
+            // Persona info with expert badge - LAST to be on top for tap detection
             _PersonaInfo(
               persona: widget.persona,
             ),
-            
-            // Swipe overlay with safe color handling
-            _SwipeOverlay(
-              horizontal: widget.horizontalThresholdPercentage,
-              vertical: widget.verticalThresholdPercentage,
-            ),
-            
-            // Relationship badge
-            if (widget.persona.relationshipScore > 0)
-              _RelationshipBadge(
-                persona: widget.persona,
-                hasMultiplePhotos: hasMultipleImages,
-              ),
           ],
         ),
       ),
@@ -466,20 +466,6 @@ class _NavigationAreas extends StatelessWidget {
                       ),
                     )
                   : const SizedBox.shrink(),
-            ),
-          ),
-        ),
-        // 중앙 터치 영역 (이미지 영역) - 터치 이벤트를 방지하기 위함
-        Positioned(
-          top: 0,
-          bottom: 250,
-          left: 60,
-          right: 60,
-          child: GestureDetector(
-            onTap: () {}, // 빈 탭 핸들러로 버튼 탭이 전파되지 않도록 함
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              color: Colors.transparent,
             ),
           ),
         ),

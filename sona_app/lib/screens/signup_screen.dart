@@ -928,15 +928,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         children: [
           Text(
             localizations.usagePurpose,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.headlineSmall?.color,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             AppLocalizations.of(context)!.sonaUsagePurpose,
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(
+              color: Theme.of(context).textTheme.bodySmall?.color,
+            ),
           ),
           const SizedBox(height: 32),
           

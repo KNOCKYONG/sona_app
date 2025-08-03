@@ -420,29 +420,33 @@ class ConversationMemoryService {
     contextParts.add(relationshipInfo);
     estimatedTokens += 50;
     
-    // 2. 저장된 중요한 기억들 (~300 tokens)
-    final memories = await _getImportantMemories(userId, personaId, limit: 5);
+    // 2. 저장된 중요한 기억들 (~600 tokens) - 더 많은 기억 포함
+    final memories = await _getImportantMemories(userId, personaId, limit: 10); // 5 -> 10개로 증가
     if (memories.isNotEmpty) {
       final memoryText = '중요한 기억들:\n' + 
           memories.map((m) => '- ${m.content} (${m.timestamp.month}/${m.timestamp.day})').join('\n');
-      if (estimatedTokens + 300 <= maxTokens) {
+      if (estimatedTokens + 600 <= maxTokens) { // 300 -> 600 토큰으로 증가
         contextParts.add(memoryText);
+        estimatedTokens += 600;
+      }
+    }
+    
+    // 3. 대화 요약 (~300 tokens) - 더 자세한 요약
+    final summary = await _getLatestSummary(userId, personaId);
+    if (summary != null) {
+      if (estimatedTokens + 300 <= maxTokens) { // 200 -> 300 토큰으로 증가
+        contextParts.add('대화 요약:\n${summary.summaryText}');
         estimatedTokens += 300;
       }
     }
     
-    // 3. 대화 요약 (~200 tokens)
-    final summary = await _getLatestSummary(userId, personaId);
-    if (summary != null) {
-      if (estimatedTokens + 200 <= maxTokens) {
-        contextParts.add('대화 요약:\n${summary.summaryText}');
-        estimatedTokens += 200;
-      }
-    }
-    
-    // 4. 최근 메시지들 (남은 토큰)
+    // 4. 최근 메시지들 (남은 토큰) - 더 많은 컨텍스트 포함
     final remainingTokens = maxTokens - estimatedTokens;
-    final recentContext = _buildRecentMessagesContext(recentMessages, remainingTokens);
+    // 최근 메시지를 20개에서 30개로 증가
+    final extendedRecentMessages = recentMessages.length > 30 
+        ? recentMessages.sublist(recentMessages.length - 30)
+        : recentMessages;
+    final recentContext = _buildRecentMessagesContext(extendedRecentMessages, remainingTokens);
     if (recentContext.isNotEmpty) {
       contextParts.add('최근 대화:\n$recentContext');
     }
@@ -497,7 +501,7 @@ class ConversationMemoryService {
 
   /// 📝 최근 메시지 컨텍스트 구성 (토큰 제한)
   String _buildRecentMessagesContext(List<Message> messages, int maxTokens) {
-    const avgTokensPerMessage = 30;
+    const avgTokensPerMessage = 25; // 30 -> 25로 조정하여 더 많은 메시지 포함
     final maxMessages = (maxTokens / avgTokensPerMessage).floor();
     
     final recentMessages = messages.length > maxMessages 

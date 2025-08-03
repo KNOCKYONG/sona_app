@@ -32,7 +32,7 @@ class AppConstants {
   // Token Limits
   static const int maxInputTokens = 3000;
   static const int maxOutputTokens = 150;
-  static const int maxContextTokens = 1000;
+  static const int maxContextTokens = 1500; // 1000 -> 1500으로 증가하여 더 많은 대화 기억
   static const double tokensPerCharacterKorean = 1.5;
   
   // Time Durations

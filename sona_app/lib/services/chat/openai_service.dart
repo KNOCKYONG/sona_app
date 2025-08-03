@@ -106,6 +106,7 @@ class OpenAIService {
           userMessage: request.userMessage,
           recentAIMessages: _extractRecentAIMessages(request.chatHistory),
           userNickname: request.userNickname,
+          isCasualSpeech: request.isCasualSpeech,
         );
         
         request.completer.complete(enhancedResponse);
@@ -222,6 +223,7 @@ class OpenAIService {
     required String userMessage,
     required List<String> recentAIMessages,
     String? userNickname,
+    bool isCasualSpeech = false,
   }) async {
     // 🔒 1. 보안 필터 적용 (최우선)
     String secureResponse = SecurityFilterService.filterResponse(
@@ -246,6 +248,7 @@ class OpenAIService {
       userMessage: userMessage,
       recentAIMessages: recentAIMessages,
       userNickname: userNickname,
+      isCasualSpeech: isCasualSpeech,
     );
 
     // 🔒 4. 최종 안전성 검증
@@ -644,6 +647,7 @@ class KoreanSpeechValidator {
     String? userMessage,
     List<String>? recentAIMessages,
     String? userNickname,
+    bool isCasualSpeech = false,
   }) {
     String validated = response;
     
@@ -656,9 +660,7 @@ class KoreanSpeechValidator {
       (match) => ''
     );
     
-    // 3. 복수 표현 제거/변혈
-    // TODO: Get isCasualSpeech from context
-    final isCasualSpeech = false; // Default to formal
+    // 3. 복수 표현 제거/변현
     if (isCasualSpeech) {
       validated = validated.replaceAll('여러분', '너');
       validated = validated.replaceAll('다들', '너');
@@ -676,11 +678,7 @@ class KoreanSpeechValidator {
     // 4. 이모티콘을 한국 표현으로 변환
     validated = _convertEmojisToKorean(validated);
     
-    // 5. 말투 교정 (반말/존댓말)
-    validated = _correctSpeechStyle(validated, isCasualSpeech);
-    
-    // 6. 관계별 톤 조정
-    validated = _adjustToneByRelationship(validated, relationshipType, persona.relationshipScore);
+    // 5. 말투 및 관계별 톤은 이제 프롬프트에서 처리됨
     
     // 7. 20대 자연스러운 표현 추가
     validated = _addNaturalExpressions(validated);
@@ -688,14 +686,7 @@ class KoreanSpeechValidator {
     // 8. 🎭 페르소나별 맞춤 대화 스타일 적용
     validated = _applyPersonaSpecificStyle(validated, persona, relationshipType);
     
-    // 9. 상황별 질문 추가
-    validated = _addSituationalQuestions(
-      validated, 
-      persona, 
-      relationshipType, 
-      userMessage, 
-      recentAIMessages ?? []
-    );
+    // 9. 상황별 질문 추가는 이제 프롬프트에서 처리됨
     
     return validated.trim();
   }
@@ -943,44 +934,7 @@ class KoreanSpeechValidator {
     return result;
   }
 
-  /// 🗣️ 말투 교정
-  static String _correctSpeechStyle(String text, bool isCasual) {
-    if (isCasual) {
-      // 존댓말 → 반말
-      text = text.replaceAll(RegExp(r'해요$'), '해');
-      text = text.replaceAll(RegExp(r'있어요$'), '있어'); 
-      text = text.replaceAll(RegExp(r'그래요$'), '그래');
-      text = text.replaceAll(RegExp(r'맞아요$'), '맞아');
-      text = text.replaceAll('당신', '너');
-      text = text.replaceAll('어떻게 지내세요', '어떻게 지내');
-    } else {
-      // 반말 → 존댓말 (필요시)
-      text = text.replaceAll(RegExp(r'(?<!했)어$'), '어요');
-      text = text.replaceAll(RegExp(r'그래\?$'), '그래요?');
-      text = text.replaceAll('너는', '당신은');
-    }
-    
-    return text;
-  }
 
-  /// 💝 점수별 톤 조정
-  static String _adjustToneByRelationship(String text, String relationshipType, int score) {
-    // 점수 기반으로 톤 조정
-    if (score >= 900) {
-      // 완전한 연애: 더 친밀한 톤
-      if (!text.contains('ㅎㅎ') && !text.contains('ㅋㅋ')) {
-        text += ' ㅎㅎ';
-      }
-    } else if (score >= 200) {
-      // 썸/호감: 설레는 톤
-      if (text.contains('!')) {
-        text = text.replaceAll('!', '~ ㅎㅎ');
-      }
-    }
-    // 친구 관계는 기본 톤 유지
-    
-    return text;
-  }
 
   /// ✨ 20대 자연스러운 표현 추가
   static String _addNaturalExpressions(String text) {
@@ -1361,42 +1315,4 @@ class KoreanSpeechValidator {
     return result;
   }
 
-  /// ❓ 상황별 질문 추가
-  static String _addSituationalQuestions(
-    String response,
-    Persona persona,
-    String relationshipType,
-    String? userMessage,
-    List<String> recentAIMessages,
-  ) {
-    // 사용자 메시지가 없거나 이미 질문이 있으면 추가 안함
-    if (userMessage == null || userMessage.isEmpty) {
-      return response;
-    }
-    
-    if (response.contains('?') || response.contains('？')) {
-      return response;
-    }
-    
-    // 간단한 상황별 질문 생성
-    final questions = [
-      '어떻게 생각해?',
-      '뭐가 좋을까?',
-      '어떤 게 나을까?',
-      '혹시 다른 생각 있어?',
-      '다른 건 어때?',
-    ];
-    
-    // 30% 확률로 질문 추가
-    if (response.hashCode % 3 == 0) {
-      final question = questions[response.hashCode.abs() % questions.length];
-      if (response.length < 20) {
-        return '$response $question';
-      } else {
-        return '$response~ $question';
-      }
-    }
-    
-    return response;
-  }
 }

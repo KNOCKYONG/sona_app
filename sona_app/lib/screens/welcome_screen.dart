@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../services/auth/auth_service.dart';
+import '../services/cache/image_preload_service.dart';
 import '../widgets/common/sona_logo.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -53,10 +54,20 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     
     _animationController.forward();
     
-    // 3초 후 자동으로 페르소나 선택 화면으로 이동
-    Future.delayed(const Duration(seconds: 3), () {
+    // 3초 후 자동으로 다음 화면으로 이동
+    Future.delayed(const Duration(seconds: 3), () async {
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/persona-selection');
+        // 이미지 프리로딩이 필요한지 확인
+        final preloadService = ImagePreloadService.instance;
+        final isPreloaded = await preloadService.isPreloadCompleted();
+        
+        if (!isPreloaded) {
+          // 프리로딩이 필요한 경우
+          Navigator.of(context).pushReplacementNamed('/image-preload');
+        } else {
+          // 이미 프리로딩이 완료된 경우
+          Navigator.of(context).pushReplacementNamed('/persona-selection');
+        }
       }
     });
   }

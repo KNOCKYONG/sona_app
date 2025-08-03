@@ -10,6 +10,9 @@ import '../../helpers/firebase_helper.dart';
 import '../../core/constants.dart';
 import '../../core/preferences_manager.dart';
 import '../relationship/relation_score_service.dart';
+import 'r2_validation_cache.dart';
+import '../cache/image_preload_service.dart';
+import 'dart:convert';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
 /// 
@@ -46,11 +49,28 @@ class PersonaService extends BaseService {
   // Session data
   final Map<String, DateTime> _sessionSwipedPersonas = {};
   
+  // R2 validation state
+  final Set<String> _r2ValidatedPersonaIds = {};
+  bool _isValidatingR2 = false;
+  Timer? _r2ValidationTimer;
+  
+  // Midnight refresh timer
+  Timer? _midnightRefreshTimer;
+  DateTime? _lastRefreshDate;
+  
   // Lazy loading state
   bool _matchedPersonasLoaded = false;
   Completer<void>? _loadingCompleter;
   
-  // Getters
+  // Progressive loading for initial fast display
+  List<Persona> get availablePersonasProgressive {
+    _cleanExpiredSwipes();
+    
+    // Return immediately without R2 check
+    return _getImmediateAvailablePersonas();
+  }
+  
+  // Original getter with R2 validation
   List<Persona> get availablePersonas {
     _cleanExpiredSwipes();
     
@@ -71,6 +91,10 @@ class PersonaService extends BaseService {
       debugPrint('📋 Matched personas: ${_matchedPersonas.length}');
       debugPrint('📋 Actioned personas: ${_actionedPersonaIds.length}');
       
+      // 디버깅: R2 이미지가 있는 페르소나 수 확인
+      final personasWithR2 = _allPersonas.where((p) => _hasR2Image(p)).length;
+      debugPrint('📋 Personas with R2 images: $personasWithR2');
+      
       // Exclude both recently swiped and matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
       final filtered = _allPersonas.where((persona) => 
@@ -80,7 +104,15 @@ class PersonaService extends BaseService {
         _hasR2Image(persona)  // Only include personas with R2 images
       ).toList();
       
-      debugPrint('📋 Filtered personas: ${filtered.length}');
+      debugPrint('📋 Filtered personas (available for swipe): ${filtered.length}');
+      
+      // 디버깅: 필터링된 각 카테고리의 수
+      final swipedCount = _allPersonas.where((p) => _isPersonaRecentlySwiped(p.id)).length;
+      final notR2Count = _allPersonas.where((p) => !_hasR2Image(p)).length;
+      debugPrint('  - Recently swiped: $swipedCount');
+      debugPrint('  - Without R2 images: $notR2Count');
+      debugPrint('  - Matched: ${matchedIds.length}');
+      debugPrint('  - Actioned: ${_actionedPersonaIds.length}');
       
       // Get recommended personas for current user
       final recommendedPersonas = getRecommendedPersonas(filtered);
@@ -115,11 +147,16 @@ class PersonaService extends BaseService {
   @override
   bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
+  bool get isValidatingR2 => _isValidatingR2;
   
   /// 실제 대기 중인 페르소나 수 (전체에서 매칭된/액션된 페르소나 제외)
   int get waitingPersonasCount {
+    debugPrint('📊 Calculating waitingPersonasCount...');
+    debugPrint('  Total personas: ${_allPersonas.length}');
+    
     // 전체 페르소나 중 R2 이미지가 있는 것만
     final totalWithImages = _allPersonas.where((persona) => _hasR2Image(persona)).toList();
+    debugPrint('  Personas with R2 images: ${totalWithImages.length}');
     
     // 성별 필터링 적용
     List<Persona> filteredPersonas = totalWithImages;
@@ -128,19 +165,26 @@ class PersonaService extends BaseService {
       filteredPersonas = totalWithImages.where((persona) => 
         persona.gender == targetGender
       ).toList();
+      debugPrint('  After gender filter (showing $targetGender only): ${filteredPersonas.length}');
+    } else {
+      debugPrint('  No gender filter applied (genderAll: ${_currentUser?.genderAll})');
     }
     
     // 매칭된 페르소나 ID 목록
     final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
+    debugPrint('  Matched personas: ${matchedIds.length}');
     
     // 액션된 페르소나 ID 목록 (매칭, 패스 등 모든 액션)
     final actionedIds = _actionedPersonaIds.toSet();
+    debugPrint('  Actioned personas: ${actionedIds.length}');
     
     // 전체에서 매칭되거나 액션된 페르소나 제외
     final waitingPersonas = filteredPersonas.where((persona) => 
       !matchedIds.contains(persona.id) && 
       !actionedIds.contains(persona.id)
     ).toList();
+    
+    debugPrint('  ✅ Final waiting personas: ${waitingPersonas.length}');
     
     return waitingPersonas.length;
   }
@@ -198,6 +242,12 @@ class PersonaService extends BaseService {
     
     // Mark matched personas as loaded
     _matchedPersonasLoaded = true;
+    
+    // Setup midnight refresh timer
+    _setupMidnightRefreshTimer();
+    
+    // 🆕 Check and download new images after loading personas
+    await checkAndDownloadNewImages();
     
     // isLoading is managed by BaseService
     notifyListeners();
@@ -658,6 +708,8 @@ class PersonaService extends BaseService {
 
   /// Optimized matched personas loading with caching
   Future<void> _loadMatchedPersonas() async {
+    debugPrint('🔄 Loading matched personas...');
+    
     if (_currentUserId == '') {
       debugPrint('⚠️ No user ID available for loading matched personas');
       return;
@@ -674,6 +726,8 @@ class PersonaService extends BaseService {
           .where('userId', isEqualTo: _currentUserId!)
           .get();
 
+      debugPrint('📊 Found ${querySnapshot.docs.length} relationship documents');
+
       _matchedPersonas.clear();
       
       // Process in parallel
@@ -683,11 +737,21 @@ class PersonaService extends BaseService {
         final data = doc.data();
         final isMatched = data['isMatched'] ?? false;
         final isActive = data['isActive'] ?? false;
+        final swipeAction = data['swipeAction'] ?? '';
         
-        if (!isMatched || !isActive) continue;
+        debugPrint('  📋 Doc ${doc.id}: isMatched=$isMatched, isActive=$isActive, swipeAction=$swipeAction');
+        
+        // Only include liked or super_liked personas
+        if (!isMatched || !isActive) {
+          debugPrint('    ❌ Skipping - not matched or not active');
+          continue;
+        }
         
         final personaId = data['personaId'] as String?;
-        if (personaId == null) continue;
+        if (personaId == null) {
+          debugPrint('    ❌ Skipping - no personaId');
+          continue;
+        }
         
         final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
         if (persona != null) {
@@ -708,6 +772,7 @@ class PersonaService extends BaseService {
           );
           
           _matchedPersonas.add(matchedPersona);
+          debugPrint('    ✅ Added ${persona.name} to matched personas (score: $relationshipScore)');
           
           // Cache relationship data
           _addToCache(personaId, _CachedRelationship(
@@ -715,16 +780,20 @@ class PersonaService extends BaseService {
             isCasualSpeech: data['isCasualSpeech'] ?? false,
             timestamp: DateTime.now(),
           ));
+        } else {
+          debugPrint('    ⚠️ Persona not found in all personas: $personaId');
         }
       }
       
       // Sort by relationship score
       _matchedPersonas.sort((a, b) => b.relationshipScore.compareTo(a.relationshipScore));
       
+      debugPrint('✅ Loaded ${_matchedPersonas.length} matched personas');
+      
       await _saveMatchedPersonas();
       
     } catch (e) {
-      debugPrint('Error loading matched personas: $e');
+      debugPrint('❌ Error loading matched personas: $e');
       await _loadMatchedPersonasFromLocal();
     }
   }
@@ -930,6 +999,7 @@ class PersonaService extends BaseService {
         keywords: data['keywords'] != null 
           ? List<String>.from(data['keywords'])
           : null,
+        hasValidR2Image: data['hasValidR2Image'] ?? null,
       );
       
       return persona;
@@ -1025,9 +1095,210 @@ class PersonaService extends BaseService {
       now.difference(time).inHours >= 24);
   }
   
-  /// Check if persona has R2 image
+  /// Get immediate available personas without R2 check
+  List<Persona> _getImmediateAvailablePersonas() {
+    final now = DateTime.now();
+    final shouldReshuffle = _shuffledAvailablePersonas == null ||
+        _lastShuffleTime == null ||
+        now.difference(_lastShuffleTime!).inMinutes >= 30;
+    
+    if (shouldReshuffle) {
+      final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
+      final filtered = _allPersonas.where((persona) => 
+        !_isPersonaRecentlySwiped(persona.id) && 
+        !matchedIds.contains(persona.id) &&
+        !_actionedPersonaIds.contains(persona.id)
+      ).toList();
+      
+      final recommendedPersonas = getRecommendedPersonas(filtered);
+      _shuffledAvailablePersonas = recommendedPersonas;
+      _lastShuffleTime = now;
+      
+      // Start background R2 validation
+      _startBackgroundR2Validation();
+    }
+    
+    return List<Persona>.from(_shuffledAvailablePersonas!);
+  }
+  
+  /// Start background R2 validation
+  void _startBackgroundR2Validation() {
+    if (_isValidatingR2) return;
+    
+    _isValidatingR2 = true;
+    _r2ValidationTimer?.cancel();
+    
+    // Start validation after a short delay
+    _r2ValidationTimer = Timer(const Duration(milliseconds: 100), () async {
+      await _validateR2ImagesInBackground();
+    });
+  }
+  
+  /// Validate R2 images in background
+  Future<void> _validateR2ImagesInBackground() async {
+    debugPrint('🔄 Starting background R2 validation...');
+    final startTime = DateTime.now();
+    
+    try {
+      final personasToValidate = _shuffledAvailablePersonas ?? [];
+      final validatedIds = <String>{};
+      
+      // Process in batches for better performance
+      const batchSize = 10;
+      for (int i = 0; i < personasToValidate.length; i += batchSize) {
+        final batch = personasToValidate.skip(i).take(batchSize).toList();
+        
+        // Parallel validation within batch
+        final results = await Future.wait(
+          batch.map((persona) async {
+            final hasR2 = await _hasR2ImageOptimized(persona);
+            return MapEntry(persona.id, hasR2);
+          })
+        );
+        
+        // Update validated IDs
+        for (final result in results) {
+          if (result.value) {
+            validatedIds.add(result.key);
+          }
+        }
+        
+        // Update UI periodically
+        if (i % 30 == 0 && i > 0) {
+          _r2ValidatedPersonaIds.clear();
+          _r2ValidatedPersonaIds.addAll(validatedIds);
+          notifyListeners();
+        }
+      }
+      
+      // Final update
+      _r2ValidatedPersonaIds.clear();
+      _r2ValidatedPersonaIds.addAll(validatedIds);
+      
+      final duration = DateTime.now().difference(startTime);
+      debugPrint('✅ R2 validation complete: ${validatedIds.length}/${personasToValidate.length} valid (${duration.inMilliseconds}ms)');
+      
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Error in background R2 validation: $e');
+    } finally {
+      _isValidatingR2 = false;
+    }
+  }
+  
+  /// Optimized R2 image check with caching
+  Future<bool> _hasR2ImageOptimized(Persona persona) async {
+    // 1. Check Firebase field first
+    if (persona.hasValidR2Image != null) {
+      return persona.hasValidR2Image!;
+    }
+    
+    // 2. Check cache
+    final cached = await R2ValidationCache.getCached(persona.id);
+    if (cached != null) {
+      return cached;
+    }
+    
+    // 3. Perform quick check
+    final hasR2 = _hasR2ImageQuick(persona);
+    
+    // 4. Cache the result
+    await R2ValidationCache.setCache(persona.id, hasR2);
+    
+    return hasR2;
+  }
+  
+  /// Quick R2 image check without logging
+  bool _hasR2ImageQuick(Persona persona) {
+    if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
+      return false;
+    }
+    
+    // Quick pattern matching without jsonEncode
+    // Check if any value in the map contains R2 domains
+    final r2Pattern = RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
+    
+    bool checkMap(Map<String, dynamic> map) {
+      for (final value in map.values) {
+        if (value is String && r2Pattern.hasMatch(value)) {
+          return true;
+        } else if (value is Map) {
+          if (checkMap(Map<String, dynamic>.from(value))) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    
+    return checkMap(persona.imageUrls!);
+  }
+  
+  /// Check if persona has valid R2 image (original method with logging)
   bool _hasR2Image(Persona persona) {
-    return persona.imageUrls != null && persona.imageUrls!.isNotEmpty;
+    // 1. Firebase에 저장된 값 우선 사용
+    if (persona.hasValidR2Image != null) {
+      return persona.hasValidR2Image!;
+    }
+    
+    // 2. 디버깅을 위한 상세 로그
+    debugPrint('🔍 Checking R2 image for ${persona.name} (${persona.id})');
+    
+    if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
+      debugPrint('  ❌ No imageUrls found');
+      return false;
+    }
+    
+    // imageUrls 구조 체크
+    final urls = persona.imageUrls!;
+    debugPrint('  📋 imageUrls structure: ${urls.keys.toList()}');
+    
+    // 1. 기본 구조 체크 (medium 사이즈 필수)
+    if (urls.containsKey('medium') && urls['medium'] is Map) {
+      final mediumUrls = urls['medium'] as Map;
+      if (mediumUrls.containsKey('jpg')) {
+        final url = mediumUrls['jpg'] as String;
+        debugPrint('  🎯 Found medium.jpg: $url');
+        // URL이 실제 R2 도메인인지 확인
+        final isR2 = url.contains('teamsona.work') || url.contains('r2.dev') || 
+               url.contains('cloudflare') || url.contains('imagedelivery.net');
+        debugPrint('  ${isR2 ? "✅" : "❌"} Is R2 URL: $isR2');
+        if (isR2) return true;
+      }
+    }
+    
+    // 2. mainImageUrls 구조 체크
+    if (urls.containsKey('mainImageUrls')) {
+      final mainUrls = urls['mainImageUrls'] as Map?;
+      if (mainUrls != null && mainUrls.containsKey('medium')) {
+        final url = mainUrls['medium'] as String;
+        debugPrint('  🎯 Found mainImageUrls.medium: $url');
+        final isR2 = url.contains('teamsona.work') || url.contains('r2.dev') || 
+               url.contains('cloudflare') || url.contains('imagedelivery.net');
+        debugPrint('  ${isR2 ? "✅" : "❌"} Is R2 URL: $isR2');
+        if (isR2) return true;
+      }
+    }
+    
+    // 3. 최상위 size 키 체크 (thumb, small, medium, large, original)
+    final sizes = ['thumb', 'small', 'medium', 'large', 'original'];
+    for (final size in sizes) {
+      if (urls.containsKey(size) && urls[size] is Map) {
+        final sizeUrls = urls[size] as Map;
+        if (sizeUrls.containsKey('jpg')) {
+          final url = sizeUrls['jpg'] as String;
+          debugPrint('  🎯 Found $size.jpg: $url');
+          if (url.contains('teamsona.work') || url.contains('r2.dev') || 
+              url.contains('cloudflare') || url.contains('imagedelivery.net')) {
+            debugPrint('  ✅ Valid R2 URL found in $size');
+            return true;
+          }
+        }
+      }
+    }
+    
+    debugPrint('  ❌ No valid R2 URL found for ${persona.name}');
+    return false;
   }
   
   /// Force reshuffle of available personas (useful after major changes)
@@ -1036,6 +1307,100 @@ class PersonaService extends BaseService {
     _shuffledAvailablePersonas = null;
     _lastShuffleTime = null;
     notifyListeners();
+  }
+  
+  /// Setup timer for midnight refresh
+  void _setupMidnightRefreshTimer() {
+    // Cancel existing timer if any
+    _midnightRefreshTimer?.cancel();
+    
+    // Calculate time until next midnight (local time)
+    final now = DateTime.now();
+    final tomorrow = DateTime(now.year, now.month, now.day + 1);
+    final timeUntilMidnight = tomorrow.difference(now);
+    
+    debugPrint('⏰ Setting up midnight refresh timer');
+    debugPrint('   Current time: ${now.toString()}');
+    debugPrint('   Next midnight: ${tomorrow.toString()}');
+    debugPrint('   Time until midnight: ${timeUntilMidnight.inHours}h ${timeUntilMidnight.inMinutes % 60}m');
+    
+    // Set timer for midnight
+    _midnightRefreshTimer = Timer(timeUntilMidnight, () async {
+      debugPrint('🌙 Midnight refresh triggered at ${DateTime.now()}');
+      await _performMidnightRefresh();
+      
+      // Setup next timer for tomorrow midnight
+      _setupMidnightRefreshTimer();
+    });
+  }
+  
+  /// Perform midnight refresh
+  Future<void> _performMidnightRefresh() async {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    
+    // Check if we already refreshed today
+    if (_lastRefreshDate != null && 
+        _lastRefreshDate!.year == todayDate.year &&
+        _lastRefreshDate!.month == todayDate.month &&
+        _lastRefreshDate!.day == todayDate.day) {
+      debugPrint('🌙 Already refreshed today, skipping...');
+      return;
+    }
+    
+    debugPrint('🌙 Performing midnight refresh...');
+    
+    // Clear session swiped personas (like refresh button)
+    _sessionSwipedPersonas.clear();
+    
+    // Clear cached swiped personas
+    await PreferencesManager.remove('swiped_personas');
+    
+    // Force reshuffle
+    _shuffledAvailablePersonas = null;
+    _lastShuffleTime = null;
+    
+    // Update last refresh date
+    _lastRefreshDate = todayDate;
+    
+    // Save refresh date to preferences
+    await PreferencesManager.setString('last_refresh_date', todayDate.toIso8601String());
+    
+    debugPrint('✅ Midnight refresh complete - all unmatched personas are now available');
+    
+    // Notify UI to update
+    notifyListeners();
+  }
+  
+  /// Check and perform refresh if needed (for app resume)
+  Future<void> checkAndPerformDailyRefresh() async {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    
+    // Load last refresh date from preferences
+    final lastRefreshStr = await PreferencesManager.getString('last_refresh_date');
+    if (lastRefreshStr != null) {
+      _lastRefreshDate = DateTime.tryParse(lastRefreshStr);
+    }
+    
+    // Check if we need to refresh
+    if (_lastRefreshDate == null ||
+        _lastRefreshDate!.year != todayDate.year ||
+        _lastRefreshDate!.month != todayDate.month ||
+        _lastRefreshDate!.day != todayDate.day) {
+      debugPrint('📅 Daily refresh needed - last refresh: $_lastRefreshDate');
+      await _performMidnightRefresh();
+    } else {
+      debugPrint('📅 No daily refresh needed - already refreshed today');
+    }
+  }
+  
+  @override
+  void dispose() {
+    _midnightRefreshTimer?.cancel();
+    _batchUpdateTimer?.cancel();
+    _r2ValidationTimer?.cancel();
+    super.dispose();
   }
   
   /// 추천 알고리즘 - 사용자 선호도에 따라 페르소나 정렬
@@ -1191,50 +1556,43 @@ class PersonaService extends BaseService {
       return;
     }
     
+    debugPrint('🔄 Loading actionedPersonaIds for user: $_currentUserId');
+    
     try {
-      // 먼저 users 컨렉션에서 확인
-      final userDoc = await FirebaseHelper.users.doc(_currentUserId).get();
-      if (userDoc.exists) {
-        final data = userDoc.data();
-        if (data != null && data['actionedPersonaIds'] != null) {
-          _actionedPersonaIds = List<String>.from(data['actionedPersonaIds']);
-          debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from Firebase (users)');
-        } else {
-          debugPrint('📋 No actionedPersonaIds found in user document');
-        }
-      } else {
-        debugPrint('📋 User document does not exist, checking user_persona_relationships...');
+      // user_persona_relationships에서 매칭된(isMatched=true) 페르소나만 가져오기
+      final relationshipsQuery = await FirebaseHelper.userPersonaRelationships
+          .where('userId', isEqualTo: _currentUserId)
+          .where('isMatched', isEqualTo: true)
+          .where('isActive', isEqualTo: true)
+          .get();
+          
+      final matchedIds = <String>[];
+      for (final doc in relationshipsQuery.docs) {
+        final data = doc.data();
+        final personaId = data['personaId'] as String?;
+        final swipeAction = data['swipeAction'] ?? '';
         
-        // user_persona_relationships에서 스와이프한 페르소나 확인
-        final relationshipsQuery = await FirebaseHelper.userPersonaRelationships
-            .where('userId', isEqualTo: _currentUserId)
-            .get();
-            
-        final actionedIds = <String>[];
-        for (final doc in relationshipsQuery.docs) {
-          final data = doc.data();
-          final personaId = data['personaId'] as String?;
-          if (personaId != null) {
-            actionedIds.add(personaId);
-          }
-        }
-        
-        _actionedPersonaIds = actionedIds;
-        debugPrint('📋 Loaded ${_actionedPersonaIds.length} actionedPersonaIds from relationships');
-        
-        // users 컨렉션에 업데이트
-        if (_actionedPersonaIds.isNotEmpty) {
-          await FirebaseHelper.users.doc(_currentUserId).set({
-            'actionedPersonaIds': _actionedPersonaIds,
-            'updatedAt': FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
-          debugPrint('✅ Migrated actionedPersonaIds to users collection');
+        if (personaId != null && (swipeAction == 'like' || swipeAction == 'super_like')) {
+          matchedIds.add(personaId);
+          debugPrint('  ✅ Found matched persona: $personaId ($swipeAction)');
         }
       }
       
-      debugPrint('📋 Final actionedPersonaIds: $_actionedPersonaIds');
+      _actionedPersonaIds = matchedIds;
+      debugPrint('📋 Loaded ${_actionedPersonaIds.length} MATCHED personas as actionedPersonaIds');
+      
+      // users 컬렉션도 업데이트하여 동기화
+      await FirebaseHelper.users.doc(_currentUserId).set({
+        'actionedPersonaIds': _actionedPersonaIds,
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+      debugPrint('✅ Synced actionedPersonaIds to users collection');
+      
+      debugPrint('📋 Final actionedPersonaIds (matched only): $_actionedPersonaIds');
     } catch (e) {
       debugPrint('❌ Error loading actionedPersonaIds: $e');
+      // 에러 발생 시 빈 배열로 초기화
+      _actionedPersonaIds = [];
     }
   }
 
@@ -1320,8 +1678,9 @@ class PersonaService extends BaseService {
 
       _sessionSwipedPersonas[personaId] = DateTime.now();
       
-      // Update user's actionedPersonaIds
-      await _updateActionedPersonaIds(personaId);
+      // ❌ REMOVED: 패스한 페르소나는 actionedPersonaIds에 추가하지 않음
+      // 매칭된 페르소나만 actionedPersonaIds에 포함되어야 함
+      debugPrint('✅ Passed persona $personaId - NOT adding to actionedPersonaIds');
       
       notifyListeners();
       return true;
@@ -1353,6 +1712,11 @@ class PersonaService extends BaseService {
   /// 스와이프한 페르소나 목록 초기화 (새로고침 기능)
   Future<void> resetSwipedPersonas() async {
     debugPrint('🔄 Resetting swiped personas for refresh...');
+    debugPrint('  Current state:');
+    debugPrint('  - Total personas: ${_allPersonas.length}');
+    debugPrint('  - Session swiped: ${_sessionSwipedPersonas.length}');
+    debugPrint('  - Actioned personas: ${_actionedPersonaIds.length}');
+    debugPrint('  - Matched personas: ${_matchedPersonas.length}');
     
     // 매칭된 페르소나 목록이 로드되지 않았다면 먼저 로드
     if (!_matchedPersonasLoaded) {
@@ -1362,21 +1726,68 @@ class PersonaService extends BaseService {
     
     // 세션 스와이프 기록만 초기화 (일시적으로 스와이프한 것들)
     _sessionSwipedPersonas.clear();
+    debugPrint('  ✅ Cleared session swiped personas');
     
     // SharedPreferences에서도 삭제
     await PreferencesManager.remove('swiped_personas');
+    debugPrint('  ✅ Cleared persisted swiped personas');
     
-    // actionedPersonaIds는 유지해야 함 - 매칭된 페르소나들은 계속 숨겨져야 함
-    // 대신 매칭되지 않은 페르소나들만 다시 보여주기 위해 강제로 reshuffle
-    debugPrint('📋 Keeping actionedPersonaIds (matched personas): ${_actionedPersonaIds.length} personas');
-    debugPrint('📋 Matched personas count: ${_matchedPersonas.length}');
+    // 새로고침 시 actionedPersonaIds를 다시 로드하여 최신 상태 반영
+    // 이제 _loadActionedPersonaIds는 매칭된 페르소나만 가져옴
+    await _loadActionedPersonaIds();
+    debugPrint('  📋 Reloaded actionedPersonaIds: ${_actionedPersonaIds.length} matched personas only');
+    
+    // 이제 actionedPersonaIds는 이미 매칭된 페르소나만 포함하므로 추가 수정 불필요
+    debugPrint('  📋 Final state after refresh:');
+    debugPrint('    - Matched personas: ${_matchedPersonas.length}');
+    debugPrint('    - Actioned personas (matched only): ${_actionedPersonaIds.length}');
     
     // shuffled 리스트 초기화하여 다시 생성되도록 함
     _shuffledAvailablePersonas = null;
     _lastShuffleTime = null;
     
+    // R2 검증 상태도 초기화
+    _r2ValidatedPersonaIds.clear();
+    _isValidatingR2 = false;
+    _r2ValidationTimer?.cancel();
+    
+    // 캐시 정리
+    await R2ValidationCache.cleanExpiredCache();
+    
+    // 🆕 새로운 이미지 체크 및 다운로드
+    await checkAndDownloadNewImages();
+    
     debugPrint('✅ Refresh complete - all unmatched personas will be shown');
     notifyListeners();
+  }
+  
+  /// 새로운 이미지 체크 및 다운로드
+  Future<void> checkAndDownloadNewImages() async {
+    debugPrint('🔍 Checking for new persona images...');
+    
+    final imagePreloadService = ImagePreloadService.instance;
+    
+    // 모든 페르소나 수집 (R2 이미지가 있는 것만)
+    final allPersonasWithImages = _allPersonas.where((p) => _hasR2Image(p)).toList();
+    
+    if (allPersonasWithImages.isEmpty) {
+      debugPrint('❌ No personas with R2 images found');
+      return;
+    }
+    
+    // 새로운 이미지가 있는지 확인
+    final hasNewImages = await imagePreloadService.hasNewImages(allPersonasWithImages);
+    
+    if (hasNewImages) {
+      debugPrint('🆕 New images detected! Starting download...');
+      
+      // 새로운 이미지 다운로드
+      await imagePreloadService.preloadNewImages(allPersonasWithImages);
+      
+      debugPrint('✅ New images downloaded successfully');
+    } else {
+      debugPrint('✅ All images are already cached');
+    }
   }
   
   /// 반말/존댓말 모드 업데이트
@@ -1607,12 +2018,6 @@ class PersonaService extends BaseService {
     }
   }
 
-  @override
-  void dispose() {
-    _batchUpdateTimer?.cancel();
-    _processBatchUpdates(); // Process any pending updates
-    super.dispose();
-  }
 }
 
 /// Helper classes

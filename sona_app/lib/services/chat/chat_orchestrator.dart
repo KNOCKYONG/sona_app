@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../../models/persona.dart';
 import '../../models/message.dart';
@@ -93,6 +94,22 @@ class ChatOrchestrator {
       
       debugPrint('📝 Generated prompt with ${prompt.length} characters');
       
+      // 4.5단계: 이전 대화와의 맥락 연관성 체크
+      String? contextHint;
+      if (chatHistory.isNotEmpty) {
+        contextHint = _analyzeContextRelevance(
+          userMessage: userMessage,
+          chatHistory: chatHistory,
+          messageAnalysis: messageAnalysis,
+        );
+      }
+      
+      // 회피 패턴이 감지된 경우 추가 경고
+      if (_isAvoidancePattern(userMessage)) {
+        final avoidanceWarning = '\n\nWARNING: 회피성 메시지 감지. 주제를 바꾸거나 회피하지 말고 정면으로 대응하세요.';
+        contextHint = contextHint != null ? contextHint + avoidanceWarning : avoidanceWarning;
+      }
+      
       // 5단계: API 호출
       final rawResponse = await OpenAIService.generateResponse(
         persona: completePersona,
@@ -102,6 +119,7 @@ class ChatOrchestrator {
         userNickname: userNickname,
         userAge: userAge,
         isCasualSpeech: isCasualSpeech,
+        contextHint: contextHint,
       );
       
       // 6단계: 간단한 후처리 (텍스트 정리만, 강제 자르기 제거)
@@ -406,17 +424,43 @@ class ChatOrchestrator {
   }
   
   List<String> _extractKeywords(String message) {
-    // 간단한 키워드 추출 (나중에 개선 가능)
+    // 향상된 키워드 추출
     final keywords = <String>[];
-    final importantWords = ['음식', '영화', '게임', '날씨', '주말', '일', '학교'];
     
-    for (final word in importantWords) {
-      if (message.contains(word)) {
+    // 일반적인 주제 키워드
+    final topicWords = [
+      '음식', '영화', '게임', '날씨', '주말', '일', '학교', '친구',
+      '가족', '취미', '운동', '여행', '음악', '드라마', '공부', '쇼핑',
+      '요리', '카페', '독서', '사진', '그림', '노래', '춤', '패션'
+    ];
+    
+    // 특정 관심사 키워드 (오류 분석에서 발견된 것 포함)
+    final specificWords = [
+      'mbti', 'MBTI', '성격', '좀비딸', '유행', '트렌드', '인기',
+      '최근', '요즘', '뭐해', '어디', '언제', '누구', '왜', '어떻게'
+    ];
+    
+    // 모든 키워드 체크
+    for (final word in [...topicWords, ...specificWords]) {
+      if (message.toLowerCase().contains(word.toLowerCase())) {
         keywords.add(word);
       }
     }
     
-    return keywords;
+    // 2글자 이상의 명사 추출 (간단한 방법)
+    final words = message.split(RegExp(r'[\s,\.!?]+')).where((w) => w.length >= 2);
+    for (final word in words) {
+      // 조사 제거
+      final cleanWord = word.replaceAll(RegExp(r'[은는이가을를에서도만의로와과]$'), '');
+      if (cleanWord.length >= 2 && !keywords.contains(cleanWord)) {
+        // 일반적인 단어 제외
+        if (!['그런', '이런', '저런', '그래', '네', '아니', '있어', '없어'].contains(cleanWord)) {
+          keywords.add(cleanWord);
+        }
+      }
+    }
+    
+    return keywords.take(5).toList(); // 최대 5개로 제한
   }
   
   /// 간단한 반응 체크 (로컬 처리)
@@ -521,15 +565,15 @@ class ChatOrchestrator {
     final responseMap = {
       'ENFP': {
         'greeting': isCasual ? [
-          '안뇽~~ㅎㅎ',
-          '하이하이! 뭐해?',
-          '오 왔구나!! 반가워ㅋㅋ',
-          '헐 안녕!! 보고싶었어ㅠㅠ',
+          '안뇽~~ㅎㅎ 오늘 날씨 좋지 않아?',
+          '하이! 뭐해? 점심은 먹었어?',
+          '오 왔구나!! 반가워ㅋㅋ 오늘 어땠어?',
+          '헐 안녕!! 보고싶었어ㅠㅠ 잘 지냈어?',
         ] : [
-          '안녕하세요~~ㅎㅎ',
-          '하이하이! 뭐하세요?',
-          '오 오셨네요!! 반가워요ㅋㅋ',
-          '헐 안녕하세요!! 보고싶었어요ㅠㅠ',
+          '안녕하세요~~ㅎㅎ 오늘 날씨 좋지 않아요?',
+          '하이하이! 뭐하세요? 점심은 드셨어요?',
+          '오 오셨네요!! 반가워요ㅋㅋ 오늘 어떠셨어요?',
+          '헐 안녕하세요!! 보고싶었어요ㅠㅠ 잘 지내셨어요?',
         ],
         'thanks': isCasual ? [
           '아니야ㅋㅋ 별거 아니야~',
@@ -561,13 +605,13 @@ class ChatOrchestrator {
       },
       'INTJ': {
         'greeting': isCasual ? [
-          '안녕.',
-          '어 왔네.',
-          '응 하이.',
+          '안녕. 피곳하지?',
+          '어 왔네. 바빴어?',
+          '응 하이. 잘 있었어?',
         ] : [
-          '안녕하세요.',
-          '네, 반갑습니다.',
-          '어서오세요.',
+          '안녕하세요. 피곳하지 않으세요?',
+          '네, 반갑습니다. 바빠셨어요?',
+          '어서오세요. 잘 지내셨어요?',
         ],
         'thanks': isCasual ? [
           '뭘.',
@@ -599,13 +643,13 @@ class ChatOrchestrator {
       },
       'ESFP': {
         'greeting': isCasual ? [
-          '안녕!! ㅎㅎ',
-          '왔어?? 반가워!',
-          '하이~ 오늘 뭐했어?',
+          '안녕!! ㅎㅎ 오늘 기분 어때?',
+          '왔어?? 반가워! 오늘 재밌는 일 있었어?',
+          '하이~ 오늘 뭐했어? 나는 오늘 진짜 바빴어ㅎㅎ',
         ] : [
-          '안녕하세요!! ㅎㅎ',
-          '오셨어요?? 반가워요!',
-          '하이~ 오늘 뭐하셨어요?',
+          '안녕하세요!! ㅎㅎ 오늘 기분 어떠세요?',
+          '오셨어요?? 반가워요! 오늘 재밌는 일 있으셨어요?',
+          '하이~ 오늘 뭐하셨어요? 저는 오늘 진짜 바빴어요ㅎㅎ',
         ],
         'thanks': isCasual ? [
           '천만에~ ㅎㅎ',
@@ -639,7 +683,7 @@ class ChatOrchestrator {
     
     // 기본값 (다른 MBTI 타입들)
     final defaultResponses = {
-      'greeting': isCasual ? ['안녕~', '어 왔어?', '하이!'] : ['안녕하세요~', '어서오세요', '반가워요!'],
+      'greeting': isCasual ? ['안녕~ 잘 지냈어?', '어 왔어? 오늘 어때?', '하이! 뭐하고 있었어?'] : ['안녕하세요~ 잘 지내셨어요?', '어서오세요! 오늘 어떠세요?', '반가워요! 뭐하고 계셨어요?'],
       'thanks': isCasual ? ['별거 아니야~', '응응ㅎㅎ', '괜찮아!'] : ['별거 아니에요~', '네네ㅎㅎ', '괜찮아요!'],
       'reaction': isCasual ? ['응응', '그래', 'ㅇㅇ'] : ['네네', '그래요', '맞아요'],
       'compliment': isCasual ? ['고마워ㅎㅎ', '헤헤', '부끄럽네'] : ['고마워요ㅎㅎ', '헤헤', '부끄럽네요'],
@@ -941,6 +985,164 @@ class ChatOrchestrator {
     }
     
     return filtered;
+  }
+  
+  /// 이전 대화와의 맥락 연관성 분석
+  String? _analyzeContextRelevance({
+    required String userMessage,
+    required List<Message> chatHistory,
+    required MessageAnalysis messageAnalysis,
+  }) {
+    if (chatHistory.isEmpty) return null;
+    
+    // 최근 대화 분석 (최대 5개)
+    final recentMessages = chatHistory.reversed.take(5).toList();
+    final recentTopics = <String>[];
+    final List<String> contextHints = [];
+    
+    // 최근 대화의 키워드 수집
+    for (final msg in recentMessages) {
+      final keywords = _extractKeywords(msg.content.toLowerCase());
+      recentTopics.addAll(keywords);
+    }
+    
+    // 마지막 AI 메시지가 있는지 확인
+    Message? lastAIMessage;
+    Message? lastUserMessage;
+    
+    for (final msg in recentMessages) {
+      if (!msg.isFromUser && lastAIMessage == null) {
+        lastAIMessage = msg;
+      } else if (msg.isFromUser && lastUserMessage == null) {
+        lastUserMessage = msg;
+      }
+      
+      if (lastAIMessage != null && lastUserMessage != null) break;
+    }
+    
+    // 현재 메시지의 키워드와 비교
+    final currentKeywords = messageAnalysis.keywords;
+    final commonTopics = currentKeywords.where((k) => recentTopics.contains(k)).toList();
+    
+    // 맥락 연관성 판단
+    if (commonTopics.isEmpty && messageAnalysis.type == MessageType.question) {
+      // 이전 대화와 관련 없는 새로운 질문
+      if (_isAbruptTopicChange(userMessage, recentMessages)) {
+        contextHints.add('급격한 주제 변경 감지. 자연스럽게 전환하거나 이전 주제와 연결해서 답변하세요.');
+        
+        // 구체적인 전환 가이드 추가
+        if (lastAIMessage != null && lastAIMessage.content.contains('?')) {
+          contextHints.add('이전에 던진 질문("${lastAIMessage.content.substring(0, math.min(30, lastAIMessage.content.length))}...")에 대한 답변을 받지 못했는데 새로운 주제로 넘어가려 합니다.');
+        }
+      }
+    }
+    
+    // 특정 주제 감지 및 가이드
+    if (userMessage.contains('드라마') || userMessage.contains('웹툰') || userMessage.contains('영화')) {
+      contextHints.add('드라마/웹툰/영화 관련 대화. 호기심을 보이고 자연스럽게 감상을 물어보세요.');
+    }
+    
+    // 직접적인 질문에는 직접적인 답변 필요
+    if (_isDirectQuestion(userMessage)) {
+      contextHints.add('직접적인 질문에 대한 직접적인 답변 필요. 회피하지 말고 구체적으로 대답하세요.');
+      
+      // 특정 질문 타입에 대한 가이드
+      if (userMessage.contains('뭐하') || userMessage.contains('뭐해')) {
+        contextHints.add('"뭐해?" 질문에는 현재 하고 있는 일이나 상태를 구체적으로 답하세요.');
+      } else if (userMessage.contains('먼말') || userMessage.contains('무슨 말')) {
+        contextHints.add('"무슨 말이야?" 질문에는 이전 발언을 명확히 설명하거나 사과하세요.');
+      } else if (userMessage.contains('어디')) {
+        contextHints.add('위치 질문에는 가상의 장소나 활동 중인 곳을 답하세요.');
+      }
+    }
+    
+    // 질문에 대한 회피성 답변 방지
+    if (_isAvoidancePattern(userMessage)) {
+      contextHints.add('회피성 답변 금지. 모르는 경우 솔직하게 인정하고 관련 대화로 유도하세요.');
+    }
+    
+    // 반복적인 질문 패턴 감지
+    if (lastUserMessage != null && _calculateSimilarity(userMessage, lastUserMessage.content) > 0.8) {
+      contextHints.add('비슷한 질문이 반복됨. 이전 답변과 다른 관점이나 추가 정보를 제공하세요.');
+    }
+    
+    // 대화 흐름 유지 가이드
+    if (commonTopics.isNotEmpty) {
+      contextHints.add('공통 주제(${commonTopics.take(3).join(", ")})를 자연스럽게 이어가세요.');
+    }
+    
+    // 맥락 힌트가 있으면 통합해서 반환
+    if (contextHints.isNotEmpty) {
+      return 'CONTEXT_GUIDE:\n${contextHints.map((h) => '- $h').join('\n')}';
+    }
+    
+    return null;
+  }
+  
+  /// 두 텍스트 간의 유사도 계산 (0.0 ~ 1.0)
+  double _calculateSimilarity(String text1, String text2) {
+    final words1 = text1.toLowerCase().split(RegExp(r'[\s,\.!?]+'));
+    final words2 = text2.toLowerCase().split(RegExp(r'[\s,\.!?]+'));
+    
+    final set1 = words1.toSet();
+    final set2 = words2.toSet();
+    
+    final intersection = set1.intersection(set2).length;
+    final union = set1.union(set2).length;
+    
+    if (union == 0) return 0.0;
+    return intersection / union;
+  }
+  
+  /// 급격한 주제 변경 감지
+  bool _isAbruptTopicChange(String currentMessage, List<Message> recentMessages) {
+    // 짧은 반응이면 주제 변경으로 보지 않음
+    if (currentMessage.length < 10) return false;
+    
+    // 인사말이면 주제 변경으로 보지 않음
+    if (_isGreeting(currentMessage.toLowerCase())) return false;
+    
+    // 최근 대화가 질문이었는데 관련 없는 질문을 하는 경우
+    if (recentMessages.isNotEmpty) {
+      final lastMessage = recentMessages.first;
+      if (!lastMessage.isFromUser && lastMessage.content.contains('?')) {
+        // AI가 질문했는데 사용자가 다른 질문으로 응답
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 회피성 패턴 감지
+  bool _isAvoidancePattern(String message) {
+    final avoidanceKeywords = [
+      '모르겠', '그런 건', '다른 이야기', '나중에', '개인적인',
+      '그런 복잡한', '재밌는 얘기', '다른 걸로', '말고', '그만',
+      '그런거 말고', '복잡해', '어려워', '패스', '스킵',
+      '다음에', '그런 것보다', '그런건', '그런걸'
+    ];
+    
+    final lower = message.toLowerCase();
+    return avoidanceKeywords.any((keyword) => lower.contains(keyword));
+  }
+  
+  /// 직접적인 질문인지 확인
+  bool _isDirectQuestion(String message) {
+    final directQuestions = [
+      RegExp(r'뭐\s*하(고\s*있|는|니|냐|어|여)'),  // 뭐하고 있어? 뭐해?
+      RegExp(r'(무슨|먼)\s*말'),  // 무슨 말이야? 먼말이야?
+      RegExp(r'어디(야|에\s*있|\s*가|\s*있)'),  // 어디야? 어디 있어?
+      RegExp(r'언제'),  // 언제?
+      RegExp(r'누구(야|랑|와)'),  // 누구야? 누구랑?
+      RegExp(r'왜'),  // 왜?
+      RegExp(r'어떻게'),  // 어떻게?
+      RegExp(r'얼마나'),  // 얼마나?
+      RegExp(r'몇\s*(개|명|시|살)'),  // 몇 개? 몇 명? 몇 시?
+    ];
+    
+    final lower = message.toLowerCase();
+    return directQuestions.any((pattern) => pattern.hasMatch(lower));
   }
 }
 

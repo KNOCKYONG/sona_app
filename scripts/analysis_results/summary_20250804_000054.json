@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250804_000054",
+  "total_reports_analyzed": 1,
+  "average_coherence_score": 61.11,
+  "critical_issues_count": 0,
+  "high_issues_count": 2,
+  "personas_with_issues": {
+    "지윤": {
+      "total_conversations": 1,
+      "avg_coherence_score": 61.11,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 3
+      }
+    }
+  }
+}

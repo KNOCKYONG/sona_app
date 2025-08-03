@@ -9,14 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sona_app/main.dart';
 import 'package:sona_app/services/theme/theme_service.dart';
+import 'package:sona_app/services/locale_service.dart';
 
 void main() {
   testWidgets('App launches successfully', (WidgetTester tester) async {
-    // Create a mock theme service
+    // Create mock services
     final themeService = ThemeService();
+    final localeService = LocaleService();
     
     // Build our app and trigger a frame.
-    await tester.pumpWidget(SonaApp(themeService: themeService));
+    await tester.pumpWidget(SonaApp(
+      themeService: themeService,
+      localeService: localeService,
+    ));
 
     // Verify that the app launches (splash screen should be shown)
     expect(find.byType(MaterialApp), findsOneWidget);

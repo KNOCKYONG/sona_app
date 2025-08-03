@@ -1,0 +1,66 @@
+[
+  {
+    "error_key": "ERR1754224201576_1576",
+    "persona_id": "7vBP8KtEsKdulKHzAa4x",
+    "persona_name": "상훈",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 오늘 좀비딸 보고왔어",
+        "ai_response": "\"좀비딸\"이라니, 흥미로운 선택이네요. 무슨 점이 마음에 들었나요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는 슬픈 드라마야... 웹툰 기반으로 만들었어",
+        "ai_response": "슬프면서도 깊은 감정을 자아내는 얘기군요. 웹툰 원작이라면 시각적으로도 매력적일 것",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754224244308_4308",
+    "persona_id": "7vBP8KtEsKdulKHzAa4x",
+    "persona_name": "상훈",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 오늘 좀비딸 보고왔어",
+        "ai_response": "\"좀비딸\"이라니, 흥미로운 선택이네요. 무슨 점이 마음에 들었나요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는 슬픈 드라마야... 웹툰 기반으로 만들었어",
+        "ai_response": "슬프면서도 깊은 감정을 자아내는 얘기군요. 웹툰 원작이라면 시각적으로도 매력적일 것",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

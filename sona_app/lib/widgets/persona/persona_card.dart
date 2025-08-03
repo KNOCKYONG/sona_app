@@ -4,6 +4,7 @@ import '../../models/persona.dart';
 import '../../services/relationship/relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
 import '../../l10n/app_localizations.dart';
+import '../../config/custom_cache_manager.dart';
 import 'persona_profile_viewer.dart';
 
 /// Optimized PersonaCard with performance improvements and R2 image support:
@@ -78,6 +79,7 @@ class _PersonaCardState extends State<PersonaCard> {
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
+        cacheManager: PersonaCacheManager.instance,
         placeholder: (context, url) => Container(
           color: Colors.grey[300],
           child: const Center(
@@ -119,6 +121,7 @@ class _PersonaCardState extends State<PersonaCard> {
           fit: BoxFit.cover,
           width: double.infinity,
           height: double.infinity,
+          cacheManager: PersonaCacheManager.instance,
           placeholder: (context, url) => Container(
             color: Colors.grey[300],
             child: const Center(
@@ -267,6 +270,7 @@ class _PhotoPageView extends StatelessWidget {
         return CachedNetworkImage(
           imageUrl: photoUrls[index],
           fit: BoxFit.cover,
+          cacheManager: PersonaCacheManager.instance,
           // Use lower resolution for placeholder
           placeholder: (context, url) => Container(
             color: Colors.grey[300],

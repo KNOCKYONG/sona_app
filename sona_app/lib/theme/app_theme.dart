@@ -481,7 +481,7 @@ class ModernCard extends StatelessWidget {
               color: Theme.of(context).cardTheme.color ?? Colors.white,
               borderRadius: BorderRadius.circular(borderRadius ?? 20),
               boxShadow: boxShadow ?? (Theme.of(context).brightness == Brightness.dark 
-                ? [BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 3))]
+                ? [BoxShadow(color: Colors.black.withValues(alpha: 0.3), blurRadius: 10, offset: const Offset(0, 3))]
                 : AppTheme.softShadow),
             ),
             child: child,
@@ -590,7 +590,7 @@ class _ModernIconButtonState extends State<ModernIconButton>
                 BoxShadow(
                   color: (widget.color ?? (Theme.of(context).brightness == Brightness.dark 
                     ? AppTheme.darkPrimaryColor 
-                    : AppTheme.primaryColor)).withOpacity(0.2),
+                    : AppTheme.primaryColor)).withValues(alpha: 0.2),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui';
-import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:provider/provider.dart';
@@ -12,10 +10,9 @@ import 'firebase_options.dart';
 import 'screens/splash_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/welcome_screen.dart';
-import 'screens/persona_selection_screen.dart';
+import 'screens/image_preload_screen.dart';
+import 'screens/refresh_download_screen.dart';
 import 'screens/chat_screen.dart';
-import 'screens/chat_list_screen.dart';
-import 'screens/profile_screen.dart';
 import 'screens/privacy_policy_screen.dart';
 import 'screens/terms_of_service_screen.dart';
 import 'screens/admin_quality_dashboard_screen.dart';
@@ -31,12 +28,10 @@ import 'services/persona/persona_service.dart';
 import 'services/chat/chat_service.dart';
 import 'services/purchase/subscription_service.dart';
 import 'services/purchase/purchase_service.dart';
-import 'services/purchase/mock_purchase_service.dart';
 import 'services/storage/cache_manager.dart';
 import 'services/theme/theme_service.dart';
 import 'theme/app_theme.dart';
 import 'core/preferences_manager.dart';
-import 'core/constants.dart';
 import 'l10n/app_localizations.dart';
 import 'services/locale_service.dart';
 
@@ -172,11 +167,13 @@ class SonaApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const LoginScreen(),
           '/welcome': (context) => const WelcomeScreen(),
+          '/image-preload': (context) => const ImagePreloadScreen(),
           '/main': (context) {
             final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
             return MainNavigationScreen(initialIndex: args?['initialIndex'] ?? 0);
           },
           '/persona-selection': (context) => const MainNavigationScreen(),
+          '/refresh-download': (context) => const RefreshDownloadScreen(),
           '/chat': (context) => const ChatScreen(),
           '/chat-list': (context) => const MainNavigationScreen(initialIndex: 1),
           '/profile': (context) => const MainNavigationScreen(),

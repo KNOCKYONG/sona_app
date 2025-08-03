@@ -48,6 +48,7 @@ class OpenAIService {
     String? userNickname,
     int? userAge,
     bool isCasualSpeech = false,
+    String? contextHint,
   }) async {
     // 성능 최적화를 위한 요청 큐잉
     final request = _PendingRequest(
@@ -58,6 +59,7 @@ class OpenAIService {
       userNickname: userNickname,
       userAge: userAge,
       isCasualSpeech: isCasualSpeech,
+      contextHint: contextHint,
       completer: Completer<String>(),
     );
     
@@ -149,6 +151,7 @@ class OpenAIService {
       userNickname: request.userNickname,
       userAge: request.userAge,
       isCasualSpeech: request.isCasualSpeech,
+      contextHint: request.contextHint,
     );
     
     // 토큰 최적화된 메시지 구성
@@ -445,6 +448,7 @@ class _PendingRequest {
   final String? userNickname;
   final int? userAge;
   final bool isCasualSpeech;
+  final String? contextHint;
   final Completer<String> completer;
 
   _PendingRequest({
@@ -455,6 +459,7 @@ class _PendingRequest {
     this.userNickname,
     this.userAge,
     this.isCasualSpeech = false,
+    this.contextHint,
     required this.completer,
   });
 }

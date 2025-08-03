@@ -16,11 +16,21 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Firebase 초기화
 try:
-    cred = credentials.Certificate('firebase-service-account-key.json')
+    # 상위 디렉토리에서 서비스 계정 키 파일 찾기
+    service_account_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'firebase-service-account-key.json')
+    if not os.path.exists(service_account_path):
+        # scripts 폴더 내에서 찾기
+        service_account_path = 'firebase-service-account-key.json'
+    
+    cred = credentials.Certificate(service_account_path)
     firebase_admin.initialize_app(cred)
 except ValueError:
     # 이미 초기화된 경우
     pass
+except FileNotFoundError:
+    print("Error: firebase-service-account-key.json 파일을 찾을 수 없습니다.")
+    print("프로젝트 루트 또는 scripts 폴더에 파일을 배치해주세요.")
+    sys.exit(1)
 
 db = firestore.client()
 

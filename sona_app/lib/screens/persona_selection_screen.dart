@@ -11,6 +11,7 @@ import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/storage/cache_manager.dart';
+import '../services/cache/image_preload_service.dart';
 import '../models/persona.dart';
 import '../models/app_user.dart';
 import '../widgets/persona/persona_card.dart';
@@ -33,7 +34,7 @@ class PersonaSelectionScreen extends StatefulWidget {
 }
 
 class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   final CardSwiperController _cardController = CardSwiperController();
   late AnimationController _heartAnimationController;
   late AnimationController _passAnimationController;
@@ -54,6 +55,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   void initState() {
     super.initState();
     
+    // Add observer for app lifecycle
+    WidgetsBinding.instance.addObserver(this);
+    
     _heartAnimationController = AnimationController(
       duration: const Duration(milliseconds: 300),
       vsync: this,
@@ -64,10 +68,82 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       vsync: this,
     );
     
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // Check for daily refresh first
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      await personaService.checkAndPerformDailyRefresh();
+      
       _loadPersonas();
       _checkFirstTimeUser();
     });
+  }
+  
+  @override
+  void dispose() {
+    // Remove observer
+    WidgetsBinding.instance.removeObserver(this);
+    
+    // 플래그 리셋
+    _isPreparingCards = false;
+    
+    // 애니메이션 컨트롤러를 먼저 정리
+    _heartAnimationController.stop();
+    _passAnimationController.stop();
+    _heartAnimationController.dispose();
+    _passAnimationController.dispose();
+    
+    // 카드 컨트롤러는 마지막에 정리
+    try {
+      _cardController.dispose();
+    } catch (e) {
+      // CardSwiper dispose 중 발생하는 오류 무시
+      debugPrint('CardSwiper dispose error (ignored): $e');
+    }
+    
+    super.dispose();
+  }
+  
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // App resumed from background - check if daily refresh is needed
+      debugPrint('🔄 App resumed - checking for daily refresh');
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      personaService.checkAndPerformDailyRefresh().then((_) {
+        // Reload personas if refresh occurred
+        _loadPersonas();
+      });
+      
+      // 🆕 백그라운드에서 새로운 이미지 체크
+      _checkForNewImagesInBackground();
+    }
+  }
+  
+  /// 백그라운드에서 새로운 이미지 체크
+  Future<void> _checkForNewImagesInBackground() async {
+    try {
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      final imagePreloadService = ImagePreloadService.instance;
+      
+      // R2 이미지가 있는 페르소나 목록
+      final personasWithImages = personaService.allPersonas
+          .where((p) => _hasR2Image(p))
+          .toList();
+      
+      if (personasWithImages.isEmpty) return;
+      
+      // 새로운 이미지 체크
+      final hasNewImages = await imagePreloadService.hasNewImages(personasWithImages);
+      
+      if (hasNewImages) {
+        debugPrint('🆕 New images detected in background! Downloading...');
+        // 백그라운드에서 조용히 다운로드
+        await imagePreloadService.preloadNewImages(personasWithImages);
+        debugPrint('✅ Background image download complete');
+      }
+    } catch (e) {
+      debugPrint('❌ Error checking for new images in background: $e');
+    }
   }
   
   Future<void> _checkFirstTimeUser() async {
@@ -365,27 +441,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     }
   }
 
-  @override
-  void dispose() {
-    // 플래그 리셋
-    _isPreparingCards = false;
-    
-    // 애니메이션 컨트롤러를 먼저 정리
-    _heartAnimationController.stop();
-    _passAnimationController.stop();
-    _heartAnimationController.dispose();
-    _passAnimationController.dispose();
-    
-    // 카드 컨트롤러는 마지막에 정리
-    try {
-      _cardController.dispose();
-    } catch (e) {
-      // CardSwiper dispose 중 발생하는 오류 무시
-      debugPrint('CardSwiper dispose error (ignored): $e');
-    }
-    
-    super.dispose();
-  }
 
   bool _onSwipe(int previousIndex, int? currentIndex, CardSwiperDirection direction) {
     // 스와이프가 진행 중이면 무시
@@ -447,6 +502,31 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     });
     
     return true; // Always allow swipe to proceed
+  }
+
+  /// Check if persona has valid R2 image
+  bool _hasR2Image(Persona persona) {
+    if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
+      return false;
+    }
+    
+    // Check if any value in the map contains R2 domains
+    final r2Pattern = RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
+    
+    bool checkMap(Map<String, dynamic> map) {
+      for (final value in map.values) {
+        if (value is String && r2Pattern.hasMatch(value)) {
+          return true;
+        } else if (value is Map) {
+          if (checkMap(Map<String, dynamic>.from(value))) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    
+    return checkMap(persona.imageUrls!);
   }
 
   void _onPersonaLiked(Persona persona, {bool isSuperLike = false}) async {
@@ -1618,29 +1698,43 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.schedule,
-                    size: 80,
-                    color: Colors.grey,
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    '모든 소나를 확인했습니다!',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFF6B9D),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    '24시간 후에 다시 만날 수 있어요.\n${personaService.waitingPersonasCount}명의 소나가 대기 중입니다.',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
+                  if (!personaService.isValidatingR2) ...[
+                    const Icon(
+                      Icons.schedule,
+                      size: 80,
                       color: Colors.grey,
                     ),
-                  ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      '모든 소나를 확인했습니다!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFF6B9D),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '24시간 후에 다시 만날 수 있어요.\n${personaService.waitingPersonasCount}명의 소나가 대기 중입니다.',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ] else ...[
+                    const CircularProgressIndicator(
+                      color: Color(0xFFFF6B9D),
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      '카드 로딩 중...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 30),
                   // 새로고침 버튼
                   Container(
@@ -1680,13 +1774,26 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                 _heartAnimationController.stop();
                                 _passAnimationController.stop();
                                 
-                                // 스와이프한 페르소나 초기화
+                                // 새로운 이미지가 있는지 확인
                                 final personaService = Provider.of<PersonaService>(context, listen: false);
-                                await personaService.resetSwipedPersonas();
+                                final imagePreloadService = ImagePreloadService.instance;
                                 
-                                // 페이지 새로고침
+                                // R2 이미지가 있는 페르소나 목록
+                                final personasWithImages = personaService.allPersonas
+                                    .where((p) => personaService.isValidatingR2 || _hasR2Image(p))
+                                    .toList();
+                                
+                                final hasNewImages = await imagePreloadService.hasNewImages(personasWithImages);
+                                
                                 if (mounted) {
-                                  Navigator.of(context).pushReplacementNamed('/persona-selection');
+                                  if (hasNewImages) {
+                                    // 새로운 이미지가 있으면 다운로드 화면으로 이동
+                                    Navigator.of(context).pushReplacementNamed('/refresh-download');
+                                  } else {
+                                    // 새로운 이미지가 없으면 바로 새로고침
+                                    await personaService.resetSwipedPersonas();
+                                    Navigator.of(context).pushReplacementNamed('/persona-selection');
+                                  }
                                 }
                               } else {
                                 // 하트 부족 메시지
@@ -1768,14 +1875,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             );
           }
 
-          return Column(
+          return Stack(
             children: [
-              // 메인 카드 스택
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: _cardItems.isNotEmpty
-                    ? CardSwiper(
+              Column(
+                children: [
+                  // 메인 카드 스택
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _cardItems.isNotEmpty
+                        ? CardSwiper(
                         key: ValueKey(_cardsKey), // 안정적인 키 사용
                         controller: _cardController,
                         cardsCount: _cardItems.length,
@@ -1940,11 +2049,50 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         );
                       },
                     ),
-                  ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            // R2 validation indicator
+            if (personaService.isValidatingR2)
+              Positioned(
+                bottom: 100,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          '더 많은 카드 로딩 중...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
-            ],
-          );
+          ],
+        );
         },
       ),
     );

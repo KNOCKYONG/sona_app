@@ -19,6 +19,11 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+  
+  // 진행률 관련 변수
+  double _progress = 0.0;
+  String _loadingMessage = '';
+  bool _showProgress = false;
 
   @override
   void initState() {
@@ -49,10 +54,22 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _startAnimation() async {
+    // 애니메이션 시작과 동시에 진행률 표시
+    setState(() {
+      _showProgress = true;
+      _loadingMessage = '앱을 시작하고 있어요';
+      _progress = 0.1;
+    });
+    
     await _animationController.forward();
     
     if (mounted) {
       debugPrint('🚀 [SplashScreen] Animation completed, starting auth check...');
+      
+      setState(() {
+        _progress = 0.2;
+        _loadingMessage = '사용자 정보 확인 중';
+      });
       
       final authService = Provider.of<AuthService>(context, listen: false);
       final userService = Provider.of<UserService>(context, listen: false);
@@ -61,11 +78,19 @@ class _SplashScreenState extends State<SplashScreen>
       try {
         // Firebase Auth 상태가 초기화될 때까지 대기
         debugPrint('🚀 [SplashScreen] Waiting for Firebase Auth initialization...');
+        setState(() {
+          _progress = 0.3;
+          _loadingMessage = '서버 연결 중';
+        });
         await Future.delayed(const Duration(seconds: 1));
         
         // Auth 상태가 아직 로드되지 않았으면 추가 대기
         if (authService.user == null) {
           debugPrint('🚀 [SplashScreen] Auth user is null, waiting for auth state...');
+          setState(() {
+            _progress = 0.4;
+            _loadingMessage = '인증 확인 중';
+          });
           await authService.waitForAuthState();
         }
         
@@ -75,6 +100,11 @@ class _SplashScreenState extends State<SplashScreen>
         if (authService.isAuthenticated && authService.currentUser != null) {
           debugPrint('🔐 [SplashScreen] User is authenticated: ${authService.currentUser!.uid}');
           
+          setState(() {
+            _progress = 0.5;
+            _loadingMessage = '프로필 불러오는 중';
+          });
+          
           // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌 (최대 5초)
           int retries = 0;
           const maxRetries = 25; // 200ms * 25 = 5초
@@ -83,6 +113,12 @@ class _SplashScreenState extends State<SplashScreen>
           while (userService.currentUser == null && retries < maxRetries) {
             await Future.delayed(const Duration(milliseconds: 200));
             retries++;
+            
+            // 진행률 업데이트 (0.5 -> 0.8)
+            setState(() {
+              _progress = 0.5 + (0.3 * (retries / maxRetries));
+            });
+            
             if (retries % 5 == 0) { // 1초마다 로그 출력
               debugPrint('🔐 [SplashScreen] Still waiting for user data... ($retries/$maxRetries)');
             }
@@ -94,9 +130,21 @@ class _SplashScreenState extends State<SplashScreen>
             debugPrint('🔐 [SplashScreen] Setting user info for PersonaService: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
             personaService.setCurrentUser(userService.currentUser!);
             
+            setState(() {
+              _progress = 0.9;
+              _loadingMessage = '페르소나 준비 중';
+            });
+            
             // PersonaService 초기화
             debugPrint('🔐 [SplashScreen] Initializing PersonaService...');
             await personaService.initialize(userId: authService.currentUser!.uid);
+            
+            setState(() {
+              _progress = 1.0;
+              _loadingMessage = '완료!';
+            });
+            
+            await Future.delayed(const Duration(milliseconds: 300));
             
             debugPrint('✅ [SplashScreen] All services initialized, navigating to main screen');
             Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
@@ -108,6 +156,11 @@ class _SplashScreenState extends State<SplashScreen>
         } else {
           debugPrint('🔐 [SplashScreen] User is not authenticated, showing welcome dialog');
           // 로그인되지 않은 경우
+          setState(() {
+            _progress = 1.0;
+            _loadingMessage = '환영합니다!';
+          });
+          await Future.delayed(const Duration(milliseconds: 500));
           _showWelcomeDialog();
         }
       } catch (e) {
@@ -229,17 +282,55 @@ class _SplashScreenState extends State<SplashScreen>
   void _signInAnonymously() async {
     final authService = Provider.of<AuthService>(context, listen: false);
     
+    // 진행률 초기화
+    setState(() {
+      _progress = 0.1;
+      _loadingMessage = '익명 로그인 중';
+      _showProgress = true;
+    });
+    
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return const Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFFFF6B9D),
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: Container(
+            color: Colors.black54,
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: Color(0xFFFF6B9D),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      '로그인 중...',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Color(0xFFFF6B9D),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
         );
       },
     );
+
+    setState(() {
+      _progress = 0.5;
+      _loadingMessage = '계정 생성 중';
+    });
 
     final success = await authService.signInAnonymously();
     
@@ -247,6 +338,11 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.of(context).pop(); // 로딩 다이얼로그 닫기
       
       if (success) {
+        setState(() {
+          _progress = 1.0;
+          _loadingMessage = '완료!';
+        });
+        await Future.delayed(const Duration(milliseconds: 300));
         Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -304,13 +400,104 @@ class _SplashScreenState extends State<SplashScreen>
                           fontWeight: FontWeight.w300,
                         ),
                       ),
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 60),
                       
-                      // 로딩 인디케이터
-                      const CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                        strokeWidth: 2,
-                      ),
+                      // 진행률 표시
+                      if (_showProgress) ...[
+                        Container(
+                          width: 280,
+                          child: Column(
+                            children: [
+                              // 진행률 바 컨테이너
+                              Container(
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Colors.white.withOpacity(0.3),
+                                  border: Border.all(
+                                    color: Colors.white.withOpacity(0.5),
+                                    width: 1,
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(7),
+                                  child: Stack(
+                                    children: [
+                                      // 진행률 바
+                                      AnimatedContainer(
+                                        duration: const Duration(milliseconds: 300),
+                                        width: 278 * _progress,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.white.withOpacity(0.9),
+                                              Colors.white,
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                          ),
+                                        ),
+                                      ),
+                                      // 반짝이는 효과
+                                      if (_progress > 0 && _progress < 1)
+                                        Positioned(
+                                          left: (_progress * 278) - 30,
+                                          child: Container(
+                                            width: 30,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Colors.white.withOpacity(0),
+                                                  Colors.white.withOpacity(0.6),
+                                                  Colors.white.withOpacity(0),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              // 퍼센트 표시
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Text(
+                                  '${(_progress * 100).toStringAsFixed(0)}%',
+                                  style: const TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 1.5,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              // 로딩 메시지
+                              Text(
+                                _loadingMessage,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else
+                        // 진행률 표시 전 로딩 인디케이터
+                        const CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 2,
+                        ),
                     ],
                   ),
                 ),

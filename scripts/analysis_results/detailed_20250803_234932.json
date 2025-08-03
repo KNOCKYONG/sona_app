@@ -1,0 +1,75 @@
+[
+  {
+    "error_key": "ERR1754232300936_936",
+    "persona_id": "lTeLKtF3vSiPrV7au13c",
+    "persona_name": "나나",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나도 못봤어ㅋㅋㅋ",
+        "ai_response": "아하, 그럼 둘이서 같이 찾아보면 좋겠네요. 다른 추천작은 무슨 거 있을까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754226107357_7357",
+    "persona_id": "lTeLKtF3vSiPrV7au13c",
+    "persona_name": "나나",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 6,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나도 못봤어ㅋㅋㅋ",
+        "ai_response": "아하, 그럼 둘이서 같이 찾아보면 좋겠네요. 다른 추천작은 무슨 거 있을까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

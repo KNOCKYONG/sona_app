@@ -18,6 +18,9 @@ class Persona {
   // 추천 관련 필드
   final List<String>? topics; // 페르소나가 다룰 수 있는 주제들
   final List<String>? keywords; // 페르소나를 설명하는 키워드들
+  
+  // R2 이미지 유효성 캐싱 필드
+  final bool? hasValidR2Image; // Firebase에 저장된 R2 이미지 유효성
 
   Persona({
     required this.id,
@@ -35,6 +38,7 @@ class Persona {
     this.imageUrls, // 새로운 이미지 URL 구조
     this.topics, // 주제들
     this.keywords, // 키워드들
+    this.hasValidR2Image, // R2 이미지 유효성
   }) : createdAt = createdAt ?? DateTime.now();
 
   // 관계 상태 확인 메서드
@@ -158,26 +162,17 @@ class Persona {
     final urls = <String>[];
     
     if (imageUrls != null) {
-      // 디버그 로그 추가
-      print('[DEBUG] getAllImageUrls - name: $name, size: $size');
-      print('[DEBUG] imageUrls keys: ${imageUrls!.keys.toList()}');
-      
       // 우선순위 1: mainImageUrls 구조 확인 (여러 이미지 지원)
       if (imageUrls!.containsKey('mainImageUrls')) {
-        print('[DEBUG] Found mainImageUrls structure');
-        
         final mainUrls = imageUrls!['mainImageUrls'] as Map<String, dynamic>?;
         if (mainUrls != null && mainUrls.containsKey(size)) {
           urls.add(mainUrls[size]);
-          print('[DEBUG] Added main image: ${mainUrls[size]}');
         }
         
         // 추가 이미지들 확인 - additionalImageUrls가 있는 경우
         if (imageUrls!.containsKey('additionalImageUrls')) {
           final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
           if (additionalUrls != null) {
-            print('[DEBUG] additionalImageUrls keys: ${additionalUrls.keys.toList()}');
-            
             // image1, image2, ... 순서로 정렬
             final sortedKeys = additionalUrls.keys.toList()
               ..sort((a, b) {
@@ -191,7 +186,6 @@ class Persona {
               final urlMap = additionalUrls[key] as Map<String, dynamic>;
               if (urlMap.containsKey(size)) {
                 urls.add(urlMap[size]);
-                print('[DEBUG] Added additional image $key: ${urlMap[size]}');
               }
             }
           }
@@ -199,20 +193,15 @@ class Persona {
       }
       // 우선순위 2: 최상위 size 키만 있는 경우 (단일 이미지)
       else if (imageUrls!.containsKey(size)) {
-        print('[DEBUG] Found direct size key structure');
         final sizeUrls = imageUrls![size] as Map<String, dynamic>?;
         if (sizeUrls != null && sizeUrls.containsKey('jpg')) {
           urls.add(sizeUrls['jpg'] as String);
-          print('[DEBUG] Added single image: ${sizeUrls['jpg']}');
         }
       }
     }
     
-    print('[DEBUG] Total images found: ${urls.length}');
-    
     // 폴백: 기존 photoUrls 사용
     if (urls.isEmpty && photoUrls.isNotEmpty) {
-      print('[DEBUG] Falling back to photoUrls');
       return photoUrls;
     }
     
@@ -235,6 +224,7 @@ class Persona {
       'imageUrls': imageUrls, // 새로운 이미지 URL 구조
       'topics': topics,
       'keywords': keywords,
+      'hasValidR2Image': hasValidR2Image,
       if (matchedAt != null) 'matchedAt': matchedAt!.toIso8601String(),
     };
   }
@@ -275,6 +265,7 @@ class Persona {
       matchedAt: json['matchedAt'] != null 
         ? DateTime.parse(json['matchedAt'])
         : null,
+      hasValidR2Image: json['hasValidR2Image'] ?? null,
     );
   }
 
@@ -292,6 +283,7 @@ class Persona {
     List<String>? topics,
     List<String>? keywords,
     DateTime? matchedAt,
+    bool? hasValidR2Image,
   }) {
     return Persona(
       id: id,
@@ -309,6 +301,7 @@ class Persona {
       matchedAt: matchedAt ?? this.matchedAt,
       topics: topics ?? this.topics,
       keywords: keywords ?? this.keywords,
+      hasValidR2Image: hasValidR2Image ?? this.hasValidR2Image,
     );
   }
 }

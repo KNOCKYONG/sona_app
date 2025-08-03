@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'language_settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../services/auth/auth_service.dart';
 import '../services/theme/theme_service.dart';
+import '../services/cache/image_preload_service.dart';
+import '../config/custom_cache_manager.dart';
 import '../utils/account_deletion_dialog.dart';
 import '../l10n/app_localizations.dart';
 
@@ -164,6 +167,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: localizations.purchasePolicy,
               onTap: () {
                 Navigator.pushNamed(context, '/purchase-policy');
+              },
+            ),
+            
+            // 저장소 관리
+            _buildSectionTitle('저장소 관리'),
+            _buildMenuItem(
+              icon: Icons.storage_outlined,
+              title: '이미지 캐시 관리',
+              subtitle: '페르소나 이미지 캐시를 관리합니다',
+              onTap: () {
+                _showCacheManagementDialog();
               },
             ),
             
@@ -423,5 +437,177 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+  }
+
+  void _showCacheManagementDialog() async {
+    // 캐시 크기 계산 중 로딩 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // 캐시 크기 계산
+    int cacheSize = 0;
+    try {
+      // 캐시된 이미지 개수로 대략적인 크기 추정
+      final prefs = await SharedPreferences.getInstance();
+      final preloadedImages = prefs.getStringList('preloaded_images') ?? [];
+      
+      // 이미지당 평균 크기 추정
+      // thumb: 50KB, small: 150KB, medium: 400KB
+      final avgSizePerImage = (50 + 150 + 400) * 1024; // 600KB per persona
+      
+      // 페르소나 수 계산 (각 페르소나당 3개 이미지)
+      final personaCount = preloadedImages.length ~/ 3;
+      cacheSize = personaCount * avgSizePerImage;
+      
+      // 최소값 설정
+      if (cacheSize == 0 && preloadedImages.isNotEmpty) {
+        cacheSize = preloadedImages.length * 200 * 1024; // 이미지당 200KB 평균
+      }
+    } catch (e) {
+      debugPrint('Error calculating cache size: $e');
+      // 대략적인 크기 추정
+      cacheSize = 50 * 1024 * 1024; // 기본값 50MB
+    }
+
+    // 로딩 다이얼로그 닫기
+    if (mounted) Navigator.pop(context);
+
+    // 캐시 관리 다이얼로그 표시
+    if (!mounted) return;
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text('이미지 캐시 관리'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.storage,
+              size: 48,
+              color: Color(0xFFFF6B9D),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '현재 캐시 크기',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              _formatBytes(cacheSize),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              '페르소나 이미지가 기기에 저장되어 있어 빠르게 로드됩니다.',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '캐시를 삭제하면 이미지를 다시 다운로드해야 합니다.',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.red[400],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _clearCache();
+            },
+            child: Text(
+              '캐시 삭제',
+              style: TextStyle(color: Colors.red[400]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+
+  String _formatBytes(int bytes) {
+    if (bytes == 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    final i = (bytes == 0) ? 0 : (bytes.bitLength - 1) ~/ 10;
+    
+    if (i >= sizes.length) {
+      return '${(bytes / (k * k * k)).toStringAsFixed(1)} GB';
+    }
+    
+    final divisor = i == 0 ? 1 : (i == 1 ? k : (i == 2 ? k * k : k * k * k));
+    return '${(bytes / divisor).toStringAsFixed(1)} ${sizes[i]}';
+  }
+
+  Future<void> _clearCache() async {
+    // 캐시 삭제 중 로딩 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      // 모든 캐시 삭제
+      await DefaultCacheManager().emptyCache();
+      await PersonaCacheManager.instance.emptyCache();
+      
+      // 이미지 프리로드 상태 초기화
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove('images_preloaded');
+      await prefs.remove('images_preload_date');
+
+      if (mounted) {
+        Navigator.pop(context); // 로딩 다이얼로그 닫기
+        
+        // 성공 메시지
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('이미지 캐시가 삭제되었습니다'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context); // 로딩 다이얼로그 닫기
+        
+        // 에러 메시지
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('캐시 삭제 중 오류가 발생했습니다: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

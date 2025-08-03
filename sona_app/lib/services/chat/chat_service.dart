@@ -11,7 +11,7 @@ import '../../helpers/firebase_helper.dart';
 import '../base/base_service.dart';
 import 'openai_service.dart';
 import 'natural_ai_service.dart';
-import 'chat_orchestrator.dart';
+import 'chat_orchestrator.dart' hide MessageType;
 import 'persona_relationship_cache.dart';
 import '../persona/persona_service.dart';
 import '../storage/local_storage_service.dart';

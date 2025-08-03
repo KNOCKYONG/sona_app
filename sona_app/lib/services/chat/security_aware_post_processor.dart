@@ -14,59 +14,15 @@ class SecurityAwarePostProcessor {
   }) {
     String processed = rawResponse;
     
-    // 1단계: MBTI별 응답 길이 제한 적용
-    processed = _enforceResponseLength(processed, persona.mbti);
-    
-    // 2단계: 기본적인 텍스트 정리
+    // 1단계: 기본적인 텍스트 정리
     processed = _cleanupText(processed);
     
-    // 3단계: 이모티콘 최적화 (한국어 스타일)
+    // 2단계: 이모티콘 최적화 (한국어 스타일)
     processed = _optimizeEmoticons(processed);
     
+    // 길이 제한은 ChatOrchestrator에서 메시지 분리로 처리
+    
     return processed;
-  }
-  
-  /// MBTI별 응답 길이 제한 적용
-  static String _enforceResponseLength(String text, String mbti) {
-    final responseLength = PersonaPromptBuilder.getMBTIResponseLength(mbti.toUpperCase());
-    
-    // 최대 길이를 초과하면 자연스러운 위치에서 자르기
-    if (text.length > responseLength.max) {
-      // 마지막 문장 부호나 공백에서 자르기
-      int cutIndex = responseLength.max;
-      
-      // 문장 부호 찾기
-      final punctuations = ['!', '?', '.', '~', 'ㅋ', 'ㅎ', 'ㅠ'];
-      int lastPuncIndex = -1;
-      
-      for (final punc in punctuations) {
-        final index = text.lastIndexOf(punc, cutIndex);
-        if (index > lastPuncIndex && index > responseLength.min) {
-          lastPuncIndex = index;
-        }
-      }
-      
-      if (lastPuncIndex > 0) {
-        // 문장 부호 뒤의 반복되는 문자들도 포함
-        cutIndex = lastPuncIndex + 1;
-        while (cutIndex < text.length && 
-               cutIndex < responseLength.max && 
-               (text[cutIndex] == text[lastPuncIndex] || text[cutIndex] == ' ')) {
-          cutIndex++;
-        }
-        text = text.substring(0, cutIndex).trim();
-      } else {
-        // 공백에서 자르기
-        final spaceIndex = text.lastIndexOf(' ', cutIndex);
-        if (spaceIndex > responseLength.min) {
-          text = text.substring(0, spaceIndex).trim() + '...';
-        } else {
-          text = text.substring(0, cutIndex).trim() + '...';
-        }
-      }
-    }
-    
-    return text;
   }
   
   /// 기본적인 텍스트 정리

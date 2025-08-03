@@ -104,15 +104,18 @@ class ChatOrchestrator {
         isCasualSpeech: isCasualSpeech,
       );
       
-      // 6단계: 간단한 후처리 (길이 제한, 텍스트 정리)
+      // 6단계: 간단한 후처리 (텍스트 정리만, 강제 자르기 제거)
       final processedResponse = SecurityAwarePostProcessor.processResponse(
         rawResponse: rawResponse,
         persona: completePersona,
         userNickname: userNickname,
       );
       
-      // 6단계: 감정 분석 및 점수 계산
-      final emotion = _analyzeEmotion(processedResponse);
+      // 7단계: 긴 응답 분리 처리
+      final responseContents = _splitLongResponse(processedResponse, completePersona.mbti);
+      
+      // 8단계: 감정 분석 및 점수 계산 (첫 번째 메시지 기준)
+      final emotion = _analyzeEmotion(responseContents.first);
       final scoreChange = await _calculateScoreChange(
         emotion: emotion,
         userMessage: userMessage,
@@ -121,13 +124,15 @@ class ChatOrchestrator {
       );
       
       return ChatResponse(
-        content: processedResponse,
+        content: responseContents.first,  // 기존 호환성
+        contents: responseContents,       // 새로운 멀티 메시지
         emotion: emotion,
         scoreChange: scoreChange,
         metadata: {
           'processingTime': DateTime.now().millisecondsSinceEpoch,
           'promptTokens': _estimateTokens(prompt),
           'responseTokens': _estimateTokens(processedResponse),
+          'messageCount': responseContents.length,
         },
       );
       
@@ -636,6 +641,94 @@ class ChatOrchestrator {
     return responseMap[mbti]?[type] ?? defaultResponses[type] ?? ['...'];
   }
   
+  /// 긴 응답을 자연스럽게 분리
+  List<String> _splitLongResponse(String response, String mbti) {
+    final responseLength = PersonaPromptBuilder.getMBTIResponseLength(mbti.toUpperCase());
+    
+    // 응답이 최대 길이를 넘지 않으면 그대로 반환
+    if (response.length <= responseLength.max) {
+      return [response];
+    }
+    
+    // 자연스러운 분리점 찾기
+    final List<String> messages = [];
+    String remaining = response;
+    
+    while (remaining.isNotEmpty) {
+      // 현재 조각의 최대 길이
+      int maxLength = messages.isEmpty ? responseLength.max : responseLength.max;
+      
+      if (remaining.length <= maxLength) {
+        messages.add(remaining.trim());
+        break;
+      }
+      
+      // 자연스러운 분리점 찾기 (문장 부호, 줄바꿈 등)
+      int splitIndex = _findNaturalSplitPoint(remaining, maxLength);
+      
+      if (splitIndex > 0 && splitIndex <= maxLength) {
+        messages.add(remaining.substring(0, splitIndex).trim());
+        remaining = remaining.substring(splitIndex).trim();
+      } else {
+        // 자연스러운 분리점을 찾지 못하면 공백에서 분리
+        int spaceIndex = remaining.lastIndexOf(' ', maxLength);
+        if (spaceIndex > maxLength * 0.5) {
+          messages.add(remaining.substring(0, spaceIndex).trim());
+          remaining = remaining.substring(spaceIndex).trim();
+        } else {
+          // 공백도 적절하지 않으면 강제 분리
+          messages.add(remaining.substring(0, maxLength).trim());
+          remaining = remaining.substring(maxLength).trim();
+        }
+      }
+      
+      // 너무 많은 메시지로 분리되지 않도록 제한
+      if (messages.length >= 3) {
+        messages[messages.length - 1] = messages[messages.length - 1] + ' ' + remaining;
+        break;
+      }
+    }
+    
+    return messages;
+  }
+  
+  /// 자연스러운 분리점 찾기
+  int _findNaturalSplitPoint(String text, int maxLength) {
+    // 우선순위: 마침표/물음표/느낌표 > 쉼표 > ㅋㅋ/ㅎㅎ/ㅠㅠ > 줄바꿈
+    final punctuations = [
+      ['.', '!', '?', '~'],           // 문장 끝
+      ['ㅋ', 'ㅎ', 'ㅠ'],              // 감정 표현
+      ['\n'],                         // 줄바꿈
+    ];
+    
+    for (final punctGroup in punctuations) {
+      int bestIndex = -1;
+      
+      for (final punct in punctGroup) {
+        int index = text.lastIndexOf(punct, maxLength);
+        
+        // 분리점이 너무 앞쪽이면 무시
+        if (index > maxLength * 0.5) {
+          // 반복되는 문자 뒤까지 포함
+          int endIndex = index + 1;
+          while (endIndex < text.length && endIndex < maxLength && text[endIndex] == punct) {
+            endIndex++;
+          }
+          
+          if (endIndex > bestIndex) {
+            bestIndex = endIndex;
+          }
+        }
+      }
+      
+      if (bestIndex > 0) {
+        return bestIndex;
+      }
+    }
+    
+    return -1;
+  }
+  
   /// 추임새에 대한 맞춤 응답
   List<String> _getExclamationResponses(String message, String mbti, bool isCasual) {
     final msg = message.toLowerCase();
@@ -742,19 +835,23 @@ class ChatOrchestrator {
 
 /// 채팅 응답 모델
 class ChatResponse {
-  final String content;
+  final List<String> contents;  // 여러 메시지로 나눌 수 있도록 변경
   final EmotionType emotion;
   final int scoreChange;
   final Map<String, dynamic>? metadata;
   final bool isError;
   
   ChatResponse({
-    required this.content,
+    required String content,  // 기존 API 호환성을 위해 유지
+    List<String>? contents,   // 새로운 멀티 메시지 지원
     required this.emotion,
     required this.scoreChange,
     this.metadata,
     this.isError = false,
-  });
+  }) : contents = contents ?? [content];  // contents가 없으면 content를 리스트로 변환
+  
+  // 편의 메서드: 첫 번째 콘텐츠 반환 (기존 코드 호환성)
+  String get content => contents.isNotEmpty ? contents.first : '';
 }
 
 /// 메시지 분석 결과

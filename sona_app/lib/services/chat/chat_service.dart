@@ -520,8 +520,8 @@ class ChatService extends BaseService {
       
       if (cachedResponse != null) {
         debugPrint('Using cached response for: $cacheKey');
-        await _sendSplitMessages(
-          content: cachedResponse.content,
+        await _sendMultipleMessages(
+          contents: [cachedResponse.content],  // Single content as array
           persona: persona,
           userId: userId,
           emotion: cachedResponse.emotion,
@@ -547,8 +547,8 @@ class ChatService extends BaseService {
         final emotion = EmotionType.sad;
         
         // Send the upset response
-        await _sendSplitMessages(
-          content: aiResponseContent,
+        await _sendMultipleMessages(
+          contents: [aiResponseContent],  // Single content as array
           persona: persona,
           userId: userId,
           emotion: emotion,
@@ -584,8 +584,8 @@ class ChatService extends BaseService {
           timestamp: DateTime.now(),
         ));
         
-        await _sendSplitMessages(
-          content: aiResponseContent,
+        await _sendMultipleMessages(
+          contents: [aiResponseContent],  // Single content as array
           persona: persona,
           userId: userId,
           emotion: emotion,
@@ -616,7 +616,6 @@ class ChatService extends BaseService {
       );
       
       // Handle Like system integration
-      String finalContent = response.content;
       int finalScoreChange = response.scoreChange;
       
       // Additional Like calculation if needed
@@ -634,22 +633,25 @@ class ChatService extends BaseService {
         finalScoreChange = likeResult.likeChange;
       }
       
-      // Add cooldown message if present
-      if (likeResult.message != null) {
-        finalContent = '${finalContent}\n\n${likeResult.message}';
+      // Process all contents from response
+      final allContents = List<String>.from(response.contents);
+      
+      // Add cooldown message if present to the last content
+      if (likeResult.message != null && allContents.isNotEmpty) {
+        allContents[allContents.length - 1] = '${allContents.last}\n\n${likeResult.message}';
       }
       
-      // Cache the response
+      // Cache the response (using the full content)
       _addToCache(cacheKey, _CachedResponse(
-        content: finalContent,
+        content: allContents.join(' '),  // Join for cache
         emotion: response.emotion,
         scoreChange: finalScoreChange,
         timestamp: DateTime.now(),
       ));
       
-      // Send response messages
-      await _sendSplitMessages(
-        content: finalContent,
+      // Send response messages using new contents array
+      await _sendMultipleMessages(
+        contents: allContents,
         persona: persona,
         userId: userId,
         emotion: response.emotion,
@@ -683,8 +685,8 @@ class ChatService extends BaseService {
       
       // Fallback response
       final fallbackResponse = _getFallbackResponse();
-      await _sendSplitMessages(
-        content: fallbackResponse,
+      await _sendMultipleMessages(
+        contents: [fallbackResponse],  // Single content as array
         persona: persona,
         userId: userId,
         emotion: EmotionType.neutral,
@@ -1612,6 +1614,70 @@ class ChatService extends BaseService {
     }
   }
 
+  /// 새로운 메서드: 여러 contents를 처리
+  Future<void> _sendMultipleMessages({
+    required List<String> contents,
+    required Persona persona,
+    required String userId,
+    EmotionType? emotion,
+    required int scoreChange,
+  }) async {
+    try {
+      for (int i = 0; i < contents.length; i++) {
+        final messagePart = contents[i];
+        final isLastMessage = i == contents.length - 1;
+        
+        // Natural typing delays between messages
+        if (i > 0) {
+          final charCount = messagePart.length;
+          int delay;
+          
+          if (charCount <= 20) {
+            delay = 300 + Random().nextInt(500);
+          } else if (charCount <= 40) {
+            delay = 800 + Random().nextInt(700);
+          } else {
+            delay = 1200 + Random().nextInt(800);
+          }
+          
+          if (messagePart.contains('음') || messagePart.contains('그') || messagePart.contains('...')) {
+            delay += 300 + Random().nextInt(400);
+          }
+          
+          await Future.delayed(Duration(milliseconds: delay));
+        }
+        
+        final aiMessage = Message(
+          id: _uuid.v4(),
+          personaId: persona.id,
+          content: messagePart,
+          type: MessageType.text,
+          isFromUser: false,
+          emotion: emotion,
+          relationshipScoreChange: isLastMessage ? scoreChange : null,
+          metadata: {
+            'isLastInSequence': isLastMessage,
+            'messageIndex': i,
+            'totalMessages': contents.length,
+          },
+          timestamp: DateTime.now(),
+        );
+        
+        _addMessageToList(persona.id, aiMessage);
+        
+        if (userId != '') {
+          _queueMessageForSaving(userId, persona.id, aiMessage);
+        } else {
+          await LocalStorageService.addTutorialMessage(aiMessage);
+        }
+        
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('Error sending multiple messages: $e');
+    }
+  }
+  
   Future<void> _sendSplitMessages({
     required String content,
     required Persona persona,

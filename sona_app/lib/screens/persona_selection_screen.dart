@@ -47,6 +47,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   List<Persona>? _lastPersonas; // 이전 페르소나 리스트 추적
   bool _isPreparingCards = false; // 카드 준비 중 플래그
   String _cardsKey = ''; // 안정적인 카드 키를 위한 변수
+  
+  // 이미지 프리로드 관련 상태
+  bool _isPreloadingImages = false;
+  double _preloadProgress = 0.0;
+  final _imagePreloadService = ImagePreloadService.instance;
   bool _isSwipeInProgress = false; // 스와이프 진행 중 플래그
   final Set<String> _processingPersonas = {}; // 처리 중인 페르소나 추적
   bool _isMatchDialogShowing = false; // 매칭 다이얼로그 표시 상태
@@ -69,9 +74,19 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       vsync: this,
     );
     
+    // 이미지 프리로드 진행 상태 구독
+    _imagePreloadService.progressStream.listen((progress) {
+      if (mounted) {
+        setState(() {
+          _preloadProgress = progress;
+        });
+      }
+    });
+    
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _loadPersonas();
       _checkFirstTimeUser();
+      _checkAndPreloadImages();
     });
   }
   
@@ -109,6 +124,60 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       
       // 🆕 백그라운드에서 새로운 이미지 체크
       _checkForNewImagesInBackground();
+    }
+  }
+  
+  /// 이미지 프리로드 확인 및 실행
+  Future<void> _checkAndPreloadImages() async {
+    try {
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      final personas = personaService.allPersonas.where((p) => _hasR2Image(p)).toList();
+      
+      if (personas.isEmpty) return;
+      
+      // 이미 프리로드가 완료되었는지 확인
+      final isCompleted = await _imagePreloadService.isPreloadCompleted();
+      
+      // 새로운 이미지가 있는지 확인
+      final hasNewImages = await _imagePreloadService.hasNewImages(personas);
+      
+      if (isCompleted && !hasNewImages) {
+        debugPrint('✅ All images already cached, no preloading needed');
+        return;
+      }
+      
+      if (hasNewImages) {
+        debugPrint('🆕 New images detected, starting incremental preload...');
+        
+        // 프리로드 시작 (증분 로딩만)
+        setState(() {
+          _isPreloadingImages = true;
+          _preloadProgress = 0.0;
+        });
+        
+        await _imagePreloadService.preloadNewImages(personas);
+        
+        setState(() {
+          _isPreloadingImages = false;
+        });
+      } else if (!isCompleted) {
+        // 첫 번째 로딩인 경우
+        setState(() {
+          _isPreloadingImages = true;
+          _preloadProgress = 0.0;
+        });
+        
+        await _imagePreloadService.preloadAllPersonaImages(personas);
+        
+        setState(() {
+          _isPreloadingImages = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('❌ Error preloading images: $e');
+      setState(() {
+        _isPreloadingImages = false;
+      });
     }
   }
   
@@ -230,8 +299,19 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     final filteredPersonas = personas.where((p) => !matchedIds.contains(p.id)).toList();
     
+    // 🎯 최소 카드 수 보장 로직 추가
+    const minPersonaCards = 20; // 최소 20장의 페르소나 카드 보장
+    
     if (filteredPersonas.isEmpty) {
       debugPrint('⚠️ All available personas are already matched');
+      // 모든 페르소나가 매칭된 경우, 재매칭 가능 메시지와 함께 일부 페르소나 표시
+      if (personas.length >= minPersonaCards) {
+        debugPrint('🔄 Showing some personas for re-matching option');
+        final shuffledPersonas = List.from(personas)..shuffle(_random);
+        _cardItems = shuffledPersonas.take(minPersonaCards).toList();
+        _cardsKey = 'rematch_${DateTime.now().millisecondsSinceEpoch}';
+        return;
+      }
       _cardItems = [];
       _cardsKey = '';
       return;
@@ -239,17 +319,32 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     debugPrint('🔥 Filtered out ${personas.length - filteredPersonas.length} already matched personas');
     debugPrint('✅ Remaining personas for cards: ${filteredPersonas.length}');
+    
+    // 🎯 필터링된 페르소나가 너무 적으면 보충
+    List<Persona> cardPersonas = filteredPersonas;
+    if (filteredPersonas.length < minPersonaCards && personas.length >= minPersonaCards) {
+      debugPrint('⚡ Not enough filtered personas (${filteredPersonas.length}), adding more...');
+      // 매칭된 페르소나 중 일부를 추가하여 최소 수량 확보
+      final additionalNeeded = minPersonaCards - filteredPersonas.length;
+      final matchedPersonas = personas.where((p) => matchedIds.contains(p.id)).toList();
+      if (matchedPersonas.isNotEmpty) {
+        matchedPersonas.shuffle(_random);
+        final additionalPersonas = matchedPersonas.take(additionalNeeded).toList();
+        cardPersonas = [...filteredPersonas, ...additionalPersonas];
+        debugPrint('✅ Added ${additionalPersonas.length} matched personas for better experience');
+      }
+    }
 
     // 중복 페르소나 체크
     final uniquePersonas = <String, Persona>{};
-    for (final persona in filteredPersonas) {
+    for (final persona in cardPersonas) {
       if (!uniquePersonas.containsKey(persona.id)) {
         uniquePersonas[persona.id] = persona;
       } else {
         debugPrint('⚠️ Duplicate persona found: ${persona.name} (ID: ${persona.id})');
       }
     }
-    debugPrint('📊 Unique personas: ${uniquePersonas.length} (from ${filteredPersonas.length} filtered)');
+    debugPrint('📊 Unique personas: ${uniquePersonas.length} (from ${cardPersonas.length} card personas)');
 
     _cardItems = [];
     final tips = TipData.allTips;
@@ -258,19 +353,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // uniquePersonasList를 먼저 선언
     final uniquePersonasList = uniquePersonas.values.toList();
     
-    // 최소 2~3개의 팁은 반드시 보여주기
+    // 🎯 팁 카드 수를 줄이고 페르소나 카드 우선 표시
     int insertedTipCount = 0;
-    final targetTipCount = 2 + (_random.nextBool() ? 1 : 0); // 2 or 3
+    final targetTipCount = uniquePersonasList.length >= 10 ? 2 : 1; // 페르소나가 충분할 때만 팁 2개
     
-    // 팁 카드 삽입 위치를 미리 결정
+    // 팁 카드 삽입 위치를 미리 결정 (더 뒤쪽에 배치)
     final guaranteedTipPositions = <int>[];
-    if (uniquePersonasList.length >= 5) {
-      guaranteedTipPositions.add(4); // 5번째 위치 (0,1,2,3,[TIP],4,...)
-      if (uniquePersonasList.length >= 10) {
-        guaranteedTipPositions.add(9); // 10번째 위치
-      }
-      if (uniquePersonasList.length >= 15) {
-        guaranteedTipPositions.add(14); // 15번째 위치
+    if (uniquePersonasList.length >= 10) {
+      guaranteedTipPositions.add(9); // 10번째 위치
+      if (uniquePersonasList.length >= 20) {
+        guaranteedTipPositions.add(19); // 20번째 위치
       }
     }
     
@@ -300,12 +392,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       currentItemIndex++;
       
       // 추가 랜덤 팁 카드 (보장된 위치가 아닌 경우)
-      if (i >= 5 && i < uniquePersonasList.length - 3 && // 마지막 3장에는 팁 넣지 않음
+      if (i >= 10 && i < uniquePersonasList.length - 5 && // 더 뒤쪽에서만 팁 추가
           insertedTipCount < targetTipCount && 
           tips.length > usedTips.length &&
           !guaranteedTipPositions.contains(currentItemIndex)) {
-        // 40% 확률로 팁 카드 삽입
-        if (_random.nextDouble() < 0.4) {
+        // 20% 확률로 팁 카드 삽입 (확률 감소)
+        if (_random.nextDouble() < 0.2) {
           final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
           if (availableTips.isNotEmpty) {
             final tipIndex = _random.nextInt(availableTips.length);
@@ -344,9 +436,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 안정적인 키 생성 - personas의 ID 조합으로 유니크한 키 생성
     _cardsKey = 'cards_${uniquePersonasList.map((p) => p.id.substring(0, 4)).join('_')}_${DateTime.now().millisecondsSinceEpoch}';
     
+    // 🎯 최종 카드 통계
+    final personaCardCount = _cardItems.where((item) => item is Persona).length;
+    final tipCardCount = _cardItems.where((item) => item is TipData).length;
+    
     debugPrint('🎴 Card set prepared: ${_cardItems.length} cards total');
-    debugPrint('   - Personas: ${uniquePersonasList.length}');
-    debugPrint('   - Tips: $insertedTipCount');
+    debugPrint('   - Persona cards: $personaCardCount (from ${uniquePersonasList.length} unique)');
+    debugPrint('   - Tip cards: $tipCardCount');
+    debugPrint('   - Matched personas shown: ${cardPersonas.where((p) => matchedIds.contains(p.id)).length}');
     debugPrint('📊 Cards shuffled and ready!');
     
     // 팁 카드 위치 확인 (디버깅용)
@@ -1787,6 +1884,60 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           final personas = personaService.availablePersonasProgressive;
           debugPrint('📊 [PersonaSelectionScreen] Available personas: ${personas.length}');
           
+          // 이미지 프리로드 중일 때 표시
+          if (_isPreloadingImages) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(
+                    color: Color(0xFFFF6B9D),
+                    strokeWidth: 3,
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    '프로필 사진 준비 중...',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${(_preloadProgress * 100).toInt()}%',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFFF6B9D),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 200,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                    child: FractionallySizedBox(
+                      widthFactor: _preloadProgress,
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFFF6B9D), Color(0xFFFF8FA3)],
+                          ),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          
           // 초기 로딩 시에만 로딩 인디케이터 표시
           if (personaService.isLoading && personas.isEmpty && _cardItems.isEmpty) {
             return const Center(
@@ -2051,7 +2202,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     );
 
     // 첫 사용자이고 사용 가능한 소나가 있을 때만 튜토리얼 오버레이 표시
-    if (_isFirstTimeUser) {
+    // 단, 이미지 프리로드 중일 때는 표시하지 않음
+    if (_isFirstTimeUser && !_isPreloadingImages) {
       return Consumer<PersonaService>(
         builder: (context, personaService, child) {
           final hasAvailablePersonas = personaService.availablePersonas.isNotEmpty;

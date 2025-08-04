@@ -1086,7 +1086,13 @@ class ChatOrchestrator {
       } else if (userMessage.contains('먼말') || userMessage.contains('무슨 말')) {
         contextHints.add('"무슨 말이야?" → 이전 발언 설명: "아 제가 방금 ~라고 했는데..."');
       } else if (userMessage.contains('어디')) {
-        contextHints.add('위치 질문 → 구체적이지만 안전한 답변: "집에서 쉬고 있어요", "카페에서 공부 중이에요"');
+        // 이동/활동 관련 질문인지 확인
+        if (userMessage.contains('돌아다니') || userMessage.contains('다니') || 
+            userMessage.contains('가는') || userMessage.contains('가고')) {
+          contextHints.add('이동/활동 질문 → 동적인 답변: "요즘 카페랑 도서관을 자주 가요", "주말엔 공원이나 전시회 다녀요" 등');
+        } else {
+          contextHints.add('위치 질문 → 구체적이지만 안전한 답변: "집에서 쉬고 있어요", "카페에서 공부 중이에요"');
+        }
       }
     }
     

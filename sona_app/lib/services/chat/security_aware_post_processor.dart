@@ -17,7 +17,10 @@ class SecurityAwarePostProcessor {
     // 1단계: 기본적인 텍스트 정리
     processed = _cleanupText(processed);
     
-    // 2단계: 이모티콘 최적화 (한국어 스타일)
+    // 2단계: 문장 완성도 검증 및 수정
+    processed = _ensureCompleteSentence(processed);
+    
+    // 3단계: 이모티콘 최적화 (한국어 스타일)
     processed = _optimizeEmoticons(processed);
     
     // 길이 제한은 ChatOrchestrator에서 메시지 분리로 처리
@@ -205,5 +208,85 @@ class SecurityAwarePostProcessor {
     text = text.replaceAll(RegExp(r'\s+'), ' ').trim();
     
     return text;
+  }
+  
+  /// 문장 완성도 검증 및 수정
+  static String _ensureCompleteSentence(String text) {
+    if (text.isEmpty) return text;
+    
+    // 문장 종결 어미 패턴
+    final sentenceEndings = [
+      '요', '죠', '네요', '어요', '아요', '해요', '이에요', '예요',
+      '습니다', '합니다', '입니다', '다', '어', '아', '지', '야',
+      '까', '까요', '나', '나요', '니', '거든', '잖아', '는데',
+      '!', '?', '.', '~', 'ㅋ', 'ㅎ', 'ㅠ', '♡', '♥', '💕'
+    ];
+    
+    // 불완전한 종결 패턴 (이것으로 끝나면 불완전함)
+    final incompleteEndings = [
+      '때가', '하는', '있는', '없는', '같은', '되는', '라는', '이라는',
+      '때', '것', '듯', '중', '그', '이', '를', '을', '에서', '으로'
+    ];
+    
+    // 마지막 문자/단어 확인
+    String trimmed = text.trim();
+    
+    // 이미 완전한 문장인지 확인
+    bool isComplete = false;
+    for (final ending in sentenceEndings) {
+      if (trimmed.endsWith(ending)) {
+        isComplete = true;
+        break;
+      }
+    }
+    
+    if (isComplete) return text;
+    
+    // 불완전한 문장인지 확인
+    bool isIncomplete = false;
+    String lastWord = '';
+    
+    for (final ending in incompleteEndings) {
+      if (trimmed.endsWith(ending)) {
+        isIncomplete = true;
+        lastWord = ending;
+        break;
+      }
+    }
+    
+    // 불완전한 문장 수정
+    if (isIncomplete) {
+      // 문맥에 따라 적절한 종결어미 추가
+      if (lastWord == '때가' || lastWord == '때') {
+        return trimmed + ' 좋아요';
+      } else if (lastWord.endsWith('하는') || lastWord.endsWith('되는')) {
+        return trimmed + ' 거예요';
+      } else if (lastWord.endsWith('있는') || lastWord.endsWith('없는')) {
+        return trimmed + ' 편이에요';
+      } else if (lastWord == '중') {
+        return trimmed + '이에요';
+      } else {
+        // 기본적으로 자연스러운 종결
+        return trimmed + '요';
+      }
+    }
+    
+    // 그 외의 경우 기본 종결어미 추가
+    // 마지막 글자가 받침이 있는지 확인
+    final lastChar = trimmed[trimmed.length - 1];
+    final lastCharCode = lastChar.codeUnitAt(0);
+    
+    // 한글인 경우
+    if (lastCharCode >= 0xAC00 && lastCharCode <= 0xD7A3) {
+      final hasJongsung = (lastCharCode - 0xAC00) % 28 != 0;
+      if (hasJongsung) {
+        return trimmed + '이에요';
+      } else {
+        return trimmed + '예요';
+      }
+    }
+    
+    // 한글이 아닌 경우 기본값
+    return trimmed + '요';
   }
 }

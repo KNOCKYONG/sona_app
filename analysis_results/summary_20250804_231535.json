@@ -1,0 +1,18 @@
+{
+  "analysis_timestamp": "20250804_231535",
+  "total_reports_analyzed": 1,
+  "average_coherence_score": 90.0,
+  "critical_issues_count": 0,
+  "high_issues_count": 0,
+  "personas_with_issues": {
+    "혜원": {
+      "total_conversations": 1,
+      "avg_coherence_score": 90.0,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 2
+      }
+    }
+  }
+}

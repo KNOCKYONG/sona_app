@@ -91,10 +91,13 @@ class _TextMessage extends StatelessWidget {
             : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Profile picture for AI messages
-          if (!isFromUser) ...[
+          // Profile picture for AI messages (only on first message in sequence)
+          if (!isFromUser && message.isFirstInSequence) ...[
             _ProfileAvatar(),
             const SizedBox(width: 8),
+          ] else if (!isFromUser) ...[
+            // Empty space to maintain alignment
+            const SizedBox(width: 44), // 36 (avatar) + 8 (spacing)
           ],
           
           // Modern message bubble with gradient and soft shadows

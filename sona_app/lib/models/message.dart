@@ -53,6 +53,7 @@ class Message {
   final Map<String, dynamic>? metadata;
   final int? relationshipScoreChange;
   final bool isRead;
+  final bool isFirstInSequence;
 
   Message({
     required this.id,
@@ -65,6 +66,7 @@ class Message {
     this.metadata,
     this.relationshipScoreChange,
     this.isRead = false,
+    this.isFirstInSequence = true,
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() {
@@ -79,6 +81,7 @@ class Message {
       'metadata': metadata,
       'relationshipScoreChange': relationshipScoreChange,
       'isRead': isRead,
+      'isFirstInSequence': isFirstInSequence,
     };
   }
 
@@ -104,6 +107,7 @@ class Message {
           : null,
       relationshipScoreChange: json['relationshipScoreChange'],
       isRead: json['isRead'] ?? false,
+      isFirstInSequence: json['isFirstInSequence'] ?? true,
     );
   }
 
@@ -114,6 +118,7 @@ class Message {
     Map<String, dynamic>? metadata,
     int? relationshipScoreChange,
     bool? isRead,
+    bool? isFirstInSequence,
   }) {
     return Message(
       id: id,
@@ -126,6 +131,7 @@ class Message {
       metadata: metadata ?? this.metadata,
       relationshipScoreChange: relationshipScoreChange ?? this.relationshipScoreChange,
       isRead: isRead ?? this.isRead,
+      isFirstInSequence: isFirstInSequence ?? this.isFirstInSequence,
     );
   }
 }

@@ -1,0 +1,38 @@
+{
+  "timestamp": "20250804_184212",
+  "total_improvements": 2,
+  "applied_improvements": 0,
+  "apply_rate": 0.0,
+  "persona_stats": {
+    "지은": {
+      "total": 2,
+      "applied": 0
+    }
+  },
+  "detailed_results": [
+    {
+      "persona_name": "지은",
+      "issue_type": "greeting_repetition",
+      "user_message": "",
+      "original_response": "안녕하세요~ 잘 지내셨어요?",
+      "improved_response": "안녕하세요~ 잘 지내셨어요?",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    },
+    {
+      "persona_name": "지은",
+      "issue_type": "irrelevant_answer",
+      "user_message": "네ㅎㅎ 지은님은요?",
+      "original_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+      "improved_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    }
+  ]
+}

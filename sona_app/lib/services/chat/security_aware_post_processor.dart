@@ -75,46 +75,77 @@ class SecurityAwarePostProcessor {
   
   /// 부드러운 표현으로 변환
   static String _softenExpression(String text) {
-    // 딱딱한 표현을 부드럽게 변환
-    final softExpressions = {
+    String result = text;
+    
+    // 1. 구체적인 패턴 먼저 처리 (replaceAll 사용)
+    final specificPatterns = {
       // 의문문 패턴
-      RegExp(r'무슨\s+점이\s+마음에\s+들었나요'): '뭐가 좋았어요',
-      RegExp(r'어떤\s+점이\s+좋았나요'): '뭐가 좋았어요',
-      RegExp(r'무엇을\s+원하시나요'): '뭐 원해요',
-      RegExp(r'어떻게\s+생각하시나요'): '어떻게 생각해요',
-      RegExp(r'괜찮으신가요'): '괜찮아요',
-      RegExp(r'어떠신가요'): '어때요',
-      RegExp(r'계신가요'): '있어요',
-      RegExp(r'하시나요'): '해요',
-      RegExp(r'되시나요'): '돼요',
-      RegExp(r'이신가요'): '이에요',
-      RegExp(r'인가요'): '이에요',
+      '무슨 점이 마음에 들었나요': '뭐가 좋았어요',
+      '어떤 점이 좋았나요': '뭐가 좋았어요',
+      '무엇을 원하시나요': '뭐 원해요',
+      '어떻게 생각하시나요': '어떻게 생각해요',
+      '괜찮으신가요': '괜찮으세요',
+      '어떠신가요': '어떠세요',
+      '계신가요': '계세요',
+      '하시나요': '하세요',
+      '되시나요': '되세요',
+      '오시나요': '오세요',
+      '가시나요': '가세요',
+      '좋으신가요': '좋으세요',
+      '이신가요': '이세요',
+      '인가요': '인가요',  // 그대로 유지
       
-      // 일반적인 ~나요 → ~어요 변환
-      RegExp(r'([가-힣]+)나요(?=[?]|$)'): r'$1어요',
-      RegExp(r'([가-힣]+)시나요(?=[?]|$)'): r'$1어요',
-      RegExp(r'([가-힣]+)신가요(?=[?]|$)'): r'$1어요',
-      
-      // ~습니까 → ~어요 변환
-      RegExp(r'([가-힣]+)습니까(?=[?]|$)'): r'$1어요',
-      RegExp(r'([가-힣]+)습니다'): r'$1어요',
+      // ~습니까 → ~어요/아요
+      '있습니까': '있어요',
+      '없습니까': '없어요',
+      '좋습니까': '좋아요',
+      '맞습니까': '맞아요',
+      '합니까': '해요',
+      '됩니까': '돼요',
+      '갑니까': '가요',
+      '옵니까': '와요',
       
       // 너무 격식있는 표현
-      RegExp(r'그러십니까'): '그래요',
-      RegExp(r'그렇습니까'): '그래요',
-      RegExp(r'아니십니까'): '아니에요',
+      '그러십니까': '그러세요',
+      '그렇습니까': '그래요',
+      '아니십니까': '아니세요',
       
       // 딱딱한 공감 표현
-      RegExp(r'그런\s*감정\s*이해해요'): '아 진짜 슬펐겠다',
-      RegExp(r'마음이\s*아프시겠어요'): '아 속상하겠다',
-      RegExp(r'이해가\s*됩니다'): '그럴 수 있어요',
-      RegExp(r'공감이\s*됩니다'): '나도 그럴 것 같아요',
+      '그런 감정 이해해요': '아 진짜 슬펐겠다',
+      '마음이 아프시겠어요': '아 속상하겠다',
+      '이해가 됩니다': '그럴 수 있어요',
+      '공감이 됩니다': '나도 그럴 것 같아요',
     };
     
-    String result = text;
-    for (final entry in softExpressions.entries) {
+    // 구체적인 패턴 적용
+    for (final entry in specificPatterns.entries) {
       result = result.replaceAll(entry.key, entry.value);
     }
+    
+    // 2. 정규표현식 패턴 처리 (replaceAllMapped 사용)
+    // ~시나요? → ~세요?
+    result = result.replaceAllMapped(
+      RegExp(r'([가-힣]+)시나요(?=\?|$)'),
+      (match) => '${match.group(1)}세요'
+    );
+    
+    // ~신가요? → ~세요?
+    result = result.replaceAllMapped(
+      RegExp(r'([가-힣]+)신가요(?=\?|$)'),
+      (match) => '${match.group(1)}세요'
+    );
+    
+    // 있나요? → 있어요?
+    result = result.replaceAllMapped(
+      RegExp(r'있나요(?=\?|$)'),
+      (match) => '있어요'
+    );
+    
+    // 없나요? → 없어요?
+    result = result.replaceAllMapped(
+      RegExp(r'없나요(?=\?|$)'),
+      (match) => '없어요'
+    );
     
     return result;
   }

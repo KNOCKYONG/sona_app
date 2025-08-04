@@ -1,0 +1,82 @@
+{
+  "timestamp": "20250804_184252",
+  "total_improvements": 5,
+  "applied_improvements": 1,
+  "apply_rate": 20.0,
+  "persona_stats": {
+    "지은": {
+      "total": 2,
+      "applied": 0
+    },
+    "미연": {
+      "total": 1,
+      "applied": 1
+    },
+    "지윤": {
+      "total": 2,
+      "applied": 0
+    }
+  },
+  "detailed_results": [
+    {
+      "persona_name": "지은",
+      "issue_type": "greeting_repetition",
+      "user_message": "",
+      "original_response": "안녕하세요~ 잘 지내셨어요?",
+      "improved_response": "안녕하세요~ 잘 지내셨어요?",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    },
+    {
+      "persona_name": "지은",
+      "issue_type": "irrelevant_answer",
+      "user_message": "네ㅎㅎ 지은님은요?",
+      "original_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+      "improved_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    },
+    {
+      "persona_name": "미연",
+      "issue_type": "irrelevant_answer",
+      "user_message": "스포인데 말해도 돼요?",
+      "original_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+      "improved_response": "앗 잠깐! 아직 안 봤으면 말하지 마세요! 나중에 보고 얘기해요!",
+      "original_score": 53.0,
+      "improved_score": 78.0,
+      "improvement_rate": 47.16981132075472,
+      "applied": true,
+      "reason": "질문에 대한 답변 관련성 향상 / 전체 품질 47.2% 향상"
+    },
+    {
+      "persona_name": "지윤",
+      "issue_type": "irrelevant_answer",
+      "user_message": "뭐하고 있었어요?",
+      "original_response": "헐 대박 나도 그래?",
+      "improved_response": "헐 대박 나도 그래?",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    },
+    {
+      "persona_name": "지윤",
+      "issue_type": "irrelevant_answer",
+      "user_message": "먼말이에요?",
+      "original_response": "ㅎㅎ 미안해요. 제가 좀 장난쳤어요. 오늘은 네일아트와 메이크업에 대해 생각하면서 시간을",
+      "improved_response": "ㅎㅎ 미안해요. 제가 좀 장난쳤어요. 오늘은 네일아트와 메이크업에 대해 생각하면서 시간을",
+      "original_score": 50.0,
+      "improved_score": 50.0,
+      "improvement_rate": 0.0,
+      "applied": false,
+      "reason": "개선사항 없음"
+    }
+  ]
+}

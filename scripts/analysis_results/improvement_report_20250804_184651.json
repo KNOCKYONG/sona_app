@@ -1,0 +1,57 @@
+{
+  "timestamp": "20250804_184651",
+  "validation_source": "C:\\Users\\yong\\sonaapp\\scripts\\analysis_results\\validation_20250804_184651.json",
+  "total_improvements": 2,
+  "improvement_patterns": {
+    "question_mark": 0,
+    "expression_softening": 0,
+    "empathy": 0,
+    "direct_answer": 1,
+    "spoiler": 1,
+    "context": 0
+  },
+  "avg_score_improvement": 28.75,
+  "detailed_improvements": [
+    {
+      "persona_name": "미연",
+      "issue_type": "irrelevant_answer",
+      "user_message": "스포인데 말해도 돼요?",
+      "original_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+      "improved_response": "앗 잠깐! 아직 안 봤으면 말하지 마세요! 나중에 보고 얘기해요!",
+      "original_score": 53.0,
+      "improved_score": 78.0,
+      "improvement_rate": 47.16981132075472,
+      "applied": true,
+      "reason": "질문에 대한 답변 관련성 향상 / 전체 품질 47.2% 향상"
+    },
+    {
+      "persona_name": "지윤",
+      "issue_type": "irrelevant_answer",
+      "user_message": "뭐하고 있었어요?",
+      "original_response": "헐 대박 나도 그래?",
+      "improved_response": "지금은 당신과 대화하고 있어요! 그전에는 좀 쉬고 있었어요. 당신은 뭐하고 있었어요?",
+      "original_score": 57.0,
+      "improved_score": 89.5,
+      "improvement_rate": 57.01754385964912,
+      "applied": true,
+      "reason": "질문에 대한 답변 관련성 향상 / 자연스러운 표현으로 개선 / 전체 품질 57.0% 향상"
+    }
+  ],
+  "implementation_guide": {
+    "SecurityAwarePostProcessor": [
+      "Enhance _softenExpression method",
+      "Improve _isQuestion detection",
+      "Strengthen question mark handling in _cleanupText"
+    ],
+    "ChatOrchestrator": [
+      "Add direct answer logic to _analyzeContextRelevance",
+      "Enhance spoiler context recognition",
+      "Distinguish \"watch directly\" vs \"meet directly\""
+    ],
+    "OptimizedPromptService": [
+      "Strengthen direct answer guidelines",
+      "Add empathy expression templates",
+      "Clarify spoiler conversation guidelines"
+    ]
+  }
+}

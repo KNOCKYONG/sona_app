@@ -66,6 +66,11 @@ class PersonaService extends BaseService {
   List<Persona> get availablePersonasProgressive {
     _cleanExpiredSwipes();
     
+    // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
+    if (!_matchedPersonasLoaded) {
+      _lazyLoadMatchedPersonas();
+    }
+    
     // Return immediately without R2 check
     return _getImmediateAvailablePersonas();
   }
@@ -97,6 +102,13 @@ class PersonaService extends BaseService {
       
       // Exclude both recently swiped and matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
+      
+      // 더 강력한 매칭 확인 로그
+      debugPrint('🔍 Matched persona IDs to exclude:');
+      for (final id in matchedIds.take(10)) {
+        debugPrint('   - $id');
+      }
+      
       final filtered = _allPersonas.where((persona) => 
         !_isPersonaRecentlySwiped(persona.id) && 
         !matchedIds.contains(persona.id) &&
@@ -242,9 +254,6 @@ class PersonaService extends BaseService {
     
     // Mark matched personas as loaded
     _matchedPersonasLoaded = true;
-    
-    // Setup midnight refresh timer
-    _setupMidnightRefreshTimer();
     
     // 🆕 Check and download new images after loading personas
     await checkAndDownloadNewImages();
@@ -1315,95 +1324,9 @@ class PersonaService extends BaseService {
     notifyListeners();
   }
   
-  /// Setup timer for midnight refresh
-  void _setupMidnightRefreshTimer() {
-    // Cancel existing timer if any
-    _midnightRefreshTimer?.cancel();
-    
-    // Calculate time until next midnight (local time)
-    final now = DateTime.now();
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
-    final timeUntilMidnight = tomorrow.difference(now);
-    
-    debugPrint('⏰ Setting up midnight refresh timer');
-    debugPrint('   Current time: ${now.toString()}');
-    debugPrint('   Next midnight: ${tomorrow.toString()}');
-    debugPrint('   Time until midnight: ${timeUntilMidnight.inHours}h ${timeUntilMidnight.inMinutes % 60}m');
-    
-    // Set timer for midnight
-    _midnightRefreshTimer = Timer(timeUntilMidnight, () async {
-      debugPrint('🌙 Midnight refresh triggered at ${DateTime.now()}');
-      await _performMidnightRefresh();
-      
-      // Setup next timer for tomorrow midnight
-      _setupMidnightRefreshTimer();
-    });
-  }
-  
-  /// Perform midnight refresh
-  Future<void> _performMidnightRefresh() async {
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
-    
-    // Check if we already refreshed today
-    if (_lastRefreshDate != null && 
-        _lastRefreshDate!.year == todayDate.year &&
-        _lastRefreshDate!.month == todayDate.month &&
-        _lastRefreshDate!.day == todayDate.day) {
-      debugPrint('🌙 Already refreshed today, skipping...');
-      return;
-    }
-    
-    debugPrint('🌙 Performing midnight refresh...');
-    
-    // Clear session swiped personas (like refresh button)
-    _sessionSwipedPersonas.clear();
-    
-    // Clear cached swiped personas
-    await PreferencesManager.remove('swiped_personas');
-    
-    // Force reshuffle
-    _shuffledAvailablePersonas = null;
-    _lastShuffleTime = null;
-    
-    // Update last refresh date
-    _lastRefreshDate = todayDate;
-    
-    // Save refresh date to preferences
-    await PreferencesManager.setString('last_refresh_date', todayDate.toIso8601String());
-    
-    debugPrint('✅ Midnight refresh complete - all unmatched personas are now available');
-    
-    // Notify UI to update
-    notifyListeners();
-  }
-  
-  /// Check and perform refresh if needed (for app resume)
-  Future<void> checkAndPerformDailyRefresh() async {
-    final today = DateTime.now();
-    final todayDate = DateTime(today.year, today.month, today.day);
-    
-    // Load last refresh date from preferences
-    final lastRefreshStr = await PreferencesManager.getString('last_refresh_date');
-    if (lastRefreshStr != null) {
-      _lastRefreshDate = DateTime.tryParse(lastRefreshStr);
-    }
-    
-    // Check if we need to refresh
-    if (_lastRefreshDate == null ||
-        _lastRefreshDate!.year != todayDate.year ||
-        _lastRefreshDate!.month != todayDate.month ||
-        _lastRefreshDate!.day != todayDate.day) {
-      debugPrint('📅 Daily refresh needed - last refresh: $_lastRefreshDate');
-      await _performMidnightRefresh();
-    } else {
-      debugPrint('📅 No daily refresh needed - already refreshed today');
-    }
-  }
   
   @override
   void dispose() {
-    _midnightRefreshTimer?.cancel();
     _batchUpdateTimer?.cancel();
     _r2ValidationTimer?.cancel();
     super.dispose();
@@ -1712,58 +1635,6 @@ class PersonaService extends BaseService {
     _saveMatchedPersonas();
     
     // UI 업데이트
-    notifyListeners();
-  }
-
-  /// 스와이프한 페르소나 목록 초기화 (새로고침 기능)
-  Future<void> resetSwipedPersonas() async {
-    debugPrint('🔄 Resetting swiped personas for refresh...');
-    debugPrint('  Current state:');
-    debugPrint('  - Total personas: ${_allPersonas.length}');
-    debugPrint('  - Session swiped: ${_sessionSwipedPersonas.length}');
-    debugPrint('  - Actioned personas: ${_actionedPersonaIds.length}');
-    debugPrint('  - Matched personas: ${_matchedPersonas.length}');
-    
-    // 매칭된 페르소나 목록이 로드되지 않았다면 먼저 로드
-    if (!_matchedPersonasLoaded) {
-      debugPrint('📋 Loading matched personas first...');
-      await _loadMatchedPersonas();
-    }
-    
-    // 세션 스와이프 기록만 초기화 (일시적으로 스와이프한 것들)
-    _sessionSwipedPersonas.clear();
-    debugPrint('  ✅ Cleared session swiped personas');
-    
-    // SharedPreferences에서도 삭제
-    await PreferencesManager.remove('swiped_personas');
-    debugPrint('  ✅ Cleared persisted swiped personas');
-    
-    // 새로고침 시 actionedPersonaIds를 다시 로드하여 최신 상태 반영
-    // 이제 _loadActionedPersonaIds는 매칭된 페르소나만 가져옴
-    await _loadActionedPersonaIds();
-    debugPrint('  📋 Reloaded actionedPersonaIds: ${_actionedPersonaIds.length} matched personas only');
-    
-    // 이제 actionedPersonaIds는 이미 매칭된 페르소나만 포함하므로 추가 수정 불필요
-    debugPrint('  📋 Final state after refresh:');
-    debugPrint('    - Matched personas: ${_matchedPersonas.length}');
-    debugPrint('    - Actioned personas (matched only): ${_actionedPersonaIds.length}');
-    
-    // shuffled 리스트 초기화하여 다시 생성되도록 함
-    _shuffledAvailablePersonas = null;
-    _lastShuffleTime = null;
-    
-    // R2 검증 상태도 초기화
-    _r2ValidatedPersonaIds.clear();
-    _isValidatingR2 = false;
-    _r2ValidationTimer?.cancel();
-    
-    // 캐시 정리
-    await R2ValidationCache.cleanExpiredCache();
-    
-    // 🆕 새로운 이미지 체크 및 다운로드
-    await checkAndDownloadNewImages();
-    
-    debugPrint('✅ Refresh complete - all unmatched personas will be shown');
     notifyListeners();
   }
   

@@ -1656,6 +1656,7 @@ class ChatService extends BaseService {
           isFromUser: false,
           emotion: emotion,
           relationshipScoreChange: isLastMessage ? scoreChange : null,
+          isFirstInSequence: i == 0, // First message in the sequence
           metadata: {
             'isLastInSequence': isLastMessage,
             'messageIndex': i,
@@ -1743,6 +1744,7 @@ class ChatService extends BaseService {
           isFromUser: false,
           emotion: emotion,
           relationshipScoreChange: isLastMessage ? scoreChange : null,
+          isFirstInSequence: i == 0, // First message in the sequence
           // 마지막 메시지인지 표시하는 메타데이터 추가
           metadata: {
             'isLastInSequence': isLastMessage,
@@ -2477,6 +2479,7 @@ class ChatService extends BaseService {
         content: greetingContent,
         type: MessageType.text,  // 시스템 메시지가 아닌 일반 텍스트
         isFromUser: false,
+        isFirstInSequence: true, // Single greeting message is always first
         timestamp: DateTime.now(),
         emotion: emotion,
         relationshipScoreChange: 0,

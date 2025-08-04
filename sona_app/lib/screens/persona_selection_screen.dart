@@ -50,6 +50,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   bool _isSwipeInProgress = false; // 스와이프 진행 중 플래그
   final Set<String> _processingPersonas = {}; // 처리 중인 페르소나 추적
   bool _isMatchDialogShowing = false; // 매칭 다이얼로그 표시 상태
+  List<dynamic> _originalCardSet = []; // 원본 카드 세트 보관 (재셔플용)
 
   @override
   void initState() {
@@ -69,10 +70,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     );
     
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // Check for daily refresh first
-      final personaService = Provider.of<PersonaService>(context, listen: false);
-      await personaService.checkAndPerformDailyRefresh();
-      
       _loadPersonas();
       _checkFirstTimeUser();
     });
@@ -106,13 +103,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // App resumed from background - check if daily refresh is needed
-      debugPrint('🔄 App resumed - checking for daily refresh');
-      final personaService = Provider.of<PersonaService>(context, listen: false);
-      personaService.checkAndPerformDailyRefresh().then((_) {
-        // Reload personas if refresh occurred
-        _loadPersonas();
-      });
+      // App resumed from background
+      debugPrint('🔄 App resumed');
+      _loadPersonas();
       
       // 🆕 백그라운드에서 새로운 이미지 체크
       _checkForNewImagesInBackground();
@@ -155,6 +148,59 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     }
   }
 
+  /// 카드 세트를 셔플하고 재시작
+  void _shuffleAndRestartCardSet() {
+    if (_originalCardSet.isEmpty) {
+      debugPrint('⚠️ No original card set to shuffle');
+      return;
+    }
+    
+    // 원본 세트를 복사하여 셔플
+    _cardItems = List.from(_originalCardSet)..shuffle(_random);
+    _cardsKey = DateTime.now().millisecondsSinceEpoch.toString(); // 새 키로 CardSwiper 리셋
+    
+    debugPrint('✨ Cards shuffled! Starting new round with ${_cardItems.length} cards');
+    debugPrint('🎲 First 5 cards after shuffle:');
+    for (int i = 0; i < 5 && i < _cardItems.length; i++) {
+      final item = _cardItems[i];
+      if (item is Persona) {
+        debugPrint('   ${i+1}. Persona: ${item.name}');
+      } else if (item is TipData) {
+        debugPrint('   ${i+1}. Tip: ${item.title.substring(0, 20)}...');
+      }
+    }
+  }
+  
+  // 매칭된 페르소나를 카드에서 제거
+  void _removeMatchedPersonaFromCards(String personaId) {
+    debugPrint('🗑️ Removing matched persona from cards: $personaId');
+    
+    // 현재 카드 리스트에서 제거
+    _cardItems.removeWhere((item) {
+      if (item is Persona) {
+        return item.id == personaId;
+      }
+      return false;
+    });
+    
+    // 원본 세트에서도 제거
+    _originalCardSet.removeWhere((item) {
+      if (item is Persona) {
+        return item.id == personaId;
+      }
+      return false;
+    });
+    
+    // UI 업데이트
+    if (mounted) {
+      setState(() {
+        _cardsKey = DateTime.now().millisecondsSinceEpoch.toString();
+      });
+    }
+    
+    debugPrint('✅ Removed persona from cards. Remaining: ${_cardItems.length}');
+  }
+
   // 카드 아이템 리스트 준비 (Personas + Tips)
   void _prepareCardItems(List<Persona> personas) {
     if (personas.isEmpty) {
@@ -166,6 +212,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 🔥 매칭된 페르소나 추가 필터링
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
+    
+    // 디버깅 정보 추가
+    debugPrint('🔍 Checking matched personas:');
+    debugPrint('   - Total matched personas: ${matchedIds.length}');
+    debugPrint('   - Matched IDs: ${matchedIds.take(5).join(', ')}...');
+    debugPrint('   - Input personas: ${personas.length}');
+    
     final filteredPersonas = personas.where((p) => !matchedIds.contains(p.id)).toList();
     
     if (filteredPersonas.isEmpty) {
@@ -176,6 +229,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     }
     
     debugPrint('🔥 Filtered out ${personas.length - filteredPersonas.length} already matched personas');
+    debugPrint('✅ Remaining personas for cards: ${filteredPersonas.length}');
 
     // 중복 페르소나 체크
     final uniquePersonas = <String, Persona>{};
@@ -272,10 +326,19 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       }
     }
     
+    // 원본 세트 저장 (재셔플용)
+    _originalCardSet = List.from(_cardItems);
+    
+    // 첫 시작도 셔플
+    _cardItems.shuffle(_random);
+    
     // 안정적인 키 생성 - personas의 ID 조합으로 유니크한 키 생성
     _cardsKey = 'cards_${uniquePersonasList.map((p) => p.id.substring(0, 4)).join('_')}_${DateTime.now().millisecondsSinceEpoch}';
     
-    debugPrint('📊 Prepared ${_cardItems.length} cards: ${uniquePersonasList.length} personas, $insertedTipCount tips (target: $targetTipCount)');
+    debugPrint('🎴 Card set prepared: ${_cardItems.length} cards total');
+    debugPrint('   - Personas: ${uniquePersonasList.length}');
+    debugPrint('   - Tips: $insertedTipCount');
+    debugPrint('📊 Cards shuffled and ready!');
     
     // 팁 카드 위치 확인 (디버깅용)
     final tipPositions = <int>[];
@@ -1435,6 +1498,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
                                   if (matchSuccess) {
                                     debugPrint('✅ Super like matching complete: ${persona.name}');
+                                    // 매칭 성공 시 카드에서 즉시 제거
+                                    _removeMatchedPersonaFromCards(persona.id);
                                     await _navigateToChat(persona, screenContext, true);
                                   } else {
                                     debugPrint('❌ Super like matching failed: ${persona.name}');
@@ -1478,6 +1543,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
                                   if (matchSuccess) {
                                     debugPrint('✅ Normal like matching complete: ${persona.name}');
+                                    // 매칭 성공 시 카드에서 즉시 제거
+                                    _removeMatchedPersonaFromCards(persona.id);
                                     await _navigateToChat(persona, screenContext, false);
                                   } else {
                                     debugPrint('❌ Normal like matching failed: ${persona.name}');
@@ -1722,183 +1789,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           
           // CardSwiper는 최소 1개의 카드가 필요하므로 빈 배열 체크
           if (_cardItems.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (!personaService.isValidatingR2) ...[
-                    const Icon(
-                      Icons.schedule,
-                      size: 80,
-                      color: Colors.grey,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      '모든 소나를 확인했습니다!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFFF6B9D),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '24시간 후에 다시 만날 수 있어요.\n${personaService.waitingPersonasCount}명의 소나가 대기 중입니다.',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ] else ...[
-                    const CircularProgressIndicator(
-                      color: Color(0xFFFF6B9D),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      '카드 로딩 중...',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ],
-                  const SizedBox(height: 30),
-                  // 새로고침 버튼
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFFF6B9D), Color(0xFFFF8FA3)],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFFFF6B9D).withOpacity(0.3),
-                          blurRadius: 15,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(30),
-                        onTap: () async {
-                          // 하트 차감 확인 다이얼로그 표시
-                          final shouldRefresh = await HeartUsageDialog.show(
-                            context: context,
-                            title: '새로운 만남을 원하시나요?',
-                            description: '이전에 스와이프한 페르소나들을\n다시 만날 수 있어요!',
-                            heartCost: 1,
-                            onConfirm: () async {
-                              // 하트 차감
-                              final purchaseService = Provider.of<PurchaseService>(context, listen: false);
-                              final hasEnoughHearts = await purchaseService.useHearts(1);
-                              
-                              if (hasEnoughHearts) {
-                                // 애니메이션 컨트롤러 정지
-                                _heartAnimationController.stop();
-                                _passAnimationController.stop();
-                                
-                                // 새로운 이미지가 있는지 확인
-                                final personaService = Provider.of<PersonaService>(context, listen: false);
-                                final imagePreloadService = ImagePreloadService.instance;
-                                
-                                // R2 이미지가 있는 페르소나 목록
-                                final personasWithImages = personaService.allPersonas
-                                    .where((p) => personaService.isValidatingR2 || _hasR2Image(p))
-                                    .toList();
-                                
-                                final hasNewImages = await imagePreloadService.hasNewImages(personasWithImages);
-                                
-                                if (mounted) {
-                                  if (hasNewImages) {
-                                    // 새로운 이미지가 있으면 다운로드 화면으로 이동
-                                    Navigator.of(context).pushReplacementNamed('/refresh-download');
-                                  } else {
-                                    // 새로운 이미지가 없으면 바로 새로고침
-                                    await personaService.resetSwipedPersonas();
-                                    Navigator.of(context).pushReplacementNamed('/persona-selection');
-                                  }
-                                }
-                              } else {
-                                // 하트 부족 메시지
-                                if (mounted) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('하트가 부족합니다. 하트를 충전해주세요.'),
-                                      backgroundColor: Colors.red,
-                                    ),
-                                  );
-                                }
-                              }
-                            },
-                            icon: Icons.refresh,
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.refresh,
-                                  size: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                '새로고침',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.favorite,
-                                      size: 14,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      '1',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color(0xFFFF6B9D),
               ),
             );
           }
@@ -1918,11 +1811,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         cardsCount: _cardItems.length,
                     onSwipe: _onSwipe,
                     onEnd: () {
-                      // 모든 카드를 스와이프했을 때 - 카드 리스트를 비워서 새로고침 화면 표시
-                      debugPrint('🔚 All cards swiped - showing refresh screen');
+                      // 세트가 끝났을 때 셔플 후 재시작
+                      debugPrint('🔄 Card set completed, shuffling and restarting...');
                       setState(() {
-                        _cardItems = [];
-                        _cardsKey = '';
+                        _shuffleAndRestartCardSet();
                       });
                     },
                     numberOfCardsDisplayed: _cardItems.length >= 2 ? 2 : _cardItems.length,
@@ -1937,7 +1829,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     // 스와이프 임계값 조정 - 더 낮은 값으로 설정하여 쉽게 스와이프되도록 함
                     threshold: 30, // 기본값 50에서 30으로 감소
                     scale: 0.9, // 뒤 카드 크기
-                    isLoop: false, // 무한 루프 비활성화
+                    isLoop: true, // 무한 루프 활성화
                     duration: const Duration(milliseconds: 150), // 스와이프 애니메이션 시간 더 단축
                     maxAngle: 20, // 최대 회전 각도 감소
                     isDisabled: false,

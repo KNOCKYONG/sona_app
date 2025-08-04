@@ -5,7 +5,9 @@ import '../services/persona/persona_service.dart';
 import '../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
-/// 새로고침 시 새로운 이미지 다운로드 화면
+/// 새로운 이미지 다운로드 화면
+/// 무한 스와이프 구현으로 인해 새로고침 기능은 제거됨
+/// 새로운 페르소나 이미지가 있을 때만 다운로드 진행
 class RefreshDownloadScreen extends StatefulWidget {
   const RefreshDownloadScreen({super.key});
 
@@ -42,9 +44,15 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
       }
     });
 
-    // PersonaService에서 새로고침 및 이미지 다운로드 수행
+    // 이 화면은 더 이상 새로고침 기능에 사용되지 않음
+    // 새로운 이미지 다운로드만 수행
     final personaService = Provider.of<PersonaService>(context, listen: false);
-    await personaService.resetSwipedPersonas();
+    final personas = personaService.allPersonas;
+    
+    final hasNew = await _preloadService.hasNewImages(personas);
+    if (hasNew) {
+      await _preloadService.preloadNewImages(personas);
+    }
 
     // 완료 후 페르소나 선택 화면으로 이동
     if (mounted) {

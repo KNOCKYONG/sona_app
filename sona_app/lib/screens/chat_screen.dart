@@ -666,16 +666,39 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             ],
           ),
           // More menu overlay
-          if (_showMoreMenu)
+          if (_showMoreMenu) ...[
+            // Invisible overlay to detect taps outside
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _showMoreMenu = false;
+                  });
+                },
+                behavior: HitTestBehavior.opaque,
+                child: Container(color: Colors.transparent),
+              ),
+            ),
+            // Dropdown menu
             Positioned(
-              top: MediaQuery.of(context).padding.top + kToolbarHeight - 4, // 더보기 버튼에 더 가깝게
-              right: 4,
-              child: Material(
-                elevation: 8,
-                borderRadius: BorderRadius.circular(12),
-                shadowColor: Colors.black.withOpacity(0.2),
-                color: Theme.of(context).cardColor,
-                child: Column(
+              top: MediaQuery.of(context).padding.top + kToolbarHeight - 4, // 상단바에 딱 붙이기
+              right: 12, // 더보기 버튼과 정렬
+              child: TweenAnimationBuilder<double>(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.easeOutCubic,
+                builder: (context, value, child) {
+                  return Transform.scale(
+                    scale: 0.9 + (0.1 * value),
+                    alignment: Alignment.topRight,
+                    child: Opacity(
+                      opacity: value,
+                      child: Material(
+                  elevation: 12,
+                  borderRadius: BorderRadius.circular(12),
+                  shadowColor: Colors.black.withOpacity(0.3),
+                  color: Theme.of(context).cardColor,
+                  child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Send Chat Error button
@@ -722,13 +745,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               );
                             }
                           } catch (e) {
+                            debugPrint('🔥 Error sending chat error report: $e');
                             if (mounted) {
                               Navigator.pop(context); // Close loading dialog
                               
                               // Show error message
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text('오류 전송 실패: ${e.toString()}'),
+                                  content: Text('오류 전송 실패: ${e.toString().contains('permission') ? '권한이 없습니다. 나중에 다시 시도해 주세요.' : '네트워크 오류가 발생했습니다.'}'),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -742,8 +766,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                          horizontal: 20,
+                          vertical: 14,
                         ),
                         child: Row(
                           children: [
@@ -831,8 +855,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       ),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 12,
+                          horizontal: 20,
+                          vertical: 14,
                         ),
                         child: Row(
                           children: [
@@ -855,8 +879,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     ),
                   ],
                 ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
+          ],
         ],
       ),
     );

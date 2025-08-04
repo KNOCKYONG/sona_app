@@ -402,66 +402,10 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       const SizedBox(height: 60),
                       
-                      // 진행률 표시
+                      // 진행률 표시 (퍼센티지만)
                       if (_showProgress) ...[
-                        Container(
-                          width: 280,
-                          child: Column(
-                            children: [
-                              // 진행률 바 컨테이너
-                              Container(
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Colors.white.withOpacity(0.3),
-                                  border: Border.all(
-                                    color: Colors.white.withOpacity(0.5),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(7),
-                                  child: Stack(
-                                    children: [
-                                      // 진행률 바
-                                      AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        width: 278 * _progress,
-                                        height: 14,
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              Colors.white.withOpacity(0.9),
-                                              Colors.white,
-                                            ],
-                                            begin: Alignment.centerLeft,
-                                            end: Alignment.centerRight,
-                                          ),
-                                        ),
-                                      ),
-                                      // 반짝이는 효과
-                                      if (_progress > 0 && _progress < 1)
-                                        Positioned(
-                                          left: (_progress * 278) - 30,
-                                          child: Container(
-                                            width: 30,
-                                            height: 14,
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                colors: [
-                                                  Colors.white.withOpacity(0),
-                                                  Colors.white.withOpacity(0.6),
-                                                  Colors.white.withOpacity(0),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
+                        Column(
+                          children: [
                               // 퍼센트 표시
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -472,10 +416,10 @@ class _SplashScreenState extends State<SplashScreen>
                                 child: Text(
                                   '${(_progress * 100).toStringAsFixed(0)}%',
                                   style: const TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
                                     color: Colors.white,
-                                    letterSpacing: 1.5,
+                                    letterSpacing: 1,
                                   ),
                                 ),
                               ),
@@ -491,7 +435,6 @@ class _SplashScreenState extends State<SplashScreen>
                               ),
                             ],
                           ),
-                        ),
                       ] else
                         // 진행률 표시 전 로딩 인디케이터
                         const CircularProgressIndicator(

@@ -209,11 +209,20 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       return;
     }
 
-    // 🔥 매칭된 페르소나 추가 필터링
+    // 🔥 매칭된 페르소나 추가 필터링 - Firebase에서 최신 정보 확인
     final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    // 매칭된 페르소나가 아직 로드되지 않았다면 강제 로드
+    if (!personaService.matchedPersonasLoaded) {
+      debugPrint('⚠️ Matched personas not loaded yet in _prepareCardItems!');
+      // 비동기로 로드 시작 (UI는 일단 진행)
+      personaService.loadMatchedPersonasIfNeeded();
+    }
+    
     final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
     
     // 디버깅 정보 추가
+    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] Preparing cards...');
     debugPrint('🔍 Checking matched personas:');
     debugPrint('   - Total matched personas: ${matchedIds.length}');
     debugPrint('   - Matched IDs: ${matchedIds.take(5).join(', ')}...');
@@ -366,6 +375,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     );
     
     debugPrint('🆔 Loading personas with userId: $currentUserId');
+    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] PersonaSelectionScreen starting persona load...');
     
     // 디바이스 정보 로그 (디버깅용)
     await DeviceIdService.logDeviceInfo();
@@ -408,6 +418,18 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     // 일반 모드에서는 전체 초기화
     await personaService.initialize(userId: currentUserId);
+    
+    // 🔥 매칭된 페르소나 로드 완료 확인
+    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] PersonaService initialization complete');
+    debugPrint('📊 Matched personas count: ${personaService.matchedPersonas.length}');
+    
+    // 매칭된 페르소나 ID 로그 (디버깅)
+    if (personaService.matchedPersonas.isNotEmpty) {
+      debugPrint('🔍 Currently matched persona IDs:');
+      for (final persona in personaService.matchedPersonas.take(5)) {
+        debugPrint('   - ${persona.id}: ${persona.name}');
+      }
+    }
   }
 
   void _showTutorialExitDialog() {

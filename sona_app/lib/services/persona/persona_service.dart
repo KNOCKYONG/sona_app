@@ -62,6 +62,9 @@ class PersonaService extends BaseService {
   bool _matchedPersonasLoaded = false;
   Completer<void>? _loadingCompleter;
   
+  // Public getter for matched personas loaded state
+  bool get matchedPersonasLoaded => _matchedPersonasLoaded;
+  
   // Progressive loading for initial fast display
   List<Persona> get availablePersonasProgressive {
     _cleanExpiredSwipes();
@@ -244,16 +247,18 @@ class PersonaService extends BaseService {
     // isLoading is managed by BaseService
     notifyListeners();
     
-    // Parallel loading for performance
+    // 🔥 매칭된 페르소나를 먼저 로드하여 필터링 준비
+    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting matched personas load...');
+    await _loadMatchedPersonas();
+    _matchedPersonasLoaded = true;
+    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
+    
+    // 그 다음 나머지 데이터 병렬 로드
     final results = await Future.wait([
       _loadFromFirebaseOrFallback(),
       _loadSwipedPersonas(),
       _loadActionedPersonaIds(),
-      _loadMatchedPersonas(),  // 매칭된 페르소나도 함께 로드
     ]);
-    
-    // Mark matched personas as loaded
-    _matchedPersonasLoaded = true;
     
     // 🆕 Check and download new images after loading personas
     await checkAndDownloadNewImages();
@@ -287,6 +292,13 @@ class PersonaService extends BaseService {
       await _loadMatchedPersonas();
     } catch (e) {
       debugPrint('Error lazy loading matched personas: $e');
+    }
+  }
+  
+  /// Public method to load matched personas if needed
+  Future<void> loadMatchedPersonasIfNeeded() async {
+    if (!_matchedPersonasLoaded) {
+      await _lazyLoadMatchedPersonas();
     }
   }
 

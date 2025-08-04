@@ -2639,7 +2639,10 @@ class ChatService extends BaseService {
     String? userMessage,
   }) async {
     try {
-      debugPrint('🚨 Sending chat error report for persona: $personaId');
+      debugPrint('🚨 ========== CHAT ERROR REPORT START ==========');
+      debugPrint('🚨 userId: $userId');
+      debugPrint('🚨 personaId: $personaId');
+      debugPrint('🚨 userMessage: $userMessage');
       
       // 현재 페르소나 정보 가져오기
       final persona = _getPersonaFromService(personaId);
@@ -2671,11 +2674,17 @@ class ChatService extends BaseService {
       );
       
       // Firebase에 저장
-      await FirebaseHelper.chatErrorFix.add(errorReport.toMap());
+      debugPrint('🚨 Attempting to save to Firebase...');
+      debugPrint('🚨 Error report data: ${errorReport.toMap()}');
       
-      debugPrint('✅ Chat error report sent successfully');
-    } catch (e) {
+      final docRef = await FirebaseHelper.chatErrorFix.add(errorReport.toMap());
+      
+      debugPrint('✅ Chat error report sent successfully with ID: ${docRef.id}');
+      debugPrint('🚨 ========== CHAT ERROR REPORT END ==========');
+    } catch (e, stackTrace) {
       debugPrint('❌ Error sending chat error report: $e');
+      debugPrint('❌ Stack trace: $stackTrace');
+      debugPrint('🚨 ========== CHAT ERROR REPORT ERROR ==========');
       rethrow;
     }
   }

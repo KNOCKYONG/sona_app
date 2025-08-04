@@ -46,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _previousIsTyping = false;
   // Track welcome messages per persona to prevent repetition
   final Map<String, bool> _hasShownWelcomePerPersona = {};
-  bool _showMoreMenu = false;
+  // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
   
   // Service references for dispose method
   ChatService? _chatService;
@@ -665,232 +665,139 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           ),
             ],
           ),
-          // More menu overlay
-          if (_showMoreMenu) ...[
-            // Invisible overlay to detect taps outside
-            Positioned.fill(
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _showMoreMenu = false;
-                  });
-                },
-                behavior: HitTestBehavior.opaque,
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-            // Dropdown menu
-            Positioned(
-              top: MediaQuery.of(context).padding.top + kToolbarHeight - 4, // 상단바에 딱 붙이기
-              right: 12, // 더보기 버튼과 정렬
-              child: TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.easeOutCubic,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: 0.9 + (0.1 * value),
-                    alignment: Alignment.topRight,
-                    child: Opacity(
-                      opacity: value,
-                      child: Material(
-                  elevation: 12,
-                  borderRadius: BorderRadius.circular(12),
-                  shadowColor: Colors.black.withOpacity(0.3),
-                  color: Theme.of(context).cardColor,
-                  child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // Send Chat Error button
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _showMoreMenu = false;
-                        });
-                        
-                        final chatService = Provider.of<ChatService>(context, listen: false);
-                        final authService = Provider.of<AuthService>(context, listen: false);
-                        final personaService = Provider.of<PersonaService>(context, listen: false);
-                        
-                        final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
-                        final currentPersona = personaService.currentPersona;
-                        
-                        if (userId.isNotEmpty && currentPersona != null) {
-                          // Show loading dialog
-                          showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (context) => const Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0xFFFF6B9D),
-                              ),
-                            ),
-                          );
-                          
-                          try {
-                            await chatService.sendChatErrorReport(
-                              userId: userId,
-                              personaId: currentPersona.id,
-                            );
-                            
-                            if (mounted) {
-                              Navigator.pop(context); // Close loading dialog
-                              
-                              // Show success message
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('대화 오류가 성공적으로 전송되었습니다.'),
-                                  backgroundColor: Colors.green,
-                                ),
-                              );
-                            }
-                          } catch (e) {
-                            debugPrint('🔥 Error sending chat error report: $e');
-                            if (mounted) {
-                              Navigator.pop(context); // Close loading dialog
-                              
-                              // Show error message
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('오류 전송 실패: ${e.toString().contains('permission') ? '권한이 없습니다. 나중에 다시 시도해 주세요.' : '네트워크 오류가 발생했습니다.'}'),
-                                  backgroundColor: Colors.red,
-                                ),
-                              );
-                            }
-                          }
-                        }
-                      },
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.bug_report_outlined,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '대화 오류 전송하기',
-                              style: TextStyle(
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // Divider
-                    Container(
-                      height: 1,
-                      color: Theme.of(context).dividerColor.withOpacity(0.2),
-                    ),
-                    // Leave chat room button
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _showMoreMenu = false;
-                        });
-                        
-                        // Show confirmation dialog
-                        final shouldLeave = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(AppLocalizations.of(context)!.leaveChatTitle),
-                            content: Text(AppLocalizations.of(context)!.leaveChatConfirm),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: Text(AppLocalizations.of(context)!.cancel),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: Text(
-                                  AppLocalizations.of(context)!.leave,
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                        
-                        if (shouldLeave == true && mounted) {
-                          // Leave chat room
-                          final chatService = Provider.of<ChatService>(context, listen: false);
-                          final authService = Provider.of<AuthService>(context, listen: false);
-                          final personaService = Provider.of<PersonaService>(context, listen: false);
-                          
-                          final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
-                          final currentPersona = personaService.currentPersona;
-                          
-                          if (userId.isNotEmpty && currentPersona != null) {
-                            // 먼저 채팅방 나가기 처리
-                            await chatService.leaveChatRoom(userId, currentPersona.id);
-                            
-                            // 매칭된 페르소나 목록에서도 제거
-                            personaService.removeFromMatchedPersonas(currentPersona.id);
-                            
-                            // Navigate back to main navigation
-                            if (mounted) {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                '/main',
-                                arguments: {'initialIndex': 1}, // 채팅 목록 탭
-                              );
-                            }
-                          }
-                        }
-                      },
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(12),
-                        bottomRight: Radius.circular(12),
-                      ),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.exit_to_app,
-                              color: Colors.red[400],
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              AppLocalizations.of(context)!.leaveChatRoom,
-                              style: TextStyle(
-                                color: Colors.red[400],
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+          // More menu overlay removed - using PopupMenuButton instead
         ],
       ),
     );
     
     return scaffold;
+  }
+
+  Future<void> _handleErrorReport() async {
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    debugPrint('🔍 Chat Error Report - Start');
+    final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+    final currentPersona = personaService.currentPersona;
+    
+    debugPrint('🔍 userId: $userId');
+    debugPrint('🔍 currentPersona: ${currentPersona?.id} - ${currentPersona?.name}');
+    
+    if (userId.isNotEmpty && currentPersona != null) {
+      debugPrint('🔍 Conditions met, showing loading dialog');
+      
+      // Store context before async operation
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+      
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => const Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFFF6B9D),
+          ),
+        ),
+      );
+      
+      bool success = false;
+      String? errorMessage;
+      
+      try {
+        await chatService.sendChatErrorReport(
+          userId: userId,
+          personaId: currentPersona.id,
+        );
+        success = true;
+      } catch (e) {
+        debugPrint('🔥 Error sending chat error report: $e');
+        errorMessage = e.toString().contains('permission') 
+            ? '권한이 없습니다. 나중에 다시 시도해 주세요.' 
+            : '네트워크 오류가 발생했습니다.';
+      }
+      
+      // Close loading dialog
+      navigator.pop();
+      
+      // Show result message
+      if (success) {
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(
+            content: Text('대화 오류가 성공적으로 전송되었습니다.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('오류 전송 실패: $errorMessage'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      debugPrint('🔍 Conditions not met - userId: $userId, currentPersona: $currentPersona');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('페르소나를 선택해 주세요.'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+    }
+  }
+  
+  Future<void> _handleLeaveChat() async {
+    // Show confirmation dialog
+    final shouldLeave = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(AppLocalizations.of(context)!.leaveChatTitle),
+        content: Text(AppLocalizations.of(context)!.leaveChatConfirm),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(AppLocalizations.of(context)!.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              AppLocalizations.of(context)!.leave,
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+    
+    if (shouldLeave == true && mounted) {
+      // Leave chat room
+      final chatService = Provider.of<ChatService>(context, listen: false);
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      
+      final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+      final currentPersona = personaService.currentPersona;
+      
+      if (userId.isNotEmpty && currentPersona != null) {
+        // 먼저 채팅방 나가기 처리
+        await chatService.leaveChatRoom(userId, currentPersona.id);
+        
+        // 매칭된 페르소나 목록에서도 제거
+        personaService.removeFromMatchedPersonas(currentPersona.id);
+        
+        // Navigate back to main navigation
+        if (mounted) {
+          Navigator.pushReplacementNamed(
+            context,
+            '/main',
+            arguments: {'initialIndex': 1}, // 채팅 목록 탭
+          );
+        }
+      }
+    }
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -949,16 +856,66 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         Center(
           child: Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: ModernIconButton(
-              icon: Icons.more_horiz_rounded,
-              onPressed: () {
-                debugPrint('🔘 More button pressed, current state: $_showMoreMenu');
-                setState(() {
-                  _showMoreMenu = !_showMoreMenu;
-                });
-                debugPrint('🔘 New state: $_showMoreMenu');
+            child: PopupMenuButton<String>(
+              icon: Icon(
+                Icons.more_horiz_rounded,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 8,
+              offset: const Offset(0, 8),
+              onSelected: (value) async {
+                if (value == 'error_report') {
+                  await _handleErrorReport();
+                } else if (value == 'leave_chat') {
+                  await _handleLeaveChat();
+                }
               },
-              tooltip: AppLocalizations.of(context)!.moreButton,
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem<String>(
+                  value: 'error_report',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.bug_report_outlined,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        '대화 오류 전송하기',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const PopupMenuDivider(),
+                PopupMenuItem<String>(
+                  value: 'leave_chat',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.exit_to_app,
+                        color: Colors.red[400],
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.leaveChatRoom,
+                        style: TextStyle(
+                          color: Colors.red[400],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

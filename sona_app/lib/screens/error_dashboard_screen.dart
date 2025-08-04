@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/chat_error_report.dart';
 import '../helpers/firebase_helper.dart';
 import '../services/chat/error_recovery_service.dart';
+import 'dart:math' as math;
 
 /// 대화 오류 대시보드 화면
 /// 관리자가 발생한 오류들을 모니터링할 수 있는 화면
@@ -22,6 +23,9 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
   final Map<String, int> _personaErrorCounts = {};
   final Map<String, int> _errorTypeCounts = {};
   
+  // 시간대별 에러 통계 (최근 24시간)
+  final Map<int, int> _hourlyErrorCounts = {};
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +40,9 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
           
           // 통계 섹션
           _buildStatisticsSection(),
+          
+          // 에러 빈도 그래프
+          _buildErrorFrequencyGraph(),
           
           // 에러 리스트
           Expanded(
@@ -161,6 +168,9 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         // 통계 계산
         _personaErrorCounts.clear();
         _errorTypeCounts.clear();
+        _hourlyErrorCounts.clear();
+        
+        final now = DateTime.now();
         
         for (var doc in snapshot.data!.docs) {
           final data = doc.data() as Map<String, dynamic>;
@@ -169,6 +179,14 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
           
           _personaErrorCounts[personaName] = (_personaErrorCounts[personaName] ?? 0) + 1;
           _errorTypeCounts[errorType] = (_errorTypeCounts[errorType] ?? 0) + 1;
+          
+          // 시간대별 통계 계산
+          final createdAt = (data['created_at'] as Timestamp).toDate();
+          final hoursDiff = now.difference(createdAt).inHours;
+          if (hoursDiff < 24) {
+            final hour = 23 - hoursDiff; // 최근 시간이 오른쪽에 오도록
+            _hourlyErrorCounts[hour] = (_hourlyErrorCounts[hour] ?? 0) + 1;
+          }
         }
         
         // 가장 많은 에러가 발생한 페르소나
@@ -517,4 +535,164 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
     return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} '
         '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
+  
+  Widget _buildErrorFrequencyGraph() {
+    return Container(
+      height: 200,
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '에러 발생 빈도 (최근 24시간)',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: CustomPaint(
+              painter: _ErrorGraphPainter(_hourlyErrorCounts),
+              size: Size.infinite,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '24시간 전',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+              Text(
+                '현재',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 에러 그래프 페인터
+class _ErrorGraphPainter extends CustomPainter {
+  final Map<int, int> hourlyData;
+  
+  _ErrorGraphPainter(this.hourlyData);
+  
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFFFF6B9D)
+      ..strokeWidth = 2
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+      
+    final fillPaint = Paint()
+      ..color = const Color(0xFFFF6B9D).withValues(alpha: 0.1)
+      ..style = PaintingStyle.fill;
+      
+    final gridPaint = Paint()
+      ..color = Colors.grey.withValues(alpha: 0.2)
+      ..strokeWidth = 1;
+    
+    // 최대값 찾기
+    int maxValue = 1;
+    for (int i = 0; i < 24; i++) {
+      final value = hourlyData[i] ?? 0;
+      if (value > maxValue) maxValue = value;
+    }
+    
+    // 그리드 그리기
+    for (int i = 0; i <= 4; i++) {
+      final y = size.height * (i / 4);
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
+    
+    // 그래프 경로 생성
+    final path = Path();
+    final fillPath = Path();
+    
+    for (int i = 0; i < 24; i++) {
+      final value = hourlyData[i] ?? 0;
+      final x = size.width * (i / 23);
+      final y = size.height - (size.height * (value / maxValue));
+      
+      if (i == 0) {
+        path.moveTo(x, y);
+        fillPath.moveTo(x, size.height);
+        fillPath.lineTo(x, y);
+      } else {
+        path.lineTo(x, y);
+        fillPath.lineTo(x, y);
+      }
+    }
+    
+    // 채우기 경로 완성
+    fillPath.lineTo(size.width, size.height);
+    fillPath.close();
+    
+    // 그래프 그리기
+    canvas.drawPath(fillPath, fillPaint);
+    canvas.drawPath(path, paint);
+    
+    // 데이터 포인트 그리기
+    final pointPaint = Paint()
+      ..color = const Color(0xFFFF6B9D)
+      ..style = PaintingStyle.fill;
+      
+    for (int i = 0; i < 24; i++) {
+      final value = hourlyData[i] ?? 0;
+      if (value > 0) {
+        final x = size.width * (i / 23);
+        final y = size.height - (size.height * (value / maxValue));
+        canvas.drawCircle(Offset(x, y), 3, pointPaint);
+      }
+    }
+    
+    // Y축 레이블 그리기
+    final textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+    );
+    
+    for (int i = 0; i <= 4; i++) {
+      final value = (maxValue * (4 - i) / 4).round();
+      textPainter.text = TextSpan(
+        text: value.toString(),
+        style: TextStyle(
+          fontSize: 10,
+          color: Colors.grey.shade600,
+        ),
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(-textPainter.width - 8, size.height * (i / 4) - textPainter.height / 2),
+      );
+    }
+  }
+  
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

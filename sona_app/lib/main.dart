@@ -26,7 +26,6 @@ import 'services/auth/auth_service.dart';
 import 'services/auth/user_service.dart';
 import 'services/persona/persona_service.dart';
 import 'services/chat/chat_service.dart';
-import 'services/purchase/subscription_service.dart';
 import 'services/purchase/purchase_service.dart';
 import 'services/storage/cache_manager.dart';
 import 'services/theme/theme_service.dart';
@@ -124,7 +123,6 @@ class SonaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => UserService()),
         ChangeNotifierProvider(create: (_) => PersonaService()),
-        ChangeNotifierProvider(create: (_) => SubscriptionService()),
         // 실제 PurchaseService 사용
         ChangeNotifierProvider<PurchaseService>(
           create: (_) => PurchaseService(),

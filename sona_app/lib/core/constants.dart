@@ -10,7 +10,6 @@ class AppConstants {
   static const String chatsCollection = 'chats';
   static const String matchesCollection = 'matches';
   static const String swipesCollection = 'swipes';
-  static const String subscriptionsCollection = 'subscriptions';
   static const String purchasesCollection = 'purchases';
   static const String conversationMemoriesCollection = 'conversation_memories';
   static const String conversationSummariesCollection = 'conversation_summaries';
@@ -62,15 +61,7 @@ class AppConstants {
   static const String cachedUserKey = 'cached_user';
   static const String cachedSubscriptionKey = 'cached_subscription';
   
-  // Subscription Types
-  static const String subscriptionBasic = 'basic';
-  static const String subscriptionPremium = 'premium';
-  static const String subscriptionVip = 'vip';
-  
   // Purchase Product IDs
-  static const String productIdPremium1Month = 'premium_1month';
-  static const String productIdPremium3Months = 'premium_3months';
-  static const String productIdPremium6Months = 'premium_6months';
   static const String productIdHearts30 = 'hearts_30';
   static const String productIdHearts50 = 'hearts_50';
   static const String productIdHearts100 = 'hearts_100';

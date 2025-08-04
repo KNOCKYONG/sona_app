@@ -304,8 +304,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           insertedTipCount < targetTipCount && 
           tips.length > usedTips.length &&
           !guaranteedTipPositions.contains(currentItemIndex)) {
-        // 20% 확률로 팁 카드 삽입
-        if (_random.nextDouble() < 0.2) {
+        // 40% 확률로 팁 카드 삽입
+        if (_random.nextDouble() < 0.4) {
           final availableTips = tips.where((tip) => !usedTips.contains(tip)).toList();
           if (availableTips.isNotEmpty) {
             final tipIndex = _random.nextInt(availableTips.length);
@@ -1783,15 +1783,18 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       ),
       body: Consumer<PersonaService>(
         builder: (context, personaService, child) {
-          if (personaService.isLoading) {
+          // 🔥 Progressive loading - 로딩 중에도 이전 데이터 표시
+          final personas = personaService.availablePersonasProgressive;
+          debugPrint('📊 [PersonaSelectionScreen] Available personas: ${personas.length}');
+          
+          // 초기 로딩 시에만 로딩 인디케이터 표시
+          if (personaService.isLoading && personas.isEmpty && _cardItems.isEmpty) {
             return const Center(
               child: CircularProgressIndicator(
                 color: Color(0xFFFF6B9D),
               ),
             );
           }
-
-          final personas = personaService.availablePersonas;
           
           // 카드 아이템 리스트 준비 (Personas + Tips) - 무한 루프 방지
           if (!_isPreparingCards && (!listEquals(_lastPersonas, personas) || _cardItems.isEmpty)) {
@@ -1996,18 +1999,25 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                 ),
               ],
             ),
-            // R2 validation indicator
+            // R2 validation indicator - 액션 버튼 바로 위에 표시
             if (personaService.isValidatingR2)
               Positioned(
-                bottom: 100,
+                bottom: 120, // 100 -> 120으로 조정하여 액션 버튼 위에 표시
                 left: 0,
                 right: 0,
                 child: Center(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.circular(25),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
                     ),
                     child: const Row(
                       mainAxisSize: MainAxisSize.min,
@@ -2020,12 +2030,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 10),
                         Text(
-                          '더 많은 카드 로딩 중...',
+                          '더 많은 페르소나 확인 중...',
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],

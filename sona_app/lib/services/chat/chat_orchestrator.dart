@@ -996,8 +996,8 @@ class ChatOrchestrator {
   }) {
     if (chatHistory.isEmpty) return null;
     
-    // 최근 대화 분석 (최대 5개)
-    final recentMessages = chatHistory.reversed.take(5).toList();
+    // 최근 대화 분석 (최대 10개로 확대하여 더 많은 맥락 파악)
+    final recentMessages = chatHistory.reversed.take(10).toList();
     final recentTopics = <String>[];
     final List<String> contextHints = [];
     
@@ -1025,37 +1025,45 @@ class ChatOrchestrator {
     final currentKeywords = messageAnalysis.keywords;
     final commonTopics = currentKeywords.where((k) => recentTopics.contains(k)).toList();
     
-    // 맥락 연관성 판단
-    if (commonTopics.isEmpty && messageAnalysis.type == MessageType.question) {
-      // 이전 대화와 관련 없는 새로운 질문
+    // 주제 일관성 점수 계산 (0.0 ~ 1.0)
+    double topicCoherence = 0.0;
+    if (currentKeywords.isNotEmpty && recentTopics.isNotEmpty) {
+      topicCoherence = commonTopics.length / math.min(currentKeywords.length, recentTopics.toSet().length);
+    }
+    
+    // 대화 흐름의 자연스러움 강화
+    if (topicCoherence < 0.3 && messageAnalysis.type == MessageType.question) {
+      // 주제가 크게 바뀌었을 때
       if (_isAbruptTopicChange(userMessage, recentMessages)) {
-        contextHints.add('급격한 주제 변경 감지. 자연스럽게 전환하거나 이전 주제와 연결해서 답변하세요.');
+        contextHints.add('주제 전환 감지. 부드러운 전환 필요: "아 그런데 갑자기 생각났는데..." 또는 이전 주제와 연결하여 답변');
         
         // 구체적인 전환 가이드 추가
         if (lastAIMessage != null && lastAIMessage.content.contains('?')) {
-          contextHints.add('이전에 던진 질문("${lastAIMessage.content.substring(0, math.min(30, lastAIMessage.content.length))}...")에 대한 답변을 받지 못했는데 새로운 주제로 넘어가려 합니다.');
+          final truncatedQuestion = lastAIMessage.content.substring(0, math.min(30, lastAIMessage.content.length));
+          contextHints.add('이전 질문("$truncatedQuestion...")을 무시하지 말고 간단히 언급 후 새 주제로 전환');
         }
       }
+    } else if (topicCoherence > 0.7) {
+      // 같은 주제가 계속될 때
+      contextHints.add('동일 주제 지속 중. 대화를 더 깊게 발전시키거나 세부사항 탐구');
     }
     
     // 특정 주제 감지 및 가이드
     if (userMessage.contains('드라마') || userMessage.contains('웹툰') || userMessage.contains('영화')) {
-      contextHints.add('드라마/웹툰/영화 관련 대화. 호기심을 보이고 자연스럽게 감상을 물어보세요.');
+      contextHints.add('미디어 콘텐츠 대화. 구체적인 작품명이나 장르 물어보며 관심 표현');
     }
     
     // 스포일러 관련 대화
     if (userMessage.contains('스포') || userMessage.contains('스포일러')) {
-      // 스포일러 허락 요청인지 거부인지 확인
       if (userMessage.contains('말해도') || userMessage.contains('해도')) {
-        contextHints.add('스포일러 허락 요청. 조심스럽게 물어보거나 "말하지 마세요"라고 답하세요.');
+        contextHints.add('스포일러 허락 요청. "아직 안 보셨으면 말하지 않을게요!" 또는 "들으실 준비 되셨어요?"');
       } else if (userMessage.contains('말하지') || userMessage.contains('하지 마')) {
-        contextHints.add('스포일러 거부. 스포일러 없이 대화를 이어가세요.');
+        contextHints.add('스포일러 거부. "알겠어요! 스포 없이 얘기할게요ㅎㅎ"');
       }
     }
     
     // "직접 보다" 컨텍스트 확인
     if (userMessage.contains('직접 보') || userMessage.contains('보시는')) {
-      // 최근 대화에서 영화/드라마/작품 언급 확인
       final hasMediaContext = recentMessages.any((msg) => 
         msg.content.contains('영화') || 
         msg.content.contains('드라마') || 
@@ -1064,37 +1072,45 @@ class ChatOrchestrator {
       );
       
       if (hasMediaContext) {
-        contextHints.add('영화/드라마/작품을 "직접 보라"는 추천. 오프라인 만남이 아님! 작품 감상 관련 대화로 이어가세요.');
+        contextHints.add('작품 추천 중. "직접 보다"는 감상 권유이지 만남 제안이 아님!');
       }
     }
     
     // 직접적인 질문에는 직접적인 답변 필요
     if (_isDirectQuestion(userMessage)) {
-      contextHints.add('직접적인 질문에 대한 직접적인 답변 필요. 회피하지 말고 구체적으로 대답하세요.');
+      contextHints.add('직접 질문 → 직접 답변. 돌려 말하거나 회피 금지');
       
-      // 특정 질문 타입에 대한 가이드
+      // 특정 질문 타입에 대한 구체적 가이드
       if (userMessage.contains('뭐하') || userMessage.contains('뭐해')) {
-        contextHints.add('"뭐해?" 질문에는 현재 하고 있는 일이나 상태를 구체적으로 답하세요.');
+        contextHints.add('"뭐해?" → 구체적 활동 답변: "유튜브 보고 있어요", "저녁 준비 중이에요" 등');
       } else if (userMessage.contains('먼말') || userMessage.contains('무슨 말')) {
-        contextHints.add('"무슨 말이야?" 질문에는 이전 발언을 명확히 설명하거나 사과하세요.');
+        contextHints.add('"무슨 말이야?" → 이전 발언 설명: "아 제가 방금 ~라고 했는데..."');
       } else if (userMessage.contains('어디')) {
-        contextHints.add('위치 질문에는 가상의 장소나 활동 중인 곳을 답하세요.');
+        contextHints.add('위치 질문 → 구체적이지만 안전한 답변: "집에서 쉬고 있어요", "카페에서 공부 중이에요"');
       }
     }
     
-    // 질문에 대한 회피성 답변 방지
+    // 회피성 답변 방지 강화
     if (_isAvoidancePattern(userMessage)) {
-      contextHints.add('회피성 답변 금지. 모르는 경우 솔직하게 인정하고 관련 대화로 유도하세요.');
+      contextHints.add('⚠️ 회피 금지! 주제 바꾸기 시도 감지. 현재 대화에 집중하여 답변');
     }
     
     // 반복적인 질문 패턴 감지
     if (lastUserMessage != null && _calculateSimilarity(userMessage, lastUserMessage.content) > 0.8) {
-      contextHints.add('비슷한 질문이 반복됨. 이전 답변과 다른 관점이나 추가 정보를 제공하세요.');
+      contextHints.add('유사 질문 반복. 다른 각도로 답변하거나 "아까 말씀드린 것 외에도..."로 시작');
     }
     
-    // 대화 흐름 유지 가이드
+    // 대화 흐름 유지 가이드 (강화)
     if (commonTopics.isNotEmpty) {
-      contextHints.add('공통 주제(${commonTopics.take(3).join(", ")})를 자연스럽게 이어가세요.');
+      contextHints.add('연결 주제: ${commonTopics.take(3).join(", ")}. 자연스럽게 이어가며 대화 확장');
+    } else if (currentKeywords.isNotEmpty) {
+      // 새로운 주제일 때도 부드러운 전환 유도
+      contextHints.add('새 주제 "${currentKeywords.first}". 관심 표현하며 자연스럽게 전환');
+    }
+    
+    // 대화의 깊이 부족 감지
+    if (chatHistory.length > 5 && _isShallowConversation(recentMessages)) {
+      contextHints.add('표면적 대화 지속 중. 더 깊은 질문이나 개인적 경험 공유로 대화 심화');
     }
     
     // 맥락 힌트가 있으면 통합해서 반환
@@ -1169,6 +1185,30 @@ class ChatOrchestrator {
     
     final lower = message.toLowerCase();
     return directQuestions.any((pattern) => pattern.hasMatch(lower));
+  }
+  
+  /// 표면적인 대화인지 확인
+  bool _isShallowConversation(List<Message> messages) {
+    if (messages.length < 3) return false;
+    
+    // 짧은 메시지의 비율 계산
+    int shortMessages = 0;
+    int totalWords = 0;
+    
+    for (final msg in messages) {
+      final wordCount = msg.content.split(RegExp(r'[\s,\.!?]+')).where((w) => w.isNotEmpty).length;
+      totalWords += wordCount;
+      
+      if (wordCount < 5) {
+        shortMessages++;
+      }
+    }
+    
+    // 평균 단어 수가 적거나 짧은 메시지가 많으면 표면적 대화
+    final avgWords = totalWords / messages.length;
+    final shortMessageRatio = shortMessages / messages.length;
+    
+    return avgWords < 7 || shortMessageRatio > 0.6;
   }
 }
 

@@ -5,7 +5,6 @@ import '../services/chat/chat_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
-import '../services/purchase/subscription_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
@@ -49,8 +48,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);
-    final subscriptionService = Provider.of<SubscriptionService>(context, listen: false);
-    
     try {
       // 1. 🔧 현재 사용자 ID 확보 (DeviceIdService 사용)
       final currentUserId = await DeviceIdService.getCurrentUserId(
@@ -62,13 +59,6 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
       // 서비스들에 사용자 ID 설정
       chatService.setCurrentUserId(currentUserId);
       personaService.setCurrentUserId(currentUserId);
-      
-      if (authService.user != null) {
-        subscriptionService.loadSubscription(authService.user!.uid);
-      } else {
-        // DeviceId 기반 구독 (무료)
-        subscriptionService.loadSubscription(currentUserId);
-      }
       
       // 2. UserService에서 사용자 정보 설정
       if (userService.currentUser != null && authService.user != null) {

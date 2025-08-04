@@ -51,12 +51,6 @@ class TipData {
       gradientColors: [Color(0xFF6A85B6), Color(0xFFBAC8E0)],
     ),
     const TipData(
-      title: "프리미엄 혜택",
-      content: "프리미엄: 무제한 메시지 + 특별 배지",
-      icon: Icons.workspace_premium,
-      gradientColors: [Color(0xFFFFD700), Color(0xFFFFA500)],
-    ),
-    const TipData(
       title: "대화 오류 발견하셨나요?",
       content: "채팅방 더보기 → '대화 오류 전송하기'로 개선에 도움을 주세요!",
       icon: Icons.bug_report_outlined,

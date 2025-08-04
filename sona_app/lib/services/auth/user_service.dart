@@ -480,11 +480,6 @@ class UserService extends BaseService {
   bool isDailyMessageLimitReached() {
     if (_currentUser == null) return false; // 로그인하지 않은 경우 제한 없음
     
-    // 프리미엄 사용자는 무제한
-    if (_currentUser!.isPremium) {
-      debugPrint('✅ 프리미엄 사용자 - 메시지 무제한');
-      return false;
-    }
     
     // 리셋이 필요한지 확인하고 필요하면 자동 리셋
     if (_shouldResetMessageCount()) {
@@ -506,11 +501,6 @@ class UserService extends BaseService {
   Future<void> incrementMessageCount() async {
     if (_currentUser == null) return;
     
-    // 프리미엄 사용자는 카운트 증가 안함
-    if (_currentUser!.isPremium) {
-      debugPrint('✅ 프리미엄 사용자 - 메시지 카운트 증가 스킵');
-      return;
-    }
     
     await executeWithLoading(() async {
       // 리셋이 필요한지 확인

@@ -40,9 +40,6 @@ class FirebaseHelper {
       personas.doc(personaId);
   
   // Other Collections
-  static CollectionReference<Map<String, dynamic>> get subscriptions => 
-      _firestore.collection(AppConstants.subscriptionsCollection);
-      
   static CollectionReference<Map<String, dynamic>> get purchases => 
       _firestore.collection(AppConstants.purchasesCollection);
       

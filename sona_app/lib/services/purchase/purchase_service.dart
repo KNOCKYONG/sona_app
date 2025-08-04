@@ -13,17 +13,6 @@ class ProductIds {
   static const String hearts30 = 'com.nohbrother.teamsona.chatapp.hearts_30';
   static const String hearts50 = 'com.nohbrother.teamsona.chatapp.hearts_50';
   
-  // 프리미엄 구독 상품
-  static const String premium1Month = 'com.nohbrother.teamsona.chatapp.premium1';
-  static const String premium3Months = 'com.nohbrother.teamsona.chatapp.premium_3months';
-  static const String premium6Months = 'com.nohbrother.teamsona.chatapp.premium_6months';
-  
-  // 구독 상품 목록
-  static const List<String> subscriptions = [
-    premium1Month,
-    // premium3Months,  // Google Play Console에 추가 후 활성화
-    // premium6Months,  // Google Play Console에 추가 후 활성화
-  ];
   
   // 소모성 상품 목록
   static const List<String> consumables = [
@@ -33,7 +22,7 @@ class ProductIds {
   ];
   
   // 전체 상품 목록
-  static List<String> get allProducts => [...subscriptions, ...consumables];
+  static List<String> get allProducts => consumables;
 }
 
 /// 구매 서비스
@@ -58,13 +47,9 @@ class PurchaseService extends BaseService {
   List<ProductDetails> get products => _products;
   List<PurchaseDetails> get purchases => _purchases;
   
-  // 사용자 구독 상태
-  bool _isPremium = false;
-  DateTime? _premiumExpiryDate;
+  // 사용자 구매 상태
   int _hearts = 0;
   
-  bool get isPremium => _isPremium;
-  DateTime? get premiumExpiryDate => _premiumExpiryDate;
   int get hearts => _hearts;
   
   PurchaseService() {
@@ -115,8 +100,6 @@ class PurchaseService extends BaseService {
       } else {
         // 로그아웃 시 상태 초기화
         debugPrint('💰 [PurchaseService] User logged out, resetting state');
-        _isPremium = false;
-        _premiumExpiryDate = null;
         _hearts = 0;
         notifyListeners();
       }
@@ -180,9 +163,7 @@ class PurchaseService extends BaseService {
     _isPurchasePending = true;
     notifyListeners();
     
-    // 구독 상품인지 확인
-    final isSubscription = ProductIds.subscriptions.contains(productDetails.id);
-    
+    // 모든 상품은 소모품으로 처리
     final PurchaseParam purchaseParam = PurchaseParam(
       productDetails: productDetails,
       applicationUserName: user.uid,
@@ -191,13 +172,8 @@ class PurchaseService extends BaseService {
     bool success = false;
     
     try {
-      if (isSubscription) {
-        // 구독 상품 구매
-        success = await _inAppPurchase.buyNonConsumable(purchaseParam: purchaseParam);
-      } else {
-        // 소모성 상품 구매
-        success = await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
-      }
+      // 소모성 상품 구매
+      success = await _inAppPurchase.buyConsumable(purchaseParam: purchaseParam);
       
       // 구매 시작 실패 시 pending 상태 리셋
       if (!success) {
@@ -285,15 +261,6 @@ class PurchaseService extends BaseService {
     debugPrint('💰 [PurchaseService] Delivering product: $productId');
     
     switch (productId) {
-      case ProductIds.premium1Month:
-        await _grantPremium(30);
-        break;
-      case ProductIds.premium3Months:
-        await _grantPremium(90);
-        break;
-      case ProductIds.premium6Months:
-        await _grantPremium(180);
-        break;
       case ProductIds.hearts10:
         debugPrint('💰 [PurchaseService] Delivering 10 hearts');
         await _grantHearts(10);
@@ -309,30 +276,6 @@ class PurchaseService extends BaseService {
       default:
         debugPrint('⚠️ [PurchaseService] Unknown product ID: $productId');
     }
-  }
-  
-  /// 프리미엄 권한 부여
-  Future<void> _grantPremium(int days) async {
-    final user = _auth.currentUser;
-    if (user == null) return;
-    
-    final now = DateTime.now();
-    final currentExpiry = _premiumExpiryDate;
-    
-    // 기존 만료일이 있고 아직 유효하면 연장, 아니면 현재부터 시작
-    final startDate = (currentExpiry != null && currentExpiry.isAfter(now)) 
-        ? currentExpiry 
-        : now;
-    
-    final newExpiry = startDate.add(Duration(days: days));
-    
-    await _firestore.collection('users').doc(user.uid).update({
-      'isPremium': true,
-      'premiumExpiryDate': Timestamp.fromDate(newExpiry),
-      'updatedAt': FieldValue.serverTimestamp(),
-    });
-    
-    debugPrint('✅ Premium granted until: $newExpiry');
   }
   
   /// 하트 지급
@@ -399,30 +342,13 @@ class PurchaseService extends BaseService {
       if (userDoc.exists) {
         final data = userDoc.data()!;
         
-        _isPremium = data['isPremium'] ?? false;
         final previousHearts = _hearts;
         _hearts = data['hearts'] ?? 0;
         
         debugPrint('💰 [PurchaseService] Hearts loaded - Previous: $previousHearts, Current: $_hearts');
         debugPrint('💰 [PurchaseService] Raw hearts data from Firestore: ${data['hearts']}');
         
-        if (data['premiumExpiryDate'] != null) {
-          _premiumExpiryDate = (data['premiumExpiryDate'] as Timestamp).toDate();
-          
-          // 만료 확인
-          if (_premiumExpiryDate!.isBefore(DateTime.now())) {
-            _isPremium = false;
-            _premiumExpiryDate = null;
-            
-            // 만료 상태 업데이트
-            await _firestore.collection('users').doc(user.uid).update({
-              'isPremium': false,
-              'updatedAt': FieldValue.serverTimestamp(),
-            });
-          }
-        }
-        
-        debugPrint('💰 [PurchaseService] Purchase data loaded successfully - Hearts: $_hearts, Premium: $_isPremium');
+        debugPrint('💰 [PurchaseService] Purchase data loaded successfully - Hearts: $_hearts');
         notifyListeners();
       } else {
         debugPrint('⚠️ [PurchaseService] User document does not exist yet');

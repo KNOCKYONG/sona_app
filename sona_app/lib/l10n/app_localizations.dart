@@ -161,7 +161,6 @@ class AppLocalizations {
   // ===== 스토어/구매 =====
   String get store => isKorean ? '스토어' : 'Store';
   String get hearts => isKorean ? '하트' : 'Hearts';
-  String get premium => isKorean ? '프리미엄' : 'Premium';
   String get notSubscribed => isKorean ? '미가입' : 'Not subscribed';
   String daysRemaining(int days) => isKorean ? '$days일 남음' : '$days days remaining';
   String get expired => isKorean ? '만료됨' : 'Expired';
@@ -175,12 +174,6 @@ class AppLocalizations {
   String get loadingProducts => isKorean ? '상품 정보를 불러오는 중...' : 'Loading products...';
   String get noProductsFound => isKorean ? '상품을 찾을 수 없습니다' : 'No products found';
   String get purchaseButton => isKorean ? '구매하기' : 'Purchase';
-  String get premium1Month => isKorean ? '프리미엄 1개월' : 'Premium 1 Month';
-  String get premium3Months => isKorean ? '프리미엄 3개월' : 'Premium 3 Months';
-  String get premium6Months => isKorean ? '프리미엄 6개월' : 'Premium 6 Months';
-  String get premiumDescription => isKorean ? '무제한 매칭, 광고 제거' : 'Unlimited matching, no ads';
-  String get premiumDescription20Off => isKorean ? '무제한 매칭, 광고 제거 (20% 할인)' : 'Unlimited matching, no ads (20% off)';
-  String get premiumDescription30Off => isKorean ? '무제한 매칭, 광고 제거 (30% 할인)' : 'Unlimited matching, no ads (30% off)';
   String get discount20 => isKorean ? '20% 할인' : '20% off';
   String get discount30 => isKorean ? '30% 할인' : '30% off';
   
@@ -197,7 +190,7 @@ class AppLocalizations {
   String get profilePhotoUpdateFailed => isKorean ? '프로필 사진 업데이트에 실패했습니다' : 'Failed to update profile photo';
   String get loginRequiredForProfile => isKorean ? '프로필을 보고 소나와의 기록을 확인하려면\n로그인이 필요해요' : 'Login required to view profile\nand check records with SONA';
   String get editProfile => isKorean ? '프로필 편집' : 'Edit Profile';
-  String get purchaseHeartsPremium => isKorean ? '하트 구매 및 프리미엄 가입' : 'Buy hearts and premium subscription';
+  String get purchaseHeartsOnly => isKorean ? '하트 구매' : 'Buy hearts';
   String get tutorialAccount => isKorean ? '튜토리얼 계정' : 'Tutorial Account';
   String get subscriptionStatus => isKorean ? '구독 현황' : 'Subscription Status';
   String get editInfo => isKorean ? '정보 수정' : 'Edit Info';
@@ -277,7 +270,7 @@ class AppLocalizations {
   String get accountDeletionInfo => isKorean ? '계정 삭제 시:' : 'When deleting account:';
   String get accountDeletionWarning1 => isKorean ? '• 모든 대화 기록이 삭제됩니다' : '• All chat history will be deleted';
   String get accountDeletionWarning2 => isKorean ? '• 보유한 하트가 모두 사라집니다' : '• All hearts will be lost';
-  String get accountDeletionWarning3 => isKorean ? '• 프리미엄 구독이 취소됩니다' : '• Premium subscription will be cancelled';
+  String get accountDeletionWarning3 => isKorean ? '• 모든 구독이 취소됩니다' : '• All subscriptions will be cancelled';
   String get accountDeletionWarning4 => isKorean ? '• 이 작업은 되돌릴 수 없습니다' : '• This action cannot be undone';
   String get continueButton => isKorean ? '계속' : 'Continue';
   String get userNotFound => isKorean ? '사용자를 찾을 수 없습니다' : 'User not found';
@@ -335,7 +328,7 @@ class AppLocalizations {
 
   // ===== 일일 메시지 제한 =====
   String get dailyLimitReached => isKorean ? '오늘의 메시지 한도에 도달했습니다' : 'Daily message limit reached';
-  String get upgradeForUnlimited => isKorean ? '프리미엄으로 업그레이드하여 무제한 대화를 즐기세요' : 'Upgrade to Premium for unlimited conversations';
+  String get purchaseMoreHearts => isKorean ? '하트를 구매하여 대화를 계속하세요' : 'Purchase hearts to continue conversations';
   String messagesRemaining(int count) => isKorean ? '남은 메시지: $count개' : '$count messages remaining';
   String get unlimitedMessages => isKorean ? '무제한' : 'Unlimited';
   
@@ -598,20 +591,10 @@ This privacy policy is effective from July 24, 2024.''';
   String get purchaseSection1Title => isKorean ? '1. 인앱 구매 상품' : '1. In-App Purchase Items';
   String get purchaseSection1Content => isKorean ? '''SONA에서 제공하는 인앱 구매 상품:
 
-프리미엄 구독:
-• 1개월 구독: ₩9,900
-• 3개월 구독: ₩24,900 (17% 할인)
-• 6개월 구독: ₩44,900 (25% 할인)
-
 하트 구매:
 • 하트 10개: ₩1,200
 • 하트 30개: ₩3,300 (8% 할인)
 • 하트 50개: ₩4,900 (18% 할인)''' : '''In-app purchase items offered by SONA:
-
-Premium Subscription:
-• 1 Month Subscription: ₩9,900
-• 3 Month Subscription: ₩24,900 (17% discount)
-• 6 Month Subscription: ₩44,900 (25% discount)
 
 Heart Purchase:
 • 10 Hearts: ₩1,200
@@ -627,50 +610,24 @@ Heart Purchase:
 
 Payment will be automatically charged upon purchase confirmation.''';
   
-  String get purchaseSection3Title => isKorean ? '3. 구독 갱신 및 해지' : '3. Subscription Renewal and Cancellation';
-  String get purchaseSection3Content => isKorean ? '''구독 자동 갱신:
-• 구독은 취소하지 않는 한 자동으로 갱신됩니다
-• 현재 구독 기간 종료 24시간 전에 갱신 요금이 청구됩니다
-
-구독 해지 방법:
-
-Android (Google Play):
-1. Google Play Store 앱 실행
-2. 프로필 아이콘 탭
-3. 결제 및 구독 > 구독 선택
-4. SONA 구독 선택 > 구독 취소
-
-iOS (App Store):
-1. 설정 앱 실행
-2. 상단의 Apple ID 탭
-3. 구독 선택
-4. SONA 구독 선택 > 구독 취소
-
-※ 구독 해지 후에도 남은 구독 기간 동안은 프리미엄 혜택을 이용할 수 있습니다.''' : '''Automatic Subscription Renewal:
-• Subscriptions automatically renew unless cancelled
-• Renewal fee will be charged 24 hours before the current subscription period ends
-
-How to Cancel Subscription:
-
-Android (Google Play):
-1. Open Google Play Store app
-2. Tap profile icon
-3. Payments & subscriptions > Subscriptions
-4. Select SONA subscription > Cancel subscription
-
-iOS (App Store):
-1. Open Settings app
-2. Tap your Apple ID at the top
-3. Select Subscriptions
-4. Select SONA subscription > Cancel subscription
-
-※ You can continue to use premium benefits for the remaining subscription period after cancellation.''';
+  String get purchaseSection3Title => isKorean ? '3. 환불 정책' : '3. Refund Policy';
+  String get purchaseSection3Content => isKorean ? '''하트 상품:
+• 구매 후 사용하지 않은 하트에 한해 구매일로부터 7일 이내 환불 가능
+• 사용한 하트는 환불 불가
+• 결제 오류 시 즉시 고객센터 문의''' : '''Hearts Products:
+• Refund available within 7 days of purchase for unused hearts only
+• Used hearts are non-refundable
+• Contact customer service immediately for payment errors''';
   
-  String get purchaseSection4Title => isKorean ? '4. 환불 정책' : '4. Refund Policy';
-  String get purchaseSection4Content => isKorean ? '''구독 상품:
-• 구독 시작 후 7일 이내: 전액 환불 가능
-• 7일 이후: 남은 기간에 대한 부분 환불 불가
-• 자동 갱신된 구독: 갱신 후 48시간 이내 환불 요청 시 전액 환불
+  String get purchaseSection4Title => isKorean ? '4. 취소 정책' : '4. Cancellation Policy';
+  String get purchaseSection4Content => isKorean ? '''구매 취소:
+• 결제 완료 전: 언제든지 취소 가능
+• 결제 완료 후: 환불 정책에 따라 처리
+• 오류로 인한 중복 결제: 전액 환불
+
+고객센터:
+• 이메일: support@teamsona.app
+• 운영시간: 평일 09:00-18:00 (주말/공휴일 제외)
 
 하트(소모성 상품):
 • 구매 후 미사용 상태: 구매일로부터 7일 이내 환불 가능
@@ -680,10 +637,14 @@ iOS (App Store):
 1. Google Play/App Store 환불 정책에 따라 직접 요청
 2. 고객센터(support@sona-app.com)로 구매 영수증과 함께 요청
 
-※ 환불 처리는 스토어 정책에 따라 3-5영업일 소요될 수 있습니다.''' : '''Subscription Products:
-• Within 7 days of subscription start: Full refund available
-• After 7 days: No partial refund for remaining period
-• Auto-renewed subscription: Full refund if requested within 48 hours of renewal
+※ 환불 처리는 스토어 정책에 따라 3-5영업일 소요될 수 있습니다.''' : '''Purchase Cancellation:
+• Before payment completion: Can be cancelled anytime
+• After payment completion: Processed according to refund policy
+• Duplicate payment due to error: Full refund
+
+Customer Service:
+• Email: support@teamsona.app
+• Hours: Weekdays 09:00-18:00 (Excluding weekends/holidays)
 
 Hearts (Consumable Items):
 • Unused after purchase: Refundable within 7 days of purchase

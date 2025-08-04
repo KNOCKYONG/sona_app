@@ -1,0 +1,185 @@
+[
+  {
+    "error_key": "ERR1754304106951_6951",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754305105746_5746",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754303319712_9712",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 83.33,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754304468288_8288",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754304170556_556",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754302320102_102",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 95.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "슬펐다니까",
+        "ai_response": "그렇죠, 슬픔이 가득한 장면이었어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

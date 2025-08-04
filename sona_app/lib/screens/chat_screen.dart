@@ -6,7 +6,6 @@ import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/chat/chat_service.dart';
-import '../services/purchase/subscription_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
@@ -119,8 +118,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
-    final subscriptionService = Provider.of<SubscriptionService>(context, listen: false);
-    
     // Store service references for dispose method
     _chatService = chatService;
     _userId = authService.user?.uid ?? '';
@@ -129,10 +126,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     chatService.setCurrentUserId(_userId!);
     
     debugPrint('🔗 ChatService initialized with PersonaService and userId: $_userId');
-    
-    if (authService.user != null) {
-      await subscriptionService.loadSubscription(authService.user!.uid);
-    }
     
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona) {

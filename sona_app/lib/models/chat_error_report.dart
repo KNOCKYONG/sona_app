@@ -12,6 +12,14 @@ class ChatErrorReport {
   final String? userMessage; // 사용자가 추가로 입력한 메시지
   final String deviceInfo;
   final String appVersion;
+  final String? errorType; // 에러 타입 (api_error, timeout, rate_limit 등)
+  final String? errorMessage; // 구체적인 에러 메시지
+  final String? stackTrace; // 스택 트레이스 (일부)
+  final Map<String, dynamic>? metadata; // 추가 메타데이터
+  final int occurrenceCount; // 발생 횟수
+  final DateTime? firstOccurred; // 최초 발생 시간
+  final DateTime? lastOccurred; // 마지막 발생 시간
+  final String? errorHash; // 중복 체크용 해시
 
   ChatErrorReport({
     required this.errorKey,
@@ -23,6 +31,14 @@ class ChatErrorReport {
     this.userMessage,
     required this.deviceInfo,
     required this.appVersion,
+    this.errorType,
+    this.errorMessage,
+    this.stackTrace,
+    this.metadata,
+    this.occurrenceCount = 1,
+    this.firstOccurred,
+    this.lastOccurred,
+    this.errorHash,
   });
 
   /// Firestore에 저장하기 위한 Map 변환
@@ -43,6 +59,14 @@ class ChatErrorReport {
       'user_message': userMessage,
       'device_info': deviceInfo,
       'app_version': appVersion,
+      'error_type': errorType,
+      'error_message': errorMessage,
+      'stack_trace': stackTrace,
+      'metadata': metadata,
+      'occurrence_count': occurrenceCount,
+      'first_occurred': firstOccurred != null ? Timestamp.fromDate(firstOccurred!) : null,
+      'last_occurred': lastOccurred != null ? Timestamp.fromDate(lastOccurred!) : null,
+      'error_hash': errorHash,
     };
   }
 
@@ -68,6 +92,18 @@ class ChatErrorReport {
       userMessage: map['user_message'],
       deviceInfo: map['device_info'] ?? '',
       appVersion: map['app_version'] ?? '',
+      errorType: map['error_type'],
+      errorMessage: map['error_message'],
+      stackTrace: map['stack_trace'],
+      metadata: map['metadata'] != null ? Map<String, dynamic>.from(map['metadata']) : null,
+      occurrenceCount: map['occurrence_count'] ?? 1,
+      firstOccurred: map['first_occurred'] != null 
+          ? (map['first_occurred'] as Timestamp).toDate() 
+          : null,
+      lastOccurred: map['last_occurred'] != null 
+          ? (map['last_occurred'] as Timestamp).toDate() 
+          : null,
+      errorHash: map['error_hash'],
     );
   }
 
@@ -77,5 +113,17 @@ class ChatErrorReport {
     final timestamp = now.millisecondsSinceEpoch;
     final random = timestamp % 10000; // 마지막 4자리
     return 'ERR${timestamp}_$random';
+  }
+  
+  /// 에러 해시 생성 (중복 체크용)
+  static String generateErrorHash({
+    required String userId,
+    required String personaId,
+    required String errorType,
+    required DateTime timestamp,
+  }) {
+    // 5분 단위로 그룹화
+    final timeSlot = timestamp.millisecondsSinceEpoch ~/ (5 * 60 * 1000);
+    return '${userId}_${personaId}_${errorType}_$timeSlot';
   }
 }

@@ -112,14 +112,22 @@ class PersonaService extends BaseService {
         debugPrint('   - $id');
       }
       
+      // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
       final filtered = _allPersonas.where((persona) => 
-        !_isPersonaRecentlySwiped(persona.id) && 
         !matchedIds.contains(persona.id) &&
-        !_actionedPersonaIds.contains(persona.id) &&  // actionedPersonaIds도 제외
-        _hasR2Image(persona)  // Only include personas with R2 images
+        !_actionedPersonaIds.contains(persona.id)
+        // 최근 스와이프 필터 제거 - 무한 스와이프
+        // R2 필터링 제거 - 모든 페르소나 표시
       ).toList();
       
-      debugPrint('📋 Filtered personas (available for swipe): ${filtered.length}');
+      // 필터링 디버깅
+      debugPrint('📋 Filtering breakdown:');
+      debugPrint('   - Total personas: ${_allPersonas.length}');
+      debugPrint('   - Matched personas to exclude: ${matchedIds.length}');
+      debugPrint('   - Actioned personas to exclude: ${_actionedPersonaIds.length}');
+      debugPrint('   - Available for swipe: ${filtered.length}');
+      debugPrint('   ✅ 무한 스와이프: 최근 스와이프 필터 제거됨');
+      debugPrint('   ✅ 모든 페르소나 표시: R2 필터 제거됨');
       
       // 디버깅: 필터링된 각 카테고리의 수
       final swipedCount = _allPersonas.where((p) => _isPersonaRecentlySwiped(p.id)).length;
@@ -1131,10 +1139,12 @@ class PersonaService extends BaseService {
     
     if (shouldReshuffle) {
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
+      // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
       final filtered = _allPersonas.where((persona) => 
-        !_isPersonaRecentlySwiped(persona.id) && 
         !matchedIds.contains(persona.id) &&
         !_actionedPersonaIds.contains(persona.id)
+        // 최근 스와이프 필터 제거 - 무한 스와이프
+        // R2 필터링 제거 - 모든 페르소나 표시
       ).toList();
       
       final recommendedPersonas = getRecommendedPersonas(filtered);

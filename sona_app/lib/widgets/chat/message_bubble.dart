@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../../services/persona/persona_service.dart';
-import '../../services/purchase/subscription_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
 import '../../l10n/app_localizations.dart';
@@ -201,63 +200,57 @@ class _TimeAndScore extends StatelessWidget {
           ),
         ],
         
-        // Score change (only rebuild this part when subscription changes)
-        Consumer<SubscriptionService>(
-          builder: (context, subscriptionService, child) {
-            if (!subscriptionService.canShowIntimacyScore ||
-                message.relationshipScoreChange == null ||
-                message.relationshipScoreChange == 0) {
-              return const SizedBox.shrink();
-            }
-            
-            final scoreChange = message.relationshipScoreChange!;
-            final isPositive = scoreChange > 0;
-            
-            return Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: isPositive
-                      ? AppTheme.successColor.withOpacity(0.15)
-                      : AppTheme.errorColor.withOpacity(0.15),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 6,
-                    vertical: 2,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isPositive
-                            ? Icons.favorite_rounded
-                            : Icons.heart_broken_rounded,
-                        size: 12,
-                        color: isPositive
-                            ? AppTheme.successColor
-                            : AppTheme.errorColor,
-                      ),
-                      const SizedBox(width: 2),
-                      Text(
-                        '${isPositive ? '+' : ''}$scoreChange',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: isPositive
-                              ? Colors.green
-                              : Colors.red,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
+        // Score change (모든 사용자가 볼 수 있음)
+        if (message.relationshipScoreChange != null &&
+            message.relationshipScoreChange != 0) ...[
+          const SizedBox(width: 8),
+          _buildScoreChange(message.relationshipScoreChange!),
+        ],
       ],
+    );
+  }
+  
+  Widget _buildScoreChange(int scoreChange) {
+    final isPositive = scoreChange > 0;
+    
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: isPositive
+            ? AppTheme.successColor.withOpacity(0.15)
+            : AppTheme.errorColor.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 6,
+          vertical: 2,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isPositive
+                  ? Icons.favorite_rounded
+                  : Icons.heart_broken_rounded,
+              size: 12,
+              color: isPositive
+                  ? AppTheme.successColor
+                  : AppTheme.errorColor,
+            ),
+            const SizedBox(width: 2),
+            Text(
+              '${isPositive ? '+' : ''}$scoreChange',
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: isPositive
+                    ? Colors.green
+                    : Colors.red,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

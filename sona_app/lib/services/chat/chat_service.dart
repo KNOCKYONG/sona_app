@@ -22,6 +22,8 @@ import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
 import '../relationship/like_cooldown_system.dart';
 import '../../models/chat_error_report.dart';
+import 'error_recovery_service.dart';
+import 'error_aggregation_service.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -672,20 +674,48 @@ class ChatService extends BaseService {
       
       // 더 구체적인 에러 분석
       String errorMessage = e.toString();
+      String errorType = 'unknown';
+      
       if (errorMessage.contains('API key') || errorMessage.contains('Invalid API key')) {
         debugPrint('🔑 API Key issue detected');
+        errorType = 'api_key_error';
       } else if (errorMessage.contains('timeout')) {
         debugPrint('⏱️ Request timeout');
+        errorType = 'timeout';
       } else if (errorMessage.contains('401')) {
         debugPrint('🚫 Authentication failed - API key may be invalid');
+        errorType = 'auth_error';
       } else if (errorMessage.contains('429')) {
         debugPrint('🚦 Rate limit exceeded');
+        errorType = 'rate_limit';
       } else if (errorMessage.contains('500') || errorMessage.contains('503')) {
         debugPrint('🔥 OpenAI server error');
+        errorType = 'server_error';
+      }
+      
+      // 자동 에러 리포트 생성 (특정 페르소나에 집중된 에러 추적)
+      try {
+        await _sendAutomaticErrorReport(
+          userId: userId,
+          personaId: persona.id,
+          personaName: persona.name,
+          errorType: errorType,
+          errorMessage: errorMessage,
+          stackTrace: stackTrace.toString().split('\n').take(10).join('\n'), // 스택 트레이스 일부만
+        );
+        
+        // 에러 복구 서비스에 추적
+        ErrorRecoveryService.instance.trackError(
+          personaId: persona.id,
+          errorType: errorType,
+          errorMessage: errorMessage,
+        );
+      } catch (reportError) {
+        debugPrint('❌ Failed to send automatic error report: $reportError');
       }
       
       // Fallback response
-      final fallbackResponse = _getFallbackResponse();
+      final fallbackResponse = _getFallbackResponse(personaId: persona.id);
       await _sendMultipleMessages(
         contents: [fallbackResponse],  // Single content as array
         persona: persona,
@@ -1165,7 +1195,28 @@ class ChatService extends BaseService {
     }
   }
 
-  String _getFallbackResponse() {
+  String _getFallbackResponse({String? personaId}) {
+    // 복구 전략 확인
+    if (personaId != null) {
+      final recoveryStrategy = ErrorRecoveryService.instance.getRecoveryStrategy(personaId);
+      if (recoveryStrategy != null) {
+        // 복구 전략이 있는 경우 더 구체적인 메시지
+        switch (recoveryStrategy.type) {
+          case RecoveryType.cooldown:
+            return '잠시만... 좀 쉬었다가 다시 대화해줄래? 머리가 복잡하네 😅';
+          case RecoveryType.simplifyPrompt:
+            return '음... 너무 복잡한가? 좀 더 간단하게 말해줄 수 있어? 🤔';
+          case RecoveryType.systemError:
+            return '앗, 뭔가 문제가 생긴 것 같아... 잠시 후에 다시 해볼까? 😓';
+          case RecoveryType.retry:
+            return '어라? 잠깐 문제가 있었나봐. 다시 한번 말해줄래? 😊';
+          default:
+            break;
+        }
+      }
+    }
+    
+    // 기본 폴백 응답
     final responses = [
       '아 잠깐만ㅋㅋ 생각이 안 나네',
       '어? 뭔가 이상하네 다시 말해줄래?',
@@ -2696,6 +2747,90 @@ class ChatService extends BaseService {
       return 'Flutter App on ${DateTime.now().toIso8601String()}';
     } catch (e) {
       return 'Unknown device';
+    }
+  }
+  
+  /// 자동 에러 리포트 전송 (내부 에러 추적용)
+  Future<void> _sendAutomaticErrorReport({
+    required String userId,
+    required String personaId,
+    required String personaName,
+    required String errorType,
+    required String errorMessage,
+    required String stackTrace,
+  }) async {
+    try {
+      final now = DateTime.now();
+      
+      // 에러 해시 생성 (중복 체크용)
+      final errorHash = ChatErrorReport.generateErrorHash(
+        userId: userId,
+        personaId: personaId,
+        errorType: errorType,
+        timestamp: now,
+      );
+      
+      // 이미 리포트된 에러인지 확인
+      if (ErrorRecoveryService.instance.isErrorRecentlyReported(errorHash)) {
+        debugPrint('⏭️ Skipping duplicate error report for: $errorHash');
+        
+        // 최근 5개 메시지만 포함
+        final messages = getMessages(personaId);
+        final recentMessages = messages.length > 5 
+            ? messages.sublist(messages.length - 5)
+            : messages;
+        
+        // 집계 서비스에 추가
+        ErrorAggregationService.instance.aggregateError(
+          userId: userId,
+          personaId: personaId,
+          personaName: personaName,
+          errorType: errorType,
+          errorMessage: errorMessage,
+          stackTrace: stackTrace,
+          recentChats: recentMessages.map((m) => m.toJson()).toList(),
+          deviceInfo: await _getDeviceInfo(),
+          lastUserMessage: messages.lastWhere((m) => m.isFromUser, orElse: () => messages.last).content,
+        );
+        
+        return;
+      }
+      
+      // 최근 5개 메시지만 포함
+      final messages = getMessages(personaId);
+      final recentMessages = messages.length > 5 
+          ? messages.sublist(messages.length - 5)
+          : messages;
+      
+      final errorReport = ChatErrorReport(
+        errorKey: ChatErrorReport.generateErrorKey(),
+        userId: userId,
+        personaId: personaId,
+        personaName: personaName,
+        recentChats: recentMessages,
+        createdAt: now,
+        userMessage: '[AUTO] Error occurred during AI response generation',
+        deviceInfo: await _getDeviceInfo(),
+        appVersion: '1.0.0',
+        errorType: errorType,
+        errorMessage: errorMessage,
+        stackTrace: stackTrace,
+        metadata: {
+          'auto_generated': true,
+          'last_user_message': messages.lastWhere((m) => m.isFromUser, orElse: () => messages.last).content,
+        },
+        errorHash: errorHash,
+        firstOccurred: now,
+        lastOccurred: now,
+      );
+      
+      await FirebaseHelper.chatErrorFix.add(errorReport.toMap());
+      debugPrint('✅ Automatic error report sent for persona: $personaName');
+      
+      // 리포트 완료 기록
+      ErrorRecoveryService.instance.markErrorAsReported(errorHash);
+    } catch (e) {
+      debugPrint('❌ Failed to send automatic error report: $e');
     }
   }
 }

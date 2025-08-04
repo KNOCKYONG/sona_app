@@ -12,18 +12,15 @@ class PurchaseScreen extends StatefulWidget {
   State<PurchaseScreen> createState() => _PurchaseScreenState();
 }
 
-class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+class _PurchaseScreenState extends State<PurchaseScreen> {
   
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
   }
   
   @override
   void dispose() {
-    _tabController.dispose();
     // 구매 대기 상태 리셋
     final purchaseService = Provider.of<PurchaseService>(context, listen: false);
     purchaseService.resetPurchasePending();
@@ -88,79 +85,18 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                     ),
                   ],
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _buildStatusItem(
-                      icon: Icons.favorite,
-                      label: localizations.hearts,
-                      value: '${purchaseService.hearts}',
-                    ),
-                    Container(
-                      height: 40,
-                      width: 1,
-                      color: Colors.white.withOpacity(0.3),
-                    ),
-                    _buildStatusItem(
-                      icon: Icons.star,
-                      label: localizations.premium,
-                      value: purchaseService.isPremium 
-                          ? _formatExpiryDate(purchaseService.premiumExpiryDate!)
-                          : localizations.notSubscribed,
-                    ),
-                  ],
+                child: Center(
+                  child: _buildStatusItem(
+                    icon: Icons.favorite,
+                    label: localizations.hearts,
+                    value: '${purchaseService.hearts}',
+                  ),
                 ),
               ),
               
-              // 탭 바
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).dividerColor.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: TabBar(
-                  controller: _tabController,
-                  indicator: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  labelColor: Colors.white,
-                  unselectedLabelColor: Theme.of(context).textTheme.bodySmall?.color,
-                  labelStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  labelPadding: EdgeInsets.zero,
-                  tabs: [
-                    Tab(
-                      height: 48,
-                      child: Center(
-                        child: Text(localizations.hearts),
-                      ),
-                    ),
-                    Tab(
-                      height: 48,
-                      child: Center(
-                        child: Text(localizations.premium),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              // 탭 뷰
+              // 하트 상품 목록
               Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    // 하트 상품
-                    _buildHeartProducts(purchaseService),
-                    // 프리미엄 상품
-                    _buildPremiumProducts(purchaseService),
-                  ],
-                ),
+                child: _buildHeartProducts(purchaseService),
               ),
             ],
           );
@@ -281,82 +217,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     );
   }
   
-  Widget _buildPremiumProducts(PurchaseService purchaseService) {
-    final premiumProducts = purchaseService.products
-        .where((p) => ProductIds.subscriptions.contains(p.id))
-        .toList();
-    
-    if (premiumProducts.isEmpty) {
-      // 에러 메시지가 있으면 표시
-      if (purchaseService.queryProductError != null) {
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  AppLocalizations.of(context)!.storeConnectionError,
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).textTheme.bodyLarge?.color,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  purchaseService.queryProductError!,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () async {
-                    await purchaseService.loadProducts();
-                  },
-                  child: Text(AppLocalizations.of(context)!.retry),
-                ),
-              ],
-            ),
-          ),
-        );
-      }
-      
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 16),
-            Text(AppLocalizations.of(context)!.loadingProducts),
-          ],
-        ),
-      );
-    }
-    
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: premiumProducts.length,
-      itemBuilder: (context, index) {
-        final product = premiumProducts[index];
-        return _buildProductCard(
-          product: product,
-          icon: Icons.star,
-          iconColor: Colors.amber,
-          onTap: () => _handlePurchase(context, purchaseService, product),
-        );
-      },
-    );
-  }
   
   Widget _buildProductCard({
     required ProductDetails product,
@@ -380,17 +240,6 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     } else if (product.id == ProductIds.hearts50) {
       displayName = localizations.hearts50;
       description = localizations.heartDescription;
-    } else if (product.id.contains('premium')) {
-      if (product.id.contains('1month')) {
-        displayName = localizations.premium1Month;
-        description = localizations.premiumDescription;
-      } else if (product.id.contains('3months')) {
-        displayName = localizations.premium3Months;
-        description = localizations.premiumDescription20Off;
-      } else if (product.id.contains('6months')) {
-        displayName = localizations.premium6Months;
-        description = localizations.premiumDescription30Off;
-      }
     }
     
     return Container(
@@ -441,38 +290,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
                     ],
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      product.price,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                    if (product.id.contains('3months') || product.id.contains('6months'))
-                      Container(
-                        margin: const EdgeInsets.only(top: 4),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          product.id.contains('3months') ? localizations.discount20 : localizations.discount30,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                  ],
+                Text(
+                  product.price,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ),
@@ -537,12 +361,4 @@ class _PurchaseScreenState extends State<PurchaseScreen> with SingleTickerProvid
     }
   }
   
-  String _formatExpiryDate(DateTime date) {
-    final remaining = date.difference(DateTime.now()).inDays;
-    if (remaining > 0) {
-      return AppLocalizations.of(context)!.daysRemaining(remaining);
-    } else {
-      return AppLocalizations.of(context)!.expired;
-    }
-  }
 }

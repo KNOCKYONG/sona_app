@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
@@ -87,13 +88,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       ),
     );
     
+    if (shouldExit == true) {
+      SystemNavigator.pop();
+    }
+    
     return shouldExit ?? false;
   }
 
   @override
   Widget build(BuildContext context) {
-    final scaffold = WillPopScope(
-      onWillPop: _onWillPop,
+    final scaffold = PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) async {
+        if (didPop) return;
+        await _onWillPop();
+      },
       child: Scaffold(
         body: IndexedStack(
           index: _selectedIndex,

@@ -176,6 +176,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           _showWelcomeMessage();
         } else {
           debugPrint('💬 Messages exist, skipping welcome message');
+          // 메시지가 있으면 마지막 메시지로 스크롤
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (_scrollController.hasClients) {
+              _scrollToBottom(force: true, smooth: false);
+            }
+          });
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -409,6 +415,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();
+        // 페르소나가 변경되면 메시지 로드 후 스크롤
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _scrollController.hasClients) {
+            _scrollToBottom(force: true, smooth: false);
+          }
+        });
       });
     }
   }

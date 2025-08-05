@@ -192,13 +192,23 @@ class OpenAIService {
     
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final content = data['choices'][0]['message']['content'];
+      final choice = data['choices'][0];
+      String content = choice['message']['content'].toString();
+      final finishReason = choice['finish_reason'];
       
       // 토큰 사용량 로깅
       final usage = data['usage'];
       debugPrint('Token usage - Prompt: ${usage['prompt_tokens']}, Completion: ${usage['completion_tokens']}, Total: ${usage['total_tokens']}');
+      debugPrint('Finish reason: $finishReason');
       
-      return content.toString().trim();
+      // finish_reason이 'length'인 경우 문장이 잘렸을 가능성이 높음
+      if (finishReason == 'length' && content.isNotEmpty) {
+        debugPrint('⚠️ Response was truncated due to token limit');
+        // 불완전한 문장 완성 처리
+        content = _completeUnfinishedSentence(content);
+      }
+      
+      return content.trim();
     } else if (response.statusCode == 429) {
       debugPrint('⏰ Rate limited by OpenAI');
       throw Exception('Rate limited');
@@ -425,6 +435,48 @@ class OpenAIService {
     
     final index = userMessage.hashCode.abs() % secureResponses.length;
     return secureResponses[index];
+  }
+
+  /// 🔧 불완전한 문장 완성
+  static String _completeUnfinishedSentence(String text) {
+    if (text.isEmpty) return text;
+    
+    final trimmed = text.trim();
+    
+    // 문장이 이미 완전한 경우
+    if (trimmed.endsWith('.') || trimmed.endsWith('?') || 
+        trimmed.endsWith('!') || trimmed.endsWith('요') || 
+        trimmed.endsWith('다') || trimmed.endsWith('죠') ||
+        trimmed.endsWith('네') || trimmed.endsWith('어') ||
+        trimmed.endsWith('야')) {
+      return trimmed;
+    }
+    
+    // 쉼표나 특정 조사로 끝나는 경우
+    if (trimmed.endsWith(',') || trimmed.endsWith('는데') || 
+        trimmed.endsWith('에서') || trimmed.endsWith('으로') ||
+        trimmed.endsWith('고') || trimmed.endsWith('며')) {
+      // 미완성으로 간주하고 문장 완성
+      if (trimmed.contains('무슨') || trimmed.contains('어떤') || 
+          trimmed.contains('뭐') || trimmed.contains('어디')) {
+        return trimmed + ' 궁금해요';
+      } else {
+        return trimmed + ' 있어요';
+      }
+    }
+    
+    // "~하셨는데" 같은 패턴 처리
+    if (trimmed.endsWith('는데') || trimmed.endsWith('했는데') || 
+        trimmed.endsWith('하셨는데') || trimmed.endsWith('했었는데')) {
+      if (trimmed.contains('무슨') || trimmed.contains('어떤')) {
+        return trimmed + ' 궁금해요';
+      } else {
+        return trimmed + ' 어떠셨어요?';
+      }
+    }
+    
+    // 기타 불완전한 경우 기본 종결어미 추가
+    return trimmed + '요';
   }
 
   /// ✅ API 키 유효성 검사

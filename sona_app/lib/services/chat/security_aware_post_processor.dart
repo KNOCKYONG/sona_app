@@ -230,7 +230,12 @@ class SecurityAwarePostProcessor {
       '때가', '하는', '있는', '없는', '같은', '되는', '라는', '이라는',
       '때', '것', '듯', '중', '그', '이', '를', '을', '에서', '으로',
       '하고', '인데', '했는데', '있고', '없고', '같고', '되고', '라고',
-      '지내고', '있었고', '했고', '이고', '그리고', '그런데'
+      '지내고', '있었고', '했고', '이고', '그리고', '그런데',
+      // 질문 중간에 끊기는 패턴 추가
+      '무슨', '어떤', '어디', '언제', '누가', '왜', '어떻게',
+      '하셨는데', '하시는데', '한다는데', '한다고 하는데',
+      // 쉼표로 끝나는 경우
+      ',', '，'
     ];
     
     // 마지막 문자/단어 확인
@@ -279,9 +284,28 @@ class SecurityAwarePostProcessor {
           return trimmed + ' 있어요';
         }
       } else if (lastWord.endsWith('인데') || lastWord.endsWith('그런데') || 
-                 lastWord.endsWith('했는데')) {
+                 lastWord.endsWith('했는데') || lastWord.endsWith('하셨는데') ||
+                 lastWord.endsWith('하시는데') || lastWord.endsWith('한다는데')) {
         // "~인데"로 끝나는 경우
-        return trimmed + ' 어떠세요?';
+        // "소나 개발하고 있다고 하셨는데, 무슨" 같은 패턴 처리
+        if (trimmed.endsWith('무슨') || trimmed.endsWith('어떤') || 
+            trimmed.endsWith('어디') || trimmed.endsWith('왜')) {
+          return trimmed + ' 부분이 궁금해요?';
+        } else {
+          return trimmed + ' 어떠세요?';
+        }
+      } else if (lastWord == '무슨' || lastWord == '어떤' || 
+                 lastWord == '어디' || lastWord == '왜' || 
+                 lastWord == '어떻게' || lastWord == '언제') {
+        // 의문사로 끝나는 경우
+        return trimmed + ' 것인지 궁금해요';
+      } else if (lastWord == ',' || lastWord == '，') {
+        // 쉼표로 끝나는 경우
+        if (trimmed.contains('하셨는데') || trimmed.contains('하시는데')) {
+          return trimmed.substring(0, trimmed.length - 1) + ' 궁금해요';
+        } else {
+          return trimmed.substring(0, trimmed.length - 1) + '요';
+        }
       } else if (lastWord.endsWith('라고') || lastWord.endsWith('이고')) {
         // "~라고", "~이고"로 끝나는 경우
         return trimmed + ' 생각해요';

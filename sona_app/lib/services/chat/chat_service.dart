@@ -1364,6 +1364,39 @@ class ChatService extends BaseService {
   bool isPersonaTyping(String personaId) {
     return _personaIsTyping[personaId] ?? false;
   }
+  
+  /// 불완전한 문장인지 감지
+  bool _isIncompleteSentence(String text) {
+    if (text.isEmpty) return false;
+    
+    final trimmed = text.trim();
+    
+    // 완전한 종결어미로 끝나는 경우
+    if (trimmed.endsWith('.') || trimmed.endsWith('?') || 
+        trimmed.endsWith('!') || trimmed.endsWith('요') || 
+        trimmed.endsWith('다') || trimmed.endsWith('죠') ||
+        trimmed.endsWith('네') || trimmed.endsWith('어') ||
+        trimmed.endsWith('야') || trimmed.endsWith('ㅋ') ||
+        trimmed.endsWith('ㅎ') || trimmed.endsWith('~')) {
+      return false;
+    }
+    
+    // 불완전한 패턴
+    final incompletePatterns = [
+      '하고', '인데', '했는데', '있고', '없고', '같고', '되고',
+      '라고', '하셨는데', '하시는데', '한다는데', '무슨', '어떤',
+      '어디', '언제', '누가', '왜', '어떻게', ',', '，', '에서',
+      '으로', '를', '을', '이', '가', '는', '은', '와', '과'
+    ];
+    
+    for (final pattern in incompletePatterns) {
+      if (trimmed.endsWith(pattern)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
 
   @override
   @override
@@ -1720,6 +1753,27 @@ class ChatService extends BaseService {
         if (!_messagesByPersona.containsKey(persona.id)) {
           _messagesByPersona[persona.id] = [];
         }
+        
+        // 메시지 병합 로직: 이전 AI 메시지가 불완전하게 끝났으면 병합
+        final messages = _messagesByPersona[persona.id]!;
+        if (messages.isNotEmpty) {
+          final lastMessage = messages.last;
+          if (!lastMessage.isFromUser && _isIncompleteSentence(lastMessage.content)) {
+            // 이전 불완전한 AI 메시지와 현재 메시지 병합
+            debugPrint('🔗 Merging incomplete messages: "${lastMessage.content}" + "${aiMessage.content}"');
+            lastMessage.content = '${lastMessage.content} ${aiMessage.content}';
+            // 병합했으므로 새 메시지는 추가하지 않음
+            
+            // Always update global messages when it's the current persona
+            if (_currentPersonaId == persona.id) {
+              _messages = List.from(_messagesByPersona[persona.id]!);
+            }
+            
+            notifyListeners();
+            return;
+          }
+        }
+        
         _messagesByPersona[persona.id]!.add(aiMessage);
         
         // Always update global messages when it's the current persona

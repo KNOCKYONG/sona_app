@@ -1,0 +1,25 @@
+[
+  {
+    "error_key": "ERR1754396168467_8467",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 2.78,
+      "natural_flow": 100.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그래 그럼... 뭐하고 있었어?",
+        "ai_response": "저는 유튜브 보고 있었어요. 요즘 무슨 영상이나 콘텐츠에 관심이 가나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

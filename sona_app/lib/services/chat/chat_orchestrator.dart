@@ -1273,6 +1273,23 @@ class ChatOrchestrator {
       contextHints.add('표면적 대화 지속 중. 더 깊은 질문이나 개인적 경험 공유로 대화 심화');
     }
     
+    // 대화 턴 수 체크 - 너무 빨리 질문하지 않도록
+    if (chatHistory.isNotEmpty) {
+      // 현재 주제에서 몇 번의 대화가 오갔는지 확인
+      int sameTopic = 0;
+      for (var msg in recentMessages.take(6)) {
+        if (_calculateSimilarity(msg.content, userMessage) > 0.3) {
+          sameTopic++;
+        }
+      }
+      
+      // 같은 주제로 대화가 2회 미만이면 새 질문 자제
+      if (sameTopic < 2) {
+        contextHints.add('⚠️ 너무 빨리 새 질문 금지! 답변만 하고 사용자 반응 기다리기');
+        contextHints.add('잘못된 예: "유튜브 보고 있어요. 뭐 보세요?" → 올바른 예: "유튜브 보고 있어요ㅎㅎ"');
+      }
+    }
+    
     // 맥락 힌트가 있으면 통합해서 반환
     if (contextHints.isNotEmpty) {
       return 'CONTEXT_GUIDE:\n${contextHints.map((h) => '- $h').join('\n')}';

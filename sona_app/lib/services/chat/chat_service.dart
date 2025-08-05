@@ -1761,8 +1761,14 @@ class ChatService extends BaseService {
           if (!lastMessage.isFromUser && _isIncompleteSentence(lastMessage.content)) {
             // 이전 불완전한 AI 메시지와 현재 메시지 병합
             debugPrint('🔗 Merging incomplete messages: "${lastMessage.content}" + "${aiMessage.content}"');
-            lastMessage.content = '${lastMessage.content} ${aiMessage.content}';
-            // 병합했으므로 새 메시지는 추가하지 않음
+            
+            // copyWith를 사용하여 새로운 메시지 생성
+            final mergedMessage = lastMessage.copyWith(
+              content: '${lastMessage.content} ${aiMessage.content}',
+            );
+            
+            // 마지막 메시지를 병합된 메시지로 교체
+            messages[messages.length - 1] = mergedMessage;
             
             // Always update global messages when it's the current persona
             if (_currentPersonaId == persona.id) {

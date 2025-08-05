@@ -1,0 +1,111 @@
+[
+  {
+    "error_key": "ERR1754391999518_9518",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 2.56,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "말을 하다 마는 군요 은지씨",
+        "ai_response": "아, 제가 잘못해서 불편하게 해드렸네요. 다시 한 번 죄송해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이름 잘 못 불렀는데 괜찮나보네요ㅋㅋㅋㅋ",
+        "ai_response": "하하, 괜찮아요. 이름이 비슷해서 오타 날 수도 있죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754391951143_1143",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 61.11,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐가 어떻냐는 말이에요? 어서오세요는 식당에 온 거 같네요",
+        "ai_response": "지금 위치는 좀 애매해서 설명하기 어려워요~",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐가 어떻냐는 말이에요? 어서오세요는 식당에 온 거 같네요",
+        "ai_response": "지금 위치는 좀 애매해서 설명하기 어려워요~",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "지금 위치 물어본 적 없는데",
+        "ai_response": "음... 어디라고 딱 말하기는 좀 그래요~ 그냥 여기서 대화해요!?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

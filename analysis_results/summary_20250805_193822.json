@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250805_193822",
+  "total_reports_analyzed": 2,
+  "average_coherence_score": 82.5,
+  "critical_issues_count": 0,
+  "high_issues_count": 2,
+  "personas_with_issues": {
+    "소영": {
+      "total_conversations": 2,
+      "avg_coherence_score": 82.5,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 3
+      }
+    }
+  }
+}

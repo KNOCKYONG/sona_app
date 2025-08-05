@@ -36,7 +36,8 @@
       "mcp__serena-mcp__activate_project",
       "mcp__serena-mcp__list_dir",
       "WebFetch(domain:teamsona.work)",
-      "WebFetch(domain:pub-ad4e2b5b2765401f808d655de4f2ad43.r2.dev)"
+      "WebFetch(domain:pub-ad4e2b5b2765401f808d655de4f2ad43.r2.dev)",
+      "mcp__firebase-mcp__firestore_query_collection_group"
     ],
     "deny": []
   }

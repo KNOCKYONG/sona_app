@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250805_200707",
+  "total_reports_analyzed": 2,
+  "average_coherence_score": 68.055,
+  "critical_issues_count": 0,
+  "high_issues_count": 3,
+  "personas_with_issues": {
+    "연지": {
+      "total_conversations": 2,
+      "avg_coherence_score": 68.06,
+      "total_issues": 9,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 3,
+        "abrupt_topic_change": 6
+      }
+    }
+  }
+}

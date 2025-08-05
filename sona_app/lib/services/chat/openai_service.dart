@@ -23,7 +23,7 @@ class OpenAIService {
   
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
-  static const int _maxOutputTokens = 150; // 토큰 제한
+  static const int _maxOutputTokens = 200; // 토큰 제한 (150→200 증가)
   static const double _temperature = 0.8;
   
   // 🔗 연결 풀링

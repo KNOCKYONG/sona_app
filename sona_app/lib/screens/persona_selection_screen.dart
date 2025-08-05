@@ -284,8 +284,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 매칭된 페르소나가 아직 로드되지 않았다면 강제 로드
     if (!personaService.matchedPersonasLoaded) {
       debugPrint('⚠️ Matched personas not loaded yet in _prepareCardItems!');
-      // 비동기로 로드 시작 (UI는 일단 진행)
-      personaService.loadMatchedPersonasIfNeeded();
+      // 동기적으로 대기
+      personaService.loadMatchedPersonasIfNeeded().then((_) {
+        if (mounted) {
+          setState(() {
+            _prepareCardItems(personas);
+          });
+        }
+      });
+      return;
     }
     
     final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
@@ -297,7 +304,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     debugPrint('   - Matched IDs: ${matchedIds.take(5).join(', ')}...');
     debugPrint('   - Input personas: ${personas.length}');
     
-    final filteredPersonas = personas.where((p) => !matchedIds.contains(p.id)).toList();
+    // 더 강력한 필터링 - 매칭된 페르소나 완전 제외
+    final filteredPersonas = personas.where((p) {
+      final isMatched = matchedIds.contains(p.id);
+      if (isMatched) {
+        debugPrint('   ❌ Excluding matched persona: ${p.name} (${p.id})');
+      }
+      return !isMatched;
+    }).toList();
     
     // 🎯 최소 카드 수 보장 로직 추가
     const minPersonaCards = 20; // 최소 20장의 페르소나 카드 보장
@@ -1451,6 +1465,19 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   void _showMatchDialog(Persona persona, {bool isSuperLike = false}) {
     // 🔥 이미 매칭된 페르소나인지 확인
     final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    // 매칭된 페르소나가 로드되지 않았다면 로드 후 확인
+    if (!personaService.matchedPersonasLoaded) {
+      debugPrint('⚠️ Checking matched personas before dialog...');
+      personaService.loadMatchedPersonasIfNeeded().then((_) {
+        if (mounted) {
+          // 재귀 호출로 다시 확인
+          _showMatchDialog(persona, isSuperLike: isSuperLike);
+        }
+      });
+      return;
+    }
+    
     if (personaService.matchedPersonas.any((p) => p.id == persona.id)) {
       debugPrint('⚠️ Already matched with ${persona.name} - showing warning');
       ScaffoldMessenger.of(context).showSnackBar(
@@ -1460,6 +1487,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           duration: const Duration(seconds: 3),
         ),
       );
+      
+      // 카드에서도 제거
+      _removeMatchedPersonaFromCards(persona.id);
       return;
     }
     

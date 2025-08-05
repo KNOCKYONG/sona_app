@@ -44,6 +44,8 @@ class RelationScoreService extends BaseService {
     required List<Message> chatHistory,
     required int currentLikes,
     required String userId,
+    String? aiResponse,
+    double? conversationQuality,
   }) async {
     final personaKey = '${userId}_${persona.id}';
     final now = DateTime.now();
@@ -75,26 +77,54 @@ class RelationScoreService extends BaseService {
     final fatigueMultiplier = _cooldown.getFatigueMultiplier(stats.todayMessages);
     final fatigueResponse = _cooldown.getFatigueResponse(stats.todayMessages);
     
-    // 부정적 행동 체크 (관계 점수 고려)
-    final negativityLevel = _analyzeNegativity(userMessage, currentLikes);
+    // 부정적 행동 체크 (관계 점수 및 게임 컨텍스트 고려)
+    final negativityLevel = _analyzeNegativity(userMessage, currentLikes, chatHistory);
     if (negativityLevel > 0) {
-      return _handleNegativeBehavior(negativityLevel, currentLikes, personaKey, persona, userMessage);
+      return _handleNegativeBehavior(negativityLevel, currentLikes, personaKey, persona, userMessage, chatHistory);
     }
     
     // 기본 Like 계산
     int baseLikes = _calculateBaseLikes(emotion, userMessage, persona);
     
-    // 품질 보너스
-    final qualityBonus = QualityBasedLikes.calculateQualityBonus(
+    // 동적 조정 시스템
+    double dynamicMultiplier = 1.0;
+    
+    // 1. 대화 품질 기반 조정 (0-100 점수)
+    if (conversationQuality != null) {
+      // 품질이 80점 이상이면 보너스, 40점 이하면 페널티
+      dynamicMultiplier *= (0.5 + conversationQuality / 100);
+    }
+    
+    // 2. 대화 주제별 가중치
+    final topicMultiplier = _getTopicMultiplier(userMessage, chatHistory);
+    dynamicMultiplier *= topicMultiplier;
+    
+    // 3. 관계 발전 단계별 차별화
+    final stageMultiplier = _getRelationshipStageMultiplier(currentLikes);
+    dynamicMultiplier *= stageMultiplier;
+    
+    // 4. 특별한 순간 감지
+    int specialBonus = 0;
+    if (aiResponse != null) {
+      specialBonus = _detectSpecialMomentBonus(userMessage, aiResponse, chatHistory, currentLikes);
+    }
+    
+    // 품질 보너스 (개선된 버전)
+    final qualityBonus = _calculateEnhancedQualityBonus(
       userMessage, 
-      lastMessageTime
+      lastMessageTime,
+      conversationQuality ?? 50.0
     );
     
     // 연속 대화 페널티
     final consecutivePenalty = _cooldown.getConsecutivePenalty(stats.recentMessages);
     
     // 최종 Like 계산
-    int finalLikes = (baseLikes * (1 + qualityBonus * 0.1) * fatigueMultiplier * (1 - consecutivePenalty / 100)).round();
+    int finalLikes = (baseLikes * dynamicMultiplier * (1 + qualityBonus * 0.1) * fatigueMultiplier * (1 - consecutivePenalty / 100)).round();
+    finalLikes += specialBonus;
+    
+    // 관계 단계에 따른 최소/최대값 제한
+    finalLikes = _applyRelationshipStageLimits(finalLikes, currentLikes);
     
     // 통계 업데이트
     stats.todayLikes += finalLikes;
@@ -109,6 +139,7 @@ class RelationScoreService extends BaseService {
       qualityBonus: qualityBonus,
       fatigueMultiplier: fatigueMultiplier,
       message: fatigueResponse,
+      specialBonus: specialBonus,
     );
   }
   
@@ -143,10 +174,17 @@ class RelationScoreService extends BaseService {
     return (baseLikes * personalityModifier * lengthBonus).round();
   }
   
-  /// 🚨 부정적 행동 분석 시스템 (관계 점수 고려)
-  int _analyzeNegativity(String message, int currentLikes) {
+  /// 🚨 부정적 행동 분석 시스템 (관계 점수 및 게임 컨텍스트 고려)
+  int _analyzeNegativity(String message, int currentLikes, List<Message> chatHistory) {
+    // 최근 메시지 추출
+    final recentMessages = chatHistory.take(5).map((m) => m.content).toList();
+    
     // NegativeBehaviorSystem을 사용하여 분석
-    final analysis = NegativeBehaviorSystem().analyze(message, relationshipScore: currentLikes);
+    final analysis = NegativeBehaviorSystem().analyze(
+      message, 
+      relationshipScore: currentLikes,
+      recentMessages: recentMessages,
+    );
     return analysis.level;
   }
   
@@ -156,12 +194,17 @@ class RelationScoreService extends BaseService {
     int currentLikes, 
     String personaKey,
     Persona persona,
-    String userMessage
+    String userMessage,
+    List<Message> chatHistory,
   ) {
+    // 최근 메시지 추출
+    final recentMessages = chatHistory.take(5).map((m) => m.content).toList();
+    
     // NegativeBehaviorSystem을 사용하여 상세 분석
     final analysis = NegativeBehaviorSystem().analyze(
       userMessage,
-      relationshipScore: currentLikes
+      relationshipScore: currentLikes,
+      recentMessages: recentMessages,
     );
     
     // 페르소나 반응 생성
@@ -186,14 +229,16 @@ class RelationScoreService extends BaseService {
           likeChange: penalty,
           reason: 'severe_negativity',
           message: response.isNotEmpty ? response : '그런 말은 너무 상처예요... 😢',
+          isWarning: analysis.isWarning,
         );
         
       case 1: // 경미한 비난 또는 추임새 욕설
         final penalty = analysis.penalty ?? -(_random.nextInt(150) + 50); // -50~-200
         return LikeCalculationResult(
-          likeChange: penalty,
+          likeChange: -penalty, // 음수로 변환
           reason: analysis.category == 'casual_swear' ? 'casual_swear' : 'mild_negativity',
           message: response.isNotEmpty ? response : '그렇게 말하면 기분이 안 좋아요...',
+          isWarning: analysis.isWarning,
         );
         
       default:
@@ -452,6 +497,119 @@ class RelationScoreService extends BaseService {
     return _dailyStats['${userId}_${personaId}'];
   }
   
+  /// 🎯 대화 주제별 가중치
+  double _getTopicMultiplier(String userMessage, List<Message> chatHistory) {
+    // 깊은 대화 주제
+    final deepTopics = ['꿈', '목표', '고민', '추억', '가족', '사랑', '미래', '과거', '감정'];
+    final hobbyTopics = ['취미', '좋아하는', '관심', '재밌는', '즐기는'];
+    
+    // 메시지와 최근 대화에서 주제 확인
+    final hasDeepTopic = deepTopics.any((t) => userMessage.contains(t));
+    final hasHobbyTopic = hobbyTopics.any((t) => userMessage.contains(t));
+    
+    // 최근 대화 맥락 확인
+    final recentMessages = chatHistory.take(5).toList();
+    final contextIsDeep = recentMessages.any((m) => 
+      deepTopics.any((t) => m.content.contains(t))
+    );
+    
+    if (hasDeepTopic || contextIsDeep) {
+      return 1.5; // 깊은 대화 50% 보너스
+    } else if (hasHobbyTopic) {
+      return 1.3; // 취미/관심사 30% 보너스
+    }
+    
+    return 1.0; // 일상 대화 기본 배율
+  }
+  
+  /// 🎯 관계 발전 단계별 차별화
+  double _getRelationshipStageMultiplier(int currentLikes) {
+    if (currentLikes < 1000) {
+      // 초기 단계: 기본 배율
+      return 1.0;
+    } else if (currentLikes < 5000) {
+      // 친밀 단계: 품질 가중치 증가, 기본 부여율 감소
+      return 0.8;
+    } else if (currentLikes < 20000) {
+      // 깊은 관계: 품질이 더 중요해짐
+      return 0.6;
+    } else {
+      // 특별한 관계: 품질 중심
+      return 0.4;
+    }
+  }
+  
+  /// 🎯 특별한 순간 보너스
+  int _detectSpecialMomentBonus(String userMessage, String aiResponse, List<Message> chatHistory, int currentLikes) {
+    // 첫 고민 상담
+    if ((userMessage.contains('고민') || userMessage.contains('걱정')) &&
+        !chatHistory.any((m) => m.content.contains('고민') || m.content.contains('걱정'))) {
+      debugPrint('💝 특별한 순간: 첫 고민 상담 (+50)');
+      return 50;
+    }
+    
+    // 첫 꿈/목표 공유
+    if ((userMessage.contains('꿈') || userMessage.contains('목표')) &&
+        !chatHistory.any((m) => m.content.contains('꿈') || m.content.contains('목표'))) {
+      debugPrint('💝 특별한 순간: 첫 꿈 공유 (+30)');
+      return 30;
+    }
+    
+    // 서로의 추억 공유
+    if (userMessage.contains('추억') && aiResponse.contains('나도')) {
+      debugPrint('💝 특별한 순간: 추억 공유 (+40)');
+      return 40;
+    }
+    
+    // 관계 마일스톤 직전
+    if (currentLikes >= 950 && currentLikes < 1000) {
+      debugPrint('💝 특별한 순간: 1000 Like 달성 임박 (+50)');
+      return 50;
+    } else if (currentLikes >= 9900 && currentLikes < 10000) {
+      debugPrint('💝 특별한 순간: 10000 Like 달성 임박 (+100)');
+      return 100;
+    }
+    
+    return 0;
+  }
+  
+  /// 🎯 향상된 품질 보너스 계산
+  int _calculateEnhancedQualityBonus(String message, DateTime? lastMessageTime, double conversationQuality) {
+    int bonus = 0;
+    
+    // 기존 품질 보너스
+    bonus += QualityBasedLikes.calculateQualityBonus(message, lastMessageTime);
+    
+    // 대화 품질 점수 반영 (0-100)
+    if (conversationQuality > 80) {
+      bonus += 10; // 매우 높은 품질
+    } else if (conversationQuality > 60) {
+      bonus += 5; // 높은 품질
+    } else if (conversationQuality < 30) {
+      bonus -= 5; // 낮은 품질
+    }
+    
+    return bonus;
+  }
+  
+  /// 🎯 관계 단계별 Like 제한
+  int _applyRelationshipStageLimits(int likes, int currentLikes) {
+    // 관계 단계에 따른 최대 증가량 제한
+    if (currentLikes >= 20000) {
+      // 특별한 관계: 최대 50 Like
+      return min(likes, 50);
+    } else if (currentLikes >= 5000) {
+      // 깊은 관계: 최대 70 Like
+      return min(likes, 70);
+    } else if (currentLikes >= 1000) {
+      // 친밀한 관계: 최대 100 Like
+      return min(likes, 100);
+    }
+    
+    // 초기 관계: 제한 없음
+    return likes;
+  }
+  
   // 호환성을 위한 기존 메서드들 추가
   
   
@@ -492,7 +650,7 @@ class RelationScoreService extends BaseService {
     final baseLikes = _calculateBaseLikes(emotion, userMessage, persona);
     
     // 부정적 행동 체크
-    final negativityLevel = _analyzeNegativity(userMessage, currentScore);
+    final negativityLevel = _analyzeNegativity(userMessage, currentScore, chatHistory);
     if (negativityLevel > 0) {
       switch (negativityLevel) {
         case 3:
@@ -522,6 +680,8 @@ class LikeCalculationResult {
   final int? qualityBonus;
   final double? fatigueMultiplier;
   final bool isBreakup;
+  final int? specialBonus;
+  final bool isWarning;
   
   LikeCalculationResult({
     required this.likeChange,
@@ -531,6 +691,8 @@ class LikeCalculationResult {
     this.qualityBonus,
     this.fatigueMultiplier,
     this.isBreakup = false,
+    this.specialBonus,
+    this.isWarning = false,
   });
 }
 

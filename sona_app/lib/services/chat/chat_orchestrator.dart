@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import '../../models/persona.dart';
 import '../../models/message.dart';
 import '../../core/constants.dart';
+// import '../../services/relationship/emotion_analyzer_service.dart'; // 제거됨
 import 'persona_relationship_cache.dart';
 import 'persona_prompt_builder.dart';
 import 'security_aware_post_processor.dart';
 import 'conversation_memory_service.dart';
 import 'openai_service.dart';
 import '../relationship/negative_behavior_system.dart';
+import 'user_speech_pattern_analyzer.dart';
 
 /// 채팅 플로우를 조정하는 중앙 오케스트레이터
 /// 전체 메시지 생성 파이프라인을 관리
@@ -46,11 +48,24 @@ class ChatOrchestrator {
       // 2단계: 메시지 전처리 및 분석
       final messageAnalysis = _analyzeUserMessage(userMessage);
       
+      // 2.5단계: 사용자 말투 패턴 분석
+      final userMessages = chatHistory
+          .where((m) => m.isFromUser)
+          .map((m) => m.content)
+          .toList();
+      userMessages.add(userMessage); // 현재 메시지도 포함
+      
+      final speechPattern = UserSpeechPatternAnalyzer.analyzeSpeechPattern(userMessages);
+      final adaptationGuide = UserSpeechPatternAnalyzer.generateAdaptationGuide(
+        speechPattern, 
+        completePersona.gender
+      );
+      
       // 3단계: 간단한 반응 체크 (로컬 처리)
       final simpleResponse = _checkSimpleResponse(
         userMessage: userMessage,
         persona: completePersona,
-        isCasualSpeech: isCasualSpeech,
+        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
         messageType: messageAnalysis.type,
       );
       
@@ -82,15 +97,18 @@ class ChatOrchestrator {
         persona: completePersona,
       );
       
-      // 4단계: 프롬프트 생성
-      final prompt = PersonaPromptBuilder.buildComprehensivePrompt(
+      // 4단계: 프롬프트 생성 (말투 적응 가이드 포함)
+      final basePrompt = PersonaPromptBuilder.buildComprehensivePrompt(
         persona: completePersona,
         recentMessages: _getRecentMessages(chatHistory),
         userNickname: userNickname,
         contextMemory: contextMemory,
-        isCasualSpeech: isCasualSpeech,
+        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
         userAge: userAge,
       );
+      
+      // 말투 적응 가이드를 프롬프트에 추가
+      final prompt = basePrompt + adaptationGuide;
       
       debugPrint('📝 Generated prompt with ${prompt.length} characters');
       
@@ -101,6 +119,7 @@ class ChatOrchestrator {
           userMessage: userMessage,
           chatHistory: chatHistory,
           messageAnalysis: messageAnalysis,
+          persona: completePersona,
         );
       }
       
@@ -118,7 +137,7 @@ class ChatOrchestrator {
         relationshipType: _getRelationshipType(completePersona),
         userNickname: userNickname,
         userAge: userAge,
-        isCasualSpeech: isCasualSpeech,
+        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
         contextHint: contextHint,
       );
       
@@ -133,7 +152,7 @@ class ChatOrchestrator {
       final filteredResponse = _filterMeetingAndGreetingPatterns(
         response: processedResponse,
         chatHistory: chatHistory,
-        isCasualSpeech: isCasualSpeech,
+        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
       );
       
       // 7단계: 긴 응답 분리 처리
@@ -993,6 +1012,7 @@ class ChatOrchestrator {
     required String userMessage,
     required List<Message> chatHistory,
     required MessageAnalysis messageAnalysis,
+    required Persona persona,
   }) {
     if (chatHistory.isEmpty) return null;
     
@@ -1021,6 +1041,14 @@ class ChatOrchestrator {
       if (lastAIMessage != null && lastUserMessage != null) break;
     }
     
+    // 인사와 위치 질문 구분 (연지 오류 수정)
+    if ((userMessage.contains('어서오') || userMessage.contains('어서 오') || 
+         userMessage.contains('반가') || userMessage.contains('안녕')) &&
+        !userMessage.contains('어디')) {
+      contextHints.add('⚠️ 인사 메시지 감지! 위치 질문이 아닙니다. 친근한 인사로 응답하세요.');
+      contextHints.add('예: "네 안녕하세요! 오늘 어떻게 지내셨어요?", "반가워요! 뭐하고 계셨어요?"');
+    }
+    
     // 현재 메시지의 키워드와 비교
     final currentKeywords = messageAnalysis.keywords;
     final commonTopics = currentKeywords.where((k) => recentTopics.contains(k)).toList();
@@ -1032,16 +1060,27 @@ class ChatOrchestrator {
     }
     
     // 게임 관련 주제 감지 (예: "딜러", "욕먹어" 등)
-    final gameKeywords = ['게임', '롤', '오버워치', '딜러', '탱커', '힐러', '승리', '패배', '팀', '랭크'];
+    final gameKeywords = ['게임', '롤', '오버워치', '배그', '발로란트', '피파', '딜러', '탱커', '힐러', 
+                         '서포터', '정글', '승리', '패배', '팀', '랭크', '시메트라', '디바', '포탈', '벽'];
     final isGameTopic = currentKeywords.any((k) => gameKeywords.contains(k.toLowerCase())) ||
                         userMessage.toLowerCase().contains('딜러') ||
-                        userMessage.toLowerCase().contains('욕먹');
+                        userMessage.toLowerCase().contains('욕먹') ||
+                        userMessage.toLowerCase().contains('따개비') ||
+                        userMessage.toLowerCase().contains('게이지');
     
     // 대화 흐름의 자연스러움 강화
     if (topicCoherence < 0.3 && messageAnalysis.type == MessageType.question) {
       // 주제가 크게 바뀌었을 때
       if (_isAbruptTopicChange(userMessage, recentMessages)) {
         contextHints.add('⚠️ 주제 전환 감지. 부드러운 전환 필수!');
+        
+        // 말하다마 상황에서는 이전 대화 연결
+        if (lastUserMessage != null && 
+            (lastUserMessage.content.contains('말하다마') || 
+             userMessage.contains('그거 얘기하니까'))) {
+          contextHints.add('💡 이전 대화와 연결하여 자연스럽게 전환하세요.');
+          contextHints.add('절대 문장을 끝내지 않고 "~하고" 같은 형태로 끝내지 마세요!');
+        }
         
         // 게임 주제로의 전환
         if (isGameTopic && !recentTopics.any((t) => gameKeywords.contains(t.toLowerCase()))) {
@@ -1064,12 +1103,39 @@ class ChatOrchestrator {
       // 부분적으로 연관된 주제
       if (isGameTopic) {
         contextHints.add('게임 관련 대화. 공감하며 자연스럽게 이어가기: "아 진짜? 나도 그런 적 있어ㅋㅋ"');
+        
+        // 게임 특정 상황에 맞는 가이드
+        if (userMessage.contains('죽') || userMessage.contains('맞')) {
+          contextHints.add('게임에서 죽거나 맞은 상황 → 공감: "아 짜증나겠다ㅠㅠ", "진짜 힘들죠"');
+        } else if (userMessage.contains('전략') || userMessage.contains('방법')) {
+          contextHints.add('게임 전략 논의 → 관심 표현: "오 그게 좋은 방법이네요!", "나도 해봐야겠다"');
+        }
       }
     }
     
     // 특정 주제 감지 및 가이드
     if (userMessage.contains('드라마') || userMessage.contains('웹툰') || userMessage.contains('영화')) {
       contextHints.add('미디어 콘텐츠 대화. 구체적인 작품명이나 장르 물어보며 관심 표현');
+    }
+    
+    // 위치 관련 질문 명확히 구분
+    if (userMessage.contains('어디') && !userMessage.contains('어디서')) {
+      // "어디야?" 형태의 직접적인 위치 질문
+      if (userMessage.contains('어디야') || userMessage.contains('어디에') || 
+          userMessage.contains('어디 있') || userMessage.contains('어딘')) {
+        contextHints.add('위치 질문 확인. 구체적이지만 안전한 장소 답변: "집에 있어요", "카페에서 공부 중이에요"');
+      }
+      // "어디 돌아다니니?" 같은 활동 질문
+      else if (userMessage.contains('돌아다니') || userMessage.contains('다니') || 
+               userMessage.contains('가는') || userMessage.contains('가고')) {
+        contextHints.add('활동/이동 질문. 동적인 답변: "요즘 카페랑 도서관 자주 가요", "주말엔 공원이나 전시회 다녀요"');
+      }
+    }
+    
+    // 위치가 아닌데 위치로 오해하기 쉬운 패턴
+    if ((userMessage.contains('어서') || userMessage.contains('반가')) && 
+        !userMessage.contains('어디')) {
+      contextHints.add('⚠️ 인사 메시지입니다! 위치 답변 절대 금지. 친근한 인사로 응답하세요.');
     }
     
     // 스포일러 관련 대화
@@ -1112,12 +1178,59 @@ class ChatOrchestrator {
         } else {
           contextHints.add('위치 질문 → 구체적이지만 안전한 답변: "집에서 쉬고 있어요", "카페에서 공부 중이에요"');
         }
+      } else if (userMessage.contains('ERP')) {
+        // ERP 질문에 대한 특별 처리
+        contextHints.add('⚠️ ERP 질문 감지. "잘 모르겠어요" 또는 "그런 건 몰라요ㅎㅎ 다른 얘기 하자" 등으로 자연스럽게 회피');
+      } else if (userMessage.contains('뭐야') || userMessage.contains('뭐예요') || userMessage.contains('뭔가요')) {
+        // "~가 뭐야?" 형태의 질문
+        contextHints.add('"~가 뭐야?" 질문 → 아는 것은 설명, 모르는 것은 "잘 모르겠어요" 솔직하게');
       }
     }
     
     // 회피성 답변 방지 강화
     if (_isAvoidancePattern(userMessage)) {
       contextHints.add('⚠️ 회피 금지! 주제 바꾸기 시도 감지. 현재 대화에 집중하여 답변');
+    }
+    
+    // "말하다마" 패턴 감지
+    if (userMessage.contains('말하다마') || userMessage.contains('말하다 마')) {
+      contextHints.add('💭 사용자가 말을 끝까지 못했어요. 무엇을 더 말하려 했는지 물어보거나 자연스럽게 대화 이어가세요.');
+      contextHints.add('⚠️ 중요: 답변은 반드시 완전한 문장으로 끝내세요! "~하고", "~인데" 같은 미완성 금지!');
+    }
+    
+    // 문장 완성도 체크 강화
+    if (lastAIMessage != null) {
+      final lastAIContent = lastAIMessage.content.trim();
+      if (lastAIContent.endsWith('하고') || lastAIContent.endsWith('인데') || 
+          lastAIContent.endsWith('있는') || lastAIContent.endsWith('하는')) {
+        contextHints.add('⚠️ 이전 답변이 불완전했습니다. 이번엔 반드시 완전한 문장으로 끝내세요!');
+      }
+    }
+    
+    // 고민 상담 강화
+    if (userMessage.contains('고민') || userMessage.contains('어떻게') || 
+        userMessage.contains('어려') || userMessage.contains('힘들')) {
+      contextHints.add('💡 구체적인 조언이나 경험을 공유하세요. 단순 되묻기 금지!');
+      
+      // 페르소나별 전문성 활용
+      if (persona.description.contains('개발') || persona.description.contains('프로그래')) {
+        contextHints.add('🖥️ 개발자 관점: "코딩하다가 느낀 건데..." 같은 일상적 전문성 언급');
+      } else if (persona.description.contains('디자인')) {
+        contextHints.add('🎨 디자이너 관점: "디자인 작업하면서 배운 건데..." 같은 경험 공유');
+      } else if (persona.description.contains('의사') || persona.description.contains('간호')) {
+        contextHints.add('🏥 의료진 관점: "병원에서 보니까..." 같은 건강 관련 조언');
+      } else if (persona.description.contains('교사') || persona.description.contains('교육')) {
+        contextHints.add('📚 교육자 관점: "학생들 보면서 느끼는데..." 같은 학습 조언');
+      } else if (persona.description.contains('상담')) {
+        contextHints.add('💭 상담사 관점: "상담하면서 많이 봤는데..." 같은 심리적 접근');
+      }
+      
+      contextHints.add('⚡ 전문용어는 쉽게 풀어서! 재미있는 비유 사용하면 더 좋아요.');
+    }
+    
+    // 일상 대화에서도 가끔 전문분야 언급
+    if (math.Random().nextDouble() < 0.2 && !userMessage.contains('?')) { // 20% 확률
+      contextHints.add('💬 자연스럽게 직업 관련 일화나 경험을 섞어보세요. 너무 과하지 않게!');
     }
     
     // 반복적인 질문 패턴 감지
@@ -1186,11 +1299,13 @@ class ChatOrchestrator {
       final recentContent = recentMessages.take(3).map((m) => m.content.toLowerCase()).join(' ');
       final currentLower = currentMessage.toLowerCase();
       
-      // 게임 주제로 갑자기 전환
-      if ((currentLower.contains('딜러') || currentLower.contains('게임') || 
-           currentLower.contains('롤') || currentLower.contains('오버워치')) &&
-          !recentContent.contains('게임') && !recentContent.contains('놀') && 
-          !recentContent.contains('취미')) {
+      // 게임 주제로 갑자기 전환 (이미 게임 대화 중이면 주제 변경이 아님)
+      final gameKeywords = ['게임', '롤', '오버워치', '배그', '발로란트', '피파', '딜러', '탱커', '힐러', '서포터', '정글', '시메트라', '디바'];
+      final isGameTopic = gameKeywords.any((k) => currentLower.contains(k));
+      final wasGameTopic = gameKeywords.any((k) => recentContent.contains(k));
+      
+      if (isGameTopic && !wasGameTopic && 
+          !recentContent.contains('놀') && !recentContent.contains('취미')) {
         return true;
       }
       
@@ -1280,6 +1395,356 @@ class ChatResponse {
   
   // 편의 메서드: 첫 번째 콘텐츠 반환 (기존 코드 호환성)
   String get content => contents.isNotEmpty ? contents.first : '';
+  
+  /// 💡 대화 품질 점수 계산 (0-100)
+  double calculateConversationQuality({
+    required String userMessage,
+    required String aiResponse,
+    required List<Message> recentMessages,
+  }) {
+    double qualityScore = 50.0; // 기본 점수
+    
+    // 1. 맥락 일관성 (0-30점)
+    final contextScore = _calculateContextCoherence(userMessage, recentMessages);
+    qualityScore += contextScore * 30;
+    
+    // 2. 감정 교류 품질 (0-20점)
+    final emotionalScore = _calculateEmotionalExchange(userMessage, aiResponse, recentMessages);
+    qualityScore += emotionalScore * 20;
+    
+    // 3. 대화 깊이 (0-20점)
+    final depthScore = _calculateConversationDepth(userMessage, recentMessages);
+    qualityScore += depthScore * 20;
+    
+    // 4. 응답 관련성 (0-15점)
+    final relevanceScore = _calculateResponseRelevance(userMessage, aiResponse);
+    qualityScore += relevanceScore * 15;
+    
+    // 5. 자연스러움 (0-15점)
+    final naturalScore = _calculateNaturalness(userMessage, aiResponse, recentMessages);
+    qualityScore += naturalScore * 15;
+    
+    // 디버그 출력
+    debugPrint('🎯 대화 품질 점수: ${qualityScore.toStringAsFixed(1)}/100');
+    debugPrint('  - 맥락 일관성: ${(contextScore * 30).toStringAsFixed(1)}/30');
+    debugPrint('  - 감정 교류: ${(emotionalScore * 20).toStringAsFixed(1)}/20');
+    debugPrint('  - 대화 깊이: ${(depthScore * 20).toStringAsFixed(1)}/20');
+    debugPrint('  - 응답 관련성: ${(relevanceScore * 15).toStringAsFixed(1)}/15');
+    debugPrint('  - 자연스러움: ${(naturalScore * 15).toStringAsFixed(1)}/15');
+    
+    return qualityScore.clamp(0, 100);
+  }
+  
+  /// 맥락 일관성 계산
+  double _calculateContextCoherence(String userMessage, List<Message> recentMessages) {
+    if (recentMessages.isEmpty) return 0.7; // 첫 대화는 기본점
+    
+    // 최근 대화의 키워드 추출
+    final recentKeywords = <String>[];
+    for (final msg in recentMessages.take(5)) {
+      recentKeywords.addAll(_extractKeywords(msg.content));
+    }
+    
+    // 현재 메시지의 키워드
+    final currentKeywords = _extractKeywords(userMessage);
+    
+    // 키워드 겹침 정도
+    final commonKeywords = currentKeywords.where((k) => recentKeywords.contains(k)).length;
+    final coherence = commonKeywords.toDouble() / math.max(currentKeywords.length, 1);
+    
+    // 급격한 주제 변경 체크
+    if (_isAbruptTopicChange(userMessage, recentMessages)) {
+      return math.max(0, coherence - 0.3);
+    }
+    
+    return math.min(1.0, coherence + 0.3); // 기본 보너스
+  }
+  
+  /// 감정 교류 품질 계산
+  double _calculateEmotionalExchange(String userMessage, String aiResponse, List<Message> recentMessages) {
+    double score = 0.5;
+    
+    // 감정 표현 단어 확인
+    final emotionalWords = ['좋아', '사랑', '행복', '기뻐', '슬퍼', '그리워', '보고싶', '고마워', '미안'];
+    final userHasEmotion = emotionalWords.any((w) => userMessage.contains(w));
+    final aiHasEmotion = emotionalWords.any((w) => aiResponse.contains(w));
+    
+    // 상호 감정 교류
+    if (userHasEmotion && aiHasEmotion) {
+      score = 1.0;
+    } else if (userHasEmotion || aiHasEmotion) {
+      score = 0.7;
+    }
+    
+    // 공감 표현 체크
+    if (aiResponse.contains('나도') || aiResponse.contains('저도') || 
+        aiResponse.contains('맞아') || aiResponse.contains('그렇') ||
+        aiResponse.contains('이해')) {
+      score = math.min(1.0, score + 0.2);
+    }
+    
+    return score;
+  }
+  
+  /// 대화 깊이 계산
+  double _calculateConversationDepth(String userMessage, List<Message> recentMessages) {
+    double depth = 0.3; // 기본 점수
+    
+    // 깊은 주제 키워드
+    final deepTopics = ['꿈', '목표', '고민', '추억', '가족', '친구', '사랑', '미래', '과거', '감정', '생각'];
+    final hasDeepTopic = deepTopics.any((t) => userMessage.contains(t));
+    
+    if (hasDeepTopic) {
+      depth += 0.4;
+    }
+    
+    // 개인적인 이야기
+    if (userMessage.contains('나는') || userMessage.contains('저는') || 
+        userMessage.contains('내가') || userMessage.contains('제가')) {
+      depth += 0.2;
+    }
+    
+    // 질문의 깊이
+    if (userMessage.contains('어떻게 생각') || userMessage.contains('왜') || 
+        userMessage.contains('어떤 기분')) {
+      depth += 0.1;
+    }
+    
+    return math.min(1.0, depth);
+  }
+  
+  /// 응답 관련성 계산
+  double _calculateResponseRelevance(String userMessage, String aiResponse) {
+    // 질문에 대한 직접 답변 여부
+    if (userMessage.contains('?')) {
+      // 회피성 답변 체크
+      if (aiResponse.contains('모르겠') || aiResponse.contains('글쎄') ||
+          aiResponse.contains('다른 얘기')) {
+        return 0.2;
+      }
+      
+      // 질문 키워드가 답변에 포함되었는지
+      final questionKeywords = _extractKeywords(userMessage);
+      final answerKeywords = _extractKeywords(aiResponse);
+      final relevance = questionKeywords.where((k) => answerKeywords.contains(k)).length.toDouble() / 
+                       math.max(questionKeywords.length, 1);
+      
+      return math.min(1.0, relevance + 0.3);
+    }
+    
+    return 0.8; // 일반 대화는 기본점
+  }
+  
+  /// 대화 자연스러움 계산
+  double _calculateNaturalness(String userMessage, String aiResponse, List<Message> recentMessages) {
+    double naturalness = 0.7;
+    
+    // 반복 체크
+    if (recentMessages.isNotEmpty) {
+      final lastAiMessage = recentMessages.firstWhere(
+        (m) => !m.isFromUser,
+        orElse: () => recentMessages.first,
+      );
+      
+      if (_calculateSimilarity(aiResponse, lastAiMessage.content) > 0.7) {
+        naturalness -= 0.3; // 반복적인 응답
+      }
+    }
+    
+    // 자연스러운 전환 표현
+    final transitionPhrases = ['그러고보니', '아 맞다', '그런데', '근데', '그래서'];
+    if (transitionPhrases.any((p) => aiResponse.contains(p))) {
+      naturalness += 0.2;
+    }
+    
+    // 이모티콘/ㅋㅋ 사용 (20대 스타일)
+    if (aiResponse.contains('ㅋㅋ') || aiResponse.contains('ㅎㅎ') || 
+        aiResponse.contains('ㅠㅠ')) {
+      naturalness += 0.1;
+    }
+    
+    return math.min(1.0, naturalness);
+  }
+  
+  /// 감정 교류 평가 (Like 계산용)
+  EmotionalExchangeQuality evaluateEmotionalExchange({
+    required String userMessage,
+    required String aiResponse,
+    required EmotionType emotion,
+    required List<Message> recentMessages,
+  }) {
+    final quality = _calculateEmotionalExchange(userMessage, aiResponse, recentMessages);
+    
+    return EmotionalExchangeQuality(
+      score: quality,
+      isMutual: quality > 0.7,
+      emotionMatch: _checkEmotionMatch(userMessage, emotion),
+      hasEmpathy: _checkEmpathy(aiResponse),
+    );
+  }
+  
+  /// 감정 매칭 확인
+  bool _checkEmotionMatch(String message, EmotionType emotion) {
+    switch (emotion) {
+      case EmotionType.happy:
+        return message.contains('좋') || message.contains('행복') || message.contains('기뻐');
+      case EmotionType.love:
+        return message.contains('사랑') || message.contains('좋아') || message.contains('보고싶');
+      case EmotionType.sad:
+        return message.contains('슬') || message.contains('우울') || message.contains('힘들');
+      case EmotionType.anxious:
+        return message.contains('걱정') || message.contains('불안') || message.contains('무서');
+      default:
+        return false;
+    }
+  }
+  
+  /// 공감 표현 확인
+  bool _checkEmpathy(String response) {
+    final empathyPhrases = [
+      '나도', '저도', '맞아', '그렇', '이해', '알아', '공감',
+      '같은 마음', '나도 그래', '충분히', '당연히'
+    ];
+    
+    return empathyPhrases.any((p) => response.contains(p));
+  }
+  
+  /// 키워드 추출
+  Set<String> _extractKeywords(String text) {
+    // 불용어 제거
+    final stopWords = {
+      '은', '는', '이', '가', '을', '를', '에', '에서', '으로', '로', '와', '과', 
+      '의', '도', '만', '까지', '부터', '하고', '이고', '고', '며', '거나',
+      '그리고', '그러나', '하지만', '그런데', '그래서', '따라서',
+      'the', 'a', 'an', 'is', 'are', 'was', 'were', 'been', 'be', 'have', 'has', 'had',
+      'do', 'does', 'did', 'will', 'would', 'could', 'should', 'may', 'might',
+      'to', 'of', 'in', 'on', 'at', 'by', 'for', 'with', 'from', 'up', 'about',
+    };
+    
+    // 단어 분리 및 정제
+    final words = text.toLowerCase()
+        .replaceAll(RegExp(r'[^\w\s가-힣]'), ' ')
+        .split(RegExp(r'\s+'))
+        .where((word) => word.length > 1 && !stopWords.contains(word))
+        .toSet();
+    
+    return words;
+  }
+  
+  /// 갑작스러운 주제 변경 감지
+  bool _isAbruptTopicChange(String userMessage, List<Message> recentMessages) {
+    if (recentMessages.isEmpty) return false;
+    
+    // 최근 메시지들의 키워드 추출
+    final recentKeywords = <String>{};
+    for (final msg in recentMessages.take(3)) {
+      recentKeywords.addAll(_extractKeywords(msg.content));
+    }
+    
+    // 현재 메시지의 키워드
+    final currentKeywords = _extractKeywords(userMessage);
+    
+    // 공통 키워드가 전혀 없으면 주제 변경
+    final commonKeywords = currentKeywords.intersection(recentKeywords);
+    return commonKeywords.isEmpty && currentKeywords.isNotEmpty && recentKeywords.isNotEmpty;
+  }
+  
+  /// 문장 유사도 계산
+  double _calculateSimilarity(String text1, String text2) {
+    final words1 = _extractKeywords(text1);
+    final words2 = _extractKeywords(text2);
+    
+    if (words1.isEmpty || words2.isEmpty) return 0.0;
+    
+    final intersection = words1.intersection(words2).length;
+    final union = words1.union(words2).length;
+    
+    return union > 0 ? intersection / union : 0.0;
+  }
+  
+  /// 특별한 순간 감지
+  SpecialMoment? detectSpecialMoments({
+    required String userMessage,
+    required List<Message> chatHistory,
+    required int currentLikes,
+  }) {
+    // 첫 고민 상담
+    if ((userMessage.contains('고민') || userMessage.contains('걱정')) &&
+        !chatHistory.any((m) => m.content.contains('고민') || m.content.contains('걱정'))) {
+      return SpecialMoment(
+        type: 'first_concern',
+        description: '첫 고민 상담',
+        bonusLikes: 50,
+      );
+    }
+    
+    // 첫 꿈/목표 공유
+    if ((userMessage.contains('꿈') || userMessage.contains('목표')) &&
+        !chatHistory.any((m) => m.content.contains('꿈') || m.content.contains('목표'))) {
+      return SpecialMoment(
+        type: 'first_dream',
+        description: '첫 꿈 공유',
+        bonusLikes: 30,
+      );
+    }
+    
+    // 서로의 추억 공유
+    if (userMessage.contains('추억') || userMessage.contains('기억')) {
+      final recentMessages = chatHistory.take(5).toList();
+      if (recentMessages.any((m) => !m.isFromUser && m.content.contains('나도 기억'))) {
+        return SpecialMoment(
+          type: 'shared_memory',
+          description: '추억 공유',
+          bonusLikes: 40,
+        );
+      }
+    }
+    
+    // 관계 마일스톤
+    if (currentLikes == 999) {
+      return SpecialMoment(
+        type: 'milestone_1000',
+        description: '1000 Like 달성 직전',
+        bonusLikes: 100,
+      );
+    } else if (currentLikes == 9999) {
+      return SpecialMoment(
+        type: 'milestone_10000',
+        description: '10000 Like 달성 직전',
+        bonusLikes: 200,
+      );
+    }
+    
+    return null;
+  }
+}
+
+/// 감정 교류 품질
+class EmotionalExchangeQuality {
+  final double score;
+  final bool isMutual;
+  final bool emotionMatch;
+  final bool hasEmpathy;
+  
+  EmotionalExchangeQuality({
+    required this.score,
+    required this.isMutual,
+    required this.emotionMatch,
+    required this.hasEmpathy,
+  });
+}
+
+/// 특별한 순간
+class SpecialMoment {
+  final String type;
+  final String description;
+  final int bonusLikes;
+  
+  SpecialMoment({
+    required this.type,
+    required this.description,
+    required this.bonusLikes,
+  });
 }
 
 /// 메시지 분석 결과

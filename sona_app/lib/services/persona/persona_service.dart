@@ -660,15 +660,43 @@ class PersonaService extends BaseService {
 
 
   /// Queue relationship creation for batch processing
-  void _queueRelationshipCreate(Map<String, dynamic> relationshipData) {
+  void _queueRelationshipCreate(Map<String, dynamic> relationshipData) async {
     final docId = '${relationshipData['userId']}_${relationshipData['personaId']}';
     
-    FirebaseHelper.userPersonaRelationships
-        .doc(docId)
-        .set(relationshipData)
-        .catchError((e) {
-          debugPrint('Error creating relationship: $e');
+    try {
+      debugPrint('🔄 Creating relationship document: $docId');
+      debugPrint('📊 Relationship data: ${relationshipData['personaName']} (score: ${relationshipData['relationshipScore']})');
+      
+      await FirebaseHelper.userPersonaRelationships
+          .doc(docId)
+          .set(relationshipData);
+          
+      debugPrint('✅ Relationship created successfully: $docId');
+    } catch (e) {
+      debugPrint('❌ Error creating relationship: $e');
+      
+      // 재시도 로직
+      if (e.toString().contains('permission-denied')) {
+        debugPrint('🚫 Permission denied - checking authentication status');
+        // 권한 문제인 경우 로컬에만 저장
+        await _saveMatchedPersonas();
+      } else {
+        // 네트워크 오류 등의 경우 재시도
+        Future.delayed(const Duration(seconds: 2), () async {
+          try {
+            debugPrint('🔄 Retrying relationship creation...');
+            await FirebaseHelper.userPersonaRelationships
+                .doc(docId)
+                .set(relationshipData);
+            debugPrint('✅ Relationship created on retry: $docId');
+          } catch (retryError) {
+            debugPrint('❌ Retry failed: $retryError');
+            // 최종 실패 시 로컬에만 저장
+            await _saveMatchedPersonas();
+          }
         });
+      }
+    }
   }
 
   /// Queue relationship update for batch processing
@@ -755,15 +783,20 @@ class PersonaService extends BaseService {
       return;
     }
 
+    // 먼저 로컬에서 로드하여 즉시 표시
+    await _loadMatchedPersonasFromLocal();
+    debugPrint('📱 Loaded ${_matchedPersonas.length} matched personas from local storage');
+
     try {
-      // Try simple query first
+      // Firebase에서도 로드하여 병합
       final querySnapshot = await FirebaseHelper.userPersonaRelationships
           .where('userId', isEqualTo: _currentUserId!)
           .get();
 
-      debugPrint('📊 Found ${querySnapshot.docs.length} relationship documents');
+      debugPrint('📊 Found ${querySnapshot.docs.length} relationship documents in Firebase');
 
-      _matchedPersonas.clear();
+      final firebaseMatchedIds = <String>{};
+      final firebasePersonas = <Persona>[];
       
       // Process in parallel
       final futures = <Future>[];
@@ -806,8 +839,9 @@ class PersonaService extends BaseService {
             matchedAt: matchedAt,
           );
           
-          _matchedPersonas.add(matchedPersona);
-          debugPrint('    ✅ Added ${persona.name} to matched personas (score: $relationshipScore)');
+          firebasePersonas.add(matchedPersona);
+          firebaseMatchedIds.add(personaId);
+          debugPrint('    ✅ Found ${persona.name} in Firebase (score: $relationshipScore)');
           
           // Cache relationship data
           _addToCache(personaId, _CachedRelationship(
@@ -820,10 +854,27 @@ class PersonaService extends BaseService {
         }
       }
       
+      // 병합: 로컬과 Firebase 데이터 통합
+      final mergedMap = <String, Persona>{};
+      
+      // 먼저 로컬 데이터 추가
+      for (final persona in _matchedPersonas) {
+        mergedMap[persona.id] = persona;
+      }
+      
+      // Firebase 데이터로 업데이트 (Firebase가 더 최신)
+      for (final persona in firebasePersonas) {
+        mergedMap[persona.id] = persona;
+      }
+      
+      _matchedPersonas = mergedMap.values.toList();
+      
       // Sort by relationship score
       _matchedPersonas.sort((a, b) => b.relationshipScore.compareTo(a.relationshipScore));
       
-      debugPrint('✅ Loaded ${_matchedPersonas.length} matched personas');
+      debugPrint('✅ Merged matched personas: ${_matchedPersonas.length} total');
+      debugPrint('   - From local: ${mergedMap.length - firebasePersonas.length}');
+      debugPrint('   - From Firebase: ${firebasePersonas.length}');
       
       await _saveMatchedPersonas();
       

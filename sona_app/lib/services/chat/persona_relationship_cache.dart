@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/persona.dart';
 import '../../core/constants.dart';
 import '../base/base_service.dart';
+import 'user_speech_pattern_analyzer.dart';
+import '../../helpers/firebase_helper.dart';
 
 /// 페르소나와 casual speech 설정을 함께 반환하는 클래스
 class PersonaWithSpeechStyle {

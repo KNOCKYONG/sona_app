@@ -228,7 +228,9 @@ class SecurityAwarePostProcessor {
     // 불완전한 종결 패턴 (이것으로 끝나면 불완전함)
     final incompleteEndings = [
       '때가', '하는', '있는', '없는', '같은', '되는', '라는', '이라는',
-      '때', '것', '듯', '중', '그', '이', '를', '을', '에서', '으로'
+      '때', '것', '듯', '중', '그', '이', '를', '을', '에서', '으로',
+      '하고', '인데', '했는데', '있고', '없고', '같고', '되고', '라고',
+      '지내고', '있었고', '했고', '이고', '그리고', '그런데'
     ];
     
     // 마지막 문자/단어 확인
@@ -268,6 +270,21 @@ class SecurityAwarePostProcessor {
         return trimmed + ' 편이에요';
       } else if (lastWord == '중') {
         return trimmed + '이에요';
+      } else if (lastWord.endsWith('하고') || lastWord.endsWith('있고') || 
+                 lastWord.endsWith('없고') || lastWord.endsWith('같고')) {
+        // "~하고"로 끝나는 경우 (예: "그럼 요즘 어떻게 지내고")
+        if (trimmed.contains('어떻게') || trimmed.contains('뭐') || trimmed.contains('무엇')) {
+          return trimmed.substring(0, trimmed.length - 1) + ' 있어요?';
+        } else {
+          return trimmed + ' 있어요';
+        }
+      } else if (lastWord.endsWith('인데') || lastWord.endsWith('그런데') || 
+                 lastWord.endsWith('했는데')) {
+        // "~인데"로 끝나는 경우
+        return trimmed + ' 어떠세요?';
+      } else if (lastWord.endsWith('라고') || lastWord.endsWith('이고')) {
+        // "~라고", "~이고"로 끝나는 경우
+        return trimmed + ' 생각해요';
       } else {
         // 기본적으로 자연스러운 종결
         return trimmed + '요';
@@ -334,8 +351,11 @@ class SecurityAwarePostProcessor {
           // 게임 관련이면 더 구체적인 전환
           if (text.toLowerCase().contains('게임') || 
               text.toLowerCase().contains('딜러') ||
-              text.toLowerCase().contains('롤')) {
-            return '아 그러고보니 게임 얘기가 나와서 말인데, $text';
+              text.toLowerCase().contains('롤') ||
+              text.toLowerCase().contains('시메트라') ||
+              text.toLowerCase().contains('오버워치')) {
+            // 이미 게임 대화 중이면 전환 표현 불필요
+            return text;
           }
           
           return '$transition $text';

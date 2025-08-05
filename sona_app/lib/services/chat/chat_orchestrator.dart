@@ -1031,21 +1031,40 @@ class ChatOrchestrator {
       topicCoherence = commonTopics.length / math.min(currentKeywords.length, recentTopics.toSet().length);
     }
     
+    // 게임 관련 주제 감지 (예: "딜러", "욕먹어" 등)
+    final gameKeywords = ['게임', '롤', '오버워치', '딜러', '탱커', '힐러', '승리', '패배', '팀', '랭크'];
+    final isGameTopic = currentKeywords.any((k) => gameKeywords.contains(k.toLowerCase())) ||
+                        userMessage.toLowerCase().contains('딜러') ||
+                        userMessage.toLowerCase().contains('욕먹');
+    
     // 대화 흐름의 자연스러움 강화
     if (topicCoherence < 0.3 && messageAnalysis.type == MessageType.question) {
       // 주제가 크게 바뀌었을 때
       if (_isAbruptTopicChange(userMessage, recentMessages)) {
-        contextHints.add('주제 전환 감지. 부드러운 전환 필요: "아 그런데 갑자기 생각났는데..." 또는 이전 주제와 연결하여 답변');
+        contextHints.add('⚠️ 주제 전환 감지. 부드러운 전환 필수!');
+        
+        // 게임 주제로의 전환
+        if (isGameTopic && !recentTopics.any((t) => gameKeywords.contains(t.toLowerCase()))) {
+          contextHints.add('게임 주제로 전환. 예시: "아 그러고보니 게임 얘기가 나와서 말인데..." 또는 "갑자기 생각났는데 나도 게임하다가..."');
+        }
         
         // 구체적인 전환 가이드 추가
         if (lastAIMessage != null && lastAIMessage.content.contains('?')) {
           final truncatedQuestion = lastAIMessage.content.substring(0, math.min(30, lastAIMessage.content.length));
           contextHints.add('이전 질문("$truncatedQuestion...")을 무시하지 말고 간단히 언급 후 새 주제로 전환');
+        } else if (lastAIMessage != null) {
+          // 질문이 아닌 경우에도 자연스러운 전환 유도
+          contextHints.add('이전 대화와 연결점 찾기: "아 맞다!" "그러고보니" "말 나온 김에" 등으로 시작');
         }
       }
     } else if (topicCoherence > 0.7) {
       // 같은 주제가 계속될 때
       contextHints.add('동일 주제 지속 중. 대화를 더 깊게 발전시키거나 세부사항 탐구');
+    } else if (topicCoherence > 0.3 && topicCoherence < 0.7) {
+      // 부분적으로 연관된 주제
+      if (isGameTopic) {
+        contextHints.add('게임 관련 대화. 공감하며 자연스럽게 이어가기: "아 진짜? 나도 그런 적 있어ㅋㅋ"');
+      }
     }
     
     // 특정 주제 감지 및 가이드
@@ -1155,6 +1174,30 @@ class ChatOrchestrator {
       final lastMessage = recentMessages.first;
       if (!lastMessage.isFromUser && lastMessage.content.contains('?')) {
         // AI가 질문했는데 사용자가 다른 질문으로 응답
+        // 단, 질문에 대한 짧은 답변은 제외
+        if (currentMessage.contains('?') || currentMessage.length > 20) {
+          return true;
+        }
+      }
+    }
+    
+    // 최근 대화 주제와 완전히 다른 주제인지 확인
+    if (recentMessages.length >= 2) {
+      final recentContent = recentMessages.take(3).map((m) => m.content.toLowerCase()).join(' ');
+      final currentLower = currentMessage.toLowerCase();
+      
+      // 게임 주제로 갑자기 전환
+      if ((currentLower.contains('딜러') || currentLower.contains('게임') || 
+           currentLower.contains('롤') || currentLower.contains('오버워치')) &&
+          !recentContent.contains('게임') && !recentContent.contains('놀') && 
+          !recentContent.contains('취미')) {
+        return true;
+      }
+      
+      // 일상 대화에서 갑자기 전문적인 주제로
+      final professionalKeywords = ['회사', '업무', '프로젝트', '개발', '코딩', '디자인'];
+      if (professionalKeywords.any((k) => currentLower.contains(k)) &&
+          professionalKeywords.every((k) => !recentContent.contains(k))) {
         return true;
       }
     }

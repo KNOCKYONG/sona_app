@@ -23,6 +23,9 @@ class SecurityAwarePostProcessor {
     // 3단계: 이모티콘 최적화 (한국어 스타일)
     processed = _optimizeEmoticons(processed);
     
+    // 4단계: 갑작스러운 주제 변경 감지 및 수정
+    processed = _smoothTopicTransition(processed);
+    
     // 길이 제한은 ChatOrchestrator에서 메시지 분리로 처리
     
     return processed;
@@ -288,5 +291,78 @@ class SecurityAwarePostProcessor {
     
     // 한글이 아닌 경우 기본값
     return trimmed + '요';
+  }
+  
+  /// 갑작스러운 주제 변경 감지 및 수정
+  static String _smoothTopicTransition(String text) {
+    // 주제 전환 표현이 없으면서 특정 패턴으로 시작하는 경우
+    final abruptPatterns = [
+      // 게임 관련 갑작스러운 시작
+      RegExp(r'^(게임|롤|오버워치|배그|발로란트|피파)', caseSensitive: false),
+      RegExp(r'^(딜러|탱커|힐러|서포터|정글)', caseSensitive: false),
+      
+      // 전문 주제 갑작스러운 시작
+      RegExp(r'^(회사|업무|프로젝트|개발|코딩)', caseSensitive: false),
+      
+      // 일상 주제 갑작스러운 시작
+      RegExp(r'^(음식|영화|드라마|웹툰|카페)', caseSensitive: false),
+    ];
+    
+    // 자연스러운 전환 표현들
+    final transitionPhrases = [
+      '아 그러고보니', '아 맞다', '갑자기 생각났는데', '그거 얘기하니까',
+      '말 나온 김에', '그런 것처럼', '아 참', '근데 있잖아'
+    ];
+    
+    // 이미 전환 표현이 있는지 확인
+    bool hasTransition = false;
+    for (final phrase in transitionPhrases) {
+      if (text.toLowerCase().contains(phrase)) {
+        hasTransition = true;
+        break;
+      }
+    }
+    
+    // 전환 표현이 없고 갑작스러운 패턴으로 시작하면 추가
+    if (!hasTransition) {
+      for (final pattern in abruptPatterns) {
+        if (pattern.hasMatch(text)) {
+          // 랜덤하게 전환 표현 선택
+          final randomIndex = DateTime.now().millisecond % transitionPhrases.length;
+          final transition = transitionPhrases[randomIndex];
+          
+          // 게임 관련이면 더 구체적인 전환
+          if (text.toLowerCase().contains('게임') || 
+              text.toLowerCase().contains('딜러') ||
+              text.toLowerCase().contains('롤')) {
+            return '아 그러고보니 게임 얘기가 나와서 말인데, $text';
+          }
+          
+          return '$transition $text';
+        }
+      }
+    }
+    
+    // 공감 표현 개선 (딱딱한 표현 -> 자연스러운 표현)
+    final empathyPatterns = {
+      '그런 감정 이해해요': '아 진짜 그럴 것 같아요',
+      '그런 감정이 이해돼요': '아 진짜 그럴 것 같아요',
+      '마음이 아프시겠어요': '아 속상하겠다',
+      '마음이 아프겠어요': '아 속상하겠다',
+      '이해가 됩니다': '그럴 수 있어요',
+      '이해가 돼요': '그럴 수 있어요',
+      '공감이 됩니다': '나도 그럴 것 같아요',
+      '공감이 돼요': '나도 그럴 것 같아요',
+      '그런 마음 알아요': '나도 그런 적 있어요',
+      '그런 기분 알아요': '나도 그런 적 있어요',
+    };
+    
+    for (final entry in empathyPatterns.entries) {
+      if (text.contains(entry.key)) {
+        text = text.replaceAll(entry.key, entry.value);
+      }
+    }
+    
+    return text;
   }
 }

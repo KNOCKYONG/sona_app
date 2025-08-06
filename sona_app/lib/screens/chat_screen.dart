@@ -465,11 +465,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         // 캐시 업데이트 (현재 like score를 캐시에 반영)
         final authService = Provider.of<AuthService>(context, listen: false);
         final userId = authService.user?.uid;
-        if (userId != null) {
+        if (userId != null && _currentPersona != null) {
           // 현재 persona의 최신 likes를 캐시에 업데이트
           RelationScoreService.instance.getLikes(
             userId: userId,
-            personaId: persona.id,
+            personaId: _currentPersona!.id,
           );
         }
         

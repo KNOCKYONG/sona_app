@@ -9,6 +9,7 @@ import '../services/chat/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
+import '../services/ui/haptic_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
@@ -170,6 +171,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     chatService.setPersonaService(personaService);
     chatService.setCurrentUserId(_userId!);
     
+    // Set up haptic feedback callback for incoming AI messages
+    chatService.onAIMessageReceived = () {
+      HapticService.messageReceived();
+    };
+    
     debugPrint('🔗 ChatService initialized with PersonaService and userId: $_userId');
     
     final args = ModalRoute.of(context)?.settings.arguments;
@@ -287,6 +293,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void _sendMessage() async {
     final content = _messageController.text.trim();
     if (content.isEmpty) return;
+    
+    // 메시지 전송 햅틱 피드백
+    HapticService.messageSent();
     
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -492,6 +501,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     // Mark all messages as read when leaving chat
     _markMessagesAsReadOnExit();
+    
+    // Clean up haptic feedback callback
+    if (_chatService != null) {
+      _chatService!.onAIMessageReceived = null;
+    }
     
     _messageController.dispose();
     _scrollController.dispose();

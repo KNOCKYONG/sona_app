@@ -77,6 +77,9 @@ class ChatService extends BaseService {
   UserService? _userService;
   String? _currentUserId;
   
+  // Haptic feedback callback
+  Function()? onAIMessageReceived;
+  
   // Data storage
   List<Message> _messages = [];
   final Map<String, List<Message>> _messagesByPersona = {};
@@ -2038,6 +2041,11 @@ class ChatService extends BaseService {
           _messages = List.from(_messagesByPersona[persona.id]!);
         }
         
+        // Trigger haptic feedback for AI message
+        if (onAIMessageReceived != null) {
+          onAIMessageReceived!();
+        }
+        
         // Queue message for batch saving
         if (userId != '') {
           _queueMessageForSaving(userId, persona.id, aiMessage);
@@ -2125,6 +2133,11 @@ class ChatService extends BaseService {
         // This ensures the message appears even if user switches chats
         if (_currentPersonaId == persona.id) {
           _messages = List.from(_messagesByPersona[persona.id]!);
+        }
+        
+        // Trigger haptic feedback for AI message
+        if (onAIMessageReceived != null) {
+          onAIMessageReceived!();
         }
         
         // Notify listeners to update UI in chat list
@@ -2910,6 +2923,11 @@ class ChatService extends BaseService {
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
         _messages = List.from(_messagesByPersona[personaId]!);
+      }
+      
+      // Trigger haptic feedback for greeting message
+      if (onAIMessageReceived != null) {
+        onAIMessageReceived!();
       }
       
       // Firebase에 저장

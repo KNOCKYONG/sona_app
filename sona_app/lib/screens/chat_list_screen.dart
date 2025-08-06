@@ -11,6 +11,7 @@ import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
 import '../widgets/persona/optimized_persona_image.dart';
 import '../services/relationship/relation_score_service.dart';
+import '../widgets/skeleton/skeleton_widgets.dart';
 import '../l10n/app_localizations.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -345,6 +346,15 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
             
             return lastTimeB.compareTo(lastTimeA); // Descending order (newest first)
           });
+          
+          // Show skeleton loading while loading initial data
+          if (_isLoading && matchedPersonas.isEmpty) {
+            return SkeletonListView(
+              itemBuilder: () => const ChatListItemSkeleton(),
+              itemCount: 5,
+              padding: const EdgeInsets.symmetric(vertical: 8),
+            );
+          }
           
           if (matchedPersonas.isEmpty) {
             return Center(

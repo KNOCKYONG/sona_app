@@ -12,6 +12,7 @@ import '../services/auth/user_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/storage/cache_manager.dart';
 import '../services/cache/image_preload_service.dart';
+import '../services/ui/haptic_service.dart';
 import '../models/persona.dart';
 import '../models/app_user.dart';
 import '../widgets/persona/persona_card.dart';
@@ -24,6 +25,7 @@ import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
 import '../models/tip_data.dart';
 import '../widgets/tutorial/tip_card.dart';
+import '../widgets/skeleton/skeleton_widgets.dart';
 import 'dart:math';
 
 class PersonaSelectionScreen extends StatefulWidget {
@@ -677,19 +679,26 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       // Tip 카드인 경우 - 어떤 방향으로든 스와이프 허용, 매칭 처리 없음
       if (item is TipData) {
         debugPrint('💡 Tip card swiped: ${item.title}');
-        // Tip 카드는 그냥 넘어가기만 함
+        // Tip 카드는 가벼운 햅틱
+        HapticService.lightImpact();
       } else if (item is Persona) {
         // 페르소나 카드인 경우 - 기존 로직대로 처리
         debugPrint('🎯 Persona at index $previousIndex: ${item.name} (ID: ${item.id})');
         
         if (direction == CardSwiperDirection.right) {
           debugPrint('💕 Right swipe - Liking persona: ${item.name} (ID: ${item.id})');
+          // 좋아요: 중간 강도 햅틱
+          HapticService.swipeFeedback(isLike: true);
           _onPersonaLiked(item, isSuperLike: false);
         } else if (direction == CardSwiperDirection.left) {
           debugPrint('👈 Left swipe - Passing persona: ${item.name} (ID: ${item.id})');
+          // 패스: 가벼운 햅틱
+          HapticService.swipeFeedback(isLike: false);
           _onPersonaPassed(item);
         } else if (direction == CardSwiperDirection.top) {
           debugPrint('⭐ Top swipe - Super liking persona: ${item.name} (ID: ${item.id})');
+          // 슈퍼 좋아요: 강한 햅틱
+          HapticService.heavyImpact();
           _onPersonaLiked(item, isSuperLike: true);
         }
       }
@@ -827,6 +836,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     if (personaService.matchedPersonas.any((p) => p.id == persona.id)) {
       debugPrint('⚠️ Already matched with ${persona.name} - showing warning');
+      // 경고 햅틱
+      HapticService.warning();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('${persona.name}님과는 이미 대화중이에요!'),
@@ -839,6 +850,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       _removeMatchedPersonaFromCards(persona.id);
       return;
     }
+    
+    // 매칭 성공 축하 햅틱!
+    HapticService.matchCelebration();
     
     // 🔧 FIX: 메인 화면의 context를 미리 저장
     final BuildContext screenContext = context;
@@ -1144,16 +1158,22 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
   void _onLikePressed() {
     debugPrint('Like button pressed - attempting to swipe right');
+    // 버튼 탭 햅틱
+    HapticService.lightImpact();
     _cardController.swipe(CardSwiperDirection.right);
   }
 
   void _onSuperLikePressed() {
     debugPrint('Super like button pressed - attempting to swipe top');
+    // 버튼 탭 햅틱
+    HapticService.lightImpact();
     _cardController.swipe(CardSwiperDirection.top);
   }
 
   void _onPassPressed() {
     debugPrint('Pass button pressed - attempting to swipe left');
+    // 버튼 탭 햅틱
+    HapticService.lightImpact();
     _cardController.swipe(CardSwiperDirection.left);
   }
 
@@ -1358,12 +1378,35 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             );
           }
           
-          // 초기 로딩 시에만 로딩 인디케이터 표시
+          // 초기 로딩 시 스켈레톤 로딩 표시
           if (personaService.isLoading && personas.isEmpty && _cardItems.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFFFF6B9D),
-              ),
+            return Stack(
+              children: [
+                // Skeleton card
+                Center(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 0.65,
+                    child: const PersonaCardSkeleton(),
+                  ),
+                ),
+                // Skeleton action buttons
+                Positioned(
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: List.generate(3, (index) => 
+                      SkeletonWidget(
+                        width: index == 1 ? 70 : 60,
+                        height: index == 1 ? 70 : 60,
+                        borderRadius: BorderRadius.circular(35),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             );
           }
           

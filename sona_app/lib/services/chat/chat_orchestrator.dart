@@ -638,8 +638,13 @@ class ChatOrchestrator {
   String? _detectSpecificLanguage(String message) {
     final lowerMessage = message.toLowerCase();
     
+    // 한국어 확인을 가장 먼저 수행 (번역 불필요)
+    if (RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message)) {
+      return null;  // 한국어는 번역하지 않음
+    }
+    
     // 언어별 특징적인 패턴과 문자 확인
-    // 영어
+    // 영어 (한국어가 전혀 없고 영어 알파벳만 있는 경우)
     if (RegExp(r'^[a-z\s\d\?\.\!\,]+$', caseSensitive: false).hasMatch(message)) {
       return 'en';
     }
@@ -700,13 +705,8 @@ class ChatOrchestrator {
       return 'hi';
     }
     
-    // 한국어 문자가 포함된 경우 null 반환 (번역 불필요)
-    if (RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message)) {
-      return null;
-    }
-    
-    // 기본적으로 영어로 간주
-    return 'en';
+    // 그 외의 경우 null 반환 (번역 불필요)
+    return null;
   }
   
   // 언어 코드를 언어 이름으로 변환

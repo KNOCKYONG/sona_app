@@ -182,7 +182,7 @@ class RelationScoreService extends BaseService {
     // NegativeBehaviorSystem을 사용하여 분석
     final analysis = NegativeBehaviorSystem().analyze(
       message, 
-      relationshipScore: currentLikes,
+      likes: currentLikes,
       recentMessages: recentMessages,
     );
     return analysis.level;
@@ -203,7 +203,7 @@ class RelationScoreService extends BaseService {
     // NegativeBehaviorSystem을 사용하여 상세 분석
     final analysis = NegativeBehaviorSystem().analyze(
       userMessage,
-      relationshipScore: currentLikes,
+      likes: currentLikes,
       recentMessages: recentMessages,
     );
     
@@ -211,7 +211,7 @@ class RelationScoreService extends BaseService {
     final response = NegativeBehaviorSystem().generateResponse(
       analysis, 
       persona,
-      relationshipScore: currentLikes
+      likes: currentLikes
     );
     
     switch (level) {

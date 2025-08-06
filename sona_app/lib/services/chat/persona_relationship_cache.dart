@@ -107,7 +107,7 @@ class PersonaRelationshipCache extends BaseService {
       
       // 관계 정보로 페르소나 업데이트
       final updatedPersona = basePersona.copyWith(
-        relationshipScore: data['relationshipScore'] ?? 0,
+        likes: data['likes'] ?? data['relationshipScore'] ?? 0,
         // TODO: RelationshipType 정의 후 주석 해제
         // currentRelationship: _parseRelationshipType(data['currentRelationship']),
       );

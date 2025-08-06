@@ -51,9 +51,14 @@ class Message {
   final DateTime timestamp;
   final EmotionType? emotion;
   final Map<String, dynamic>? metadata;
-  final int? relationshipScoreChange;
+  final int? likesChange;
   final bool isRead;
   final bool isFirstInSequence;
+  
+  // 다국어 지원 필드
+  final String? originalLanguage; // 원문 언어 코드 (예: 'ko', 'en')
+  final String? translatedContent; // 번역된 내용
+  final String? targetLanguage; // 번역 대상 언어 코드
 
   Message({
     required this.id,
@@ -64,9 +69,12 @@ class Message {
     DateTime? timestamp,
     this.emotion,
     this.metadata,
-    this.relationshipScoreChange,
+    this.likesChange,
     this.isRead = false,
     this.isFirstInSequence = true,
+    this.originalLanguage,
+    this.translatedContent,
+    this.targetLanguage,
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() {
@@ -79,9 +87,12 @@ class Message {
       'timestamp': timestamp.toIso8601String(),
       'emotion': emotion?.name,
       'metadata': metadata,
-      'relationshipScoreChange': relationshipScoreChange,
+      'likesChange': likesChange,
       'isRead': isRead,
       'isFirstInSequence': isFirstInSequence,
+      'originalLanguage': originalLanguage,
+      'translatedContent': translatedContent,
+      'targetLanguage': targetLanguage,
     };
   }
 
@@ -105,9 +116,12 @@ class Message {
       metadata: json['metadata'] != null
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
-      relationshipScoreChange: json['relationshipScoreChange'],
+      likesChange: json['likesChange'] ?? json['relationshipScoreChange'],  // 호환성
       isRead: json['isRead'] ?? false,
       isFirstInSequence: json['isFirstInSequence'] ?? true,
+      originalLanguage: json['originalLanguage'],
+      translatedContent: json['translatedContent'],
+      targetLanguage: json['targetLanguage'],
     );
   }
 
@@ -116,9 +130,12 @@ class Message {
     MessageType? type,
     EmotionType? emotion,
     Map<String, dynamic>? metadata,
-    int? relationshipScoreChange,
+    int? likesChange,
     bool? isRead,
     bool? isFirstInSequence,
+    String? originalLanguage,
+    String? translatedContent,
+    String? targetLanguage,
   }) {
     return Message(
       id: id,
@@ -129,9 +146,12 @@ class Message {
       timestamp: timestamp,
       emotion: emotion ?? this.emotion,
       metadata: metadata ?? this.metadata,
-      relationshipScoreChange: relationshipScoreChange ?? this.relationshipScoreChange,
+      likesChange: likesChange ?? this.likesChange,
       isRead: isRead ?? this.isRead,
       isFirstInSequence: isFirstInSequence ?? this.isFirstInSequence,
+      originalLanguage: originalLanguage ?? this.originalLanguage,
+      translatedContent: translatedContent ?? this.translatedContent,
+      targetLanguage: targetLanguage ?? this.targetLanguage,
     );
   }
 }

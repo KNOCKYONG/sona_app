@@ -56,5 +56,17 @@ class TipData {
       icon: Icons.bug_report_outlined,
       gradientColors: [Color(0xFF667EEA), Color(0xFF764BA2)],
     ),
+    const TipData(
+      title: "다국어 채팅 기능",
+      content: "외국어로 메시지를 보내면 AI가 자동으로 인식! 메시지를 탭하면 번역을 볼 수 있어요.",
+      icon: Icons.translate,
+      gradientColors: [Color(0xFF30cfd0), Color(0xFF330867)],
+    ),
+    const TipData(
+      title: "메시지 복사하기",
+      content: "메시지를 길게 누르면 클립보드에 복사됩니다. 번역된 내용도 복사 가능해요!",
+      icon: Icons.copy,
+      gradientColors: [Color(0xFFf093fb), Color(0xFFf5576c)],
+    ),
   ];
 }

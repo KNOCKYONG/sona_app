@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../models/chat_error_report.dart';
 import '../../helpers/firebase_helper.dart';
+import '../app_info_service.dart';
 import 'error_recovery_service.dart';
 
 /// 에러 집계 서비스
@@ -97,7 +98,7 @@ class ErrorAggregationService {
         createdAt: DateTime.now(),
         userMessage: '[BATCH] Aggregated error report',
         deviceInfo: error.deviceInfo,
-        appVersion: '1.0.0',
+        appVersion: AppInfoService.instance.appVersion,
         errorType: error.errorType,
         errorMessage: error.errorMessage,
         stackTrace: error.stackTrace,

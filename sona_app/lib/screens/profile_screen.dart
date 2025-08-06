@@ -161,7 +161,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final matchedPersonaCount = personaService.matchedPersonas.length;
     int totalLikes = 0;
     for (final persona in personaService.matchedPersonas) {
-      totalLikes += persona.relationshipScore;
+      totalLikes += persona.likes;
     }
     final hearts = purchaseService.hearts;
     

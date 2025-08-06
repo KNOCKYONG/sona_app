@@ -5,7 +5,7 @@ class Persona {
   final String description;
   final List<String> photoUrls;
   final String personality;
-  final int relationshipScore;
+  final int likes;
   final DateTime createdAt;
   final Map<String, dynamic> preferences;
   final String gender; // 성별 ('male', 'female')
@@ -29,7 +29,7 @@ class Persona {
     required this.description,
     required this.photoUrls,
     required this.personality,
-    this.relationshipScore = 0,
+    this.likes = 0,
     DateTime? createdAt,
     this.preferences = const {},
     this.gender = 'female', // 기본값은 여성
@@ -45,15 +45,15 @@ class Persona {
 
   // 감정 반응 강도 계산 (점수 기반)
   double getEmotionalIntensity() {
-    if (relationshipScore >= 1000) return 1.0; // 완전한 연애
-    if (relationshipScore >= 500) return 0.8;  // 연애
-    if (relationshipScore >= 200) return 0.6;  // 썸
+    if (likes >= 1000) return 1.0; // 완전한 연애
+    if (likes >= 500) return 0.8;  // 연애
+    if (likes >= 200) return 0.6;  // 썸
     return 0.3; // 친구
   }
 
   // 질투 반응 여부 (점수 기반)
   bool canShowJealousy() {
-    return relationshipScore >= 200; // 썸 이상부터 질투 반응
+    return likes >= 200; // 썸 이상부터 질투 반응
   }
   
   // 이미지 URL 헬퍼 메서드들 (Cloudflare R2 구조 대응)
@@ -216,7 +216,7 @@ class Persona {
       'description': description,
       'photoUrls': photoUrls,
       'personality': personality,
-      'relationshipScore': relationshipScore,
+      'likes': likes,
       'createdAt': createdAt.toIso8601String(),
       'preferences': preferences,
       'gender': gender,
@@ -248,7 +248,7 @@ class Persona {
       description: json['description'],
       photoUrls: photoUrlsList,
       personality: json['personality'],
-      relationshipScore: json['relationshipScore'] ?? 0,
+      likes: json['likes'] ?? json['relationshipScore'] ?? 0,  // 호환성을 위해 둘 다 체크
       createdAt: DateTime.parse(json['createdAt']),
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
       gender: json['gender'] ?? 'female',
@@ -275,7 +275,7 @@ class Persona {
     String? description,
     List<String>? photoUrls,
     String? personality,
-    int? relationshipScore,
+    int? likes,
     Map<String, dynamic>? preferences,
     String? gender,
     String? mbti,
@@ -292,7 +292,7 @@ class Persona {
       description: description ?? this.description,
       photoUrls: photoUrls ?? this.photoUrls,
       personality: personality ?? this.personality,
-      relationshipScore: relationshipScore ?? this.relationshipScore,
+      likes: likes ?? this.likes,
       createdAt: createdAt,
       preferences: preferences ?? this.preferences,
       gender: gender ?? this.gender,

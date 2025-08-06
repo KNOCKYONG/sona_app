@@ -809,659 +809,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     });
   }
 
-  // 전문가 상담 안내 팝업
-  // 전문가 매칭 시 로그인 필요 다이얼로그
-  void _showExpertLoginRequiredDialog(Persona persona) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFF2196F3).withOpacity(0.1),
-                  const Color(0xFF1976D2).withOpacity(0.05),
-                ],
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF2196F3).withOpacity(0.3),
-                        blurRadius: 20,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.lock_outline,
-                    color: Colors.white,
-                    size: 40,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                const Text(
-                  '전문 상담 서비스',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF2196F3),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '${persona.name}님과의 전문 상담은\n로그인 후 이용 가능합니다.',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    height: 1.5,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: const [
-                      Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Color(0xFF2196F3), size: 20),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '검증된 전문가의 1:1 맞춤 상담',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Color(0xFF2196F3), size: 20),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '실행 가능한 구체적 솔루션 제공',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Icon(Icons.check_circle, color: Color(0xFF2196F3), size: 20),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              '안전하고 비밀이 보장되는 상담',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          _cardController.undo(); // 카드 되돌리기
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.grey[600],
-                          side: BorderSide(color: Colors.grey[400]!),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                        child: const Text('나중에'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          await _exitTutorialAndSignIn();
-                          // 로그인 성공 후 다시 전문가와 매칭
-                          if (mounted) {
-                            final authService = Provider.of<AuthService>(context, listen: false);
-                            if (authService.user != null) {
-                              _showExpertConsultationDialog(persona);
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2196F3),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: const Text(
-                          '로그인하기',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // 전문가 상담 시작 다이얼로그
-  void _showExpertConsultationDialog(Persona persona) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext dialogContext) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFFFF6B9D), Color(0xFFFF8FA3)],
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  '💫 전문가 매칭! 💫',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // 전문가 프로필
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: persona.photoUrls.isNotEmpty
-                        ? CachedNetworkImage(
-                            imageUrl: persona.photoUrls.first,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.person, size: 40),
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '${persona.name}님과 매칭되었습니다! 🎉',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  '전문적인 상담을 시작할 수 있어요! 💕',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        '${persona.name}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        persona.description,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          color: Colors.white70,
-                          height: 1.5,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.thumb_up, color: Colors.white70, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            '좋은 텔로우를 사귀 넣기기',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.of(dialogContext).pop();
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          side: const BorderSide(color: Colors.white),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text('나중에'),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          Navigator.of(dialogContext).pop();
-                          await _navigateToChat(persona, context, false);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: const Color(0xFFFF6B9D),
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          '채팅 시작',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _showExpertConsultationPopup(Persona persona, BuildContext screenContext) {
-    showModal<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              gradient: const LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xFF2196F3), Color(0xFF1976D2)],
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  '🎉 전문가 매칭 성공! 🎉',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                
-                // 전문가 프로필 이미지
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: persona.getThumbnailUrl() != null
-                        ? CachedNetworkImage(
-                            imageUrl: persona.getThumbnailUrl()!,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[300],
-                              child: const Icon(Icons.person, size: 40),
-                            ),
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: const Icon(Icons.person, size: 40),
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                
-                Text(
-                  'Dr. ${persona.name}',
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                // profession 필드 제거됨
-                const SizedBox(height: 20),
-                
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withOpacity(0.2)),
-                  ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        '🌟 전문가와 매칭되었습니다! 🌟',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        '이제 궁금한 점을 마음껏 물어보고\n전문적인 조언을 받아보세요!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.white.withOpacity(0.9),
-                          height: 1.5,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          Icon(Icons.psychology, color: Colors.white70, size: 24),
-                          Icon(Icons.chat_bubble, color: Colors.white70, size: 24),
-                          Icon(Icons.lightbulb, color: Colors.white70, size: 24),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        '전문 상담 • 맞춤 조언 • 실행 가능한 솔루션',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                ElevatedButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    // Continue with navigation
-                    await _navigateToChat(persona, screenContext, false);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF2196F3),
-                    minimumSize: const Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                  ),
-                  child: const Text(
-                    '전문 상담 시작하기',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  // 전문가 소나 확인 다이얼로그
-  Future<void> _showExpertConfirmDialog(Persona persona) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2196F3),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Icon(
-                  Icons.verified,
-                  color: Colors.white,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Text(
-                  '전문가 Sona',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RichText(
-                text: TextSpan(
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.black87,
-                    height: 1.5,
-                  ),
-                  children: [
-                    const TextSpan(text: 'Dr. '),
-                    TextSpan(
-                      text: persona.name,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    const TextSpan(text: '님은 '),
-                    TextSpan(
-                      text: '상담사',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2196F3),
-                      ),
-                    ),
-                    const TextSpan(text: ' 전문가입니다.\n\n'),
-                    const TextSpan(
-                      text: '전문가와의 매칭은 ',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    const TextSpan(
-                      text: '5 포인트',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFFF6B9D),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '가 차감되며, ',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    const TextSpan(
-                      text: '친구 관계(50점)',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF2196F3),
-                      ),
-                    ),
-                    const TextSpan(
-                      text: '로 시작됩니다.\n(전문가는 Super Like 불가)\n\n매칭하시겠습니까?',
-                      style: TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                '취소',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _onPersonaLiked(persona, isSuperLike: false); // 전문가는 항상 일반 매칭
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFFF6B9D),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text(
-                '5 포인트로 매칭',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void _showMatchDialog(Persona persona, {bool isSuperLike = false}) {
     // 🔥 이미 매칭된 페르소나인지 확인
     final personaService = Provider.of<PersonaService>(context, listen: false);
@@ -1501,14 +848,25 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     
     // 전문가 기능 제거됨
     
-    showModal<void>(
+    showGeneralDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black87,
+      transitionDuration: const Duration(milliseconds: 500),
+      pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+        return ScaleTransition(
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Curves.elasticOut,
           ),
-          child: Container(
+          child: FadeTransition(
+            opacity: animation,
+            child: Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Container(
             constraints: BoxConstraints(
               maxWidth: 340,
               maxHeight: MediaQuery.of(context).size.height * 0.8, // 화면 높이의 80%로 동적 조정
@@ -1530,8 +888,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   children: [
                     Text(
                       isSuperLike
-                          ? '💫 슈퍼 라이크 매칭! 💫'
-                          : '✨ 매칭 성공! ✨',
+                          ? '슈퍼 라이크 매칭!'
+                          : '매칭 성공!',
                       style: const TextStyle(
                         fontSize: 22, // 24 -> 22
                         fontWeight: FontWeight.bold,
@@ -1540,15 +898,29 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     ),
                     const SizedBox(height: 12), // 16 -> 12
 
-                    // 소나 프로필 이미지
-                    Container(
-                      width: 90, // 100 -> 90
-                      height: 90, // 100 -> 90
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 3),
-                      ),
-                      child: ClipOval(
+                    // 소나 프로필 이미지 with animation
+                    TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 800),
+                      curve: Curves.easeOutBack,
+                      builder: (context, value, child) {
+                        return Transform.scale(
+                          scale: value,
+                          child: Container(
+                            width: 90,
+                            height: 90,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 3),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.white.withOpacity(0.5 * value),
+                                  blurRadius: 20 * value,
+                                  spreadRadius: 5 * value,
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
                         child: persona.getThumbnailUrl() != null
                             ? CachedNetworkImage(
                                 imageUrl: persona.getThumbnailUrl()!,
@@ -1566,27 +938,43 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                 color: Colors.grey[300],
                                 child: const Icon(Icons.person, size: 40),
                               ),
-                      ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    const SizedBox(height: 12), // 16 -> 12
+                    const SizedBox(height: 12),
 
-                    Text(
-                      isSuperLike
-                          ? '${persona.name}님이 당신을\n특별히 좋아해요! 💕'
-                          : '${persona.name}님과 매칭되었어요!',
-                      style: const TextStyle(
-                        fontSize: 16, // 18 -> 16
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
+                    TweenAnimationBuilder<double>(
+                      tween: Tween<double>(begin: 0.0, end: 1.0),
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.easeOut,
+                      builder: (context, value, child) {
+                        return Opacity(
+                          opacity: value,
+                          child: Transform.translate(
+                            offset: Offset(0, 20 * (1 - value)),
+                            child: Text(
+                              isSuperLike
+                                  ? '${persona.name}님이 당신을\n특별히 좋아해요!'
+                                  : '${persona.name}님과 매칭되었어요!',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 6), // 8 -> 6
 
                     Text(
                       isSuperLike
-                          ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요 💫'
-                          : '소나와 친구처럼 대화를 시작해보세요 💕',
+                          ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요'
+                          : '소나와 친구처럼 대화를 시작해보세요',
                       style: const TextStyle(
                         fontSize: 13, // 14 -> 13
                         color: Colors.white70,
@@ -1741,6 +1129,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                 ),
               ),
             ),
+              ),
+            ),
           ),
         );
       },
@@ -1810,22 +1200,22 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           // 🔧 FIX: 업데이트된 persona를 전달
           final updatedPersona = isSuperLike 
               ? persona.copyWith(
-                  relationshipScore: 200, 
+                  likes: 200, 
                   // currentRelationship: RelationshipType.crush, // RelationshipType 정의 필요
                   imageUrls: persona.imageUrls,  // Preserve imageUrls
                 )
               : persona.copyWith(
-                  relationshipScore: 50, 
+                  likes: 50, 
                   // currentRelationship: RelationshipType.friend, // RelationshipType 정의 필요
                   imageUrls: persona.imageUrls,  // Preserve imageUrls
                 );
           
           Navigator.of(screenContext).pushNamedAndRemoveUntil(
             '/chat',
-            (route) => false,
+            (route) => route.settings.name == '/main',
             arguments: updatedPersona,
           );
-          debugPrint('✅ Successfully navigated to direct chat with ${persona.name} (score: ${updatedPersona.relationshipScore})');
+          debugPrint('✅ Successfully navigated to direct chat with ${persona.name} (score: ${updatedPersona.likes})');
         } catch (navError) {
           debugPrint('❌ Direct chat navigation error: $navError');
           
@@ -1835,7 +1225,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               debugPrint('🔄 Fallback to chat list navigation...');
               Navigator.of(screenContext).pushNamedAndRemoveUntil(
                 '/chat-list', 
-                (route) => false,
+                (route) => route.settings.name == '/main',
               );
               debugPrint('✅ Fallback navigation succeeded');
             } catch (altError) {

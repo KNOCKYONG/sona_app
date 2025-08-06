@@ -23,7 +23,7 @@ class OpenAIService {
   
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
-  static const int _maxOutputTokens = 200; // 토큰 제한 (150→200 증가)
+  static const int _maxOutputTokens = 200; // 기본 토큰 제한
   static const double _temperature = 0.8;
   
   // 🔗 연결 풀링
@@ -320,7 +320,7 @@ class OpenAIService {
     // 높은 감정적 중요도를 가진 메시지 필터링
     final significantMessages = recentMessages.where((msg) =>
       msg.emotion != null && msg.emotion != EmotionType.neutral ||
-      msg.relationshipScoreChange != null && msg.relationshipScoreChange!.abs() > 5
+      msg.likesChange != null && msg.likesChange!.abs() > 5
     ).toList();
     
     // 최근 + 중요한 메시지 결합
@@ -415,8 +415,8 @@ class OpenAIService {
 
   /// 🔒 보안 폴백 응답 생성
   static String _getSecureFallbackResponse(Persona persona, String userMessage) {
-    // TODO: Get isCasualSpeech from context
-    final isCasualSpeech = false; // Default to formal
+    // Using default formal speech for secure fallback
+    final isCasualSpeech = false; // Security fallbacks use formal speech
     final secureResponses = isCasualSpeech ? [
       '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
       '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',

@@ -343,6 +343,7 @@ class UserService extends BaseService {
     String? intro,
     File? profileImage,
     bool? genderAll,
+    String? preferredLanguage,
   }) async {
     final result = await executeWithLoading<bool>(() async {
       if (_currentUser == null) return false;
@@ -389,6 +390,7 @@ class UserService extends BaseService {
         updates['profileImageUrl'] = newProfileImagePath;
       }
       if (genderAll != null) updates['genderAll'] = genderAll;
+      if (preferredLanguage != null) updates['preferredLanguage'] = preferredLanguage;
 
       // Firestore 업데이트
       await FirebaseHelper.user(_currentUser!.uid).update(updates);
@@ -398,6 +400,24 @@ class UserService extends BaseService {
 
       return true;
     }, errorContext: 'updateUserProfile');
+    
+    return result ?? false;
+  }
+
+  // 사용자 정보 업데이트 (AppUser 객체 사용)
+  Future<bool> updateUser(AppUser user) async {
+    final result = await executeWithLoading<bool>(() async {
+      if (_currentUser == null || user.uid != _currentUser!.uid) return false;
+
+      // Firestore 업데이트
+      await FirebaseHelper.user(user.uid).update(user.toFirestore());
+      
+      // 로컬 사용자 정보 업데이트
+      _currentUser = user;
+      notifyListeners();
+      
+      return true;
+    }, errorContext: 'updateUser');
     
     return result ?? false;
   }

@@ -10,6 +10,7 @@ import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
 import '../models/persona.dart';
+import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
@@ -456,13 +457,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    Widget scaffold = Scaffold(
-      appBar: _buildAppBar(),
-      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
-      body: Stack(
-        children: [
-          Column(
-            children: [
+    Widget scaffold = PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (didPop) return;
+        
+        // Navigate to chat list instead of popping
+        Navigator.pushReplacementNamed(
+          context,
+          '/main',
+          arguments: {'initialIndex': 1}, // 채팅 목록 탭
+        );
+      },
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
+        body: Stack(
+          children: [
+            Column(
+              children: [
               
               // Chat messages list
               Expanded(
@@ -672,6 +685,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           ),
           // More menu overlay removed - using PopupMenuButton instead
         ],
+        ),
       ),
     );
     
@@ -805,6 +819,179 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  Future<void> _handleTranslationError() async {
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    final userService = Provider.of<UserService>(context, listen: false);
+    
+    final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+    final currentPersona = personaService.currentPersona;
+    final currentUser = userService.currentUser;
+    
+    if (userId.isNotEmpty && currentPersona != null) {
+      // Get recent messages with translations
+      final messages = chatService.getMessages(currentPersona.id);
+      final translatedMessages = messages
+          .where((msg) => !msg.isFromUser && msg.translatedContent != null)
+          .toList();
+      
+      if (translatedMessages.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.noTranslatedMessages),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return;
+      }
+      
+      // Show dialog to select which message has translation error
+      final selectedMessage = await showDialog<Message>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Row(
+            children: [
+              const Icon(Icons.translate, color: Color(0xFFFF6B9D)),
+              const SizedBox(width: 8),
+              Text(AppLocalizations.of(context)!.translationError),
+            ],
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.selectTranslationError,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: translatedMessages.length.clamp(0, 5), // Show max 5 recent translated messages
+                    itemBuilder: (context, index) {
+                      final msg = translatedMessages[index];
+                      return Card(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        child: InkWell(
+                          onTap: () => Navigator.of(dialogContext).pop(msg),
+                          borderRadius: BorderRadius.circular(8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${currentPersona.name}: ${msg.content}',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.translate, size: 14, color: Colors.grey[600]),
+                                    const SizedBox(width: 4),
+                                    Expanded(
+                                      child: Text(
+                                        msg.translatedContent ?? '',
+                                        style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: Text(AppLocalizations.of(context)!.cancel),
+            ),
+          ],
+        ),
+      );
+      
+      if (selectedMessage != null) {
+        // Show loading
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => const Center(
+            child: CircularProgressIndicator(color: Color(0xFFFF6B9D)),
+          ),
+        );
+        
+        try {
+          // Save translation error report
+          final errorData = {
+            'userId': userId,
+            'personaId': currentPersona.id,
+            'personaName': currentPersona.name,
+            'messageId': selectedMessage.id,
+            'originalContent': selectedMessage.content,
+            'translatedContent': selectedMessage.translatedContent,
+            'targetLanguage': selectedMessage.targetLanguage,
+            'userLanguage': currentUser?.preferredLanguage ?? 'ko',
+            'timestamp': DateTime.now().toIso8601String(),
+            'errorType': 'translation',
+          };
+          
+          final success = await chatService.reportChatError(
+            userId,
+            currentPersona.id,
+            {'translation_error': errorData},
+          );
+          
+          // Close loading dialog
+          if (mounted) Navigator.of(context).pop();
+          
+          if (success && mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.translationErrorReported),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.reportFailed),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        } catch (e) {
+          // Close loading dialog
+          if (mounted) Navigator.of(context).pop();
+          
+          debugPrint('❌ Translation error report failed: $e');
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.reportFailed),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        }
+      }
+    }
+  }
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -874,6 +1061,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               onSelected: (value) async {
                 if (value == 'error_report') {
                   await _handleErrorReport();
+                } else if (value == 'translation_error') {
+                  await _handleTranslationError();
                 } else if (value == 'leave_chat') {
                   await _handleLeaveChat();
                 }
@@ -891,6 +1080,26 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       const SizedBox(width: 12),
                       Text(
                         '대화 오류 전송하기',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuItem<String>(
+                  value: 'translation_error',
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.translate,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        AppLocalizations.of(context)!.translationError,
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodyLarge?.color,
                           fontWeight: FontWeight.w500,
@@ -1000,64 +1209,48 @@ class _PersonaTitle extends StatelessWidget {
         // Get the updated persona with latest relationship score
         final updatedPersona = personaService.currentPersona ?? persona;
         
-        return FutureBuilder<int>(
-          future: _getLikes(context, updatedPersona),
-          builder: (context, snapshot) {
-            final likes = snapshot.data ?? updatedPersona.relationshipScore ?? 0;
-            
-            return Row(
-              children: [
-                GestureDetector(
-                  onTap: () => _showPersonaProfile(context, updatedPersona),
-                  child: Builder(
-                    builder: (context) {
-                      final thumbnailUrl = updatedPersona.getThumbnailUrl();
-                      
-                      // 링 시스템으로 감싼 프로필 이미지
-                      return RelationshipRingSystem.buildRing(
-                        likes: likes,
-                        size: 44,
-                        child: _ProfileImage(
-                          photoUrl: thumbnailUrl,
-                        ),
-                      );
-                    },
+        // 🔧 FIX: Use existing likes directly without FutureBuilder
+        final likes = updatedPersona.likes ?? 0;
+        
+        return Row(
+          children: [
+            GestureDetector(
+              onTap: () => _showPersonaProfile(context, updatedPersona),
+              child: Builder(
+                builder: (context) {
+                  final thumbnailUrl = updatedPersona.getThumbnailUrl();
+                  
+                  // 링 시스템으로 감싼 프로필 이미지
+                  return RelationshipRingSystem.buildRing(
+                    likes: likes,
+                    size: 44,
+                    child: _ProfileImage(
+                      photoUrl: thumbnailUrl,
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.conversationWith(updatedPersona.name),
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.conversationWith(updatedPersona.name),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      _OnlineStatus(persona: updatedPersona),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          },
+                  _OnlineStatus(persona: updatedPersona),
+                ],
+              ),
+            ),
+          ],
         );
       },
-    );
-  }
-  
-  Future<int> _getLikes(BuildContext context, Persona persona) async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = authService.user?.uid;
-    
-    if (userId == null) return persona.relationshipScore ?? 0;
-    
-    return await RelationScoreService.instance.getLikes(
-      userId: userId,
-      personaId: persona.id,
     );
   }
 
@@ -1143,74 +1336,58 @@ class _OnlineStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<int>(
-      future: _getLikes(context),
-      builder: (context, snapshot) {
-        final likes = snapshot.data ?? persona.relationshipScore ?? 0;
-        final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
-        
-        return Row(
-          children: [
-            // 온라인 표시 (like score가 0 이하면 회색)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: likes <= 0 ? Colors.grey[400] : Colors.green[500],
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: likes <= 0 
-                        ? Colors.grey.withOpacity(0.4) 
-                        : Colors.green.withOpacity(0.4),
-                    blurRadius: 4,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 6),
-            // Online 텍스트 (like score가 0 이하면 Offline)
-            Text(
-              likes <= 0 ? 'Offline' : 'Online',
-              style: TextStyle(
-                fontSize: 12,
-                color: likes <= 0 ? Colors.grey : Colors.green,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(width: 8),
-            // 하트 아이콘
-            SizedBox(
-              width: 14,
-              height: 14,
-              child: visualInfo.heart,
-            ),
-            const SizedBox(width: 4),
-            // Like 수 (포맷팅됨)
-            Text(
-              visualInfo.formattedLikes,
-              style: TextStyle(
-                fontSize: 12,
-                color: visualInfo.color,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-  
-  Future<int> _getLikes(BuildContext context) async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = authService.user?.uid;
+    // 🔧 FIX: Use existing likes directly without FutureBuilder
+    final likes = persona.likes ?? 0;
+    final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
     
-    if (userId == null) return persona.relationshipScore ?? 0;
-    
-    return await RelationScoreService.instance.getLikes(
-      userId: userId,
-      personaId: persona.id,
+    return Row(
+      children: [
+        // 온라인 표시 (like score가 0 이하면 회색)
+        Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            color: likes <= 0 ? Colors.grey[400] : Colors.green[500],
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: likes <= 0 
+                    ? Colors.grey.withOpacity(0.4) 
+                    : Colors.green.withOpacity(0.4),
+                blurRadius: 4,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(width: 6),
+        // Online 텍스트 (like score가 0 이하면 Offline)
+        Text(
+          likes <= 0 ? 'Offline' : 'Online',
+          style: TextStyle(
+            fontSize: 12,
+            color: likes <= 0 ? Colors.grey : Colors.green,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(width: 8),
+        // 하트 아이콘
+        SizedBox(
+          width: 14,
+          height: 14,
+          child: visualInfo.heart,
+        ),
+        const SizedBox(width: 4),
+        // Like 수 (포맷팅됨)
+        Text(
+          visualInfo.formattedLikes,
+          style: TextStyle(
+            fontSize: 12,
+            color: visualInfo.color,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }

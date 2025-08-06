@@ -286,7 +286,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                               ),
                               
                               // 관계 상태 배지 (시각적 요소)
-                              if (widget.persona.relationshipScore > 0)
+                              if (widget.persona.likes > 0)
                                 Positioned(
                                   top: 16,
                                   right: 16,
@@ -509,7 +509,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
   }
   
   Widget _buildRelationshipBadge() {
-    final likes = widget.persona.relationshipScore ?? 0;
+    final likes = widget.persona.likes ?? 0;
     final color = RelationshipColorSystem.getRelationshipColor(likes);
     
     return Container(

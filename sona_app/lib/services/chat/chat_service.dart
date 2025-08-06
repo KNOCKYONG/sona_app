@@ -17,6 +17,7 @@ import '../persona/persona_service.dart';
 import '../storage/local_storage_service.dart';
 import 'conversation_memory_service.dart';
 import '../auth/user_service.dart';
+import '../app_info_service.dart';
 import 'security_filter_service.dart';
 import '../relationship/relation_score_service.dart';
 import '../relationship/negative_behavior_system.dart';
@@ -575,7 +576,7 @@ class ChatService extends BaseService {
           userMessage: userMessage,
           persona: persona,
           chatHistory: _messages.where((m) => m.personaId == persona.id).toList(),
-          currentLikes: persona.relationshipScore ?? 0,
+          currentLikes: persona.likes ?? 0,
           userId: userId,
         );
         
@@ -598,12 +599,14 @@ class ChatService extends BaseService {
         return;
       }
       
-      // Get user nickname and age
+      // Get user nickname, age, and preferred language
       String? userNickname;
       int? userAge;
+      String? userLanguage;
       if (_userService?.currentUser != null) {
         userNickname = _userService!.currentUser!.nickname;
         userAge = _userService!.currentUser!.age;
+        userLanguage = _userService!.currentUser!.preferredLanguage;
       }
       
       // Use new ChatOrchestrator for normal messages
@@ -616,6 +619,7 @@ class ChatService extends BaseService {
         chatHistory: chatHistory,
         userNickname: userNickname,
         userAge: userAge,
+        userLanguage: userLanguage,
       );
       
       // Handle Like system integration
@@ -627,7 +631,7 @@ class ChatService extends BaseService {
         userMessage: userMessage,
         persona: persona,
         chatHistory: chatHistory,
-        currentLikes: persona.relationshipScore ?? 0,
+        currentLikes: persona.likes ?? 0,
         userId: userId,
       );
       
@@ -659,6 +663,9 @@ class ChatService extends BaseService {
         userId: userId,
         emotion: response.emotion,
         scoreChange: finalScoreChange,
+        translatedContent: response.translatedContent,
+        translatedContents: response.translatedContents,
+        targetLanguage: response.targetLanguage,
       );
       
       // Increment daily message count after successful response
@@ -1656,9 +1663,8 @@ class ChatService extends BaseService {
   
   /// 방어적 응답 생성
   String _generateDefensiveResponse(Persona persona, String userMessage, String severity) {
-    // TODO: Get isCasualSpeech from PersonaRelationshipCache
-    // For now, default to formal speech
-    final isCasualSpeech = false;
+    // Using default formal speech for defensive responses
+    final isCasualSpeech = false; // Defensive responses use formal speech for safety
     
     if (severity == 'high') {
       // 심한 욕설에 대한 응답
@@ -1706,6 +1712,9 @@ class ChatService extends BaseService {
     required String userId,
     EmotionType? emotion,
     required int scoreChange,
+    String? translatedContent,
+    List<String>? translatedContents,
+    String? targetLanguage,
   }) async {
     try {
       for (int i = 0; i < contents.length; i++) {
@@ -1732,6 +1741,15 @@ class ChatService extends BaseService {
           await Future.delayed(Duration(milliseconds: delay));
         }
         
+        // 각 메시지에 해당하는 번역 가져오기
+        String? messageTranslation;
+        if (translatedContents != null && i < translatedContents.length) {
+          messageTranslation = translatedContents[i];
+        } else if (translatedContent != null && isLastMessage) {
+          // 호환성 유지: translatedContents가 없는 경우 마지막 메시지에만 번역 추가
+          messageTranslation = translatedContent;
+        }
+        
         final aiMessage = Message(
           id: _uuid.v4(),
           personaId: persona.id,
@@ -1739,8 +1757,11 @@ class ChatService extends BaseService {
           type: MessageType.text,
           isFromUser: false,
           emotion: emotion,
-          relationshipScoreChange: isLastMessage ? scoreChange : null,
+          likesChange: isLastMessage ? scoreChange : null,
           isFirstInSequence: i == 0, // First message in the sequence
+          originalLanguage: 'ko', // AI responses are always in Korean
+          translatedContent: messageTranslation, // 각 메시지별 번역
+          targetLanguage: messageTranslation != null ? targetLanguage : null,
           metadata: {
             'isLastInSequence': isLastMessage,
             'messageIndex': i,
@@ -1794,7 +1815,7 @@ class ChatService extends BaseService {
         
         // Handle score change on last message
         if (isLastMessage && scoreChange != 0) {
-          debugPrint('📊 Processing relationship score change: $scoreChange for ${persona.name}');
+          debugPrint('📊 Processing likes change: $scoreChange for ${persona.name}');
           if (userId != '') {
             _notifyScoreChange(persona.id, scoreChange, userId);
           }
@@ -1854,7 +1875,7 @@ class ChatService extends BaseService {
           type: MessageType.text,
           isFromUser: false,
           emotion: emotion,
-          relationshipScoreChange: isLastMessage ? scoreChange : null,
+          likesChange: isLastMessage ? scoreChange : null,
           isFirstInSequence: i == 0, // First message in the sequence
           // 마지막 메시지인지 표시하는 메타데이터 추가
           metadata: {
@@ -1886,10 +1907,10 @@ class ChatService extends BaseService {
          
          // 마지막 메시지에서만 친밀도 변화 반영
          if (isLastMessage) {
-           debugPrint('📊 Processing relationship score change: $scoreChange for ${persona.name}');
+           debugPrint('📊 Processing likes change: $scoreChange for ${persona.name}');
            
            if (scoreChange != 0) {
-             // Update Firebase relationship score
+             // Update Firebase likes
              if (userId != '') {
                debugPrint('🔥 Normal mode - calling PersonaService for score update');
                _notifyScoreChange(persona.id, scoreChange, userId);
@@ -2141,12 +2162,12 @@ class ChatService extends BaseService {
    void _updateTutorialPersonaScore(Persona persona, int scoreChange) {
      try {
        if (_personaService != null) {
-         final currentScore = persona.relationshipScore;
+         final currentScore = persona.likes;
          final newScore = (currentScore + scoreChange).clamp(0, 1000);
          
          // 현재 소나 업데이트
          final updatedPersona = persona.copyWith(
-           relationshipScore: newScore,
+           likes: newScore,
          );
          
          _personaService!.setCurrentPersona(updatedPersona);
@@ -2363,8 +2384,8 @@ class ChatService extends BaseService {
       EmotionType emotion;
       
       // 전문가 페르소나인지 확인
-      // TODO: Get isCasualSpeech from PersonaRelationshipCache
-      final isCasual = false; // Default to formal
+      // Using default formal speech for greetings
+      final isCasual = false; // Greetings use formal speech initially
       final mbti = persona.mbti.toUpperCase();
       
       // 현재 시간대 및 요일 확인
@@ -2593,7 +2614,7 @@ class ChatService extends BaseService {
         isFirstInSequence: true, // Single greeting message is always first
         timestamp: DateTime.now(),
         emotion: emotion,
-        relationshipScoreChange: 0,
+        likesChange: 0,
       );
 
       // 메시지 저장
@@ -2629,8 +2650,8 @@ class ChatService extends BaseService {
       return '안녕하세요! 대화해봐요 ㅎㅎ';
     }
     
-    // TODO: Get isCasualSpeech from PersonaRelationshipCache
-    final isCasual = false; // Default to formal
+    // Using default formal speech for first message
+    final isCasual = false; // First messages use formal speech
     final mbti = persona.mbti.toUpperCase();
     
     // MBTI와 말투에 따른 개성있는 인사 메시지들
@@ -2696,8 +2717,8 @@ class ChatService extends BaseService {
   
   /// 🔒 보안 폴백 응답 생성
   String _generateSecureFallbackResponse(Persona persona, String userMessage) {
-    // TODO: Get isCasualSpeech from PersonaRelationshipCache
-    final isCasualSpeech = false; // Default to formal
+    // Using default formal speech for secure fallback
+    final isCasualSpeech = false; // Security fallbacks use formal speech
     final responses = isCasualSpeech ? [
       '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
       '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
@@ -2781,7 +2802,7 @@ class ChatService extends BaseService {
         createdAt: DateTime.now(),
         userMessage: userMessage,
         deviceInfo: deviceInfo,
-        appVersion: '1.0.0', // TODO: Get actual app version
+        appVersion: AppInfoService.instance.appVersion,
       );
       
       // Firebase에 저장
@@ -2871,7 +2892,7 @@ class ChatService extends BaseService {
         createdAt: now,
         userMessage: '[AUTO] Error occurred during AI response generation',
         deviceInfo: await _getDeviceInfo(),
-        appVersion: '1.0.0',
+        appVersion: AppInfoService.instance.appVersion,
         errorType: errorType,
         errorMessage: errorMessage,
         stackTrace: stackTrace,
@@ -2891,6 +2912,59 @@ class ChatService extends BaseService {
       ErrorRecoveryService.instance.markErrorAsReported(errorHash);
     } catch (e) {
       debugPrint('❌ Failed to send automatic error report: $e');
+    }
+  }
+  
+  /// 채팅 오류를 Firebase에 보고합니다
+  Future<bool> reportChatError(String userId, String personaId, Map<String, dynamic> errorData) async {
+    try {
+      final messages = getMessages(personaId);
+      final recentMessages = messages.length > 10
+          ? messages.sublist(messages.length - 10)
+          : messages;
+      
+      // Get persona name
+      final personaService = PersonaService();
+      final persona = personaService.matchedPersonas.firstWhere(
+        (p) => p.id == personaId,
+        orElse: () => Persona(
+          id: personaId,
+          name: 'Unknown',
+          age: 0,
+          description: '',
+          photoUrls: [],
+          personality: '',
+          createdAt: DateTime.now(),
+        ),
+      );
+      
+      final errorReport = ChatErrorReport(
+        errorKey: ChatErrorReport.generateErrorKey(),
+        userId: userId,
+        personaId: personaId,
+        personaName: persona.name,
+        recentChats: recentMessages,
+        createdAt: DateTime.now(),
+        userMessage: errorData['user_message'],
+        deviceInfo: await _getDeviceInfo(),
+        appVersion: AppInfoService.instance.appVersion,
+        errorType: errorData['error_type'] ?? 'user_report',
+        errorMessage: errorData['error_message'],
+        metadata: errorData,
+        errorHash: ChatErrorReport.generateErrorHash(
+          userId: userId,
+          personaId: personaId,
+          errorType: errorData['error_type'] ?? 'user_report',
+          timestamp: DateTime.now(),
+        ),
+      );
+      
+      await FirebaseHelper.chatErrorFix.add(errorReport.toMap());
+      debugPrint('✅ User error report sent for persona: ${persona.name}');
+      return true;
+    } catch (e) {
+      debugPrint('❌ Failed to send user error report: $e');
+      return false;
     }
   }
 }

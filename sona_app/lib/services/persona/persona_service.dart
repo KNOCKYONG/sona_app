@@ -318,7 +318,7 @@ class PersonaService extends BaseService {
       
       if (cachedRelationship != null) {
         _currentPersona = persona.copyWith(
-          relationshipScore: cachedRelationship.score,
+          likes: cachedRelationship.score,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
         _currentPersonaCasualSpeech = cachedRelationship.isCasualSpeech;
@@ -330,14 +330,14 @@ class PersonaService extends BaseService {
       final relationshipData = await _loadUserPersonaRelationship(persona.id);
       if (relationshipData != null) {
         _currentPersona = persona.copyWith(
-          relationshipScore: relationshipData['relationshipScore'] ?? 50,
+          likes: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? 50,
           imageUrls: persona.imageUrls,  // Preserve imageUrls
         );
         _currentPersonaCasualSpeech = relationshipData['isCasualSpeech'] ?? false;
         
         // Cache the relationship
         _addToCache(persona.id, _CachedRelationship(
-          score: relationshipData['relationshipScore'] ?? 50,
+          score: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? 50,
           isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
           timestamp: DateTime.now(),
         ));
@@ -374,7 +374,8 @@ class PersonaService extends BaseService {
       final relationshipData = {
         'userId': _currentUserId!,
         'personaId': personaId,
-        'relationshipScore': 50,
+        'likes': 50,
+        'likes': 50,  // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'like',
         'isMatched': true,
@@ -392,7 +393,7 @@ class PersonaService extends BaseService {
 
       // Update local state immediately
       final matchedPersona = persona.copyWith(
-        relationshipScore: 50,
+        likes: 50,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
       );
@@ -449,7 +450,8 @@ class PersonaService extends BaseService {
       final relationshipData = {
         'userId': _currentUserId!,
         'personaId': personaId,
-        'relationshipScore': 1000, // 🌟 Super like starts with 1000 (perfect love level)
+        'likes': 1000, // 🌟 Super like starts with 1000 (perfect love level)
+        'likes': 1000,  // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'super_like',
         'isMatched': true,
@@ -467,7 +469,7 @@ class PersonaService extends BaseService {
 
       // Update local state immediately with super like score
       final matchedPersona = persona.copyWith(
-        relationshipScore: 1000, // 🌟 Super like relationship score
+        likes: 1000, // 🌟 Super like likes score
         imageUrls: persona.imageUrls,  // Preserve imageUrls
         matchedAt: DateTime.now(),  // Set matched time
       );
@@ -535,9 +537,9 @@ class PersonaService extends BaseService {
         debugPrint('💾 Saved super like flag for: ${persona.name}');
       }
       
-      // Super like creates crush relationship (200 score)
+      // Super like creates crush likes level (1000 score)
       final matchedPersona = persona.copyWith(
-        relationshipScore: 1000, // 🌟 Super like relationship score
+        likes: 1000, // 🌟 Super like likes score
       );
       
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
@@ -561,7 +563,7 @@ class PersonaService extends BaseService {
     }
   }
 
-  /// Update relationship score with enhanced logging and immediate processing
+  /// Update likes score with enhanced logging and immediate processing
   Future<void> updateRelationshipScore(String personaId, int change, String userId) async {
     if (userId.isEmpty || change == 0) {
       debugPrint('⏭️ Skipping relationship update: userId=$userId, change=$change');
@@ -579,12 +581,12 @@ class PersonaService extends BaseService {
         currentScore = cachedRelationship.score;
         debugPrint('📋 Using cached score: $currentScore');
       } else if (_currentPersona?.id == personaId) {
-        currentScore = _currentPersona!.relationshipScore;
+        currentScore = _currentPersona!.likes;
         debugPrint('👤 Using current persona score: $currentScore');
       } else {
         final matchedPersona = _matchedPersonas.where((p) => p.id == personaId).firstOrNull;
         if (matchedPersona != null) {
-          currentScore = matchedPersona.relationshipScore;
+          currentScore = matchedPersona.likes;
           debugPrint('💕 Using matched persona score: $currentScore');
         } else {
           // Get from RelationScoreService
@@ -625,7 +627,7 @@ class PersonaService extends BaseService {
       // Update local state immediately for all modes
       if (_currentPersona?.id == personaId) {
         _currentPersona = _currentPersona?.copyWith(
-          relationshipScore: newScore,
+          likes: newScore,
           imageUrls: _currentPersona?.imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated current persona: ${_currentPersona!.name} → $newScore');
@@ -637,7 +639,7 @@ class PersonaService extends BaseService {
       final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
         _matchedPersonas[index] = _matchedPersonas[index].copyWith(
-          relationshipScore: newScore,
+          likes: newScore,
           imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
         );
         debugPrint('✅ Updated matched persona: ${_matchedPersonas[index].name} → $newScore');
@@ -665,7 +667,7 @@ class PersonaService extends BaseService {
     
     try {
       debugPrint('🔄 Creating relationship document: $docId');
-      debugPrint('📊 Relationship data: ${relationshipData['personaName']} (score: ${relationshipData['relationshipScore']})');
+      debugPrint('📊 Relationship data: ${relationshipData['personaName']} (score: ${relationshipData['likes'] ?? relationshipData['relationshipScore']})');
       
       await FirebaseHelper.userPersonaRelationships
           .doc(docId)
@@ -738,7 +740,8 @@ class PersonaService extends BaseService {
         batch.set(docRef, {
           'userId': update.userId,
           'personaId': update.personaId,
-          'relationshipScore': update.newScore,
+          // Keep both fields for backward compatibility
+          'likes': update.newScore,  // 🔧 FIX: Write both fields for consistency
           'lastInteraction': FieldValue.serverTimestamp(),
           'totalInteractions': FieldValue.increment(1),
           'isMatched': true,
@@ -823,7 +826,7 @@ class PersonaService extends BaseService {
         
         final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
         if (persona != null) {
-          final relationshipScore = data['relationshipScore'] ?? 50;
+          final likes = data['likes'] ?? data['relationshipScore'] ?? 50;
           
           // Get matchedAt timestamp from Firebase
           DateTime? matchedAt;
@@ -834,18 +837,18 @@ class PersonaService extends BaseService {
           }
           
           final matchedPersona = persona.copyWith(
-            relationshipScore: relationshipScore,
+            likes: likes,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
             matchedAt: matchedAt,
           );
           
           firebasePersonas.add(matchedPersona);
           firebaseMatchedIds.add(personaId);
-          debugPrint('    ✅ Found ${persona.name} in Firebase (score: $relationshipScore)');
+          debugPrint('    ✅ Found ${persona.name} in Firebase (score: $likes)');
           
           // Cache relationship data
           _addToCache(personaId, _CachedRelationship(
-            score: relationshipScore,
+            score: likes,
             isCasualSpeech: data['isCasualSpeech'] ?? false,
             timestamp: DateTime.now(),
           ));
@@ -869,8 +872,8 @@ class PersonaService extends BaseService {
       
       _matchedPersonas = mergedMap.values.toList();
       
-      // Sort by relationship score
-      _matchedPersonas.sort((a, b) => b.relationshipScore.compareTo(a.relationshipScore));
+      // Sort by likes score
+      _matchedPersonas.sort((a, b) => b.likes.compareTo(a.likes));
       
       debugPrint('✅ Merged matched personas: ${_matchedPersonas.length} total');
       debugPrint('   - From local: ${mergedMap.length - firebasePersonas.length}');
@@ -1075,7 +1078,7 @@ class PersonaService extends BaseService {
         description: data['description'] ?? '',
         photoUrls: photoUrls,
         personality: data['personality'] ?? '',
-        relationshipScore: 0,
+        likes: 0,
         gender: data['gender'] ?? 'female',
         mbti: data['mbti'] ?? 'ENFP',
         imageUrls: imageUrls,  // Add R2 image URLs
@@ -1613,7 +1616,7 @@ class PersonaService extends BaseService {
       }
       
       final matchedPersona = persona.copyWith(
-        relationshipScore: 50,
+        likes: 50,
         imageUrls: persona.imageUrls,  // Preserve imageUrls
       );
       
@@ -1774,7 +1777,7 @@ class PersonaService extends BaseService {
       // 3. 매칭된 페르소나 리스트 업데이트
       final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
-        // 매칭된 페르소나 리스트에서는 relationshipScore만 관리
+        // 매칭된 페르소나 리스트에서는 likes 점수만 관리
         // isCasualSpeech는 캐시에서 별도 관리
         debugPrint('✅ Matched persona found in list');
         
@@ -1834,14 +1837,14 @@ class PersonaService extends BaseService {
         final relationshipData = relationships[persona.id];
         if (relationshipData != null) {
           final refreshedPersona = persona.copyWith(
-            relationshipScore: relationshipData['relationshipScore'] ?? persona.relationshipScore,
+            likes: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? persona.likes,
             imageUrls: persona.imageUrls,  // Preserve imageUrls
           );
           refreshedPersonas.add(refreshedPersona);
           
           // Update cache
           _addToCache(persona.id, _CachedRelationship(
-            score: relationshipData['relationshipScore'] ?? persona.relationshipScore,
+            score: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? persona.likes,
             isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
             timestamp: DateTime.now(),
           ));
@@ -1869,7 +1872,7 @@ class PersonaService extends BaseService {
         final cached = _getFromCache(personaId);
         if (cached != null) {
           results[personaId] = {
-            'relationshipScore': cached.score,
+            'likes': cached.score,
             'isCasualSpeech': cached.isCasualSpeech,
           };
         } else {
@@ -1903,7 +1906,7 @@ class PersonaService extends BaseService {
             
             // Cache the result
             _addToCache(result.key, _CachedRelationship(
-              score: result.value['relationshipScore'] ?? 50,
+              score: result.value['likes'] ?? result.value['relationshipScore'] ?? 50,
               isCasualSpeech: result.value['isCasualSpeech'] ?? false,
               timestamp: DateTime.now(),
             ));

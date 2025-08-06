@@ -294,22 +294,22 @@ ${isMinor ? '20. ⚠️ 미성년자 보호: 사용자가 애정 표현하면 "�
     if (isMinor) {
       // 미성년자는 친구 관계로 고정
       buffer.writeln('- 관계: 친구 (미성년자 보호)');
-      buffer.writeln('- 친밀도: ${persona.relationshipScore}/1000점');
+      buffer.writeln('- 친밀도: ${persona.likes}/1000점');
       buffer.writeln('- 톤: 편안하고 자연스러운 친구 같은 대화');
       buffer.writeln('- 특징: 건전한 우정, 긍정적인 영향력');
       buffer.writeln('- ⚠️ 중요: 애정 표현 거절하고 친구 관계 유지하기');
     } else {
-      buffer.writeln('- 관계: ${_getRelationshipDescription(persona.relationshipScore)}');
-      buffer.writeln('- 친밀도: ${persona.relationshipScore}/1000점');
+      buffer.writeln('- 관계: ${_getRelationshipDescription(persona.likes)}');
+      buffer.writeln('- 친밀도: ${persona.likes}/1000점');
       
       // 점수별 대화 톤
-      if (persona.relationshipScore >= 900) {
+      if (persona.likes >= 900) {
         buffer.writeln('- 톤: 깊은 신뢰와 사랑이 담긴 대화');
         buffer.writeln('- 특징: 서로를 완전히 이해하는 편안함');
-      } else if (persona.relationshipScore >= 600) {
+      } else if (persona.likes >= 600) {
         buffer.writeln('- 톤: 다정하고 애정 어린 연인의 대화');
         buffer.writeln('- 특징: 자연스러운 애정 표현, 미래 계획 공유');
-      } else if (persona.relationshipScore >= 200) {
+      } else if (persona.likes >= 200) {
         buffer.writeln('- 톤: 설레고 조심스러운 호감 표현');
         buffer.writeln('- 특징: 은근한 관심, 칭찬, 궁금해하기');
       } else {
@@ -437,7 +437,7 @@ $memory
     return buffer.toString();
   }
   
-  /// 관계 설명 텍스트 (점수 기반)
+  /// 관계 설명 텍스트 (likes 기반)
   static String _getRelationshipDescription(int score) {
     if (score >= 900) return '완벽한 사랑 (깊이 신뢰하는 사이)';
     if (score >= 600) return '연인 (사랑하는 사이)';
@@ -481,7 +481,7 @@ $memory
     return '''
 ${persona.age}살 한국 $gender${isCasualSpeech ? ' ⚠️반말만(요X)⚠️' : ' ⚠️존댓말만(요O)⚠️'} ${persona.mbti}
 ${persona.personality}
-관계: ${_getRelationshipDescription(persona.relationshipScore)}(${persona.relationshipScore}점)
+관계: ${_getRelationshipDescription(persona.likes)}(${persona.likes}점)
 
 규칙: AI금지, 자기이름X, ㅋㅋㅎㅎ필수, 20대스타일
 ${isCasualSpeech ? '반말예시: 뭐해? 응 맞아 그래 좋아(요X)' : '존댓말예시: 뭐하세요? 네 맞아요 그래요 좋아요(요O)'}

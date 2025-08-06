@@ -83,7 +83,7 @@ class FirebasePersonaService extends ChangeNotifier {
         // TODO: RelationshipType 정의 후 주석 해제
         // 'currentRelationship': RelationshipType.friend.name,
         'currentRelationship': 'friend', // 임시로 문자열 사용
-        'relationshipScore': 0,
+        'likes': 0,  // Use new likes field
         'isCasualSpeech': false,
         'gender': 'female', // 기본값
         'mbti': 'ENFP', // 기본값
@@ -216,7 +216,7 @@ class FirebasePersonaService extends ChangeNotifier {
             'userId': userId,
             'isActive': true,
             'matchedAt': FieldValue.serverTimestamp(),
-            'relationshipScore': 0,
+            'likes': 0,  // Use new likes field
             'isCasualSpeech': false,
           });
       
@@ -281,23 +281,23 @@ class FirebasePersonaService extends ChangeNotifier {
       final matchDoc = await matchDocRef.get();
       if (!matchDoc.exists) return false;
       
-      final currentScore = matchDoc.data()?['relationshipScore'] ?? 0;
+      final currentScore = matchDoc.data()?['likes'] ?? matchDoc.data()?['relationshipScore'] ?? 0;
       final newScore = (currentScore + scoreChange).clamp(0, 1000);
       
       await matchDocRef.update({
-        'relationshipScore': newScore,
+        'likes': newScore,  // Update using new likes field
         'lastScoreUpdate': FieldValue.serverTimestamp(),
       });
       
       // 로컬에서도 업데이트
       if (_currentPersona?.id == personaId) {
-        _currentPersona = _currentPersona!.copyWith(relationshipScore: newScore);
+        _currentPersona = _currentPersona!.copyWith(likes: newScore);
       }
       
       // myPersonas에서도 업데이트
       final index = _myPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
-        _myPersonas[index] = _myPersonas[index].copyWith(relationshipScore: newScore);
+        _myPersonas[index] = _myPersonas[index].copyWith(likes: newScore);
       }
       
       notifyListeners();

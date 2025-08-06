@@ -1,0 +1,43 @@
+[
+  {
+    "error_key": "ERR1754475416703_6703",
+    "persona_id": "yIWmW3d6rdVKjvflZj9Z",
+    "persona_name": "동현",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이제 퇴근했어. 너 번역 기능 생겼다며",
+        "ai_response": "아, 퇴근하셨구나. 하루 고생 많으셨겠어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "인도네시아어 할 줄 알아?",
+        "ai_response": "인도네시아어에 대해 알고 있어요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "인도네시아어 할 줄 알아?",
+        "ai_response": "인도네시아어에 대해 알고 있어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

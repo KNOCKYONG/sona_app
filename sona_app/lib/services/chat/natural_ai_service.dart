@@ -19,7 +19,7 @@ class NaturalAIService {
       userMessage: userMessage,
       persona: persona,
       chatHistory: chatHistory,
-      currentScore: persona.relationshipScore,
+      currentScore: persona.likes,
     );
   }
 
@@ -30,7 +30,7 @@ class NaturalAIService {
     required String relationshipType,
     required Persona persona,
     required List<Message> chatHistory,
-    required int relationshipScore,
+    required int likes,
     String? userNickname,
   }) {
     final personality = persona.personality;
@@ -41,7 +41,7 @@ class NaturalAIService {
     final isFirstMessage = chatHistory.where((m) => m.isFromUser).isEmpty;
     
     // 첫 만남
-    if (relationshipScore == 0 && isFirstMessage) {
+    if (likes == 0 && isFirstMessage) {
       response = _getFirstMeetingResponse(
         userMessage: userMessage,
         emotion: emotion,

@@ -212,7 +212,7 @@ class _PersonaCardState extends State<PersonaCard> {
               ),
             
             // Relationship badge
-            if (widget.persona.relationshipScore > 0)
+            if (widget.persona.likes > 0)
               _RelationshipBadge(
                 persona: widget.persona,
                 hasMultiplePhotos: hasMultipleImages,
@@ -879,7 +879,7 @@ class _RelationshipBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final likes = persona.relationshipScore ?? 0;
+    final likes = persona.likes ?? 0;
     final color = RelationshipColorSystem.getRelationshipColor(likes);
     
     return Positioned(

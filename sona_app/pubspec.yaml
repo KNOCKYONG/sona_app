@@ -1,7 +1,7 @@
 name: sona_app
 description: SONA - 감정 기반 AI 페르소나 대화 매칭 앱
 publish_to: 'none'
-version: 1.0.2+15
+version: 1.0.2+16
 
 environment:
   sdk: '>=2.19.0 <4.0.0'
@@ -24,6 +24,9 @@ dependencies:
   
   # State Management
   provider: ^6.1.1
+  
+  # App Info
+  package_info_plus: ^8.0.3
   
   # UI & Animation
   animations: ^2.0.11

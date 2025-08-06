@@ -181,7 +181,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.user?.uid;
     
-    if (userId == null) return persona.relationshipScore ?? 0;
+    if (userId == null) return persona.likes ?? 0;
     
     return await RelationScoreService.instance.getLikes(
       userId: userId,
@@ -192,6 +192,11 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context); // AutomaticKeepAliveClientMixin 사용 시 필요
+    
+    // Cache theme and colors for performance
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
     
     // 화면이 처음 빌드될 때 데이터 로드
     if (!_hasInitialized && !_isLoading) {
@@ -205,9 +210,9 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     }
     
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         automaticallyImplyLeading: false,
         title: Row(
@@ -217,7 +222,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
             Text(
               AppLocalizations.of(context)!.chats,
               style: TextStyle(
-                color: Theme.of(context).textTheme.headlineSmall?.color,
+                color: textTheme.headlineSmall?.color,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -226,7 +231,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh, color: Theme.of(context).iconTheme.color),
+            icon: Icon(Icons.refresh, color: theme.iconTheme.color),
             onPressed: () async {
               // 🔄 수동 새로고침
               // 로딩 인디케이터 표시
@@ -267,7 +272,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
             },
           ),
           IconButton(
-            icon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
+            icon: Icon(Icons.search, color: theme.iconTheme.color),
             onPressed: () {
               // 검색 기능 추가 예정
             },
@@ -318,7 +323,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                   Icon(
                     Icons.chat_bubble_outline,
                     size: 80,
-                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
+                    color: textTheme.bodySmall?.color?.withOpacity(0.5),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -326,7 +331,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).textTheme.headlineSmall?.color,
+                      color: textTheme.headlineSmall?.color,
                     ),
                   ),
                   const SizedBox(height: 10),
@@ -334,7 +339,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                     AppLocalizations.of(context)!.meetNewPersonas,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
+                      color: textTheme.bodyLarge?.color?.withOpacity(0.7),
                     ),
                   ),
                   const SizedBox(height: 30),
@@ -343,7 +348,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                       Navigator.pushReplacementNamed(context, '/persona-selection');
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: colorScheme.primary,
                       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
@@ -410,10 +415,10 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
+                    color: theme.cardColor,
                     border: Border(
                       bottom: BorderSide(
-                        color: Theme.of(context).dividerColor.withOpacity(0.2),
+                        color: theme.dividerColor.withOpacity(0.2),
                         width: 1,
                       ),
                     ),
@@ -429,7 +434,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+                                color: colorScheme.primary.withOpacity(0.2),
                                 width: 2,
                               ),
                             ),
@@ -441,7 +446,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                             ),
                           ),
                           // 관계 점수 뱃지
-                          if (persona.relationshipScore > 80)
+                          if (persona.likes > 80)
                             Positioned(
                               right: 0,
                               bottom: 0,
@@ -451,10 +456,10 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Theme.of(context).cardColor, width: 2),
+                                  border: Border.all(color: theme.cardColor, width: 2),
                                 ),
                                 child: const Center(
-                                  child: Text(
+                                  child: const Text(
                                     '❤️',
                                     style: TextStyle(fontSize: 10),
                                   ),
@@ -482,7 +487,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: hasUnread ? FontWeight.bold : FontWeight.w600,
-                                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                                            color: textTheme.bodyLarge?.color,
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -492,7 +497,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                       FutureBuilder<int>(
                                         future: _getLikes(context, persona),
                                         builder: (context, snapshot) {
-                                          final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+                                          final likes = snapshot.data ?? persona.likes ?? 0;
                                           final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
                                           
                                           return Row(
@@ -526,7 +531,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     _getLastMessageTime(messages),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: hasUnread ? Theme.of(context).colorScheme.primary : Theme.of(context).textTheme.bodySmall?.color,
+                                      color: hasUnread ? colorScheme.primary : textTheme.bodySmall?.color,
                                     ),
                                   ),
                               ],
@@ -539,7 +544,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     isTyping ? AppLocalizations.of(context)!.isTyping(persona.name) : _getLastMessagePreview(messages, persona.name),
                                     style: TextStyle(
                                       fontSize: 14,
-                                      color: hasUnread || isTyping ? Theme.of(context).textTheme.bodyLarge?.color : Theme.of(context).textTheme.bodySmall?.color,
+                                      color: hasUnread || isTyping ? textTheme.bodyLarge?.color : textTheme.bodySmall?.color,
                                       fontWeight: hasUnread || isTyping ? FontWeight.w500 : FontWeight.normal,
                                       fontStyle: isTyping ? FontStyle.italic : FontStyle.normal,
                                     ),
@@ -552,7 +557,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                     margin: const EdgeInsets.only(left: 8),
                                     padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color: colorScheme.primary,
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Text(

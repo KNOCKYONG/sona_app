@@ -728,6 +728,69 @@ Faster processing is available when you provide your purchase receipt.''';
   String get marketingDescription => isKorean ? '이벤트 및 혜택 정보를 받아보실 수 있습니다' : 'You can receive event and benefit information';
   String get ageConfirmation => isKorean ? '만 14세 이상이며, 위 내용을 확인했습니다.' : 'I am 14 years or older and have confirmed the above.';
   String get agreeToTerms => isKorean ? '에 동의합니다' : '';
+  
+  // ===== 다국어 지원 =====
+  // Removed duplicate - languageSettings already defined at line 206
+  String get preferredLanguage => isKorean ? '선호 언어' : 'Preferred Language';
+  String get selectLanguage => isKorean ? '언어를 선택하세요' : 'Select Language';
+  String get languageDescription => isKorean ? 'AI가 선택한 언어로 응답합니다' : 'AI will respond in your selected language';
+  String get korean => isKorean ? '한국어' : 'Korean';
+  String get english => isKorean ? '영어' : 'English';
+  String get japanese => isKorean ? '일본어' : 'Japanese';
+  String get chinese => isKorean ? '중국어' : 'Chinese';
+  String get indonesian => isKorean ? '인도네시아어' : 'Indonesian';
+  String get vietnamese => isKorean ? '베트남어' : 'Vietnamese';
+  String get spanish => isKorean ? '스페인어' : 'Spanish';
+  String get thai => isKorean ? '태국어' : 'Thai';
+  String get showOriginalText => isKorean ? '원문 보기' : 'Show Original';
+  String get hideOriginalText => isKorean ? '원문 숨기기' : 'Hide Original';
+  String get translationError => isKorean ? '번역 오류 신고' : 'Report Translation Error';
+  String get translationErrorReport => isKorean ? '번역 오류 신고' : 'Report Translation Error';
+  String get translationErrorDescription => isKorean ? '잘못된 번역이나 어색한 표현을 신고해주세요' : 'Please report incorrect translations or awkward expressions';
+  String get errorDetails => isKorean ? '오류 상세 내용' : 'Error Details';
+  String get errorDetailsHint => isKorean ? '어떤 부분이 잘못되었는지 자세히 설명해주세요' : 'Please explain in detail what is wrong';
+  String get submitReport => isKorean ? '신고 제출' : 'Submit Report';
+  String get reportSubmittedSuccess => isKorean ? '신고가 접수되었습니다. 감사합니다!' : 'Your report has been submitted. Thank you!';
+  String get reportSubmitFailed => isKorean ? '신고 제출에 실패했습니다' : 'Failed to submit report';
+  String get translationNote => isKorean ? '※ AI 번역은 완벽하지 않을 수 있습니다' : '※ AI translation may not be perfect';
+  String get multilingualChat => isKorean ? '다국어 채팅' : 'Multilingual Chat';
+  String get languageIndicator => isKorean ? '언어' : 'Language';
+  String get translatedFrom => isKorean ? '번역됨' : 'Translated';
+  String get originalText => isKorean ? '원문' : 'Original';
+  String get noTranslatedMessages => isKorean ? '번역된 메시지가 없습니다' : 'No translated messages';
+  String get selectTranslationError => isKorean ? '번역 오류가 있는 메시지를 선택해주세요' : 'Please select a message with translation error';
+  String get translationErrorReported => isKorean ? '번역 오류가 신고되었습니다. 감사합니다!' : 'Translation error reported. Thank you!';
+  String get reportFailed => isKorean ? '신고 제출에 실패했습니다' : 'Failed to submit report';
+  String get translatedText => isKorean ? '번역' : 'Translation';
+  String get autoTranslate => isKorean ? '자동 번역' : 'Auto Translate';
+  String get translationSettings => isKorean ? '번역 설정' : 'Translation Settings';
+  String get alwaysShowOriginal => isKorean ? '항상 원문 표시' : 'Always Show Original';
+  String get translationQuality => isKorean ? '번역 품질' : 'Translation Quality';
+  String get reportTranslationIssue => isKorean ? '번역 문제 신고' : 'Report Translation Issue';
+  String get languageChanged => isKorean ? '언어가 변경되었습니다' : 'Language has been changed';
+  String get languageChangeFailed => isKorean ? '언어 변경에 실패했습니다' : 'Failed to change language';
+  String get selectErrorType => isKorean ? '오류 유형을 선택하세요' : 'Select error type';
+  String get wrongTranslation => isKorean ? '잘못된 번역' : 'Wrong Translation';
+  String get awkwardExpression => isKorean ? '어색한 표현' : 'Awkward Expression';
+  String get missingTranslation => isKorean ? '번역 누락' : 'Missing Translation';
+  String get culturalIssue => isKorean ? '문화적 오류' : 'Cultural Issue';
+  String get technicalError => isKorean ? '기술적 오류' : 'Technical Error';
+  String get otherError => isKorean ? '기타 오류' : 'Other Error';
+  
+  // Language codes map
+  String getLanguageName(String code) {
+    switch (code) {
+      case 'ko': return korean;
+      case 'en': return english;
+      case 'ja': return japanese;
+      case 'zh': return chinese;
+      case 'id': return indonesian;
+      case 'vi': return vietnamese;
+      case 'es': return spanish;
+      case 'th': return thai;
+      default: return english;
+    }
+  }
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

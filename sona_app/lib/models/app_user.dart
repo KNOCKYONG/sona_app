@@ -28,6 +28,8 @@ class AppUser {
   final DateTime? lastMessageCountReset; // 마지막 리셋 시간
   final int dailyMessageLimit; // 일일 메시지 제한 (기본값: 100)
   
+  // 다국어 지원 필드
+  final String preferredLanguage; // 선호 언어 코드 ('ko', 'en', 'ja', 'zh', 'id', 'vi' 등)
 
   AppUser({
     required this.uid,
@@ -52,6 +54,7 @@ class AppUser {
     this.dailyMessageCount = 0,
     this.lastMessageCountReset,
     this.dailyMessageLimit = 100,
+    this.preferredLanguage = 'ko', // 기본값은 한국어
   }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
@@ -90,6 +93,7 @@ class AppUser {
       'dailyMessageCount': dailyMessageCount,
       'lastMessageCountReset': lastMessageCountReset != null ? Timestamp.fromDate(lastMessageCountReset!) : null,
       'dailyMessageLimit': dailyMessageLimit,
+      'preferredLanguage': preferredLanguage,
     };
   }
 
@@ -131,6 +135,7 @@ class AppUser {
           ? (data['lastMessageCountReset'] as Timestamp).toDate()
           : null,
       dailyMessageLimit: data['dailyMessageLimit'] ?? 100,
+      preferredLanguage: data['preferredLanguage'] ?? 'ko',
     );
   }
 
@@ -155,6 +160,7 @@ class AppUser {
     int? dailyMessageCount,
     DateTime? lastMessageCountReset,
     int? dailyMessageLimit,
+    String? preferredLanguage,
   }) {
     return AppUser(
       uid: uid,
@@ -179,6 +185,7 @@ class AppUser {
       dailyMessageCount: dailyMessageCount ?? this.dailyMessageCount,
       lastMessageCountReset: lastMessageCountReset ?? this.lastMessageCountReset,
       dailyMessageLimit: dailyMessageLimit ?? this.dailyMessageLimit,
+      preferredLanguage: preferredLanguage ?? this.preferredLanguage,
     );
   }
 }

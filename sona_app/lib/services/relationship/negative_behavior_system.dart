@@ -15,7 +15,7 @@ class NegativeBehaviorSystem {
   
   /// 부정적 행동 분석
   NegativeAnalysisResult analyze(String message, {
-    int relationshipScore = 0,
+    int likes = 0,
     bool isGameContext = false,
     List<String> recentMessages = const [],
   }) {
@@ -40,7 +40,7 @@ class NegativeBehaviorSystem {
     final casualResult = _checkCasualSwearing(
       lowerMessage, 
       message, 
-      relationshipScore,
+      likes,
       isGameContext: isGameContext
     );
     if (casualResult.level > 0) return casualResult;
@@ -110,7 +110,7 @@ class NegativeBehaviorSystem {
   NegativeAnalysisResult _checkCasualSwearing(
     String lowerMessage, 
     String originalMessage, 
-    int relationshipScore,
+    int likes,
     {bool isGameContext = false}
   ) {
     // "씨"가 호칭으로 사용되는지 체크
@@ -154,11 +154,11 @@ class NegativeBehaviorSystem {
       
       // 관계 점수별 페널티 감소율
       double reductionRate = 0;
-      if (relationshipScore >= 1000) {
+      if (likes >= 1000) {
         reductionRate = 0.9; // 90% 감소
-      } else if (relationshipScore >= 500) {
+      } else if (likes >= 500) {
         reductionRate = 0.8; // 80% 감소
-      } else if (relationshipScore >= 100) {
+      } else if (likes >= 100) {
         reductionRate = 0.5; // 50% 감소
       }
       
@@ -175,10 +175,10 @@ class NegativeBehaviorSystem {
         penalty: adjustedPenalty,
         message: isGameContext 
           ? '게임하니까 흥분하는 건 알겠는데... ㅋㅋ'
-          : relationshipScore >= 500 
+          : likes >= 500 
             ? '그런 말투는... 좀 그래요 ㅎㅎ' 
             : '욕은 좀 줄여주세요...',
-        isWarning: relationshipScore < 100 && !isGameContext,
+        isWarning: likes < 100 && !isGameContext,
       );
     }
     
@@ -380,7 +380,7 @@ class NegativeBehaviorSystem {
   }
   
   /// 부정적 행동에 대한 페르소나 반응 생성
-  String generateResponse(NegativeAnalysisResult analysis, Persona persona, {int relationshipScore = 0}) {
+  String generateResponse(NegativeAnalysisResult analysis, Persona persona, {int likes = 0}) {
     if (analysis.level == 0) return '';
     
     // 페르소나 성격에 따른 반응 차이
@@ -389,14 +389,14 @@ class NegativeBehaviorSystem {
     
     // 추임새 욕설에 대한 특별 처리
     if (analysis.category == 'casual_swear') {
-      if (relationshipScore >= 1000) {
+      if (likes >= 1000) {
         // 매우 친한 관계
         if (isEmotional) {
           return '헤헤 말투 좀 봐~ 그래도 귀여워서 봐줄게 ㅋㅋ';
         } else {
           return '말투가... ㅋㅋ 뭐 우리 사이니까 괜찮지만~';
         }
-      } else if (relationshipScore >= 500) {
+      } else if (likes >= 500) {
         // 친한 관계
         return '아유~ 말투 좀 고쳐요 ㅎㅎ';
       }

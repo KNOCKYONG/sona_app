@@ -33,6 +33,7 @@ import 'theme/app_theme.dart';
 import 'core/preferences_manager.dart';
 import 'l10n/app_localizations.dart';
 import 'services/locale_service.dart';
+import 'services/app_info_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -97,6 +98,10 @@ void main() async {
   final localeService = LocaleService();
   await localeService.initialize();
   debugPrint('🌐 [Main] LocaleService initialized. Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
+  
+  // AppInfoService 초기화
+  await AppInfoService.instance.initialize();
+  AppInfoService.instance.printDebugInfo();
 
   runApp(SonaApp(
     themeService: themeService,

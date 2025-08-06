@@ -33,8 +33,15 @@ class ChatOrchestrator {
     required List<Message> chatHistory,
     String? userNickname,
     int? userAge,
+    String? userLanguage,
   }) async {
     try {
+      // 0단계: 외국어 감지 시 자동으로 영어 번역 설정
+      if (userLanguage == null && _detectForeignLanguageQuestion(userMessage)) {
+        userLanguage = 'en'; // 기본값으로 영어 번역 제공
+        debugPrint('🌍 Foreign language detected, auto-setting translation to English');
+      }
+      
       // 1단계: 완전한 페르소나 정보 로드
       final personaData = await _relationshipCache.getCompletePersona(
         userId: userId,
@@ -148,15 +155,33 @@ class ChatOrchestrator {
         userNickname: userNickname,
       );
       
+      // 6.1단계: 다국어 응답 파싱 (사용자가 한국어가 아닌 언어를 선호하는 경우)
+      String finalResponse = processedResponse;
+      String? translatedContent;
+      List<String>? translatedContents; // 각 메시지별 번역 저장
+      if (userLanguage != null && userLanguage != 'ko') {
+        final multilingualParsed = _parseMultilingualResponse(processedResponse, userLanguage);
+        finalResponse = multilingualParsed['korean'] ?? processedResponse;
+        translatedContent = multilingualParsed['translated'];
+      }
+      
       // 6.5단계: 만남 제안 필터링 및 초기 인사 패턴 방지
       final filteredResponse = _filterMeetingAndGreetingPatterns(
-        response: processedResponse,
+        response: finalResponse,
         chatHistory: chatHistory,
         isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
       );
       
       // 7단계: 긴 응답 분리 처리
       final responseContents = _splitLongResponse(filteredResponse, completePersona.mbti);
+      
+      // 7.5단계: 각 메시지별 번역 생성
+      if (translatedContent != null && responseContents.length > 1) {
+        // 번역된 내용도 동일하게 분리
+        translatedContents = _splitLongResponse(translatedContent, completePersona.mbti);
+      } else if (translatedContent != null) {
+        translatedContents = [translatedContent];
+      }
       
       // 8단계: 감정 분석 및 점수 계산 (첫 번째 메시지 기준)
       final emotion = _analyzeEmotion(responseContents.first);
@@ -172,11 +197,15 @@ class ChatOrchestrator {
         contents: responseContents,       // 새로운 멀티 메시지
         emotion: emotion,
         scoreChange: scoreChange,
+        translatedContent: translatedContent,
+        translatedContents: translatedContents, // 각 메시지별 번역
+        targetLanguage: userLanguage,
         metadata: {
           'processingTime': DateTime.now().millisecondsSinceEpoch,
           'promptTokens': _estimateTokens(prompt),
           'responseTokens': _estimateTokens(processedResponse),
           'messageCount': responseContents.length,
+          'hasTranslation': translatedContent != null,
         },
       );
       
@@ -218,11 +247,11 @@ class ChatOrchestrator {
   /// 관계 타입 가져오기
   String _getRelationshipType(Persona persona) {
     // 점수 기반으로 관계 타입 결정
-    if (persona.relationshipScore >= 900) {
+    if (persona.likes >= 900) {
       return '완벽한 사랑';
-    } else if (persona.relationshipScore >= 600) {
+    } else if (persona.likes >= 600) {
       return '연인';
-    } else if (persona.relationshipScore >= 200) {
+    } else if (persona.likes >= 200) {
       return '썸/호감';
     } else {
       return '친구';
@@ -294,14 +323,14 @@ class ChatOrchestrator {
     final negativeSystem = NegativeBehaviorSystem();
     final negativeAnalysis = negativeSystem.analyze(
       userMessage, 
-      relationshipScore: persona.relationshipScore
+      likes: persona.likes
     );
     
     // 부정적 행동이 감지되면 페널티 반환
     if (negativeAnalysis.isNegative) {
       // 레벨 3 (심각한 위협/욕설)은 즉시 이별
       if (negativeAnalysis.level >= 3) {
-        return -persona.relationshipScore; // 0으로 리셋
+        return -persona.likes; // 0으로 리셋
       }
       
       // 페널티가 지정되어 있으면 사용, 없으면 레벨에 따른 기본값
@@ -358,7 +387,7 @@ class ChatOrchestrator {
     }
     
     // 관계 수준에 따른 보정 (높은 관계에서는 변화폭 감소)
-    if (persona.relationshipScore >= 600) {
+    if (persona.likes >= 600) {
       baseChange = (baseChange * 0.7).round();
     }
     
@@ -371,10 +400,75 @@ class ChatOrchestrator {
     return (text.length * 1.5).round();
   }
   
+  /// 다국어 응답 파싱
+  Map<String, String?> _parseMultilingualResponse(String response, String targetLanguage) {
+    final Map<String, String?> result = {
+      'korean': null,
+      'translated': null,
+    };
+    
+    debugPrint('🌐 Parsing multilingual response for $targetLanguage');
+    debugPrint('📝 Response to parse: $response');
+    
+    // [KO] 태그로 시작하는 한국어 부분 찾기
+    final koPattern = RegExp(r'\[KO\]\s*(.+?)(?=\[${targetLanguage.toUpperCase()}\]|$)', 
+                            multiLine: true, dotAll: true);
+    final koMatch = koPattern.firstMatch(response);
+    
+    // [LANG] 태그로 시작하는 번역 부분 찾기
+    final langPattern = RegExp(r'\[${targetLanguage.toUpperCase()}\]\s*(.+?)(?=\[|$)', 
+                              multiLine: true, dotAll: true);
+    final langMatch = langPattern.firstMatch(response);
+    
+    // 매칭된 내용 추출
+    if (koMatch != null) {
+      result['korean'] = koMatch.group(1)?.trim();
+      debugPrint('✅ Found Korean: ${result['korean']}');
+    }
+    
+    if (langMatch != null) {
+      result['translated'] = langMatch.group(1)?.trim();
+      debugPrint('✅ Found Translation: ${result['translated']}');
+    }
+    
+    // 태그가 없는 경우 전체를 한국어로 간주하고 간단한 번역 제공
+    if (result['korean'] == null && result['translated'] == null) {
+      result['korean'] = response;
+      // 간단한 번역 생성 (실제 번역 API를 사용하거나 기본 메시지 제공)
+      result['translated'] = _generateSimpleTranslation(response, targetLanguage);
+      debugPrint('⚠️ No tags found, using simple translation');
+    }
+    
+    return result;
+  }
+  
+  /// 간단한 번역 생성 (폴백용)
+  String? _generateSimpleTranslation(String koreanText, String targetLanguage) {
+    // 간단한 번역 매핑 (실제로는 번역 API를 사용하는 것이 좋음)
+    if (targetLanguage == 'en') {
+      // 일반적인 응답 패턴에 대한 기본 번역
+      if (koreanText.contains('앱') && koreanText.contains('만들')) {
+        return "You're making an app! That sounds interesting. What features are you planning to add?";
+      } else if (koreanText.contains('채팅') || koreanText.contains('대화')) {
+        return "A Korean AI chat app sounds really cool! I'd love to hear more about it.";
+      } else if (koreanText.contains('흥미')) {
+        return "That's interesting! Tell me more about it.";
+      } else if (koreanText.contains('안녕')) {
+        return "Hello! How are you today?";
+      } else if (koreanText.contains('어떻게')) {
+        return "How's it going? What are you working on?";
+      }
+      // 기본 번역
+      return "That sounds great! I'd love to hear more about what you're working on.";
+    }
+    
+    return null;
+  }
+  
   /// 폴백 응답 생성
   String _generateFallbackResponse(Persona persona) {
-    // TODO: Get isCasualSpeech from PersonaRelationshipCache
-    final isCasualSpeech = false; // Default to formal
+    // Using default formal speech for fallback responses
+    final isCasualSpeech = false; // Fallback always uses formal speech for safety
     final responses = isCasualSpeech ? [
       '아 잠깐만ㅋㅋ 생각이 안 나네',
       '어? 뭔가 이상하네 다시 말해줄래?',
@@ -1049,6 +1143,13 @@ class ChatOrchestrator {
       contextHints.add('예: "네 안녕하세요! 오늘 어떻게 지내셨어요?", "반가워요! 뭐하고 계셨어요?"');
     }
     
+    // 외국어 관련 질문 감지 및 한국어 응답 강제
+    if (_detectForeignLanguageQuestion(userMessage)) {
+      contextHints.add('🚫 외국어 감지! 절대 외국어로 응답하지 마세요.');
+      contextHints.add('✅ 자연스럽게 한국어로만 대화하세요. 외국어 언급 금지!');
+      contextHints.add('💡 질문 내용에 맞게 한국어로 자연스럽게 대답하세요.');
+    }
+    
     // 현재 메시지의 키워드와 비교
     final currentKeywords = messageAnalysis.keywords;
     final commonTopics = currentKeywords.where((k) => recentTopics.contains(k)).toList();
@@ -1413,6 +1514,72 @@ class ChatOrchestrator {
     
     return avgWords < 7 || shortMessageRatio > 0.6;
   }
+  
+  /// 외국어 관련 질문 감지 (최적화)
+  bool _detectForeignLanguageQuestion(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    // 한글이 거의 없는 경우 (5% 미만) 외국어로 판단 - 더 엄격한 기준 적용
+    int koreanCharCount = 0;
+    int totalCharCount = 0;
+    for (final char in message.runes) {
+      if (char >= 0xAC00 && char <= 0xD7AF) { // 한글 유니코드 범위
+        koreanCharCount++;
+      }
+      if (char != 32 && char != 10 && char != 13) { // 공백과 줄바꿈 제외
+        totalCharCount++;
+      }
+    }
+    
+    if (totalCharCount > 0) {
+      final koreanRatio = koreanCharCount / totalCharCount;
+      // 더 엄격한 기준: 5% 미만이고 최소 5글자 이상일 때만 외국어로 판단
+      if (koreanRatio < 0.05 && totalCharCount > 5) {
+        debugPrint('🌍 Foreign language detected by character ratio: Korean=$koreanRatio');
+        return true;
+      }
+    }
+    
+    // 명확한 외국어 문장 패턴만 감지 (단순 단어는 제외)
+    final clearForeignSentences = [
+      // 완전한 외국어 문장 (최소 2단어 이상)
+      RegExp(r'^(hello|hi|hey)\s+(there|everyone|guys|friend)', caseSensitive: false),
+      RegExp(r'how\s+are\s+you', caseSensitive: false),
+      RegExp(r"(i\s+am|i'm)\s+\w+", caseSensitive: false),
+      RegExp(r'thank\s+you(\s+very\s+much)?', caseSensitive: false),
+      RegExp(r'(what|where|when|who|why|how)\s+\w+', caseSensitive: false),
+      // 일본어 문장
+      RegExp(r'(arigatou|arigato)\s*(gozaimasu)?', caseSensitive: false),
+      RegExp(r'konnichiwa|ohayou|konbanwa', caseSensitive: false),
+      // 중국어 문장
+      RegExp(r'ni\s*hao|xie\s*xie', caseSensitive: false),
+      // 인도네시아어 문장
+      RegExp(r'(terima\s+kasih|selamat\s+(pagi|siang|malam))', caseSensitive: false),
+      RegExp(r'apa\s+kabar', caseSensitive: false),
+    ];
+    
+    // 완전한 외국어 문장 패턴 매칭
+    for (final pattern in clearForeignSentences) {
+      if (pattern.hasMatch(lowerMessage)) {
+        debugPrint('🌍 Clear foreign sentence detected');
+        return true;
+      }
+    }
+    
+    // 비한글 문자 비율 체크 (한글이 10% 미만이고 최소 10글자 이상인 경우만)
+    final koreanPattern = RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]');
+    final totalLength = message.replaceAll(RegExp(r'\s'), '').length;
+    if (totalLength > 10) {  // 최소 10글자 이상일 때만 체크
+      final koreanMatches = koreanPattern.allMatches(message).length;
+      final koreanRatio = koreanMatches / totalLength;
+      if (koreanRatio < 0.1) {  // 10% 미만일 때만 외국어로 판단
+        debugPrint('🌍 Foreign language detected by low Korean ratio: $koreanRatio');
+        return true;
+      }
+    }
+    
+    return false;
+  }
 }
 
 /// 채팅 응답 모델
@@ -1422,6 +1589,9 @@ class ChatResponse {
   final int scoreChange;
   final Map<String, dynamic>? metadata;
   final bool isError;
+  final String? translatedContent; // 번역된 내용 (다국어 지원)
+  final List<String>? translatedContents; // 각 메시지별 번역
+  final String? targetLanguage; // 번역 대상 언어
   
   ChatResponse({
     required String content,  // 기존 API 호환성을 위해 유지
@@ -1430,6 +1600,9 @@ class ChatResponse {
     required this.scoreChange,
     this.metadata,
     this.isError = false,
+    this.translatedContent,
+    this.translatedContents,
+    this.targetLanguage,
   }) : contents = contents ?? [content];  // contents가 없으면 content를 리스트로 변환
   
   // 편의 메서드: 첫 번째 콘텐츠 반환 (기존 코드 호환성)

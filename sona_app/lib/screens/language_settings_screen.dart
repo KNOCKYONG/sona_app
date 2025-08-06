@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
-import '../core/preferences_manager.dart';
-import '../services/theme/theme_service.dart';
 import '../services/locale_service.dart';
 
 class LanguageSettingsScreen extends StatefulWidget {
@@ -13,29 +11,59 @@ class LanguageSettingsScreen extends StatefulWidget {
 }
 
 class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
   
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final localeService = Provider.of<LocaleService>(context);
     
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.language),
+        title: Text(l10n.languageSettings),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
       body: ListView(
         children: [
+          // 앱 UI 언어 설정 섹션
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone_android,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      l10n.language,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  l10n.isKorean ? '앱 인터페이스 언어를 설정합니다' : 'Set app interface language',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
           // 시스템 언어 사용 스위치
           SwitchListTile(
-            title: const Text('Use System Language\n시스템 언어 사용'),
-            subtitle: const Text('Follow device language settings\n기기의 언어 설정을 따릅니다'),
+            title: Text(l10n.isKorean ? '시스템 언어 사용' : 'Use System Language'),
+            subtitle: Text(l10n.isKorean ? '기기의 언어 설정을 따릅니다' : 'Follow device language settings'),
             value: localeService.useSystemLanguage,
             onChanged: (value) {
               localeService.setUseSystemLanguage(value);
@@ -173,54 +201,6 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
           ],
           
           const SizedBox(height: 20),
-          
-          // 언어 설정 안내
-          Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: isDarkMode 
-                  ? Colors.grey[800]!.withOpacity(0.3)
-                  : Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.info_outline,
-                      size: 20,
-                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Language Settings Info\n언어 설정 안내',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: isDarkMode ? Colors.grey[300] : Colors.grey[800],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '• The app will automatically detect your device language on first launch.\n'
-                  '• You can manually select a language if you prefer.\n'
-                  '• Changes will take effect after restarting the app.\n\n'
-                  '• 첫 실행 시 기기의 언어를 자동으로 감지합니다.\n'
-                  '• 원하는 언어를 수동으로 선택할 수 있습니다.\n'
-                  '• 변경사항은 앱을 재시작한 후 적용됩니다.',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
-                    height: 1.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

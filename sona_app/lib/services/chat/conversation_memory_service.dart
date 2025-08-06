@@ -42,7 +42,7 @@ class ConversationMemoryService {
           importance: importance,
           tags: _extractTags(message, messages, i),
           emotion: message.emotion ?? EmotionType.neutral,
-          relationshipScoreChange: message.relationshipScoreChange ?? 0,
+          likesChange: message.likesChange ?? 0,
           context: _buildLocalContext(messages, i),
         );
         
@@ -79,7 +79,7 @@ class ConversationMemoryService {
     }
     
     // 3. 점수 변화가 있는 메시지 (0.2)
-    if (message.relationshipScoreChange != null && message.relationshipScoreChange! != 0) {
+    if (message.likesChange != null && message.likesChange! != 0) {
       importance += 0.2;
     }
     
@@ -127,9 +127,9 @@ class ConversationMemoryService {
     if (content.contains('꿈') || content.contains('목표')) tags.add('dreams');
     
     // 특별한 순간 태그
-    if (message.relationshipScoreChange != null && message.relationshipScoreChange! > 5) {
+    if (message.likesChange != null && message.likesChange! > 5) {
       tags.add('milestone_positive');
-    } else if (message.relationshipScoreChange != null && message.relationshipScoreChange! < -5) {
+    } else if (message.likesChange != null && message.likesChange! < -5) {
       tags.add('milestone_negative');
     }
     
@@ -202,7 +202,7 @@ class ConversationMemoryService {
       emotionPatterns: emotionPatterns,
       milestones: milestones,
       personalInfo: personalInfo,
-      currentRelationshipScore: persona.relationshipScore,
+      currentRelationshipScore: persona.likes,
     );
     
     return summary;
@@ -214,7 +214,7 @@ class ConversationMemoryService {
     int currentScore = 50; // 초기 점수
     
     for (final message in messages) {
-      final scoreChange = message.relationshipScoreChange ?? 0;
+      final scoreChange = message.likesChange ?? 0;
       if (scoreChange != 0) {
         currentScore += scoreChange;
         
@@ -308,8 +308,8 @@ class ConversationMemoryService {
         milestoneType = 'promise';
       }
       // 큰 점수 변화
-      else if (message.relationshipScoreChange != null && 
-               message.relationshipScoreChange!.abs() >= 10) {
+      else if (message.likesChange != null && 
+               message.likesChange!.abs() >= 10) {
         milestoneType = 'major_score_change';
       }
       
@@ -320,7 +320,7 @@ class ConversationMemoryService {
           timestamp: message.timestamp,
           isFromUser: message.isFromUser,
           emotion: message.emotion ?? EmotionType.neutral,
-          scoreChange: message.relationshipScoreChange ?? 0,
+          scoreChange: message.likesChange ?? 0,
         ));
       }
     }
@@ -414,7 +414,7 @@ class ConversationMemoryService {
     
     // 1. 현재 관계 상태 (필수, ~50 tokens)
     final relationshipInfo = '''
-친밀도: ${persona.relationshipScore}/1000
+친밀도: ${persona.likes}/1000
 대화 스타일: 존댓말
 ''';
     contextParts.add(relationshipInfo);
@@ -560,7 +560,7 @@ class ConversationMemory {
   final double importance;
   final List<String> tags;
   final EmotionType emotion;
-  final int relationshipScoreChange;
+  final int likesChange;
   final String context;
 
   ConversationMemory({
@@ -574,7 +574,7 @@ class ConversationMemory {
     required this.importance,
     required this.tags,
     required this.emotion,
-    required this.relationshipScoreChange,
+    required this.likesChange,
     required this.context,
   });
 
@@ -589,7 +589,7 @@ class ConversationMemory {
     'importance': importance,
     'tags': tags,
     'emotion': emotion.name,
-    'relationshipScoreChange': relationshipScoreChange,
+    'likesChange': likesChange,
     'context': context,
   };
 
@@ -607,7 +607,7 @@ class ConversationMemory {
       (e) => e.name == json['emotion'],
       orElse: () => EmotionType.neutral,
     ),
-    relationshipScoreChange: json['relationshipScoreChange'],
+    likesChange: json['likesChange'] ?? json['relationshipScoreChange'] ?? 0,  // Backward compatibility
     context: json['context'],
   );
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -36,8 +37,8 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Call score change callback if needed
-    if (message.relationshipScoreChange != null && 
-        message.relationshipScoreChange != 0 &&
+    if (message.likesChange != null && 
+        message.likesChange != 0 &&
         onScoreChange != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         onScoreChange!();
@@ -58,7 +59,7 @@ class MessageBubble extends StatelessWidget {
 }
 
 // Separate widget for text messages to avoid rebuilds
-class _TextMessage extends StatelessWidget {
+class _TextMessage extends StatefulWidget {
   final Message message;
   
   static const _userTextStyle = TextStyle(
@@ -78,8 +79,37 @@ class _TextMessage extends StatelessWidget {
   });
 
   @override
+  State<_TextMessage> createState() => _TextMessageState();
+}
+
+class _TextMessageState extends State<_TextMessage> {
+  bool _showTranslation = false;
+
+  String _getLanguageName(String languageCode) {
+    switch (languageCode) {
+      case 'en':
+        return 'English';
+      case 'ja':
+        return '日本語';
+      case 'zh':
+        return '中文';
+      case 'id':
+        return 'Bahasa';
+      case 'vi':
+        return 'Tiếng Việt';
+      case 'es':
+        return 'Español';
+      case 'th':
+        return 'ไทย';
+      case 'ko':
+      default:
+        return '한국어';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final isFromUser = message.isFromUser;
+    final isFromUser = widget.message.isFromUser;
     final maxWidth = MediaQuery.of(context).size.width * 0.75;
     
     return Container(
@@ -91,7 +121,7 @@ class _TextMessage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Profile picture for AI messages (only on first message in sequence)
-          if (!isFromUser && message.isFirstInSequence) ...[
+          if (!isFromUser && widget.message.isFirstInSequence) ...[
             _ProfileAvatar(),
             const SizedBox(width: 8),
           ] else if (!isFromUser) ...[
@@ -103,10 +133,45 @@ class _TextMessage extends StatelessWidget {
           Flexible(
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxWidth),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutCubic,
-                decoration: BoxDecoration(
+              child: GestureDetector(
+                onTap: () {
+                  // 번역이 있는 경우에만 토글
+                  if (!isFromUser && 
+                      widget.message.translatedContent != null && 
+                      widget.message.translatedContent!.isNotEmpty) {
+                    setState(() {
+                      _showTranslation = !_showTranslation;
+                    });
+                  }
+                },
+                onLongPress: () {
+                  // 메시지 내용을 클립보드에 복사
+                  final textToCopy = _showTranslation && widget.message.translatedContent != null
+                      ? widget.message.translatedContent!
+                      : widget.message.content;
+                  Clipboard.setData(ClipboardData(text: textToCopy));
+                  
+                  // 스낵바로 피드백 제공
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        AppLocalizations.of(context)!.messageCopied,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: Colors.grey[800],
+                      behavior: SnackBarBehavior.floating,
+                      margin: const EdgeInsets.all(16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  );
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeOutCubic,
+                  decoration: BoxDecoration(
                   gradient: isFromUser
                       ? AppTheme.primaryGradient
                       : null,
@@ -144,17 +209,98 @@ class _TextMessage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        message.content,
-                        style: isFromUser ? _userTextStyle : _aiTextStyle,
-                      ),
+                      // 번역이 있는 메시지
+                      if (!isFromUser && 
+                          widget.message.translatedContent != null && 
+                          widget.message.translatedContent!.isNotEmpty) ...[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
+                            if (!_showTranslation) ...[
+                              Stack(
+                                children: [
+                                  // 한국어 메시지 텍스트
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 30),
+                                    child: Text(
+                                      widget.message.content,
+                                      style: _TextMessage._aiTextStyle,
+                                    ),
+                                  ),
+                                  // 번역 인디케이터 아이콘 (우측 상단)
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: Icon(
+                                      Icons.language,
+                                      size: 16,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                            // 번역 모드 (회색 배경)
+                            if (_showTranslation) ...[
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      widget.message.translatedContent!,
+                                      style: TextStyle(
+                                        color: Colors.grey[700],
+                                        fontSize: 16,
+                                        height: 1.4,
+                                      ),
+                                    ),
+                                  ),
+                                  // 번역 인디케이터 아이콘 (우측 상단)
+                                  Positioned(
+                                    top: 4,
+                                    right: 8,
+                                    child: Icon(
+                                      Icons.language,
+                                      size: 16,
+                                      color: AppTheme.primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              // 원문 표시 (작은 글씨)
+                              Text(
+                                '원문: ${widget.message.content}',
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ] else ...[
+                        // 번역이 없는 일반 메시지
+                        Text(
+                          widget.message.content,
+                          style: isFromUser ? _TextMessage._userTextStyle : _TextMessage._aiTextStyle,
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       _TimeAndScore(
-                        message: message,
+                        message: widget.message,
                         isFromUser: isFromUser,
                       ),
                     ],
                   ),
+                ),
                 ),
               ),
             ),

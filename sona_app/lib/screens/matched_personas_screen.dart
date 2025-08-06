@@ -89,7 +89,7 @@ class _PersonaCard extends StatelessWidget {
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.user?.uid;
     
-    if (userId == null) return persona.relationshipScore ?? 0;
+    if (userId == null) return persona.likes ?? 0;
     
     return await RelationScoreService.instance.getLikes(
       userId: userId,
@@ -192,7 +192,7 @@ class _PersonaCard extends StatelessWidget {
                           FutureBuilder<int>(
                             future: _getLikes(context, persona),
                             builder: (context, snapshot) {
-                              final likes = snapshot.data ?? persona.relationshipScore ?? 0;
+                              final likes = snapshot.data ?? persona.likes ?? 0;
                               final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
                               
                               return Row(

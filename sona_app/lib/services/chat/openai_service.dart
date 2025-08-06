@@ -24,6 +24,7 @@ class OpenAIService {
   // 🎯 최적화된 토큰 제한
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
   static const int _maxOutputTokens = 200; // 기본 토큰 제한
+  static const int _maxTranslationTokens = 500; // 번역 시 토큰 제한 증가 (2.5배)
   static const double _temperature = 0.8;
   
   // 🔗 연결 풀링
@@ -49,6 +50,7 @@ class OpenAIService {
     int? userAge,
     bool isCasualSpeech = false,
     String? contextHint,
+    String? targetLanguage, // 번역 언어 추가
   }) async {
     // 성능 최적화를 위한 요청 큐잉
     final request = _PendingRequest(
@@ -60,6 +62,7 @@ class OpenAIService {
       userAge: userAge,
       isCasualSpeech: isCasualSpeech,
       contextHint: contextHint,
+      targetLanguage: targetLanguage,
       completer: Completer<String>(),
     );
     
@@ -152,6 +155,7 @@ class OpenAIService {
       userAge: request.userAge,
       isCasualSpeech: request.isCasualSpeech,
       contextHint: request.contextHint,
+      targetLanguage: request.targetLanguage,
     );
     
     // 토큰 최적화된 메시지 구성
@@ -176,7 +180,7 @@ class OpenAIService {
       body: jsonEncode({
         'model': AppConstants.openAIModel,
         'messages': optimizedMessages,
-        'max_tokens': _maxOutputTokens,
+        'max_tokens': request.targetLanguage != null ? _maxTranslationTokens : _maxOutputTokens,
         'temperature': _temperature,
         'presence_penalty': 0.6,
         'frequency_penalty': 0.5,
@@ -501,6 +505,7 @@ class _PendingRequest {
   final int? userAge;
   final bool isCasualSpeech;
   final String? contextHint;
+  final String? targetLanguage;
   final Completer<String> completer;
 
   _PendingRequest({
@@ -512,6 +517,7 @@ class _PendingRequest {
     this.userAge,
     this.isCasualSpeech = false,
     this.contextHint,
+    this.targetLanguage,
     required this.completer,
   });
 }

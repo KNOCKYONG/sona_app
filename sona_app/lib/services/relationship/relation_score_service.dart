@@ -36,6 +36,11 @@ class RelationScoreService extends BaseService {
   // 사용자별 마지막 메시지 시간
   final Map<String, DateTime> _lastMessageTimes = {};
   
+  // Like score 캐싱 시스템
+  final Map<String, int> _likesCache = {};
+  final Map<String, DateTime> _cacheTimestamps = {};
+  static const Duration _cacheTTL = Duration(minutes: 5);
+  
   /// 🎯 다차원 Like 계산 시스템
   Future<LikeCalculationResult> calculateLikes({
     required EmotionType emotion,
@@ -372,6 +377,9 @@ class RelationScoreService extends BaseService {
       final docId = '${userId}_${personaId}';
       final newLikes = max(0, currentLikes + likeChange);
       
+      // 캐시 즉시 업데이트
+      _updateCache(userId, personaId, newLikes);
+      
       // 이별 처리
       if (breakupReason != null || newLikes == 0) {
         await processBreakup(
@@ -441,12 +449,74 @@ class RelationScoreService extends BaseService {
       
       if (doc.exists) {
         // 새로운 likes 필드 우선, 없으면 기존 relationshipScore 사용
-        return doc.data()?['likes'] ?? doc.data()?['relationshipScore'] ?? 0;
+        final likes = doc.data()?['likes'] ?? doc.data()?['relationshipScore'] ?? 0;
+        // 캐시 업데이트
+        _updateCache(userId, personaId, likes);
+        return likes;
       }
       return 0;
     }, defaultValue: 0);
     
     return result ?? 0;
+  }
+  
+  /// 💾 캐시된 Like 조회 (즉시 반환)
+  int getCachedLikes({
+    required String userId,
+    required String personaId,
+  }) {
+    final cacheKey = '${userId}_${personaId}';
+    
+    // 캐시 확인
+    if (_likesCache.containsKey(cacheKey)) {
+      final timestamp = _cacheTimestamps[cacheKey];
+      if (timestamp != null && DateTime.now().difference(timestamp) < _cacheTTL) {
+        // 캐시가 유효한 경우
+        return _likesCache[cacheKey]!;
+      }
+    }
+    
+    // 캐시가 없거나 만료된 경우, 백그라운드에서 업데이트
+    _refreshCacheInBackground(userId, personaId);
+    
+    // 일단 캐시된 값이나 0 반환
+    return _likesCache[cacheKey] ?? 0;
+  }
+  
+  /// 🔄 백그라운드에서 캐시 새로고침
+  void _refreshCacheInBackground(String userId, String personaId) {
+    // 비동기로 최신 값 가져오기
+    getLikes(userId: userId, personaId: personaId).then((likes) {
+      _updateCache(userId, personaId, likes);
+    }).catchError((error) {
+      debugPrint('Error refreshing likes cache: $error');
+    });
+  }
+  
+  /// 📝 캐시 업데이트
+  void _updateCache(String userId, String personaId, int likes) {
+    final cacheKey = '${userId}_${personaId}';
+    _likesCache[cacheKey] = likes;
+    _cacheTimestamps[cacheKey] = DateTime.now();
+  }
+  
+  /// 🔄 모든 페르소나의 Like 프리로드
+  Future<void> preloadLikes({
+    required String userId,
+    required List<String> personaIds,
+  }) async {
+    // 병렬로 모든 like score 로드
+    final futures = personaIds.map((personaId) => 
+      getLikes(userId: userId, personaId: personaId)
+    );
+    
+    await Future.wait(futures);
+  }
+  
+  /// 🗑️ 캐시 클리어
+  void clearCache() {
+    _likesCache.clear();
+    _cacheTimestamps.clear();
   }
   
   /// 📊 모든 페르소나와의 Like 조회

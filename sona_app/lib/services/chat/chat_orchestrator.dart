@@ -36,10 +36,13 @@ class ChatOrchestrator {
     String? userLanguage,
   }) async {
     try {
-      // 0단계: 외국어 감지 시 자동으로 영어 번역 설정
-      if (userLanguage == null && _detectForeignLanguageQuestion(userMessage)) {
-        userLanguage = 'en'; // 기본값으로 영어 번역 제공
-        debugPrint('🌍 Foreign language detected, auto-setting translation to English');
+      // 0단계: 외국어 감지 및 언어 식별
+      if (userLanguage == null) {
+        final detectedLang = _detectSpecificLanguage(userMessage);
+        if (detectedLang != null) {
+          userLanguage = detectedLang;
+          debugPrint('🌍 Language detected: $detectedLang (${_getLanguageName(detectedLang)})');
+        }
       }
       
       // 1단계: 완전한 페르소나 정보 로드
@@ -146,6 +149,7 @@ class ChatOrchestrator {
         userAge: userAge,
         isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
         contextHint: contextHint,
+        targetLanguage: userLanguage, // 번역 언어 전달
       );
       
       // 6단계: 간단한 후처리 (텍스트 정리만, 강제 자르기 제거)
@@ -444,25 +448,76 @@ class ChatOrchestrator {
   
   /// 간단한 번역 생성 (폴백용)
   String? _generateSimpleTranslation(String koreanText, String targetLanguage) {
-    // 간단한 번역 매핑 (실제로는 번역 API를 사용하는 것이 좋음)
-    if (targetLanguage == 'en') {
-      // 일반적인 응답 패턴에 대한 기본 번역
-      if (koreanText.contains('앱') && koreanText.contains('만들')) {
-        return "You're making an app! That sounds interesting. What features are you planning to add?";
-      } else if (koreanText.contains('채팅') || koreanText.contains('대화')) {
-        return "A Korean AI chat app sounds really cool! I'd love to hear more about it.";
-      } else if (koreanText.contains('흥미')) {
-        return "That's interesting! Tell me more about it.";
-      } else if (koreanText.contains('안녕')) {
-        return "Hello! How are you today?";
-      } else if (koreanText.contains('어떻게')) {
-        return "How's it going? What are you working on?";
-      }
-      // 기본 번역
-      return "That sounds great! I'd love to hear more about what you're working on.";
+    // 언어별 기본 번역 템플릿
+    final Map<String, Map<String, String>> translations = {
+      'en': {
+        'greeting': "Hello! How are you today?",
+        'app': "You're making an app! That sounds interesting. What features are you planning to add?",
+        'chat': "A Korean AI chat app sounds really cool! I'd love to hear more about it.",
+        'interesting': "That's interesting! Tell me more about it.",
+        'howsit': "How's it going? What are you working on?",
+        'default': "That sounds great! I'd love to hear more about what you're working on.",
+      },
+      'ja': {
+        'greeting': "こんにちは！今日はどうですか？",
+        'app': "アプリを作っているんですね！面白そうです。どんな機能を追加する予定ですか？",
+        'chat': "韓国のAIチャットアプリ、とても素敵ですね！もっと詳しく聞きたいです。",
+        'interesting': "面白いですね！もっと教えてください。",
+        'howsit': "調子はどうですか？何をしていますか？",
+        'default': "素晴らしいですね！もっと詳しく聞かせてください。",
+      },
+      'zh': {
+        'greeting': "你好！今天怎么样？",
+        'app': "你在做一个应用程序！听起来很有趣。你打算添加什么功能？",
+        'chat': "韩国AI聊天应用听起来很酷！我想了解更多。",
+        'interesting': "很有趣！告诉我更多吧。",
+        'howsit': "怎么样？你在做什么？",
+        'default': "听起来很棒！我想了解更多关于你正在做的事情。",
+      },
+      'es': {
+        'greeting': "¡Hola! ¿Cómo estás hoy?",
+        'app': "¡Estás haciendo una aplicación! Suena interesante. ¿Qué características planeas agregar?",
+        'chat': "¡Una aplicación de chat AI coreana suena genial! Me encantaría saber más.",
+        'interesting': "¡Qué interesante! Cuéntame más.",
+        'howsit': "¿Cómo va todo? ¿En qué estás trabajando?",
+        'default': "¡Suena genial! Me encantaría saber más sobre lo que estás haciendo.",
+      },
+      'fr': {
+        'greeting': "Bonjour ! Comment allez-vous aujourd'hui ?",
+        'app': "Vous créez une application ! Ça semble intéressant. Quelles fonctionnalités prévoyez-vous d'ajouter ?",
+        'chat': "Une application de chat IA coréenne, ça semble vraiment cool ! J'aimerais en savoir plus.",
+        'interesting': "C'est intéressant ! Dites-m'en plus.",
+        'howsit': "Comment ça va ? Sur quoi travaillez-vous ?",
+        'default': "Ça semble génial ! J'aimerais en savoir plus sur ce que vous faites.",
+      },
+      'de': {
+        'greeting': "Hallo! Wie geht es Ihnen heute?",
+        'app': "Sie erstellen eine App! Das klingt interessant. Welche Funktionen planen Sie hinzuzufügen?",
+        'chat': "Eine koreanische KI-Chat-App klingt wirklich cool! Ich würde gerne mehr darüber erfahren.",
+        'interesting': "Das ist interessant! Erzählen Sie mir mehr.",
+        'howsit': "Wie geht's? Woran arbeiten Sie?",
+        'default': "Das klingt großartig! Ich würde gerne mehr über das erfahren, woran Sie arbeiten.",
+      },
+    };
+    
+    // 지원하는 언어가 아니면 영어로 폴백
+    final langTranslations = translations[targetLanguage] ?? translations['en']!;
+    
+    // 한국어 텍스트 분석하여 적절한 번역 선택
+    if (koreanText.contains('안녕')) {
+      return langTranslations['greeting'];
+    } else if (koreanText.contains('앱') && koreanText.contains('만들')) {
+      return langTranslations['app'];
+    } else if (koreanText.contains('채팅') || koreanText.contains('대화')) {
+      return langTranslations['chat'];
+    } else if (koreanText.contains('흥미')) {
+      return langTranslations['interesting'];
+    } else if (koreanText.contains('어떻게')) {
+      return langTranslations['howsit'];
     }
     
-    return null;
+    // 기본 번역
+    return langTranslations['default'];
   }
   
   /// 폴백 응답 생성
@@ -625,6 +680,100 @@ class ChatOrchestrator {
   bool _isEnglishGreeting(String message) {
     // 영어 인사 패턴 감지
     return RegExp(r'(hi|hello|hey|how\s+(are\s+you|r\s+u))', caseSensitive: false).hasMatch(message);
+  }
+  
+  // 🌍 다국어 감지 시스템
+  String? _detectSpecificLanguage(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    // 언어별 특징적인 패턴과 문자 확인
+    // 영어
+    if (RegExp(r'^[a-z\s\d\?\.\!\,]+$', caseSensitive: false).hasMatch(message)) {
+      return 'en';
+    }
+    
+    // 일본어 (히라가나, 카타카나, 한자)
+    if (RegExp(r'[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]').hasMatch(message)) {
+      return 'ja';
+    }
+    
+    // 중국어 (한자만 사용, 일본어 가나 없음)
+    if (RegExp(r'[\u4E00-\u9FFF]').hasMatch(message) && 
+        !RegExp(r'[\u3040-\u309F\u30A0-\u30FF]').hasMatch(message)) {
+      return 'zh';
+    }
+    
+    // 스페인어 (특수 문자: ñ, á, é, í, ó, ú, ¿, ¡)
+    if (RegExp(r'[ñáéíóúÁÉÍÓÚ¿¡]').hasMatch(message)) {
+      return 'es';
+    }
+    
+    // 프랑스어 (특수 문자: à, â, é, è, ê, ë, î, ï, ô, ù, û, ç)
+    if (RegExp(r'[àâéèêëîïôùûçÀÂÉÈÊËÎÏÔÙÛÇ]').hasMatch(message)) {
+      return 'fr';
+    }
+    
+    // 독일어 (특수 문자: ä, ö, ü, ß)
+    if (RegExp(r'[äöüßÄÖÜ]').hasMatch(message)) {
+      return 'de';
+    }
+    
+    // 러시아어 (키릴 문자)
+    if (RegExp(r'[\u0400-\u04FF]').hasMatch(message)) {
+      return 'ru';
+    }
+    
+    // 베트남어 (성조 표시)
+    if (RegExp(r'[àảãáạăằẳẵắặâầẩẫấậèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵđĐ]').hasMatch(message)) {
+      return 'vi';
+    }
+    
+    // 태국어
+    if (RegExp(r'[\u0E00-\u0E7F]').hasMatch(message)) {
+      return 'th';
+    }
+    
+    // 인도네시아어/말레이어 (특정 단어 패턴)
+    if (RegExp(r'\b(apa|ini|itu|saya|kamu|tidak|ada|dengan|untuk|dari|ke|di|yang)\b', caseSensitive: false).hasMatch(message)) {
+      return 'id';
+    }
+    
+    // 아랍어
+    if (RegExp(r'[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]').hasMatch(message)) {
+      return 'ar';
+    }
+    
+    // 힌디어 (데바나가리 문자)
+    if (RegExp(r'[\u0900-\u097F]').hasMatch(message)) {
+      return 'hi';
+    }
+    
+    // 한국어 문자가 포함된 경우 null 반환 (번역 불필요)
+    if (RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message)) {
+      return null;
+    }
+    
+    // 기본적으로 영어로 간주
+    return 'en';
+  }
+  
+  // 언어 코드를 언어 이름으로 변환
+  String _getLanguageName(String langCode) {
+    final languageNames = {
+      'en': '영어',
+      'ja': '일본어',
+      'zh': '중국어',
+      'es': '스페인어',
+      'fr': '프랑스어',
+      'de': '독일어',
+      'ru': '러시아어',
+      'vi': '베트남어',
+      'th': '태국어',
+      'id': '인도네시아어',
+      'ar': '아랍어',
+      'hi': '힌디어',
+    };
+    return languageNames[langCode] ?? '영어';
   }
   
   bool _isThanks(String message) {

@@ -198,6 +198,7 @@ class OptimizedPromptService {
     int? userAge,
     bool isCasualSpeech = false,
     String? contextHint,
+    String? targetLanguage,
   }) {
     final List<String> promptParts = [];
     
@@ -253,7 +254,39 @@ ${userNickname != null && userNickname.isNotEmpty ? '사용자가 본인 이름�
 ${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 대화만 하세요.' : ''}
 ''');
     
-    // 7. 맥락 힌트 (주제 변경 또는 회피 패턴 감지 시)
+    // 7. 다국어 지원 (번역이 필요한 경우)
+    if (targetLanguage != null && targetLanguage != 'ko') {
+      final languageNames = {
+        'en': '영어',
+        'ja': '일본어',
+        'zh': '중국어',
+        'es': '스페인어',
+        'fr': '프랑스어',
+        'de': '독일어',
+        'ru': '러시아어',
+        'vi': '베트남어',
+        'th': '태국어',
+        'id': '인도네시아어',
+        'ar': '아랍어',
+        'hi': '힌디어',
+      };
+      
+      final langName = languageNames[targetLanguage] ?? targetLanguage;
+      
+      promptParts.add('''
+## 🌐 다국어 응답 형식
+- 한국어로 자연스럽게 대화 후, 같은 내용을 ${langName}로 번역
+- 형식: 
+  [KO] 한국어 응답
+  [${targetLanguage.toUpperCase()}] 번역된 응답
+- 번역은 자연스럽고 문맥에 맞게
+- 이모티콘과 감정 표현도 문화에 맞게 조정
+- ${langName} 문화권의 표현 방식 고려
+- 존댓말/반말 등의 뉘앙스도 적절히 반영
+''');
+    }
+    
+    // 8. 맥락 힌트 (주제 변경 또는 회피 패턴 감지 시)
     if (contextHint != null && contextHint.isNotEmpty) {
       promptParts.add('''
 ## ⚠️ 대화 맥락 주의사항 [즉시 적용]

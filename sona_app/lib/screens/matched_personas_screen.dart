@@ -6,9 +6,72 @@ import '../models/persona.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/auth/auth_service.dart';
 
-class MatchedPersonasScreen extends StatelessWidget {
+class MatchedPersonasScreen extends StatefulWidget {
   const MatchedPersonasScreen({super.key});
+  
+  @override
+  State<MatchedPersonasScreen> createState() => _MatchedPersonasScreenState();
+}
 
+class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
+  final Map<String, int> _cachedLikes = {};
+  bool _hasPreloaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _preloadLikes();
+  }
+  
+  Future<void> _preloadLikes() async {
+    if (_hasPreloaded) return;
+    
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId != null && personaService.matchedPersonas.isNotEmpty) {
+      await RelationScoreService.instance.preloadLikes(
+        userId: userId,
+        personaIds: personaService.matchedPersonas.map((p) => p.id).toList(),
+      );
+      
+      // 로컬 캐시 업데이트
+      if (mounted) {
+        setState(() {
+          for (final persona in personaService.matchedPersonas) {
+            final likes = RelationScoreService.instance.getCachedLikes(
+              userId: userId,
+              personaId: persona.id,
+            );
+            _cachedLikes[persona.id] = likes > 0 ? likes : persona.likes;
+          }
+          _hasPreloaded = true;
+        });
+      }
+    }
+  }
+  
+  int _getCachedLikes(BuildContext context, Persona persona) {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid;
+    
+    if (userId == null) return persona.likes;
+    
+    // 로컬 캐시 먼저 확인
+    if (_cachedLikes.containsKey(persona.id)) {
+      return _cachedLikes[persona.id]!;
+    }
+    
+    // 캐시가 없으면 RelationScoreService의 캐시 사용
+    final likes = RelationScoreService.instance.getCachedLikes(
+      userId: userId,
+      personaId: persona.id,
+    );
+    
+    return likes > 0 ? likes : persona.likes;
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +134,10 @@ class MatchedPersonasScreen extends StatelessWidget {
             itemCount: matchedPersonas.length,
             itemBuilder: (context, index) {
               final persona = matchedPersonas[index];
-              return _PersonaCard(persona: persona);
+              return _PersonaCard(
+                persona: persona,
+                getCachedLikes: _getCachedLikes,
+              );
             },
           );
         },
@@ -82,20 +148,13 @@ class MatchedPersonasScreen extends StatelessWidget {
 
 class _PersonaCard extends StatelessWidget {
   final Persona persona;
+  final int Function(BuildContext, Persona) getCachedLikes;
   
-  const _PersonaCard({required this.persona});
+  const _PersonaCard({
+    required this.persona,
+    required this.getCachedLikes,
+  });
   
-  Future<int> _getLikes(BuildContext context, Persona persona) async {
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final userId = authService.user?.uid;
-    
-    if (userId == null) return persona.likes ?? 0;
-    
-    return await RelationScoreService.instance.getLikes(
-      userId: userId,
-      personaId: persona.id,
-    );
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -188,11 +247,10 @@ class _PersonaCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          // 친밀도 표시 (like score와 뱃지)
-                          FutureBuilder<int>(
-                            future: _getLikes(context, persona),
-                            builder: (context, snapshot) {
-                              final likes = snapshot.data ?? persona.likes ?? 0;
+                          // 친밀도 표시 (like score와 뱃지) - 캐시 사용
+                          Builder(
+                            builder: (context) {
+                              final likes = getCachedLikes(context, persona);
                               final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
                               
                               return Row(

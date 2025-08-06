@@ -2017,9 +2017,14 @@ class ChatService extends BaseService {
   List<String> _splitIntoSentences(String text) {
     final sentences = <String>[];
     
+    // 번역을 위해 명확한 문장 종결 부호 우선 사용
     // More specific sentence enders with clear punctuation
-    final sentenceEnders = [
-      '. ', '! ', '? ', '.\n', '!\n', '?\n', '...', '~~',
+    final primaryEnders = [
+      '.', '!', '?', '...', '~~'  // 기본 마침표 단위
+    ];
+    
+    // 한국어 종결 어미 패턴 (마침표가 없어도 문장 끝)
+    final koreanEnders = [
       '요. ', '요! ', '요? ', '요~ ', '요ㅋㅋ', '요ㅎㅎ',
       '어. ', '어! ', '어? ', '어~ ', '어ㅋㅋ', '어ㅎㅎ',
       '야. ', '야! ', '야? ', '야~ ', '야ㅋㅋ', '야ㅎㅎ',
@@ -2040,13 +2045,28 @@ class ChatService extends BaseService {
       int earliestIndex = -1;
       String matchedEnder = '';
       
-      // Find the earliest sentence ender, but require minimum length
-      for (final ender in sentenceEnders) {
-        final index = remaining.indexOf(ender);
-        // Require minimum length before splitting
-        if (index != -1 && index >= minSentenceLength && (earliestIndex == -1 || index < earliestIndex)) {
-          earliestIndex = index;
+      // 먼저 기본 마침표 단위로 찾기 (번역 품질 향상)
+      for (final ender in primaryEnders) {
+        // 마침표 뒤에 공백이나 문장 끝이 오는 경우 찾기
+        final escapedEnder = RegExp.escape(ender);
+        final pattern = RegExp('$escapedEnder(?=\\s|\$)');
+        final match = pattern.firstMatch(remaining);
+        if (match != null && match.start >= minSentenceLength && 
+            (earliestIndex == -1 || match.start < earliestIndex)) {
+          earliestIndex = match.start;
           matchedEnder = ender;
+        }
+      }
+      
+      // 기본 마침표가 없으면 한국어 종결 어미로 찾기
+      if (earliestIndex == -1) {
+        for (final ender in koreanEnders) {
+          final index = remaining.indexOf(ender);
+          // Require minimum length before splitting
+          if (index != -1 && index >= minSentenceLength && (earliestIndex == -1 || index < earliestIndex)) {
+            earliestIndex = index;
+            matchedEnder = ender;
+          }
         }
       }
       

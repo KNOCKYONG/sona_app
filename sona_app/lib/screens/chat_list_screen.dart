@@ -27,6 +27,7 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
   bool _isLoading = false;
   bool _hasInitialized = false;
   final Map<String, bool> _leftChatStatus = {};
+  final Map<String, int> _cachedLikes = {}; // Like score 로컬 캐시
   
   @override
   void initState() {
@@ -87,12 +88,29 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
         
         // 모든 메시지 로드 대기
         await Future.wait(loadFutures);
+        
+        // Like scores 프리로드 (캐싱)
+        if (currentUserId.isNotEmpty) {
+          await RelationScoreService.instance.preloadLikes(
+            userId: currentUserId,
+            personaIds: matchedPersonas.map((p) => p.id).toList(),
+          );
+          
+          // 로컬 캐시 업데이트
+          for (final persona in matchedPersonas) {
+            final likes = RelationScoreService.instance.getCachedLikes(
+              userId: currentUserId,
+              personaId: persona.id,
+            );
+            _cachedLikes[persona.id] = likes > 0 ? likes : persona.likes;
+          }
+        }
       } else {
         debugPrint('⚠️ No matched personas found - user might need to swipe more');
       }
       
       // 5. 채팅방 나가기 상태 확인
-      if (currentUserId != null && currentUserId.isNotEmpty) {
+      if (currentUserId.isNotEmpty) {
         try {
           final chatsSnapshot = await FirebaseFirestore.instance
               .collection('users')
@@ -177,16 +195,29 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
     }
   }
 
-  Future<int> _getLikes(BuildContext context, Persona persona) async {
+  int _getCachedLikes(BuildContext context, Persona persona) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.user?.uid;
     
-    if (userId == null) return persona.likes ?? 0;
+    if (userId == null) return persona.likes;
     
-    return await RelationScoreService.instance.getLikes(
+    // 로컬 캐시 먼저 확인
+    if (_cachedLikes.containsKey(persona.id)) {
+      return _cachedLikes[persona.id]!;
+    }
+    
+    // 캐시가 없으면 RelationScoreService의 캐시 사용
+    final likes = RelationScoreService.instance.getCachedLikes(
       userId: userId,
       personaId: persona.id,
     );
+    
+    // 백그라운드에서 업데이트된 값 반영
+    if (likes > 0) {
+      _cachedLikes[persona.id] = likes;
+    }
+    
+    return likes > 0 ? likes : persona.likes;
   }
 
   @override
@@ -493,11 +524,10 @@ class _ChatListScreenState extends State<ChatListScreen> with AutomaticKeepAlive
                                         ),
                                       ),
                                       const SizedBox(width: 8),
-                                      // 친밀도 표시 (like score와 뱃지)
-                                      FutureBuilder<int>(
-                                        future: _getLikes(context, persona),
-                                        builder: (context, snapshot) {
-                                          final likes = snapshot.data ?? persona.likes ?? 0;
+                                      // 친밀도 표시 (like score와 뱃지) - 캐시 사용
+                                      Builder(
+                                        builder: (context) {
+                                          final likes = _getCachedLikes(context, persona);
                                           final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
                                           
                                           return Row(

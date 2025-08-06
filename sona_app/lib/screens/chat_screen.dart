@@ -459,8 +459,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Widget scaffold = PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvoked: (didPop) async {
         if (didPop) return;
+        
+        // 캐시 업데이트 (현재 like score를 캐시에 반영)
+        final authService = Provider.of<AuthService>(context, listen: false);
+        final userId = authService.user?.uid;
+        if (userId != null) {
+          // 현재 persona의 최신 likes를 캐시에 업데이트
+          RelationScoreService.instance.getLikes(
+            userId: userId,
+            personaId: persona.id,
+          );
+        }
         
         // Navigate to chat list instead of popping
         Navigator.pushReplacementNamed(

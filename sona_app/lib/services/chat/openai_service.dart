@@ -25,7 +25,7 @@ class OpenAIService {
   static const int _maxInputTokens = 3000; // GPT-4.1-mini에 맞게 증가
   static const int _maxOutputTokens = 200; // 기본 토큰 제한
   static const int _maxTranslationTokens = 500; // 번역 시 토큰 제한 증가 (2.5배)
-  static const double _temperature = 0.8;
+  static const double _temperature = 0.85; // 창의성 증가 (0.8 → 0.85) - 슬랭 사용 유도
   
   // 🔗 연결 풀링
   static final http.Client _httpClient = http.Client();
@@ -182,8 +182,8 @@ class OpenAIService {
         'messages': optimizedMessages,
         'max_tokens': request.targetLanguage != null ? _maxTranslationTokens : _maxOutputTokens,
         'temperature': _temperature,
-        'presence_penalty': 0.6,
-        'frequency_penalty': 0.5,
+        'presence_penalty': 0.3, // 다양한 표현 허용 (0.6 → 0.3)
+        'frequency_penalty': 0.2, // 반복 표현 허용 - ㅋㅋ/ㅎㅎ 사용 유도 (0.5 → 0.2)
         'top_p': 0.9,
         'stream': false,
       }),
@@ -1003,8 +1003,30 @@ class KoreanSpeechValidator {
   static String _addNaturalExpressions(String text) {
     String result = text;
     
+    // ㅋㅋ/ㅎㅎ가 없으면 추가 (필수!)
+    if (!result.contains('ㅋ') && !result.contains('ㅎ') && !result.contains('ㅠ')) {
+      // 문장 끝에 적절한 표현 추가
+      if (result.contains('?')) {
+        // 의문문엔 ㅋㅋ
+        result = result.replaceFirst('?', '?ㅋㅋ');
+      } else if (result.contains('!')) {
+        // 감탄문엔 ㅎㅎ
+        result = result.replaceFirst('!', '!ㅎㅎ');
+      } else if (result.endsWith('.')) {
+        // 평서문엔 랜덤
+        final endings = ['ㅋㅋ', 'ㅎㅎ', 'ㅋㅋㅋ'];
+        final randomEnding = endings[result.hashCode.abs() % endings.length];
+        result = result.substring(0, result.length - 1) + randomEnding;
+      } else {
+        // 마침표가 없으면 추가
+        final endings = ['ㅋㅋ', 'ㅎㅎ', '~'];
+        final randomEnding = endings[result.hashCode.abs() % endings.length];
+        result = result + randomEnding;
+      }
+    }
+    
     // 짧은 응답에 자연스러운 시작 표현 추가
-    if (result.length < 10) {
+    if (result.length < 15) {
       final contextualStarters = {
         'positive': ['와 ', '헐 ', '오 ', '대박 '],
         'question': ['어 ', '음 ', '아 '],
@@ -1039,6 +1061,12 @@ class KoreanSpeechValidator {
       '그런가요': '그런가',
       '맞나요': '맞나',
       '좋나요': '좋나',
+      '저녁 메뉴 추천': '저메추',
+      '점심 메뉴 추천': '점메추',
+      '아침 메뉴 추천': '아메추',
+      '맛있': '존맛',
+      '재미있': '꿀잼',
+      '재미없': '노잼',
     };
     
     naturalReplacements.forEach((formal, natural) {

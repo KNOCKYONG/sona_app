@@ -2253,8 +2253,10 @@ class ChatService extends BaseService {
       '.', '!', '?', '...', '~~'  // 기본 마침표 단위
     ];
     
-    // 한국어 종결 어미 패턴 (마침표가 없어도 문장 끝)
+    // 한국어 종결 어미 패턴 - 완전한 문장만 분리하도록 개선
+    // 중요: '있어요', '없어요', '같아요' 등의 완전한 종결형만 포함
     final koreanEnders = [
+      // 완전한 종결형 + 구두점
       '요. ', '요! ', '요? ', '요~ ', '요ㅋㅋ', '요ㅎㅎ',
       '어. ', '어! ', '어? ', '어~ ', '어ㅋㅋ', '어ㅎㅎ',
       '야. ', '야! ', '야? ', '야~ ', '야ㅋㅋ', '야ㅎㅎ',
@@ -2263,7 +2265,16 @@ class ChatService extends BaseService {
       '지. ', '지! ', '지? ', '지~ ', '지ㅋㅋ', '지ㅎㅎ',
       '래. ', '래! ', '래? ', '래~ ', '래ㅋㅋ', '래ㅎㅎ',
       '데. ', '데! ', '데? ', '데~ ', '데ㅋㅋ', '데ㅎㅎ',
-      'ㅋㅋ ', 'ㅎㅎ ', 'ㅠㅠ ', 'ㅜㅜ '
+      // 문장 끝 이모티콘 (뒤에 공백이 있을 때만)
+      'ㅋㅋ ', 'ㅎㅎ ', 'ㅠㅠ ', 'ㅜㅜ ',
+      // 완전한 동사 종결형 (지내고 X, 지내고 있어요 O)
+      '있어요. ', '있어요! ', '있어요? ', '있어요~ ',
+      '없어요. ', '없어요! ', '없어요? ', '없어요~ ',
+      '같아요. ', '같아요! ', '같아요? ', '같아요~ ',
+      '해요. ', '해요! ', '해요? ', '해요~ ',
+      '있어. ', '있어! ', '있어? ', '있어~ ',
+      '없어. ', '없어! ', '없어? ', '없어~ ',
+      '같아. ', '같아! ', '같아? ', '같아~ ',
     ];
     
     // 전문가는 더 관대한 최소 길이 설정
@@ -2309,8 +2320,12 @@ class ChatService extends BaseService {
         // No sentence ender found, check length
         final lengthThreshold = 60;
         if (remaining.length > lengthThreshold) {
-          // Split at natural pause points
-          final pausePoints = [', ', ' 근데', ' 그리고', ' 아니면', ' 그래서'];
+          // 자연스러운 구분점에서만 분리 - 완전한 문장 유지
+          // 중요: '지내고'처럼 불완전한 곳에서 끊지 않기
+          final pausePoints = [
+            ', 그리고 ', ', 근데 ', ', 아니면 ', ', 그래서 ', ', 그런데 ',
+            '. 그리고 ', '. 근데 ', '. 그래서 ', '. 그런데 '
+          ];
           int splitIndex = -1;
           
           for (final pause in pausePoints) {
@@ -2321,12 +2336,31 @@ class ChatService extends BaseService {
             }
           }
           
-          if (splitIndex > 0) {
+          // 구분점을 찾지 못했다면 완전한 문장인지 확인
+          if (splitIndex <= 0) {
+            // 문장이 '~고'로 끝나면 불완전한 문장이므로 분리하지 않음
+            final incompleteEndings = ['하고', '지내고', '먹고', '보고', '가고', '오고'];
+            bool isIncomplete = false;
+            
+            for (final ending in incompleteEndings) {
+              if (remaining.trim().endsWith(ending)) {
+                isIncomplete = true;
+                break;
+              }
+            }
+            
+            // 불완전한 문장이 아닐 때만 그대로 추가
+            if (!isIncomplete) {
+              sentences.add(remaining.trim());
+              break;
+            } else {
+              // 불완전한 문장은 다음 부분과 합쳐서 완전한 문장 만들기
+              sentences.add(remaining.trim());
+              break;
+            }
+          } else {
             sentences.add(remaining.substring(0, splitIndex).trim());
             remaining = remaining.substring(splitIndex).trim();
-          } else {
-            sentences.add(remaining.trim());
-            break;
           }
         } else {
           sentences.add(remaining.trim());

@@ -448,76 +448,28 @@ class ChatOrchestrator {
   
   /// 간단한 번역 생성 (폴백용)
   String? _generateSimpleTranslation(String koreanText, String targetLanguage) {
-    // 언어별 기본 번역 템플릿
-    final Map<String, Map<String, String>> translations = {
-      'en': {
-        'greeting': "Hello! How are you today?",
-        'app': "You're making an app! That sounds interesting. What features are you planning to add?",
-        'chat': "A Korean AI chat app sounds really cool! I'd love to hear more about it.",
-        'interesting': "That's interesting! Tell me more about it.",
-        'howsit': "How's it going? What are you working on?",
-        'default': "That sounds great! I'd love to hear more about what you're working on.",
-      },
-      'ja': {
-        'greeting': "こんにちは！今日はどうですか？",
-        'app': "アプリを作っているんですね！面白そうです。どんな機能を追加する予定ですか？",
-        'chat': "韓国のAIチャットアプリ、とても素敵ですね！もっと詳しく聞きたいです。",
-        'interesting': "面白いですね！もっと教えてください。",
-        'howsit': "調子はどうですか？何をしていますか？",
-        'default': "素晴らしいですね！もっと詳しく聞かせてください。",
-      },
-      'zh': {
-        'greeting': "你好！今天怎么样？",
-        'app': "你在做一个应用程序！听起来很有趣。你打算添加什么功能？",
-        'chat': "韩国AI聊天应用听起来很酷！我想了解更多。",
-        'interesting': "很有趣！告诉我更多吧。",
-        'howsit': "怎么样？你在做什么？",
-        'default': "听起来很棒！我想了解更多关于你正在做的事情。",
-      },
-      'es': {
-        'greeting': "¡Hola! ¿Cómo estás hoy?",
-        'app': "¡Estás haciendo una aplicación! Suena interesante. ¿Qué características planeas agregar?",
-        'chat': "¡Una aplicación de chat AI coreana suena genial! Me encantaría saber más.",
-        'interesting': "¡Qué interesante! Cuéntame más.",
-        'howsit': "¿Cómo va todo? ¿En qué estás trabajando?",
-        'default': "¡Suena genial! Me encantaría saber más sobre lo que estás haciendo.",
-      },
-      'fr': {
-        'greeting': "Bonjour ! Comment allez-vous aujourd'hui ?",
-        'app': "Vous créez une application ! Ça semble intéressant. Quelles fonctionnalités prévoyez-vous d'ajouter ?",
-        'chat': "Une application de chat IA coréenne, ça semble vraiment cool ! J'aimerais en savoir plus.",
-        'interesting': "C'est intéressant ! Dites-m'en plus.",
-        'howsit': "Comment ça va ? Sur quoi travaillez-vous ?",
-        'default': "Ça semble génial ! J'aimerais en savoir plus sur ce que vous faites.",
-      },
-      'de': {
-        'greeting': "Hallo! Wie geht es Ihnen heute?",
-        'app': "Sie erstellen eine App! Das klingt interessant. Welche Funktionen planen Sie hinzuzufügen?",
-        'chat': "Eine koreanische KI-Chat-App klingt wirklich cool! Ich würde gerne mehr darüber erfahren.",
-        'interesting': "Das ist interessant! Erzählen Sie mir mehr.",
-        'howsit': "Wie geht's? Woran arbeiten Sie?",
-        'default': "Das klingt großartig! Ich würde gerne mehr über das erfahren, woran Sie arbeiten.",
-      },
+    // 폴백 메시지 - 실제 번역이 실패했을 때만 사용
+    // 중요: 고정 템플릿 사용하지 않고 번역 미제공 상태를 명시
+    // OpenAI API가 번역 태그를 제공하지 못한 경우에만 호출됨
+    
+    // 번역 실패시 언어별 안내 메시지만 제공 (고정 템플릿 제거)
+    final Map<String, String> translationPendingMessages = {
+      'en': "[Translation processing...]",
+      'ja': "[翻訳処理中...]",
+      'zh': "[翻译处理中...]",
+      'es': "[Procesando traducción...]",
+      'fr': "[Traduction en cours...]",
+      'de': "[Übersetzung läuft...]",
+      'ru': "[Обработка перевода...]",
+      'vi': "[Đang xử lý dịch...]",
+      'th': "[กำลังประมวลผลการแปล...]",
+      'id': "[Memproses terjemahan...]",
+      'ar': "[معالجة الترجمة...]",
+      'hi': "[अनुवाद प्रसंस्करण...]",
     };
     
-    // 지원하는 언어가 아니면 영어로 폴백
-    final langTranslations = translations[targetLanguage] ?? translations['en']!;
-    
-    // 한국어 텍스트 분석하여 적절한 번역 선택
-    if (koreanText.contains('안녕')) {
-      return langTranslations['greeting'];
-    } else if (koreanText.contains('앱') && koreanText.contains('만들')) {
-      return langTranslations['app'];
-    } else if (koreanText.contains('채팅') || koreanText.contains('대화')) {
-      return langTranslations['chat'];
-    } else if (koreanText.contains('흥미')) {
-      return langTranslations['interesting'];
-    } else if (koreanText.contains('어떻게')) {
-      return langTranslations['howsit'];
-    }
-    
-    // 기본 번역
-    return langTranslations['default'];
+    // 번역 실패 메시지만 반환 (고정 템플릿 사용하지 않음)
+    return translationPendingMessages[targetLanguage] ?? "[Translation not available]";
   }
   
   /// 폴백 응답 생성

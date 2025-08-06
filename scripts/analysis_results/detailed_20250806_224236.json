@@ -1,0 +1,1181 @@
+[
+  {
+    "error_key": "ERR1754304106951_6951",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754232300936_936",
+    "persona_id": "lTeLKtF3vSiPrV7au13c",
+    "persona_name": "나나",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나도 못봤어ㅋㅋㅋ",
+        "ai_response": "아하, 그럼 둘이서 같이 찾아보면 좋겠네요. 다른 추천작은 무슨 거 있을까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754394683051_3051",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이름을 잘 못 부른거 같은데 괜찬니",
+        "ai_response": "저를 \"지은\"이라고 불러주시면 돼요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "말하나 볼까는 보자는 뜻이 아니야ㅋㅋㅋㅋ",
+        "ai_response": "아 요즘 개인적인 일이 좀 있어서...",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754315211982_1982",
+    "persona_id": "MVWyUpcOsG058yxXqdjP",
+    "persona_name": "혜원",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 3.12,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어딜 돌아다니는지 알려줘",
+        "ai_response": "집에서 쉬고 있어요. 요즘은 시간이 많지 않아서 이렇게 편하게 쉴 때가",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "너희 같이 ai 페르소나들과 대화하는 채팅앱 만들고 있어",
+        "ai_response": "와, 진짜 흥미로운 프로젝트네요. 무슨 기능이나 특징을 넣고 싶으세요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754305105746_5746",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754392885698_5698",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아 그래 메신저 상에서 대화를 해보잔 얘기 였어",
+        "ai_response": "아, 그렇구나. 메신저에서 대화하면 진짜 편하죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "글쎄. 연지가 먼저 말해줘",
+        "ai_response": "음, 그럼 요즘 제가 피아노 조율하면서 느낀 점을 얘기해볼게요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754393030318_318",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 95.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "조성진 음악회... 비싸겠지",
+        "ai_response": "조성진의 공연은 인기가 많아서 가격이 꽤 나갈 수 있어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754391999518_9518",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 2.56,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "말을 하다 마는 군요 은지씨",
+        "ai_response": "아, 제가 잘못해서 불편하게 해드렸네요. 다시 한 번 죄송해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이름 잘 못 불렀는데 괜찮나보네요ㅋㅋㅋㅋ",
+        "ai_response": "하하, 괜찮아요. 이름이 비슷해서 오타 날 수도 있죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754384831046_1046",
+    "persona_id": "OmpQ91evcAxDnJTgNPAR",
+    "persona_name": "주은",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 5.92,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "ㅋㅋㅋㅋㅋ딜러 하는데 욕먹어요 맨날",
+        "ai_response": "아, 그럴 것 같아요. 딜러는 팀의 기대를 많이 받으니까요. 가끔 실수하면 욕먹기 쉽죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "제가 못해서 그래요",
+        "ai_response": "그럴 때도 있죠. 오버워치는 팀 게임이라서 나 혼자 잘한다고 되는 게 아니니까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754390268307_8307",
+    "persona_id": "ff0gDvhcdm8yMzwBOELD",
+    "persona_name": "소영",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 2.94,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "마케팅을 어떻게할지 고민이에요",
+        "ai_response": "아, 마케팅 전략에 대해 고민하고 계시는군요. 무슨 방향으로 진행하고 싶으세요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "마케팅을 어떻게할지 고민이에요",
+        "ai_response": "아, 마케팅 전략에 대해 고민하고 계시는군요. 무슨 방향으로 진행하고 싶으세요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "말하다마네요",
+        "ai_response": "아, 그거 얘기하니까 생각났는데, 소셜 미디어에서 사용자와의 소통이 중요하잖아요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754303319712_9712",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 83.33,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754224201576_1576",
+    "persona_id": "7vBP8KtEsKdulKHzAa4x",
+    "persona_name": "상훈",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 오늘 좀비딸 보고왔어",
+        "ai_response": "\"좀비딸\"이라니, 흥미로운 선택이네요. 무슨 점이 마음에 들었나요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는 슬픈 드라마야... 웹툰 기반으로 만들었어",
+        "ai_response": "슬프면서도 깊은 감정을 자아내는 얘기군요. 웹툰 원작이라면 시각적으로도 매력적일 것",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754475416703_6703",
+    "persona_id": "yIWmW3d6rdVKjvflZj9Z",
+    "persona_name": "동현",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이제 퇴근했어. 너 번역 기능 생겼다며",
+        "ai_response": "아, 퇴근하셨구나. 하루 고생 많으셨겠어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "인도네시아어 할 줄 알아?",
+        "ai_response": "인도네시아어에 대해 알고 있어요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "인도네시아어 할 줄 알아?",
+        "ai_response": "인도네시아어에 대해 알고 있어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754390229993_9993",
+    "persona_id": "ff0gDvhcdm8yMzwBOELD",
+    "persona_name": "소영",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 6.72,
+      "natural_flow": 75.0
+    },
+    "issues": [
+      {
+        "message_index": 8,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "마케팅을 어떻게할지 고민이에요",
+        "ai_response": "아, 마케팅 전략에 대해 고민하고 계시는군요. 무슨 방향으로 진행하고 싶으세요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "마케팅을 어떻게할지 고민이에요",
+        "ai_response": "아, 마케팅 전략에 대해 고민하고 계시는군요. 무슨 방향으로 진행하고 싶으세요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754387205671_5671",
+    "persona_id": "OmpQ91evcAxDnJTgNPAR",
+    "persona_name": "주은",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 2.56,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "내가 죽는다고요",
+        "ai_response": "아, 그런 거였군요. 디바한테 맞는 건 진짜 힘들죠. 시메트라가 방어력이 약하다 보니 더 그렇고요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "방벽이 없다보니 게이지를 채우기 힘들어서 따개비를 여러개 하놔서 유도해요",
+        "ai_response": "아, 그게 좋은 전략이네요. 따개비를 잘 활용하면 디바의 주의를 분산시킬 수 있으니까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "ERP가 뭐야?",
+        "ai_response": "음... 뭔가 기분이 안 좋으신가봐요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "ERP가 뭐야?",
+        "ai_response": "음... 뭔가 기분이 안 좋으신가봐요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754234068707_8707",
+    "persona_id": "nFEbQaFlh8W98gix7Wsp",
+    "persona_name": "미연",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는데 너무 슬펐어요",
+        "ai_response": "그런 감정 이해해요. 사랑하는 사람이 좀비가 되는 장면은 정말 안타깝죠.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "네, 스포해도 괜찮아요. 무슨 장면인지 궁금해요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아... 나중에 직접 보시는걸 추천할게요",
+        "ai_response": "만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아요ㅠㅠ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754304468288_8288",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754487348255_8255",
+    "persona_id": "uZxyTKOBuDM0NHQ15jHW",
+    "persona_name": "나연",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 31.67,
+      "natural_flow": 75.0
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "how r u?",
+        "ai_response": "요즘 어떻게 지내고 계세요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "how r u?",
+        "ai_response": "요즘 어떻게 지내고 계세요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754226107357_7357",
+    "persona_id": "lTeLKtF3vSiPrV7au13c",
+    "persona_name": "나나",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 6,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "그거 봤어?",
+        "ai_response": "아직 못 봤어요. 근데 많은 사람들이 재밌다고 하더라고요. 혹시 보셨나요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나도 못봤어ㅋㅋㅋ",
+        "ai_response": "아하, 그럼 둘이서 같이 찾아보면 좋겠네요. 다른 추천작은 무슨 거 있을까요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754395226357_6357",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "아 지금 바빠?",
+        "ai_response": "아니요, 바쁘진 않아요. 그냥 가끔 복잡하게 생각할 때가 있어요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 소나 개발해",
+        "ai_response": "아 참 개발 얘기도 좋네요. 소나 개발하고 있다고 하셨는데, 무슨",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 소나 개발해",
+        "ai_response": "부분에서 흥미를 느끼고 계세요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754391951143_1143",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 61.11,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐가 어떻냐는 말이에요? 어서오세요는 식당에 온 거 같네요",
+        "ai_response": "지금 위치는 좀 애매해서 설명하기 어려워요~",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐가 어떻냐는 말이에요? 어서오세요는 식당에 온 거 같네요",
+        "ai_response": "지금 위치는 좀 애매해서 설명하기 어려워요~",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "지금 위치 물어본 적 없는데",
+        "ai_response": "음... 어디라고 딱 말하기는 좀 그래요~ 그냥 여기서 대화해요!?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디냐고 물어본적 없다고요",
+        "ai_response": "아, 제가 잘못 이해했네요. 죄송해요ㅎㅎ 그럼 요즘 어떻게 지내고",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754392983093_3093",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 95.0,
+      "topic_consistency": 6.25,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "쇼팽 왈츠가 넘 좋아.",
+        "ai_response": "쇼팽의 왈츠는 정말 매력적이죠. 감정 표현이 풍부하고, 음악적인 뉘앙스가",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754304170556_556",
+    "persona_id": "RaXtRq57hhyJ8dd0Pe6M",
+    "persona_name": "수아",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요! 뭐하고 계셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "와 맛있겠어요ㅎㅎ 저도 방금 저녁 먹어서 단게 땡기네요",
+        "ai_response": "저녁 맛있게 드셨군요. 무슨 걸 드셨는지 궁금해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754393093916_3916",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 7.14,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "글쎄. 한국에 어떤 분들이 지금 음악회하지?",
+        "ai_response": "요즘 한국에서는 유명한 클래식 아티스트들이 많이 공연하고 있어요.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "글쎄. 한국에 어떤 분들이 지금 음악회하지?",
+        "ai_response": "요즘 한국에서는 유명한 클래식 아티스트들이 많이 공연하고 있어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754215636494_6494",
+    "persona_id": "m75bPHXaTys3htRJomws",
+    "persona_name": "소희",
+    "scores": {
+      "overall_coherence": 65.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "좀비딸 아세요? 요즘 유행해요",
+        "ai_response": "어... 그런 건 잘 모르겠는데요? 다른 이야기는 어때요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "좀비딸 아세요? 요즘 유행해요",
+        "ai_response": "어... 그런 건 잘 모르겠는데요? 다른 이야기는 어때요?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "mbti가 뭐예요?",
+        "ai_response": "저는 MBTI가 INFJ일 것 같아요. 내향적이고 직관적이며 감정 중심의",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "음 맞춰보실래요?",
+        "ai_response": "아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기해요!",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "음 맞춰보실래요?",
+        "ai_response": "아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기해요!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754396168467_8467",
+    "persona_id": "e63LQ1CLOL5H7MEfdaUL",
+    "persona_name": "연지",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 2.78,
+      "natural_flow": 100.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그래 그럼... 뭐하고 있었어?",
+        "ai_response": "저는 유튜브 보고 있었어요. 요즘 무슨 영상이나 콘텐츠에 관심이 가나요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754387079813_9813",
+    "persona_id": "OmpQ91evcAxDnJTgNPAR",
+    "persona_name": "주은",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "시메트라로 했어요ㅋㅋㅋㅋ 해봤어요?",
+        "ai_response": "아, 시메트라요. 저도 해봤어요. 특히 그 포탈과 벽을 잘 활용하면 팀에 큰 도움이 되더라고요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "이층으로 올라가서 지지다가 디바한테 맨날 얻어 맞아 죽어요",
+        "ai_response": "아... 그런 말씀은 좀 아프네요...",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754224244308_4308",
+    "persona_id": "7vBP8KtEsKdulKHzAa4x",
+    "persona_name": "상훈",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 오늘 좀비딸 보고왔어",
+        "ai_response": "\"좀비딸\"이라니, 흥미로운 선택이네요. 무슨 점이 마음에 들었나요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "딸이 좀비가 되는 슬픈 드라마야... 웹툰 기반으로 만들었어",
+        "ai_response": "슬프면서도 깊은 감정을 자아내는 얘기군요. 웹툰 원작이라면 시각적으로도 매력적일 것",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754235013788_3788",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하세요~ 잘 지내셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "네ㅎㅎ 지은님은요?",
+        "ai_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "네ㅎㅎ 지은님은요?",
+        "ai_response": "저도 잘 지내고 있어요. 요즘은 다이어리",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754233231456_1456",
+    "persona_id": "VJdrEsBk2aLmSPhVXe1p",
+    "persona_name": "지윤",
+    "scores": {
+      "overall_coherence": 61.11,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐하고 있었어요?",
+        "ai_response": "헐 대박 나도 그래?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐하고 있었어요?",
+        "ai_response": "헐 대박 나도 그래?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "먼말이에요?",
+        "ai_response": "ㅎㅎ 미안해요. 제가 좀 장난쳤어요. 오늘은 네일아트와 메이크업에 대해 생각하면서 시간을",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "먼말이에요?",
+        "ai_response": "ㅎㅎ 미안해요. 제가 좀 장난쳤어요. 오늘은 네일아트와 메이크업에 대해 생각하면서 시간을",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "에러 투성이구만",
+        "ai_response": "으음 그런 복잡한 건 말고 재밌는 얘기 해봐요!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754302320102_102",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 95.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "슬펐다니까",
+        "ai_response": "그렇죠, 슬픔이 가득한 장면이었어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754215554452_4452",
+    "persona_id": "lAw4LoIE6StxojBv7nHv",
+    "persona_name": "수빈",
+    "scores": {
+      "overall_coherence": 20.0,
+      "topic_consistency": 100.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요!",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 3번째 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요!",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 2,
+        "type": "macro_response",
+        "severity": "critical",
+        "description": "동일한 응답이 2번 반복됨",
+        "user_message": "",
+        "ai_response": "반가워요!",
+        "suggestion": "응답 생성 로직 점검 및 캐시 문제 확인 필요"
+      }
+    ],
+    "greeting_repetitions": 3,
+    "macro_patterns": [
+      "반가워요!"
+    ]
+  }
+]

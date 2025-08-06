@@ -588,6 +588,10 @@ class ChatOrchestrator {
     
     // 간단한 인사말
     if (_isGreeting(lowerMessage)) {
+      // 영어 인사인 경우 특별 처리
+      if (_isEnglishGreeting(lowerMessage)) {
+        return _getEnglishGreetingResponse(mbti, isCasualSpeech);
+      }
       return _getGreetingResponse(mbti, isCasualSpeech);
     }
     
@@ -610,8 +614,17 @@ class ChatOrchestrator {
   }
   
   bool _isGreeting(String message) {
-    final greetings = ['안녕', '하이', 'ㅎㅇ', '방가', '반가', 'hi', 'hello'];
+    final greetings = ['안녕', '하이', 'ㅎㅇ', '방가', '반가', 'hi', 'hello', 'hey'];
+    // how are you, how r u 등의 패턴도 인사로 처리
+    if (RegExp(r'how\s+(are\s+you|r\s+u)', caseSensitive: false).hasMatch(message)) {
+      return true;
+    }
     return greetings.any((g) => message.contains(g));
+  }
+  
+  bool _isEnglishGreeting(String message) {
+    // 영어 인사 패턴 감지
+    return RegExp(r'(hi|hello|hey|how\s+(are\s+you|r\s+u))', caseSensitive: false).hasMatch(message);
   }
   
   bool _isThanks(String message) {
@@ -648,29 +661,67 @@ class ChatOrchestrator {
   
   String _getGreetingResponse(String mbti, bool isCasual) {
     final responses = _getPersonaResponses(mbti, 'greeting', isCasual);
+    // 더 나은 랜덤성을 위해 Random 사용
+    final random = math.Random();
+    return responses[random.nextInt(responses.length)];
+  }
+  
+  String _getEnglishGreetingResponse(String mbti, bool isCasual) {
+    // 영어 인사에 대한 특별한 응답
+    final responses = isCasual ? [
+      "좋아! 너는?",
+      "나쁘지 않아ㅎㅎ 너는 어때?",
+      "괜찮아~ 오늘 뭐 했어?",
+      "잘 지내고 있어! 너는?",
+    ] : [
+      "잘 지내고 있어요! 당신은요?",
+      "좋아요ㅎㅎ 오늘 어떠셨어요?",
+      "괜찮아요~ 무슨 일 있으셨어요?",
+      "잘 지내요! 오늘 뭐 하셨어요?",
+    ];
+    
+    // MBTI별 차별화
+    if (mbti.startsWith('E')) {
+      // 외향형은 더 활발하게
+      return isCasual ? 
+        "완전 좋아!! 너는 어때? 오늘 재밌는 일 있었어?" :
+        "정말 좋아요!! 당신은요? 오늘 특별한 일 있으셨어요?";
+    } else if (mbti.startsWith('I')) {
+      // 내향형은 차분하게
+      return isCasual ?
+        "괜찮아, 너는?" :
+        "잘 지내고 있어요, 당신은요?";
+    }
+    
     return responses[DateTime.now().millisecond % responses.length];
   }
   
   String _getThanksResponse(String mbti, bool isCasual) {
     final responses = _getPersonaResponses(mbti, 'thanks', isCasual);
-    return responses[DateTime.now().millisecond % responses.length];
+    // 더 나은 랜덤성을 위해 Random 사용
+    final random = math.Random();
+    return responses[random.nextInt(responses.length)];
   }
   
   String _getSimpleReactionResponse(String message, String mbti, bool isCasual) {
     // 추임새 타입별 맞춤 응답
     final exclamationResponses = _getExclamationResponses(message, mbti, isCasual);
     if (exclamationResponses.isNotEmpty) {
-      return exclamationResponses[DateTime.now().millisecond % exclamationResponses.length];
+      final random = math.Random();
+      return exclamationResponses[random.nextInt(exclamationResponses.length)];
     }
     
     // 기본 반응
     final responses = _getPersonaResponses(mbti, 'reaction', isCasual);
-    return responses[DateTime.now().millisecond % responses.length];
+    final random = math.Random();
+    return responses[random.nextInt(responses.length)];
   }
   
   String _getComplimentResponse(String mbti, bool isCasual) {
     final responses = _getPersonaResponses(mbti, 'compliment', isCasual);
-    return responses[DateTime.now().millisecond % responses.length];
+    // 더 나은 랜덤성을 위해 Random 사용
+    final random = math.Random();
+    return responses[random.nextInt(responses.length)];
   }
   
   List<String> _getPersonaResponses(String mbti, String type, bool isCasual) {
@@ -1133,6 +1184,27 @@ class ChatOrchestrator {
       }
       
       if (lastAIMessage != null && lastUserMessage != null) break;
+    }
+    
+    // 영어 인사에 대한 특별 처리
+    if (RegExp(r'how\s+(are\s+you|r\s+u)', caseSensitive: false).hasMatch(userMessage)) {
+      contextHints.add('🌐 영어로 안부를 물었습니다. 먼저 나의 상태를 답하고 상대방 안부를 물어보세요!');
+      contextHints.add('예시: "잘 지내고 있어요! 당신은요? 오늘 뭐 하셨어요?", "좋아요ㅎㅎ 너는 어때?"');
+    }
+    
+    // 주제 연속성 체크 강화
+    if (lastAIMessage != null && lastUserMessage != null) {
+      final previousTopics = _extractKeywords(lastUserMessage.content + ' ' + lastAIMessage.content);
+      final currentTopics = _extractKeywords(userMessage);
+      
+      final hasTopicConnection = previousTopics.any((topic) => 
+        currentTopics.contains(topic) || userMessage.toLowerCase().contains(topic.toLowerCase())
+      );
+      
+      if (!hasTopicConnection && userMessage.length > 10 && !_isGreeting(userMessage.toLowerCase())) {
+        contextHints.add('🔗 이전 대화와 연결점을 찾아 자연스럽게 이어가세요!');
+        contextHints.add('💡 예: "아 그러고보니..." 또는 "방금 얘기하다가 생각난 건데..."');
+      }
     }
     
     // 인사와 위치 질문 구분 (연지 오류 수정)

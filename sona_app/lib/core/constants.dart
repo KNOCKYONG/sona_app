@@ -21,7 +21,8 @@ class AppConstants {
   static const String qualityAlertsCollection = 'quality_alerts';
   
   // Message Limits
-  static const int maxMessagesInMemory = 100;
+  static const int maxMessagesInMemory = 30; // 초기 로딩 속도 개선을 위해 축소
+  static const int messagesPerPage = 20; // 추가 로드 시 가져올 메시지 수
   static const int maxCacheSize = 50;
   static const int maxBatchSize = 500;
   static const int recentMessagesLimit = 10;

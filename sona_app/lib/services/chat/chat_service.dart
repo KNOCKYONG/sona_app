@@ -88,6 +88,10 @@ class ChatService extends BaseService {
   // Current persona ID for tracking active chat
   String? _currentPersonaId;
   
+  // Pagination state
+  bool _isLoadingMore = false;
+  final Map<String, bool> _hasMoreMessages = {};
+  
   void setPersonaService(PersonaService personaService) {
     _personaService = personaService;
   }
@@ -333,6 +337,73 @@ class ChatService extends BaseService {
         .reversed
         .toList();
   }
+  
+  /// Load more messages for pagination
+  Future<void> loadMoreMessages(String userId, String personaId) async {
+    if (_isLoadingMore || userId.isEmpty) return;
+    
+    _isLoadingMore = true;
+    notifyListeners();
+    
+    try {
+      final currentMessages = _messagesByPersona[personaId] ?? [];
+      if (currentMessages.isEmpty) {
+        _isLoadingMore = false;
+        notifyListeners();
+        return;
+      }
+      
+      // Get the oldest message timestamp
+      final oldestMessage = currentMessages.first;
+      
+      // Load more messages before the oldest one
+      final querySnapshot = await FirebaseHelper.userChatMessages(userId, personaId)
+          .orderBy('timestamp', descending: true)
+          .where('timestamp', isLessThan: oldestMessage.timestamp)
+          .limit(AppConstants.messagesPerPage)
+          .get();
+      
+      if (querySnapshot.docs.isEmpty) {
+        _hasMoreMessages[personaId] = false;
+        _isLoadingMore = false;
+        notifyListeners();
+        return;
+      }
+      
+      final newMessages = querySnapshot.docs
+          .map((doc) => Message.fromJson({...doc.data(), 'id': doc.id}))
+          .toList()
+          .reversed
+          .toList();
+      
+      // Prepend new messages to the beginning
+      _messagesByPersona[personaId] = [...newMessages, ...currentMessages];
+      
+      // Update global messages if this is the current persona
+      if (_currentPersonaId == personaId) {
+        _messages = List.from(_messagesByPersona[personaId]!);
+      }
+      
+      // Check if we have more messages
+      _hasMoreMessages[personaId] = querySnapshot.docs.length == AppConstants.messagesPerPage;
+      
+      debugPrint('📜 Loaded ${newMessages.length} more messages for persona $personaId');
+    } catch (e) {
+      debugPrint('❌ Error loading more messages: $e');
+      handleError(e, 'loadMoreMessages');
+    } finally {
+      _isLoadingMore = false;
+      notifyListeners();
+    }
+  }
+  
+  /// Check if there are more messages to load
+  bool hasMoreMessages(String personaId) {
+    return _hasMoreMessages[personaId] ?? true;
+  }
+  
+  /// Check if currently loading more messages
+  bool get isLoadingMore => _isLoadingMore;
 
   /// Preload conversation memory for faster responses
   Future<void> _preloadConversationMemory(String userId, String personaId) async {
@@ -499,7 +570,47 @@ class ChatService extends BaseService {
   /// Generate AI response using new orchestrator
   Future<void> _generateAIResponse(String userId, Persona persona, String userMessage, {bool wrongNameDetected = false}) async {
     debugPrint('🤖 _generateAIResponse called for ${persona.name} with message: $userMessage${wrongNameDetected ? " (WRONG NAME DETECTED)" : ""}');
+    
+    // Create placeholder message ID to track this response
+    final placeholderId = _uuid.v4();
+    Message? placeholderMessage;
+    
     try {
+      // Create and save placeholder message immediately to ensure it's saved even if interrupted
+      placeholderMessage = Message(
+        id: placeholderId,
+        personaId: persona.id,
+        content: '...',  // Typing indicator placeholder
+        type: MessageType.text,
+        isFromUser: false,
+        emotion: EmotionType.neutral,
+        metadata: {
+          'isPlaceholder': true,
+          'timestamp': DateTime.now().toIso8601String(),
+        },
+        timestamp: DateTime.now(),
+      );
+      
+      // Add placeholder to local state
+      if (!_messagesByPersona.containsKey(persona.id)) {
+        _messagesByPersona[persona.id] = [];
+      }
+      _messagesByPersona[persona.id]!.add(placeholderMessage);
+      
+      // Update global messages if current persona
+      if (_currentPersonaId == persona.id) {
+        _messages = List.from(_messagesByPersona[persona.id]!);
+      }
+      
+      // Save placeholder to Firebase immediately
+      if (userId != '') {
+        _queueMessageForSaving(userId, persona.id, placeholderMessage);
+        // Force immediate write for placeholder
+        await _processBatchWrite();
+      }
+      
+      notifyListeners();
+      
       // Check if like score is 0 or below BEFORE marking as read
       final currentLikes = await RelationScoreService.instance.getLikes(
         userId: userId,
@@ -524,6 +635,30 @@ class ChatService extends BaseService {
       
       if (cachedResponse != null) {
         debugPrint('Using cached response for: $cacheKey');
+        
+        // Remove placeholder before sending cached response
+        if (placeholderMessage != null) {
+          _messagesByPersona[persona.id]?.removeWhere((m) => m.id == placeholderId);
+          if (_currentPersonaId == persona.id) {
+            _messages = List.from(_messagesByPersona[persona.id]!);
+          }
+          // Delete placeholder from Firebase
+          if (userId != '') {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userId)
+                  .collection('chats')
+                  .doc(persona.id)
+                  .collection('messages')
+                  .doc(placeholderId)
+                  .delete();
+            } catch (e) {
+              debugPrint('⚠️ Failed to delete placeholder: $e');
+            }
+          }
+        }
+        
         await _sendMultipleMessages(
           contents: [cachedResponse.content],  // Single content as array
           persona: persona,
@@ -549,6 +684,29 @@ class ChatService extends BaseService {
         
         final aiResponseContent = wrongNameResponses[_random.nextInt(wrongNameResponses.length)];
         final emotion = EmotionType.sad;
+        
+        // Remove placeholder before sending upset response
+        if (placeholderMessage != null) {
+          _messagesByPersona[persona.id]?.removeWhere((m) => m.id == placeholderId);
+          if (_currentPersonaId == persona.id) {
+            _messages = List.from(_messagesByPersona[persona.id]!);
+          }
+          // Delete placeholder from Firebase
+          if (userId != '') {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userId)
+                  .collection('chats')
+                  .doc(persona.id)
+                  .collection('messages')
+                  .doc(placeholderId)
+                  .delete();
+            } catch (e) {
+              debugPrint('⚠️ Failed to delete placeholder: $e');
+            }
+          }
+        }
         
         // Send the upset response
         await _sendMultipleMessages(
@@ -587,6 +745,29 @@ class ChatService extends BaseService {
           scoreChange: likeResult.likeChange,
           timestamp: DateTime.now(),
         ));
+        
+        // Remove placeholder before sending defensive response
+        if (placeholderMessage != null) {
+          _messagesByPersona[persona.id]?.removeWhere((m) => m.id == placeholderId);
+          if (_currentPersonaId == persona.id) {
+            _messages = List.from(_messagesByPersona[persona.id]!);
+          }
+          // Delete placeholder from Firebase
+          if (userId != '') {
+            try {
+              await FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(userId)
+                  .collection('chats')
+                  .doc(persona.id)
+                  .collection('messages')
+                  .doc(placeholderId)
+                  .delete();
+            } catch (e) {
+              debugPrint('⚠️ Failed to delete placeholder: $e');
+            }
+          }
+        }
         
         await _sendMultipleMessages(
           contents: [aiResponseContent],  // Single content as array
@@ -656,6 +837,29 @@ class ChatService extends BaseService {
         timestamp: DateTime.now(),
       ));
       
+      // Remove placeholder message before adding real response
+      if (placeholderMessage != null) {
+        _messagesByPersona[persona.id]?.removeWhere((m) => m.id == placeholderId);
+        if (_currentPersonaId == persona.id) {
+          _messages = List.from(_messagesByPersona[persona.id]!);
+        }
+        // Delete placeholder from Firebase
+        if (userId != '') {
+          try {
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('chats')
+                .doc(persona.id)
+                .collection('messages')
+                .doc(placeholderId)
+                .delete();
+          } catch (e) {
+            debugPrint('⚠️ Failed to delete placeholder: $e');
+          }
+        }
+      }
+      
       // Send response messages using new contents array
       await _sendMultipleMessages(
         contents: allContents,
@@ -721,8 +925,34 @@ class ChatService extends BaseService {
         debugPrint('❌ Failed to send automatic error report: $reportError');
       }
       
-      // Fallback response
+      // Update placeholder with fallback response if it exists
       final fallbackResponse = _getFallbackResponse(personaId: persona.id);
+      
+      if (placeholderMessage != null) {
+        // Remove placeholder first
+        _messagesByPersona[persona.id]?.removeWhere((m) => m.id == placeholderId);
+        if (_currentPersonaId == persona.id) {
+          _messages = List.from(_messagesByPersona[persona.id]!);
+        }
+        
+        // Delete placeholder from Firebase before adding fallback
+        if (userId != '') {
+          try {
+            await FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('chats')
+                .doc(persona.id)
+                .collection('messages')
+                .doc(placeholderId)
+                .delete();
+          } catch (e) {
+            debugPrint('⚠️ Failed to delete placeholder on error: $e');
+          }
+        }
+      }
+      
+      // Send fallback response
       await _sendMultipleMessages(
         contents: [fallbackResponse],  // Single content as array
         persona: persona,

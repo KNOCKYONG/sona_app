@@ -35,10 +35,14 @@ class PersonaService extends BaseService {
   List<Persona>? _shuffledAvailablePersonas;
   DateTime? _lastShuffleTime;
   
-  // Caching system
+  // Caching system  
   final Map<String, _CachedRelationship> _relationshipCache = {};
   static const Duration _cacheTTL = Duration(minutes: 5);
   static const int _maxCacheSize = 100;
+  
+  // Memory cache for persona data
+  final Map<String, Persona> _personaMemoryCache = {};
+  DateTime? _lastPersonaCacheUpdate;
   
   // Batch operation queue
   final List<_PendingRelationshipUpdate> _pendingUpdates = [];
@@ -157,6 +161,48 @@ class PersonaService extends BaseService {
   }
   
   List<Persona> get allPersonas => _allPersonas;
+  
+  /// Get persona by ID with memory caching
+  Persona? getPersonaById(String personaId) {
+    // Check memory cache first
+    if (_personaMemoryCache.containsKey(personaId)) {
+      final cached = _personaMemoryCache[personaId];
+      // Return cached if less than 5 minutes old
+      if (_lastPersonaCacheUpdate != null && 
+          DateTime.now().difference(_lastPersonaCacheUpdate!).inMinutes < 5) {
+        return cached;
+      }
+    }
+    
+    // Look in all personas list
+    Persona? persona;
+    try {
+      persona = _allPersonas.firstWhere((p) => p.id == personaId);
+    } catch (e) {
+      try {
+        persona = _matchedPersonas.firstWhere((p) => p.id == personaId);
+      } catch (e) {
+        persona = null;
+      }
+    }
+    
+    // Cache the result if found
+    if (persona != null && persona.id != '') {
+      _personaMemoryCache[personaId] = persona;
+      _lastPersonaCacheUpdate = DateTime.now();
+      
+      // Clean cache if too large
+      if (_personaMemoryCache.length > 50) {
+        final keysToRemove = _personaMemoryCache.keys.take(10).toList();
+        for (final key in keysToRemove) {
+          _personaMemoryCache.remove(key);
+        }
+      }
+    }
+    
+    return persona;
+  }
+  
   List<Persona> get matchedPersonas {
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
@@ -216,16 +262,6 @@ class PersonaService extends BaseService {
   List<Persona> get sessionPersonas => _matchedPersonas;
   List<Persona> get myPersonas => _matchedPersonas;
 
-  /// Get persona by ID from all personas
-  Persona? getPersonaById(String personaId) {
-    try {
-      return _allPersonas.firstWhere((persona) => persona.id == personaId);
-    } catch (e) {
-      debugPrint('Persona not found with ID: $personaId');
-      return null;
-    }
-  }
-
   /// Initialize service with parallel loading
   Future<void> initialize({String? userId}) async {
     // Prevent duplicate initialization
@@ -271,22 +307,25 @@ class PersonaService extends BaseService {
     // 🆕 Check and download new images after loading personas
     await checkAndDownloadNewImages();
     
+    // Preload first 20 persona images for better performance
+    if (_allPersonas.isNotEmpty) {
+      final personasToPreload = _allPersonas.take(20).toList();
+      ImagePreloadService.instance.preloadNewImages(personasToPreload);
+      debugPrint('🖼️ Preloading images for ${personasToPreload.length} personas');
+    }
+    
     // isLoading is managed by BaseService
     notifyListeners();
   }
 
-  /// Load personas from Firebase with fallback
+  /// Load personas from cache first, then Firebase with fallback
   Future<void> _loadFromFirebaseOrFallback() async {
-    try {
-      final success = await _loadFromFirebase();
-      if (!success) {
-        debugPrint('Firebase failed, using empty persona list...');
-        _allPersonas = [];
-        debugPrint('✅ Using empty persona list');
-      }
-    } catch (e) {
-      debugPrint('Error loading from Firebase: $e, using empty list');
-      _allPersonas = [];
+    // Try to load from local cache first
+    await _loadPersonasFromCache();
+    
+    // If cache is empty or stale, load from Firebase
+    if (_allPersonas.isEmpty || await _isCacheStale()) {
+      await _loadPersonasFromFirebase();
     }
   }
 
@@ -1974,6 +2013,86 @@ class PersonaService extends BaseService {
           debugPrint('❌ Error creating user document: $createError');
         }
       }
+    }
+  }
+
+  /// Load personas from local cache
+  Future<void> _loadPersonasFromCache() async {
+    try {
+      final cacheKey = 'cached_personas';
+      final cachedData = await PreferencesManager.getString(cacheKey);
+      
+      if (cachedData != null) {
+        final decoded = json.decode(cachedData) as Map<String, dynamic>;
+        final cacheTime = DateTime.parse(decoded['timestamp'] as String);
+        final personasList = decoded['personas'] as List;
+        
+        // Check if cache is less than 1 hour old
+        if (DateTime.now().difference(cacheTime).inHours < 1) {
+          _allPersonas = personasList
+              .map((data) => Persona.fromJson(data as Map<String, dynamic>))
+              .toList();
+          debugPrint('📦 Loaded ${_allPersonas.length} personas from cache');
+          
+          // Preload images for cached personas
+          if (_allPersonas.isNotEmpty) {
+            ImagePreloadService.instance.preloadNewImages(_allPersonas.take(10).toList());
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error loading personas from cache: $e');
+    }
+  }
+  
+  /// Save personas to local cache
+  Future<void> _savePersonasToCache() async {
+    try {
+      final cacheData = {
+        'timestamp': DateTime.now().toIso8601String(),
+        'personas': _allPersonas.map((p) => p.toJson()).toList(),
+      };
+      
+      final cacheKey = 'cached_personas';
+      await PreferencesManager.setString(cacheKey, json.encode(cacheData));
+      debugPrint('💾 Saved ${_allPersonas.length} personas to cache');
+    } catch (e) {
+      debugPrint('❌ Error saving personas to cache: $e');
+    }
+  }
+  
+  /// Check if cache is stale
+  Future<bool> _isCacheStale() async {
+    try {
+      final cacheKey = 'cached_personas_timestamp';
+      final timestamp = await PreferencesManager.getString(cacheKey);
+      
+      if (timestamp == null) return true;
+      
+      final cacheTime = DateTime.parse(timestamp);
+      // Consider cache stale after 1 hour
+      return DateTime.now().difference(cacheTime).inHours >= 1;
+    } catch (e) {
+      return true;
+    }
+  }
+  
+  /// Load personas from Firebase
+  Future<void> _loadPersonasFromFirebase() async {
+    try {
+      final success = await _loadFromFirebase();
+      if (success) {
+        // Save to cache after successful load
+        await _savePersonasToCache();
+        
+        // Update cache timestamp
+        await PreferencesManager.setString(
+          'cached_personas_timestamp',
+          DateTime.now().toIso8601String(),
+        );
+      }
+    } catch (e) {
+      debugPrint('❌ Error loading personas from Firebase: $e');
     }
   }
 

@@ -64,10 +64,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     });
   }
 
+  bool _isLoadingMore = false;
+  
   void _setupScrollListener() {
     _scrollController.addListener(() {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
+      final minScroll = _scrollController.position.minScrollExtent;
       final scrollThreshold = 100.0;
       
       // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
@@ -81,6 +84,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             _unreadAIMessageCount = 0;
           }
         });
+      }
+      
+      // 상단 근처에서 추가 메시지 로드 (상단 100픽셀 이내)
+      if (currentScroll <= minScroll + 100 && !_isLoadingMore) {
+        _loadMoreMessages();
       }
       
       // 사용자가 스크롤 중인지 감지
@@ -110,6 +118,42 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         // 키보드가 올라올 때 자동 스크롤 하지 않음
         // 사용자가 위의 메시지를 보면서 타이핑할 수 있도록 함
       }
+    });
+  }
+  
+  Future<void> _loadMoreMessages() async {
+    if (_isLoadingMore || _currentPersona == null || _userId == null || _userId!.isEmpty) return;
+    
+    setState(() {
+      _isLoadingMore = true;
+    });
+    
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    
+    if (personaService.currentPersona != null) {
+      // Store current scroll position
+      final currentScrollPosition = _scrollController.position.pixels;
+      final currentMaxScroll = _scrollController.position.maxScrollExtent;
+      
+      await chatService.loadMoreMessages(_userId!, personaService.currentPersona!.id);
+      
+      // After loading, maintain relative scroll position
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (_scrollController.hasClients) {
+          final newMaxScroll = _scrollController.position.maxScrollExtent;
+          final scrollDiff = newMaxScroll - currentMaxScroll;
+          
+          // Jump to maintain position (add the height of new messages)
+          if (scrollDiff > 0) {
+            _scrollController.jumpTo(currentScrollPosition + scrollDiff);
+          }
+        }
+      });
+    }
+    
+    setState(() {
+      _isLoadingMore = false;
     });
   }
 
@@ -580,23 +624,51 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     bottom: 80 + MediaQuery.of(context).viewInsets.bottom, // 메시지 박스가 완전히 보이도록 패딩 증가
                   ),
                   keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag, // 스크롤 시 키보드 숨김
-                  itemCount: messages.length + (chatService.isPersonaTyping(currentPersona.id) ? 1 : 0),
+                  itemCount: messages.length + 
+                    (_isLoadingMore ? 1 : 0) + // Loading indicator at top
+                    (chatService.isPersonaTyping(currentPersona.id) ? 1 : 0), // Typing indicator at bottom
                   itemBuilder: (context, index) {
-                    if (index == messages.length && chatService.isPersonaTyping(currentPersona.id)) {
+                    // Loading more indicator at the top
+                    if (_isLoadingMore && index == 0) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Color(0xFFFF6B9D),
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    
+                    // Adjust index for messages when loading indicator is shown
+                    final messageIndex = _isLoadingMore ? index - 1 : index;
+                    
+                    // Typing indicator at the bottom
+                    if (messageIndex == messages.length && chatService.isPersonaTyping(currentPersona.id)) {
                       return const Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: TypingIndicator(),
                       );
                     }
                     
-                    final message = messages[index];
-                    return MessageBubble(
-                      key: ValueKey(message.id),
-                      message: message,
-                      onScoreChange: () {
-                        // Handle score change if needed
-                      },
-                    );
+                    // Regular message
+                    if (messageIndex < messages.length) {
+                      final message = messages[messageIndex];
+                      return MessageBubble(
+                        key: ValueKey(message.id),
+                        message: message,
+                        onScoreChange: () {
+                          // Handle score change if needed
+                        },
+                      );
+                    }
+                    
+                    return const SizedBox.shrink();
                   },
                 );
               },

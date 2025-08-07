@@ -346,7 +346,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(localizations.allPersonasMatched),
+              content: Text(AppLocalizations.of(context)!.allPersonasMatched),
               duration: const Duration(seconds: 3),
               backgroundColor: Colors.orange,
             ),

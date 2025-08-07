@@ -47,6 +47,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _previousIsTyping = false;
   // Track welcome messages per persona to prevent repetition
   final Map<String, bool> _hasShownWelcomePerPersona = {};
+  bool _isFirstLoad = true; // Track if this is the first load to force scroll
   // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
 
   // Service references for dispose method
@@ -232,10 +233,28 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           _showWelcomeMessage();
         } else {
           debugPrint('💬 Messages exist, skipping welcome message');
-          // 메시지가 있으면 마지막 메시지로 스크롤
+          // 메시지가 있으면 마지막 메시지로 스크롤 (double frame callback for proper layout)
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (_scrollController.hasClients) {
-              _scrollToBottom(force: true, smooth: false);
+              // First frame: let layout complete
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (_scrollController.hasClients) {
+                  // Second frame: scroll after layout is complete
+                  final maxScroll = _scrollController.position.maxScrollExtent;
+                  _scrollController.jumpTo(maxScroll);
+                  
+                  // Small delay then animate to ensure last message is fully visible
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    if (mounted && _scrollController.hasClients) {
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                      );
+                    }
+                  });
+                }
+              });
             }
           });
         }
@@ -415,9 +434,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void _scrollToBottom({bool force = false, bool smooth = true}) {
     // 자동 스크롤 조건 체크
     // 1. force가 true이거나
-    // 2. 사용자가 스크롤 중이 아니고 맨 아래에 가까이 있을 때만 자동 스크롤
-    if (!force && (_isUserScrolling || !_isNearBottom)) {
+    // 2. 첫 로드이거나 (isFirstLoad)
+    // 3. 사용자가 스크롤 중이 아니고 맨 아래에 가까이 있을 때만 자동 스크롤
+    if (!force && !_isFirstLoad && (_isUserScrolling || !_isNearBottom)) {
       return;
+    }
+    
+    // Clear first load flag after first scroll
+    if (_isFirstLoad) {
+      _isFirstLoad = false;
     }
 
     // force가 true면 즉시 실행, 아니면 다음 프레임에서 실행
@@ -478,10 +503,20 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();
-        // 페르소나가 변경되면 메시지 로드 후 스크롤
+        // 페르소나가 변경되면 첫 로드 플래그 설정하고 메시지 로드 후 스크롔
+        _isFirstLoad = true;
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted && _scrollController.hasClients) {
-            _scrollToBottom(force: true, smooth: false);
+            // Double frame callback for proper layout
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scrollController.hasClients) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (_scrollController.hasClients) {
+                    _scrollToBottom(force: true, smooth: false);
+                  }
+                });
+              }
+            });
           }
         });
       });
@@ -657,10 +692,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               left: 16,
                               right: 16,
                               top: 16,
-                              bottom: 80 +
+                              bottom: 100 +
                                   MediaQuery.of(context)
                                       .viewInsets
-                                      .bottom, // 메시지 박스가 완전히 보이도록 패딩 증가
+                                      .bottom, // 메시지 박스와 마지막 메시지가 완전히 보이도록 패딩 증가
                             ),
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior

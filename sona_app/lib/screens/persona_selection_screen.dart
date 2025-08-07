@@ -5,6 +5,7 @@ import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animations/animations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/auth/auth_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/device_id_service.dart';
@@ -58,6 +59,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   final Set<String> _processingPersonas = {}; // 처리 중인 페르소나 추적
   bool _isMatchDialogShowing = false; // 매칭 다이얼로그 표시 상태
   List<dynamic> _originalCardSet = []; // 원본 카드 세트 보관 (재셔플용)
+  bool _isLoadingMatchedPersonas = false; // Track loading state for matched personas
 
   @override
   void initState() {
@@ -278,7 +280,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   }
 
   // 카드 아이템 리스트 준비 (Personas + Tips)
-  void _prepareCardItems(List<Persona> personas) {
+  void _prepareCardItems(List<Persona> personas) async {
     if (personas.isEmpty) {
       _cardItems = [];
       _cardsKey = '';
@@ -291,14 +293,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 매칭된 페르소나가 아직 로드되지 않았다면 강제 로드
     if (!personaService.matchedPersonasLoaded) {
       debugPrint('⚠️ Matched personas not loaded yet in _prepareCardItems!');
-      // 동기적으로 대기
-      personaService.loadMatchedPersonasIfNeeded().then((_) {
-        if (mounted) {
-          setState(() {
-            _prepareCardItems(personas);
-          });
-        }
+      
+      // Show loading state
+      setState(() {
+        _isLoadingMatchedPersonas = true;
       });
+      
+      // Wait for matched personas to load
+      await personaService.loadMatchedPersonasIfNeeded();
+      
+      // Hide loading state
+      if (mounted) {
+        setState(() {
+          _isLoadingMatchedPersonas = false;
+        });
+        // Retry with loaded data
+        _prepareCardItems(personas);
+      }
       return;
     }
 
@@ -857,20 +868,52 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     });
   }
 
-  void _showMatchDialog(Persona persona, {bool isSuperLike = false}) {
+  void _showMatchDialog(Persona persona, {bool isSuperLike = false}) async {
     // 🔥 이미 매칭된 페르소나인지 확인
     final personaService = Provider.of<PersonaService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
 
     // 매칭된 페르소나가 로드되지 않았다면 로드 후 확인
     if (!personaService.matchedPersonasLoaded) {
       debugPrint('⚠️ Checking matched personas before dialog...');
-      personaService.loadMatchedPersonasIfNeeded().then((_) {
-        if (mounted) {
-          // 재귀 호출로 다시 확인
-          _showMatchDialog(persona, isSuperLike: isSuperLike);
+      await personaService.loadMatchedPersonasIfNeeded();
+      if (!mounted) return;
+    }
+
+    // 🔒 Double-check with Firebase to prevent duplicate matches
+    final userId = await DeviceIdService.getCurrentUserId(
+      firebaseUserId: authService.user?.uid,
+    );
+    
+    try {
+      final relationshipDoc = await FirebaseFirestore.instance
+          .collection('user_persona_relationships')
+          .doc('${userId}_${persona.id}')
+          .get();
+      
+      if (relationshipDoc.exists) {
+        final data = relationshipDoc.data();
+        if (data?['isMatched'] == true && data?['isActive'] == true) {
+          debugPrint('⚠️ Firebase confirms: Already matched with ${persona.name}');
+          // 경고 햅틱
+          HapticService.warning();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${persona.name}님과는 이미 대화중이에요!'),
+              backgroundColor: Colors.orange,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+          
+          // 카드에서도 제거
+          _removeMatchedPersonaFromCards(persona.id);
+          // Force refresh matched personas list
+          await personaService.loadMatchedPersonasIfNeeded();
+          return;
         }
-      });
-      return;
+      }
+    } catch (e) {
+      debugPrint('Error checking Firebase for duplicate match: $e');
     }
 
     if (personaService.matchedPersonas.any((p) => p.id == persona.id)) {

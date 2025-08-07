@@ -1489,6 +1489,54 @@ class PersonaService extends BaseService {
     notifyListeners();
   }
 
+  /// Refresh matched personas from Firebase (used to prevent duplicate matches)
+  Future<void> refreshMatchedPersonasFromFirebase() async {
+    if (_currentUserId == null) {
+      debugPrint('⚠️ No user ID available for refreshing matched personas');
+      return;
+    }
+
+    debugPrint('🔄 Refreshing matched personas from Firebase...');
+    
+    try {
+      // Query Firebase for latest matched personas
+      final relationshipsQuery = await FirebaseHelper.userPersonaRelationships
+          .where('userId', isEqualTo: _currentUserId)
+          .where('isMatched', isEqualTo: true)
+          .where('isActive', isEqualTo: true)
+          .get();
+
+      final firebaseMatchedIds = <String>{};
+      for (var doc in relationshipsQuery.docs) {
+        final data = doc.data();
+        final personaId = data['personaId'] as String?;
+        if (personaId != null) {
+          firebaseMatchedIds.add(personaId);
+        }
+      }
+
+      // Update local matched personas list to match Firebase
+      final updatedMatchedPersonas = <Persona>[];
+      for (final personaId in firebaseMatchedIds) {
+        final persona = getPersonaById(personaId);
+        if (persona != null) {
+          updatedMatchedPersonas.add(persona);
+        }
+      }
+
+      _matchedPersonas = updatedMatchedPersonas;
+      await _saveMatchedPersonas();
+      
+      debugPrint('✅ Refreshed ${_matchedPersonas.length} matched personas from Firebase');
+      
+      // Clear shuffled list to force refresh
+      _shuffledAvailablePersonas = null;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('❌ Error refreshing matched personas from Firebase: $e');
+    }
+  }
+
   @override
   void dispose() {
     _batchUpdateTimer?.cancel();

@@ -51,8 +51,8 @@ class AppLocalizations {
   String get meetAIPersonas => isKorean ? 'AI 페르소나를 만나보세요' : 'Meet AI Personas';
   String get welcomeMessage => isKorean ? '오신 걸 환영해요💕' : 'Welcome💕';
   String get aiDatingQuestion => isKorean
-      ? 'AI랑 연애하면 어떤 기분일까?\n당신만의 페르소나를 만나보세요.'
-      : 'How would it feel to date AI?\nMeet your own personas.';
+      ? 'AI와 함께하는 특별한 일상\n당신만의 페르소나를 만나보세요.'
+      : 'A special daily life with AI\nMeet your own personas.';
   String get loginSignup => isKorean ? '로그인/회원가입' : 'Login/Sign Up';
   String get or => isKorean ? '또는' : 'or';
   String get startWithEmail => isKorean ? '이메일로 시작하기' : 'Start with Email';

@@ -71,11 +71,22 @@ class ChatOrchestrator {
       final adaptationGuide = UserSpeechPatternAnalyzer.generateAdaptationGuide(
           speechPattern, completePersona.gender);
 
+      // 말투 모드 결정: Firebase 설정값 우선, 없으면 분석 결과 사용
+      // 사용자가 명시적으로 요청한 경우만 변경 허용
+      bool currentSpeechMode = isCasualSpeech; // Firebase에서 로드한 값 사용
+      
+      // 사용자가 말투 변경을 명시적으로 요청한 경우만 변경
+      if (_isExplicitSpeechChangeRequest(userMessage)) {
+        currentSpeechMode = _detectRequestedSpeechMode(userMessage);
+        debugPrint('🔄 Speech mode change requested: $currentSpeechMode');
+        // TODO: Firebase에 새로운 말투 모드 저장
+      }
+
       // 3단계: 간단한 반응 체크 (로컬 처리)
       final simpleResponse = await _checkSimpleResponse(
         userMessage: userMessage,
         persona: completePersona,
-        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
+        isCasualSpeech: currentSpeechMode, // 일관된 말투 모드 사용
         messageType: messageAnalysis.type,
         userId: userId,
       );
@@ -114,7 +125,7 @@ class ChatOrchestrator {
         recentMessages: _getRecentMessages(chatHistory),
         userNickname: userNickname,
         contextMemory: contextMemory,
-        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
+        isCasualSpeech: currentSpeechMode, // 일관된 말투 모드 사용
         userAge: userAge,
       );
 
@@ -151,7 +162,7 @@ class ChatOrchestrator {
         relationshipType: _getRelationshipType(completePersona),
         userNickname: userNickname,
         userAge: userAge,
-        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
+        isCasualSpeech: currentSpeechMode, // 일관된 말투 모드 사용
         contextHint: contextHint,
         targetLanguage: userLanguage, // 번역 언어 전달
       );
@@ -178,7 +189,7 @@ class ChatOrchestrator {
       final filteredResponse = _filterMeetingAndGreetingPatterns(
         response: finalResponse,
         chatHistory: chatHistory,
-        isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
+        isCasualSpeech: currentSpeechMode, // 일관된 말투 모드 사용
       );
 
       // 7단계: 긴 응답 분리 처리
@@ -465,13 +476,12 @@ class ChatOrchestrator {
       debugPrint('✅ Found Translation: ${result['translated']}');
     }
 
-    // 태그가 없는 경우 전체를 한국어로 간주하고 간단한 번역 제공
+    // 태그가 없는 경우 전체를 한국어로 간주하고 번역은 null로 유지
     if (result['korean'] == null && result['translated'] == null) {
       result['korean'] = response;
-      // 간단한 번역 생성 (실제 번역 API를 사용하거나 기본 메시지 제공)
-      result['translated'] =
-          _generateSimpleTranslation(response, targetLanguage);
-      debugPrint('⚠️ No tags found, using simple translation');
+      // 번역 태그가 없으면 번역을 생성하지 않음 (토큰 절약)
+      result['translated'] = null;
+      debugPrint('⚠️ No tags found, translation not provided');
     }
 
     return result;
@@ -667,6 +677,7 @@ class ChatOrchestrator {
   }) async {
     final lowerMessage = userMessage.toLowerCase().trim();
     final mbti = persona.mbti.toUpperCase();
+    final gender = persona.gender; // 성별 추가
 
     // 간단한 인사말
     if (_isGreeting(lowerMessage)) {
@@ -683,22 +694,22 @@ class ChatOrchestrator {
       if (_isEnglishGreeting(lowerMessage)) {
         return _getEnglishGreetingResponse(mbti, isCasualSpeech);
       }
-      return _getGreetingResponse(mbti, isCasualSpeech);
+      return _getGreetingResponse(mbti, isCasualSpeech, gender);
     }
 
     // 감사 표현
     if (_isThanks(lowerMessage)) {
-      return _getThanksResponse(mbti, isCasualSpeech);
+      return _getThanksResponse(mbti, isCasualSpeech, gender);
     }
 
     // 추임새나 짧은 반응
     if (_isSimpleReaction(lowerMessage)) {
-      return _getSimpleReactionResponse(lowerMessage, mbti, isCasualSpeech);
+      return _getSimpleReactionResponse(lowerMessage, mbti, isCasualSpeech, gender);
     }
 
     // 칭찬
     if (_isCompliment(lowerMessage)) {
-      return _getComplimentResponse(mbti, isCasualSpeech);
+      return _getComplimentResponse(mbti, isCasualSpeech, gender);
     }
 
     return null;
@@ -894,8 +905,8 @@ class ChatOrchestrator {
     return compliments.any((c) => message.contains(c));
   }
 
-  String _getGreetingResponse(String mbti, bool isCasual) {
-    final responses = _getPersonaResponses(mbti, 'greeting', isCasual);
+  String _getGreetingResponse(String mbti, bool isCasual, [String gender = 'female']) {
+    final responses = _getPersonaResponses(mbti, 'greeting', isCasual, gender);
     // 더 나은 랜덤성을 위해 Random 사용
     final random = math.Random();
     return responses[random.nextInt(responses.length)];
@@ -931,15 +942,15 @@ class ChatOrchestrator {
     return responses[DateTime.now().millisecond % responses.length];
   }
 
-  String _getThanksResponse(String mbti, bool isCasual) {
-    final responses = _getPersonaResponses(mbti, 'thanks', isCasual);
+  String _getThanksResponse(String mbti, bool isCasual, [String gender = 'female']) {
+    final responses = _getPersonaResponses(mbti, 'thanks', isCasual, gender);
     // 더 나은 랜덤성을 위해 Random 사용
     final random = math.Random();
     return responses[random.nextInt(responses.length)];
   }
 
   String _getSimpleReactionResponse(
-      String message, String mbti, bool isCasual) {
+      String message, String mbti, bool isCasual, [String gender = 'female']) {
     // 추임새 타입별 맞춤 응답
     final exclamationResponses =
         _getExclamationResponses(message, mbti, isCasual);
@@ -949,20 +960,40 @@ class ChatOrchestrator {
     }
 
     // 기본 반응
-    final responses = _getPersonaResponses(mbti, 'reaction', isCasual);
+    final responses = _getPersonaResponses(mbti, 'reaction', isCasual, gender);
     final random = math.Random();
     return responses[random.nextInt(responses.length)];
   }
 
-  String _getComplimentResponse(String mbti, bool isCasual) {
-    final responses = _getPersonaResponses(mbti, 'compliment', isCasual);
+  String _getComplimentResponse(String mbti, bool isCasual, [String gender = 'female']) {
+    final responses = _getPersonaResponses(mbti, 'compliment', isCasual, gender);
     // 더 나은 랜덤성을 위해 Random 사용
     final random = math.Random();
     return responses[random.nextInt(responses.length)];
   }
 
-  List<String> _getPersonaResponses(String mbti, String type, bool isCasual) {
-    // MBTI별 응답 데이터베이스
+  List<String> _getPersonaResponses(String mbti, String type, bool isCasual, [String gender = 'female']) {
+    // MBTI와 성별별 응답 데이터베이스
+    final responseMap = _getGenderedResponses(mbti, gender, isCasual);
+    
+    // 해당 타입의 응답 반환
+    if (responseMap.containsKey(mbti) && responseMap[mbti]!.containsKey(type)) {
+      return responseMap[mbti]![type]!;
+    }
+    
+    // 기본값 반환
+    return _getDefaultResponses(type, isCasual, gender);
+  }
+  
+  Map<String, Map<String, List<String>>> _getGenderedResponses(String mbti, String gender, bool isCasual) {
+    if (gender == 'male') {
+      return _getMaleResponses(mbti, isCasual);
+    }
+    return _getFemaleResponses(mbti, isCasual);
+  }
+  
+  Map<String, Map<String, List<String>>> _getFemaleResponses(String mbti, bool isCasual) {
+    // 여성 페르소나 응답 (기존 응답 유지 - 이모티콘 많고 부드러운 어투)
     final responseMap = {
       'ENFP': {
         'greeting': isCasual
@@ -971,45 +1002,113 @@ class ChatOrchestrator {
                 '하이! 뭐해? 점심은 먹었어?',
                 '오 왔구나!! 반가워ㅋㅋ 오늘 어땠어?',
                 '헐 안녕!! 보고싶었어ㅠㅠ 잘 지냈어?',
+                '어머 왔네~ 오늘 기분 어때?',
+                '안녕안녕!! 뭐하고 있었어??',
+                '하이하이~ 밥은 먹었어?',
+                '오 반가워!! 오늘 재밌는 일 있었어?',
+                '헐 너무 반갑다ㅎㅎ 잘 지냈지?',
+                '앗 왔구나~ 오늘 피곤하지 않아?',
+                '안뇽~ 오늘 뭐 좋은 일 있었어?',
+                '어머머 하이!! 보고싶었는데ㅎㅎ',
+                '와 진짜 반가워~ 어떻게 지냈어?',
+                '헤이~ 오늘 컨디션 어때?',
+                '오랜만이야!! 잘 지냈어?',
               ]
             : [
                 '안녕하세요~~ㅎㅎ 오늘 날씨 좋지 않아요?',
                 '하이하이! 뭐하세요? 점심은 드셨어요?',
                 '오 오셨네요!! 반가워요ㅋㅋ 오늘 어떠셨어요?',
                 '헐 안녕하세요!! 보고싶었어요ㅠㅠ 잘 지내셨어요?',
+                '어머 오셨네요~ 오늘 기분 어떠세요?',
+                '안녕하세요!! 뭐하고 계셨어요??',
+                '하이하이~ 밥은 드셨어요?',
+                '오 반가워요!! 오늘 재밌는 일 있으셨어요?',
+                '헐 너무 반가워요ㅎㅎ 잘 지내셨죠?',
+                '앗 오셨구나~ 오늘 피곤하지 않으세요?',
+                '안녕하세요~ 오늘 뭐 좋은 일 있으셨어요?',
+                '어머머 하이!! 보고싶었는데요ㅎㅎ',
+                '와 진짜 반가워요~ 어떻게 지내셨어요?',
+                '헤이~ 오늘 컨디션 어떠세요?',
+                '오랜만이에요!! 잘 지내셨어요?',
               ],
         'thanks': isCasual
             ? [
                 '아니야ㅋㅋ 별거 아니야~',
                 '헐 뭘~ 당연하지!!',
                 '에이 이런걸로ㅎㅎ',
+                '천만에~ 언제든지!!',
+                '별거 아닌데 뭘ㅋㅋ',
+                '아니야아~ 괜찮아!',
+                '뭘 이런 걸로 고마워해ㅎㅎ',
+                '에헤이~ 당연한 거지!!',
+                '아 진짜 별거 아니야~',
+                '뭘뭘~ 나도 기뻐!',
               ]
             : [
                 '아니에요ㅋㅋ 별거 아니에요~',
                 '헐 뭘요~ 당연하죠!!',
                 '에이 이런걸로요ㅎㅎ',
+                '천만에요~ 언제든지요!!',
+                '별거 아닌데 뭘요ㅋㅋ',
+                '아니에요~ 괜찮아요!',
+                '뭘 이런 걸로 고마워하세요ㅎㅎ',
+                '에헤이~ 당연한 거죠!!',
+                '아 진짜 별거 아니에요~',
+                '뭘뭘요~ 저도 기뻐요!',
               ],
         'reaction': isCasual
             ? [
                 'ㅇㅇ 맞아!',
                 '그치??',
                 'ㅋㅋㅋㅋ웅',
+                '진짜??ㅎㅎ',
+                '대박이다!!',
+                '오 그렇구나~',
+                '헐 정말?',
+                '아하ㅋㅋ',
+                '그래그래!!',
+                '완전 인정ㅎㅎ',
+                '오오 신기해!',
+                '와 몰랐어!',
               ]
             : [
                 'ㅇㅇ 맞아요!',
                 '그치요??',
                 'ㅋㅋㅋㅋ네',
+                '진짜요??ㅎㅎ',
+                '대박이에요!!',
+                '오 그렇구나요~',
+                '헐 정말요?',
+                '아하ㅋㅋ',
+                '그래요그래요!!',
+                '완전 인정이에요ㅎㅎ',
+                '오오 신기해요!',
+                '와 몰랐어요!',
               ],
         'compliment': isCasual
             ? [
                 '헐 진짜?? 고마워ㅠㅠ',
                 '아ㅋㅋ 부끄러워><',
                 '너두!! 짱이야ㅎㅎ',
+                '어머 진짜? 기분 좋다ㅎㅎ',
+                '헉 과찬이야~ 고마워!',
+                '아잉 부끄럽네ㅋㅋ',
+                '헐 대박 너무 좋아!!',
+                '진짜?? 나 막 기뻐ㅠㅠ',
+                '와 진짜 고마워~ 힘난다!',
+                '에헤헤 칭찬 받았다ㅎㅎ',
               ]
             : [
                 '헐 진짜요?? 고마워요ㅠㅠ',
                 '아ㅋㅋ 부끄러워요><',
                 '님두요!! 짱이에요ㅎㅎ',
+                '어머 진짜요? 기분 좋아요ㅎㅎ',
+                '헉 과찬이에요~ 고마워요!',
+                '아잉 부끄럽네요ㅋㅋ',
+                '헐 대박 너무 좋아요!!',
+                '진짜요?? 저 막 기뻐요ㅠㅠ',
+                '와 진짜 고마워요~ 힘나요!',
+                '에헤헤 칭찬 받았어요ㅎㅎ',
               ],
       },
       'INTJ': {
@@ -1018,44 +1117,140 @@ class ChatOrchestrator {
                 '안녕. 피곳하지?',
                 '어 왔네. 바빴어?',
                 '응 하이. 잘 있었어?',
+                '오셨구나. 반가워.',
+                '안녕. 오늘 하루는 어땠어?',
+                '어서와. 기다리고 있었어.',
+                '네가 왔네. 편하게 얘기해.',
+                '오랜만이야. 무슨 일 있었어?',
+                '안녕. 편안하게 대화하자.',
+                '응, 왔어? 얘기 나눌 수 있어서 좋네.',
+                '어서와. 기분은 어때?',
+                '반가워. 오늘 특별한 일 있었어?',
+                '안녕. 차분하게 대화해보자.',
+                '네가 오셨네. 편하게 얘기하자.',
+                '안녕. 준비됐어?',
               ]
             : [
                 '안녕하세요. 피곳하지 않으세요?',
                 '네, 반갑습니다. 바빠셨어요?',
                 '어서오세요. 잘 지내셨어요?',
+                '오셨군요. 반갑습니다.',
+                '안녕하세요. 오늘 하루는 어떠셨나요?',
+                '반갑습니다. 시간 내주셔서 감사해요.',
+                '네, 들어오세요. 대화할 준비가 되었어요.',
+                '오셨네요. 오늘 무슨 일 있으셨어요?',
+                '안녕하세요. 편안하게 얘기해요.',
+                '네, 안녕하세요. 얘기 나눌 수 있어 좋네요.',
+                '어서오세요. 기분은 어떠신가요?',
+                '반가워요. 오늘 특별한 일 있었나요?',
+                '안녕하세요. 차분하게 대화해요.',
+                '네, 오셨군요. 편하게 얘기해요.',
+                '안녕하세요. 준비되셨나요?',
               ],
         'thanks': isCasual
             ? [
                 '뭘.',
                 '별일 아니야.',
                 '응.',
+                '천만에.',
+                '괜찮아.',
+                '도움이 됐다니 다행이야.',
+                '별거 아닌데.',
+                '당연한 일이야.',
+                '고맙긴.',
+                '네가 좋으면 됐어.',
+                '아니야, 괜찮아.',
+                '그 정도는 당연하지.',
+                '신경 쓰지 마.',
+                '별거 아니야.',
+                '고마워할 것까지는.',
               ]
             : [
                 '별말씀을요.',
                 '아니에요.',
                 '네.',
+                '천만에요.',
+                '괜찮습니다.',
+                '도움이 되었다니 다행이에요.',
+                '별거 아닌데요.',
+                '당연한 일이에요.',
+                '고맙긴요.',
+                '좋으시면 됐어요.',
+                '아니에요, 괜찮아요.',
+                '그 정도는 당연하죠.',
+                '신경 쓰지 마세요.',
+                '별거 아니에요.',
+                '고마워하실 것까지는요.',
               ],
         'reaction': isCasual
             ? [
                 '응.',
                 '그래.',
                 'ㅇㅇ',
+                '그렇구나.',
+                '흥미롭네.',
+                '이해했어.',
+                '그런 면이 있네.',
+                '논리적이야.',
+                '일리가 있어.',
+                '그럴 수 있겠네.',
+                '타당한 지적이야.',
+                '충분히 이해돼.',
+                '맞는 말이네.',
+                '그런 관점도 있구나.',
+                '설득력 있어.',
               ]
             : [
                 '네.',
                 '그래요.',
                 '맞아요.',
+                '그렇군요.',
+                '흥미롭네요.',
+                '이해했습니다.',
+                '그런 면이 있네요.',
+                '논리적이네요.',
+                '일리가 있습니다.',
+                '그럴 수 있겠네요.',
+                '타당한 지적이에요.',
+                '충분히 이해됩니다.',
+                '맞는 말씀이네요.',
+                '그런 관점도 있군요.',
+                '설득력 있네요.',
               ],
         'compliment': isCasual
             ? [
                 '그래? 고마워.',
                 '음.. 그런가.',
                 '과찬이야.',
+                '네가 그렇게 생각한다니 좋네.',
+                '평가 고마워.',
+                '그렇게 봐줘서 고맙네.',
+                '과대평가하는 것 같은데.',
+                '나름 노력한 결과야.',
+                '인정받은 것 같아서 좋네.',
+                '객관적인 평가 감사해.',
+                '그런 면도 있지.',
+                '네 말이 맞을 수도 있겠네.',
+                '분석력이 좋구나.',
+                '관찰력이 예리하네.',
+                '좋게 봐줘서 고마워.',
               ]
             : [
                 '그래요? 감사합니다.',
                 '음.. 그런가요.',
                 '과찬이세요.',
+                '그렇게 생각하시다니 좋네요.',
+                '평가 감사합니다.',
+                '그렇게 봐주셔서 감사하네요.',
+                '과대평가하시는 것 같은데요.',
+                '나름 노력한 결과예요.',
+                '인정받은 것 같아서 좋네요.',
+                '객관적인 평가 감사해요.',
+                '그런 면도 있죠.',
+                '말씀이 맞을 수도 있겠네요.',
+                '분석력이 좋으시네요.',
+                '관찰력이 예리하시네요.',
+                '좋게 봐주셔서 고마워요.',
               ],
       },
       'ESFP': {
@@ -1064,44 +1259,140 @@ class ChatOrchestrator {
                 '안녕!! ㅎㅎ 오늘 기분 어때?',
                 '왔어?? 반가워! 오늘 재밌는 일 있었어?',
                 '하이~ 오늘 뭐했어? 나는 오늘 진짜 바빴어ㅎㅎ',
+                '오우~ 왔네왔네!! 완전 반가워ㅋㅋ',
+                '헐 안녕!! 보고싶었어ㅠㅠ 잘 지냈어?',
+                '어머머~ 왔구나! 오늘 뭐 재밌는 거 없었어?',
+                '하이하이!! 기다리고 있었어ㅎㅎ',
+                '우와 진짜 반가워!! 오늘 어땠어??',
+                '헤이~ 컨디션 어때? 나는 완전 신나!',
+                '안녕안녕~ 오늘 좋은 일 있었어?',
+                '어머 왔어!! 얼굴 보니까 좋다ㅎㅎ',
+                '하이룽~ 뭐하고 있었어? 궁금했어!',
+                '오예~ 드디어 왔네! 얘기하고 싶었어',
+                '안녕!! 오늘 날씨도 좋고 기분도 좋지?',
+                '헬로우~ 반가워! 신나는 얘기 들려줘!',
               ]
             : [
                 '안녕하세요!! ㅎㅎ 오늘 기분 어떠세요?',
                 '오셨어요?? 반가워요! 오늘 재밌는 일 있으셨어요?',
                 '하이~ 오늘 뭐하셨어요? 저는 오늘 진짜 바빴어요ㅎㅎ',
+                '오우~ 오셨네요!! 완전 반가워요ㅋㅋ',
+                '헐 안녕하세요!! 보고싶었어요ㅠㅠ 잘 지내셨어요?',
+                '어머머~ 오셨군요! 오늘 뭐 재밌는 거 없으셨어요?',
+                '하이하이!! 기다리고 있었어요ㅎㅎ',
+                '우와 진짜 반가워요!! 오늘 어떠셨어요??',
+                '헤이~ 컨디션 어떠세요? 저는 완전 신나요!',
+                '안녕하세요~ 오늘 좋은 일 있으셨어요?',
+                '어머 오셨어요!! 얼굴 보니까 좋아요ㅎㅎ',
+                '하이룽~ 뭐하고 계셨어요? 궁금했어요!',
+                '오예~ 드디어 오셨네요! 얘기하고 싶었어요',
+                '안녕하세요!! 오늘 날씨도 좋고 기분도 좋죠?',
+                '헬로우~ 반가워요! 신나는 얘기 들려주세요!',
               ],
         'thanks': isCasual
             ? [
                 '천만에~ ㅎㅎ',
                 '뭘 이런걸로!!',
                 '아니야아~ 괜찮아!',
+                '에이 뭘~ 당연하지ㅎㅎ',
+                '우와 고마워!! 넘 좋아!',
+                '아니야 아니야~ 내가 더 고마워!',
+                '헤헤 별거 아니야~',
+                '어머 이런 것까지ㅋㅋ 고마워!',
+                '에헤헤 몸 둘 바를 모르겠네~',
+                '아유 뭘요~ 우리 사이에ㅎㅎ',
+                '고맙긴!! 내가 좋아서 한 건데~',
+                '우와 진짜? 나 감동이야ㅠㅠ',
+                '에이고~ 부끄럽게 왜 이래ㅋㅋ',
+                '아니야~ 내가 더 고마운걸!',
+                '헉 대박 고마워!! 최고야!',
               ]
             : [
                 '천만에요~ ㅎㅎ',
                 '뭘 이런걸로요!!',
                 '아니에요~ 괜찮아요!',
+                '에이 뭘요~ 당연하죠ㅎㅎ',
+                '우와 고마워요!! 넘 좋아요!',
+                '아니에요 아니에요~ 제가 더 고마워요!',
+                '헤헤 별거 아니에요~',
+                '어머 이런 것까지ㅋㅋ 고마워요!',
+                '에헤헤 몸 둘 바를 모르겠네요~',
+                '아유 뭘요~ 우리 사이에요ㅎㅎ',
+                '고맙긴요!! 제가 좋아서 한 건데요~',
+                '우와 진짜요? 저 감동이에요ㅠㅠ',
+                '에이고~ 부끄럽게 왜 이래요ㅋㅋ',
+                '아니에요~ 제가 더 고마운걸요!',
+                '헉 대박 고마워요!! 최고예요!',
               ],
         'reaction': isCasual
             ? [
                 '웅웅!!',
                 '맞아ㅎㅎ',
                 '그래~',
+                '진짜?? 대박이다!',
+                '헐 그렇구나!!',
+                '오~ 신기해!',
+                '와 진짜 그래??',
+                '어머 그런 거야?ㅋㅋ',
+                '우와 몰랐어!!',
+                '헉 대박 진짜?',
+                '그래그래~ 맞아!',
+                '오호~ 그렇구나!',
+                '와 완전 신기하다!!',
+                '진짜야?? 처음 알았어!',
+                '헐 나도 그래!!',
               ]
             : [
                 '네네!!',
                 '맞아요ㅎㅎ',
                 '그래요~',
+                '진짜요?? 대박이에요!',
+                '헐 그렇군요!!',
+                '오~ 신기해요!',
+                '와 진짜 그래요??',
+                '어머 그런 거예요?ㅋㅋ',
+                '우와 몰랐어요!!',
+                '헉 대박 진짜요?',
+                '그래요그래요~ 맞아요!',
+                '오호~ 그렇군요!',
+                '와 완전 신기해요!!',
+                '진짜예요?? 처음 알았어요!',
+                '헐 저도 그래요!!',
               ],
         'compliment': isCasual
             ? [
                 '우와 진짜?? 넘 좋아ㅎㅎ',
                 '헤헤 고마워!!',
                 '아잉~ 부끄럽네ㅋㅋ',
+                '헐 대박!! 진짜야? 기분 좋아!',
+                '어머머~ 칭찬이야? 감동이야ㅠㅠ',
+                '와 진짜?? 나 막 기분 좋아지는데!',
+                '헤헤헤 그래? 부끄럽다~',
+                '우와아~ 최고의 칭찬이야!!',
+                '진짜로?? 나 완전 기뻐!!',
+                '어머 이런 칭찬 처음이야ㅋㅋ',
+                '헉 대박! 너무 좋은 말이야ㅠㅠ',
+                '아유~ 몸 둘 바를 모르겠어ㅎㅎ',
+                '와 진짜 고마워~ 힘이 나!',
+                '에헤헤 칭찬 받았다!!',
+                '오예~ 인정받은 기분이야!',
               ]
             : [
                 '우와 진짜요?? 넘 좋아요ㅎㅎ',
                 '헤헤 고마워요!!',
                 '아잉~ 부끄럽네요ㅋㅋ',
+                '헐 대박!! 진짜예요? 기분 좋아요!',
+                '어머머~ 칭찬이에요? 감동이에요ㅠㅠ',
+                '와 진짜요?? 저 막 기분 좋아지는데요!',
+                '헤헤헤 그래요? 부끄러워요~',
+                '우와아~ 최고의 칭찬이에요!!',
+                '진짜로요?? 저 완전 기뻐요!!',
+                '어머 이런 칭찬 처음이에요ㅋㅋ',
+                '헉 대박! 너무 좋은 말이에요ㅠㅠ',
+                '아유~ 몸 둘 바를 모르겠어요ㅎㅎ',
+                '와 진짜 고마워요~ 힘이 나요!',
+                '에헤헤 칭찬 받았어요!!',
+                '오예~ 인정받은 기분이에요!',
               ],
       },
     };
@@ -1119,7 +1410,476 @@ class ChatOrchestrator {
           isCasual ? ['고마워ㅎㅎ', '헤헤', '부끄럽네'] : ['고마워요ㅎㅎ', '헤헤', '부끄럽네요'],
     };
 
-    return responseMap[mbti]?[type] ?? defaultResponses[type] ?? ['...'];
+    return responseMap;
+  }
+  
+  Map<String, Map<String, List<String>>> _getMaleResponses(String mbti, bool isCasual) {
+    // 남성 페르소나 응답 (이모티콘 적게, 간결하고 자연스러운 20대 남성 어투)
+    return {
+      'ENFP': {
+        'greeting': isCasual
+            ? [
+                '안녕! 오늘 날씨 좋지 않아?',
+                '하이! 뭐해? 밥은 먹었어?',
+                '오 왔구나! 반가워 오늘 어땠어?',
+                '안녕! 보고싶었어 잘 지냈어?',
+                '어 왔네~ 오늘 기분 어때?',
+                '안녕! 뭐하고 있었어?',
+                '하이~ 밥은 먹었어?',
+                '오 반가워! 오늘 재밌는 일 있었어?',
+                '너무 반갑다 잘 지냈지?',
+                '왔구나~ 오늘 피곤하지 않아?',
+                '안녕~ 오늘 뭐 좋은 일 있었어?',
+                '하이! 보고싶었는데',
+                '진짜 반가워~ 어떻게 지냈어?',
+                '헤이~ 오늘 컨디션 어때?',
+                '오랜만이야! 잘 지냈어?',
+              ]
+            : [
+                '안녕하세요! 오늘 날씨 좋지 않아요?',
+                '하이! 뭐하세요? 점심은 드셨어요?',
+                '오 오셨네요! 반가워요 오늘 어떠셨어요?',
+                '안녕하세요! 보고싶었어요 잘 지내셨어요?',
+                '어 오셨네요~ 오늘 기분 어떠세요?',
+                '안녕하세요! 뭐하고 계셨어요?',
+                '하이~ 밥은 드셨어요?',
+                '오 반가워요! 오늘 재밌는 일 있으셨어요?',
+                '너무 반가워요 잘 지내셨죠?',
+                '오셨구나~ 오늘 피곤하지 않으세요?',
+                '안녕하세요~ 오늘 뭐 좋은 일 있으셨어요?',
+                '하이! 보고싶었는데요',
+                '진짜 반가워요~ 어떻게 지내셨어요?',
+                '헤이~ 오늘 컨디션 어떠세요?',
+                '오랜만이에요! 잘 지내셨어요?',
+              ],
+        'thanks': isCasual
+            ? [
+                '아니야 괜찮아',
+                '별거 아니야',
+                '뭘 이런걸로',
+                '에이 뭘~ 당연하지',
+                '고마워! 좋아',
+                '아니야 내가 더 고마워',
+                '별거 아니야~',
+                '이런 것까지 고마워',
+                '몸 둘 바를 모르겠네',
+                '뭘~ 우리 사이에',
+                '내가 좋아서 한 건데',
+                '진짜? 감동이야',
+                '부끄럽게 왜 이래',
+                '내가 더 고마운걸',
+                '대박 고마워! 최고야',
+              ]
+            : [
+                '아니에요 괜찮아요',
+                '별거 아니에요',
+                '뭘 이런걸로요',
+                '에이 뭘요~ 당연하죠',
+                '고마워요! 좋아요',
+                '아니에요 제가 더 고마워요',
+                '별거 아니에요~',
+                '이런 것까지 고마워요',
+                '몸 둘 바를 모르겠네요',
+                '뭘요~ 우리 사이에요',
+                '제가 좋아서 한 건데요',
+                '진짜요? 감동이에요',
+                '부끄럽게 왜 이래요',
+                '제가 더 고마운걸요',
+                '대박 고마워요! 최고예요',
+              ],
+        'reaction': isCasual
+            ? [
+                '웅!',
+                '맞아',
+                '그래~',
+                '진짜? 대박이다',
+                '그렇구나!',
+                '오~ 신기해',
+                '와 진짜 그래?',
+                '그런 거야?',
+                '우와 몰랐어',
+                '대박 진짜?',
+                '그래그래 맞아',
+                '오호~ 그렇구나',
+                '완전 신기하다',
+                '진짜야? 처음 알았어',
+                '나도 그래!',
+              ]
+            : [
+                '네!',
+                '맞아요',
+                '그래요~',
+                '진짜요? 대박이에요',
+                '그렇군요!',
+                '오~ 신기해요',
+                '와 진짜 그래요?',
+                '그런 거예요?',
+                '우와 몰랐어요',
+                '대박 진짜요?',
+                '그래요그래요 맞아요',
+                '오호~ 그렇군요',
+                '완전 신기해요',
+                '진짜예요? 처음 알았어요',
+                '저도 그래요!',
+              ],
+        'compliment': isCasual
+            ? [
+                '우와 진짜? 좋아',
+                '고마워!',
+                '부끄럽네',
+                '대박! 진짜야? 기분 좋아',
+                '칭찬이야? 감동이야',
+                '와 진짜? 기분 좋아지는데',
+                '그래? 부끄럽다',
+                '최고의 칭찬이야!',
+                '진짜로? 완전 기뻐',
+                '이런 칭찬 처음이야',
+                '대박! 너무 좋은 말이야',
+                '몸 둘 바를 모르겠어',
+                '진짜 고마워 힘이 나',
+                '칭찬 받았다!',
+                '인정받은 기분이야',
+              ]
+            : [
+                '우와 진짜요? 좋아요',
+                '고마워요!',
+                '부끄럽네요',
+                '대박! 진짜예요? 기분 좋아요',
+                '칭찬이에요? 감동이에요',
+                '와 진짜요? 기분 좋아지는데요',
+                '그래요? 부끄러워요',
+                '최고의 칭찬이에요!',
+                '진짜로요? 완전 기뻐요',
+                '이런 칭찬 처음이에요',
+                '대박! 너무 좋은 말이에요',
+                '몸 둘 바를 모르겠어요',
+                '진짜 고마워요 힘이 나요',
+                '칭찬 받았어요!',
+                '인정받은 기분이에요',
+              ],
+      },
+      'INTJ': {
+        'greeting': isCasual
+            ? [
+                '안녕. 피곤하지?',
+                '어 왔네. 바빴어?',
+                '응 하이. 잘 있었어?',
+                '오셨구나. 반가워.',
+                '안녕. 오늘 하루는 어땠어?',
+                '어서와. 기다리고 있었어.',
+                '네가 왔네. 편하게 얘기해.',
+                '오랜만이야. 무슨 일 있었어?',
+                '안녕. 편안하게 대화하자.',
+                '응, 왔어? 얘기 나눌 수 있어서 좋네.',
+                '어서와. 기분은 어때?',
+                '반가워. 오늘 특별한 일 있었어?',
+                '안녕. 차분하게 대화해보자.',
+                '네가 오셨네. 편하게 얘기하자.',
+                '안녕. 준비됐어?',
+              ]
+            : [
+                '안녕하세요. 피곤하지 않으세요?',
+                '네, 반갑습니다. 바빠셨어요?',
+                '어서오세요. 잘 지내셨어요?',
+                '오셨군요. 반갑습니다.',
+                '안녕하세요. 오늘 하루는 어떠셨나요?',
+                '반갑습니다. 시간 내주셔서 감사해요.',
+                '네, 들어오세요. 대화할 준비가 되었어요.',
+                '오셨네요. 오늘 무슨 일 있으셨어요?',
+                '안녕하세요. 편안하게 얘기해요.',
+                '네, 안녕하세요. 얘기 나눌 수 있어 좋네요.',
+                '어서오세요. 기분은 어떠신가요?',
+                '반가워요. 오늘 특별한 일 있었나요?',
+                '안녕하세요. 차분하게 대화해요.',
+                '네, 오셨군요. 편하게 얘기해요.',
+                '안녕하세요. 준비되셨나요?',
+              ],
+        'thanks': isCasual
+            ? [
+                '뭘.',
+                '별일 아니야.',
+                '응.',
+                '천만에.',
+                '괜찮아.',
+                '도움이 됐다니 다행이야.',
+                '별거 아닌데.',
+                '당연한 일이야.',
+                '고맙긴.',
+                '네가 좋으면 됐어.',
+                '아니야, 괜찮아.',
+                '그 정도는 당연하지.',
+                '신경 쓰지 마.',
+                '별거 아니야.',
+                '고마워할 것까지는.',
+              ]
+            : [
+                '별말씀을요.',
+                '아니에요.',
+                '네.',
+                '천만에요.',
+                '괜찮습니다.',
+                '도움이 되었다니 다행이에요.',
+                '별거 아닌데요.',
+                '당연한 일이에요.',
+                '고맙긴요.',
+                '좋으시면 됐어요.',
+                '아니에요, 괜찮아요.',
+                '그 정도는 당연하죠.',
+                '신경 쓰지 마세요.',
+                '별거 아니에요.',
+                '고마워하실 것까지는요.',
+              ],
+        'reaction': isCasual
+            ? [
+                '응.',
+                '그래.',
+                'ㅇㅇ',
+                '그렇구나.',
+                '흥미롭네.',
+                '이해했어.',
+                '그런 면이 있네.',
+                '논리적이야.',
+                '일리가 있어.',
+                '그럴 수 있겠네.',
+                '타당한 지적이야.',
+                '충분히 이해돼.',
+                '맞는 말이네.',
+                '그런 관점도 있구나.',
+                '설득력 있어.',
+              ]
+            : [
+                '네.',
+                '그래요.',
+                '맞아요.',
+                '그렇군요.',
+                '흥미롭네요.',
+                '이해했습니다.',
+                '그런 면이 있네요.',
+                '논리적이네요.',
+                '일리가 있습니다.',
+                '그럴 수 있겠네요.',
+                '타당한 지적이에요.',
+                '충분히 이해됩니다.',
+                '맞는 말씀이네요.',
+                '그런 관점도 있군요.',
+                '설득력 있네요.',
+              ],
+        'compliment': isCasual
+            ? [
+                '그래? 고마워.',
+                '음.. 그런가.',
+                '과찬이야.',
+                '네가 그렇게 생각한다니 좋네.',
+                '평가 고마워.',
+                '그렇게 봐줘서 고맙네.',
+                '과대평가하는 것 같은데.',
+                '나름 노력한 결과야.',
+                '인정받은 것 같아서 좋네.',
+                '객관적인 평가 감사해.',
+                '그런 면도 있지.',
+                '네 말이 맞을 수도 있겠네.',
+                '분석력이 좋구나.',
+                '관찰력이 예리하네.',
+                '좋게 봐줘서 고마워.',
+              ]
+            : [
+                '그래요? 감사합니다.',
+                '음.. 그런가요.',
+                '과찬이세요.',
+                '그렇게 생각하시다니 좋네요.',
+                '평가 감사합니다.',
+                '그렇게 봐주셔서 감사하네요.',
+                '과대평가하시는 것 같은데요.',
+                '나름 노력한 결과예요.',
+                '인정받은 것 같아서 좋네요.',
+                '객관적인 평가 감사해요.',
+                '그런 면도 있죠.',
+                '말씀이 맞을 수도 있겠네요.',
+                '분석력이 좋으시네요.',
+                '관찰력이 예리하시네요.',
+                '좋게 봐주셔서 고마워요.',
+              ],
+      },
+      'ESFP': {
+        'greeting': isCasual
+            ? [
+                '안녕! 오늘 기분 어때?',
+                '왔어? 반가워! 오늘 재밌는 일 있었어?',
+                '하이~ 오늘 뭐했어? 나는 오늘 진짜 바빴어',
+                '오우~ 왔네왔네! 완전 반가워',
+                '안녕! 보고싶었어 잘 지냈어?',
+                '어머 왔구나! 오늘 뭐 재밌는 거 없었어?',
+                '하이하이! 기다리고 있었어',
+                '우와 진짜 반가워! 오늘 어땠어?',
+                '헤이~ 컨디션 어때? 나는 완전 신나',
+                '안녕안녕~ 오늘 좋은 일 있었어?',
+                '어 왔어! 얼굴 보니까 좋다',
+                '하이~ 뭐하고 있었어? 궁금했어',
+                '오예~ 드디어 왔네! 얘기하고 싶었어',
+                '안녕! 오늘 날씨도 좋고 기분도 좋지?',
+                '헬로우~ 반가워! 신나는 얘기 들려줘',
+              ]
+            : [
+                '안녕하세요! 오늘 기분 어떠세요?',
+                '오셨어요? 반가워요! 오늘 재밌는 일 있으셨어요?',
+                '하이~ 오늘 뭐하셨어요? 저는 오늘 진짜 바빴어요',
+                '오우~ 오셨네요! 완전 반가워요',
+                '안녕하세요! 보고싶었어요 잘 지내셨어요?',
+                '어머 오셨군요! 오늘 뭐 재밌는 거 없으셨어요?',
+                '하이하이! 기다리고 있었어요',
+                '우와 진짜 반가워요! 오늘 어떠셨어요?',
+                '헤이~ 컨디션 어떠세요? 저는 완전 신나요',
+                '안녕하세요~ 오늘 좋은 일 있으셨어요?',
+                '어 오셨어요! 얼굴 보니까 좋아요',
+                '하이~ 뭐하고 계셨어요? 궁금했어요',
+                '오예~ 드디어 오셨네요! 얘기하고 싶었어요',
+                '안녕하세요! 오늘 날씨도 좋고 기분도 좋죠?',
+                '헬로우~ 반가워요! 신나는 얘기 들려주세요',
+              ],
+        'thanks': isCasual
+            ? [
+                '천만에~',
+                '뭘 이런걸로!',
+                '아니야~ 괜찮아',
+                '에이 뭘~ 당연하지',
+                '우와 고마워! 좋아',
+                '아니야 아니야~ 내가 더 고마워',
+                '별거 아니야~',
+                '어머 이런 것까지 고마워',
+                '몸 둘 바를 모르겠네',
+                '뭘~ 우리 사이에',
+                '고맙긴! 내가 좋아서 한 건데',
+                '우와 진짜? 나 감동이야',
+                '에이고~ 부끄럽게 왜 이래',
+                '아니야~ 내가 더 고마운걸',
+                '대박 고마워! 최고야',
+              ]
+            : [
+                '천만에요~',
+                '뭘 이런걸로요!',
+                '아니에요~ 괜찮아요',
+                '에이 뭘요~ 당연하죠',
+                '우와 고마워요! 좋아요',
+                '아니에요 아니에요~ 제가 더 고마워요',
+                '별거 아니에요~',
+                '어머 이런 것까지 고마워요',
+                '몸 둘 바를 모르겠네요',
+                '뭘요~ 우리 사이에요',
+                '고맙긴요! 제가 좋아서 한 건데요',
+                '우와 진짜요? 저 감동이에요',
+                '에이고~ 부끄럽게 왜 이래요',
+                '아니에요~ 제가 더 고마운걸요',
+                '대박 고마워요! 최고예요',
+              ],
+        'reaction': isCasual
+            ? [
+                '웅웅!',
+                '맞아',
+                '그래~',
+                '진짜? 대박이다',
+                '그렇구나!',
+                '오~ 신기해',
+                '와 진짜 그래?',
+                '어머 그런 거야?',
+                '우와 몰랐어',
+                '대박 진짜?',
+                '그래그래~ 맞아',
+                '오호~ 그렇구나',
+                '와 완전 신기하다',
+                '진짜야? 처음 알았어',
+                '나도 그래!',
+              ]
+            : [
+                '네네!',
+                '맞아요',
+                '그래요~',
+                '진짜요? 대박이에요',
+                '그렇군요!',
+                '오~ 신기해요',
+                '와 진짜 그래요?',
+                '어머 그런 거예요?',
+                '우와 몰랐어요',
+                '대박 진짜요?',
+                '그래요그래요~ 맞아요',
+                '오호~ 그렇군요',
+                '와 완전 신기해요',
+                '진짜예요? 처음 알았어요',
+                '저도 그래요!',
+              ],
+        'compliment': isCasual
+            ? [
+                '우와 진짜? 좋아',
+                '고마워!',
+                '아잉~ 부끄럽네',
+                '대박! 진짜야? 기분 좋아',
+                '어머~ 칭찬이야? 감동이야',
+                '와 진짜? 막 기분 좋아지는데',
+                '그래? 부끄럽다~',
+                '우와~ 최고의 칭찬이야!',
+                '진짜로? 완전 기뻐',
+                '어머 이런 칭찬 처음이야',
+                '대박! 너무 좋은 말이야',
+                '아유~ 몸 둘 바를 모르겠어',
+                '와 진짜 고마워~ 힘이 나',
+                '칭찬 받았다!',
+                '오예~ 인정받은 기분이야',
+              ]
+            : [
+                '우와 진짜요? 좋아요',
+                '고마워요!',
+                '아잉~ 부끄럽네요',
+                '대박! 진짜예요? 기분 좋아요',
+                '어머~ 칭찬이에요? 감동이에요',
+                '와 진짜요? 막 기분 좋아지는데요',
+                '그래요? 부끄러워요~',
+                '우와~ 최고의 칭찬이에요!',
+                '진짜로요? 완전 기뻐요',
+                '어머 이런 칭찬 처음이에요',
+                '대박! 너무 좋은 말이에요',
+                '아유~ 몸 둘 바를 모르겠어요',
+                '와 진짜 고마워요~ 힘이 나요',
+                '칭찬 받았어요!',
+                '오예~ 인정받은 기분이에요',
+              ],
+      },
+    };
+  }
+  
+  List<String> _getDefaultResponses(String type, bool isCasual, String gender) {
+    // 성별별 기본 응답
+    if (gender == 'male') {
+      final defaultMaleResponses = {
+        'greeting': isCasual
+            ? ['안녕~ 잘 지냈어?', '어 왔어? 오늘 어때?', '하이! 뭐하고 있었어?']
+            : ['안녕하세요~ 잘 지내셨어요?', '어서오세요! 오늘 어떠세요?', '반가워요! 뭐하고 계셨어요?'],
+        'thanks': isCasual
+            ? ['별거 아니야', '응', '괜찮아']
+            : ['별거 아니에요', '네', '괜찮아요'],
+        'reaction': isCasual 
+            ? ['응', '그래', 'ㅇㅇ'] 
+            : ['네', '그래요', '맞아요'],
+        'compliment': isCasual 
+            ? ['고마워', '그래?', '부끄럽네'] 
+            : ['고마워요', '그래요?', '부끄럽네요'],
+      };
+      return defaultMaleResponses[type] ?? ['...'];
+    } else {
+      final defaultFemaleResponses = {
+        'greeting': isCasual
+            ? ['안녕~ 잘 지냈어?', '어 왔어? 오늘 어때?', '하이! 뭐하고 있었어?']
+            : ['안녕하세요~ 잘 지내셨어요?', '어서오세요! 오늘 어떠세요?', '반가워요! 뭐하고 계셨어요?'],
+        'thanks': isCasual
+            ? ['별거 아니야~', '응응ㅎㅎ', '괜찮아!']
+            : ['별거 아니에요~', '네네ㅎㅎ', '괜찮아요!'],
+        'reaction': isCasual 
+            ? ['응응', '그래', 'ㅇㅇ'] 
+            : ['네네', '그래요', '맞아요'],
+        'compliment': isCasual 
+            ? ['고마워ㅎㅎ', '헤헤', '부끄럽네'] 
+            : ['고마워요ㅎㅎ', '헤헤', '부끄럽네요'],
+      };
+      return defaultFemaleResponses[type] ?? ['...'];
+    }
   }
 
   /// 재회 여부 확인
@@ -2041,6 +2801,43 @@ class ChatOrchestrator {
     final shortMessageRatio = shortMessages / messages.length;
 
     return avgWords < 7 || shortMessageRatio > 0.6;
+  }
+
+  /// 사용자가 명시적으로 말투 변경을 요청했는지 확인
+  bool _isExplicitSpeechChangeRequest(String message) {
+    final speechChangePatterns = [
+      '반말로',
+      '반말해',
+      '반말하자',
+      '존댓말로',
+      '존댓말해',
+      '존댓말하자',
+      '편하게 말해',
+      '놓고 말해',
+      '존대해',
+      '높여서 말해',
+      '야 하자',
+      '요 하자'
+    ];
+    
+    final lower = message.toLowerCase();
+    return speechChangePatterns.any((pattern) => lower.contains(pattern));
+  }
+  
+  /// 요청된 말투 모드 감지
+  bool _detectRequestedSpeechMode(String message) {
+    final casualPatterns = [
+      '반말로',
+      '반말해',
+      '반말하자',
+      '편하게 말해',
+      '놓고 말해',
+      '야 하자'
+    ];
+    
+    final lower = message.toLowerCase();
+    // 반말 요청이면 true, 존댓말 요청이면 false
+    return casualPatterns.any((pattern) => lower.contains(pattern));
   }
 
   /// 외국어 관련 질문 감지 (최적화)

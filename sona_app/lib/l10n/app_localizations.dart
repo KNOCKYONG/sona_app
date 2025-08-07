@@ -43,6 +43,7 @@ class AppLocalizations {
   String get refresh => isKorean ? '새로고침' : 'Refresh';
   String get yes => isKorean ? '예' : 'Yes';
   String get no => isKorean ? '아니오' : 'No';
+  String get you => isKorean ? '나' : 'You';
 
   // ===== 로그인/회원가입 =====
   String get login => isKorean ? '로그인' : 'Login';

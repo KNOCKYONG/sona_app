@@ -278,7 +278,7 @@ class OpenAIService {
     // 🔒 4. 최종 안전성 검증
     if (!SecurityFilterService.validateResponseSafety(enhancedResponse)) {
       debugPrint('🚨 Security validation failed - generating safe fallback');
-      return _getSecureFallbackResponse(persona, userMessage);
+      return _getSecureFallbackResponse(persona, userMessage, isCasualSpeech: isCasualSpeech);
     }
 
     return enhancedResponse;
@@ -428,9 +428,8 @@ class OpenAIService {
 
   /// 🔒 보안 폴백 응답 생성
   static String _getSecureFallbackResponse(
-      Persona persona, String userMessage) {
-    // Using default formal speech for secure fallback
-    final isCasualSpeech = false; // Security fallbacks use formal speech
+      Persona persona, String userMessage, {bool isCasualSpeech = false}) {
+    // Use the current speech mode for consistency
     final secureResponses = isCasualSpeech
         ? [
             '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',

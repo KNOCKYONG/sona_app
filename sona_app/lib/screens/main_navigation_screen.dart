@@ -8,6 +8,7 @@ import '../services/storage/cache_manager.dart';
 import '../services/chat/chat_service.dart';
 import '../services/auth/auth_service.dart';
 import '../services/persona/persona_service.dart';
+import '../services/ui/haptic_service.dart';
 import '../widgets/tutorial/tutorial_overlay.dart';
 import '../models/tutorial_animation.dart' as anim_model;
 
@@ -52,7 +53,10 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     }
   }
 
-  void _onItemTapped(int index) {
+  void _onItemTapped(int index) async {
+    // iOS-style selection haptic for tab switching
+    await HapticService.selectionClick();
+    
     setState(() {
       _selectedIndex = index;
     });

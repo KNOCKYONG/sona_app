@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../services/auth/auth_service.dart';
 import '../services/theme/theme_service.dart';
+import '../services/ui/haptic_service.dart';
 import '../services/cache/image_preload_service.dart';
 import '../config/custom_cache_manager.dart';
 import '../utils/account_deletion_dialog.dart';
@@ -20,6 +21,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   bool _soundEnabled = true;
+  bool _hapticEnabled = true;
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _notificationsEnabled = prefs.getBool('notifications_enabled') ?? true;
       _soundEnabled = prefs.getBool('sound_enabled') ?? true;
+      _hapticEnabled = HapticService.isEnabled;
     });
   }
 
@@ -99,6 +102,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _soundEnabled = value;
                 });
                 _saveSettings();
+              },
+            ),
+            _buildSwitchItem(
+              icon: Icons.vibration_outlined,
+              title: localizations.isKorean ? '햅틱 피드백' : 'Haptic Feedback',
+              subtitle: localizations.isKorean 
+                  ? '터치 시 미세한 진동 효과' 
+                  : 'Subtle vibration on touch',
+              value: _hapticEnabled,
+              onChanged: (value) async {
+                setState(() {
+                  _hapticEnabled = value;
+                });
+                await HapticService.setEnabled(value);
+                // 설정 변경 시 즉시 햅틱 피드백 제공 (켜진 경우에만)
+                if (value) {
+                  await HapticService.lightImpact();
+                }
               },
             ),
 

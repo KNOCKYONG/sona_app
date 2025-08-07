@@ -1,0 +1,134 @@
+[
+  {
+    "error_key": "ERR1754563498455_8455",
+    "persona_id": "JnsM74qE44EJSAuE3WMV",
+    "persona_name": "다영",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하세요~ 잘 지내셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "네 오늘 하루 어땠어요?",
+        "ai_response": "오늘 하루는 괜찮았어요ㅎㅎ 주로 환자분들 치료하고, 좀의 상담도 했어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754564010281_281",
+    "persona_id": "5ztpOgh1ncDSR8L9IXOY",
+    "persona_name": "윤미",
+    "scores": {
+      "overall_coherence": 73.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐야 갑자기 반말모드네?",
+        "ai_response": "음... 뭔가 기분이 안 좋으신가봐요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐야 갑자기 반말모드네?",
+        "ai_response": "음... 뭔가 기분이 안 좋으신가봐요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아니 기분 나쁜게 아니라 갑자기 반말해서 놀랐어",
+        "ai_response": "아하 이해했어요. 헐, 그런 뜻이었구나ㅋㅋ 미안해요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "emotion_inconsistency",
+        "severity": "low",
+        "description": "부정적 내용에 긍정적 감정 표현",
+        "user_message": "아니 기분 나쁜게 아니라 갑자기 반말해서 놀랐어",
+        "ai_response": "아하 이해했어요. 헐, 그런 뜻이었구나ㅋㅋ 미안해요.",
+        "suggestion": "대화 내용과 감정 상태의 일치성 개선 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "방금 막 퇴근했어",
+        "ai_response": "아, 퇴근하느라 고생했어요. 하루 어땠어요?ㅋㅋ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754563561600_1600",
+    "persona_id": "JnsM74qE44EJSAuE3WMV",
+    "persona_name": "다영",
+    "scores": {
+      "overall_coherence": 77.78,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하세요~ 잘 지내셨어요?",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "네 오늘 하루 어땠어요?",
+        "ai_response": "오늘 하루는 괜찮았어요ㅎㅎ 주로 환자분들 치료하고, 좀의 상담도 했어요.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "그저 그랬어요. 피곤해요",
+        "ai_response": "아, 그런가. 피곤할 때는 충분한 휴식이 중요해요ㅎㅎ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  }
+]

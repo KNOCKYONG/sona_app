@@ -59,6 +59,9 @@ class Message {
   final String? originalLanguage; // 원문 언어 코드 (예: 'ko', 'en')
   final String? translatedContent; // 번역된 내용
   final String? targetLanguage; // 번역 대상 언어 코드
+  
+  // 리액션 지원
+  final Map<String, int>? reactions; // emoji -> count
 
   Message({
     required this.id,
@@ -75,6 +78,7 @@ class Message {
     this.originalLanguage,
     this.translatedContent,
     this.targetLanguage,
+    this.reactions,
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() {
@@ -93,6 +97,7 @@ class Message {
       'originalLanguage': originalLanguage,
       'translatedContent': translatedContent,
       'targetLanguage': targetLanguage,
+      'reactions': reactions,
     };
   }
 
@@ -123,6 +128,9 @@ class Message {
       originalLanguage: json['originalLanguage'],
       translatedContent: json['translatedContent'],
       targetLanguage: json['targetLanguage'],
+      reactions: json['reactions'] != null
+          ? Map<String, int>.from(json['reactions'])
+          : null,
     );
   }
 
@@ -137,6 +145,7 @@ class Message {
     String? originalLanguage,
     String? translatedContent,
     String? targetLanguage,
+    Map<String, int>? reactions,
   }) {
     return Message(
       id: id,
@@ -153,6 +162,7 @@ class Message {
       originalLanguage: originalLanguage ?? this.originalLanguage,
       translatedContent: translatedContent ?? this.translatedContent,
       targetLanguage: targetLanguage ?? this.targetLanguage,
+      reactions: reactions ?? this.reactions,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,6 +11,7 @@ import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/chat/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
+import '../services/ui/haptic_service.dart';
 import 'matched_personas_screen.dart';
 import 'profile_edit_screen.dart';
 import '../l10n/app_localizations.dart';
@@ -26,6 +28,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isUploadingImage = false;
 
   Future<void> _pickAndUploadImage() async {
+    // Haptic feedback when opening image picker
+    await HapticService.selectionClick();
+    
     final File? imageFile = await PermissionHelper.requestAndPickImage(
       context: context,
       source: ImageSource.gallery,
@@ -42,6 +47,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
         if (mounted) {
           if (success) {
+            // Success haptic feedback
+            await HapticService.success();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content:
@@ -50,6 +57,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             );
           } else {
+            // Error haptic feedback
+            await HapticService.error();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -580,7 +589,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ?.withOpacity(0.5),
                   )
                 : null),
-        onTap: onTap,
+        onTap: onTap != null
+            ? () async {
+                // iOS-style light haptic feedback for menu taps
+                await HapticService.lightImpact();
+                onTap();
+              }
+            : null,
       ),
     );
   }

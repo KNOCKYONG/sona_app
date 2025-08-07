@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../../services/persona/persona_service.dart';
+import '../../services/ui/haptic_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
 import '../../l10n/app_localizations.dart';
@@ -133,17 +134,10 @@ class _TextMessageState extends State<_TextMessage> {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: maxWidth),
               child: GestureDetector(
-                onTap: () {
-                  // 번역이 있는 경우에만 토글
-                  if (!isFromUser &&
-                      widget.message.translatedContent != null &&
-                      widget.message.translatedContent!.isNotEmpty) {
-                    setState(() {
-                      _showTranslation = !_showTranslation;
-                    });
-                  }
-                },
-                onLongPress: () {
+                onLongPress: () async {
+                  // Medium haptic for copy action
+                  await HapticService.mediumImpact();
+                  
                   // 메시지 내용을 클립보드에 복사
                   final textToCopy = _showTranslation &&
                           widget.message.translatedContent != null
@@ -183,7 +177,7 @@ class _TextMessageState extends State<_TextMessage> {
                     boxShadow: isFromUser
                         ? [
                             BoxShadow(
-                              color: AppTheme.primaryColor.withOpacity(0.25),
+                              color: const Color(0xFFFF8FAD).withOpacity(0.20),
                               blurRadius: 16,
                               offset: const Offset(0, 8),
                             ),
@@ -205,10 +199,12 @@ class _TextMessageState extends State<_TextMessage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        // 번역이 있는 메시지
+                        // 번역이 있는 메시지 (실제 번역이 있고, 유효한 번역일 때만 표시)
                         if (!isFromUser &&
                             widget.message.translatedContent != null &&
-                            widget.message.translatedContent!.isNotEmpty) ...[
+                            widget.message.translatedContent!.isNotEmpty &&
+                            !widget.message.translatedContent!.startsWith('[') && // [Translation processing...] 같은 메시지 제외
+                            !widget.message.translatedContent!.contains('Translation')) ...[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -218,20 +214,36 @@ class _TextMessageState extends State<_TextMessage> {
                                   children: [
                                     // 한국어 메시지 텍스트
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 30),
+                                      padding: const EdgeInsets.only(right: 35),
                                       child: Text(
                                         widget.message.content,
                                         style: _TextMessage._aiTextStyle,
                                       ),
                                     ),
-                                    // 번역 인디케이터 아이콘 (우측 상단)
+                                    // 번역 버튼 (우측 상단) - 탭 가능한 영역
                                     Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Icon(
-                                        Icons.language,
-                                        size: 16,
-                                        color: Colors.grey[400],
+                                      top: -4,
+                                      right: -4,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            // Light haptic for translation toggle
+                                            await HapticService.selectionClick();
+                                            setState(() {
+                                              _showTranslation = !_showTranslation;
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Icon(
+                                              Icons.language,
+                                              size: 18,
+                                              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -243,41 +255,104 @@ class _TextMessageState extends State<_TextMessage> {
                                   children: [
                                     Container(
                                       width: double.infinity,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        borderRadius: BorderRadius.circular(12),
+                                      padding: const EdgeInsets.only(
+                                        left: 12,
+                                        right: 35,
+                                        top: 8,
+                                        bottom: 8,
                                       ),
-                                      child: Text(
-                                        widget.message.translatedContent!,
-                                        style: TextStyle(
-                                          color: Colors.grey[700],
-                                          fontSize: 16,
-                                          height: 1.4,
+                                      decoration: BoxDecoration(
+                                        color: Colors.blue.withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.blue.withOpacity(0.2),
+                                          width: 1,
                                         ),
                                       ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          // 번역된 텍스트
+                                          Text(
+                                            widget.message.translatedContent!,
+                                            style: TextStyle(
+                                              color: Colors.blue[900],
+                                              fontSize: 16,
+                                              height: 1.4,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          // 언어 표시
+                                          Text(
+                                            'Translated',
+                                            style: TextStyle(
+                                              color: Colors.blue[700],
+                                              fontSize: 11,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    // 번역 인디케이터 아이콘 (우측 상단)
+                                    // 지구본 토글 버튼 (우측 상단) - X 버튼 대신 지구본으로 토글
                                     Positioned(
-                                      top: 4,
-                                      right: 8,
-                                      child: Icon(
-                                        Icons.language,
-                                        size: 16,
-                                        color: AppTheme.primaryColor,
+                                      top: -4,
+                                      right: -4,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            // Light haptic for translation toggle
+                                            await HapticService.selectionClick();
+                                            setState(() {
+                                              _showTranslation = !_showTranslation;
+                                            });
+                                          },
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Icon(
+                                              Icons.language,
+                                              size: 18,
+                                              color: Colors.blue[700]?.withOpacity(0.8),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 6),
                                 // 원문 표시 (작은 글씨)
-                                Text(
-                                  '원문: ${widget.message.content}',
-                                  style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic,
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.format_quote,
+                                        size: 12,
+                                        color: Colors.grey[600],
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Flexible(
+                                        child: Text(
+                                          widget.message.content,
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 12,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -568,7 +643,11 @@ class _ProfileAvatar extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: persona != null
-                ? () => _showPersonaProfile(context, persona)
+                ? () async {
+                    // Light haptic for avatar tap
+                    await HapticService.lightImpact();
+                    _showPersonaProfile(context, persona);
+                  }
                 : null,
             customBorder: const CircleBorder(),
             child: Container(

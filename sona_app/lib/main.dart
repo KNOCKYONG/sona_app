@@ -29,6 +29,7 @@ import 'services/chat/chat_service.dart';
 import 'services/purchase/purchase_service.dart';
 import 'services/storage/cache_manager.dart';
 import 'services/theme/theme_service.dart';
+import 'services/ui/haptic_service.dart';
 import 'theme/app_theme.dart';
 import 'core/preferences_manager.dart';
 import 'l10n/app_localizations.dart';
@@ -92,6 +93,9 @@ void main() async {
   // ThemeService 초기화
   final themeService = ThemeService();
   await themeService.initialize();
+
+  // HapticService 초기화
+  await HapticService.initialize();
 
   // LocaleService 초기화
   debugPrint('🌐 [Main] Initializing LocaleService...');

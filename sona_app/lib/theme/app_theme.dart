@@ -21,9 +21,9 @@ class AppTheme {
   static const Color darkSecondaryColor = Color(0xFFD989A0);
   static const Color darkAccentColor = Color(0xFF8E84FF);
 
-  // Gradient colors
+  // Gradient colors - Softer pastel pink for better visual comfort
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFFFF6B9D), Color(0xFFC06C84)],
+    colors: [Color(0xFFFF8FAD), Color(0xFFE09098)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
@@ -614,7 +614,9 @@ class _ModernIconButtonState extends State<ModernIconButton>
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
-                onTap: () {
+                onTap: () async {
+                  // iOS-style haptic feedback on tap
+                  HapticFeedback.lightImpact();
                   _animationController.forward().then((_) {
                     _animationController.reverse();
                   });

@@ -1,0 +1,30 @@
+{
+  "analysis_timestamp": "20250807_195448",
+  "total_reports_analyzed": 3,
+  "average_coherence_score": 75.26,
+  "critical_issues_count": 0,
+  "high_issues_count": 3,
+  "personas_with_issues": {
+    "다영": {
+      "total_conversations": 2,
+      "avg_coherence_score": 76.39,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 2,
+        "abrupt_topic_change": 3
+      }
+    },
+    "윤미": {
+      "total_conversations": 1,
+      "avg_coherence_score": 73.0,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 3,
+        "emotion_inconsistency": 1
+      }
+    }
+  }
+}

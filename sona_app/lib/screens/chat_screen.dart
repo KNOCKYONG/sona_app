@@ -13,6 +13,7 @@ import '../services/ui/haptic_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
+import '../widgets/chat/animated_message_bubble.dart';
 import '../widgets/chat/typing_indicator.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
 import '../widgets/common/modern_emotion_picker.dart';
@@ -49,6 +50,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final Map<String, bool> _hasShownWelcomePerPersona = {};
   bool _isFirstLoad = true; // Track if this is the first load to force scroll
   // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
+  
+  // Reply functionality
+  Message? _replyingToMessage;
+  final Set<String> _newMessageIds = {}; // Track new messages for animation
 
   // Service references for dispose method
   ChatService? _chatService;
@@ -371,6 +376,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
 
     _messageController.clear();
+    
+    // Clear reply state
+    if (_replyingToMessage != null) {
+      setState(() {
+        _replyingToMessage = null;
+      });
+    }
+    
+    // 메시지 전송 후 즉시 맨 아래로 스크롤
+    _scrollToBottom(force: true, smooth: true);
 
     final persona = personaService.currentPersona;
     if (persona == null) {
@@ -399,6 +414,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     );
 
     if (success) {
+      // Mark the user message for animation
+      final messages = chatService.getMessages(persona.id);
+      if (messages.isNotEmpty) {
+        setState(() {
+          _newMessageIds.add(messages.last.id);
+        });
+      }
       // 메시지가 실제로 화면에 추가되고 렌더링된 후에 스크롤
       // 두 번의 프레임 후에 실행하여 확실하게 렌더링이 완료되도록 함
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -651,6 +673,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
                             // AI 메시지가 추가되었을 때 처리
                             if (hasNewAIMessage) {
+                              // Mark new messages for animation
+                              for (int i = messages.length - newMessageCount;
+                                  i < messages.length;
+                                  i++) {
+                                _newMessageIds.add(messages[i].id);
+                              }
+                              
                               // 채팅방에 있을 때는 즉시 읽음 처리
                               final authService = Provider.of<AuthService>(
                                   context,
@@ -742,12 +771,29 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               // Regular message
                               if (messageIndex < messages.length) {
                                 final message = messages[messageIndex];
-                                return MessageBubble(
+                                final isNew = _newMessageIds.contains(message.id);
+                                
+                                // Clear new message flag after animation
+                                if (isNew) {
+                                  Future.delayed(const Duration(milliseconds: 600), () {
+                                    if (mounted) {
+                                      setState(() {
+                                        _newMessageIds.remove(message.id);
+                                      });
+                                    }
+                                  });
+                                }
+                                
+                                return SwipeableMessageBubble(
                                   key: ValueKey(message.id),
                                   message: message,
                                   onScoreChange: () {
                                     // Handle score change if needed
                                   },
+                                  onSwipeReply: _handleSwipeReply,
+                                  onReaction: _handleReaction,
+                                  isNewMessage: isNew,
+                                  index: messageIndex,
                                 );
                               }
 
@@ -836,15 +882,28 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   ),
                 ),
 
-                // Message input
+                // Message input with reply UI
                 Consumer<PersonaService>(
                   builder: (context, personaService, child) {
-                    return _MessageInput(
-                      controller: _messageController,
-                      focusNode: _focusNode,
-                      onSend: _sendMessage,
-                      onAttachment: _showAttachmentMenu,
-                      onEmotion: _showEmotionPicker,
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Reply preview
+                        if (_replyingToMessage != null)
+                          _ReplyPreview(
+                            message: _replyingToMessage!,
+                            onCancel: _cancelReply,
+                            personaName: personaService.currentPersona?.name ?? '',
+                          ),
+                        // Message input
+                        _MessageInput(
+                          controller: _messageController,
+                          focusNode: _focusNode,
+                          onSend: _sendMessage,
+                          onAttachment: _showAttachmentMenu,
+                          onEmotion: _showEmotionPicker,
+                        ),
+                      ],
                     );
                   },
                 ),
@@ -1344,6 +1403,48 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       ),
     );
   }
+  
+  void _handleSwipeReply(Message message) {
+    setState(() {
+      _replyingToMessage = message;
+    });
+    
+    // Focus the input field
+    _focusNode.requestFocus();
+    
+    // Light haptic feedback
+    HapticService.lightImpact();
+  }
+  
+  void _cancelReply() {
+    setState(() {
+      _replyingToMessage = null;
+    });
+  }
+  
+  void _handleReaction(Message message, String emoji) {
+    // Update the message with the new reaction
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final currentReactions = Map<String, int>.from(message.reactions ?? {});
+    
+    // Toggle or add reaction
+    if (currentReactions.containsKey(emoji)) {
+      currentReactions[emoji] = currentReactions[emoji]! + 1;
+    } else {
+      currentReactions[emoji] = 1;
+    }
+    
+    // Update the message in the chat service
+    // Note: In a real app, this would sync with Firebase
+    setState(() {
+      // Update local state for immediate feedback
+      final updatedMessage = message.copyWith(reactions: currentReactions);
+      // You would update this in your chat service
+    });
+    
+    // Haptic feedback
+    HapticService.success();
+  }
 }
 
 // Separate widgets for better performance
@@ -1692,6 +1793,97 @@ class _EmptyState extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ReplyPreview extends StatelessWidget {
+  final Message message;
+  final VoidCallback onCancel;
+  final String personaName;
+  
+  const _ReplyPreview({
+    required this.message,
+    required this.onCancel,
+    required this.personaName,
+  });
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        border: Border(
+          top: BorderSide(
+            color: Theme.of(context).dividerColor.withOpacity(0.2),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(8),
+          border: Border(
+            left: BorderSide(
+              color: Theme.of(context).colorScheme.primary,
+              width: 3,
+            ),
+          ),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              Icons.reply_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    message.isFromUser 
+                        ? AppLocalizations.of(context)!.you
+                        : personaName,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  Text(
+                    message.content,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.close,
+                size: 18,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+              ),
+              onPressed: onCancel,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(
+                minWidth: 32,
+                minHeight: 32,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

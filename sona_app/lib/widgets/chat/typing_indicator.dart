@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import '../../services/persona/persona_service.dart';
 
+/// iOS Messages-style typing indicator with smooth animations
 class TypingIndicator extends StatefulWidget {
   final String? personaName;
 
@@ -14,162 +18,162 @@ class TypingIndicator extends StatefulWidget {
 
 class _TypingIndicatorState extends State<TypingIndicator>
     with TickerProviderStateMixin {
-  late AnimationController _animationController;
-  late List<AnimationController> _dotControllers;
+  late AnimationController _fadeController;
+  late AnimationController _pulseController;
+  late Animation<double> _fadeAnimation;
   late List<Animation<double>> _dotAnimations;
 
   @override
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1500),
+    // Fade in/out animation for the whole indicator
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
+    _fadeAnimation = CurvedAnimation(
+      parent: _fadeController,
+      curve: Curves.easeOut,
+    );
+    _fadeController.forward();
 
-    // 3개의 점에 대한 개별 애니메이션 컨트롤러 생성
-    _dotControllers = List.generate(3, (index) {
-      return AnimationController(
-        duration: const Duration(milliseconds: 600),
-        vsync: this,
+    // iOS-style pulse animation for dots
+    _pulseController = AnimationController(
+      duration: const Duration(milliseconds: 1400),
+      vsync: this,
+    )..repeat();
+
+    // Create staggered animations for each dot
+    _dotAnimations = List.generate(3, (index) {
+      return Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(
+        CurvedAnimation(
+          parent: _pulseController,
+          curve: Interval(
+            index * 0.2,
+            0.6 + index * 0.2,
+            curve: Curves.easeInOut,
+          ),
+        ),
       );
     });
-
-    // 각 점에 대한 애니메이션 생성
-    _dotAnimations = _dotControllers.map((controller) {
-      return Tween<double>(
-        begin: 0.4,
-        end: 1.0,
-      ).animate(CurvedAnimation(
-        parent: controller,
-        curve: Curves.easeInOut,
-      ));
-    }).toList();
-
-    // 순차적으로 점 애니메이션 시작
-    _startDotAnimations();
-  }
-
-  void _startDotAnimations() async {
-    while (mounted) {
-      for (int i = 0; i < _dotControllers.length; i++) {
-        if (mounted) {
-          _dotControllers[i].forward();
-          await Future.delayed(const Duration(milliseconds: 200));
-        }
-      }
-
-      // 모든 점이 끝나면 역순으로 애니메이션
-      for (int i = _dotControllers.length - 1; i >= 0; i--) {
-        if (mounted) {
-          _dotControllers[i].reverse();
-          await Future.delayed(const Duration(milliseconds: 200));
-        }
-      }
-
-      await Future.delayed(const Duration(milliseconds: 300));
-    }
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
-    for (var controller in _dotControllers) {
-      controller.dispose();
-    }
+    _fadeController.dispose();
+    _pulseController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          // 타이핑 중임을 나타내는 아이콘
-          Container(
-            width: 24,
-            height: 24,
-            margin: const EdgeInsets.only(right: 8, bottom: 8),
-            decoration: BoxDecoration(
-              color: const Color(0xFFFF6B9D).withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.edit,
-              size: 14,
-              color: Color(0xFFFF6B9D),
-            ),
-          ),
+    final personaService = Provider.of<PersonaService>(context);
+    final persona = personaService.currentPersona;
+    final thumbnailUrl = persona?.getThumbnailUrl();
 
-          // 타이핑 인디케이터 버블
-          Flexible(
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                  bottomLeft: Radius.circular(4),
-                  bottomRight: Radius.circular(20),
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            // Persona profile image (matching message bubble style)
+            if (persona != null) ...[
+              Container(
+                width: 36,
+                height: 36,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[200],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.1),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                child: ClipOval(
+                  child: thumbnailUrl != null && thumbnailUrl.isNotEmpty
+                      ? CachedNetworkImage(
+                          imageUrl: thumbnailUrl,
+                          fit: BoxFit.cover,
+                          memCacheWidth: 72,
+                          memCacheHeight: 72,
+                          placeholder: (context, url) => Container(
+                            color: Colors.grey[200],
+                          ),
+                          errorWidget: (context, url, error) => Container(
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.person,
+                              color: Color(0xFFFF6B9D),
+                              size: 20,
+                            ),
+                          ),
+                        )
+                      : Container(
+                          color: Colors.grey[200],
+                          child: const Icon(
+                            Icons.person,
+                            color: Color(0xFFFF6B9D),
+                            size: 20,
+                          ),
+                        ),
+                ),
+              ),
+              const SizedBox(width: 8),
+            ],
+
+            // iOS-style typing bubble
+            Container(
+              height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFE5E5EA), // iOS gray bubble color
+                borderRadius: BorderRadius.circular(18),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
-                  // 타이핑 중 텍스트
-                  Text(
-                    '입력 중...',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // 애니메이션 점들
-                  Row(
-                    children: List.generate(3, (index) {
-                      return AnimatedBuilder(
-                        animation: _dotAnimations[index],
-                        builder: (context, child) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 1),
-                            child: Opacity(
-                              opacity: _dotAnimations[index].value,
-                              child: Container(
-                                width: 6,
-                                height: 6,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFF6B9D),
-                                  shape: BoxShape.circle,
-                                ),
+                children: List.generate(3, (index) {
+                  return AnimatedBuilder(
+                    animation: _dotAnimations[index],
+                    builder: (context, child) {
+                      final scale = 0.5 + (_dotAnimations[index].value * 0.5);
+                      final opacity = 0.4 + (_dotAnimations[index].value * 0.6);
+                      
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: index == 1 ? 3 : 2,
+                        ),
+                        child: Transform.scale(
+                          scale: scale,
+                          child: Opacity(
+                            opacity: opacity,
+                            child: Container(
+                              width: 9,
+                              height: 9,
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF8E8E93), // iOS dot color
+                                shape: BoxShape.circle,
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ),
                       );
-                    }),
-                  ),
-                ],
+                    },
+                  );
+                }),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -6,6 +6,7 @@ import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/auth/device_id_service.dart';
+import '../services/ui/haptic_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
@@ -424,9 +425,15 @@ class _ChatListScreenState extends State<ChatListScreen>
             );
           }
 
-          return ListView.builder(
-            itemCount: matchedPersonas.length,
-            itemBuilder: (context, index) {
+          return RefreshIndicator(
+            onRefresh: () async {
+              // Haptic feedback when pull-to-refresh triggers
+              await HapticService.mediumImpact();
+              await _initializeChatList();
+            },
+            child: ListView.builder(
+              itemCount: matchedPersonas.length,
+              itemBuilder: (context, index) {
               final persona = matchedPersonas[index];
               // 매번 최신 메시지를 가져오도록 함
               final messages =
@@ -467,7 +474,9 @@ class _ChatListScreenState extends State<ChatListScreen>
               final isTyping = chatService.isPersonaTyping(persona.id);
 
               return InkWell(
-                onTap: () {
+                onTap: () async {
+                  // iOS-style light haptic for list item tap
+                  await HapticService.lightImpact();
                   Navigator.pushNamed(
                     context,
                     '/chat',
@@ -662,6 +671,7 @@ class _ChatListScreenState extends State<ChatListScreen>
                 ),
               );
             },
+            ),
           );
         },
       ),

@@ -1614,10 +1614,10 @@ class ChatService extends BaseService {
     // Cancel existing timer if any
     _responseDelayTimers[personaId]?.cancel();
 
-    // Calculate delay (2-5 seconds base + 2 seconds per additional message)
-    final baseDelay = 2 + _random.nextInt(4); // 2-5 seconds
+    // Calculate delay (1-3 seconds base + 1 second per additional message) - 2/3 of original
+    final baseDelay = 1 + _random.nextInt(3); // 1-3 seconds (was 2-5)
     final additionalDelay =
-        (_responseQueues[personaId]!.messages.length - 1) * 2;
+        (_responseQueues[personaId]!.messages.length - 1) * 1; // 1 second per message (was 2)
     final totalDelay = baseDelay + additionalDelay;
 
     debugPrint(

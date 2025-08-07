@@ -10,7 +10,7 @@ class ChatListItem extends StatelessWidget {
   final DateTime lastMessageTime;
   final bool hasUnread;
   final VoidCallback onTap;
-  
+
   const ChatListItem({
     super.key,
     required this.persona,
@@ -19,7 +19,7 @@ class ChatListItem extends StatelessWidget {
     required this.hasUnread,
     required this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -67,11 +67,11 @@ class ChatListItem extends StatelessWidget {
       ),
     );
   }
-  
+
   String _formatTime(DateTime time) {
     final now = DateTime.now();
     final difference = now.difference(time);
-    
+
     if (difference.inDays > 0) {
       return AppLocalizations.of(context)!.daysAgo(difference.inDays);
     } else if (difference.inHours > 0) {
@@ -88,13 +88,13 @@ class ChatListItem extends StatelessWidget {
 class PersonaCardMini extends StatelessWidget {
   final Persona persona;
   final VoidCallback? onTap;
-  
+
   const PersonaCardMini({
     super.key,
     required this.persona,
     this.onTap,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -120,7 +120,7 @@ class PersonaCardMini extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
             ),
-            
+
             // 그라디언트 오버레이
             Positioned.fill(
               child: Container(
@@ -137,7 +137,7 @@ class PersonaCardMini extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // 정보
             Positioned(
               bottom: 20,

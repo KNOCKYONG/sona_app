@@ -97,13 +97,13 @@ class SwipeFeedbacks {
     color: Color(0xFF4CAF50),
     emoji: '❤️',
   );
-  
+
   static const up = SwipeFeedback(
     icon: Icons.star,
     color: Color(0xFFFFD700),
     emoji: '⭐',
   );
-  
+
   static const left = SwipeFeedback(
     icon: Icons.close,
     color: Color(0xFFF44336),

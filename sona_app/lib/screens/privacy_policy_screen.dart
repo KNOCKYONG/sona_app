@@ -7,7 +7,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.privacyPolicy),
@@ -37,47 +37,38 @@ class PrivacyPolicyScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            
             _SectionWidget(
               title: localizations.privacySection1Title,
               content: localizations.privacySection1Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection2Title,
               content: localizations.privacySection2Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection3Title,
               content: localizations.privacySection3Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection4Title,
               content: localizations.privacySection4Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection5Title,
               content: localizations.privacySection5Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection6Title,
               content: localizations.privacySection6Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection7Title,
               content: localizations.privacySection7Content,
             ),
-            
             _SectionWidget(
               title: localizations.privacySection8Title,
               content: localizations.privacySection8Content,
             ),
-            
             const SizedBox(height: 40),
           ],
         ),

@@ -13,23 +13,25 @@ class AppUser {
   final String? profileImageUrl;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  
+
   // 새로운 필드들
-  final String? purpose; // 'friendship', 'dating', 'counseling', 'entertainment'
+  final String?
+      purpose; // 'friendship', 'dating', 'counseling', 'entertainment'
   final List<String>? preferredPersonaTypes; // 선호하는 페르소나 유형들
   final List<String>? preferredMbti; // 선호하는 MBTI 유형들
   final String? communicationStyle; // 'casual', 'formal', 'adaptive'
   final List<String>? preferredTopics; // 선호하는 대화 주제들
   final bool genderAll; // Gender All 체크박스 - 모든 성별 페르소나 보기
   final List<String> actionedPersonaIds; // 액션(좋아요, 슈퍼좋아요, 취소)한 페르소나 ID 목록
-  
+
   // 일일 메시지 제한 관련 필드
   final int dailyMessageCount; // 오늘 보낸 메시지 수
   final DateTime? lastMessageCountReset; // 마지막 리셋 시간
   final int dailyMessageLimit; // 일일 메시지 제한 (기본값: 100)
-  
+
   // 다국어 지원 필드
-  final String preferredLanguage; // 선호 언어 코드 ('ko', 'en', 'ja', 'zh', 'id', 'vi' 등)
+  final String
+      preferredLanguage; // 선호 언어 코드 ('ko', 'en', 'ja', 'zh', 'id', 'vi' 등)
 
   AppUser({
     required this.uid,
@@ -61,7 +63,7 @@ class AppUser {
   static int calculateAge(DateTime birth) {
     final now = DateTime.now();
     int age = now.year - birth.year;
-    if (now.month < birth.month || 
+    if (now.month < birth.month ||
         (now.month == birth.month && now.day < birth.day)) {
       age--;
     }
@@ -91,7 +93,9 @@ class AppUser {
       'genderAll': genderAll,
       'actionedPersonaIds': actionedPersonaIds,
       'dailyMessageCount': dailyMessageCount,
-      'lastMessageCountReset': lastMessageCountReset != null ? Timestamp.fromDate(lastMessageCountReset!) : null,
+      'lastMessageCountReset': lastMessageCountReset != null
+          ? Timestamp.fromDate(lastMessageCountReset!)
+          : null,
       'dailyMessageLimit': dailyMessageLimit,
       'preferredLanguage': preferredLanguage,
     };
@@ -107,31 +111,32 @@ class AppUser {
       gender: data['gender'],
       birth: (data['birth'] as Timestamp).toDate(),
       age: data['age'] ?? 0,
-      preferredPersona: PreferredPersona.fromMap(data['preferredPersona'] ?? {}),
+      preferredPersona:
+          PreferredPersona.fromMap(data['preferredPersona'] ?? {}),
       interests: List<String>.from(data['interests'] ?? []),
       intro: data['intro'],
       profileImageUrl: data['profileImageUrl'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
-      updatedAt: data['updatedAt'] != null 
-          ? (data['updatedAt'] as Timestamp).toDate() 
+      updatedAt: data['updatedAt'] != null
+          ? (data['updatedAt'] as Timestamp).toDate()
           : null,
       purpose: data['purpose'],
-      preferredPersonaTypes: data['preferredPersonaTypes'] != null 
+      preferredPersonaTypes: data['preferredPersonaTypes'] != null
           ? List<String>.from(data['preferredPersonaTypes'])
           : null,
-      preferredMbti: data['preferredMbti'] != null 
+      preferredMbti: data['preferredMbti'] != null
           ? List<String>.from(data['preferredMbti'])
           : null,
       communicationStyle: data['communicationStyle'],
-      preferredTopics: data['preferredTopics'] != null 
+      preferredTopics: data['preferredTopics'] != null
           ? List<String>.from(data['preferredTopics'])
           : null,
       genderAll: data['genderAll'] ?? false,
-      actionedPersonaIds: data['actionedPersonaIds'] != null 
+      actionedPersonaIds: data['actionedPersonaIds'] != null
           ? List<String>.from(data['actionedPersonaIds'])
           : [],
       dailyMessageCount: data['dailyMessageCount'] ?? 0,
-      lastMessageCountReset: data['lastMessageCountReset'] != null 
+      lastMessageCountReset: data['lastMessageCountReset'] != null
           ? (data['lastMessageCountReset'] as Timestamp).toDate()
           : null,
       dailyMessageLimit: data['dailyMessageLimit'] ?? 100,
@@ -176,14 +181,16 @@ class AppUser {
       createdAt: createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       purpose: purpose ?? this.purpose,
-      preferredPersonaTypes: preferredPersonaTypes ?? this.preferredPersonaTypes,
+      preferredPersonaTypes:
+          preferredPersonaTypes ?? this.preferredPersonaTypes,
       preferredMbti: preferredMbti ?? this.preferredMbti,
       communicationStyle: communicationStyle ?? this.communicationStyle,
       preferredTopics: preferredTopics ?? this.preferredTopics,
       genderAll: genderAll ?? this.genderAll,
       actionedPersonaIds: actionedPersonaIds ?? this.actionedPersonaIds,
       dailyMessageCount: dailyMessageCount ?? this.dailyMessageCount,
-      lastMessageCountReset: lastMessageCountReset ?? this.lastMessageCountReset,
+      lastMessageCountReset:
+          lastMessageCountReset ?? this.lastMessageCountReset,
       dailyMessageLimit: dailyMessageLimit ?? this.dailyMessageLimit,
       preferredLanguage: preferredLanguage ?? this.preferredLanguage,
     );
@@ -267,9 +274,21 @@ class TopicOptions {
 // MBTI 옵션
 class MbtiOptions {
   static const List<String> allTypes = [
-    'INTJ', 'INTP', 'ENTJ', 'ENTP',
-    'INFJ', 'INFP', 'ENFJ', 'ENFP',
-    'ISTJ', 'ISFJ', 'ESTJ', 'ESFJ',
-    'ISTP', 'ISFP', 'ESTP', 'ESFP',
+    'INTJ',
+    'INTP',
+    'ENTJ',
+    'ENTP',
+    'INFJ',
+    'INFP',
+    'ENFJ',
+    'ENFP',
+    'ISTJ',
+    'ISFJ',
+    'ESTJ',
+    'ESFJ',
+    'ISTP',
+    'ISFP',
+    'ESTP',
+    'ESFP',
   ];
 }

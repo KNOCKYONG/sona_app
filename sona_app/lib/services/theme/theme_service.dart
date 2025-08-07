@@ -11,11 +11,11 @@ enum ThemeType {
 
 class ThemeService extends BaseService {
   static const String _themeKey = 'theme_mode';
-  
+
   ThemeType _currentTheme = ThemeType.system;
-  
+
   ThemeType get currentTheme => _currentTheme;
-  
+
   ThemeMode get themeMode {
     switch (_currentTheme) {
       case ThemeType.system:
@@ -26,12 +26,13 @@ class ThemeService extends BaseService {
         return ThemeMode.dark;
     }
   }
-  
+
   bool get isDarkMode {
     switch (_currentTheme) {
       case ThemeType.system:
         // Check system brightness
-        final brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+        final brightness =
+            SchedulerBinding.instance.platformDispatcher.platformBrightness;
         return brightness == Brightness.dark;
       case ThemeType.light:
         return false;
@@ -39,7 +40,7 @@ class ThemeService extends BaseService {
         return true;
     }
   }
-  
+
   Future<void> initialize() async {
     await executeWithLoading(() async {
       final savedTheme = await PreferencesManager.getString(_themeKey);
@@ -52,13 +53,13 @@ class ThemeService extends BaseService {
       notifyListeners();
     }, showError: false);
   }
-  
+
   Future<void> setTheme(ThemeType theme) async {
     _currentTheme = theme;
     await PreferencesManager.setString(_themeKey, theme.toString());
     notifyListeners();
   }
-  
+
   String getThemeDisplayName(ThemeType theme) {
     switch (theme) {
       case ThemeType.system:
@@ -69,7 +70,7 @@ class ThemeService extends BaseService {
         return '다크 모드';
     }
   }
-  
+
   IconData getThemeIcon(ThemeType theme) {
     switch (theme) {
       case ThemeType.system:

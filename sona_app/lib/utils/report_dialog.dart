@@ -4,14 +4,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../l10n/app_localizations.dart';
 
 class ReportDialog {
-  static Future<void> show(BuildContext context, {
+  static Future<void> show(
+    BuildContext context, {
     required String targetType, // 'persona', 'message', 'user'
     required String targetId,
     String? targetName,
   }) async {
     String? selectedReason;
     String customReason = '';
-    
+
     final localizations = AppLocalizations.of(context)!;
     final reasons = [
       localizations.inappropriateContent,
@@ -24,14 +25,15 @@ class ReportDialog {
       localizations.copyrightInfringement,
       localizations.other,
     ];
-    
+
     final result = await showDialog<Map<String, String>>(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text('${targetName ?? targetType} ${localizations.report}'),
+              title:
+                  Text('${targetName ?? targetType} ${localizations.report}'),
               content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -43,15 +45,15 @@ class ReportDialog {
                     ),
                     const SizedBox(height: 16),
                     ...reasons.map((reason) => RadioListTile<String>(
-                      title: Text(reason),
-                      value: reason,
-                      groupValue: selectedReason,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedReason = value;
-                        });
-                      },
-                    )),
+                          title: Text(reason),
+                          value: reason,
+                          groupValue: selectedReason,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedReason = value;
+                            });
+                          },
+                        )),
                     if (selectedReason == localizations.other) ...[
                       const SizedBox(height: 16),
                       TextField(
@@ -75,12 +77,14 @@ class ReportDialog {
                   child: Text(localizations.cancel),
                 ),
                 ElevatedButton(
-                  onPressed: selectedReason == null ? null : () {
-                    Navigator.pop(context, {
-                      'reason': selectedReason!,
-                      'customReason': customReason,
-                    });
-                  },
+                  onPressed: selectedReason == null
+                      ? null
+                      : () {
+                          Navigator.pop(context, {
+                            'reason': selectedReason!,
+                            'customReason': customReason,
+                          });
+                        },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                   ),
@@ -92,7 +96,7 @@ class ReportDialog {
         );
       },
     );
-    
+
     if (result != null && context.mounted) {
       await _submitReport(
         context: context,
@@ -104,7 +108,7 @@ class ReportDialog {
       );
     }
   }
-  
+
   static Future<void> _submitReport({
     required BuildContext context,
     required String targetType,
@@ -119,14 +123,15 @@ class ReportDialog {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context)!.loginRequiredToReport),
+              content:
+                  Text(AppLocalizations.of(context)!.loginRequiredToReport),
               backgroundColor: Colors.red,
             ),
           );
         }
         return;
       }
-      
+
       // 로딩 다이얼로그 표시
       if (context.mounted) {
         showDialog(
@@ -149,7 +154,7 @@ class ReportDialog {
           ),
         );
       }
-      
+
       // Firestore에 신고 정보 저장
       await FirebaseFirestore.instance.collection('reports').add({
         'reporterId': user.uid,
@@ -163,10 +168,10 @@ class ReportDialog {
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
-      
+
       if (context.mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(AppLocalizations.of(context)!.reportSubmitted),
@@ -177,10 +182,11 @@ class ReportDialog {
     } catch (e) {
       if (context.mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.reportError(e.toString())),
+            content:
+                Text(AppLocalizations.of(context)!.reportError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );

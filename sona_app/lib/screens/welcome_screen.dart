@@ -12,7 +12,7 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> 
+class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -22,12 +22,12 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -35,7 +35,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _animationController,
       curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
     ));
-    
+
     _scaleAnimation = Tween<double>(
       begin: 0.8,
       end: 1.0,
@@ -43,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _animationController,
       curve: const Interval(0.0, 0.7, curve: Curves.elasticOut),
     ));
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.3),
       end: Offset.zero,
@@ -51,16 +51,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       parent: _animationController,
       curve: const Interval(0.3, 1.0, curve: Curves.easeOut),
     ));
-    
+
     _animationController.forward();
-    
+
     // 3초 후 자동으로 다음 화면으로 이동
     Future.delayed(const Duration(seconds: 3), () async {
       if (mounted) {
         // 이미지 프리로딩이 필요한지 확인
         final preloadService = ImagePreloadService.instance;
         final isPreloaded = await preloadService.isPreloadCompleted();
-        
+
         if (!isPreloaded) {
           // 프리로딩이 필요한 경우
           Navigator.of(context).pushReplacementNamed('/image-preload');
@@ -82,7 +82,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
     final user = authService.user;
-    
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -172,9 +172,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           color: Colors.grey[400],
                         ),
                       ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // 환영 메시지
                     SlideTransition(
                       position: _slideAnimation,
@@ -208,16 +208,17 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 60),
-                    
+
                     // 로딩 인디케이터
                     SlideTransition(
                       position: _slideAnimation,
                       child: Column(
                         children: [
                           const CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                           const SizedBox(height: 20),
                           const Text(

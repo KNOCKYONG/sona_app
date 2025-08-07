@@ -30,12 +30,12 @@ class LikeFormatter {
     // 천 미만은 그대로 표시
     return likes.toString();
   }
-  
+
   /// 아이콘과 함께 포맷팅
   static String formatWithIcon(int likes) {
     return '❤️ ${format(likes)}';
   }
-  
+
   /// 증감 표시와 함께 포맷팅
   static String formatWithChange(int likes, int change) {
     if (change == 0) {
@@ -46,47 +46,57 @@ class LikeFormatter {
       return '${format(likes)} ($change)';
     }
   }
-  
+
   /// 자세한 숫자 표시 (쉼표 포함)
   static String formatDetailed(int likes) {
     final String likesStr = likes.toString();
     final StringBuffer result = StringBuffer();
-    
+
     for (int i = 0; i < likesStr.length; i++) {
       if (i > 0 && (likesStr.length - i) % 3 == 0) {
         result.write(',');
       }
       result.write(likesStr[i]);
     }
-    
+
     return result.toString();
   }
-  
+
   /// 마일스톤 체크
   static int? getNextMilestone(int currentLikes) {
     final milestones = [
-      100, 500, 1000, 2000, 5000, 10000, 
-      20000, 50000, 100000, 200000, 500000, 1000000
+      100,
+      500,
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      50000,
+      100000,
+      200000,
+      500000,
+      1000000
     ];
-    
+
     for (final milestone in milestones) {
       if (currentLikes < milestone) {
         return milestone;
       }
     }
-    
+
     // 백만 이상은 백만 단위로
     final millions = (currentLikes / 1000000).floor() + 1;
     return millions * 1000000;
   }
-  
+
   /// 다음 마일스톤까지 남은 Like
   static int getLikesToNextMilestone(int currentLikes) {
     final nextMilestone = getNextMilestone(currentLikes);
     if (nextMilestone == null) return 0;
     return nextMilestone - currentLikes;
   }
-  
+
   /// 마일스톤 달성 메시지
   static String? getMilestoneMessage(int likes) {
     switch (likes) {
@@ -110,13 +120,14 @@ class LikeFormatter {
         return null;
     }
   }
-  
+
   /// 성장률 계산 및 표시
   static String formatGrowthRate(int currentLikes, int previousLikes) {
     if (previousLikes == 0) return '';
-    
-    final growth = ((currentLikes - previousLikes) / previousLikes * 100).round();
-    
+
+    final growth =
+        ((currentLikes - previousLikes) / previousLikes * 100).round();
+
     if (growth > 0) {
       return '+$growth%';
     } else if (growth < 0) {

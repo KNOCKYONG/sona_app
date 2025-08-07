@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class NetworkUtils {
   static final Connectivity _connectivity = Connectivity();
-  
+
   /// 현재 네트워크 연결 상태 확인
   static Future<bool> isConnected() async {
     try {
@@ -14,11 +14,11 @@ class NetworkUtils {
       return false;
     }
   }
-  
+
   /// 네트워크 연결 상태 스트림
-  static Stream<ConnectivityResult> get onConnectivityChanged => 
+  static Stream<ConnectivityResult> get onConnectivityChanged =>
       _connectivity.onConnectivityChanged;
-  
+
   /// 네트워크 연결 확인 후 작업 실행
   static Future<T?> executeWithNetworkCheck<T>({
     required Future<T> Function() action,
@@ -26,7 +26,7 @@ class NetworkUtils {
     VoidCallback? onNoConnection,
   }) async {
     final isConnected = await NetworkUtils.isConnected();
-    
+
     if (!isConnected) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -40,10 +40,10 @@ class NetworkUtils {
       onNoConnection?.call();
       return null;
     }
-    
+
     return await action();
   }
-  
+
   /// 연결 타입별 메시지
   static String getConnectionMessage(ConnectivityResult result) {
     switch (result) {

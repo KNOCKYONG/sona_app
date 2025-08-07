@@ -13,24 +13,24 @@ class PurchaseScreen extends StatefulWidget {
 }
 
 class _PurchaseScreenState extends State<PurchaseScreen> {
-  
   @override
   void initState() {
     super.initState();
   }
-  
+
   @override
   void dispose() {
     // 구매 대기 상태 리셋
-    final purchaseService = Provider.of<PurchaseService>(context, listen: false);
+    final purchaseService =
+        Provider.of<PurchaseService>(context, listen: false);
     purchaseService.resetPurchasePending();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -46,7 +46,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
+          icon: Icon(Icons.arrow_back_ios,
+              color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -56,11 +57,13 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
             return Center(
               child: Text(
                 AppLocalizations.of(context)!.storeNotAvailable,
-                style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
             );
           }
-          
+
           return Column(
             children: [
               // 현재 보유 정보
@@ -93,7 +96,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   ),
                 ),
               ),
-              
+
               // 하트 상품 목록
               Expanded(
                 child: _buildHeartProducts(purchaseService),
@@ -104,7 +107,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       ),
     );
   }
-  
+
   Widget _buildStatusItem({
     required IconData icon,
     required String label,
@@ -133,18 +136,18 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       ],
     );
   }
-  
+
   Widget _buildHeartProducts(PurchaseService purchaseService) {
     final heartProducts = purchaseService.products
         .where((p) => ProductIds.consumables.contains(p.id))
         .toList();
-    
+
     // 디버그 정보 출력
     debugPrint('🔍 Store available: ${purchaseService.isAvailable}');
     debugPrint('🔍 All products: ${purchaseService.products.length}');
     debugPrint('🔍 Heart products: ${heartProducts.length}');
     debugPrint('🔍 Query error: ${purchaseService.queryProductError}');
-    
+
     if (heartProducts.isEmpty) {
       // 에러 메시지가 있으면 표시
       if (purchaseService.queryProductError != null) {
@@ -189,19 +192,20 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           ),
         );
       }
-      
+
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+            CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary),
             const SizedBox(height: 16),
             Text(AppLocalizations.of(context)!.loadingProducts),
           ],
         ),
       );
     }
-    
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: heartProducts.length,
@@ -216,8 +220,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       },
     );
   }
-  
-  
+
   Widget _buildProductCard({
     required ProductDetails product,
     required IconData icon,
@@ -225,11 +228,11 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     required VoidCallback onTap,
   }) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     // 상품명에서 정보 추출
     String displayName = product.title;
     String? description;
-    
+
     // Google Play Console의 상품 ID와 매칭
     if (product.id == ProductIds.hearts10) {
       displayName = localizations.hearts10;
@@ -241,7 +244,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       displayName = localizations.hearts50;
       description = localizations.heartDescription;
     }
-    
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       child: Material(
@@ -305,7 +308,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       ),
     );
   }
-  
+
   Future<void> _handlePurchase(
     BuildContext context,
     PurchaseService purchaseService,
@@ -320,7 +323,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       );
       return;
     }
-    
+
     // 구매 확인 다이얼로그
     final confirm = await showDialog<bool>(
       context: context,
@@ -329,7 +332,8 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
           borderRadius: BorderRadius.circular(20),
         ),
         title: Text(AppLocalizations.of(context)!.purchaseConfirm),
-        content: Text(AppLocalizations.of(context)!.purchaseConfirmMessage(product.title, product.price)),
+        content: Text(AppLocalizations.of(context)!
+            .purchaseConfirmMessage(product.title, product.price)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -345,12 +349,12 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         ],
       ),
     );
-    
+
     if (confirm != true) return;
-    
+
     // 구매 진행
     final success = await purchaseService.buyProduct(product);
-    
+
     if (!success && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -360,5 +364,4 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
       );
     }
   }
-  
 }

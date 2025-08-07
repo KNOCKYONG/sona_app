@@ -8,7 +8,7 @@ import '../services/auth/auth_service.dart';
 
 class MatchedPersonasScreen extends StatefulWidget {
   const MatchedPersonasScreen({super.key});
-  
+
   @override
   State<MatchedPersonasScreen> createState() => _MatchedPersonasScreenState();
 }
@@ -22,20 +22,20 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
     super.initState();
     _preloadLikes();
   }
-  
+
   Future<void> _preloadLikes() async {
     if (_hasPreloaded) return;
-    
+
     final authService = Provider.of<AuthService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final userId = authService.user?.uid;
-    
+
     if (userId != null && personaService.matchedPersonas.isNotEmpty) {
       await RelationScoreService.instance.preloadLikes(
         userId: userId,
         personaIds: personaService.matchedPersonas.map((p) => p.id).toList(),
       );
-      
+
       // 로컬 캐시 업데이트
       if (mounted) {
         setState(() {
@@ -51,27 +51,27 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
       }
     }
   }
-  
+
   int _getCachedLikes(BuildContext context, Persona persona) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.user?.uid;
-    
+
     if (userId == null) return persona.likes;
-    
+
     // 로컬 캐시 먼저 확인
     if (_cachedLikes.containsKey(persona.id)) {
       return _cachedLikes[persona.id]!;
     }
-    
+
     // 캐시가 없으면 RelationScoreService의 캐시 사용
     final likes = RelationScoreService.instance.getCachedLikes(
       userId: userId,
       personaId: persona.id,
     );
-    
+
     return likes > 0 ? likes : persona.likes;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,14 +89,15 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
+          icon: Icon(Icons.arrow_back_ios,
+              color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: Consumer<PersonaService>(
         builder: (context, personaService, child) {
           final matchedPersonas = personaService.matchedPersonas;
-          
+
           if (matchedPersonas.isEmpty) {
             return Center(
               child: Column(
@@ -105,7 +106,11 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
                   Icon(
                     Icons.favorite_border,
                     size: 100,
-                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.3),
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.color
+                        ?.withOpacity(0.3),
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -128,7 +133,7 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
               ),
             );
           }
-          
+
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: matchedPersonas.length,
@@ -149,13 +154,12 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
 class _PersonaCard extends StatelessWidget {
   final Persona persona;
   final int Function(BuildContext, Persona) getCachedLikes;
-  
+
   const _PersonaCard({
     required this.persona,
     required this.getCachedLikes,
   });
-  
-  
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -231,7 +235,7 @@ class _PersonaCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                
+
                 // 정보
                 Expanded(
                   child: Column(
@@ -251,8 +255,9 @@ class _PersonaCard extends StatelessWidget {
                           Builder(
                             builder: (context) {
                               final likes = getCachedLikes(context, persona);
-                              final visualInfo = RelationScoreService.instance.getVisualInfo(likes);
-                              
+                              final visualInfo = RelationScoreService.instance
+                                  .getVisualInfo(likes);
+
                               return Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -289,7 +294,7 @@ class _PersonaCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                
+
                 // 화살표
                 Icon(
                   Icons.arrow_forward_ios,

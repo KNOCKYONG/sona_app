@@ -24,34 +24,36 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   bool _isUploadingImage = false;
-  
+
   Future<void> _pickAndUploadImage() async {
     final File? imageFile = await PermissionHelper.requestAndPickImage(
       context: context,
       source: ImageSource.gallery,
     );
-    
+
     if (imageFile != null && mounted) {
       setState(() {
         _isUploadingImage = true;
       });
-      
+
       try {
         final userService = Provider.of<UserService>(context, listen: false);
         final success = await userService.updateProfileImage(imageFile);
-        
+
         if (mounted) {
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(AppLocalizations.of(context)!.profilePhotoUpdated),
+                content:
+                    Text(AppLocalizations.of(context)!.profilePhotoUpdated),
                 backgroundColor: Colors.green,
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(AppLocalizations.of(context)!.profilePhotoUpdateFailed),
+                content: Text(
+                    AppLocalizations.of(context)!.profilePhotoUpdateFailed),
                 backgroundColor: Colors.red,
               ),
             );
@@ -66,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       }
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
@@ -77,7 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     final firebaseUser = authService.user;
     final appUser = userService.currentUser;
     final isLoggedIn = authService.isAuthenticated;
-    
+
     // 로그인하지 않은 경우 로그인 유도 화면 표시
     if (!isLoggedIn) {
       return Scaffold(
@@ -121,7 +123,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   AppLocalizations.of(context)!.loginRequiredForProfile,
                   style: TextStyle(
                     fontSize: 16,
-                    color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.7),
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodyLarge
+                        ?.color
+                        ?.withOpacity(0.7),
                     height: 1.5,
                   ),
                   textAlign: TextAlign.center,
@@ -156,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     }
-    
+
     // 통계 계산
     final matchedPersonaCount = personaService.matchedPersonas.length;
     int totalLikes = 0;
@@ -164,7 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       totalLikes += persona.likes;
     }
     final hearts = purchaseService.hearts;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -227,13 +233,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   color: Colors.grey[200],
                                   child: Center(
                                     child: CircularProgressIndicator(
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
                                   ),
                                 )
-                              : (appUser?.profileImageUrl != null || firebaseUser?.photoURL != null)
+                              : (appUser?.profileImageUrl != null ||
+                                      firebaseUser?.photoURL != null)
                                   ? _buildProfileImage(
-                                      appUser?.profileImageUrl ?? firebaseUser?.photoURL ?? '',
+                                      appUser?.profileImageUrl ??
+                                          firebaseUser?.photoURL ??
+                                          '',
                                     )
                                   : Container(
                                       color: Colors.grey[200],
@@ -264,19 +274,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             icon: Icon(
                               Icons.camera_alt,
                               size: 18,
-                              color: _isUploadingImage ? Colors.white54 : Colors.white,
+                              color: _isUploadingImage
+                                  ? Colors.white54
+                                  : Colors.white,
                             ),
-                            onPressed: _isUploadingImage ? null : _pickAndUploadImage,
+                            onPressed:
+                                _isUploadingImage ? null : _pickAndUploadImage,
                           ),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-                  
+
                   // 사용자 이름
                   Text(
-                    appUser?.nickname ?? firebaseUser?.displayName ?? AppLocalizations.of(context)!.sonaFriend,
+                    appUser?.nickname ??
+                        firebaseUser?.displayName ??
+                        AppLocalizations.of(context)!.sonaFriend,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -284,7 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  
+
                   // 이메일
                   if (firebaseUser?.email != null)
                     Text(
@@ -295,21 +310,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   const SizedBox(height: 20),
-                  
+
                   // 통계 정보
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatItem(AppLocalizations.of(context)!.totalLikes, '$totalLikes'),
-                      _buildStatItem(AppLocalizations.of(context)!.ownedHearts, '$hearts'),
+                      _buildStatItem(AppLocalizations.of(context)!.totalLikes,
+                          '$totalLikes'),
+                      _buildStatItem(
+                          AppLocalizations.of(context)!.ownedHearts, '$hearts'),
                     ],
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // 메뉴 리스트
             Container(
               padding: const EdgeInsets.all(16),
@@ -318,7 +335,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildMenuItem(
                     icon: Icons.favorite,
                     title: AppLocalizations.of(context)!.matchedPersonas,
-                    subtitle: AppLocalizations.of(context)!.chattingWithPersonas(personaService.matchedPersonas.length),
+                    subtitle: AppLocalizations.of(context)!
+                        .chattingWithPersonas(
+                            personaService.matchedPersonas.length),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -349,7 +368,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // 로그아웃 버튼
                   SizedBox(
                     width: double.infinity,
@@ -362,11 +381,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                             title: Text(AppLocalizations.of(context)!.logout),
-                            content: Text(AppLocalizations.of(context)!.logoutConfirm),
+                            content: Text(
+                                AppLocalizations.of(context)!.logoutConfirm),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.pop(context),
-                                child: Text(AppLocalizations.of(context)!.cancel),
+                                child:
+                                    Text(AppLocalizations.of(context)!.cancel),
                               ),
                               TextButton(
                                 onPressed: () async {
@@ -384,7 +405,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                        backgroundColor: Theme.of(context)
+                            .colorScheme
+                            .error
+                            .withOpacity(0.1),
                         foregroundColor: Theme.of(context).colorScheme.error,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -452,7 +476,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       );
     }
-    
+
     // 로컬 파일 경로인 경우
     if (imageUrl.startsWith('/')) {
       final file = File(imageUrl);
@@ -471,7 +495,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
       );
     }
-    
+
     // 일반 URL인 경우
     return CachedNetworkImage(
       imageUrl: imageUrl,
@@ -549,7 +573,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ? Icon(
                     Icons.arrow_forward_ios,
                     size: 16,
-                    color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.5),
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.color
+                        ?.withOpacity(0.5),
                   )
                 : null),
         onTap: onTap,

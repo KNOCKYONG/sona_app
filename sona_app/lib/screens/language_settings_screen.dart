@@ -11,12 +11,11 @@ class LanguageSettingsScreen extends StatefulWidget {
 }
 
 class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
-  
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final localeService = Provider.of<LocaleService>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.languageSettings),
@@ -50,7 +49,9 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  l10n.isKorean ? '앱 인터페이스 언어를 설정합니다' : 'Set app interface language',
+                  l10n.isKorean
+                      ? '앱 인터페이스 언어를 설정합니다'
+                      : 'Set app interface language',
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).textTheme.bodySmall?.color,
@@ -59,21 +60,23 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
               ],
             ),
           ),
-          
+
           // 시스템 언어 사용 스위치
           SwitchListTile(
             title: Text(l10n.isKorean ? '시스템 언어 사용' : 'Use System Language'),
-            subtitle: Text(l10n.isKorean ? '기기의 언어 설정을 따릅니다' : 'Follow device language settings'),
+            subtitle: Text(l10n.isKorean
+                ? '기기의 언어 설정을 따릅니다'
+                : 'Follow device language settings'),
             value: localeService.useSystemLanguage,
             onChanged: (value) {
               localeService.setUseSystemLanguage(value);
             },
             activeColor: Theme.of(context).colorScheme.primary,
           ),
-          
+
           if (!localeService.useSystemLanguage) ...[
             const Divider(),
-            
+
             // 언어 선택 버튼들
             Container(
               padding: const EdgeInsets.all(16),
@@ -99,25 +102,37 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
-                              color: localeService.locale?.languageCode == 'en' || (localeService.useSystemLanguage && l10n.isKorean == false)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).cardColor,
+                              color:
+                                  localeService.locale?.languageCode == 'en' ||
+                                          (localeService.useSystemLanguage &&
+                                              l10n.isKorean == false)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: localeService.locale?.languageCode == 'en' || (localeService.useSystemLanguage && l10n.isKorean == false)
+                                color: localeService.locale?.languageCode ==
+                                            'en' ||
+                                        (localeService.useSystemLanguage &&
+                                            l10n.isKorean == false)
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).dividerColor,
                                 width: 2,
                               ),
-                              boxShadow: localeService.locale?.languageCode == 'en' || (localeService.useSystemLanguage && l10n.isKorean == false)
-                                  ? [
-                                      BoxShadow(
-                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ]
-                                  : null,
+                              boxShadow:
+                                  localeService.locale?.languageCode == 'en' ||
+                                          (localeService.useSystemLanguage &&
+                                              l10n.isKorean == false)
+                                      ? [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ]
+                                      : null,
                             ),
                             child: Column(
                               children: [
@@ -131,9 +146,15 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: localeService.locale?.languageCode == 'en' || (localeService.useSystemLanguage && l10n.isKorean == false)
+                                    color: localeService.locale?.languageCode ==
+                                                'en' ||
+                                            (localeService.useSystemLanguage &&
+                                                l10n.isKorean == false)
                                         ? Colors.white
-                                        : Theme.of(context).textTheme.bodyLarge?.color,
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
                                   ),
                                 ),
                               ],
@@ -151,25 +172,37 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             decoration: BoxDecoration(
-                              color: localeService.locale?.languageCode == 'ko' || (localeService.useSystemLanguage && l10n.isKorean == true)
-                                  ? Theme.of(context).colorScheme.primary
-                                  : Theme.of(context).cardColor,
+                              color:
+                                  localeService.locale?.languageCode == 'ko' ||
+                                          (localeService.useSystemLanguage &&
+                                              l10n.isKorean == true)
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Theme.of(context).cardColor,
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: localeService.locale?.languageCode == 'ko' || (localeService.useSystemLanguage && l10n.isKorean == true)
+                                color: localeService.locale?.languageCode ==
+                                            'ko' ||
+                                        (localeService.useSystemLanguage &&
+                                            l10n.isKorean == true)
                                     ? Theme.of(context).colorScheme.primary
                                     : Theme.of(context).dividerColor,
                                 width: 2,
                               ),
-                              boxShadow: localeService.locale?.languageCode == 'ko' || (localeService.useSystemLanguage && l10n.isKorean == true)
-                                  ? [
-                                      BoxShadow(
-                                        color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ]
-                                  : null,
+                              boxShadow:
+                                  localeService.locale?.languageCode == 'ko' ||
+                                          (localeService.useSystemLanguage &&
+                                              l10n.isKorean == true)
+                                      ? [
+                                          BoxShadow(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                                .withOpacity(0.3),
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ]
+                                      : null,
                             ),
                             child: Column(
                               children: [
@@ -183,9 +216,15 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: localeService.locale?.languageCode == 'ko' || (localeService.useSystemLanguage && l10n.isKorean == true)
+                                    color: localeService.locale?.languageCode ==
+                                                'ko' ||
+                                            (localeService.useSystemLanguage &&
+                                                l10n.isKorean == true)
                                         ? Colors.white
-                                        : Theme.of(context).textTheme.bodyLarge?.color,
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge
+                                            ?.color,
                                   ),
                                 ),
                               ],
@@ -199,7 +238,7 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
               ),
             ),
           ],
-          
+
           const SizedBox(height: 20),
         ],
       ),

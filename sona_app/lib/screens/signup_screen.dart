@@ -14,7 +14,7 @@ import '../l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isGoogleSignUp;
-  
+
   const SignUpScreen({
     super.key,
     this.isGoogleSignUp = false,
@@ -27,13 +27,13 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
   final _pageController = PageController();
-  
+
   // Controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _introController = TextEditingController();
-  
+
   // Form data
   String? _selectedGender;
   DateTime? _selectedBirth;
@@ -44,20 +44,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
   RangeValues _preferredAgeRange = const RangeValues(20, 35);
   List<String> _selectedInterests = [];
   File? _profileImage;
-  
+
   // 새로운 필드들
   String? _selectedPurpose;
   List<String> _selectedPreferredMbti = [];
   List<String> _selectedPreferredTopics = [];
-  
+
   // Terms agreement
   bool _agreedToTerms = false;
   bool _agreedToPrivacy = false;
   bool _agreedToMarketing = false;
-  
+
   int _currentPage = 0;
   bool _isCheckingNickname = false;
-  bool _isNicknameAvailable = false;  // 초기값을 false로 변경
+  bool _isNicknameAvailable = false; // 초기값을 false로 변경
   Timer? _nicknameCheckTimer;
 
   @override
@@ -76,7 +76,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       context: context,
       source: ImageSource.gallery,
     );
-    
+
     if (image != null) {
       setState(() {
         _profileImage = image;
@@ -86,14 +86,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _checkNicknameAvailability(String nickname) async {
     if (nickname.isEmpty) return;
-    
+
     setState(() {
       _isCheckingNickname = true;
     });
-    
+
     final userService = context.read<UserService>();
     final isAvailable = await userService.isNicknameAvailable(nickname);
-    
+
     setState(() {
       _isNicknameAvailable = isAvailable;
       _isCheckingNickname = false;
@@ -101,18 +101,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _updateSelectedBirth() {
-    if (_selectedYear != null && _selectedMonth != null && _selectedDay != null) {
+    if (_selectedYear != null &&
+        _selectedMonth != null &&
+        _selectedDay != null) {
       setState(() {
-        _selectedBirth = DateTime(_selectedYear!, _selectedMonth!, _selectedDay!);
+        _selectedBirth =
+            DateTime(_selectedYear!, _selectedMonth!, _selectedDay!);
       });
     }
   }
-  
+
   List<int> _getValidDays() {
     if (_selectedYear == null || _selectedMonth == null) {
       return List.generate(31, (index) => index + 1);
     }
-    
+
     // 해당 년월의 마지막 날 계산
     final lastDay = DateTime(_selectedYear!, _selectedMonth! + 1, 0).day;
     return List.generate(lastDay, (index) => index + 1);
@@ -120,37 +123,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     if (_selectedGender == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.selectGender)),
       );
       return;
     }
-    
+
     if (_selectedBirth == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(AppLocalizations.of(context)!.selectBirthDate)),
       );
       return;
     }
-    
+
     if (_selectedInterests.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.selectAtLeastOneInterest)),
+        SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.selectAtLeastOneInterest)),
       );
       return;
     }
-    
+
     if (!_agreedToTerms || !_agreedToPrivacy) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.requiredTermsAgreement)),
+        SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.requiredTermsAgreement)),
       );
       return;
     }
-    
+
     final userService = context.read<UserService>();
-    
+
     if (widget.isGoogleSignUp) {
       // 구글 로그인 후 추가 정보 저장
       final user = await userService.completeGoogleSignUp(
@@ -165,11 +172,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
-        preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        preferredMbti:
+            _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        preferredTopics:
+            _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
       );
-      
+
       if (user != null && mounted) {
         Navigator.pushReplacementNamed(context, '/main');
       }
@@ -189,16 +198,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: _selectedPurpose,
-        preferredMbti: _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
-        preferredTopics: _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        preferredMbti:
+            _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        preferredTopics:
+            _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
       );
-      
+
       if (user != null && mounted) {
         Navigator.pushReplacementNamed(context, '/main');
       }
     }
-    
+
     // 에러 처리
     if (userService.error != null && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -210,12 +221,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _nextPage() {
     // 현재 페이지의 유효성 검사
     bool canProceed = false;
-    
+
     switch (_currentPage) {
       case 0: // 기본 정보 페이지
         canProceed = _validateBasicInfo();
         break;
-      case 1: // 프로필 정보 페이지  
+      case 1: // 프로필 정보 페이지
         canProceed = _validateProfileInfo();
         break;
       case 2: // 사용 목적 페이지
@@ -231,7 +242,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         canProceed = _validateTopics();
         break;
     }
-    
+
     if (canProceed && _currentPage < 6) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
@@ -239,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
     }
   }
-  
+
   bool _validateBasicInfo() {
     // 이메일 가입인 경우
     if (!widget.isGoogleSignUp) {
@@ -252,7 +263,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _showErrorSnackBar(AppLocalizations.of(context)!.invalidEmailFormat);
         return false;
       }
-      
+
       // 비밀번호 검사
       if (_passwordController.text.isEmpty) {
         _showErrorSnackBar(AppLocalizations.of(context)!.enterPassword);
@@ -263,13 +274,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return false;
       }
     }
-    
+
     // 닉네임 검사
     if (_nicknameController.text.isEmpty) {
       _showErrorSnackBar(AppLocalizations.of(context)!.enterNickname);
       return false;
     }
-    if (_nicknameController.text.length < 2 || _nicknameController.text.length > 10) {
+    if (_nicknameController.text.length < 2 ||
+        _nicknameController.text.length > 10) {
       _showErrorSnackBar(AppLocalizations.of(context)!.nicknameLengthError);
       return false;
     }
@@ -277,37 +289,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _showErrorSnackBar(AppLocalizations.of(context)!.nicknameAlreadyUsed);
       return false;
     }
-    
+
     return true;
   }
-  
+
   bool _validateProfileInfo() {
     // 성별 검사 (선택사항이므로 체크하지 않음)
-    
+
     // 생년월일 검사 (필수)
     if (_selectedBirth == null) {
       _showErrorSnackBar(AppLocalizations.of(context)!.selectBirthDate);
       return false;
     }
-    
+
     // 자기소개는 선택사항이므로 체크하지 않음
-    
+
     return true;
   }
-  
+
   bool _validatePreferences() {
     // 선호 성별과 나이 범위는 기본값이 있으므로 체크하지 않음
     return true;
   }
-  
+
   bool _validateInterests() {
     if (_selectedInterests.isEmpty) {
-      _showErrorSnackBar(AppLocalizations.of(context)!.selectAtLeastOneInterest);
+      _showErrorSnackBar(
+          AppLocalizations.of(context)!.selectAtLeastOneInterest);
       return false;
     }
     return true;
   }
-  
+
   bool _validatePurpose() {
     if (_selectedPurpose == null) {
       _showErrorSnackBar(AppLocalizations.of(context)!.selectPurpose);
@@ -315,12 +328,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     return true;
   }
-  
+
   bool _validateTopics() {
     // 선택사항이므로 항상 true
     return true;
   }
-  
+
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
       _showErrorSnackBar(AppLocalizations.of(context)!.serviceTermsAgreement);
@@ -332,7 +345,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     return true;
   }
-  
+
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -341,13 +354,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-  
+
   bool _canProceedToNextPage() {
     switch (_currentPage) {
       case 0: // 기본 정보 페이지
         // 이메일 가입인 경우
         if (!widget.isGoogleSignUp) {
-          if (_emailController.text.isEmpty || 
+          if (_emailController.text.isEmpty ||
               !_emailController.text.contains('@') ||
               _passwordController.text.isEmpty ||
               _passwordController.text.length < 6) {
@@ -355,29 +368,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         }
         // 닉네임 검사
-        return _nicknameController.text.length >= 3 && 
-               _nicknameController.text.length <= 10 &&
-               _isNicknameAvailable &&
-               !_isCheckingNickname;
-               
+        return _nicknameController.text.length >= 3 &&
+            _nicknameController.text.length <= 10 &&
+            _isNicknameAvailable &&
+            !_isCheckingNickname;
+
       case 1: // 프로필 정보 페이지
         return _selectedBirth != null;
-        
+
       case 2: // 사용 목적 페이지
         return _selectedPurpose != null;
-        
+
       case 3: // 선호 설정 페이지
         return true; // 기본값이 있으므로 항상 true
-        
+
       case 4: // 관심사 페이지
         return _selectedInterests.isNotEmpty;
-        
+
       case 5: // 선호 주제 페이지
         return true; // 선택사항이므로 항상 true
-        
+
       case 6: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
-        
+
       default:
         return false;
     }
@@ -416,7 +429,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   AppTheme.primaryColor,
                 ),
               ),
-              
+
               // Page content
               Expanded(
                 child: PageView(
@@ -438,7 +451,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
               ),
-              
+
               // Navigation buttons
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -452,13 +465,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                     else
                       const SizedBox(width: 60),
-                    
                     if (_currentPage < 6)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: _canProceedToNextPage() 
-                              ? AppTheme.primaryColor 
+                          backgroundColor: _canProceedToNextPage()
+                              ? AppTheme.primaryColor
                               : Colors.grey[300],
                           padding: const EdgeInsets.symmetric(
                             horizontal: 32,
@@ -468,8 +480,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: Text(
                           localizations.next,
                           style: TextStyle(
-                            color: _canProceedToNextPage() 
-                                ? Colors.white 
+                            color: _canProceedToNextPage()
+                                ? Colors.white
                                 : Colors.grey[600],
                           ),
                         ),
@@ -495,7 +507,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   ),
                                 ),
                               )
-                            : Text(AppLocalizations.of(context)!.completeSignup),
+                            : Text(
+                                AppLocalizations.of(context)!.completeSignup),
                       ),
                   ],
                 ),
@@ -527,7 +540,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
-          
+
           // Email & Password (이메일 가입시에만)
           if (!widget.isGoogleSignUp) ...[
             TextFormField(
@@ -549,7 +562,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               },
             ),
             const SizedBox(height: 16),
-            
             TextFormField(
               controller: _passwordController,
               decoration: InputDecoration(
@@ -570,7 +582,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             const SizedBox(height: 24),
           ],
-          
+
           // Nickname
           TextFormField(
             controller: _nicknameController,
@@ -589,10 +601,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     )
                   : _nicknameController.text.isNotEmpty
                       ? Icon(
-                          _isNicknameAvailable && _nicknameController.text.length >= 3 && _nicknameController.text.length <= 10
+                          _isNicknameAvailable &&
+                                  _nicknameController.text.length >= 3 &&
+                                  _nicknameController.text.length <= 10
                               ? Icons.check_circle
                               : Icons.error,
-                          color: _isNicknameAvailable && _nicknameController.text.length >= 3 && _nicknameController.text.length <= 10
+                          color: _isNicknameAvailable &&
+                                  _nicknameController.text.length >= 3 &&
+                                  _nicknameController.text.length <= 10
                               ? Colors.green
                               : Colors.red,
                         )
@@ -601,7 +617,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onChanged: (value) {
               // 타이머 취소
               _nicknameCheckTimer?.cancel();
-              
+
               // 닉네임이 비어있거나 길이가 맞지 않으면 검사하지 않음
               if (value.isEmpty || value.length < 3 || value.length > 10) {
                 setState(() {
@@ -610,13 +626,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 });
                 return;
               }
-              
+
               // 500ms 후에 중복 확인
               setState(() {
                 _isCheckingNickname = true;
               });
-              
-              _nicknameCheckTimer = Timer(const Duration(milliseconds: 500), () {
+
+              _nicknameCheckTimer =
+                  Timer(const Duration(milliseconds: 500), () {
                 _checkNicknameAvailability(value);
               });
             },
@@ -658,7 +675,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
-          
+
           // Profile image
           Center(
             child: GestureDetector(
@@ -699,9 +716,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 32),
-          
+
           // Gender
-          Text(localizations.genderRequired, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(localizations.genderRequired,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -742,9 +760,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             },
           ),
           const SizedBox(height: 24),
-          
+
           // Birth date
-          Text(localizations.birthDateRequired, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(localizations.birthDateRequired,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -752,8 +771,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.year,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    labelText: AppLocalizations.of(context)!.year,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedYear,
                   items: List.generate(
@@ -770,7 +790,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     setState(() {
                       _selectedYear = value;
                       // 선택된 날짜가 유효하지 않으면 초기화
-                      if (_selectedDay != null && _selectedDay! > _getValidDays().length) {
+                      if (_selectedDay != null &&
+                          _selectedDay! > _getValidDays().length) {
                         _selectedDay = null;
                       }
                       _updateSelectedBirth();
@@ -783,8 +804,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.month,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    labelText: AppLocalizations.of(context)!.month,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedMonth,
                   items: List.generate(
@@ -798,7 +820,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     setState(() {
                       _selectedMonth = value;
                       // 선택된 날짜가 유효하지 않으면 초기화
-                      if (_selectedDay != null && _selectedDay! > _getValidDays().length) {
+                      if (_selectedDay != null &&
+                          _selectedDay! > _getValidDays().length) {
                         _selectedDay = null;
                       }
                       _updateSelectedBirth();
@@ -811,8 +834,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.day,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    labelText: AppLocalizations.of(context)!.day,
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
                   value: _selectedDay,
                   items: _getValidDays()
@@ -832,7 +856,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           ),
           const SizedBox(height: 24),
-          
+
           // Introduction
           TextFormField(
             controller: _introController,
@@ -869,7 +893,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
-          
+
           // Gender All checkbox
           Text(
             localizations.personaGenderPreference,
@@ -888,7 +912,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controlAffinity: ListTileControlAffinity.leading,
           ),
           const SizedBox(height: 24),
-          
+
           // Preferred age range
           Text(
             AppLocalizations.of(context)!.preferredPersonaAgeRange,
@@ -896,7 +920,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            localizations.ageRange(_preferredAgeRange.start.toInt(), _preferredAgeRange.end.toInt()),
+            localizations.ageRange(_preferredAgeRange.start.toInt(),
+                _preferredAgeRange.end.toInt()),
             style: const TextStyle(fontSize: 16),
           ),
           RangeSlider(
@@ -942,15 +967,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 32),
-          
           ..._buildPurposeOptions(),
-          
         ],
       ),
     );
   }
-  
-  
+
   List<Widget> _buildPurposeOptions() {
     final localizations = AppLocalizations.of(context)!;
     final purposes = [
@@ -970,12 +992,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
         'icon': Icons.theater_comedy,
       },
     ];
-    
+
     return purposes.map((purpose) {
       final key = purpose['key'] as String;
       final title = purpose['title'] as String;
       final icon = purpose['icon'] as IconData;
-      
+
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: InkWell(
@@ -988,13 +1010,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               border: Border.all(
-                color: _selectedPurpose == key 
-                    ? AppTheme.primaryColor 
+                color: _selectedPurpose == key
+                    ? AppTheme.primaryColor
                     : Colors.grey[300]!,
                 width: _selectedPurpose == key ? 2 : 1,
               ),
               borderRadius: BorderRadius.circular(12),
-              color: _selectedPurpose == key 
+              color: _selectedPurpose == key
                   ? AppTheme.primaryColor.withOpacity(0.05)
                   : null,
             ),
@@ -1003,8 +1025,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Icon(
                   icon,
                   size: 32,
-                  color: _selectedPurpose == key 
-                      ? AppTheme.primaryColor 
+                  color: _selectedPurpose == key
+                      ? AppTheme.primaryColor
                       : Colors.grey[600],
                 ),
                 const SizedBox(width: 16),
@@ -1017,8 +1039,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: _selectedPurpose == key 
-                              ? AppTheme.primaryColor 
+                          color: _selectedPurpose == key
+                              ? AppTheme.primaryColor
                               : Theme.of(context).textTheme.bodyLarge?.color,
                         ),
                       ),
@@ -1027,7 +1049,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         _getPurposeDescription(key),
                         style: TextStyle(
                           fontSize: 14,
-                          color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                          color: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.color
+                              ?.withOpacity(0.7),
                         ),
                       ),
                     ],
@@ -1045,7 +1071,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
     }).toList();
   }
-  
+
   IconData _getPurposeIcon(String purpose) {
     switch (purpose) {
       case 'friendship':
@@ -1060,7 +1086,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return Icons.chat;
     }
   }
-  
+
   String _getPurposeDescription(String purpose) {
     switch (purpose) {
       case 'friendship':
@@ -1093,7 +1119,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       {'key': 'technology', 'title': localizations.technology},
     ];
   }
-  
+
   List<Map<String, String>> _getLocalizedTopics() {
     final localizations = AppLocalizations.of(context)!;
     return [
@@ -1107,7 +1133,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       {'key': 'light_talk', 'title': localizations.lightTalk},
     ];
   }
-  
+
   Widget _buildInterestsPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -1127,7 +1153,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
-          
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1156,7 +1181,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-  
+
   Widget _buildTopicsPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -1176,7 +1201,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
-          
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1201,10 +1225,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               );
             }).toList(),
           ),
-          
-          
           const SizedBox(height: 32),
-          
           Text(
             AppLocalizations.of(context)!.preferredMbti,
             style: TextStyle(
@@ -1221,7 +1242,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1248,7 +1268,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-  
+
   Widget _buildTermsAgreementPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -1268,7 +1288,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 32),
-          
           TermsAgreementWidget(
             agreedToTerms: _agreedToTerms,
             agreedToPrivacy: _agreedToPrivacy,

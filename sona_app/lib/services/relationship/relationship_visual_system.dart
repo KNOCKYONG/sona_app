@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 /// 🎨 관계 시각화 시스템
-/// 
+///
 /// 색상, 뱃지, 링, 하트 등 시각적 요소로 관계를 표현
 class RelationshipVisualSystem {
   // 싱글톤 패턴
-  static final RelationshipVisualSystem _instance = RelationshipVisualSystem._internal();
+  static final RelationshipVisualSystem _instance =
+      RelationshipVisualSystem._internal();
   factory RelationshipVisualSystem() => _instance;
   RelationshipVisualSystem._internal();
 }
@@ -19,61 +20,50 @@ class RelationshipColorSystem {
     if (likes <= 0) {
       return Colors.grey[400]!;
     }
-    
+
     if (likes < 500) {
       // 친구: 파란색 → 하늘색
-      return Color.lerp(
-        Colors.blue[700]!, 
-        Colors.lightBlue[400]!, 
-        (likes / 500).clamp(0.0, 1.0)
-      )!;
+      return Color.lerp(Colors.blue[700]!, Colors.lightBlue[400]!,
+          (likes / 500).clamp(0.0, 1.0))!;
     } else if (likes < 2000) {
       // 썸: 하늘색 → 분홍색
-      return Color.lerp(
-        Colors.lightBlue[400]!, 
-        Colors.pink[300]!, 
-        ((likes - 500) / 1500).clamp(0.0, 1.0)
-      )!;
+      return Color.lerp(Colors.lightBlue[400]!, Colors.pink[300]!,
+          ((likes - 500) / 1500).clamp(0.0, 1.0))!;
     } else if (likes < 5000) {
       // 연애: 분홍색 → 빨간색
-      return Color.lerp(
-        Colors.pink[300]!, 
-        Colors.red[400]!, 
-        ((likes - 2000) / 3000).clamp(0.0, 1.0)
-      )!;
+      return Color.lerp(Colors.pink[300]!, Colors.red[400]!,
+          ((likes - 2000) / 3000).clamp(0.0, 1.0))!;
     } else {
       // 깊은 사랑: 빨간색 → 와인색 → 금색
       if (likes < 10000) {
         return Color.lerp(
-          Colors.red[400]!, 
-          const Color(0xFF722F37), // 와인색
-          ((likes - 5000) / 5000).clamp(0.0, 1.0)
-        )!;
+            Colors.red[400]!,
+            const Color(0xFF722F37), // 와인색
+            ((likes - 5000) / 5000).clamp(0.0, 1.0))!;
       } else {
         // 10K+ 금색 계열로 전환
         return Color.lerp(
-          const Color(0xFF722F37),
-          const Color(0xFFFFD700), // 금색
-          ((likes - 10000) / 10000).clamp(0.0, 1.0)
-        )!;
+            const Color(0xFF722F37),
+            const Color(0xFFFFD700), // 금색
+            ((likes - 10000) / 10000).clamp(0.0, 1.0))!;
       }
     }
   }
-  
+
   /// 다크모드 대응 색상
   static Color getAdaptiveColor(BuildContext context, int likes) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final baseColor = getRelationshipColor(likes);
-    
+
     if (isDark) {
       // 다크모드에서는 채도를 높이고 명도 조정
       final hslColor = HSLColor.fromColor(baseColor);
       return hslColor
-        .withSaturation((hslColor.saturation * 1.2).clamp(0.0, 1.0))
-        .withLightness((hslColor.lightness * 1.1).clamp(0.0, 0.8))
-        .toColor();
+          .withSaturation((hslColor.saturation * 1.2).clamp(0.0, 1.0))
+          .withLightness((hslColor.lightness * 1.1).clamp(0.0, 0.8))
+          .toColor();
     }
-    
+
     return baseColor;
   }
 }
@@ -149,29 +139,31 @@ class RelationshipRingSystem {
     double size = 60,
   }) {
     final rings = _calculateRings(likes);
-    
+
     return Stack(
       alignment: Alignment.center,
       children: [
         // 다중 링 효과
         ...rings.map((ring) => Container(
-          width: size + ring.offset,
-          height: size + ring.offset,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: ring.color,
-              width: ring.width,
-            ),
-            boxShadow: ring.isGlowing ? [
-              BoxShadow(
-                color: ring.color.withOpacity(0.5),
-                blurRadius: 4,
-                spreadRadius: 1,
+              width: size + ring.offset,
+              height: size + ring.offset,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: ring.color,
+                  width: ring.width,
+                ),
+                boxShadow: ring.isGlowing
+                    ? [
+                        BoxShadow(
+                          color: ring.color.withOpacity(0.5),
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                        ),
+                      ]
+                    : null,
               ),
-            ] : null,
-          ),
-        )),
+            )),
         // 중앙 콘텐츠
         SizedBox(
           width: size,
@@ -181,10 +173,10 @@ class RelationshipRingSystem {
       ],
     );
   }
-  
+
   static List<RingData> _calculateRings(int likes) {
     final rings = <RingData>[];
-    
+
     if (likes >= 100) {
       rings.add(RingData(
         color: Colors.blue.withOpacity(0.5),
@@ -193,7 +185,7 @@ class RelationshipRingSystem {
         isGlowing: false,
       ));
     }
-    
+
     if (likes >= 1000) {
       rings.add(RingData(
         color: Colors.pink.withOpacity(0.6),
@@ -202,7 +194,7 @@ class RelationshipRingSystem {
         isGlowing: false,
       ));
     }
-    
+
     if (likes >= 5000) {
       rings.add(RingData(
         color: Colors.red.withOpacity(0.7),
@@ -211,7 +203,7 @@ class RelationshipRingSystem {
         isGlowing: false,
       ));
     }
-    
+
     if (likes >= 10000) {
       // 금색 빛나는 링
       rings.add(RingData(
@@ -221,7 +213,7 @@ class RelationshipRingSystem {
         isGlowing: true,
       ));
     }
-    
+
     return rings;
   }
 }
@@ -237,10 +229,10 @@ class HeartEvolutionSystem {
         size: size,
       );
     }
-    
+
     // 양수일 때는 기존 색상 시스템 적용
     final color = RelationshipColorSystem.getRelationshipColor(likes);
-    
+
     return Icon(
       Icons.favorite,
       color: color,
@@ -255,7 +247,7 @@ class RingData {
   final double width;
   final double offset;
   final bool isGlowing;
-  
+
   RingData({
     required this.color,
     required this.width,

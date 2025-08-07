@@ -54,7 +54,7 @@ class Message {
   final int? likesChange;
   final bool isRead;
   final bool isFirstInSequence;
-  
+
   // 다국어 지원 필드
   final String? originalLanguage; // 원문 언어 코드 (예: 'ko', 'en')
   final String? translatedContent; // 번역된 내용
@@ -116,7 +116,8 @@ class Message {
       metadata: json['metadata'] != null
           ? Map<String, dynamic>.from(json['metadata'])
           : null,
-      likesChange: json['likesChange'] ?? json['relationshipScoreChange'],  // 호환성
+      likesChange:
+          json['likesChange'] ?? json['relationshipScoreChange'], // 호환성
       isRead: json['isRead'] ?? false,
       isFirstInSequence: json['isFirstInSequence'] ?? true,
       originalLanguage: json['originalLanguage'],

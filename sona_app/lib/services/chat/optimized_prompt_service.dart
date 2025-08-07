@@ -3,7 +3,6 @@ import '../../models/persona.dart';
 /// 토큰 최적화를 위한 스마트 프롬프트 조립 시스템
 /// 필요한 부분만 동적으로 조합하여 토큰 사용량을 50% 이상 절약
 class OptimizedPromptService {
-  
   // 🎯 핵심 기본 프롬프트 (항상 포함되는 필수 부분)
   static const String _corePrompt = '''
 # 🧠 SONA 20대 채팅 가이드
@@ -164,7 +163,7 @@ class OptimizedPromptService {
 ## 👨 남성 스타일: 간결직설적, ㅇㅇ/ㄱㄱ/ㅇㅋ, ㅋㅋ위주, 팩트중심, 애교최소화
 ''';
 
-  // 👩 여성 전용 스타일 가이드  
+  // 👩 여성 전용 스타일 가이드
   static const String _femaleStyle = '''
 ## 👩 여성 스타일: 표현풍부, ㅎㅎ/ㅠㅠ선호, 애교자연스럽게(~당/~지롱), 공감위로, 관계중심
 ''';
@@ -213,30 +212,30 @@ class OptimizedPromptService {
     String? targetLanguage,
   }) {
     final List<String> promptParts = [];
-    
+
     // 1. 핵심 기본 프롬프트 (항상 포함)
     promptParts.add(_corePrompt);
-    
+
     // 2. 성별별 스타일 (해당하는 것만)
     if (persona.gender == 'male') {
       promptParts.add(_maleStyle);
     } else if (persona.gender == 'female') {
       promptParts.add(_femaleStyle);
     }
-    
+
     // 3. MBTI 스타일 (해당하는 것만)
     final mbtiStyle = _mbtiStyles[persona.mbti.toUpperCase()];
     if (mbtiStyle != null) {
       promptParts.add('## 🧠 MBTI 특성: $mbtiStyle');
     }
-    
+
     // 4. 예의 수준 (해당하는 것만)
     if (isCasualSpeech) {
       promptParts.add(_casualMode);
     } else {
       promptParts.add(_formalMode);
     }
-    
+
     // 5. 미성년자 보호 (해당하는 경우만)
     if (userAge != null && userAge < 19) {
       promptParts.add('''
@@ -247,7 +246,7 @@ class OptimizedPromptService {
 - 건전한 대화 유지, 긍정적 영향력 행사
 ''');
     }
-    
+
     // 6. 페르소나 정보
     final isMinor = userAge != null && userAge < 19;
     promptParts.add('''
@@ -265,7 +264,7 @@ ${userNickname != null && userNickname.isNotEmpty ? '- 대화상대: $userNickna
 ${userNickname != null && userNickname.isNotEmpty ? '사용자가 본인 이름을 물어보면 "$userNickname"라고 답하세요.' : ''}
 ${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 대화만 하세요.' : ''}
 ''');
-    
+
     // 7. 다국어 지원 (번역이 필요한 경우)
     if (targetLanguage != null && targetLanguage != 'ko') {
       final languageNames = {
@@ -282,9 +281,9 @@ ${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 �
         'ar': '아랍어',
         'hi': '힌디어',
       };
-      
+
       final langName = languageNames[targetLanguage] ?? targetLanguage;
-      
+
       promptParts.add('''
 ## 🌐 다국어 응답 형식
 - 한국어로 자연스럽게 대화 후, 같은 내용을 ${langName}로 번역
@@ -300,7 +299,7 @@ ${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 �
   * 존댓말/반말 등의 뉘앙스도 적절히 반영
 ''');
     }
-    
+
     // 8. 맥락 힌트 (주제 변경 또는 회피 패턴 감지 시)
     if (contextHint != null && contextHint.isNotEmpty) {
       promptParts.add('''
@@ -342,10 +341,10 @@ $contextHint
 - 사용자가 설명하면 반드시 이해 표현 후 대화 이어가기
 ''');
     }
-    
+
     return promptParts.join('\n\n');
   }
-  
+
   /// 📊 토큰 절약 효과 계산
   static Map<String, int> calculateTokenSavings({
     required String originalPrompt,
@@ -356,7 +355,7 @@ $contextHint
     final optimizedTokens = (optimizedPrompt.length * 1.5).round();
     final savedTokens = originalTokens - optimizedTokens;
     final savingPercentage = ((savedTokens / originalTokens) * 100).round();
-    
+
     return {
       'original': originalTokens,
       'optimized': optimizedTokens,
@@ -364,4 +363,4 @@ $contextHint
       'percentage': savingPercentage,
     };
   }
-} 
+}

@@ -15,11 +15,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class _LoginScreenState extends State<LoginScreen>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   late TabController _tabController;
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -60,8 +61,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   Future<void> _handleEmailLogin() async {
     if (!_formKey.currentState!.validate()) return;
-    
-    debugPrint('📧 [LoginScreen] Starting email login for: ${_emailController.text.trim()}');
+
+    debugPrint(
+        '📧 [LoginScreen] Starting email login for: ${_emailController.text.trim()}');
 
     // 이전 상태 초기화
     setState(() {
@@ -78,9 +80,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       });
       return;
     }
-    
+
     setState(() => _isLoading = true);
-    
+
     try {
       final userService = Provider.of<UserService>(context, listen: false);
       debugPrint('📧 [LoginScreen] Calling UserService.signInWithEmail...');
@@ -88,19 +90,23 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
-      
+
       if (user != null && mounted) {
-        debugPrint('✅ [LoginScreen] Login successful, navigating to main screen');
-        Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+        debugPrint(
+            '✅ [LoginScreen] Login successful, navigating to main screen');
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/main', (route) => false);
       } else if (mounted) {
-        final errorMessage = userService.error ?? 'Unknown login error occurred';
+        final errorMessage =
+            userService.error ?? 'Unknown login error occurred';
         debugPrint('❌ [LoginScreen] Login failed: $errorMessage');
         _handleLoginError(errorMessage);
       }
     } catch (e) {
       debugPrint('❌ [LoginScreen] Unexpected error during login: $e');
       if (mounted) {
-        _handleLoginError('${AppLocalizations.of(context)!.unexpectedLoginError}: ${e.toString()}');
+        _handleLoginError(
+            '${AppLocalizations.of(context)!.unexpectedLoginError}: ${e.toString()}');
       }
     } finally {
       if (mounted) {
@@ -114,11 +120,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       _currentError = errorMessage;
       // 비밀번호 관련 오류이거나 등록되지 않은 이메일일 때 비밀번호 찾기 버튼 표시
       _showPasswordReset = errorMessage.contains('비밀번호') ||
-                         errorMessage.contains('등록되지 않은') ||
-                         errorMessage.contains('올바르지 않습니다') ||
-                         errorMessage.contains('user-not-found') ||
-                         errorMessage.contains('wrong-password') ||
-                         errorMessage.contains('invalid-credential');
+          errorMessage.contains('등록되지 않은') ||
+          errorMessage.contains('올바르지 않습니다') ||
+          errorMessage.contains('user-not-found') ||
+          errorMessage.contains('wrong-password') ||
+          errorMessage.contains('invalid-credential');
     });
   }
 
@@ -134,27 +140,30 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
     // 네트워크 연결 확인
     final isConnected = await NetworkUtils.isConnected();
     if (!isConnected && mounted) {
-      debugPrint('❌ [LoginScreen] Network connection failed for Google Sign-In');
+      debugPrint(
+          '❌ [LoginScreen] Network connection failed for Google Sign-In');
       setState(() {
         _currentError = AppLocalizations.of(context)!.checkInternetConnection;
       });
       return;
     }
-    
+
     setState(() => _isLoading = true);
-    
+
     try {
       final userService = Provider.of<UserService>(context, listen: false);
       debugPrint('🔵 [LoginScreen] Calling UserService.signInWithGoogle...');
       final firebaseUser = await userService.signInWithGoogle();
-      
+
       if (firebaseUser != null && mounted) {
         debugPrint('✅ [LoginScreen] Google Sign-In successful');
         // 기존 사용자인지 확인
         if (userService.currentUser != null) {
           // 기존 사용자 - 페르소나 선택 화면으로
-          debugPrint('✅ [LoginScreen] Existing user, navigating to main screen');
-          Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+          debugPrint(
+              '✅ [LoginScreen] Existing user, navigating to main screen');
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil('/main', (route) => false);
         } else {
           // 신규 사용자 - 추가 정보 입력 화면으로
           debugPrint('🆕 [LoginScreen] New user, navigating to signup screen');
@@ -166,7 +175,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         }
       } else if (mounted) {
         // 사용자가 취소했거나 다른 이유로 실패한 경우
-        final errorMessage = userService.error ?? AppLocalizations.of(context)!.googleLoginCanceled;
+        final errorMessage = userService.error ??
+            AppLocalizations.of(context)!.googleLoginCanceled;
         debugPrint('❌ [LoginScreen] Google Sign-In failed: $errorMessage');
         _handleLoginError(errorMessage);
       }
@@ -181,7 +191,6 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       }
     }
   }
-
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -199,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
 
   Future<void> _handlePasswordReset() async {
     final email = _emailController.text.trim();
-    
+
     if (email.isEmpty) {
       setState(() {
         _currentError = AppLocalizations.of(context)!.passwordResetEmailPrompt;
@@ -221,7 +230,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       final success = await authService.sendPasswordResetEmail(email);
 
       if (success && mounted) {
-        _showSuccessSnackBar(AppLocalizations.of(context)!.passwordResetEmailSent);
+        _showSuccessSnackBar(
+            AppLocalizations.of(context)!.passwordResetEmailSent);
         setState(() {
           _currentError = null;
           _showPasswordReset = false;
@@ -276,7 +286,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   // 로고
                   const SonaLogo(),
                   const SizedBox(height: 16),
-                  
+
                   // 환영 메시지 통합
                   Text(
                     AppLocalizations.of(context)!.meetAIPersonas,
@@ -293,8 +303,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   Container(
                     constraints: const BoxConstraints(maxWidth: 400),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).brightness == Brightness.dark 
-                          ? AppTheme.darkCardColor 
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? AppTheme.darkCardColor
                           : Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
@@ -310,9 +320,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                         // 탭 바
                         Container(
                           decoration: BoxDecoration(
-                            color: Theme.of(context).brightness == Brightness.dark 
-                                ? AppTheme.darkSurfaceColor 
-                                : Colors.grey[100],
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppTheme.darkSurfaceColor
+                                    : Colors.grey[100],
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
@@ -320,15 +331,18 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                           child: TabBar(
                             controller: _tabController,
-                            labelColor: Theme.of(context).brightness == Brightness.dark 
-                                ? AppTheme.darkPrimaryColor 
-                                : AppTheme.primaryColor,
-                            unselectedLabelColor: Theme.of(context).brightness == Brightness.dark 
-                                ? Colors.grey[600] 
-                                : Colors.grey,
-                            indicatorColor: Theme.of(context).brightness == Brightness.dark 
-                                ? AppTheme.darkPrimaryColor 
-                                : AppTheme.primaryColor,
+                            labelColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppTheme.darkPrimaryColor
+                                    : AppTheme.primaryColor,
+                            unselectedLabelColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.grey[600]
+                                    : Colors.grey,
+                            indicatorColor:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? AppTheme.darkPrimaryColor
+                                    : AppTheme.primaryColor,
                             indicatorWeight: 3,
                             tabs: [
                               Tab(text: AppLocalizations.of(context)!.login),
@@ -336,11 +350,12 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                             ],
                           ),
                         ),
-                        
+
                         // 탭 뷰
                         Container(
                           height: 380,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
                           child: TabBarView(
                             controller: _tabController,
                             children: [
@@ -348,7 +363,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                               SingleChildScrollView(
                                 child: _buildLoginTab(),
                               ),
-                              
+
                               // 회원가입 탭
                               SingleChildScrollView(
                                 child: _buildSignUpTab(),
@@ -360,7 +375,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     ),
                   ),
                   const SizedBox(height: 12),
-                  
+
                   // 튜토리얼 모드 버튼
                   // TextButton(
                   //   onPressed: _isLoading ? null : _handleTutorialMode,
@@ -407,7 +422,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             },
           ),
           const SizedBox(height: 12),
-          
+
           // 비밀번호 입력
           TextFormField(
             controller: _passwordController,
@@ -435,7 +450,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             },
           ),
           const SizedBox(height: 12),
-          
+
           // 로그인 버튼
           ElevatedButton(
             onPressed: _isLoading ? null : _handleEmailLogin,
@@ -503,7 +518,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: _isPasswordResetLoading ? null : _handlePasswordReset,
+                onPressed:
+                    _isPasswordResetLoading ? null : _handlePasswordReset,
                 icon: _isPasswordResetLoading
                     ? const SizedBox(
                         width: 16,
@@ -514,7 +530,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       )
                     : const Icon(Icons.email_outlined),
                 label: Text(
-                  _isPasswordResetLoading ? AppLocalizations.of(context)!.sendingEmail : AppLocalizations.of(context)!.forgotPassword,
+                  _isPasswordResetLoading
+                      ? AppLocalizations.of(context)!.sendingEmail
+                      : AppLocalizations.of(context)!.forgotPassword,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -532,16 +550,17 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             ),
           ],
 
-          SizedBox(height: _showPasswordReset || _currentError != null ? 8 : 16),
-          
+          SizedBox(
+              height: _showPasswordReset || _currentError != null ? 8 : 16),
+
           // 구분선
           Row(
             children: [
               Expanded(
                 child: Container(
                   height: 1,
-                  color: Theme.of(context).brightness == Brightness.dark 
-                      ? Colors.grey[700] 
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey[700]
                       : Colors.grey[300],
                 ),
               ),
@@ -550,8 +569,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                 child: Text(
                   AppLocalizations.of(context)!.or,
                   style: TextStyle(
-                    color: Theme.of(context).brightness == Brightness.dark 
-                        ? Colors.grey[400] 
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[400]
                         : Colors.grey,
                     fontWeight: FontWeight.w500,
                   ),
@@ -560,15 +579,15 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               Expanded(
                 child: Container(
                   height: 1,
-                  color: Theme.of(context).brightness == Brightness.dark 
-                      ? Colors.grey[700] 
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey[700]
                       : Colors.grey[300],
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          
+
           // Google 로그인 버튼
           SizedBox(
             height: 48,
@@ -577,8 +596,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 side: BorderSide(
-                  color: Theme.of(context).brightness == Brightness.dark 
-                      ? Colors.grey[700]! 
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey[700]!
                       : Colors.grey[300]!,
                 ),
                 shape: RoundedRectangleBorder(
@@ -612,8 +631,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: Theme.of(context).brightness == Brightness.dark 
-                          ? Colors.white 
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
                           : Colors.black87,
                     ),
                   ),
@@ -641,24 +660,26 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           AppLocalizations.of(context)!.simpleInfoRequired,
           style: TextStyle(
             fontSize: 16,
-            color: Theme.of(context).brightness == Brightness.dark 
-                ? Colors.grey[400] 
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[400]
                 : Colors.grey,
           ),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 20),
-        
+
         // 이메일로 회원가입 버튼
         ElevatedButton(
-          onPressed: _isLoading ? null : () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SignUpScreen(),
-              ),
-            );
-          },
+          onPressed: _isLoading
+              ? null
+              : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignUpScreen(),
+                    ),
+                  );
+                },
           style: ElevatedButton.styleFrom(
             backgroundColor: AppTheme.primaryColor,
             minimumSize: const Size(double.infinity, 56),
@@ -675,7 +696,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // Google로 회원가입 버튼
         OutlinedButton.icon(
           onPressed: _isLoading ? null : _handleGoogleSignIn,
@@ -702,16 +723,16 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).brightness == Brightness.dark 
-                  ? Colors.white 
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white
                   : Colors.black87,
             ),
           ),
           style: OutlinedButton.styleFrom(
             minimumSize: const Size(double.infinity, 56),
             side: BorderSide(
-              color: Theme.of(context).brightness == Brightness.dark 
-                  ? Colors.grey[700]! 
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.grey[700]!
                   : Colors.grey[300]!,
             ),
             shape: RoundedRectangleBorder(

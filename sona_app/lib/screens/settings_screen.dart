@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -71,7 +71,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20),
-            
+
             // 알림 설정
             _buildSectionTitle(localizations.notificationSettings),
             _buildSwitchItem(
@@ -86,7 +86,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _saveSettings();
               },
             ),
-            
+
             // 소리 설정
             _buildSectionTitle(localizations.soundSettings),
             _buildSwitchItem(
@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _saveSettings();
               },
             ),
-            
+
             // 테마 설정
             _buildSectionTitle(localizations.theme),
             Consumer<ThemeService>(
@@ -109,14 +109,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 return _buildMenuItem(
                   icon: themeService.getThemeIcon(themeService.currentTheme),
                   title: localizations.themeSettings,
-                  subtitle: themeService.getThemeDisplayName(themeService.currentTheme),
+                  subtitle: themeService
+                      .getThemeDisplayName(themeService.currentTheme),
                   onTap: () {
                     Navigator.pushNamed(context, '/theme-settings');
                   },
                 );
               },
             ),
-            
+
             // 기타
             _buildSectionTitle(localizations.others),
             _buildMenuItem(
@@ -169,7 +170,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 Navigator.pushNamed(context, '/purchase-policy');
               },
             ),
-            
+
             // 저장소 관리
             _buildSectionTitle('저장소 관리'),
             _buildMenuItem(
@@ -180,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _showCacheManagementDialog();
               },
             ),
-            
+
             // 계정 관리
             _buildSectionTitle(localizations.accountManagement),
             _buildMenuItem(
@@ -191,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 AccountDeletionDialog.show(context);
               },
             ),
-            
+
             const SizedBox(height: 40),
           ],
         ),
@@ -455,15 +456,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // 캐시된 이미지 개수로 대략적인 크기 추정
       final prefs = await SharedPreferences.getInstance();
       final preloadedImages = prefs.getStringList('preloaded_images') ?? [];
-      
+
       // 이미지당 평균 크기 추정
       // thumb: 50KB, small: 150KB, medium: 400KB
       final avgSizePerImage = (50 + 150 + 400) * 1024; // 600KB per persona
-      
+
       // 페르소나 수 계산 (각 페르소나당 3개 이미지)
       final personaCount = preloadedImages.length ~/ 3;
       cacheSize = personaCount * avgSizePerImage;
-      
+
       // 최소값 설정
       if (cacheSize == 0 && preloadedImages.isNotEmpty) {
         cacheSize = preloadedImages.length * 200 * 1024; // 이미지당 200KB 평균
@@ -479,7 +480,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     // 캐시 관리 다이얼로그 표시
     if (!mounted) return;
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -550,17 +551,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-
   String _formatBytes(int bytes) {
     if (bytes == 0) return '0 B';
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     final i = (bytes == 0) ? 0 : (bytes.bitLength - 1) ~/ 10;
-    
+
     if (i >= sizes.length) {
       return '${(bytes / (k * k * k)).toStringAsFixed(1)} GB';
     }
-    
+
     final divisor = i == 0 ? 1 : (i == 1 ? k : (i == 2 ? k * k : k * k * k));
     return '${(bytes / divisor).toStringAsFixed(1)} ${sizes[i]}';
   }
@@ -579,7 +579,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       // 모든 캐시 삭제
       await DefaultCacheManager().emptyCache();
       await PersonaCacheManager.instance.emptyCache();
-      
+
       // 이미지 프리로드 상태 초기화
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('images_preloaded');
@@ -587,7 +587,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       if (mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
-        
+
         // 성공 메시지
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -599,7 +599,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } catch (e) {
       if (mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기
-        
+
         // 에러 메시지
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

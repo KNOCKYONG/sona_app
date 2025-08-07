@@ -37,7 +37,7 @@ import 'services/app_info_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 환경 변수 로드
   try {
     await dotenv.load(fileName: ".env");
@@ -46,7 +46,7 @@ void main() async {
       print('Warning: .env file not found. Using default configuration.');
     }
   }
-  
+
   // Firebase 중복 초기화 방지
   try {
     await Firebase.initializeApp(
@@ -67,7 +67,7 @@ void main() async {
     FlutterError.onError = (errorDetails) {
       FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
     };
-    
+
     // Dart 예외 처리 (웹에서는 PlatformDispatcher가 제대로 지원되지 않음)
     PlatformDispatcher.instance.onError = (error, stack) {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
@@ -85,20 +85,21 @@ void main() async {
 
   // 캐시 매니저 초기화
   await CacheManager.instance.initialize();
-  
+
   // PreferencesManager 초기화
   await PreferencesManager.initialize();
-  
+
   // ThemeService 초기화
   final themeService = ThemeService();
   await themeService.initialize();
-  
+
   // LocaleService 초기화
   debugPrint('🌐 [Main] Initializing LocaleService...');
   final localeService = LocaleService();
   await localeService.initialize();
-  debugPrint('🌐 [Main] LocaleService initialized. Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
-  
+  debugPrint(
+      '🌐 [Main] LocaleService initialized. Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
+
   // AppInfoService 초기화
   await AppInfoService.instance.initialize();
   AppInfoService.instance.printDebugInfo();
@@ -112,9 +113,9 @@ void main() async {
 class SonaApp extends StatelessWidget {
   final ThemeService themeService;
   final LocaleService localeService;
-  
+
   const SonaApp({
-    super.key, 
+    super.key,
     required this.themeService,
     required this.localeService,
   });
@@ -167,26 +168,30 @@ class SonaApp extends StatelessWidget {
           },
           initialRoute: '/',
           routes: {
-          '/': (context) => const SplashScreen(),
-          '/login': (context) => const LoginScreen(),
-          '/welcome': (context) => const WelcomeScreen(),
-          '/image-preload': (context) => const ImagePreloadScreen(),
-          '/main': (context) {
-            final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-            return MainNavigationScreen(initialIndex: args?['initialIndex'] ?? 0);
-          },
-          '/persona-selection': (context) => const MainNavigationScreen(),
-          '/refresh-download': (context) => const RefreshDownloadScreen(),
-          '/chat': (context) => const ChatScreen(),
-          '/chat-list': (context) => const MainNavigationScreen(initialIndex: 1),
-          '/profile': (context) => const MainNavigationScreen(),
-          '/privacy-policy': (context) => const PrivacyPolicyScreen(),
-          '/terms-of-service': (context) => const TermsOfServiceScreen(),
-          '/admin/quality-dashboard': (context) => const AdminQualityDashboardScreen(),
-          '/settings': (context) => const SettingsScreen(),
-          '/theme-settings': (context) => const ThemeSettingsScreen(),
-          '/purchase': (context) => const PurchaseScreen(),
-          '/purchase-policy': (context) => const PurchasePolicyScreen(),
+            '/': (context) => const SplashScreen(),
+            '/login': (context) => const LoginScreen(),
+            '/welcome': (context) => const WelcomeScreen(),
+            '/image-preload': (context) => const ImagePreloadScreen(),
+            '/main': (context) {
+              final args = ModalRoute.of(context)?.settings.arguments
+                  as Map<String, dynamic>?;
+              return MainNavigationScreen(
+                  initialIndex: args?['initialIndex'] ?? 0);
+            },
+            '/persona-selection': (context) => const MainNavigationScreen(),
+            '/refresh-download': (context) => const RefreshDownloadScreen(),
+            '/chat': (context) => const ChatScreen(),
+            '/chat-list': (context) =>
+                const MainNavigationScreen(initialIndex: 1),
+            '/profile': (context) => const MainNavigationScreen(),
+            '/privacy-policy': (context) => const PrivacyPolicyScreen(),
+            '/terms-of-service': (context) => const TermsOfServiceScreen(),
+            '/admin/quality-dashboard': (context) =>
+                const AdminQualityDashboardScreen(),
+            '/settings': (context) => const SettingsScreen(),
+            '/theme-settings': (context) => const ThemeSettingsScreen(),
+            '/purchase': (context) => const PurchaseScreen(),
+            '/purchase-policy': (context) => const PurchasePolicyScreen(),
           },
         ),
       ),

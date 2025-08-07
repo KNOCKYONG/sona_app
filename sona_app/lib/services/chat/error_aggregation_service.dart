@@ -9,19 +9,20 @@ import 'error_recovery_service.dart';
 /// 동일한 에러를 집계하여 배치로 리포팅
 class ErrorAggregationService {
   static ErrorAggregationService? _instance;
-  static ErrorAggregationService get instance => _instance ??= ErrorAggregationService._();
-  
+  static ErrorAggregationService get instance =>
+      _instance ??= ErrorAggregationService._();
+
   ErrorAggregationService._() {
     // 5분마다 집계된 에러 리포트
     _batchTimer = Timer.periodic(const Duration(minutes: 5), (_) {
       _sendBatchReports();
     });
   }
-  
+
   // 집계 중인 에러들
   final Map<String, _AggregatedError> _aggregatedErrors = {};
   Timer? _batchTimer;
-  
+
   /// 에러 집계
   void aggregateError({
     required String userId,
@@ -41,7 +42,7 @@ class ErrorAggregationService {
       errorType: errorType,
       timestamp: now,
     );
-    
+
     if (_aggregatedErrors.containsKey(errorHash)) {
       // 기존 에러 업데이트
       final existing = _aggregatedErrors[errorHash]!;
@@ -66,29 +67,33 @@ class ErrorAggregationService {
         lastUserMessages: [if (lastUserMessage != null) lastUserMessage],
       );
     }
-    
-    debugPrint('📊 Error aggregated: $errorHash (count: ${_aggregatedErrors[errorHash]!.occurrenceCount})');
+
+    debugPrint(
+        '📊 Error aggregated: $errorHash (count: ${_aggregatedErrors[errorHash]!.occurrenceCount})');
   }
-  
+
   /// 배치 리포트 전송
   Future<void> _sendBatchReports() async {
     if (_aggregatedErrors.isEmpty) return;
-    
-    debugPrint('📤 Sending batch error reports: ${_aggregatedErrors.length} unique errors');
-    
+
+    debugPrint(
+        '📤 Sending batch error reports: ${_aggregatedErrors.length} unique errors');
+
     final batch = FirebaseHelper.batch();
-    final errorsToReport = Map<String, _AggregatedError>.from(_aggregatedErrors);
+    final errorsToReport =
+        Map<String, _AggregatedError>.from(_aggregatedErrors);
     _aggregatedErrors.clear();
-    
+
     for (final entry in errorsToReport.entries) {
       final error = entry.value;
-      
+
       // 이미 리포트된 에러인지 확인
-      if (ErrorRecoveryService.instance.isErrorRecentlyReported(error.errorHash)) {
+      if (ErrorRecoveryService.instance
+          .isErrorRecentlyReported(error.errorHash)) {
         debugPrint('⏭️ Skipping already reported error: ${error.errorHash}');
         continue;
       }
-      
+
       final errorReport = ChatErrorReport(
         errorKey: ChatErrorReport.generateErrorKey(),
         userId: error.userId,
@@ -112,14 +117,14 @@ class ErrorAggregationService {
         firstOccurred: error.firstOccurred,
         lastOccurred: error.lastOccurred,
       );
-      
+
       final docRef = FirebaseHelper.chatErrorFix.doc();
       batch.set(docRef, errorReport.toMap());
-      
+
       // 리포트 완료 기록
       ErrorRecoveryService.instance.markErrorAsReported(error.errorHash);
     }
-    
+
     try {
       await batch.commit();
       debugPrint('✅ Batch error reports sent successfully');
@@ -127,12 +132,12 @@ class ErrorAggregationService {
       debugPrint('❌ Failed to send batch error reports: $e');
     }
   }
-  
+
   /// 즉시 배치 전송 (테스트용)
   Future<void> flushBatchReports() async {
     await _sendBatchReports();
   }
-  
+
   /// 서비스 종료
   void dispose() {
     _batchTimer?.cancel();
@@ -152,11 +157,11 @@ class _AggregatedError {
   final String deviceInfo;
   final String errorHash;
   final List<String> lastUserMessages;
-  
+
   DateTime firstOccurred;
   DateTime lastOccurred;
   int occurrenceCount;
-  
+
   _AggregatedError({
     required this.userId,
     required this.personaId,

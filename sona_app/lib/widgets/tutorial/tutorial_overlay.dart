@@ -43,16 +43,18 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       debugPrint('⚠️ No tutorial steps provided for ${widget.screenKey}');
       return;
     }
-    
+
     final prefs = await SharedPreferences.getInstance();
     final authService = context.read<AuthService>();
     final userId = authService.user?.uid ?? 'anonymous';
-    
+
     // 튜토리얼 모드인 경우 항상 표시, 일반 모드에서는 한 번만 표시
     final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
-    final hasSeenTutorial = prefs.getBool('tutorial_${widget.screenKey}_$userId') ?? false;
-    final allPersonasViewed = prefs.getBool('all_personas_viewed_$userId') ?? false;
-    
+    final hasSeenTutorial =
+        prefs.getBool('tutorial_${widget.screenKey}_$userId') ?? false;
+    final allPersonasViewed =
+        prefs.getBool('all_personas_viewed_$userId') ?? false;
+
     // persona_selection 화면이고 첫 사용자인 경우 튜토리얼 표시
     if (widget.screenKey == 'persona_selection' && !hasSeenTutorial) {
       // 첫 사용자인지 체크
@@ -60,13 +62,14 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       if (!isFirstTime) {
         return;
       }
-      
+
       // 모든 페르소나를 확인했다면 튜토리얼 표시 안함
       if (allPersonasViewed) {
         return;
       }
-      
-      debugPrint('TutorialOverlay - Showing tutorial for persona_selection (first time user)');
+
+      debugPrint(
+          'TutorialOverlay - Showing tutorial for persona_selection (first time user)');
       await Future.delayed(const Duration(milliseconds: 500));
       if (mounted) {
         setState(() {
@@ -75,22 +78,24 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
       }
       return;
     }
-    
+
     // 각 스텝별로 다시 보지 않기 설정 확인 (사용자별로)
     bool allStepsHidden = true;
     for (int i = 0; i < widget.tutorialSteps.length; i++) {
-      final stepHidden = prefs.getBool('tutorial_${widget.screenKey}_step_${i}_$userId') ?? false;
+      final stepHidden =
+          prefs.getBool('tutorial_${widget.screenKey}_step_${i}_$userId') ??
+              false;
       if (!stepHidden) {
         allStepsHidden = false;
         break;
       }
     }
-    
+
     // 모든 스텝이 숨겨져 있으면 튜토리얼 표시 안함
     if (allStepsHidden && !isTutorialMode) {
       return;
     }
-    
+
     // 튜토리얼 모드이거나, (튜토리얼을 본 적이 없고 모든 스텝이 숨겨지지 않은 경우)에만 표시
     if (isTutorialMode || (!hasSeenTutorial && !allStepsHidden)) {
       // 화면이 완전히 로드된 후 튜토리얼 표시
@@ -103,24 +108,24 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
     }
   }
 
-
   void _nextStep() async {
     debugPrint('TutorialOverlay - Moving from step $_currentStep to next');
-    
+
     // 🔧 FIX: 빈 배열에 대한 안전한 처리
     if (widget.tutorialSteps.isEmpty) {
       _completeTutorial();
       return;
     }
-    
+
     // 현재 스텝을 다시 보지 않기로 선택했다면 저장 (사용자별로)
     if (_dontShowAgainSteps[_currentStep] == true) {
       final prefs = await SharedPreferences.getInstance();
       final authService = context.read<AuthService>();
       final userId = authService.user?.uid ?? 'anonymous';
-      await prefs.setBool('tutorial_${widget.screenKey}_step_${_currentStep}_$userId', true);
+      await prefs.setBool(
+          'tutorial_${widget.screenKey}_step_${_currentStep}_$userId', true);
     }
-    
+
     if (_currentStep < widget.tutorialSteps.length - 1) {
       setState(() {
         _currentStep++;
@@ -130,25 +135,24 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
     }
   }
 
-
   Future<void> _completeTutorial() async {
     final prefs = await SharedPreferences.getInstance();
     final authService = context.read<AuthService>();
     final userId = authService.user?.uid ?? 'anonymous';
     final isTutorialMode = prefs.getBool('is_tutorial_mode') ?? false;
-    
+
     // 현재 화면의 튜토리얼 완료 상태 저장
     await prefs.setBool('tutorial_${widget.screenKey}_$userId', true);
-    
+
     // persona_selection 튜토리얼을 완료했으면 첫 사용자 튜토리얼 완료 표시
     if (widget.screenKey == 'persona_selection') {
       await CacheManager.instance.markTutorialCompleted();
     }
-    
+
     setState(() {
       _showTutorial = false;
     });
-    
+
     // 완료 콜백 호출
     widget.onTutorialComplete?.call();
   }
@@ -172,13 +176,16 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
 
   Widget _buildTutorialOverlay() {
     // 🔧 FIX: 안전한 tutorialSteps 접근
-    if (widget.tutorialSteps.isEmpty || _currentStep >= widget.tutorialSteps.length) {
-      debugPrint('❌ Invalid tutorial step: $_currentStep of ${widget.tutorialSteps.length}');
+    if (widget.tutorialSteps.isEmpty ||
+        _currentStep >= widget.tutorialSteps.length) {
+      debugPrint(
+          '❌ Invalid tutorial step: $_currentStep of ${widget.tutorialSteps.length}');
       return const SizedBox.shrink(); // 빈 위젯 반환
     }
-    
+
     // 애니메이션 스텝이 제공되었으면 사용
-    if (widget.animatedSteps != null && _currentStep < widget.animatedSteps!.length) {
+    if (widget.animatedSteps != null &&
+        _currentStep < widget.animatedSteps!.length) {
       final animatedStep = widget.animatedSteps![_currentStep];
       return Stack(
         children: [
@@ -202,7 +209,7 @@ class _TutorialOverlayState extends State<TutorialOverlay> {
         ],
       );
     }
-    
+
     // 애니메이션 스텝이 없으면 빈 위젯 반환
     return const SizedBox.shrink();
   }

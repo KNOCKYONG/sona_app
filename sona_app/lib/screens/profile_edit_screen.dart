@@ -19,23 +19,23 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nicknameController = TextEditingController();
   final _introController = TextEditingController();
-  
+
   File? _profileImage;
   bool _isCheckingNickname = false;
   bool _isNicknameAvailable = true;
   String? _selectedGender;
   bool _genderAll = false;
-  
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
   }
-  
+
   void _loadUserData() {
     final userService = context.read<UserService>();
     final user = userService.currentUser;
-    
+
     if (user != null) {
       _nicknameController.text = user.nickname;
       _introController.text = user.intro ?? '';
@@ -43,33 +43,33 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       _genderAll = user.genderAll;
     }
   }
-  
+
   @override
   void dispose() {
     _nicknameController.dispose();
     _introController.dispose();
     super.dispose();
   }
-  
+
   Future<void> _pickImage() async {
     final imageFile = await PermissionHelper.requestAndPickImage(
       context: context,
       source: ImageSource.gallery,
     );
-    
+
     if (imageFile != null) {
       setState(() {
         _profileImage = imageFile;
       });
     }
   }
-  
+
   Future<void> _checkNicknameAvailability(String nickname) async {
     if (nickname.isEmpty) return;
-    
+
     final userService = context.read<UserService>();
     final currentUser = userService.currentUser;
-    
+
     // 현재 닉네임과 같으면 체크하지 않음
     if (currentUser != null && nickname == currentUser.nickname) {
       setState(() {
@@ -78,24 +78,24 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       });
       return;
     }
-    
+
     setState(() {
       _isCheckingNickname = true;
     });
-    
+
     final isAvailable = await userService.isNicknameAvailable(nickname);
-    
+
     setState(() {
       _isNicknameAvailable = isAvailable;
       _isCheckingNickname = false;
     });
   }
-  
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     final userService = context.read<UserService>();
-    
+
     final success = await userService.updateUserProfile(
       nickname: _nicknameController.text,
       gender: _selectedGender,
@@ -103,7 +103,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       profileImage: _profileImage,
       genderAll: _genderAll,
     );
-    
+
     if (success && mounted) {
       // Update PersonaService with new user data
       final personaService = context.read<PersonaService>();
@@ -112,7 +112,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         // Force reshuffle to apply new gender preferences
         personaService.reshuffleAvailablePersonas();
       }
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(AppLocalizations.of(context)!.profileUpdated),
@@ -123,18 +123,19 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     } else if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(userService.error ?? AppLocalizations.of(context)!.profileUpdateFailed),
+          content: Text(userService.error ??
+              AppLocalizations.of(context)!.profileUpdateFailed),
           backgroundColor: Colors.red,
         ),
       );
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final userService = context.watch<UserService>();
     final user = userService.currentUser;
-    
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
@@ -150,7 +151,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).iconTheme.color),
+          icon: Icon(Icons.arrow_back_ios,
+              color: Theme.of(context).iconTheme.color),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
@@ -159,8 +161,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             child: Text(
               AppLocalizations.of(context)!.complete,
               style: TextStyle(
-                color: userService.isLoading 
-                    ? Theme.of(context).textTheme.bodySmall?.color 
+                color: userService.isLoading
+                    ? Theme.of(context).textTheme.bodySmall?.color
                     : Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
               ),
@@ -174,7 +176,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
           child: Column(
             children: [
               const SizedBox(height: 24),
-              
+
               // 프로필 이미지
               Center(
                 child: GestureDetector(
@@ -243,7 +245,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              
+
               // 입력 필드들
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -263,7 +265,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 height: 20,
                                 child: Padding(
                                   padding: EdgeInsets.all(10),
-                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2),
                                 ),
                               )
                             : _nicknameController.text.isNotEmpty
@@ -287,7 +290,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           return AppLocalizations.of(context)!.enterNickname;
                         }
                         if (value.length < 3 || value.length > 10) {
-                          return AppLocalizations.of(context)!.nicknameLengthError;
+                          return AppLocalizations.of(context)!
+                              .nicknameLengthError;
                         }
                         if (!_isNicknameAvailable) {
                           return AppLocalizations.of(context)!.nicknameInUse;
@@ -296,7 +300,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       },
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // 성별
                     Text(
                       AppLocalizations.of(context)!.gender,
@@ -346,12 +350,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    
+
                     // Gender All checkbox
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: CheckboxListTile(
@@ -374,13 +382,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    
+
                     // 자기소개
                     TextFormField(
                       controller: _introController,
                       decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context)!.selfIntroduction,
-                        hintText: AppLocalizations.of(context)!.selfIntroductionHint,
+                        labelText:
+                            AppLocalizations.of(context)!.selfIntroduction,
+                        hintText:
+                            AppLocalizations.of(context)!.selfIntroductionHint,
                         alignLabelWithHint: true,
                       ),
                       maxLines: 3,
@@ -415,7 +425,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         },
       );
     }
-    
+
     // 일반 URL인 경우
     return Image.network(
       imageUrl,

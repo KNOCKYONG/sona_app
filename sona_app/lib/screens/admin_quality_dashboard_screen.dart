@@ -2,29 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// 📊 관리자용 상담 품질 모니터링 대시보드
-/// 
+///
 /// 실시간으로 전문 상담사들의 응답 품질을 모니터링하고
 /// 낮은 품질의 상담을 즉시 감지하여 대응할 수 있도록 함
 class AdminQualityDashboardScreen extends StatefulWidget {
   const AdminQualityDashboardScreen({super.key});
 
   @override
-  State<AdminQualityDashboardScreen> createState() => _AdminQualityDashboardScreenState();
+  State<AdminQualityDashboardScreen> createState() =>
+      _AdminQualityDashboardScreenState();
 }
 
-class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScreen> {
+class _AdminQualityDashboardScreenState
+    extends State<AdminQualityDashboardScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  
+
   Stream<QuerySnapshot>? _qualityMetricsStream;
   Map<String, ConsultationQualityStats> _personaStats = {};
   List<LowQualityAlert> _alerts = [];
-  
+
   @override
   void initState() {
     super.initState();
     _initializeMonitoring();
   }
-  
+
   void _initializeMonitoring() {
     // 실시간 품질 메트릭 스트림 설정
     _qualityMetricsStream = _firestore
@@ -32,38 +34,38 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
         .orderBy('timestamp', descending: true)
         .limit(100)
         .snapshots();
-        
+
     _loadPersonaStats();
     _loadQualityAlerts();
   }
-  
+
   Future<void> _loadPersonaStats() async {
     try {
       final now = DateTime.now();
       final oneDayAgo = now.subtract(const Duration(days: 1));
-      
+
       final snapshot = await _firestore
           .collection('consultation_quality_logs')
           .where('timestamp', isGreaterThan: oneDayAgo.toIso8601String())
           .get();
-          
+
       final Map<String, List<Map<String, dynamic>>> groupedMetrics = {};
-      
+
       for (final doc in snapshot.docs) {
         final data = doc.data();
         final personaType = data['persona_type'] as String;
-        
+
         if (!groupedMetrics.containsKey(personaType)) {
           groupedMetrics[personaType] = [];
         }
         groupedMetrics[personaType]!.add(data);
       }
-      
+
       final Map<String, ConsultationQualityStats> stats = {};
       for (final entry in groupedMetrics.entries) {
         stats[entry.key] = ConsultationQualityStats.fromMetrics(entry.value);
       }
-      
+
       setState(() {
         _personaStats = stats;
       });
@@ -71,18 +73,18 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       debugPrint('Error loading persona stats: $e');
     }
   }
-  
+
   Future<void> _loadQualityAlerts() async {
     try {
       final now = DateTime.now();
       final oneHourAgo = now.subtract(const Duration(hours: 1));
-      
+
       final snapshot = await _firestore
           .collection('consultation_quality_logs')
           .where('timestamp', isGreaterThan: oneHourAgo.toIso8601String())
           .where('response_quality_score', isLessThan: 0.6)
           .get();
-          
+
       final alerts = snapshot.docs.map((doc) {
         final data = doc.data();
         return LowQualityAlert(
@@ -92,7 +94,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
           userMessage: data['user_message_preview'] ?? 'N/A',
         );
       }).toList();
-      
+
       setState(() {
         _alerts = alerts;
       });
@@ -125,19 +127,19 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
           children: [
             // 전체 품질 지표 카드들
             _buildOverallStatsCards(),
-            
+
             const SizedBox(height: 24),
-            
+
             // 낮은 품질 알림
             _buildQualityAlerts(),
-            
+
             const SizedBox(height: 24),
-            
+
             // 페르소나별 품질 통계
             _buildPersonaQualityStats(),
-            
+
             const SizedBox(height: 24),
-            
+
             // 실시간 품질 로그
             _buildRealTimeQualityLog(),
           ],
@@ -145,10 +147,10 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ),
     );
   }
-  
+
   Widget _buildOverallStatsCards() {
     final overallStats = _calculateOverallStats();
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -166,8 +168,11 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
               child: _buildStatCard(
                 '평균 품질 점수',
                 '${(overallStats.averageQuality * 100).toStringAsFixed(1)}%',
-                overallStats.averageQuality >= 0.8 ? Colors.green : 
-                overallStats.averageQuality >= 0.6 ? Colors.orange : Colors.red,
+                overallStats.averageQuality >= 0.8
+                    ? Colors.green
+                    : overallStats.averageQuality >= 0.6
+                        ? Colors.orange
+                        : Colors.red,
                 Icons.star,
               ),
             ),
@@ -207,8 +212,9 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ],
     );
   }
-  
-  Widget _buildStatCard(String title, String value, Color color, IconData icon) {
+
+  Widget _buildStatCard(
+      String title, String value, Color color, IconData icon) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -254,7 +260,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ),
     );
   }
-  
+
   Widget _buildQualityAlerts() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,7 +341,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ],
     );
   }
-  
+
   Widget _buildPersonaQualityStats() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -364,7 +370,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
               final entry = _personaStats.entries.elementAt(index);
               final personaType = entry.key;
               final stats = entry.value;
-              
+
               return Container(
                 margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(16),
@@ -397,7 +403,9 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
                           child: _buildMiniStat(
                             '평균 품질',
                             '${(stats.averageQuality * 100).toStringAsFixed(1)}%',
-                            stats.averageQuality >= 0.8 ? Colors.green : Colors.orange,
+                            stats.averageQuality >= 0.8
+                                ? Colors.green
+                                : Colors.orange,
                           ),
                         ),
                         Expanded(
@@ -411,7 +419,9 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
                           child: _buildMiniStat(
                             '전문성 점수',
                             '${(stats.professionalism * 100).toStringAsFixed(1)}%',
-                            stats.professionalism >= 0.8 ? Colors.green : Colors.orange,
+                            stats.professionalism >= 0.8
+                                ? Colors.green
+                                : Colors.orange,
                           ),
                         ),
                       ],
@@ -424,7 +434,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ],
     );
   }
-  
+
   Widget _buildMiniStat(String label, String value, Color color) {
     return Column(
       children: [
@@ -447,7 +457,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ],
     );
   }
-  
+
   Widget _buildRealTimeQualityLog() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -466,7 +476,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
-            
+
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
               return const Center(
                 child: Padding(
@@ -475,7 +485,7 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
                 ),
               );
             }
-            
+
             return ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -483,32 +493,42 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
               itemBuilder: (context, index) {
                 final doc = snapshot.data!.docs[index];
                 final data = doc.data() as Map<String, dynamic>;
-                
+
                 final qualityScore = data['response_quality_score'] as double;
                 final personaType = data['persona_type'] as String;
                 final timestamp = DateTime.parse(data['timestamp']);
-                
+
                 return Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: qualityScore >= 0.8 ? Colors.green.withOpacity(0.1) : 
-                           qualityScore >= 0.6 ? Colors.orange.withOpacity(0.1) : 
-                           Colors.red.withOpacity(0.1),
+                    color: qualityScore >= 0.8
+                        ? Colors.green.withOpacity(0.1)
+                        : qualityScore >= 0.6
+                            ? Colors.orange.withOpacity(0.1)
+                            : Colors.red.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: qualityScore >= 0.8 ? Colors.green.withOpacity(0.3) : 
-                             qualityScore >= 0.6 ? Colors.orange.withOpacity(0.3) : 
-                             Colors.red.withOpacity(0.3),
+                      color: qualityScore >= 0.8
+                          ? Colors.green.withOpacity(0.3)
+                          : qualityScore >= 0.6
+                              ? Colors.orange.withOpacity(0.3)
+                              : Colors.red.withOpacity(0.3),
                     ),
                   ),
                   child: Row(
                     children: [
                       Icon(
-                        qualityScore >= 0.8 ? Icons.check_circle : 
-                        qualityScore >= 0.6 ? Icons.warning : Icons.error,
-                        color: qualityScore >= 0.8 ? Colors.green : 
-                               qualityScore >= 0.6 ? Colors.orange : Colors.red,
+                        qualityScore >= 0.8
+                            ? Icons.check_circle
+                            : qualityScore >= 0.6
+                                ? Icons.warning
+                                : Icons.error,
+                        color: qualityScore >= 0.8
+                            ? Colors.green
+                            : qualityScore >= 0.6
+                                ? Colors.orange
+                                : Colors.red,
                         size: 20,
                       ),
                       const SizedBox(width: 12),
@@ -543,22 +563,23 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       ],
     );
   }
-  
+
   OverallQualityStats _calculateOverallStats() {
     int totalSessions = 0;
     double totalQuality = 0.0;
     int lowQualityCount = 0;
     int crisisDetected = 0;
-    
+
     for (final stats in _personaStats.values) {
       totalSessions += stats.totalResponses;
       totalQuality += stats.averageQuality * stats.totalResponses;
       lowQualityCount += stats.lowQualityResponses;
       crisisDetected += stats.crisisResponses;
     }
-    
-    final averageQuality = totalSessions > 0 ? totalQuality / totalSessions : 0.0;
-    
+
+    final averageQuality =
+        totalSessions > 0 ? totalQuality / totalSessions : 0.0;
+
     return OverallQualityStats(
       totalSessions: totalSessions,
       averageQuality: averageQuality,
@@ -566,11 +587,11 @@ class _AdminQualityDashboardScreenState extends State<AdminQualityDashboardScree
       crisisDetected: crisisDetected,
     );
   }
-  
+
   String _formatTime(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inMinutes < 1) {
       return '방금 전';
     } else if (difference.inMinutes < 60) {
@@ -590,7 +611,7 @@ class ConsultationQualityStats {
   final double professionalism;
   final int lowQualityResponses;
   final int crisisResponses;
-  
+
   ConsultationQualityStats({
     required this.totalResponses,
     required this.averageQuality,
@@ -598,8 +619,9 @@ class ConsultationQualityStats {
     required this.lowQualityResponses,
     required this.crisisResponses,
   });
-  
-  factory ConsultationQualityStats.fromMetrics(List<Map<String, dynamic>> metrics) {
+
+  factory ConsultationQualityStats.fromMetrics(
+      List<Map<String, dynamic>> metrics) {
     if (metrics.isEmpty) {
       return ConsultationQualityStats(
         totalResponses: 0,
@@ -609,23 +631,23 @@ class ConsultationQualityStats {
         crisisResponses: 0,
       );
     }
-    
+
     double totalQuality = 0.0;
     double totalProfessionalism = 0.0;
     int lowQualityCount = 0;
     int crisisCount = 0;
-    
+
     for (final metric in metrics) {
       final quality = metric['response_quality_score'] as double;
       final professionalism = metric['professional_tone_score'] as double;
-      
+
       totalQuality += quality;
       totalProfessionalism += professionalism;
-      
+
       if (quality < 0.6) lowQualityCount++;
       if (metric['is_crisis_response'] == true) crisisCount++;
     }
-    
+
     return ConsultationQualityStats(
       totalResponses: metrics.length,
       averageQuality: totalQuality / metrics.length,
@@ -641,7 +663,7 @@ class LowQualityAlert {
   final double qualityScore;
   final DateTime timestamp;
   final String userMessage;
-  
+
   LowQualityAlert({
     required this.personaType,
     required this.qualityScore,
@@ -655,7 +677,7 @@ class OverallQualityStats {
   final double averageQuality;
   final int lowQualityCount;
   final int crisisDetected;
-  
+
   OverallQualityStats({
     required this.totalSessions,
     required this.averageQuality,

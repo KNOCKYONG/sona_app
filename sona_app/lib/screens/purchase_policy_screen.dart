@@ -7,7 +7,7 @@ class PurchasePolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.purchaseAndRefundPolicy),
@@ -37,37 +37,30 @@ class PurchasePolicyScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-            
             _SectionWidget(
               title: localizations.purchaseSection1Title,
               content: localizations.purchaseSection1Content,
             ),
-            
             _SectionWidget(
               title: localizations.purchaseSection2Title,
               content: localizations.purchaseSection2Content,
             ),
-            
             _SectionWidget(
               title: localizations.purchaseSection3Title,
               content: localizations.purchaseSection3Content,
             ),
-            
             _SectionWidget(
               title: localizations.purchaseSection4Title,
               content: localizations.purchaseSection4Content,
             ),
-            
             _SectionWidget(
               title: localizations.purchaseSection5Title,
               content: localizations.purchaseSection5Content,
             ),
-            
             _SectionWidget(
               title: localizations.purchaseSection6Title,
               content: localizations.purchaseSection6Content,
             ),
-            
             const SizedBox(height: 40),
           ],
         ),

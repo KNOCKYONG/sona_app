@@ -3,14 +3,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 /// 🔧 디바이스 고유 ID 관리 서비스
-/// 
+///
 /// 사용자가 로그인하지 않아도 임시 userId를 제공하여
 /// Firebase 작업이 정상적으로 수행될 수 있도록 합니다.
 class DeviceIdService {
   static const String _deviceIdKey = 'device_unique_id';
   static const String _deviceUserIdKey = 'device_user_id';
   static const Uuid _uuid = Uuid();
-  
+
   static String? _cachedDeviceId;
   static String? _cachedUserId;
 
@@ -69,7 +69,8 @@ class DeviceIdService {
     } catch (e) {
       debugPrint('❌ Error getting temporary user ID: $e');
       // 폴백: 간단한 임시 ID
-      final fallbackUserId = 'device_user_${DateTime.now().millisecondsSinceEpoch}';
+      final fallbackUserId =
+          'device_user_${DateTime.now().millisecondsSinceEpoch}';
       _cachedUserId = fallbackUserId;
       return fallbackUserId;
     }
@@ -112,7 +113,7 @@ class DeviceIdService {
   static Future<void> logDeviceInfo() async {
     final deviceId = await getDeviceId();
     final userId = await getTemporaryUserId();
-    
+
     debugPrint('📱 Device Info:');
     debugPrint('   Device ID: $deviceId');
     debugPrint('   Temp User ID: $userId');
@@ -125,20 +126,20 @@ class DeviceIdService {
     if (userId == null || userId.isEmpty) {
       return false;
     }
-    
+
     // 최소 길이 체크
     if (userId.length < 3) {
       return false;
     }
-    
+
     // 알려진 유효한 패턴들
     final validPatterns = [
       'tutorial_user',
       'device_user_',
       // Firebase UID는 보통 28자
     ];
-    
-    return validPatterns.any((pattern) => userId.startsWith(pattern)) || 
-           userId.length >= 20; // Firebase UID 길이
+
+    return validPatterns.any((pattern) => userId.startsWith(pattern)) ||
+        userId.length >= 20; // Firebase UID 길이
   }
-} 
+}

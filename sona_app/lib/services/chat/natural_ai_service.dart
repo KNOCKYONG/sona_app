@@ -34,12 +34,12 @@ class NaturalAIService {
     String? userNickname,
   }) {
     final personality = persona.personality;
-    
+
     String response = '';
-    
+
     // 첫 만남인지 확인
     final isFirstMessage = chatHistory.where((m) => m.isFromUser).isEmpty;
-    
+
     // 첫 만남
     if (likes == 0 && isFirstMessage) {
       response = _getFirstMeetingResponse(
@@ -49,12 +49,12 @@ class NaturalAIService {
         chatHistory: chatHistory,
         userNickname: userNickname,
       );
-      
+
       // 중복 체크 - 첫 만남 응답도 체크
       response = _avoidRepetitiveResponse(response, chatHistory);
       return response;
     }
-    
+
     // 일반 소나의 성격과 특성을 반영한 응답 생성
     response = _getPersonaSpecificResponse(
       userMessage: userMessage,
@@ -64,58 +64,74 @@ class NaturalAIService {
       chatHistory: chatHistory,
       userNickname: userNickname,
     );
-    
+
     // 최근 응답과 중복 체크 및 필터링
     response = _avoidRepetitiveResponse(response, chatHistory);
-    
+
     return response;
   }
-  
+
   /// 최근 응답과의 중복을 피하는 필터
-  static String _avoidRepetitiveResponse(String response, List<Message> chatHistory) {
+  static String _avoidRepetitiveResponse(
+      String response, List<Message> chatHistory) {
     // 최근 AI 응답 5개 가져오기
     final recentAIResponses = chatHistory
         .where((m) => !m.isFromUser)
         .take(5)
         .map((m) => m.content.toLowerCase())
         .toList();
-    
+
     if (recentAIResponses.isEmpty) {
       return response;
     }
-    
+
     // 첫 문장 추출 (중복 체크용)
-    final responseFirstSentence = response.split(RegExp(r'[.!?]'))[0].toLowerCase().trim();
-    
+    final responseFirstSentence =
+        response.split(RegExp(r'[.!?]'))[0].toLowerCase().trim();
+
     // 반복적인 시작 패턴 체크
     final repetitivePatterns = [
-      '오', '와', '아', '그렇구나', '그래', '그런가', '흠', '음',
-      '어떤', '어떻게', '무슨', '뭐', '왜',
-      '근데', '그런데', '그래서', '그러니까'
+      '오',
+      '와',
+      '아',
+      '그렇구나',
+      '그래',
+      '그런가',
+      '흠',
+      '음',
+      '어떤',
+      '어떻게',
+      '무슨',
+      '뭐',
+      '왜',
+      '근데',
+      '그런데',
+      '그래서',
+      '그러니까'
     ];
-    
+
     // 최근 응답들의 첫 단어/패턴과 비교
     for (final recent in recentAIResponses) {
       final recentFirstWord = recent.split(' ')[0];
       final currentFirstWord = responseFirstSentence.split(' ')[0];
-      
+
       // 같은 시작 단어가 3번 이상 반복되면 대체
-      final sameStartCount = recentAIResponses
-          .where((r) => r.startsWith(currentFirstWord))
-          .length;
-      
+      final sameStartCount =
+          recentAIResponses.where((r) => r.startsWith(currentFirstWord)).length;
+
       if (sameStartCount >= 2) {
         // 대체 시작 표현 선택
         response = _replaceRepetitiveStart(response, repetitivePatterns);
         break;
       }
     }
-    
+
     return response;
   }
-  
+
   /// 반복적인 시작 표현을 대체
-  static String _replaceRepetitiveStart(String response, List<String> usedPatterns) {
+  static String _replaceRepetitiveStart(
+      String response, List<String> usedPatterns) {
     final alternatives = [
       '흠... ',
       '아하 ',
@@ -129,31 +145,33 @@ class NaturalAIService {
       '완전 ',
       '', // 바로 본론으로
     ];
-    
+
     // 사용되지 않은 대체 표현 찾기
     final availableAlts = alternatives
-        .where((alt) => !usedPatterns.any((used) => 
-            response.toLowerCase().startsWith(used) || 
+        .where((alt) => !usedPatterns.any((used) =>
+            response.toLowerCase().startsWith(used) ||
             alt.toLowerCase().startsWith(used)))
         .toList();
-    
+
     if (availableAlts.isEmpty) {
       return response; // 대체할 표현이 없으면 원본 반환
     }
-    
+
     // 랜덤하게 대체 표현 선택
     final newStart = availableAlts[_random.nextInt(availableAlts.length)];
-    
+
     // 첫 단어를 대체
     final words = response.split(' ');
     if (words.isNotEmpty) {
       // 감탄사나 짧은 반응어를 대체
-      if (words[0].length <= 3 || words[0].endsWith('...') || words[0].endsWith('~')) {
+      if (words[0].length <= 3 ||
+          words[0].endsWith('...') ||
+          words[0].endsWith('~')) {
         words[0] = newStart.trim();
         return words.join(' ');
       }
     }
-    
+
     // 아니면 앞에 추가
     return newStart + response;
   }
@@ -169,76 +187,128 @@ class NaturalAIService {
   }) {
     final personality = persona.personality;
     final lowerMessage = userMessage.toLowerCase();
-    
+
     // 감정 표현이 포함된 메시지인지 확인
     final hasEmotionalWords = _containsEmotionalWords(lowerMessage);
-    
+
     // 질문인지 확인
-    final isQuestion = lowerMessage.contains('?') || 
-                      _containsQuestionWords(lowerMessage);
-    
+    final isQuestion =
+        lowerMessage.contains('?') || _containsQuestionWords(lowerMessage);
+
     // 개인적인 정보 공유인지 확인
     final isPersonalShare = _containsPersonalWords(lowerMessage);
-    
+
     // 긍정적/부정적 감정 확인
     final isPositive = _containsPositiveWords(lowerMessage);
     final isNegative = _containsNegativeWords(lowerMessage);
-    
+
     // MBTI 타입별 응답 스타일
     String response = '';
-    
+
     switch (persona.mbti.substring(0, 2)) {
       case 'EN': // 외향적 직관형
         response = _getExtrovertedIntuitiveResponse(
-          userMessage, emotion, relationshipType, persona, 
-          isQuestion, hasEmotionalWords, isPersonalShare, 
-          isPositive, isNegative, userNickname
-        );
+            userMessage,
+            emotion,
+            relationshipType,
+            persona,
+            isQuestion,
+            hasEmotionalWords,
+            isPersonalShare,
+            isPositive,
+            isNegative,
+            userNickname);
         break;
       case 'ES': // 외향적 감각형
         response = _getExtrovertedSensingResponse(
-          userMessage, emotion, relationshipType, persona, 
-          isQuestion, hasEmotionalWords, isPersonalShare, 
-          isPositive, isNegative, userNickname
-        );
+            userMessage,
+            emotion,
+            relationshipType,
+            persona,
+            isQuestion,
+            hasEmotionalWords,
+            isPersonalShare,
+            isPositive,
+            isNegative,
+            userNickname);
         break;
       case 'IN': // 내향적 직관형
         response = _getIntrovertedIntuitiveResponse(
-          userMessage, emotion, relationshipType, persona, 
-          isQuestion, hasEmotionalWords, isPersonalShare, 
-          isPositive, isNegative, userNickname
-        );
+            userMessage,
+            emotion,
+            relationshipType,
+            persona,
+            isQuestion,
+            hasEmotionalWords,
+            isPersonalShare,
+            isPositive,
+            isNegative,
+            userNickname);
         break;
       case 'IS': // 내향적 감각형
         response = _getIntrovertedSensingResponse(
-          userMessage, emotion, relationshipType, persona, 
-          isQuestion, hasEmotionalWords, isPersonalShare, 
-          isPositive, isNegative, userNickname
-        );
+            userMessage,
+            emotion,
+            relationshipType,
+            persona,
+            isQuestion,
+            hasEmotionalWords,
+            isPersonalShare,
+            isPositive,
+            isNegative,
+            userNickname);
         break;
       default:
         response = _getDefaultResponse(
-          userMessage, emotion, relationshipType, persona, 
-          isQuestion, hasEmotionalWords, isPersonalShare, 
-          isPositive, isNegative, userNickname
-        );
+            userMessage,
+            emotion,
+            relationshipType,
+            persona,
+            isQuestion,
+            hasEmotionalWords,
+            isPersonalShare,
+            isPositive,
+            isNegative,
+            userNickname);
     }
-    
+
     // 페르소나의 개성 추가
     response = _addPersonaQuirks(response, persona, emotion);
-    
+
     return response;
   }
 
   /// 감정 단어 포함 여부 확인
   static bool _containsEmotionalWords(String message) {
     final emotionalWords = [
-      '행복', '기뻐', '좋아', '사랑', '즐거', '신나',
-      '슬퍼', '우울', '힘들', '외로', '눈물', '아프',
-      '화나', '짜증', '답답', '싫어', '미워',
-      '무서', '두려', '걱정', '불안',
-      '놀라', '깜짝', '대박', '헐',
-      '심심', '지루', '재미없'
+      '행복',
+      '기뻐',
+      '좋아',
+      '사랑',
+      '즐거',
+      '신나',
+      '슬퍼',
+      '우울',
+      '힘들',
+      '외로',
+      '눈물',
+      '아프',
+      '화나',
+      '짜증',
+      '답답',
+      '싫어',
+      '미워',
+      '무서',
+      '두려',
+      '걱정',
+      '불안',
+      '놀라',
+      '깜짝',
+      '대박',
+      '헐',
+      '심심',
+      '지루',
+      '재미없'
     ];
     return emotionalWords.any((word) => message.contains(word));
   }
@@ -246,10 +316,29 @@ class NaturalAIService {
   /// 질문 단어 포함 여부 확인
   static bool _containsQuestionWords(String message) {
     final questionWords = [
-      '뭐', '뭘', '무엇', '무슨', '어떤', '어떻게', '어디',
-      '언제', '누구', '왜', '어째서', '얼마나', '몇',
-      '할까', '일까', '을까', '나요', '니까', '는지',
-      '냐고', '라고', '이야', '어때'
+      '뭐',
+      '뭘',
+      '무엇',
+      '무슨',
+      '어떤',
+      '어떻게',
+      '어디',
+      '언제',
+      '누구',
+      '왜',
+      '어째서',
+      '얼마나',
+      '몇',
+      '할까',
+      '일까',
+      '을까',
+      '나요',
+      '니까',
+      '는지',
+      '냐고',
+      '라고',
+      '이야',
+      '어때'
     ];
     return questionWords.any((word) => message.contains(word));
   }
@@ -257,11 +346,35 @@ class NaturalAIService {
   /// 개인적인 정보 단어 포함 여부 확인
   static bool _containsPersonalWords(String message) {
     final personalWords = [
-      '나는', '내가', '저는', '제가', '우리', '나한테',
-      '친구', '가족', '엄마', '아빠', '형', '누나', '언니', '오빠',
-      '학교', '회사', '집', '동네', '고향',
-      '어제', '오늘', '내일', '주말', '휴일',
-      '먹었', '갔다', '했어', '봤어', '만났'
+      '나는',
+      '내가',
+      '저는',
+      '제가',
+      '우리',
+      '나한테',
+      '친구',
+      '가족',
+      '엄마',
+      '아빠',
+      '형',
+      '누나',
+      '언니',
+      '오빠',
+      '학교',
+      '회사',
+      '집',
+      '동네',
+      '고향',
+      '어제',
+      '오늘',
+      '내일',
+      '주말',
+      '휴일',
+      '먹었',
+      '갔다',
+      '했어',
+      '봤어',
+      '만났'
     ];
     return personalWords.any((word) => message.contains(word));
   }
@@ -269,9 +382,27 @@ class NaturalAIService {
   /// 긍정적인 단어 포함 여부 확인
   static bool _containsPositiveWords(String message) {
     final positiveWords = [
-      '좋', '행복', '기뻐', '즐거', '신나', '대박', '최고',
-      '사랑', '감사', '고마', '다행', '훌륭', '멋',
-      '예쁘', '귀여', '재미', '재밌', '웃', '히히', 'ㅋㅋ', 'ㅎㅎ'
+      '좋',
+      '행복',
+      '기뻐',
+      '즐거',
+      '신나',
+      '대박',
+      '최고',
+      '사랑',
+      '감사',
+      '고마',
+      '다행',
+      '훌륭',
+      '멋',
+      '예쁘',
+      '귀여',
+      '재미',
+      '재밌',
+      '웃',
+      '히히',
+      'ㅋㅋ',
+      'ㅎㅎ'
     ];
     return positiveWords.any((word) => message.contains(word));
   }
@@ -279,10 +410,28 @@ class NaturalAIService {
   /// 부정적인 단어 포함 여부 확인
   static bool _containsNegativeWords(String message) {
     final negativeWords = [
-      '싫', '나쁘', '별로', '최악', '실패', '망했',
-      '슬퍼', '우울', '힘들', '아프', '외로', '눈물',
-      '화나', '짜증', '답답', '스트레스', '걱정', '불안',
-      '무서', '두려', 'ㅠㅠ', 'ㅜㅜ'
+      '싫',
+      '나쁘',
+      '별로',
+      '최악',
+      '실패',
+      '망했',
+      '슬퍼',
+      '우울',
+      '힘들',
+      '아프',
+      '외로',
+      '눈물',
+      '화나',
+      '짜증',
+      '답답',
+      '스트레스',
+      '걱정',
+      '불안',
+      '무서',
+      '두려',
+      'ㅠㅠ',
+      'ㅜㅜ'
     ];
     return negativeWords.any((word) => message.contains(word));
   }
@@ -301,7 +450,7 @@ class NaturalAIService {
     String? userNickname,
   ) {
     List<String> responses = [];
-    
+
     if (isQuestion) {
       responses = [
         '오 그거 완전 재밌는 질문이다!! 음... 내 생각엔 말이지~',
@@ -338,7 +487,7 @@ class NaturalAIService {
         '헐 진짜? 나도 그런 생각 해본 적 있어!! 우리 잘 맞는다ㅎㅎ',
       ];
     }
-    
+
     return responses[_random.nextInt(responses.length)];
   }
 
@@ -356,7 +505,7 @@ class NaturalAIService {
     String? userNickname,
   ) {
     List<String> responses = [];
-    
+
     if (isQuestion) {
       responses = [
         '음~ 그거 나도 생각해봤는데! 이렇게 해보는 건 어때?',
@@ -393,7 +542,7 @@ class NaturalAIService {
         '오 대박! 나도 그거 해보고 싶다~ 어때 같이 할래?',
       ];
     }
-    
+
     return responses[_random.nextInt(responses.length)];
   }
 
@@ -411,7 +560,7 @@ class NaturalAIService {
     String? userNickname,
   ) {
     List<String> responses = [];
-    
+
     if (isQuestion) {
       responses = [
         '음... 흥미로운 질문이네. 내 생각엔... 이런 관점도 있을 것 같아',
@@ -448,7 +597,7 @@ class NaturalAIService {
         '오, 그래? 나는 조금 다르게 봤는데... 신기하다',
       ];
     }
-    
+
     return responses[_random.nextInt(responses.length)];
   }
 
@@ -466,7 +615,7 @@ class NaturalAIService {
     String? userNickname,
   ) {
     List<String> responses = [];
-    
+
     if (isQuestion) {
       responses = [
         '음... 그건 이렇게 하면 될 것 같은데. 한번 해봐',
@@ -503,7 +652,7 @@ class NaturalAIService {
         '응응, 그래. 또 궁금한 거 있으면 물어봐',
       ];
     }
-    
+
     return responses[_random.nextInt(responses.length)];
   }
 
@@ -521,7 +670,7 @@ class NaturalAIService {
     String? userNickname,
   ) {
     List<String> responses = [];
-    
+
     if (isQuestion) {
       responses = [
         '음~ 그건 좀 생각해봐야겠는데? 어떻게 보면...',
@@ -544,12 +693,13 @@ class NaturalAIService {
         '그래그래~ 듣고 있어ㅎㅎ',
       ];
     }
-    
+
     return responses[_random.nextInt(responses.length)];
   }
 
   /// 페르소나의 개성 추가
-  static String _addPersonaQuirks(String response, Persona persona, EmotionType emotion) {
+  static String _addPersonaQuirks(
+      String response, Persona persona, EmotionType emotion) {
     // 성별에 따른 말투 차이
     if (persona.gender == 'female') {
       // 여성스러운 표현 추가
@@ -564,7 +714,7 @@ class NaturalAIService {
         response += masculineEndings[_random.nextInt(masculineEndings.length)];
       }
     }
-    
+
     // 나이에 따른 표현
     if (persona.age <= 23) {
       // 더 젊은 표현
@@ -572,7 +722,7 @@ class NaturalAIService {
       response = response.replaceAll('그러니까', '그니까');
       response = response.replaceAll('정말', '진짜');
     }
-    
+
     // 감정에 따른 이모티콘 추가
     if (_random.nextDouble() < 0.4) {
       switch (emotion) {
@@ -611,7 +761,7 @@ class NaturalAIService {
           break;
       }
     }
-    
+
     return response;
   }
 
@@ -624,20 +774,24 @@ class NaturalAIService {
     String? userNickname,
   }) {
     final lowerMessage = userMessage.toLowerCase();
-    
+
     // 첫 만남 단계 구분
     String stage = 'greeting'; // greeting, introduction, interest
-    
-    if (lowerMessage.contains('안녕') || lowerMessage.contains('hi') || 
-        lowerMessage.contains('hello') || lowerMessage.contains('반가')) {
+
+    if (lowerMessage.contains('안녕') ||
+        lowerMessage.contains('hi') ||
+        lowerMessage.contains('hello') ||
+        lowerMessage.contains('반가')) {
       stage = 'greeting';
-    } else if (lowerMessage.contains('누구') || lowerMessage.contains('뭐해') ||
-               lowerMessage.contains('소개') || lowerMessage.contains('어떤')) {
+    } else if (lowerMessage.contains('누구') ||
+        lowerMessage.contains('뭐해') ||
+        lowerMessage.contains('소개') ||
+        lowerMessage.contains('어떤')) {
       stage = 'introduction';
     } else {
       stage = 'interest';
     }
-    
+
     // 일반 페르소나 첫 만남 응답
     return _getFirstMeetingGeneralResponse(
       userMessage: userMessage,
@@ -657,7 +811,7 @@ class NaturalAIService {
     String? userNickname,
   }) {
     List<String> responses = [];
-    
+
     switch (stage) {
       case 'greeting':
         responses = [
@@ -667,7 +821,7 @@ class NaturalAIService {
           '안녕안녕~ ${persona.name}이야! ${userNickname != null ? "$userNickname님" : "너"}랑 친해지고 싶어ㅎㅎ',
         ];
         break;
-        
+
       case 'introduction':
         responses = [
           '나? ${persona.age}살 ${persona.name}이야! ${persona.description} 하하 별거 없지?ㅎㅎ',
@@ -676,7 +830,7 @@ class NaturalAIService {
           '오 궁금해? 나는 ${persona.name}, ${persona.age}살! 성격은... 만나보면 알게 될걸?ㅋㅋ',
         ];
         break;
-        
+
       case 'interest':
         // 사용자 메시지에 반응하면서 자연스럽게 대화 시작
         if (userMessage.contains('심심')) {
@@ -701,36 +855,69 @@ class NaturalAIService {
         }
         break;
     }
-    
+
     String response = responses[_random.nextInt(responses.length)];
-    
+
     // 페르소나 특성 반영
     if (persona.mbti.startsWith('I')) {
       // 내향적인 경우 좀 더 조심스럽게
       response = response.replaceAll('ㅋㅋㅋ', 'ㅎㅎ');
       response = response.replaceAll('!!!', '!');
     }
-    
+
     if (persona.gender == 'female' && _random.nextDouble() < 0.3) {
       response += '💕';
     }
-    
+
     return response;
   }
 
   /// 감정 분석하여 가장 적절한 감정 타입 반환
   static EmotionType analyzeEmotion(String userMessage) {
     final lowerMessage = userMessage.toLowerCase();
-    
+
     // 감정별 키워드 매핑
     final emotionKeywords = {
-      EmotionType.happy: ['행복', '기뻐', '좋아', '즐거', '신나', '최고', '대박', '웃', '하하', 'ㅋㅋ', 'ㅎㅎ'],
+      EmotionType.happy: [
+        '행복',
+        '기뻐',
+        '좋아',
+        '즐거',
+        '신나',
+        '최고',
+        '대박',
+        '웃',
+        '하하',
+        'ㅋㅋ',
+        'ㅎㅎ'
+      ],
       EmotionType.love: ['사랑', '좋아해', '보고싶', '그리워', '애정', '마음', '설레', '두근'],
-      EmotionType.sad: ['슬퍼', '우울', '눈물', '힘들', '외로', '쓸쓸', '아프', '그리워', 'ㅠㅠ', 'ㅜㅜ'],
+      EmotionType.sad: [
+        '슬퍼',
+        '우울',
+        '눈물',
+        '힘들',
+        '외로',
+        '쓸쓸',
+        '아프',
+        '그리워',
+        'ㅠㅠ',
+        'ㅜㅜ'
+      ],
       EmotionType.angry: ['화나', '짜증', '싫어', '미워', '답답', '열받', '빡치', '아오'],
-      EmotionType.surprised: ['놀라', '깜짝', '대박', '헐', '뭐야', '어떻게', '진짜', '설마', '와'],
+      EmotionType.surprised: [
+        '놀라',
+        '깜짝',
+        '대박',
+        '헐',
+        '뭐야',
+        '어떻게',
+        '진짜',
+        '설마',
+        '와'
+      ],
     };
-    
+
     // 각 감정별 점수 계산
     Map<EmotionType, int> scores = {
       EmotionType.happy: 0,
@@ -745,7 +932,7 @@ class NaturalAIService {
       EmotionType.anxious: 0,
       EmotionType.concerned: 0,
     };
-    
+
     // 키워드 매칭으로 점수 계산
     emotionKeywords.forEach((emotion, keywords) {
       for (String keyword in keywords) {
@@ -754,23 +941,23 @@ class NaturalAIService {
         }
       }
     });
-    
+
     // 가장 높은 점수의 감정 찾기
     EmotionType detectedEmotion = EmotionType.neutral;
     int maxScore = 0;
-    
+
     scores.forEach((emotion, score) {
       if (score > maxScore) {
         maxScore = score;
         detectedEmotion = emotion;
       }
     });
-    
+
     // 아무 감정도 감지되지 않으면 중립
     if (maxScore == 0) {
       detectedEmotion = EmotionType.neutral;
     }
-    
+
     return detectedEmotion;
   }
 
@@ -778,17 +965,25 @@ class NaturalAIService {
   static String removeAIExpressions(String response) {
     // AI스러운 시작 표현들 제거
     final aiStarts = [
-      '음, ', '아, ', '오, ', '그렇군요, ', '네, ', '아하, ',
-      '흠, ', '그래요, ', '그런가요, ', '알겠어요, ',
+      '음, ',
+      '아, ',
+      '오, ',
+      '그렇군요, ',
+      '네, ',
+      '아하, ',
+      '흠, ',
+      '그래요, ',
+      '그런가요, ',
+      '알겠어요, ',
     ];
-    
+
     for (final start in aiStarts) {
       if (response.startsWith(start)) {
         response = response.substring(start.length);
         break;
       }
     }
-    
+
     // AI스러운 표현들을 자연스럽게 변경
     final aiReplacements = {
       '그렇군요': '그렇구나',
@@ -807,11 +1002,11 @@ class NaturalAIService {
       '아마도': '아마',
       '혹시': '혹시',
     };
-    
+
     aiReplacements.forEach((ai, natural) {
       response = response.replaceAll(ai, natural);
     });
-    
+
     return response;
   }
 
@@ -824,13 +1019,13 @@ class NaturalAIService {
     response = response.replaceAll(RegExp(r'\.{4,}'), '...');
     response = response.replaceAll(RegExp(r'!{3,}'), '!!');
     response = response.replaceAll(RegExp(r'\?{3,}'), '??');
-    
+
     // 어색한 조합 수정
     response = response.replaceAll('ㅋㅋㅎㅎ', 'ㅋㅋ');
     response = response.replaceAll('ㅎㅎㅋㅋ', 'ㅎㅎ');
     response = response.replaceAll('~~!', '~!');
     response = response.replaceAll('...!', '!');
-    
+
     // 문장 끝 정리
     if (response.endsWith('~ㅋㅋ')) {
       response = response.substring(0, response.length - 2) + 'ㅋㅋ';
@@ -838,7 +1033,7 @@ class NaturalAIService {
     if (response.endsWith('~ㅎㅎ')) {
       response = response.substring(0, response.length - 2) + 'ㅎㅎ';
     }
-    
+
     return response.trim();
   }
 
@@ -850,16 +1045,16 @@ class NaturalAIService {
   }) {
     // 최근 대화 분석
     final recentMessages = chatHistory.take(5).toList();
-    
+
     // 대화 주제 파악
     String topic = _extractTopic(recentMessages);
-    
+
     // 대화 분위기 파악
     String mood = _analyzeMood(recentMessages);
-    
+
     // 맥락에 맞는 응답 생성
     List<String> contextualResponses = [];
-    
+
     if (topic.contains('일상')) {
       contextualResponses = [
         '아 그거 완전 공감돼! 나도 그런 적 있어ㅋㅋ',
@@ -873,32 +1068,40 @@ class NaturalAIService {
         '그런 상황이면 나도 고민될 것 같아... 같이 생각해보자',
       ];
     }
-    
+
     if (contextualResponses.isEmpty) {
       return ''; // 맥락 응답이 없으면 빈 문자열 반환
     }
-    
+
     return contextualResponses[_random.nextInt(contextualResponses.length)];
   }
 
   static String _extractTopic(List<Message> messages) {
     // 간단한 주제 추출 로직
     String allContent = messages.map((m) => m.content).join(' ').toLowerCase();
-    
-    if (allContent.contains('학교') || allContent.contains('공부') || 
-        allContent.contains('시험') || allContent.contains('과제')) {
+
+    if (allContent.contains('학교') ||
+        allContent.contains('공부') ||
+        allContent.contains('시험') ||
+        allContent.contains('과제')) {
       return '학업';
-    } else if (allContent.contains('회사') || allContent.contains('일') || 
-               allContent.contains('직장') || allContent.contains('상사')) {
+    } else if (allContent.contains('회사') ||
+        allContent.contains('일') ||
+        allContent.contains('직장') ||
+        allContent.contains('상사')) {
       return '직장';
-    } else if (allContent.contains('친구') || allContent.contains('연애') || 
-               allContent.contains('가족') || allContent.contains('관계')) {
+    } else if (allContent.contains('친구') ||
+        allContent.contains('연애') ||
+        allContent.contains('가족') ||
+        allContent.contains('관계')) {
       return '관계';
-    } else if (allContent.contains('걱정') || allContent.contains('고민') || 
-               allContent.contains('힘들') || allContent.contains('스트레스')) {
+    } else if (allContent.contains('걱정') ||
+        allContent.contains('고민') ||
+        allContent.contains('힘들') ||
+        allContent.contains('스트레스')) {
       return '고민';
     }
-    
+
     return '일상';
   }
 
@@ -906,13 +1109,13 @@ class NaturalAIService {
     // 간단한 분위기 분석 로직
     int positiveCount = 0;
     int negativeCount = 0;
-    
+
     for (var message in messages) {
       String content = message.content.toLowerCase();
       if (_containsPositiveWords(content)) positiveCount++;
       if (_containsNegativeWords(content)) negativeCount++;
     }
-    
+
     if (positiveCount > negativeCount) return '긍정적';
     if (negativeCount > positiveCount) return '부정적';
     return '중립적';
@@ -927,7 +1130,7 @@ class NaturalAIService {
       '들어줘서 고마워': ['얘기해줘서 좋아', '들을 수 있어서 다행이야'],
       '도움이 됐으면 좋겠어': ['도움됐으면 좋겠다', '괜찮아졌으면 좋겠어'],
     };
-    
+
     // 각 패턴에 대해 자연스러운 대체어로 변경
     naturalAlternatives.forEach((aiPattern, alternatives) {
       if (response.contains(aiPattern)) {
@@ -935,7 +1138,7 @@ class NaturalAIService {
         response = response.replaceAll(aiPattern, replacement);
       }
     });
-    
+
     // 일반적인 AI 패턴 제거
     final generalAlternatives = [
       '그래 그래~',
@@ -949,15 +1152,16 @@ class NaturalAIService {
       '아하하',
       '그치 그치',
     ];
-    
+
     // 문장 시작이 너무 AI스러우면 대체
-    if (response.split(' ')[0].length > 4) { // 긴 시작어는 AI스러움
-      response = generalAlternatives[_random.nextInt(generalAlternatives.length)] + 
-                ' ' + response;
+    if (response.split(' ')[0].length > 4) {
+      // 긴 시작어는 AI스러움
+      response =
+          generalAlternatives[_random.nextInt(generalAlternatives.length)] +
+              ' ' +
+              response;
     }
-    
+
     return response;
   }
-
-
 }

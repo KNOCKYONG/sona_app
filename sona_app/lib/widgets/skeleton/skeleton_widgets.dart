@@ -19,7 +19,7 @@ class SkeletonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Shimmer.fromColors(
       baseColor: isDarkMode ? Colors.grey[800]! : Colors.grey[300]!,
       highlightColor: isDarkMode ? Colors.grey[700]! : Colors.grey[100]!,
@@ -54,7 +54,8 @@ class PersonaCardSkeleton extends StatelessWidget {
             child: SkeletonWidget(
               width: double.infinity,
               height: double.infinity,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
             ),
           ),
           // Info section skeleton
@@ -123,7 +124,8 @@ class MessageBubbleSkeleton extends StatelessWidget {
           bottom: 4,
         ),
         child: Column(
-          crossAxisAlignment: isFromUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          crossAxisAlignment:
+              isFromUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             SkeletonWidget(
               width: 200,
@@ -131,8 +133,10 @@ class MessageBubbleSkeleton extends StatelessWidget {
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(16),
                 topRight: const Radius.circular(16),
-                bottomLeft: isFromUser ? const Radius.circular(16) : Radius.zero,
-                bottomRight: isFromUser ? Radius.zero : const Radius.circular(16),
+                bottomLeft:
+                    isFromUser ? const Radius.circular(16) : Radius.zero,
+                bottomRight:
+                    isFromUser ? Radius.zero : const Radius.circular(16),
               ),
             ),
           ],

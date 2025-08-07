@@ -8,7 +8,8 @@ class AuthService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     // Web Client ID from Firebase console
-    clientId: '874385422837-p5k562hl218ph0s2ucqgdi4ngk658r4s.apps.googleusercontent.com',
+    clientId:
+        '874385422837-p5k562hl218ph0s2ucqgdi4ngk658r4s.apps.googleusercontent.com',
   );
   User? _user;
 
@@ -40,7 +41,8 @@ class AuthService extends BaseService {
       }
 
       // Google 인증 정보 가져오기
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
       // Firebase 인증 자격 증명 생성
       final credential = GoogleAuthProvider.credential(
@@ -80,7 +82,6 @@ class AuthService extends BaseService {
     return result ?? false;
   }
 
-
   Future<bool> signInWithEmail(String email, String password) async {
     final result = await executeWithLoading<bool>(() async {
       try {
@@ -99,7 +100,8 @@ class AuthService extends BaseService {
         // 네트워크 에러인 경우 추가 디버깅 정보
         if (e.code == 'network-request-failed') {
           debugPrint('Network error details: ${e.toString()}');
-          debugPrint('Please check: 1) Internet connection 2) Firebase project setup 3) Email/Password auth enabled in Firebase Console');
+          debugPrint(
+              'Please check: 1) Internet connection 2) Firebase project setup 3) Email/Password auth enabled in Firebase Console');
         }
 
         // BaseService의 _getErrorMessage가 처리하도록 에러를 다시 throw
@@ -181,9 +183,12 @@ class AuthService extends BaseService {
 
   Future<Map<String, dynamic>> getUserPreferences() async {
     return {
-      'emotion_points': await PreferencesManager.getInt('emotion_points') ?? 100,
-      'notifications_enabled': await PreferencesManager.getBool('notifications_enabled') ?? true,
-      'sound_enabled': await PreferencesManager.getBool('sound_enabled') ?? true,
+      'emotion_points':
+          await PreferencesManager.getInt('emotion_points') ?? 100,
+      'notifications_enabled':
+          await PreferencesManager.getBool('notifications_enabled') ?? true,
+      'sound_enabled':
+          await PreferencesManager.getBool('sound_enabled') ?? true,
       'theme_mode': await PreferencesManager.getString('theme_mode') ?? 'light',
     };
   }
@@ -204,14 +209,16 @@ class AuthService extends BaseService {
   }
 
   Future<void> spendEmotionPoints(int amount) async {
-    final currentPoints = await PreferencesManager.getInt('emotion_points') ?? 0;
+    final currentPoints =
+        await PreferencesManager.getInt('emotion_points') ?? 0;
     final newPoints = (currentPoints - amount).clamp(0, 9999);
     await PreferencesManager.setInt('emotion_points', newPoints);
     notifyListeners();
   }
 
   Future<void> addEmotionPoints(int amount) async {
-    final currentPoints = await PreferencesManager.getInt('emotion_points') ?? 0;
+    final currentPoints =
+        await PreferencesManager.getInt('emotion_points') ?? 0;
     final newPoints = (currentPoints + amount).clamp(0, 9999);
     await PreferencesManager.setInt('emotion_points', newPoints);
     notifyListeners();
@@ -225,13 +232,13 @@ class AuthService extends BaseService {
       debugPrint('✅ [AuthService] Password reset email sent successfully');
       return true;
     }, errorContext: 'sendPasswordResetEmail');
-    
+
     return result ?? false;
   }
 
   /// 이메일 형식 검증
   bool isValidEmail(String email) {
-    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(email);
+    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
+        .hasMatch(email);
   }
-
 }

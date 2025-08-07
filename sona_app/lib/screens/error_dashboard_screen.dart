@@ -18,14 +18,14 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
   String _selectedFilter = 'all'; // all, persona, type
   String? _selectedPersona;
   String? _selectedErrorType;
-  
+
   // 페르소나별 에러 통계
   final Map<String, int> _personaErrorCounts = {};
   final Map<String, int> _errorTypeCounts = {};
-  
+
   // 시간대별 에러 통계 (최근 24시간)
   final Map<int, int> _hourlyErrorCounts = {};
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,13 +37,13 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         children: [
           // 필터 섹션
           _buildFilterSection(),
-          
+
           // 통계 섹션
           _buildStatisticsSection(),
-          
+
           // 에러 빈도 그래프
           _buildErrorFrequencyGraph(),
-          
+
           // 에러 리스트
           Expanded(
             child: _buildErrorList(),
@@ -52,7 +52,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
       ),
     );
   }
-  
+
   Widget _buildFilterSection() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -111,24 +111,26 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                   .get(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) return const SizedBox();
-                
+
                 final personas = <String>{};
                 for (var doc in snapshot.data!.docs) {
                   final data = doc.data() as Map<String, dynamic>;
                   personas.add(data['persona_name'] ?? 'Unknown');
                 }
-                
+
                 return Wrap(
                   spacing: 8,
-                  children: personas.map((persona) => FilterChip(
-                    label: Text(persona),
-                    selected: _selectedPersona == persona,
-                    onSelected: (selected) {
-                      setState(() {
-                        _selectedPersona = selected ? persona : null;
-                      });
-                    },
-                  )).toList(),
+                  children: personas
+                      .map((persona) => FilterChip(
+                            label: Text(persona),
+                            selected: _selectedPersona == persona,
+                            onSelected: (selected) {
+                              setState(() {
+                                _selectedPersona = selected ? persona : null;
+                              });
+                            },
+                          ))
+                      .toList(),
                 );
               },
             ),
@@ -137,23 +139,30 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
-              children: ['api_key_error', 'timeout', 'rate_limit', 'server_error', 'unknown']
+              children: [
+                'api_key_error',
+                'timeout',
+                'rate_limit',
+                'server_error',
+                'unknown'
+              ]
                   .map((type) => FilterChip(
-                    label: Text(_getErrorTypeLabel(type)),
-                    selected: _selectedErrorType == type,
-                    onSelected: (selected) {
-                      setState(() {
-                        _selectedErrorType = selected ? type : null;
-                      });
-                    },
-                  )).toList(),
+                        label: Text(_getErrorTypeLabel(type)),
+                        selected: _selectedErrorType == type,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedErrorType = selected ? type : null;
+                          });
+                        },
+                      ))
+                  .toList(),
             ),
           ],
         ],
       ),
     );
   }
-  
+
   Widget _buildStatisticsSection() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseHelper.chatErrorFix
@@ -164,22 +173,23 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         // 통계 계산
         _personaErrorCounts.clear();
         _errorTypeCounts.clear();
         _hourlyErrorCounts.clear();
-        
+
         final now = DateTime.now();
-        
+
         for (var doc in snapshot.data!.docs) {
           final data = doc.data() as Map<String, dynamic>;
           final personaName = data['persona_name'] ?? 'Unknown';
           final errorType = data['error_type'] ?? 'unknown';
-          
-          _personaErrorCounts[personaName] = (_personaErrorCounts[personaName] ?? 0) + 1;
+
+          _personaErrorCounts[personaName] =
+              (_personaErrorCounts[personaName] ?? 0) + 1;
           _errorTypeCounts[errorType] = (_errorTypeCounts[errorType] ?? 0) + 1;
-          
+
           // 시간대별 통계 계산
           final createdAt = (data['created_at'] as Timestamp).toDate();
           final hoursDiff = now.difference(createdAt).inHours;
@@ -188,17 +198,19 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             _hourlyErrorCounts[hour] = (_hourlyErrorCounts[hour] ?? 0) + 1;
           }
         }
-        
+
         // 가장 많은 에러가 발생한 페르소나
         final topPersona = _personaErrorCounts.entries.isNotEmpty
-            ? _personaErrorCounts.entries.reduce((a, b) => a.value > b.value ? a : b)
+            ? _personaErrorCounts.entries
+                .reduce((a, b) => a.value > b.value ? a : b)
             : null;
-            
+
         // 가장 많이 발생한 에러 타입
         final topErrorType = _errorTypeCounts.entries.isNotEmpty
-            ? _errorTypeCounts.entries.reduce((a, b) => a.value > b.value ? a : b)
+            ? _errorTypeCounts.entries
+                .reduce((a, b) => a.value > b.value ? a : b)
             : null;
-        
+
         return Container(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -250,7 +262,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
       },
     );
   }
-  
+
   Widget _buildStatCard({
     required String title,
     required String value,
@@ -301,30 +313,31 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
       ),
     );
   }
-  
+
   Widget _buildErrorList() {
-    Query query = FirebaseHelper.chatErrorFix.orderBy('created_at', descending: true);
-    
+    Query query =
+        FirebaseHelper.chatErrorFix.orderBy('created_at', descending: true);
+
     // 필터 적용
     if (_selectedFilter == 'persona' && _selectedPersona != null) {
       query = query.where('persona_name', isEqualTo: _selectedPersona);
     } else if (_selectedFilter == 'type' && _selectedErrorType != null) {
       query = query.where('error_type', isEqualTo: _selectedErrorType);
     }
-    
+
     return StreamBuilder<QuerySnapshot>(
       stream: query.limit(50).snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         }
-        
+
         if (snapshot.data!.docs.isEmpty) {
           return const Center(
             child: Text('에러 리포트가 없습니다.'),
           );
         }
-        
+
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
           itemBuilder: (context, index) {
@@ -332,23 +345,25 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             final errorReport = ChatErrorReport.fromMap(
               doc.data() as Map<String, dynamic>,
             );
-            
+
             return _buildErrorItem(errorReport);
           },
         );
       },
     );
   }
-  
+
   Widget _buildErrorItem(ChatErrorReport errorReport) {
-    final isProblematic = ErrorRecoveryService.instance.isPersonaProblematic(errorReport.personaId);
-    
+    final isProblematic = ErrorRecoveryService.instance
+        .isPersonaProblematic(errorReport.personaId);
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       color: isProblematic ? Colors.red.withValues(alpha: 0.05) : null,
       child: ExpansionTile(
         leading: CircleAvatar(
-          backgroundColor: _getErrorTypeColor(errorReport.errorType ?? 'unknown'),
+          backgroundColor:
+              _getErrorTypeColor(errorReport.errorType ?? 'unknown'),
           child: Text(
             errorReport.personaName.substring(0, 1),
             style: const TextStyle(color: Colors.white),
@@ -427,7 +442,8 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                     ),
                     child: Text(
                       errorReport.errorMessage!,
-                      style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                      style: const TextStyle(
+                          fontFamily: 'monospace', fontSize: 12),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -438,25 +454,29 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 ),
                 const SizedBox(height: 8),
                 ...errorReport.recentChats.map((msg) => Container(
-                  margin: const EdgeInsets.only(bottom: 4),
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: msg.isFromUser ? Colors.blue.withValues(alpha: 0.05) : Colors.grey.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        msg.isFromUser ? '사용자: ' : '${errorReport.personaName}: ',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      margin: const EdgeInsets.only(bottom: 4),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: msg.isFromUser
+                            ? Colors.blue.withValues(alpha: 0.05)
+                            : Colors.grey.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      Expanded(
-                        child: Text(msg.content),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            msg.isFromUser
+                                ? '사용자: '
+                                : '${errorReport.personaName}: ',
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Expanded(
+                            child: Text(msg.content),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )),
+                    )),
                 if (errorReport.userMessage != null) ...[
                   const SizedBox(height: 12),
                   const Text(
@@ -497,7 +517,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
       ),
     );
   }
-  
+
   String _getErrorTypeLabel(String type) {
     switch (type) {
       case 'api_key_error':
@@ -514,7 +534,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         return '알 수 없음';
     }
   }
-  
+
   Color _getErrorTypeColor(String type) {
     switch (type) {
       case 'api_key_error':
@@ -530,12 +550,12 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         return Colors.grey;
     }
   }
-  
+
   String _formatDateTime(DateTime dateTime) {
     return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')} '
         '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
   }
-  
+
   Widget _buildErrorFrequencyGraph() {
     return Container(
       height: 200,
@@ -598,9 +618,9 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
 /// 에러 그래프 페인터
 class _ErrorGraphPainter extends CustomPainter {
   final Map<int, int> hourlyData;
-  
+
   _ErrorGraphPainter(this.hourlyData);
-  
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -608,37 +628,37 @@ class _ErrorGraphPainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
-      
+
     final fillPaint = Paint()
       ..color = const Color(0xFFFF6B9D).withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
-      
+
     final gridPaint = Paint()
       ..color = Colors.grey.withValues(alpha: 0.2)
       ..strokeWidth = 1;
-    
+
     // 최대값 찾기
     int maxValue = 1;
     for (int i = 0; i < 24; i++) {
       final value = hourlyData[i] ?? 0;
       if (value > maxValue) maxValue = value;
     }
-    
+
     // 그리드 그리기
     for (int i = 0; i <= 4; i++) {
       final y = size.height * (i / 4);
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
-    
+
     // 그래프 경로 생성
     final path = Path();
     final fillPath = Path();
-    
+
     for (int i = 0; i < 24; i++) {
       final value = hourlyData[i] ?? 0;
       final x = size.width * (i / 23);
       final y = size.height - (size.height * (value / maxValue));
-      
+
       if (i == 0) {
         path.moveTo(x, y);
         fillPath.moveTo(x, size.height);
@@ -648,20 +668,20 @@ class _ErrorGraphPainter extends CustomPainter {
         fillPath.lineTo(x, y);
       }
     }
-    
+
     // 채우기 경로 완성
     fillPath.lineTo(size.width, size.height);
     fillPath.close();
-    
+
     // 그래프 그리기
     canvas.drawPath(fillPath, fillPaint);
     canvas.drawPath(path, paint);
-    
+
     // 데이터 포인트 그리기
     final pointPaint = Paint()
       ..color = const Color(0xFFFF6B9D)
       ..style = PaintingStyle.fill;
-      
+
     for (int i = 0; i < 24; i++) {
       final value = hourlyData[i] ?? 0;
       if (value > 0) {
@@ -670,12 +690,12 @@ class _ErrorGraphPainter extends CustomPainter {
         canvas.drawCircle(Offset(x, y), 3, pointPaint);
       }
     }
-    
+
     // Y축 레이블 그리기
     final textPainter = TextPainter(
       textDirection: TextDirection.ltr,
     );
-    
+
     for (int i = 0; i <= 4; i++) {
       final value = (maxValue * (4 - i) / 4).round();
       textPainter.text = TextSpan(
@@ -688,11 +708,12 @@ class _ErrorGraphPainter extends CustomPainter {
       textPainter.layout();
       textPainter.paint(
         canvas,
-        Offset(-textPainter.width - 8, size.height * (i / 4) - textPainter.height / 2),
+        Offset(-textPainter.width - 8,
+            size.height * (i / 4) - textPainter.height / 2),
       );
     }
   }
-  
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

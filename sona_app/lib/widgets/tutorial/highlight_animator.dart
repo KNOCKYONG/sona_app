@@ -86,7 +86,7 @@ class _HighlightAnimatorState extends State<HighlightAnimator>
                 ),
               ),
             ),
-            
+
             // 보더 효과
             Positioned(
               left: widget.highlightArea.left,
@@ -98,8 +98,8 @@ class _HighlightAnimatorState extends State<HighlightAnimator>
                 ),
                 painter: AnimatedBorderPainter(
                   progress: _controller.value,
-                  color: widget.highlightArea.glowColor ?? 
-                      const Color(0xFFFF6B9D),
+                  color:
+                      widget.highlightArea.glowColor ?? const Color(0xFFFF6B9D),
                   borderRadius: widget.highlightArea.borderRadius,
                 ),
               ),
@@ -227,7 +227,7 @@ class AnimatedBorderPainter extends CustomPainter {
     final animatedOffset = progress * (dashLength + dashSpace);
 
     final path = Path()..addRRect(rrect);
-    
+
     // 대시 라인 그리기
     final dashPaint = Paint()
       ..color = color
@@ -254,19 +254,21 @@ class AnimatedBorderPainter extends CustomPainter {
     required double offset,
   }) {
     final pathMetrics = path.computeMetrics();
-    
+
     for (final metric in pathMetrics) {
       var distance = offset % (dashLength + dashSpace);
-      
+
       while (distance < metric.length) {
         final remainingLength = metric.length - distance;
-        
+
         if (remainingLength >= dashLength) {
-          final extractPath = metric.extractPath(distance, distance + dashLength);
+          final extractPath =
+              metric.extractPath(distance, distance + dashLength);
           canvas.drawPath(extractPath, paint);
           distance += dashLength + dashSpace;
         } else {
-          final extractPath = metric.extractPath(distance, distance + remainingLength);
+          final extractPath =
+              metric.extractPath(distance, distance + remainingLength);
           canvas.drawPath(extractPath, paint);
           break;
         }
@@ -276,7 +278,6 @@ class AnimatedBorderPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(AnimatedBorderPainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.color != color;
+    return oldDelegate.progress != progress || oldDelegate.color != color;
   }
 }

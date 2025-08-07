@@ -5,29 +5,31 @@ import '../persona/firebase_persona_service.dart';
 import '../storage/firebase_storage_service.dart';
 
 class DataMigrationService {
-  static final FirebasePersonaService _personaService = FirebasePersonaService();
-  
+  static final FirebasePersonaService _personaService =
+      FirebasePersonaService();
+
   /// 기본 페르소나 데이터를 Firebase로 마이그레이션
   static Future<bool> migrateDefaultPersonasToFirebase() async {
     try {
       debugPrint('Starting persona migration to Firebase...');
-      
+
       final defaultPersonas = _getDefaultPersonas();
-      
+
       for (final persona in defaultPersonas) {
         debugPrint('Migrating persona: ${persona.name}');
-        
+
         // 1. 사진들을 Firebase Storage에 업로드
         List<String> firebasePhotoUrls = [];
-        
+
         for (int i = 0; i < persona.photoUrls.length; i++) {
           try {
             final photoUrl = persona.photoUrls[i];
             final imageData = await _downloadImageFromUrl(photoUrl);
-            
+
             if (imageData != null) {
               final fileName = 'photo_${i + 1}.jpg';
-              final uploadedUrl = await FirebaseStorageService.uploadPersonaPhoto(
+              final uploadedUrl =
+                  await FirebaseStorageService.uploadPersonaPhoto(
                 personaId: persona.id,
                 imageData: imageData,
                 fileName: fileName,
@@ -40,7 +42,7 @@ class DataMigrationService {
             firebasePhotoUrls.add(persona.photoUrls[i]);
           }
         }
-        
+
         // 2. 페르소나 정보를 Firestore에 저장
         try {
           await _personaService.createPersona(
@@ -56,7 +58,7 @@ class DataMigrationService {
           debugPrint('Failed to create persona ${persona.name}: $e');
         }
       }
-      
+
       debugPrint('Persona migration completed');
       return true;
     } catch (e) {
@@ -64,7 +66,7 @@ class DataMigrationService {
       return false;
     }
   }
-  
+
   /// URL에서 이미지 다운로드
   static Future<Uint8List?> _downloadImageFromUrl(String url) async {
     try {
@@ -77,7 +79,7 @@ class DataMigrationService {
     }
     return null;
   }
-  
+
   /// 기본 페르소나 데이터 정의 (기존 하드코딩된 데이터)
   static List<Persona> _getDefaultPersonas() {
     return [
@@ -155,15 +157,15 @@ class DataMigrationService {
       ),
     ];
   }
-  
+
   /// 마이그레이션 상태 확인
   static Future<Map<String, dynamic>> getMigrationStatus() async {
     try {
       await _personaService.loadAllPersonas();
-      
+
       final firebasePersonaCount = _personaService.allPersonas.length;
       final defaultPersonaCount = _getDefaultPersonas().length;
-      
+
       return {
         'isCompleted': firebasePersonaCount >= defaultPersonaCount,
         'firebaseCount': firebasePersonaCount,
@@ -180,17 +182,18 @@ class DataMigrationService {
       };
     }
   }
-  
+
   /// 테스트용 단일 페르소나 마이그레이션
   static Future<bool> migrateTestPersona() async {
     try {
       final testPersona = _getDefaultPersonas().first;
-      
+
       debugPrint('Migrating test persona: ${testPersona.name}');
-      
+
       // 첫 번째 사진만 업로드
-      final imageData = await _downloadImageFromUrl(testPersona.photoUrls.first);
-      
+      final imageData =
+          await _downloadImageFromUrl(testPersona.photoUrls.first);
+
       List<String> firebasePhotoUrls = [];
       if (imageData != null) {
         final uploadedUrl = await FirebaseStorageService.uploadPersonaPhoto(
@@ -200,7 +203,7 @@ class DataMigrationService {
         );
         firebasePhotoUrls.add(uploadedUrl);
       }
-      
+
       await _personaService.createPersona(
         name: '${testPersona.name} (Test)',
         age: testPersona.age,
@@ -208,7 +211,7 @@ class DataMigrationService {
         personality: testPersona.personality,
         photoUrls: firebasePhotoUrls,
       );
-      
+
       debugPrint('Test persona migration completed');
       return true;
     } catch (e) {

@@ -35,12 +35,12 @@ class GestureAnimator extends StatelessWidget {
 
   Widget _buildSwipeAnimation() {
     final endPosition = animation.endPosition ?? animation.startPosition;
-    
+
     return AnimatedBuilder(
       animation: controller,
       builder: (context, child) {
         final curvedValue = animation.curve.transform(controller.value);
-        
+
         // 위치 계산
         final currentPosition = Offset.lerp(
           animation.startPosition,
@@ -94,13 +94,13 @@ class GestureAnimator extends StatelessWidget {
                     ],
                   ),
                   child: Transform.rotate(
-                    angle: animation.type == TutorialAnimationType.swipeLeft 
-                        ? math.pi / 6  // 왼쪽 스와이프일 때 약간 기울임
+                    angle: animation.type == TutorialAnimationType.swipeLeft
+                        ? math.pi / 6 // 왼쪽 스와이프일 때 약간 기울임
                         : animation.type == TutorialAnimationType.swipeRight
-                        ? -math.pi / 6  // 오른쪽 스와이프일 때 약간 기울임
-                        : 0,  // 위 스와이프일 때는 기울이지 않음
+                            ? -math.pi / 6 // 오른쪽 스와이프일 때 약간 기울임
+                            : 0, // 위 스와이프일 때는 기울이지 않음
                     child: const Icon(
-                      Icons.touch_app,  // 손가락 포인터 아이콘
+                      Icons.touch_app, // 손가락 포인터 아이콘
                       color: Color(0xFFFF6B9D),
                       size: 35,
                     ),
@@ -167,7 +167,8 @@ class GestureAnimator extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: const Color(0xFFFF6B9D).withValues(alpha: opacity * 0.5),
+                        color: const Color(0xFFFF6B9D)
+                            .withValues(alpha: opacity * 0.5),
                         width: 3,
                       ),
                     ),
@@ -211,7 +212,7 @@ class GestureAnimator extends StatelessWidget {
       builder: (context, child) {
         final textLength = (controller.value * 20).floor();
         final cursorOpacity = math.sin(controller.value * math.pi * 4).abs();
-        
+
         return Positioned(
           left: animation.startPosition.dx,
           top: animation.startPosition.dy,
@@ -244,7 +245,7 @@ class GestureAnimator extends StatelessWidget {
       animation: controller,
       builder: (context, child) {
         final scale = 1.0 + math.sin(controller.value * math.pi * 2) * 0.2;
-        
+
         return Positioned(
           left: animation.startPosition.dx - 30,
           top: animation.startPosition.dy - 30,
@@ -276,7 +277,7 @@ class GestureAnimator extends StatelessWidget {
         // 바운스 효과를 위한 계산
         final bounceValue = Curves.elasticOut.transform(controller.value);
         final yOffset = math.sin(bounceValue * math.pi) * 20;
-        
+
         return Positioned(
           left: animation.startPosition.dx - 30,
           top: animation.startPosition.dy - 30 - yOffset,
@@ -353,7 +354,7 @@ class SwipeTrailPainter extends CustomPainter {
       canvas.save();
       canvas.translate(end.dx, end.dy);
       canvas.rotate(angle);
-      
+
       // 화살표 머리
       canvas.drawLine(
         const Offset(-15, -10),
@@ -365,7 +366,7 @@ class SwipeTrailPainter extends CustomPainter {
         Offset.zero,
         arrowPaint,
       );
-      
+
       canvas.restore();
     }
   }

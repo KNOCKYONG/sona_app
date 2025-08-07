@@ -13,7 +13,7 @@ import '../models/tutorial_animation.dart' as anim_model;
 
 class MainNavigationScreen extends StatefulWidget {
   final int initialIndex;
-  
+
   const MainNavigationScreen({
     super.key,
     this.initialIndex = 0,
@@ -38,7 +38,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     super.initState();
     _selectedIndex = widget.initialIndex;
     _checkFirstTimeUser();
-    
+
     // 채팅 목록 탭으로 시작하는 경우 처리는 ChatListScreen의 initState에서 처리됨
   }
 
@@ -56,7 +56,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    
+
     // 채팅 목록 탭을 선택했을 때 처리는 ChatListScreen에서 자동으로 처리됨
   }
 
@@ -68,7 +68,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       });
       return false;
     }
-    
+
     // 첫 번째 탭에서 뒤로 가기를 누른 경우 앱 종료 확인
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -87,11 +87,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ],
       ),
     );
-    
+
     if (shouldExit == true) {
       SystemNavigator.pop();
     }
-    
+
     return shouldExit ?? false;
   }
 

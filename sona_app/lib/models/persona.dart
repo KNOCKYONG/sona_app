@@ -11,14 +11,14 @@ class Persona {
   final String gender; // 성별 ('male', 'female')
   final String mbti; // MBTI 성격 유형 (예: 'ENFP', 'INTJ')
   final DateTime? matchedAt; // 매칭된 시간
-  
+
   // 새로운 이미지 구조 (Cloudflare R2)
   final Map<String, dynamic>? imageUrls; // 크기별 이미지 URL 저장
-  
+
   // 추천 관련 필드
   final List<String>? topics; // 페르소나가 다룰 수 있는 주제들
   final List<String>? keywords; // 페르소나를 설명하는 키워드들
-  
+
   // R2 이미지 유효성 캐싱 필드
   final bool? hasValidR2Image; // Firebase에 저장된 R2 이미지 유효성
 
@@ -46,8 +46,8 @@ class Persona {
   // 감정 반응 강도 계산 (점수 기반)
   double getEmotionalIntensity() {
     if (likes >= 1000) return 1.0; // 완전한 연애
-    if (likes >= 500) return 0.8;  // 연애
-    if (likes >= 200) return 0.6;  // 썸
+    if (likes >= 500) return 0.8; // 연애
+    if (likes >= 200) return 0.6; // 썸
     return 0.3; // 친구
   }
 
@@ -55,7 +55,7 @@ class Persona {
   bool canShowJealousy() {
     return likes >= 200; // 썸 이상부터 질투 반응
   }
-  
+
   // 이미지 URL 헬퍼 메서드들 (Cloudflare R2 구조 대응)
   String? getThumbnailUrl() {
     // 새로운 R2 구조에서 썸네일 URL 가져오기
@@ -76,7 +76,7 @@ class Persona {
     }
     return photoUrls.firstOrNull;
   }
-  
+
   String? getMediumImageUrl() {
     // 프로필 보기용 중간 크기 이미지
     if (imageUrls != null) {
@@ -84,7 +84,9 @@ class Persona {
       if (imageUrls!.containsKey('medium')) {
         final mediumUrls = imageUrls!['medium'] as Map<String, dynamic>?;
         // JPEG 우선 (WebP 디코딩 문제 회피)
-        return mediumUrls?['jpg'] ?? mediumUrls?['webp'] ?? photoUrls.firstOrNull;
+        return mediumUrls?['jpg'] ??
+            mediumUrls?['webp'] ??
+            photoUrls.firstOrNull;
       }
       // mainImageUrls 구조 확인 (윤미 같은 경우)
       else if (imageUrls!.containsKey('mainImageUrls')) {
@@ -97,7 +99,7 @@ class Persona {
     }
     return photoUrls.firstOrNull;
   }
-  
+
   String? getLargeImageUrl() {
     // 상세 보기용 큰 이미지
     if (imageUrls != null) {
@@ -117,7 +119,7 @@ class Persona {
     }
     return photoUrls.firstOrNull;
   }
-  
+
   String? getSmallImageUrl() {
     // 작은 이미지 (카드용)
     if (imageUrls != null) {
@@ -137,14 +139,16 @@ class Persona {
     }
     return photoUrls.firstOrNull;
   }
-  
+
   String? getOriginalImageUrl() {
     // 원본 이미지
     if (imageUrls != null) {
       // 직접 original 키 확인
       if (imageUrls!.containsKey('original')) {
         final originalUrls = imageUrls!['original'] as Map<String, dynamic>?;
-        return originalUrls?['jpg'] ?? originalUrls?['webp'] ?? photoUrls.firstOrNull;
+        return originalUrls?['jpg'] ??
+            originalUrls?['webp'] ??
+            photoUrls.firstOrNull;
       }
       // mainImageUrls 구조 확인
       else if (imageUrls!.containsKey('mainImageUrls')) {
@@ -156,11 +160,11 @@ class Persona {
     }
     return photoUrls.firstOrNull;
   }
-  
+
   List<String> getAllImageUrls({String size = 'medium'}) {
     // 모든 이미지 URL 가져오기 (갤러리용)
     final urls = <String>[];
-    
+
     if (imageUrls != null) {
       // 우선순위 1: mainImageUrls 구조 확인 (여러 이미지 지원)
       if (imageUrls!.containsKey('mainImageUrls')) {
@@ -168,10 +172,11 @@ class Persona {
         if (mainUrls != null && mainUrls.containsKey(size)) {
           urls.add(mainUrls[size]);
         }
-        
+
         // 추가 이미지들 확인 - additionalImageUrls가 있는 경우
         if (imageUrls!.containsKey('additionalImageUrls')) {
-          final additionalUrls = imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
+          final additionalUrls =
+              imageUrls!['additionalImageUrls'] as Map<String, dynamic>?;
           if (additionalUrls != null) {
             // image1, image2, ... 순서로 정렬
             final sortedKeys = additionalUrls.keys.toList()
@@ -181,7 +186,7 @@ class Persona {
                 final numB = int.tryParse(b.replaceAll('image', '')) ?? 0;
                 return numA.compareTo(numB);
               });
-            
+
             for (final key in sortedKeys) {
               final urlMap = additionalUrls[key] as Map<String, dynamic>;
               if (urlMap.containsKey(size)) {
@@ -199,12 +204,12 @@ class Persona {
         }
       }
     }
-    
+
     // 폴백: 기존 photoUrls 사용
     if (urls.isEmpty && photoUrls.isNotEmpty) {
       return photoUrls;
     }
-    
+
     return urls;
   }
 
@@ -240,7 +245,7 @@ class Persona {
         photoUrlsList = [];
       }
     }
-    
+
     return Persona(
       id: json['id'],
       name: json['name'],
@@ -248,23 +253,19 @@ class Persona {
       description: json['description'],
       photoUrls: photoUrlsList,
       personality: json['personality'],
-      likes: json['likes'] ?? json['relationshipScore'] ?? 0,  // 호환성을 위해 둘 다 체크
+      likes: json['likes'] ?? json['relationshipScore'] ?? 0, // 호환성을 위해 둘 다 체크
       createdAt: DateTime.parse(json['createdAt']),
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
       gender: json['gender'] ?? 'female',
       mbti: json['mbti'] ?? 'ENFP',
-      imageUrls: json['imageUrls'] != null 
-        ? Map<String, dynamic>.from(json['imageUrls']) 
-        : null,
-      topics: json['topics'] != null 
-        ? List<String>.from(json['topics'])
-        : null,
-      keywords: json['keywords'] != null 
-        ? List<String>.from(json['keywords'])
-        : null,
-      matchedAt: json['matchedAt'] != null 
-        ? DateTime.parse(json['matchedAt'])
-        : null,
+      imageUrls: json['imageUrls'] != null
+          ? Map<String, dynamic>.from(json['imageUrls'])
+          : null,
+      topics: json['topics'] != null ? List<String>.from(json['topics']) : null,
+      keywords:
+          json['keywords'] != null ? List<String>.from(json['keywords']) : null,
+      matchedAt:
+          json['matchedAt'] != null ? DateTime.parse(json['matchedAt']) : null,
       hasValidR2Image: json['hasValidR2Image'] ?? null,
     );
   }
@@ -305,4 +306,3 @@ class Persona {
     );
   }
 }
-

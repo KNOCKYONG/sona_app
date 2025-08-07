@@ -41,7 +41,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       parent: _animationController,
       curve: Curves.easeOutCubic,
     ));
-    
+
     _animationController.forward();
   }
 
@@ -57,10 +57,10 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
     final screenHeight = MediaQuery.of(context).size.height;
     final tapX = details.localPosition.dx;
     final tapY = details.localPosition.dy;
-    
+
     // 카드 하단 정보 영역 (이름부터 카드 아래까지) - 화면 높이의 60% 지점부터
     final infoAreaStart = screenHeight * 0.6;
-    
+
     if (tapY >= infoAreaStart) {
       // 하단 정보 영역 전체가 상세보기 토글 (이름부터 카드 끝까지)
       setState(() {
@@ -160,7 +160,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                         ],
                       ),
                     ),
-                    
+
                     // 카드 영역
                     Expanded(
                       child: Container(
@@ -182,15 +182,19 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                       _currentPhotoIndex = index;
                                     });
                                   },
-                                  itemCount: widget.persona.getAllImageUrls(size: 'large').length,
+                                  itemCount: widget.persona
+                                      .getAllImageUrls(size: 'large')
+                                      .length,
                                   itemBuilder: (context, index) {
-                                    final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
+                                    final allImageUrls = widget.persona
+                                        .getAllImageUrls(size: 'large');
                                     return GestureDetector(
                                       onTapUp: _onPhotoTap,
                                       child: CachedNetworkImage(
                                         imageUrl: allImageUrls[index],
                                         fit: BoxFit.cover,
-                                        placeholder: (context, url) => Container(
+                                        placeholder: (context, url) =>
+                                            Container(
                                           color: Colors.grey[300],
                                           child: const Center(
                                             child: CircularProgressIndicator(
@@ -198,7 +202,8 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                             ),
                                           ),
                                         ),
-                                        errorWidget: (context, url, error) => Container(
+                                        errorWidget: (context, url, error) =>
+                                            Container(
                                           color: Colors.grey[300],
                                           child: const Icon(
                                             Icons.image_not_supported,
@@ -211,10 +216,11 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                   },
                                 ),
                               ),
-                              
+
                               // 사진 인디케이터
                               Builder(builder: (context) {
-                                final allImageUrls = widget.persona.getAllImageUrls(size: 'large');
+                                final allImageUrls = widget.persona
+                                    .getAllImageUrls(size: 'large');
                                 if (allImageUrls.length > 1) {
                                   return Positioned(
                                     top: 16,
@@ -226,12 +232,15 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                         (index) => Expanded(
                                           child: Container(
                                             height: 3,
-                                            margin: const EdgeInsets.symmetric(horizontal: 1),
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 1),
                                             decoration: BoxDecoration(
                                               color: index == _currentPhotoIndex
                                                   ? Colors.white
-                                                  : Colors.white.withOpacity(0.3),
-                                              borderRadius: BorderRadius.circular(2),
+                                                  : Colors.white
+                                                      .withOpacity(0.3),
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
                                             ),
                                           ),
                                         ),
@@ -241,7 +250,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                 }
                                 return const SizedBox.shrink();
                               }),
-                              
+
                               // 그라데이션 오버레이
                               Positioned(
                                 bottom: 0,
@@ -265,7 +274,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                   ),
                                 ),
                               ),
-                              
+
                               // 페르소나 정보
                               Positioned(
                                 bottom: 20,
@@ -280,11 +289,13 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                   behavior: HitTestBehavior.opaque,
                                   child: AnimatedSwitcher(
                                     duration: const Duration(milliseconds: 300),
-                                    child: _showDetails ? _buildDetailedInfo() : _buildBasicInfo(),
+                                    child: _showDetails
+                                        ? _buildDetailedInfo()
+                                        : _buildBasicInfo(),
                                   ),
                                 ),
                               ),
-                              
+
                               // 관계 상태 배지 (시각적 요소)
                               if (widget.persona.likes > 0)
                                 Positioned(
@@ -297,7 +308,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                         ),
                       ),
                     ),
-                    
+
                     // 하단 안내 텍스트
                     Padding(
                       padding: const EdgeInsets.all(16),
@@ -339,7 +350,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
               ),
             ),
             const SizedBox(width: 8),
-            
+
             // 나이
             Text(
               '${widget.persona.age}',
@@ -350,14 +361,15 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
               ),
             ),
             const SizedBox(width: 6),
-            
+
             // MBTI
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+                border:
+                    Border.all(color: Colors.white.withOpacity(0.3), width: 1),
               ),
               child: Text(
                 widget.persona.mbti,
@@ -433,7 +445,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
               ),
             ),
             const SizedBox(width: 8),
-            
+
             // 나이
             Text(
               '${widget.persona.age}',
@@ -444,14 +456,15 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
               ),
             ),
             const SizedBox(width: 6),
-            
+
             // MBTI
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+                border:
+                    Border.all(color: Colors.white.withOpacity(0.3), width: 1),
               ),
               child: Text(
                 widget.persona.mbti,
@@ -465,7 +478,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
           ],
         ),
         const SizedBox(height: 8),
-        
+
         Text(
           widget.persona.description,
           style: const TextStyle(
@@ -475,7 +488,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
           ),
         ),
         const SizedBox(height: 12),
-        
+
         // 성격 특성
         if (widget.persona.personality.isNotEmpty) ...[
           const Text(
@@ -507,11 +520,11 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       ],
     );
   }
-  
+
   Widget _buildRelationshipBadge() {
     final likes = widget.persona.likes ?? 0;
     final color = RelationshipColorSystem.getRelationshipColor(likes);
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
@@ -555,4 +568,4 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
       ),
     );
   }
-} 
+}

@@ -26,13 +26,13 @@ class _EmotionIndicatorState extends State<EmotionIndicator>
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.animate) {
       _animationController = AnimationController(
         duration: const Duration(milliseconds: 1500),
         vsync: this,
       );
-      
+
       _pulseAnimation = Tween<double>(
         begin: 0.8,
         end: 1.2,
@@ -40,7 +40,7 @@ class _EmotionIndicatorState extends State<EmotionIndicator>
         parent: _animationController,
         curve: Curves.elasticInOut,
       ));
-      
+
       _rotationAnimation = Tween<double>(
         begin: -0.1,
         end: 0.1,
@@ -48,7 +48,7 @@ class _EmotionIndicatorState extends State<EmotionIndicator>
         parent: _animationController,
         curve: Curves.easeInOut,
       ));
-      
+
       _animationController.repeat(reverse: true);
     }
   }
@@ -185,7 +185,7 @@ class EmotionBar extends StatelessWidget {
     }
 
     final totalCount = emotionCounts.values.reduce((a, b) => a + b);
-    
+
     return Container(
       height: height,
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -199,7 +199,7 @@ class EmotionBar extends StatelessWidget {
           final emotion = entry.key;
           final count = entry.value;
           final percentage = count / totalCount;
-          
+
           return Expanded(
             flex: count,
             child: Container(

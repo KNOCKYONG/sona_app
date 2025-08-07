@@ -16,7 +16,7 @@ class OptimizedPersonaImage extends StatelessWidget {
   final Widget? placeholder;
   final Widget? errorWidget;
   final bool showLoading;
-  
+
   const OptimizedPersonaImage({
     super.key,
     required this.persona,
@@ -29,7 +29,7 @@ class OptimizedPersonaImage extends StatelessWidget {
     this.errorWidget,
     this.showLoading = true,
   });
-  
+
   // 팩토리 생성자들 - 용도별 이미지
   factory OptimizedPersonaImage.thumbnail({
     required Persona persona,
@@ -44,7 +44,7 @@ class OptimizedPersonaImage extends StatelessWidget {
       borderRadius: borderRadius ?? BorderRadius.circular(size / 2),
     );
   }
-  
+
   factory OptimizedPersonaImage.card({
     required Persona persona,
     double? width,
@@ -59,7 +59,7 @@ class OptimizedPersonaImage extends StatelessWidget {
       borderRadius: borderRadius ?? BorderRadius.circular(12),
     );
   }
-  
+
   factory OptimizedPersonaImage.profile({
     required Persona persona,
     double? width,
@@ -74,7 +74,7 @@ class OptimizedPersonaImage extends StatelessWidget {
       borderRadius: borderRadius ?? BorderRadius.circular(16),
     );
   }
-  
+
   factory OptimizedPersonaImage.fullScreen({
     required Persona persona,
     double? width,
@@ -88,19 +88,20 @@ class OptimizedPersonaImage extends StatelessWidget {
       borderRadius: BorderRadius.zero,
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final imageUrl = _getImageUrl();
-    
+
     if (imageUrl == null || imageUrl.isEmpty) {
       return _buildErrorWidget();
     }
-    
+
     // CachedNetworkImage 최적화 설정
-    final cacheConfig = ImageCacheConfig.cacheDuration[imageSize] ?? const Duration(days: 7);
+    final cacheConfig =
+        ImageCacheConfig.cacheDuration[imageSize] ?? const Duration(days: 7);
     final memCacheSize = ImageCacheConfig.memCacheSize[imageSize] ?? 20;
-    
+
     return ClipRRect(
       borderRadius: borderRadius ?? BorderRadius.zero,
       child: CachedNetworkImage(
@@ -116,12 +117,12 @@ class OptimizedPersonaImage extends StatelessWidget {
         // 캐시 매니저 설정
         cacheKey: '${persona.id}_${imageSize.suffix}',
         // 로딩 중 표시
-        placeholder: showLoading 
-          ? (context, url) => placeholder ?? _buildLoadingWidget()
-          : null,
+        placeholder: showLoading
+            ? (context, url) => placeholder ?? _buildLoadingWidget()
+            : null,
         // 에러 위젯
-        errorWidget: (context, url, error) => 
-          errorWidget ?? _buildErrorWidget(),
+        errorWidget: (context, url, error) =>
+            errorWidget ?? _buildErrorWidget(),
         // 고급 설정
         httpHeaders: {
           'Cache-Control': 'max-age=${cacheConfig.inSeconds}',
@@ -129,7 +130,7 @@ class OptimizedPersonaImage extends StatelessWidget {
       ),
     );
   }
-  
+
   String? _getImageUrl() {
     // 새로운 R2 이미지 구조 사용
     if (persona.imageUrls != null) {
@@ -147,15 +148,15 @@ class OptimizedPersonaImage extends StatelessWidget {
           return persona.getOriginalImageUrl();
       }
     }
-    
+
     // 폴백: photoUrls 사용
     if (persona.photoUrls.isNotEmpty) {
       return persona.photoUrls.first;
     }
-    
+
     return null;
   }
-  
+
   int? _getMemCacheWidth() {
     // 메모리 캐시용 크기 제한
     switch (imageSize) {
@@ -171,7 +172,7 @@ class OptimizedPersonaImage extends StatelessWidget {
         return null; // 원본은 제한 없음
     }
   }
-  
+
   int? _getMemCacheHeight() {
     // 정사각형이 아닌 경우 높이도 계산
     if (width != null && height != null) {
@@ -181,7 +182,7 @@ class OptimizedPersonaImage extends StatelessWidget {
     }
     return _getMemCacheWidth(); // 정사각형 가정
   }
-  
+
   Widget _buildLoadingWidget() {
     return Container(
       width: width,
@@ -195,7 +196,7 @@ class OptimizedPersonaImage extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildErrorWidget() {
     return Container(
       width: width,
@@ -214,44 +215,45 @@ class OptimizedPersonaImage extends StatelessWidget {
 class OptimizedPersonaGallery extends StatefulWidget {
   final Persona persona;
   final int initialIndex;
-  
+
   const OptimizedPersonaGallery({
     super.key,
     required this.persona,
     this.initialIndex = 0,
   });
-  
+
   @override
-  State<OptimizedPersonaGallery> createState() => _OptimizedPersonaGalleryState();
+  State<OptimizedPersonaGallery> createState() =>
+      _OptimizedPersonaGalleryState();
 }
 
 class _OptimizedPersonaGalleryState extends State<OptimizedPersonaGallery> {
   late PageController _pageController;
   late int _currentIndex;
-  
+
   @override
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: _currentIndex);
   }
-  
+
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final imageUrls = widget.persona.getAllImageUrls(size: 'large');
-    
+
     if (imageUrls.isEmpty) {
       return const Center(
         child: Text('이미지가 없습니다'),
       );
     }
-    
+
     return Stack(
       children: [
         // 이미지 뷰어
@@ -280,7 +282,7 @@ class _OptimizedPersonaGalleryState extends State<OptimizedPersonaGallery> {
             );
           },
         ),
-        
+
         // 인디케이터
         if (imageUrls.length > 1)
           Positioned(

@@ -15,7 +15,7 @@ import '../cache/image_preload_service.dart';
 import 'dart:convert';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
-/// 
+///
 /// Key optimizations:
 /// 1. Intelligent caching with TTL
 /// 2. Batch operations for Firebase
@@ -24,156 +24,137 @@ import 'dart:convert';
 /// 5. Parallel data fetching
 class PersonaService extends BaseService {
   String? _currentUserId;
-  
+
   // Data storage with caching
   List<Persona> _allPersonas = [];
   List<Persona> _matchedPersonas = [];
   Persona? _currentPersona;
   bool? _currentPersonaCasualSpeech; // 현재 페르소나의 반말 모드 별도 저장
-  
+
   // Stable shuffled list for swipe session
   List<Persona>? _shuffledAvailablePersonas;
   DateTime? _lastShuffleTime;
-  
-  // Caching system  
+
+  // Caching system
   final Map<String, _CachedRelationship> _relationshipCache = {};
   static const Duration _cacheTTL = Duration(minutes: 5);
   static const int _maxCacheSize = 100;
-  
+
   // Memory cache for persona data
   final Map<String, Persona> _personaMemoryCache = {};
   DateTime? _lastPersonaCacheUpdate;
-  
+
   // Batch operation queue
   final List<_PendingRelationshipUpdate> _pendingUpdates = [];
   Timer? _batchUpdateTimer;
   static const Duration _batchUpdateDelay = Duration(seconds: 2);
   static const int _maxBatchSize = 10;
-  
+
   // Session data
   final Map<String, DateTime> _sessionSwipedPersonas = {};
-  
+
   // R2 validation state
   final Set<String> _r2ValidatedPersonaIds = {};
   bool _isValidatingR2 = false;
   Timer? _r2ValidationTimer;
-  
+
   // Midnight refresh timer
   Timer? _midnightRefreshTimer;
   DateTime? _lastRefreshDate;
-  
+
   // Lazy loading state
   bool _matchedPersonasLoaded = false;
   Completer<void>? _loadingCompleter;
-  
+
   // Public getter for matched personas loaded state
   bool get matchedPersonasLoaded => _matchedPersonasLoaded;
-  
+
   // Progressive loading for initial fast display
   List<Persona> get availablePersonasProgressive {
     _cleanExpiredSwipes();
-    
+
     // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
     }
-    
+
     // Return immediately without R2 check
     return _getImmediateAvailablePersonas();
   }
-  
+
   // Original getter with R2 validation
   List<Persona> get availablePersonas {
     _cleanExpiredSwipes();
-    
+
     // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
     }
-    
+
     // Check if we need to reshuffle (every 30 minutes or if list is null)
     final now = DateTime.now();
     final shouldReshuffle = _shuffledAvailablePersonas == null ||
         _lastShuffleTime == null ||
         now.difference(_lastShuffleTime!).inMinutes >= 30;
-    
+
     if (shouldReshuffle) {
-      debugPrint('🔀 Reshuffling available personas...');
-      debugPrint('📋 Total personas: ${_allPersonas.length}');
-      debugPrint('📋 Matched personas: ${_matchedPersonas.length}');
-      debugPrint('📋 Actioned personas: ${_actionedPersonaIds.length}');
-      
-      // 디버깅: R2 이미지가 있는 페르소나 수 확인
+      // Reshuffling personas: Total=${_allPersonas.length}, Matched=${_matchedPersonas.length}
       final personasWithR2 = _allPersonas.where((p) => _hasR2Image(p)).length;
-      debugPrint('📋 Personas with R2 images: $personasWithR2');
-      
+
       // Exclude both recently swiped and matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
-      
-      // 더 강력한 매칭 확인 로그
-      debugPrint('🔍 Matched persona IDs to exclude:');
-      for (final id in matchedIds.take(10)) {
-        debugPrint('   - $id');
-      }
-      
+
+      // Excluding matched persona IDs: ${matchedIds.length}
+
       // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
-      final filtered = _allPersonas.where((persona) => 
-        !matchedIds.contains(persona.id) &&
-        !_actionedPersonaIds.contains(persona.id)
-        // 최근 스와이프 필터 제거 - 무한 스와이프
-        // R2 필터링 제거 - 모든 페르소나 표시
-      ).toList();
-      
-      // 필터링 디버깅
-      debugPrint('📋 Filtering breakdown:');
-      debugPrint('   - Total personas: ${_allPersonas.length}');
-      debugPrint('   - Matched personas to exclude: ${matchedIds.length}');
-      debugPrint('   - Actioned personas to exclude: ${_actionedPersonaIds.length}');
-      debugPrint('   - Available for swipe: ${filtered.length}');
-      debugPrint('   ✅ 무한 스와이프: 최근 스와이프 필터 제거됨');
-      debugPrint('   ✅ 모든 페르소나 표시: R2 필터 제거됨');
-      
-      // 디버깅: 필터링된 각 카테고리의 수
-      final swipedCount = _allPersonas.where((p) => _isPersonaRecentlySwiped(p.id)).length;
-      final notR2Count = _allPersonas.where((p) => !_hasR2Image(p)).length;
-      debugPrint('  - Recently swiped: $swipedCount');
-      debugPrint('  - Without R2 images: $notR2Count');
-      debugPrint('  - Matched: ${matchedIds.length}');
-      debugPrint('  - Actioned: ${_actionedPersonaIds.length}');
-      
+      final filtered = _allPersonas
+          .where((persona) =>
+                  !matchedIds.contains(persona.id) &&
+                  !_actionedPersonaIds.contains(persona.id)
+              // 최근 스와이프 필터 제거 - 무한 스와이프
+              // R2 필터링 제거 - 모든 페르소나 표시
+              )
+          .toList();
+
+      // Filtering: Available=${filtered.length} from Total=${_allPersonas.length}
+
+      // Filter stats calculated
+
       // Get recommended personas for current user
       final recommendedPersonas = getRecommendedPersonas(filtered);
       _shuffledAvailablePersonas = recommendedPersonas;
       _lastShuffleTime = now;
-      
-      debugPrint('✅ Sorted ${recommendedPersonas.length} personas by recommendation score');
+
+      // Sorted ${recommendedPersonas.length} personas by recommendation
     } else {
       // Update the existing shuffled list to exclude newly swiped/matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
-      _shuffledAvailablePersonas = _shuffledAvailablePersonas!.where((persona) => 
-        !_isPersonaRecentlySwiped(persona.id) && 
-        !matchedIds.contains(persona.id) &&
-        _hasR2Image(persona)  // Only include personas with R2 images
-      ).toList();
+      _shuffledAvailablePersonas = _shuffledAvailablePersonas!
+          .where((persona) =>
+                  !_isPersonaRecentlySwiped(persona.id) &&
+                  !matchedIds.contains(persona.id) &&
+                  _hasR2Image(persona) // Only include personas with R2 images
+              )
+          .toList();
     }
-    
+
     return List<Persona>.from(_shuffledAvailablePersonas!);
   }
-  
+
   List<Persona> get allPersonas => _allPersonas;
-  
+
   /// Get persona by ID with memory caching
   Persona? getPersonaById(String personaId) {
     // Check memory cache first
     if (_personaMemoryCache.containsKey(personaId)) {
       final cached = _personaMemoryCache[personaId];
       // Return cached if less than 5 minutes old
-      if (_lastPersonaCacheUpdate != null && 
+      if (_lastPersonaCacheUpdate != null &&
           DateTime.now().difference(_lastPersonaCacheUpdate!).inMinutes < 5) {
         return cached;
       }
     }
-    
+
     // Look in all personas list
     Persona? persona;
     try {
@@ -185,12 +166,12 @@ class PersonaService extends BaseService {
         persona = null;
       }
     }
-    
+
     // Cache the result if found
     if (persona != null && persona.id != '') {
       _personaMemoryCache[personaId] = persona;
       _lastPersonaCacheUpdate = DateTime.now();
-      
+
       // Clean cache if too large
       if (_personaMemoryCache.length > 50) {
         final keysToRemove = _personaMemoryCache.keys.take(10).toList();
@@ -199,10 +180,10 @@ class PersonaService extends BaseService {
         }
       }
     }
-    
+
     return persona;
   }
-  
+
   List<Persona> get matchedPersonas {
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
@@ -210,54 +191,60 @@ class PersonaService extends BaseService {
     // Filter out personas without R2 images
     return _matchedPersonas.where((persona) => _hasR2Image(persona)).toList();
   }
-  
+
   Persona? get currentPersona => _currentPersona;
   bool? get currentPersonaCasualSpeech => _currentPersonaCasualSpeech;
   @override
   bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
   bool get isValidatingR2 => _isValidatingR2;
-  
+
   /// 실제 대기 중인 페르소나 수 (전체에서 매칭된/액션된 페르소나 제외)
   int get waitingPersonasCount {
     debugPrint('📊 Calculating waitingPersonasCount...');
     debugPrint('  Total personas: ${_allPersonas.length}');
-    
+
     // 전체 페르소나 중 R2 이미지가 있는 것만
-    final totalWithImages = _allPersonas.where((persona) => _hasR2Image(persona)).toList();
+    final totalWithImages =
+        _allPersonas.where((persona) => _hasR2Image(persona)).toList();
     debugPrint('  Personas with R2 images: ${totalWithImages.length}');
-    
+
     // 성별 필터링 적용
     List<Persona> filteredPersonas = totalWithImages;
-    if (_currentUser != null && !_currentUser!.genderAll && _currentUser!.gender != null) {
+    if (_currentUser != null &&
+        !_currentUser!.genderAll &&
+        _currentUser!.gender != null) {
       final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
-      filteredPersonas = totalWithImages.where((persona) => 
-        persona.gender == targetGender
-      ).toList();
-      debugPrint('  After gender filter (showing $targetGender only): ${filteredPersonas.length}');
+      filteredPersonas = totalWithImages
+          .where((persona) => persona.gender == targetGender)
+          .toList();
+      debugPrint(
+          '  After gender filter (showing $targetGender only): ${filteredPersonas.length}');
     } else {
-      debugPrint('  No gender filter applied (genderAll: ${_currentUser?.genderAll})');
+      debugPrint(
+          '  No gender filter applied (genderAll: ${_currentUser?.genderAll})');
     }
-    
+
     // 매칭된 페르소나 ID 목록
     final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
-    debugPrint('  Matched personas: ${matchedIds.length}');
-    
+    // Matched personas: ${matchedIds.length}
+
     // 액션된 페르소나 ID 목록 (매칭, 패스 등 모든 액션)
     final actionedIds = _actionedPersonaIds.toSet();
-    debugPrint('  Actioned personas: ${actionedIds.length}');
-    
+    // Actioned personas: ${actionedIds.length}
+
     // 전체에서 매칭되거나 액션된 페르소나 제외
-    final waitingPersonas = filteredPersonas.where((persona) => 
-      !matchedIds.contains(persona.id) && 
-      !actionedIds.contains(persona.id)
-    ).toList();
-    
+    final waitingPersonas = filteredPersonas
+        .where((persona) =>
+            !matchedIds.contains(persona.id) &&
+            !actionedIds.contains(persona.id))
+        .toList();
+
     debugPrint('  ✅ Final waiting personas: ${waitingPersonas.length}');
-    
+
     return waitingPersonas.length;
   }
-  
+
   // Additional getters for compatibility
   List<Persona> get sessionPersonas => _matchedPersonas;
   List<Persona> get myPersonas => _matchedPersonas;
@@ -268,52 +255,53 @@ class PersonaService extends BaseService {
     if (_loadingCompleter != null && !_loadingCompleter!.isCompleted) {
       return _loadingCompleter!.future;
     }
-    
+
     _loadingCompleter = Completer<void>();
-    
+
     await executeWithLoading(() async {
-      
       await _initializeNormalMode(userId);
-      
+
       _loadingCompleter!.complete();
     }, errorContext: 'initialize', showError: false);
   }
-
 
   /// Normal mode initialization with parallel loading
   Future<void> _initializeNormalMode(String? userId) async {
     _currentUserId = await DeviceIdService.getCurrentUserId(
       firebaseUserId: userId,
     );
-    
+
     debugPrint('🚀 PersonaService initializing with userId: $_currentUserId');
-    
+
     // isLoading is managed by BaseService
     notifyListeners();
-    
+
     // 🔥 매칭된 페르소나를 먼저 로드하여 필터링 준비
-    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting matched personas load...');
+    debugPrint(
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting matched personas load...');
     await _loadMatchedPersonas();
     _matchedPersonasLoaded = true;
-    debugPrint('⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
-    
+    debugPrint(
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
+
     // 그 다음 나머지 데이터 병렬 로드
     final results = await Future.wait([
       _loadFromFirebaseOrFallback(),
       _loadSwipedPersonas(),
       _loadActionedPersonaIds(),
     ]);
-    
+
     // 🆕 Check and download new images after loading personas
     await checkAndDownloadNewImages();
-    
+
     // Preload first 20 persona images for better performance
     if (_allPersonas.isNotEmpty) {
       final personasToPreload = _allPersonas.take(20).toList();
       ImagePreloadService.instance.preloadNewImages(personasToPreload);
-      debugPrint('🖼️ Preloading images for ${personasToPreload.length} personas');
+      debugPrint(
+          '🖼️ Preloading images for ${personasToPreload.length} personas');
     }
-    
+
     // isLoading is managed by BaseService
     notifyListeners();
   }
@@ -322,7 +310,7 @@ class PersonaService extends BaseService {
   Future<void> _loadFromFirebaseOrFallback() async {
     // Try to load from local cache first
     await _loadPersonasFromCache();
-    
+
     // If cache is empty or stale, load from Firebase
     if (_allPersonas.isEmpty || await _isCacheStale()) {
       await _loadPersonasFromFirebase();
@@ -332,16 +320,16 @@ class PersonaService extends BaseService {
   /// Lazy load matched personas
   Future<void> _lazyLoadMatchedPersonas() async {
     if (_matchedPersonasLoaded || _currentUserId == null) return;
-    
+
     _matchedPersonasLoaded = true;
-    
+
     try {
       await _loadMatchedPersonas();
     } catch (e) {
       debugPrint('Error lazy loading matched personas: $e');
     }
   }
-  
+
   /// Public method to load matched personas if needed
   Future<void> loadMatchedPersonasIfNeeded() async {
     if (!_matchedPersonasLoaded) {
@@ -354,32 +342,39 @@ class PersonaService extends BaseService {
     if (_currentUserId != null) {
       // Check cache first
       final cachedRelationship = _getFromCache(persona.id);
-      
+
       if (cachedRelationship != null) {
         _currentPersona = persona.copyWith(
           likes: cachedRelationship.score,
-          imageUrls: persona.imageUrls,  // Preserve imageUrls
+          imageUrls: persona.imageUrls, // Preserve imageUrls
         );
         _currentPersonaCasualSpeech = cachedRelationship.isCasualSpeech;
         notifyListeners();
         return;
       }
-      
+
       // Load from Firebase if not cached
       final relationshipData = await _loadUserPersonaRelationship(persona.id);
       if (relationshipData != null) {
         _currentPersona = persona.copyWith(
-          likes: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? 50,
-          imageUrls: persona.imageUrls,  // Preserve imageUrls
+          likes: relationshipData['likes'] ??
+              relationshipData['relationshipScore'] ??
+              50,
+          imageUrls: persona.imageUrls, // Preserve imageUrls
         );
-        _currentPersonaCasualSpeech = relationshipData['isCasualSpeech'] ?? false;
-        
+        _currentPersonaCasualSpeech =
+            relationshipData['isCasualSpeech'] ?? false;
+
         // Cache the relationship
-        _addToCache(persona.id, _CachedRelationship(
-          score: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? 50,
-          isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
-          timestamp: DateTime.now(),
-        ));
+        _addToCache(
+            persona.id,
+            _CachedRelationship(
+              score: relationshipData['likes'] ??
+                  relationshipData['relationshipScore'] ??
+                  50,
+              isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
+              timestamp: DateTime.now(),
+            ));
       } else {
         _currentPersona = persona;
         _currentPersonaCasualSpeech = false; // 기본값
@@ -408,13 +403,13 @@ class PersonaService extends BaseService {
         debugPrint('⚠️ Persona not found for liking: $personaId');
         return false;
       }
-      
+
       // Create relationship data
       final relationshipData = {
         'userId': _currentUserId!,
         'personaId': personaId,
         'likes': 50,
-        'likes': 50,  // 🔧 FIX: Write both fields for consistency
+        'likes': 50, // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'like',
         'isMatched': true,
@@ -424,7 +419,8 @@ class PersonaService extends BaseService {
         'lastInteraction': FieldValue.serverTimestamp(),
         'personaName': persona.name,
         'personaAge': persona.age,
-        'personaPhotoUrl': persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
+        'personaPhotoUrl':
+            persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
       };
 
       // Queue for batch operation
@@ -433,30 +429,32 @@ class PersonaService extends BaseService {
       // Update local state immediately
       final matchedPersona = persona.copyWith(
         likes: 50,
-        imageUrls: persona.imageUrls,  // Preserve imageUrls
-        matchedAt: DateTime.now(),  // Set matched time
+        imageUrls: persona.imageUrls, // Preserve imageUrls
+        matchedAt: DateTime.now(), // Set matched time
       );
-      
+
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
         _matchedPersonas.add(matchedPersona);
         await _saveMatchedPersonas();
       }
-      
+
       // 🔥 즉시 사용 가능한 페르소나 목록에서 제거
       _shuffledAvailablePersonas?.removeWhere((p) => p.id == personaId);
-      
+
       _sessionSwipedPersonas[personaId] = DateTime.now();
-      
+
       // Cache the relationship
-      _addToCache(personaId, _CachedRelationship(
-        score: 50,
-        isCasualSpeech: false,
-        timestamp: DateTime.now(),
-      ));
-      
+      _addToCache(
+          personaId,
+          _CachedRelationship(
+            score: 50,
+            isCasualSpeech: false,
+            timestamp: DateTime.now(),
+          ));
+
       // Update user's actionedPersonaIds
       await _updateActionedPersonaIds(personaId);
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -482,15 +480,15 @@ class PersonaService extends BaseService {
         debugPrint('⚠️ Persona not found for super liking: $personaId');
         return false;
       }
-      
+
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
-      
+
       // Create relationship data with super like relationship score (1000)
       final relationshipData = {
         'userId': _currentUserId!,
         'personaId': personaId,
         'likes': 1000, // 🌟 Super like starts with 1000 (perfect love level)
-        'likes': 1000,  // 🔧 FIX: Write both fields for consistency
+        'likes': 1000, // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'super_like',
         'isMatched': true,
@@ -500,7 +498,8 @@ class PersonaService extends BaseService {
         'lastInteraction': FieldValue.serverTimestamp(),
         'personaName': persona.name,
         'personaAge': persona.age,
-        'personaPhotoUrl': persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
+        'personaPhotoUrl':
+            persona.photoUrls.isNotEmpty ? persona.photoUrls.first : '',
       };
 
       // Queue for batch operation
@@ -509,10 +508,10 @@ class PersonaService extends BaseService {
       // Update local state immediately with super like score
       final matchedPersona = persona.copyWith(
         likes: 1000, // 🌟 Super like likes score
-        imageUrls: persona.imageUrls,  // Preserve imageUrls
-        matchedAt: DateTime.now(),  // Set matched time
+        imageUrls: persona.imageUrls, // Preserve imageUrls
+        matchedAt: DateTime.now(), // Set matched time
       );
-      
+
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
         _matchedPersonas.add(matchedPersona);
         await _saveMatchedPersonas();
@@ -524,24 +523,27 @@ class PersonaService extends BaseService {
           await _saveMatchedPersonas();
         }
       }
-      
+
       // 🔥 즉시 사용 가능한 페르소나 목록에서 제거
       _shuffledAvailablePersonas?.removeWhere((p) => p.id == personaId);
-      
+
       _sessionSwipedPersonas[personaId] = DateTime.now();
-      
+
       // Cache the relationship with super like score
-      _addToCache(personaId, _CachedRelationship(
-        score: 1000, // 🌟 Super like score
-        isCasualSpeech: false,
-        timestamp: DateTime.now(),
-      ));
-      
-      debugPrint('✅ Super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
-      
+      _addToCache(
+          personaId,
+          _CachedRelationship(
+            score: 1000, // 🌟 Super like score
+            isCasualSpeech: false,
+            timestamp: DateTime.now(),
+          ));
+
+      debugPrint(
+          '✅ Super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
+
       // Update user's actionedPersonaIds
       await _updateActionedPersonaIds(personaId);
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -555,32 +557,40 @@ class PersonaService extends BaseService {
     try {
       final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
       if (persona == null) {
-        debugPrint('⚠️ Persona not found for tutorial super liking: $personaId');
+        debugPrint(
+            '⚠️ Persona not found for tutorial super liking: $personaId');
         return false;
       }
-      
-      debugPrint('🎓⭐ Processing tutorial SUPER LIKE for persona: ${persona.name}');
-      
-      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
-      
+
+      debugPrint(
+          '🎓⭐ Processing tutorial SUPER LIKE for persona: ${persona.name}');
+
+      final matchedIds =
+          await PreferencesManager.getStringList('tutorial_matched_personas') ??
+              [];
+
       if (!matchedIds.contains(personaId)) {
         matchedIds.add(personaId);
-        await PreferencesManager.setStringList('tutorial_matched_personas', matchedIds);
+        await PreferencesManager.setStringList(
+            'tutorial_matched_personas', matchedIds);
       }
-      
+
       // Also save to super liked list
-      final superLikedIds = await PreferencesManager.getStringList('tutorial_super_liked_personas') ?? [];
+      final superLikedIds = await PreferencesManager.getStringList(
+              'tutorial_super_liked_personas') ??
+          [];
       if (!superLikedIds.contains(personaId)) {
         superLikedIds.add(personaId);
-        await PreferencesManager.setStringList('tutorial_super_liked_personas', superLikedIds);
+        await PreferencesManager.setStringList(
+            'tutorial_super_liked_personas', superLikedIds);
         debugPrint('💾 Saved super like flag for: ${persona.name}');
       }
-      
+
       // Super like creates crush likes level (1000 score)
       final matchedPersona = persona.copyWith(
         likes: 1000, // 🌟 Super like likes score
       );
-      
+
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
         _matchedPersonas.add(matchedPersona);
       } else {
@@ -590,10 +600,11 @@ class PersonaService extends BaseService {
           _matchedPersonas[index] = matchedPersona;
         }
       }
-      
+
       _sessionSwipedPersonas[personaId] = DateTime.now();
-      
-      debugPrint('✅ Tutorial super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
+
+      debugPrint(
+          '✅ Tutorial super like processed successfully: ${persona.name} → 1000 (완벽한 사랑)');
       notifyListeners();
       return true;
     } catch (e) {
@@ -603,19 +614,22 @@ class PersonaService extends BaseService {
   }
 
   /// Update likes score with enhanced logging and immediate processing
-  Future<void> updateRelationshipScore(String personaId, int change, String userId) async {
+  Future<void> updateRelationshipScore(
+      String personaId, int change, String userId) async {
     if (userId.isEmpty || change == 0) {
-      debugPrint('⏭️ Skipping relationship update: userId=$userId, change=$change');
+      debugPrint(
+          '⏭️ Skipping relationship update: userId=$userId, change=$change');
       return;
     }
-    
-    debugPrint('🔄 Starting relationship score update: personaId=$personaId, change=$change, userId=$userId');
-    
+
+    debugPrint(
+        '🔄 Starting relationship score update: personaId=$personaId, change=$change, userId=$userId');
+
     try {
       // Get current score from cache or persona
       int currentScore = 50;
       final cachedRelationship = _getFromCache(personaId);
-      
+
       if (cachedRelationship != null) {
         currentScore = cachedRelationship.score;
         debugPrint('📋 Using cached score: $currentScore');
@@ -623,20 +637,22 @@ class PersonaService extends BaseService {
         currentScore = _currentPersona!.likes;
         debugPrint('👤 Using current persona score: $currentScore');
       } else {
-        final matchedPersona = _matchedPersonas.where((p) => p.id == personaId).firstOrNull;
+        final matchedPersona =
+            _matchedPersonas.where((p) => p.id == personaId).firstOrNull;
         if (matchedPersona != null) {
           currentScore = matchedPersona.likes;
           debugPrint('💕 Using matched persona score: $currentScore');
         } else {
           // Get from RelationScoreService
-          currentScore = await RelationScoreService.instance.getRelationshipScore(
+          currentScore =
+              await RelationScoreService.instance.getRelationshipScore(
             userId: userId,
             personaId: personaId,
           );
           debugPrint('📈 Using score from RelationScoreService: $currentScore');
         }
       }
-      
+
       // Use RelationScoreService to update score
       await RelationScoreService.instance.updateRelationshipScore(
         userId: userId,
@@ -644,53 +660,58 @@ class PersonaService extends BaseService {
         scoreChange: change,
         currentScore: currentScore,
       );
-      
+
       final newScore = (currentScore + change).clamp(0, 1000);
       debugPrint('📊 Score calculation: $currentScore + $change = $newScore');
-      
+
       // Update relationship in Firebase
       debugPrint('🔥 Normal mode - queuing Firebase update');
       // Queue update for batch processing
       _queueRelationshipUpdate(_PendingRelationshipUpdate(
-          userId: userId,
-          personaId: personaId,
-          newScore: newScore,
-        ));
-        
-        // 🔧 FIX: Immediately process batch if this is a significant change
-        if (change.abs() >= 3) {
-          debugPrint('🚀 Significant change detected ($change) - processing immediately');
-          Future.microtask(() => _processBatchUpdates());
-        }
-      
+        userId: userId,
+        personaId: personaId,
+        newScore: newScore,
+      ));
+
+      // 🔧 FIX: Immediately process batch if this is a significant change
+      if (change.abs() >= 3) {
+        debugPrint(
+            '🚀 Significant change detected ($change) - processing immediately');
+        Future.microtask(() => _processBatchUpdates());
+      }
+
       // Update local state immediately for all modes
       if (_currentPersona?.id == personaId) {
         _currentPersona = _currentPersona?.copyWith(
           likes: newScore,
-          imageUrls: _currentPersona?.imageUrls,  // Preserve imageUrls
+          imageUrls: _currentPersona?.imageUrls, // Preserve imageUrls
         );
-        debugPrint('✅ Updated current persona: ${_currentPersona!.name} → $newScore');
+        debugPrint(
+            '✅ Updated current persona: ${_currentPersona!.name} → $newScore');
         // 🔥 즉시 UI 업데이트 (currentPersona 변경)
         notifyListeners();
       }
-      
+
       // Update matched personas list
       final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
         _matchedPersonas[index] = _matchedPersonas[index].copyWith(
           likes: newScore,
-          imageUrls: _matchedPersonas[index].imageUrls,  // Preserve imageUrls
+          imageUrls: _matchedPersonas[index].imageUrls, // Preserve imageUrls
         );
-        debugPrint('✅ Updated matched persona: ${_matchedPersonas[index].name} → $newScore');
+        debugPrint(
+            '✅ Updated matched persona: ${_matchedPersonas[index].name} → $newScore');
       }
-      
+
       // Update cache
-      _addToCache(personaId, _CachedRelationship(
-        score: newScore,
-        isCasualSpeech: cachedRelationship?.isCasualSpeech ?? false,
-        timestamp: DateTime.now(),
-      ));
-      
+      _addToCache(
+          personaId,
+          _CachedRelationship(
+            score: newScore,
+            isCasualSpeech: cachedRelationship?.isCasualSpeech ?? false,
+            timestamp: DateTime.now(),
+          ));
+
       debugPrint('🔄 Relationship update completed successfully');
       // 🔥 최종 UI 업데이트 (모든 변경사항 반영)
       notifyListeners();
@@ -699,23 +720,24 @@ class PersonaService extends BaseService {
     }
   }
 
-
   /// Queue relationship creation for batch processing
   void _queueRelationshipCreate(Map<String, dynamic> relationshipData) async {
-    final docId = '${relationshipData['userId']}_${relationshipData['personaId']}';
-    
+    final docId =
+        '${relationshipData['userId']}_${relationshipData['personaId']}';
+
     try {
       debugPrint('🔄 Creating relationship document: $docId');
-      debugPrint('📊 Relationship data: ${relationshipData['personaName']} (score: ${relationshipData['likes'] ?? relationshipData['relationshipScore']})');
-      
+      debugPrint(
+          '📊 Relationship data: ${relationshipData['personaName']} (score: ${relationshipData['likes'] ?? relationshipData['relationshipScore']})');
+
       await FirebaseHelper.userPersonaRelationships
           .doc(docId)
           .set(relationshipData);
-          
+
       debugPrint('✅ Relationship created successfully: $docId');
     } catch (e) {
       debugPrint('❌ Error creating relationship: $e');
-      
+
       // 재시도 로직
       if (e.toString().contains('permission-denied')) {
         debugPrint('🚫 Permission denied - checking authentication status');
@@ -743,10 +765,10 @@ class PersonaService extends BaseService {
   /// Queue relationship update for batch processing
   void _queueRelationshipUpdate(_PendingRelationshipUpdate update) {
     _pendingUpdates.add(update);
-    
+
     // Start batch timer if not running
     _batchUpdateTimer ??= Timer(_batchUpdateDelay, _processBatchUpdates);
-    
+
     // Process immediately if batch is full
     if (_pendingUpdates.length >= _maxBatchSize) {
       _processBatchUpdates();
@@ -756,56 +778,66 @@ class PersonaService extends BaseService {
   /// Process batch updates to Firebase with auto-creation
   Future<void> _processBatchUpdates() async {
     if (_pendingUpdates.isEmpty) return;
-    
+
     _batchUpdateTimer?.cancel();
     _batchUpdateTimer = null;
-    
+
     final updates = List<_PendingRelationshipUpdate>.from(_pendingUpdates);
     _pendingUpdates.clear();
-    
+
     debugPrint('🔥 Processing ${updates.length} relationship updates...');
-    
+
     try {
       final batch = FirebaseHelper.batch();
-      
+
       for (final update in updates) {
         final docRef = FirebaseHelper.userPersonaRelationships
             .doc('${update.userId}_${update.personaId}');
-        
+
         // Get persona info for complete document
-        final persona = _allPersonas.where((p) => p.id == update.personaId).firstOrNull;
-        
+        final persona =
+            _allPersonas.where((p) => p.id == update.personaId).firstOrNull;
+
         // Use set with merge to create document if it doesn't exist
-        batch.set(docRef, {
-          'userId': update.userId,
-          'personaId': update.personaId,
-          // Keep both fields for backward compatibility
-          'likes': update.newScore,  // 🔧 FIX: Write both fields for consistency
-          'lastInteraction': FieldValue.serverTimestamp(),
-          'totalInteractions': FieldValue.increment(1),
-          'isMatched': true,
-          'isActive': true,
-          // Add persona info for convenience
-          'personaName': persona?.name ?? 'Unknown',
-          'personaAge': persona?.age ?? 0,
-          'personaPhotoUrl': (persona?.photoUrls.isNotEmpty == true) ? persona!.photoUrls.first : '',
-          // Update existing document or create new one
-          'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
-        
-        debugPrint('📝 Queued update: ${update.personaId} → ${update.newScore}');
+        batch.set(
+            docRef,
+            {
+              'userId': update.userId,
+              'personaId': update.personaId,
+              // Keep both fields for backward compatibility
+              'likes':
+                  update.newScore, // 🔧 FIX: Write both fields for consistency
+              'lastInteraction': FieldValue.serverTimestamp(),
+              'totalInteractions': FieldValue.increment(1),
+              'isMatched': true,
+              'isActive': true,
+              // Add persona info for convenience
+              'personaName': persona?.name ?? 'Unknown',
+              'personaAge': persona?.age ?? 0,
+              'personaPhotoUrl': (persona?.photoUrls.isNotEmpty == true)
+                  ? persona!.photoUrls.first
+                  : '',
+              // Update existing document or create new one
+              'updatedAt': FieldValue.serverTimestamp(),
+            },
+            SetOptions(merge: true));
+
+        debugPrint(
+            '📝 Queued update: ${update.personaId} → ${update.newScore}');
       }
-      
+
       await batch.commit();
-      debugPrint('✅ Successfully batch updated ${updates.length} relationships');
+      debugPrint(
+          '✅ Successfully batch updated ${updates.length} relationships');
     } catch (e) {
       debugPrint('❌ Error in batch update: $e');
       // Re-queue failed updates for retry
       _pendingUpdates.addAll(updates);
-      
+
       // If it's a permission error, don't retry indefinitely
       if (e.toString().contains('permission-denied')) {
-        debugPrint('🚫 Permission denied - clearing failed updates to prevent infinite retry');
+        debugPrint(
+            '🚫 Permission denied - clearing failed updates to prevent infinite retry');
         _pendingUpdates.clear();
       }
     }
@@ -814,7 +846,7 @@ class PersonaService extends BaseService {
   /// Optimized matched personas loading with caching
   Future<void> _loadMatchedPersonas() async {
     debugPrint('🔄 Loading matched personas...');
-    
+
     if (_currentUserId == '') {
       debugPrint('⚠️ No user ID available for loading matched personas');
       return;
@@ -827,7 +859,8 @@ class PersonaService extends BaseService {
 
     // 먼저 로컬에서 로드하여 즉시 표시
     await _loadMatchedPersonasFromLocal();
-    debugPrint('📱 Loaded ${_matchedPersonas.length} matched personas from local storage');
+    debugPrint(
+        '📱 Loaded ${_matchedPersonas.length} matched personas from local storage');
 
     try {
       // Firebase에서도 로드하여 병합
@@ -835,38 +868,41 @@ class PersonaService extends BaseService {
           .where('userId', isEqualTo: _currentUserId!)
           .get();
 
-      debugPrint('📊 Found ${querySnapshot.docs.length} relationship documents in Firebase');
+      debugPrint(
+          '📊 Found ${querySnapshot.docs.length} relationship documents in Firebase');
 
       final firebaseMatchedIds = <String>{};
       final firebasePersonas = <Persona>[];
-      
+
       // Process in parallel
       final futures = <Future>[];
-      
+
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final isMatched = data['isMatched'] ?? false;
         final isActive = data['isActive'] ?? false;
         final swipeAction = data['swipeAction'] ?? '';
-        
-        debugPrint('  📋 Doc ${doc.id}: isMatched=$isMatched, isActive=$isActive, swipeAction=$swipeAction');
-        
+
+        debugPrint(
+            '  📋 Doc ${doc.id}: isMatched=$isMatched, isActive=$isActive, swipeAction=$swipeAction');
+
         // Only include liked or super_liked personas
         if (!isMatched || !isActive) {
           debugPrint('    ❌ Skipping - not matched or not active');
           continue;
         }
-        
+
         final personaId = data['personaId'] as String?;
         if (personaId == null) {
           debugPrint('    ❌ Skipping - no personaId');
           continue;
         }
-        
-        final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+
+        final persona =
+            _allPersonas.where((p) => p.id == personaId).firstOrNull;
         if (persona != null) {
           final likes = data['likes'] ?? data['relationshipScore'] ?? 50;
-          
+
           // Get matchedAt timestamp from Firebase
           DateTime? matchedAt;
           if (data['matchedAt'] != null) {
@@ -874,52 +910,54 @@ class PersonaService extends BaseService {
               matchedAt = (data['matchedAt'] as Timestamp).toDate();
             }
           }
-          
+
           final matchedPersona = persona.copyWith(
             likes: likes,
-            imageUrls: persona.imageUrls,  // Preserve imageUrls
+            imageUrls: persona.imageUrls, // Preserve imageUrls
             matchedAt: matchedAt,
           );
-          
+
           firebasePersonas.add(matchedPersona);
           firebaseMatchedIds.add(personaId);
           debugPrint('    ✅ Found ${persona.name} in Firebase (score: $likes)');
-          
+
           // Cache relationship data
-          _addToCache(personaId, _CachedRelationship(
-            score: likes,
-            isCasualSpeech: data['isCasualSpeech'] ?? false,
-            timestamp: DateTime.now(),
-          ));
+          _addToCache(
+              personaId,
+              _CachedRelationship(
+                score: likes,
+                isCasualSpeech: data['isCasualSpeech'] ?? false,
+                timestamp: DateTime.now(),
+              ));
         } else {
           debugPrint('    ⚠️ Persona not found in all personas: $personaId');
         }
       }
-      
+
       // 병합: 로컬과 Firebase 데이터 통합
       final mergedMap = <String, Persona>{};
-      
+
       // 먼저 로컬 데이터 추가
       for (final persona in _matchedPersonas) {
         mergedMap[persona.id] = persona;
       }
-      
+
       // Firebase 데이터로 업데이트 (Firebase가 더 최신)
       for (final persona in firebasePersonas) {
         mergedMap[persona.id] = persona;
       }
-      
+
       _matchedPersonas = mergedMap.values.toList();
-      
+
       // Sort by likes score
       _matchedPersonas.sort((a, b) => b.likes.compareTo(a.likes));
-      
+
       debugPrint('✅ Merged matched personas: ${_matchedPersonas.length} total');
-      debugPrint('   - From local: ${mergedMap.length - firebasePersonas.length}');
+      debugPrint(
+          '   - From local: ${mergedMap.length - firebasePersonas.length}');
       debugPrint('   - From Firebase: ${firebasePersonas.length}');
-      
+
       await _saveMatchedPersonas();
-      
     } catch (e) {
       debugPrint('❌ Error loading matched personas: $e');
       await _loadMatchedPersonasFromLocal();
@@ -939,92 +977,94 @@ class PersonaService extends BaseService {
     }
     return null;
   }
-  
+
   void _addToCache(String personaId, _CachedRelationship relationship) {
     _relationshipCache[personaId] = relationship;
-    
+
     // Clean old entries if needed
     if (_relationshipCache.length > _maxCacheSize) {
       final sortedEntries = _relationshipCache.entries.toList()
         ..sort((a, b) => a.value.timestamp.compareTo(b.value.timestamp));
-      
+
       for (int i = 0; i < sortedEntries.length - _maxCacheSize; i++) {
         _relationshipCache.remove(sortedEntries[i].key);
       }
     }
   }
 
-
   /// Load personas from Firebase with enhanced retry and authentication
   Future<bool> _loadFromFirebase() async {
     debugPrint('🔥 Starting Firebase personas loading...');
-    
+
     // Clear shuffled list when loading new personas
     _shuffledAvailablePersonas = null;
     _lastShuffleTime = null;
-    
+
     // 🚀 Enhanced Firebase access with multiple strategies
     for (int attempt = 1; attempt <= 4; attempt++) {
       try {
         debugPrint('🔄 Firebase attempt $attempt/4...');
-        
+
         // Strategy 1: Direct access (should work with new Security Rules)
         if (attempt == 1) {
           debugPrint('📖 Trying direct Firebase access...');
-          final querySnapshot = await FirebaseHelper.personas
-              .get();
-          
+          final querySnapshot = await FirebaseHelper.personas.get();
+
           if (querySnapshot.docs.isNotEmpty) {
             _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
-            debugPrint('✅ SUCCESS: Direct access loaded ${_allPersonas.length} personas');
+            debugPrint(
+                '✅ SUCCESS: Direct access loaded ${_allPersonas.length} personas');
             return true;
           }
         }
-        
+
         // Strategy 2: Anonymous authentication
         else if (attempt == 2) {
           debugPrint('🎭 Trying anonymous authentication...');
           try {
-            final userCredential = await FirebaseAuth.instance.signInAnonymously();
-            debugPrint('✅ Anonymous auth successful: ${userCredential.user?.uid}');
-            
-            await Future.delayed(const Duration(milliseconds: 500)); // Give time for auth to propagate
-            
-            final querySnapshot = await FirebaseFirestore.instance
-                .collection('personas')
-                .get();
-                
+            final userCredential =
+                await FirebaseAuth.instance.signInAnonymously();
+            debugPrint(
+                '✅ Anonymous auth successful: ${userCredential.user?.uid}');
+
+            await Future.delayed(const Duration(
+                milliseconds: 500)); // Give time for auth to propagate
+
+            final querySnapshot =
+                await FirebaseFirestore.instance.collection('personas').get();
+
             if (querySnapshot.docs.isNotEmpty) {
               _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
-              debugPrint('✅ SUCCESS: Anonymous auth loaded ${_allPersonas.length} personas');
+              debugPrint(
+                  '✅ SUCCESS: Anonymous auth loaded ${_allPersonas.length} personas');
               return true;
             }
           } catch (authError) {
             debugPrint('❌ Anonymous auth failed: $authError');
           }
         }
-        
+
         // Strategy 3: Force retry after clearing any cached auth issues
         else if (attempt == 3) {
           debugPrint('🔄 Clearing auth state and retrying...');
           try {
             // Don't sign out if we're already authenticated, just retry
             await Future.delayed(const Duration(milliseconds: 1000));
-            
-            final querySnapshot = await FirebaseFirestore.instance
-                .collection('personas')
-                .get();
-                
+
+            final querySnapshot =
+                await FirebaseFirestore.instance.collection('personas').get();
+
             if (querySnapshot.docs.isNotEmpty) {
               _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
-              debugPrint('✅ SUCCESS: Retry loaded ${_allPersonas.length} personas');
+              debugPrint(
+                  '✅ SUCCESS: Retry loaded ${_allPersonas.length} personas');
               return true;
             }
           } catch (retryError) {
             debugPrint('❌ Retry attempt failed: $retryError');
           }
         }
-        
+
         // Strategy 4: Last resort with different approach
         else if (attempt == 4) {
           debugPrint('🚨 Last resort: Trying with limit query...');
@@ -1033,26 +1073,26 @@ class PersonaService extends BaseService {
                 .collection('personas')
                 .limit(10)
                 .get();
-                
+
             if (querySnapshot.docs.isNotEmpty) {
               _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
-              debugPrint('✅ SUCCESS: Limited query loaded ${_allPersonas.length} personas');
+              debugPrint(
+                  '✅ SUCCESS: Limited query loaded ${_allPersonas.length} personas');
               return true;
             }
           } catch (limitError) {
             debugPrint('❌ Limited query failed: $limitError');
           }
         }
-        
       } catch (e) {
         debugPrint('❌ Firebase attempt $attempt failed: $e');
-        
+
         if (e.toString().contains('permission-denied')) {
           debugPrint('🚫 Permission denied on attempt $attempt');
         } else if (e.toString().contains('network')) {
           debugPrint('📡 Network error on attempt $attempt');
         }
-        
+
         // Wait before next attempt (except for last attempt)
         if (attempt < 4) {
           final delay = attempt * 500; // 500ms, 1s, 1.5s
@@ -1061,7 +1101,7 @@ class PersonaService extends BaseService {
         }
       }
     }
-    
+
     debugPrint('💥 All Firebase attempts failed. Using fallback personas.');
     return false;
   }
@@ -1070,15 +1110,16 @@ class PersonaService extends BaseService {
   List<Persona> _parseFirebasePersonas(List<QueryDocumentSnapshot> docs) {
     return docs.map((doc) {
       final data = doc.data() as Map<String, dynamic>;
-      
+
       // Parse photoUrls - handle both string and array formats with validation
       List<String> photoUrls = [];
-      
+
       // First check if R2 images are available in imageUrls field
       if (data['imageUrls'] != null && data['imageUrls'] is Map) {
         // R2 images are available, clear photoUrls to force using R2 images
         photoUrls = [];
-        debugPrint('🎯 R2 images available for ${data['name']}, clearing photoUrls');
+        debugPrint(
+            '🎯 R2 images available for ${data['name']}, clearing photoUrls');
       } else if (data['photoUrls'] != null) {
         // No R2 images, use legacy photoUrls with validation
         if (data['photoUrls'] is List) {
@@ -1088,19 +1129,19 @@ class PersonaService extends BaseService {
           String photoUrlsStr = data['photoUrls'];
           // Remove brackets and split by comma
           photoUrlsStr = photoUrlsStr.replaceAll('[', '').replaceAll(']', '');
-          final rawUrls = photoUrlsStr.split(', ').map((url) => url.trim()).toList();
+          final rawUrls =
+              photoUrlsStr.split(', ').map((url) => url.trim()).toList();
           photoUrls = _validateAndFilterPhotoUrls(rawUrls);
         }
       }
-      
-      
+
       // Parse imageUrls for R2 storage
       Map<String, dynamic>? imageUrls;
       if (data['imageUrls'] != null) {
         debugPrint('🔍 Parsing imageUrls for ${data['name']}:');
         debugPrint('   Type: ${data['imageUrls'].runtimeType}');
         debugPrint('   Value: ${data['imageUrls']}');
-        
+
         if (data['imageUrls'] is Map) {
           imageUrls = Map<String, dynamic>.from(data['imageUrls']);
           debugPrint('   ✅ Parsed as Map: $imageUrls');
@@ -1109,7 +1150,7 @@ class PersonaService extends BaseService {
           debugPrint('   ⚠️ imageUrls is String, might be corrupted data');
         }
       }
-      
+
       final persona = Persona(
         id: doc.id,
         name: data['name'] ?? '',
@@ -1120,16 +1161,15 @@ class PersonaService extends BaseService {
         likes: 0,
         gender: data['gender'] ?? 'female',
         mbti: data['mbti'] ?? 'ENFP',
-        imageUrls: imageUrls,  // Add R2 image URLs
-        topics: data['topics'] != null 
-          ? List<String>.from(data['topics'])
-          : null,
-        keywords: data['keywords'] != null 
-          ? List<String>.from(data['keywords'])
-          : null,
+        imageUrls: imageUrls, // Add R2 image URLs
+        topics:
+            data['topics'] != null ? List<String>.from(data['topics']) : null,
+        keywords: data['keywords'] != null
+            ? List<String>.from(data['keywords'])
+            : null,
         hasValidR2Image: data['hasValidR2Image'] ?? null,
       );
-      
+
       return persona;
     }).toList();
   }
@@ -1137,36 +1177,35 @@ class PersonaService extends BaseService {
   /// 🔧 Validate and filter photo URLs - only return valid URLs, no placeholders
   List<String> _validateAndFilterPhotoUrls(List<String> rawUrls) {
     List<String> validUrls = [];
-    
+
     for (String url in rawUrls) {
       String trimmedUrl = url.trim();
-      
+
       // Skip empty URLs
       if (trimmedUrl.isEmpty) continue;
-      
+
       // Check if URL is valid (starts with http or https)
-      if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+      if (trimmedUrl.startsWith('http://') ||
+          trimmedUrl.startsWith('https://')) {
         validUrls.add(trimmedUrl);
       }
       // Skip invalid URLs (like assets/images/...) without replacement
     }
-    
+
     return validUrls;
   }
 
-
   // Other helper methods remain the same...
-  
 
-  Future<Map<String, dynamic>?> _loadUserPersonaRelationship(String personaId) async {
+  Future<Map<String, dynamic>?> _loadUserPersonaRelationship(
+      String personaId) async {
     if (_currentUserId == null) return null;
-    
+
     try {
       final docId = '${_currentUserId}_$personaId';
-      final doc = await FirebaseHelper.userPersonaRelationships
-          .doc(docId)
-          .get();
-      
+      final doc =
+          await FirebaseHelper.userPersonaRelationships.doc(docId).get();
+
       if (doc.exists) {
         return doc.data();
       }
@@ -1178,11 +1217,13 @@ class PersonaService extends BaseService {
 
   Future<void> _loadSwipedPersonas() async {
     try {
-      final swipedIds = await PreferencesManager.getStringList('swiped_personas') ?? [];
-      
+      final swipedIds =
+          await PreferencesManager.getStringList('swiped_personas') ?? [];
+
       _sessionSwipedPersonas.clear();
       for (String id in swipedIds) {
-        _sessionSwipedPersonas[id] = DateTime.now().subtract(const Duration(hours: 1));
+        _sessionSwipedPersonas[id] =
+            DateTime.now().subtract(const Duration(hours: 1));
       }
     } catch (e) {
       debugPrint('Error loading swiped personas: $e');
@@ -1191,8 +1232,9 @@ class PersonaService extends BaseService {
 
   Future<void> _loadMatchedPersonasFromLocal() async {
     try {
-      final matchedIds = await PreferencesManager.getStringList('matched_personas') ?? [];
-      
+      final matchedIds =
+          await PreferencesManager.getStringList('matched_personas') ?? [];
+
       _matchedPersonas = _allPersonas
           .where((persona) => matchedIds.contains(persona.id))
           .toList();
@@ -1219,80 +1261,80 @@ class PersonaService extends BaseService {
 
   void _cleanExpiredSwipes() {
     final now = DateTime.now();
-    _sessionSwipedPersonas.removeWhere((id, time) => 
-      now.difference(time).inHours >= 24);
+    _sessionSwipedPersonas
+        .removeWhere((id, time) => now.difference(time).inHours >= 24);
   }
-  
+
   /// Get immediate available personas without R2 check
   List<Persona> _getImmediateAvailablePersonas() {
     final now = DateTime.now();
     final shouldReshuffle = _shuffledAvailablePersonas == null ||
         _lastShuffleTime == null ||
         now.difference(_lastShuffleTime!).inMinutes >= 30;
-    
+
     if (shouldReshuffle) {
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
       // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
-      final filtered = _allPersonas.where((persona) => 
-        !matchedIds.contains(persona.id) &&
-        !_actionedPersonaIds.contains(persona.id)
-        // 최근 스와이프 필터 제거 - 무한 스와이프
-        // R2 필터링 제거 - 모든 페르소나 표시
-      ).toList();
-      
+      final filtered = _allPersonas
+          .where((persona) =>
+                  !matchedIds.contains(persona.id) &&
+                  !_actionedPersonaIds.contains(persona.id)
+              // 최근 스와이프 필터 제거 - 무한 스와이프
+              // R2 필터링 제거 - 모든 페르소나 표시
+              )
+          .toList();
+
       final recommendedPersonas = getRecommendedPersonas(filtered);
       _shuffledAvailablePersonas = recommendedPersonas;
       _lastShuffleTime = now;
-      
+
       // Start background R2 validation
       _startBackgroundR2Validation();
     }
-    
+
     return List<Persona>.from(_shuffledAvailablePersonas!);
   }
-  
+
   /// Start background R2 validation
   void _startBackgroundR2Validation() {
     if (_isValidatingR2) return;
-    
+
     _isValidatingR2 = true;
     _r2ValidationTimer?.cancel();
-    
+
     // Start validation after a short delay
     _r2ValidationTimer = Timer(const Duration(milliseconds: 100), () async {
       await _validateR2ImagesInBackground();
     });
   }
-  
+
   /// Validate R2 images in background
   Future<void> _validateR2ImagesInBackground() async {
     debugPrint('🔄 Starting background R2 validation...');
     final startTime = DateTime.now();
-    
+
     try {
       final personasToValidate = _shuffledAvailablePersonas ?? [];
       final validatedIds = <String>{};
-      
+
       // Process in batches for better performance
       const batchSize = 10;
       for (int i = 0; i < personasToValidate.length; i += batchSize) {
         final batch = personasToValidate.skip(i).take(batchSize).toList();
-        
+
         // Parallel validation within batch
-        final results = await Future.wait(
-          batch.map((persona) async {
-            final hasR2 = await _hasR2ImageOptimized(persona);
-            return MapEntry(persona.id, hasR2);
-          })
-        );
-        
+        final results = await Future.wait(batch.map((persona) async {
+          final hasR2 = await _hasR2ImageOptimized(persona);
+          return MapEntry(persona.id, hasR2);
+        }));
+
         // Update validated IDs
         for (final result in results) {
           if (result.value) {
             validatedIds.add(result.key);
           }
         }
-        
+
         // Update UI periodically
         if (i % 30 == 0 && i > 0) {
           _r2ValidatedPersonaIds.clear();
@@ -1300,14 +1342,15 @@ class PersonaService extends BaseService {
           notifyListeners();
         }
       }
-      
+
       // Final update
       _r2ValidatedPersonaIds.clear();
       _r2ValidatedPersonaIds.addAll(validatedIds);
-      
+
       final duration = DateTime.now().difference(startTime);
-      debugPrint('✅ R2 validation complete: ${validatedIds.length}/${personasToValidate.length} valid (${duration.inMilliseconds}ms)');
-      
+      debugPrint(
+          '✅ R2 validation complete: ${validatedIds.length}/${personasToValidate.length} valid (${duration.inMilliseconds}ms)');
+
       notifyListeners();
     } catch (e) {
       debugPrint('❌ Error in background R2 validation: $e');
@@ -1315,39 +1358,40 @@ class PersonaService extends BaseService {
       _isValidatingR2 = false;
     }
   }
-  
+
   /// Optimized R2 image check with caching
   Future<bool> _hasR2ImageOptimized(Persona persona) async {
     // 1. Check Firebase field first
     if (persona.hasValidR2Image != null) {
       return persona.hasValidR2Image!;
     }
-    
+
     // 2. Check cache
     final cached = await R2ValidationCache.getCached(persona.id);
     if (cached != null) {
       return cached;
     }
-    
+
     // 3. Perform quick check
     final hasR2 = _hasR2ImageQuick(persona);
-    
+
     // 4. Cache the result
     await R2ValidationCache.setCache(persona.id, hasR2);
-    
+
     return hasR2;
   }
-  
+
   /// Quick R2 image check without logging
   bool _hasR2ImageQuick(Persona persona) {
     if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
       return false;
     }
-    
+
     // Quick pattern matching without jsonEncode
     // Check if any value in the map contains R2 domains
-    final r2Pattern = RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
-    
+    final r2Pattern =
+        RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
+
     bool checkMap(Map<String, dynamic> map) {
       for (final value in map.values) {
         if (value is String && r2Pattern.hasMatch(value)) {
@@ -1360,29 +1404,29 @@ class PersonaService extends BaseService {
       }
       return false;
     }
-    
+
     return checkMap(persona.imageUrls!);
   }
-  
+
   /// Check if persona has valid R2 image (original method with logging)
   bool _hasR2Image(Persona persona) {
     // 1. Firebase에 저장된 값 우선 사용
     if (persona.hasValidR2Image != null) {
       return persona.hasValidR2Image!;
     }
-    
+
     // 2. 디버깅을 위한 상세 로그
     debugPrint('🔍 Checking R2 image for ${persona.name} (${persona.id})');
-    
+
     if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
       debugPrint('  ❌ No imageUrls found');
       return false;
     }
-    
+
     // imageUrls 구조 체크
     final urls = persona.imageUrls!;
     debugPrint('  📋 imageUrls structure: ${urls.keys.toList()}');
-    
+
     // 1. 기본 구조 체크 (medium 사이즈 필수)
     if (urls.containsKey('medium') && urls['medium'] is Map) {
       final mediumUrls = urls['medium'] as Map;
@@ -1390,26 +1434,30 @@ class PersonaService extends BaseService {
         final url = mediumUrls['jpg'] as String;
         debugPrint('  🎯 Found medium.jpg: $url');
         // URL이 실제 R2 도메인인지 확인
-        final isR2 = url.contains('teamsona.work') || url.contains('r2.dev') || 
-               url.contains('cloudflare') || url.contains('imagedelivery.net');
+        final isR2 = url.contains('teamsona.work') ||
+            url.contains('r2.dev') ||
+            url.contains('cloudflare') ||
+            url.contains('imagedelivery.net');
         debugPrint('  ${isR2 ? "✅" : "❌"} Is R2 URL: $isR2');
         if (isR2) return true;
       }
     }
-    
+
     // 2. mainImageUrls 구조 체크
     if (urls.containsKey('mainImageUrls')) {
       final mainUrls = urls['mainImageUrls'] as Map?;
       if (mainUrls != null && mainUrls.containsKey('medium')) {
         final url = mainUrls['medium'] as String;
         debugPrint('  🎯 Found mainImageUrls.medium: $url');
-        final isR2 = url.contains('teamsona.work') || url.contains('r2.dev') || 
-               url.contains('cloudflare') || url.contains('imagedelivery.net');
+        final isR2 = url.contains('teamsona.work') ||
+            url.contains('r2.dev') ||
+            url.contains('cloudflare') ||
+            url.contains('imagedelivery.net');
         debugPrint('  ${isR2 ? "✅" : "❌"} Is R2 URL: $isR2');
         if (isR2) return true;
       }
     }
-    
+
     // 3. 최상위 size 키 체크 (thumb, small, medium, large, original)
     final sizes = ['thumb', 'small', 'medium', 'large', 'original'];
     for (final size in sizes) {
@@ -1418,19 +1466,21 @@ class PersonaService extends BaseService {
         if (sizeUrls.containsKey('jpg')) {
           final url = sizeUrls['jpg'] as String;
           debugPrint('  🎯 Found $size.jpg: $url');
-          if (url.contains('teamsona.work') || url.contains('r2.dev') || 
-              url.contains('cloudflare') || url.contains('imagedelivery.net')) {
+          if (url.contains('teamsona.work') ||
+              url.contains('r2.dev') ||
+              url.contains('cloudflare') ||
+              url.contains('imagedelivery.net')) {
             debugPrint('  ✅ Valid R2 URL found in $size');
             return true;
           }
         }
       }
     }
-    
+
     debugPrint('  ❌ No valid R2 URL found for ${persona.name}');
     return false;
   }
-  
+
   /// Force reshuffle of available personas (useful after major changes)
   void reshuffleAvailablePersonas() {
     debugPrint('🔄 Force reshuffling available personas...');
@@ -1438,15 +1488,14 @@ class PersonaService extends BaseService {
     _lastShuffleTime = null;
     notifyListeners();
   }
-  
-  
+
   @override
   void dispose() {
     _batchUpdateTimer?.cancel();
     _r2ValidationTimer?.cancel();
     super.dispose();
   }
-  
+
   /// 추천 알고리즘 - 사용자 선호도에 따라 페르소나 정렬
   List<Persona> getRecommendedPersonas(List<Persona> personas) {
     // 현재 사용자 정보가 없으면 랜덤 순서로 반환
@@ -1454,39 +1503,44 @@ class PersonaService extends BaseService {
       personas.shuffle();
       return personas;
     }
-    
+
     // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링) - 이것만 필터링
     List<Persona> filteredPersonas = personas;
     if (!_currentUser!.genderAll && _currentUser!.gender != null) {
       // 사용자가 남성이면 여성 페르소나만, 여성이면 남성 페르소나만
       final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
-      filteredPersonas = personas.where((persona) => 
-        persona.gender == targetGender
-      ).toList();
-      
-      debugPrint('🎯 Gender filtering: User(${_currentUser!.gender}) → Showing only $targetGender personas');
-      debugPrint('   Filtered from ${personas.length} to ${filteredPersonas.length} personas');
+      filteredPersonas =
+          personas.where((persona) => persona.gender == targetGender).toList();
+
+      debugPrint(
+          '🎯 Gender filtering: User(${_currentUser!.gender}) → Showing only $targetGender personas');
+      debugPrint(
+          '   Filtered from ${personas.length} to ${filteredPersonas.length} personas');
     } else {
-      debugPrint('🌈 Gender All enabled or no gender specified - showing all personas');
+      debugPrint(
+          '🌈 Gender All enabled or no gender specified - showing all personas');
     }
-    
+
     // 2. 액션한 페르소나 제외는 이미 availablePersonas에서 처리됨
     // 여기서는 순서만 정렬하고 추가 필터링하지 않음
-    debugPrint('📋 Available personas for recommendation: ${filteredPersonas.length}');
-    
+    debugPrint(
+        '📋 Available personas for recommendation: ${filteredPersonas.length}');
+
     // 필터링 후 페르소나가 없으면 빈 리스트 반환
     if (filteredPersonas.isEmpty) {
       debugPrint('⚠️ No personas available after gender filtering');
       return [];
     }
-    
+
     // 각 페르소나에 대한 추천 점수 계산
     final scoredPersonas = filteredPersonas.map((persona) {
       // 모든 페르소나에 기본 점수 부여 (0.1) - 아무도 배제되지 않도록
       double score = 0.1;
-      
+
       // 1. 관심사 매칭 점수 (30% 가중치)
-      if (_currentUser != null && _currentUser!.interests.isNotEmpty && persona.keywords != null) {
+      if (_currentUser != null &&
+          _currentUser!.interests.isNotEmpty &&
+          persona.keywords != null) {
         int matchingInterests = 0;
         for (final interest in _currentUser!.interests) {
           // 페르소나 설명에서 관심사 키워드 찾기
@@ -1494,16 +1548,15 @@ class PersonaService extends BaseService {
             matchingInterests++;
           }
           // 키워드에서 매칭
-          if (persona.keywords!.any((keyword) => 
-            keyword.toLowerCase().contains(interest.toLowerCase()) ||
-            interest.toLowerCase().contains(keyword.toLowerCase())
-          )) {
+          if (persona.keywords!.any((keyword) =>
+              keyword.toLowerCase().contains(interest.toLowerCase()) ||
+              interest.toLowerCase().contains(keyword.toLowerCase()))) {
             matchingInterests++;
           }
         }
         score += (matchingInterests / _currentUser!.interests.length) * 0.3;
       }
-      
+
       // 2. 용도 매칭 점수 (20% 가중치)
       if (_currentUser != null && _currentUser!.purpose != null) {
         switch (_currentUser!.purpose) {
@@ -1515,7 +1568,8 @@ class PersonaService extends BaseService {
             // 연애/데이팅 - 나이 선호도 반영
             score += 0.1;
             // 선호 나이대 매칭
-            if (_currentUser!.preferredPersona != null && _currentUser!.preferredPersona!.ageRange != null) {
+            if (_currentUser!.preferredPersona != null &&
+                _currentUser!.preferredPersona!.ageRange != null) {
               final ageRange = _currentUser!.preferredPersona!.ageRange!;
               if (persona.age >= ageRange[0] && persona.age <= ageRange[1]) {
                 score += 0.1;
@@ -1532,57 +1586,62 @@ class PersonaService extends BaseService {
             break;
         }
       }
-      
+
       // 3. 성향 매칭 점수 (20% 가중치)
-      if (_currentUser != null && _currentUser!.preferredMbti != null && _currentUser!.preferredMbti!.isNotEmpty) {
+      if (_currentUser != null &&
+          _currentUser!.preferredMbti != null &&
+          _currentUser!.preferredMbti!.isNotEmpty) {
         if (_currentUser!.preferredMbti!.contains(persona.mbti)) {
           score += 0.2;
         }
       }
-      
+
       // 4. 주제 매칭 점수 (10% 가중치)
-      if (_currentUser != null && _currentUser!.preferredTopics != null && 
-          _currentUser!.preferredTopics!.isNotEmpty && 
+      if (_currentUser != null &&
+          _currentUser!.preferredTopics != null &&
+          _currentUser!.preferredTopics!.isNotEmpty &&
           persona.topics != null) {
         int matchingTopics = 0;
         for (final topic in _currentUser!.preferredTopics!) {
-          if (persona.topics!.any((pTopic) => 
-            pTopic.toLowerCase().contains(topic.toLowerCase()) ||
-            topic.toLowerCase().contains(pTopic.toLowerCase())
-          )) {
+          if (persona.topics!.any((pTopic) =>
+              pTopic.toLowerCase().contains(topic.toLowerCase()) ||
+              topic.toLowerCase().contains(pTopic.toLowerCase()))) {
             matchingTopics++;
           }
         }
         if (_currentUser!.preferredTopics!.isNotEmpty) {
-          score += (matchingTopics / _currentUser!.preferredTopics!.length) * 0.1;
+          score +=
+              (matchingTopics / _currentUser!.preferredTopics!.length) * 0.1;
         }
       }
-      
+
       // 5. 랜덤 요소 추가 (10% 가중치) - 다양성 확보
       score += (persona.hashCode % 100) / 1000.0;
-      
+
       return MapEntry(persona, score);
     }).toList();
-    
+
     // 점수순으로 정렬 (높은 점수가 먼저)
     scoredPersonas.sort((a, b) => b.value.compareTo(a.value));
-    
+
     // 상위 30%는 추천순, 나머지는 랜덤하게 섞어서 다양성 확보
     final topCount = (filteredPersonas.length * 0.3).ceil();
-    final topPersonas = scoredPersonas.take(topCount).map((e) => e.key).toList();
-    final otherPersonas = scoredPersonas.skip(topCount).map((e) => e.key).toList();
+    final topPersonas =
+        scoredPersonas.take(topCount).map((e) => e.key).toList();
+    final otherPersonas =
+        scoredPersonas.skip(topCount).map((e) => e.key).toList();
     otherPersonas.shuffle();
-    
+
     // 모든 필터링된 페르소나 반환 (순서만 조정됨)
     final result = [...topPersonas, ...otherPersonas];
     debugPrint('✅ Recommendation complete: ${result.length} personas ordered');
     return result;
   }
-  
+
   // 현재 사용자 정보 설정 (추천 알고리즘을 위해)
   AppUser? _currentUser;
   List<String> _actionedPersonaIds = [];
-  
+
   void setCurrentUser(AppUser? user) {
     _currentUser = user;
     if (user != null) {
@@ -1592,16 +1651,16 @@ class PersonaService extends BaseService {
     _shuffledAvailablePersonas = null;
     notifyListeners();
   }
-  
+
   /// Load actionedPersonaIds from Firebase if not already loaded
   Future<void> _loadActionedPersonaIds() async {
     if (_currentUserId == null) {
       debugPrint('⚠️ No user ID available for loading actionedPersonaIds');
       return;
     }
-    
+
     debugPrint('🔄 Loading actionedPersonaIds for user: $_currentUserId');
-    
+
     try {
       // user_persona_relationships에서 매칭된(isMatched=true) 페르소나만 가져오기
       final relationshipsQuery = await FirebaseHelper.userPersonaRelationships
@@ -1609,30 +1668,33 @@ class PersonaService extends BaseService {
           .where('isMatched', isEqualTo: true)
           .where('isActive', isEqualTo: true)
           .get();
-          
+
       final matchedIds = <String>[];
       for (final doc in relationshipsQuery.docs) {
         final data = doc.data();
         final personaId = data['personaId'] as String?;
         final swipeAction = data['swipeAction'] ?? '';
-        
-        if (personaId != null && (swipeAction == 'like' || swipeAction == 'super_like')) {
+
+        if (personaId != null &&
+            (swipeAction == 'like' || swipeAction == 'super_like')) {
           matchedIds.add(personaId);
           debugPrint('  ✅ Found matched persona: $personaId ($swipeAction)');
         }
       }
-      
+
       _actionedPersonaIds = matchedIds;
-      debugPrint('📋 Loaded ${_actionedPersonaIds.length} MATCHED personas as actionedPersonaIds');
-      
+      debugPrint(
+          '📋 Loaded ${_actionedPersonaIds.length} MATCHED personas as actionedPersonaIds');
+
       // users 컬렉션도 업데이트하여 동기화
       await FirebaseHelper.users.doc(_currentUserId).set({
         'actionedPersonaIds': _actionedPersonaIds,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
       debugPrint('✅ Synced actionedPersonaIds to users collection');
-      
-      debugPrint('📋 Final actionedPersonaIds (matched only): $_actionedPersonaIds');
+
+      debugPrint(
+          '📋 Final actionedPersonaIds (matched only): $_actionedPersonaIds');
     } catch (e) {
       debugPrint('❌ Error loading actionedPersonaIds: $e');
       // 에러 발생 시 빈 배열로 초기화
@@ -1647,24 +1709,27 @@ class PersonaService extends BaseService {
         debugPrint('⚠️ Persona not found for tutorial liking: $personaId');
         return false;
       }
-      final matchedIds = await PreferencesManager.getStringList('tutorial_matched_personas') ?? [];
-      
+      final matchedIds =
+          await PreferencesManager.getStringList('tutorial_matched_personas') ??
+              [];
+
       if (!matchedIds.contains(personaId)) {
         matchedIds.add(personaId);
-        await PreferencesManager.setStringList('tutorial_matched_personas', matchedIds);
+        await PreferencesManager.setStringList(
+            'tutorial_matched_personas', matchedIds);
       }
-      
+
       final matchedPersona = persona.copyWith(
         likes: 50,
-        imageUrls: persona.imageUrls,  // Preserve imageUrls
+        imageUrls: persona.imageUrls, // Preserve imageUrls
       );
-      
+
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
         _matchedPersonas.add(matchedPersona);
       }
-      
+
       _sessionSwipedPersonas[personaId] = DateTime.now();
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -1673,13 +1738,13 @@ class PersonaService extends BaseService {
     }
   }
 
-
   /// Public method to load tutorial personas (deprecated - use initialize() instead)
   @Deprecated('Use initialize() with tutorial_user userId instead')
   Future<void> loadTutorialPersonas() async {
     // This method is deprecated - initialize() should be used instead
     // for complete state setup including swiped personas and loading state
-    debugPrint('⚠️ loadTutorialPersonas() is deprecated, use initialize() instead');
+    debugPrint(
+        '⚠️ loadTutorialPersonas() is deprecated, use initialize() instead');
     await initialize(userId: 'tutorial_user');
   }
 
@@ -1692,7 +1757,6 @@ class PersonaService extends BaseService {
     await setCurrentPersona(persona);
   }
 
-
   Future<bool> passPersona(String personaId) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
@@ -1700,9 +1764,9 @@ class PersonaService extends BaseService {
 
     try {
       final docId = '${_currentUserId}_$personaId';
-      
+
       final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
-      
+
       final passData = {
         'userId': _currentUserId!,
         'personaId': personaId,
@@ -1713,19 +1777,18 @@ class PersonaService extends BaseService {
         'createdAt': FieldValue.serverTimestamp(),
         'personaName': persona?.name ?? '',
         'personaAge': persona?.age ?? 0,
-        'personaPhotoUrl': '',  // No photo URL for passed personas
+        'personaPhotoUrl': '', // No photo URL for passed personas
       };
 
-      await FirebaseHelper.userPersonaRelationships
-          .doc(docId)
-          .set(passData);
+      await FirebaseHelper.userPersonaRelationships.doc(docId).set(passData);
 
       _sessionSwipedPersonas[personaId] = DateTime.now();
-      
+
       // ❌ REMOVED: 패스한 페르소나는 actionedPersonaIds에 추가하지 않음
       // 매칭된 페르소나만 actionedPersonaIds에 포함되어야 함
-      debugPrint('✅ Passed persona $personaId - NOT adding to actionedPersonaIds');
-      
+      debugPrint(
+          '✅ Passed persona $personaId - NOT adding to actionedPersonaIds');
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -1742,46 +1805,48 @@ class PersonaService extends BaseService {
   /// 매칭된 페르소나 목록에서 제거
   void removeFromMatchedPersonas(String personaId) {
     debugPrint('🗑️ Removing persona from matched list: $personaId');
-    
+
     // 매칭된 페르소나 목록에서 제거
     _matchedPersonas.removeWhere((p) => p.id == personaId);
-    
+
     // SharedPreferences에도 저장
     _saveMatchedPersonas();
-    
+
     // UI 업데이트
     notifyListeners();
   }
-  
+
   /// 새로운 이미지 체크 및 다운로드
   Future<void> checkAndDownloadNewImages() async {
     debugPrint('🔍 Checking for new persona images...');
-    
+
     final imagePreloadService = ImagePreloadService.instance;
-    
+
     // 모든 페르소나 수집 (R2 이미지가 있는 것만)
-    final allPersonasWithImages = _allPersonas.where((p) => _hasR2Image(p)).toList();
-    
+    final allPersonasWithImages =
+        _allPersonas.where((p) => _hasR2Image(p)).toList();
+
     if (allPersonasWithImages.isEmpty) {
       debugPrint('❌ No personas with R2 images found');
       return;
     }
-    
+
     // 새로운 이미지가 있는지 확인
-    final hasNewImages = await imagePreloadService.hasNewImages(allPersonasWithImages);
-    
+    final hasNewImages =
+        await imagePreloadService.hasNewImages(allPersonasWithImages);
+
     if (hasNewImages) {
       debugPrint('🆕 New images detected! Starting download...');
-      
+
       // 새로운 이미지 다운로드
       await imagePreloadService.preloadNewImages(allPersonasWithImages);
-      
+
       debugPrint('✅ New images downloaded successfully');
     } else {
       debugPrint('✅ All images are already cached');
     }
   }
-  
+
   /// 반말/존댓말 모드 업데이트
   Future<bool> updateCasualSpeech({
     required String personaId,
@@ -1791,53 +1856,55 @@ class PersonaService extends BaseService {
       debugPrint('⚠️ No user ID available for updating casual speech');
       return false;
     }
-    
-    debugPrint('🗣️ Updating casual speech for persona $personaId to: $isCasualSpeech');
-    
+
+    debugPrint(
+        '🗣️ Updating casual speech for persona $personaId to: $isCasualSpeech');
+
     try {
       // 1. Firebase 업데이트
       final docId = '${_currentUserId}_$personaId';
-      await FirebaseHelper.userPersonaRelationships
-          .doc(docId)
-          .update({
+      await FirebaseHelper.userPersonaRelationships.doc(docId).update({
         'isCasualSpeech': isCasualSpeech,
         'casualSpeechUpdatedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       });
-      
+
       debugPrint('✅ Firebase updated successfully');
-      
+
       // 2. 현재 페르소나 업데이트
       if (_currentPersona?.id == personaId) {
         _currentPersonaCasualSpeech = isCasualSpeech;
-        debugPrint('✅ Current persona casual speech updated: ${_currentPersona!.name} → ${isCasualSpeech ? "반말" : "존댓말"}');
+        debugPrint(
+            '✅ Current persona casual speech updated: ${_currentPersona!.name} → ${isCasualSpeech ? "반말" : "존댓말"}');
       }
-      
+
       // 3. 매칭된 페르소나 리스트 업데이트
       final index = _matchedPersonas.indexWhere((p) => p.id == personaId);
       if (index != -1) {
         // 매칭된 페르소나 리스트에서는 likes 점수만 관리
         // isCasualSpeech는 캐시에서 별도 관리
         debugPrint('✅ Matched persona found in list');
-        
+
         // Save to local storage
         await _saveMatchedPersonas();
       }
-      
+
       // 4. 캐시 업데이트
       final cachedRelationship = _getFromCache(personaId);
       if (cachedRelationship != null) {
-        _addToCache(personaId, _CachedRelationship(
-          score: cachedRelationship.score,
-          isCasualSpeech: isCasualSpeech,
-          timestamp: DateTime.now(),
-        ));
+        _addToCache(
+            personaId,
+            _CachedRelationship(
+              score: cachedRelationship.score,
+              isCasualSpeech: isCasualSpeech,
+              timestamp: DateTime.now(),
+            ));
         debugPrint('✅ Cache updated');
       }
-      
+
       // 5. UI 즉시 업데이트
       notifyListeners();
-      
+
       debugPrint('🎯 Casual speech update completed successfully');
       return true;
     } catch (e) {
@@ -1846,13 +1913,15 @@ class PersonaService extends BaseService {
     }
   }
 
-  Future<bool> matchWithPersona(String personaId, {bool isSuperLike = false}) async {
+  Future<bool> matchWithPersona(String personaId,
+      {bool isSuperLike = false}) async {
     // 🔥 이미 매칭된 페르소나인지 먼저 확인
     if (_matchedPersonas.any((p) => p.id == personaId)) {
-      debugPrint('⚠️ Already matched with persona: $personaId - preventing duplicate match');
+      debugPrint(
+          '⚠️ Already matched with persona: $personaId - preventing duplicate match');
       return false;
     }
-    
+
     if (isSuperLike) {
       debugPrint('⭐ Processing as SUPER LIKE: $personaId');
       return await superLikePersona(personaId);
@@ -1864,34 +1933,40 @@ class PersonaService extends BaseService {
 
   Future<void> refreshMatchedPersonasRelationships() async {
     if (_currentUserId == null) return;
-    
+
     try {
       final List<Persona> refreshedPersonas = [];
-      
+
       // Batch fetch relationships
       final personaIds = _matchedPersonas.map((p) => p.id).toList();
       final relationships = await batchGetRelationships(personaIds);
-      
+
       for (final persona in _matchedPersonas) {
         final relationshipData = relationships[persona.id];
         if (relationshipData != null) {
           final refreshedPersona = persona.copyWith(
-            likes: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? persona.likes,
-            imageUrls: persona.imageUrls,  // Preserve imageUrls
+            likes: relationshipData['likes'] ??
+                relationshipData['relationshipScore'] ??
+                persona.likes,
+            imageUrls: persona.imageUrls, // Preserve imageUrls
           );
           refreshedPersonas.add(refreshedPersona);
-          
+
           // Update cache
-          _addToCache(persona.id, _CachedRelationship(
-            score: relationshipData['likes'] ?? relationshipData['relationshipScore'] ?? persona.likes,
-            isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
-            timestamp: DateTime.now(),
-          ));
+          _addToCache(
+              persona.id,
+              _CachedRelationship(
+                score: relationshipData['likes'] ??
+                    relationshipData['relationshipScore'] ??
+                    persona.likes,
+                isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
+                timestamp: DateTime.now(),
+              ));
         } else {
           refreshedPersonas.add(persona);
         }
       }
-      
+
       _matchedPersonas = refreshedPersonas;
       notifyListeners();
     } catch (e) {
@@ -1899,12 +1974,13 @@ class PersonaService extends BaseService {
     }
   }
 
-  Future<Map<String, Map<String, dynamic>>> batchGetRelationships(List<String> personaIds) async {
+  Future<Map<String, Map<String, dynamic>>> batchGetRelationships(
+      List<String> personaIds) async {
     if (_currentUserId == null || personaIds.isEmpty) return {};
 
     try {
       final results = <String, Map<String, dynamic>>{};
-      
+
       // Check cache first
       final uncachedIds = <String>[];
       for (final personaId in personaIds) {
@@ -1918,19 +1994,18 @@ class PersonaService extends BaseService {
           uncachedIds.add(personaId);
         }
       }
-      
+
       if (uncachedIds.isEmpty) return results;
-      
+
       // Batch fetch uncached relationships
       for (int i = 0; i < uncachedIds.length; i += 10) {
         final batch = uncachedIds.skip(i).take(10).toList();
-        
+
         final futures = batch.map((personaId) async {
           final docId = '${_currentUserId}_$personaId';
-          final doc = await FirebaseHelper.userPersonaRelationships
-              .doc(docId)
-              .get();
-          
+          final doc =
+              await FirebaseHelper.userPersonaRelationships.doc(docId).get();
+
           if (doc.exists) {
             return MapEntry(personaId, doc.data()!);
           }
@@ -1938,17 +2013,21 @@ class PersonaService extends BaseService {
         });
 
         final batchResults = await Future.wait(futures);
-        
+
         for (final result in batchResults) {
           if (result != null) {
             results[result.key] = result.value;
-            
+
             // Cache the result
-            _addToCache(result.key, _CachedRelationship(
-              score: result.value['likes'] ?? result.value['relationshipScore'] ?? 50,
-              isCasualSpeech: result.value['isCasualSpeech'] ?? false,
-              timestamp: DateTime.now(),
-            ));
+            _addToCache(
+                result.key,
+                _CachedRelationship(
+                  score: result.value['likes'] ??
+                      result.value['relationshipScore'] ??
+                      50,
+                  isCasualSpeech: result.value['isCasualSpeech'] ?? false,
+                  timestamp: DateTime.now(),
+                ));
           }
         }
       }
@@ -1966,31 +2045,37 @@ class PersonaService extends BaseService {
       debugPrint('⚠️ No user ID available for updating actionedPersonaIds');
       return;
     }
-    
+
     try {
       // Update local list
       if (!_actionedPersonaIds.contains(personaId)) {
         _actionedPersonaIds.add(personaId);
-        debugPrint('📝 Added persona $personaId to local actionedPersonaIds list');
+        debugPrint(
+            '📝 Added persona $personaId to local actionedPersonaIds list');
       }
-      
+
       // Also update currentUser if available
       if (_currentUser != null) {
         if (!_currentUser!.actionedPersonaIds.contains(personaId)) {
           _currentUser = _currentUser!.copyWith(
-            actionedPersonaIds: [..._currentUser!.actionedPersonaIds, personaId],
+            actionedPersonaIds: [
+              ..._currentUser!.actionedPersonaIds,
+              personaId
+            ],
           );
-          debugPrint('📝 Added persona $personaId to currentUser actionedPersonaIds');
+          debugPrint(
+              '📝 Added persona $personaId to currentUser actionedPersonaIds');
         }
       }
-      
+
       // Always update Firebase to ensure persistence
       await FirebaseHelper.users.doc(_currentUserId).update({
         'actionedPersonaIds': FieldValue.arrayUnion([personaId]),
       });
-      
-      debugPrint('✅ Updated actionedPersonaIds in Firebase for persona: $personaId');
-      
+
+      debugPrint(
+          '✅ Updated actionedPersonaIds in Firebase for persona: $personaId');
+
       // Force reshuffle to immediately exclude this persona
       _shuffledAvailablePersonas = null;
       notifyListeners();
@@ -2004,7 +2089,7 @@ class PersonaService extends BaseService {
             'updatedAt': FieldValue.serverTimestamp(),
           }, SetOptions(merge: true));
           debugPrint('✅ Created user document with actionedPersonaIds');
-          
+
           // Also update local list
           if (!_actionedPersonaIds.contains(personaId)) {
             _actionedPersonaIds.add(personaId);
@@ -2021,22 +2106,23 @@ class PersonaService extends BaseService {
     try {
       final cacheKey = 'cached_personas';
       final cachedData = await PreferencesManager.getString(cacheKey);
-      
+
       if (cachedData != null) {
         final decoded = json.decode(cachedData) as Map<String, dynamic>;
         final cacheTime = DateTime.parse(decoded['timestamp'] as String);
         final personasList = decoded['personas'] as List;
-        
+
         // Check if cache is less than 1 hour old
         if (DateTime.now().difference(cacheTime).inHours < 1) {
           _allPersonas = personasList
               .map((data) => Persona.fromJson(data as Map<String, dynamic>))
               .toList();
           debugPrint('📦 Loaded ${_allPersonas.length} personas from cache');
-          
+
           // Preload images for cached personas
           if (_allPersonas.isNotEmpty) {
-            ImagePreloadService.instance.preloadNewImages(_allPersonas.take(10).toList());
+            ImagePreloadService.instance
+                .preloadNewImages(_allPersonas.take(10).toList());
           }
         }
       }
@@ -2044,7 +2130,7 @@ class PersonaService extends BaseService {
       debugPrint('❌ Error loading personas from cache: $e');
     }
   }
-  
+
   /// Save personas to local cache
   Future<void> _savePersonasToCache() async {
     try {
@@ -2052,7 +2138,7 @@ class PersonaService extends BaseService {
         'timestamp': DateTime.now().toIso8601String(),
         'personas': _allPersonas.map((p) => p.toJson()).toList(),
       };
-      
+
       final cacheKey = 'cached_personas';
       await PreferencesManager.setString(cacheKey, json.encode(cacheData));
       debugPrint('💾 Saved ${_allPersonas.length} personas to cache');
@@ -2060,15 +2146,15 @@ class PersonaService extends BaseService {
       debugPrint('❌ Error saving personas to cache: $e');
     }
   }
-  
+
   /// Check if cache is stale
   Future<bool> _isCacheStale() async {
     try {
       final cacheKey = 'cached_personas_timestamp';
       final timestamp = await PreferencesManager.getString(cacheKey);
-      
+
       if (timestamp == null) return true;
-      
+
       final cacheTime = DateTime.parse(timestamp);
       // Consider cache stale after 1 hour
       return DateTime.now().difference(cacheTime).inHours >= 1;
@@ -2076,7 +2162,7 @@ class PersonaService extends BaseService {
       return true;
     }
   }
-  
+
   /// Load personas from Firebase
   Future<void> _loadPersonasFromFirebase() async {
     try {
@@ -2084,7 +2170,7 @@ class PersonaService extends BaseService {
       if (success) {
         // Save to cache after successful load
         await _savePersonasToCache();
-        
+
         // Update cache timestamp
         await PreferencesManager.setString(
           'cached_personas_timestamp',
@@ -2095,7 +2181,6 @@ class PersonaService extends BaseService {
       debugPrint('❌ Error loading personas from Firebase: $e');
     }
   }
-
 }
 
 /// Helper classes
@@ -2103,7 +2188,7 @@ class _CachedRelationship {
   final int score;
   final bool isCasualSpeech;
   final DateTime timestamp;
-  
+
   _CachedRelationship({
     required this.score,
     required this.isCasualSpeech,

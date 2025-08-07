@@ -16,7 +16,8 @@ class Permission {
 class PermissionStatus {
   static const PermissionStatus granted = PermissionStatus._('granted');
   static const PermissionStatus denied = PermissionStatus._('denied');
-  static const PermissionStatus permanentlyDenied = PermissionStatus._('permanentlyDenied');
+  static const PermissionStatus permanentlyDenied =
+      PermissionStatus._('permanentlyDenied');
 
   final String value;
   const PermissionStatus._(this.value);

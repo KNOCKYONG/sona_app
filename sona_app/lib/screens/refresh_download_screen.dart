@@ -48,7 +48,7 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
     // 새로운 이미지 다운로드만 수행
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final personas = personaService.allPersonas;
-    
+
     final hasNew = await _preloadService.hasNewImages(personas);
     if (hasNew) {
       await _preloadService.preloadNewImages(personas);
@@ -111,9 +111,9 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
 
                 // 설명
                 Text(
-                  _totalImages > 0 
-                    ? '새로운 페르소나 이미지를 다운로드하고 있어요'
-                    : '페르소나를 준비하고 있어요',
+                  _totalImages > 0
+                      ? '새로운 페르소나 이미지를 다운로드하고 있어요'
+                      : '페르소나를 준비하고 있어요',
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
@@ -182,7 +182,8 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
                       const SizedBox(height: 20),
                       // 퍼센트 표시 (크고 명확하게)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),

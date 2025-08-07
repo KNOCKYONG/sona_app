@@ -7,7 +7,7 @@ class ModernFloatingActionButton extends StatefulWidget {
   final String? tooltip;
   final bool isExtended;
   final String? label;
-  
+
   const ModernFloatingActionButton({
     Key? key,
     required this.onPressed,
@@ -16,9 +16,10 @@ class ModernFloatingActionButton extends StatefulWidget {
     this.isExtended = false,
     this.label,
   }) : super(key: key);
-  
+
   @override
-  State<ModernFloatingActionButton> createState() => _ModernFloatingActionButtonState();
+  State<ModernFloatingActionButton> createState() =>
+      _ModernFloatingActionButtonState();
 }
 
 class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
@@ -26,7 +27,7 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _rotateAnimation;
-  
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +35,7 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    
+
     _scaleAnimation = Tween<double>(
       begin: 1.0,
       end: 0.95,
@@ -42,7 +43,7 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
       parent: _animationController,
       curve: Curves.easeInOut,
     ));
-    
+
     _rotateAnimation = Tween<double>(
       begin: 0.0,
       end: 0.25,
@@ -51,13 +52,13 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
       curve: Curves.easeInOut,
     ));
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final fab = AnimatedBuilder(
@@ -80,7 +81,8 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(widget.isExtended ? 28 : 20),
+                borderRadius:
+                    BorderRadius.circular(widget.isExtended ? 28 : 20),
                 onTap: () {
                   _animationController.forward().then((_) {
                     _animationController.reverse();
@@ -130,14 +132,14 @@ class _ModernFloatingActionButtonState extends State<ModernFloatingActionButton>
         );
       },
     );
-    
+
     if (widget.tooltip != null) {
       return Tooltip(
         message: widget.tooltip!,
         child: fab,
       );
     }
-    
+
     return fab;
   }
 }

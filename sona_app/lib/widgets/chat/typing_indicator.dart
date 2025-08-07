@@ -21,12 +21,12 @@ class _TypingIndicatorState extends State<TypingIndicator>
   @override
   void initState() {
     super.initState();
-    
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
-    
+
     // 3개의 점에 대한 개별 애니메이션 컨트롤러 생성
     _dotControllers = List.generate(3, (index) {
       return AnimationController(
@@ -34,7 +34,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
         vsync: this,
       );
     });
-    
+
     // 각 점에 대한 애니메이션 생성
     _dotAnimations = _dotControllers.map((controller) {
       return Tween<double>(
@@ -45,7 +45,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
         curve: Curves.easeInOut,
       ));
     }).toList();
-    
+
     // 순차적으로 점 애니메이션 시작
     _startDotAnimations();
   }
@@ -58,7 +58,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
           await Future.delayed(const Duration(milliseconds: 200));
         }
       }
-      
+
       // 모든 점이 끝나면 역순으로 애니메이션
       for (int i = _dotControllers.length - 1; i >= 0; i--) {
         if (mounted) {
@@ -66,7 +66,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
           await Future.delayed(const Duration(milliseconds: 200));
         }
       }
-      
+
       await Future.delayed(const Duration(milliseconds: 300));
     }
   }
@@ -103,7 +103,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
               color: Color(0xFFFF6B9D),
             ),
           ),
-          
+
           // 타이핑 인디케이터 버블
           Flexible(
             child: Container(
@@ -140,7 +140,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
                     ),
                   ),
                   const SizedBox(width: 8),
-                  
+
                   // 애니메이션 점들
                   Row(
                     children: List.generate(3, (index) {
@@ -185,7 +185,7 @@ class TypingIndicatorSimple extends StatefulWidget {
 class _TypingIndicatorSimpleState extends State<TypingIndicatorSimple>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  
+
   @override
   void initState() {
     super.initState();
@@ -216,7 +216,7 @@ class _TypingIndicatorSimpleState extends State<TypingIndicatorSimple>
                   final animationValue = Curves.easeInOut.transform(
                     (_animationController.value + delay) % 1.0,
                   );
-                  
+
                   return Container(
                     margin: const EdgeInsets.symmetric(horizontal: 2),
                     child: Opacity(

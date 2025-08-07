@@ -5,13 +5,13 @@ import '../../theme/app_theme.dart';
 class ModernEmotionPicker extends StatefulWidget {
   final Function(String) onEmotionSelected;
   final String selectedEmotion;
-  
+
   const ModernEmotionPicker({
     Key? key,
     required this.onEmotionSelected,
     required this.selectedEmotion,
   }) : super(key: key);
-  
+
   @override
   State<ModernEmotionPicker> createState() => _ModernEmotionPickerState();
 }
@@ -21,7 +21,7 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-  
+
   final List<EmotionItem> emotions = [
     EmotionItem(
       emoji: '😊',
@@ -84,7 +84,7 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
       ),
     ),
   ];
-  
+
   @override
   void initState() {
     super.initState();
@@ -92,7 +92,7 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    
+
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
@@ -100,7 +100,7 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
       parent: _animationController,
       curve: Curves.easeOut,
     ));
-    
+
     _scaleAnimation = Tween<double>(
       begin: 0.8,
       end: 1.0,
@@ -108,16 +108,16 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
       parent: _animationController,
       curve: Curves.elasticOut,
     ));
-    
+
     _animationController.forward();
   }
-  
+
   @override
   void dispose() {
     _animationController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -183,14 +183,15 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
                               ],
                             ),
                           ),
-                          
+
                           // Emotion Grid
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: GridView.builder(
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 crossAxisSpacing: 16,
                                 mainAxisSpacing: 16,
@@ -199,8 +200,9 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
                               itemCount: emotions.length,
                               itemBuilder: (context, index) {
                                 final emotion = emotions[index];
-                                final isSelected = widget.selectedEmotion == emotion.emoji;
-                                
+                                final isSelected =
+                                    widget.selectedEmotion == emotion.emoji;
+
                                 return _EmotionButton(
                                   emotion: emotion,
                                   isSelected: isSelected,
@@ -212,7 +214,7 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
                               },
                             ),
                           ),
-                          
+
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -232,13 +234,13 @@ class _EmotionButton extends StatefulWidget {
   final EmotionItem emotion;
   final bool isSelected;
   final VoidCallback onTap;
-  
+
   const _EmotionButton({
     required this.emotion,
     required this.isSelected,
     required this.onTap,
   });
-  
+
   @override
   State<_EmotionButton> createState() => _EmotionButtonState();
 }
@@ -247,7 +249,7 @@ class _EmotionButtonState extends State<_EmotionButton>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  
+
   @override
   void initState() {
     super.initState();
@@ -263,13 +265,13 @@ class _EmotionButtonState extends State<_EmotionButton>
       curve: Curves.easeInOut,
     ));
   }
-  
+
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -318,7 +320,8 @@ class _EmotionButtonState extends State<_EmotionButton>
                     widget.emotion.label,
                     style: TextStyle(
                       fontSize: 12,
-                      fontWeight: widget.isSelected ? FontWeight.w600 : FontWeight.w400,
+                      fontWeight:
+                          widget.isSelected ? FontWeight.w600 : FontWeight.w400,
                       color: widget.isSelected ? Colors.white : Colors.black87,
                     ),
                   ),
@@ -337,7 +340,7 @@ class EmotionItem {
   final String label;
   final Color color;
   final Gradient gradient;
-  
+
   const EmotionItem({
     required this.emoji,
     required this.label,

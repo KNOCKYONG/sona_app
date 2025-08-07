@@ -1,10 +1,10 @@
 /// 첫 만남 감지 및 상태 관리를 위한 유틸리티 클래스
 class FirstMeetingDetector {
   /// 첫 만남 단계 정의
-  static const int greetingMessages = 5;      // 첫 인사 단계
-  static const int icebreakingMessages = 15;  // 아이스브레이킹 단계
+  static const int greetingMessages = 5; // 첫 인사 단계
+  static const int icebreakingMessages = 15; // 아이스브레이킹 단계
   static const int gettingToKnowMessages = 30; // 알아가는 단계
-  
+
   /// 첫 만남 여부 확인
   static bool isFirstMeeting({
     required int messageCount,
@@ -14,7 +14,7 @@ class FirstMeetingDetector {
     if (messageCount <= gettingToKnowMessages) {
       return true;
     }
-    
+
     // 매칭된 지 24시간 이내면 첫 만남
     if (matchedAt != null) {
       final hoursSinceMatch = DateTime.now().difference(matchedAt).inHours;
@@ -22,10 +22,10 @@ class FirstMeetingDetector {
         return true;
       }
     }
-    
+
     return false;
   }
-  
+
   /// 첫 만남 단계 확인
   static FirstMeetingStage getFirstMeetingStage({
     required int messageCount,
@@ -41,7 +41,7 @@ class FirstMeetingDetector {
       return FirstMeetingStage.comfortable;
     }
   }
-  
+
   /// 긴장감 표현 여부 결정
   static bool shouldBeNervous({
     required FirstMeetingStage stage,
@@ -58,7 +58,7 @@ class FirstMeetingDetector {
         return false; // 긴장하지 않음
     }
   }
-  
+
   /// 첫 만남 대화 주제 제공
   static List<String> getFirstMeetingTopics() {
     return [
@@ -76,7 +76,7 @@ class FirstMeetingDetector {
       '싫어하는 것',
     ];
   }
-  
+
   /// 긴장감 표현 문구
   static List<String> getNervousExpressions(bool isCasual) {
     if (isCasual) {
@@ -99,7 +99,7 @@ class FirstMeetingDetector {
       ];
     }
   }
-  
+
   /// 감사 표현 문구
   static List<String> getThankfulExpressions(bool isCasual) {
     if (isCasual) {
@@ -124,8 +124,8 @@ class FirstMeetingDetector {
 
 /// 첫 만남 단계 열거형
 enum FirstMeetingStage {
-  greeting,       // 첫 인사 (1-5 메시지)
-  icebreaking,    // 아이스브레이킹 (6-15 메시지)
-  gettingToKnow,  // 알아가는 중 (16-30 메시지)
-  comfortable,    // 편해진 단계 (31+ 메시지)
+  greeting, // 첫 인사 (1-5 메시지)
+  icebreaking, // 아이스브레이킹 (6-15 메시지)
+  gettingToKnow, // 알아가는 중 (16-30 메시지)
+  comfortable, // 편해진 단계 (31+ 메시지)
 }

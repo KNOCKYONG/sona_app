@@ -8,51 +8,53 @@ import 'purchase_service.dart';
 class MockPurchaseService extends PurchaseService {
   bool _mockIsAvailable = true;
   bool _mockIsPurchasePending = false;
-  
+
   // Mock 사용자 데이터
   int _mockHearts = 10; // 초기 하트 10개
-  
+
   // Mock 상품 데이터
   final List<ProductDetails> _mockProducts = [
     _createMockProduct(ProductIds.hearts10, '하트 10개', '₩1,100'),
     _createMockProduct(ProductIds.hearts30, '하트 30개', '₩3,300'),
     _createMockProduct(ProductIds.hearts50, '하트 50개', '₩5,500'),
   ];
-  
+
   @override
   bool get isAvailable => _mockIsAvailable;
-  
+
   @override
   bool get isPurchasePending => _mockIsPurchasePending;
-  
+
   @override
   List<ProductDetails> get products => _mockProducts;
-  
+
   @override
   int get hearts => _mockHearts;
-  
+
   @override
   Future<void> loadProducts() async {
     debugPrint('🧪 MockPurchaseService: Loading mock products...');
-    
+
     // 로딩 시뮬레이션
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // 상품 로드 완료
     notifyListeners();
-    debugPrint('✅ MockPurchaseService: Loaded ${_mockProducts.length} mock products');
+    debugPrint(
+        '✅ MockPurchaseService: Loaded ${_mockProducts.length} mock products');
   }
-  
+
   @override
   Future<bool> buyProduct(ProductDetails productDetails) async {
-    debugPrint('🧪 MockPurchaseService: Attempting to buy ${productDetails.id}');
-    
+    debugPrint(
+        '🧪 MockPurchaseService: Attempting to buy ${productDetails.id}');
+
     _mockIsPurchasePending = true;
     notifyListeners();
-    
+
     // 구매 프로세스 시뮬레이션
     await Future.delayed(const Duration(seconds: 2));
-    
+
     // 구매 성공 시뮬레이션
     if (ProductIds.consumables.contains(productDetails.id)) {
       // 하트 구매
@@ -68,52 +70,55 @@ class MockPurchaseService extends PurchaseService {
           amount = 50;
           break;
       }
-      
+
       // Mock 하트 지급
       await _mockGrantHearts(amount);
       debugPrint('✅ MockPurchaseService: Granted $amount hearts');
-    
+    }
+
     _mockIsPurchasePending = false;
     notifyListeners();
-    
+
     return true;
   }
-  
+
   @override
   Future<void> restorePurchases() async {
     debugPrint('🧪 MockPurchaseService: Restoring purchases...');
-    
+
     // 복원 시뮬레이션
     await Future.delayed(const Duration(seconds: 1));
-    
+
     // Mock 복원 완료
     debugPrint('✅ MockPurchaseService: Purchase restoration complete');
   }
-  
+
   // Mock 하트 지급
   Future<void> _mockGrantHearts(int amount) async {
     debugPrint('💝 MockPurchaseService: Mock granting $amount hearts');
-    
+
     _mockHearts += amount;
     notifyListeners();
   }
-  
+
   @override
   Future<bool> useHearts(int amount) async {
     if (_mockHearts < amount) {
       debugPrint('❌ Not enough hearts: $_mockHearts < $amount');
       return false;
     }
-    
+
     _mockHearts -= amount;
     notifyListeners();
-    
-    debugPrint('✅ MockPurchaseService: Used $amount hearts. Remaining: $_mockHearts');
+
+    debugPrint(
+        '✅ MockPurchaseService: Used $amount hearts. Remaining: $_mockHearts');
     return true;
   }
-  
+
   // Mock ProductDetails 생성
-  static ProductDetails _createMockProduct(String id, String title, String price) {
+  static ProductDetails _createMockProduct(
+      String id, String title, String price) {
     return ProductDetails(
       id: id,
       title: title,
@@ -123,18 +128,18 @@ class MockPurchaseService extends PurchaseService {
       currencyCode: 'KRW',
     );
   }
-  
+
   // 테스트 모드 설정
   void setTestMode(bool enabled) {
     _mockIsAvailable = enabled;
     notifyListeners();
   }
-  
+
   // 구매 진행 상태 시뮬레이션
   void simulatePurchaseInProgress() {
     _mockIsPurchasePending = true;
     notifyListeners();
-    
+
     // 3초 후 자동으로 완료
     Timer(const Duration(seconds: 3), () {
       _mockIsPurchasePending = false;

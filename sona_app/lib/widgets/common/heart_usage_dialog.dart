@@ -9,7 +9,7 @@ class HeartUsageDialog extends StatelessWidget {
   final VoidCallback onConfirm;
   final String? additionalInfo;
   final IconData icon;
-  
+
   const HeartUsageDialog({
     Key? key,
     required this.title,
@@ -19,11 +19,11 @@ class HeartUsageDialog extends StatelessWidget {
     this.additionalInfo,
     this.icon = Icons.favorite,
   }) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
@@ -75,7 +75,7 @@ class HeartUsageDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            
+
             // 타이틀
             Text(
               title,
@@ -87,7 +87,7 @@ class HeartUsageDialog extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
-            
+
             // 설명
             Text(
               description,
@@ -98,12 +98,13 @@ class HeartUsageDialog extends StatelessWidget {
                 height: 1.5,
               ),
             ),
-            
+
             // 추가 정보가 있으면 표시
             if (additionalInfo != null) ...[
               const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFF6B9D).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -123,9 +124,9 @@ class HeartUsageDialog extends StatelessWidget {
                 ),
               ),
             ],
-            
+
             const SizedBox(height: 32),
-            
+
             // 버튼들
             Row(
               children: [
@@ -134,9 +135,11 @@ class HeartUsageDialog extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => Navigator.of(context).pop(false),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      foregroundColor:
+                          isDarkMode ? Colors.grey[400] : Colors.grey[600],
                       side: BorderSide(
-                        color: isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
+                        color:
+                            isDarkMode ? Colors.grey[700]! : Colors.grey[300]!,
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
@@ -153,7 +156,7 @@ class HeartUsageDialog extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                
+
                 // 하트 사용 버튼
                 Expanded(
                   child: ElevatedButton(
@@ -193,7 +196,7 @@ class HeartUsageDialog extends StatelessWidget {
       ),
     );
   }
-  
+
   /// 하트 사용 다이얼로그를 표시하는 정적 메서드
   static Future<bool> show({
     required BuildContext context,
@@ -218,7 +221,7 @@ class HeartUsageDialog extends StatelessWidget {
         );
       },
     );
-    
+
     return result ?? false;
   }
 }

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 /// 🔐 시스템 정보 보호 서비스
-/// 
+///
 /// 핵심 기능:
 /// 1. 시스템 정보 유출 차단
 /// 2. 메타데이터 제거
@@ -16,22 +16,22 @@ class SystemInfoProtection {
     'openai', 'anthropic', 'claude', 'gemini',
     'api key', 'api_key', 'apikey', 'secret key',
     'bearer token', 'authorization',
-    
+
     // 기술 스택 정보
     'flutter', 'dart', 'firebase', 'firestore',
     'cloud functions', 'cloudflare', 'r2', 'workers',
     'react', 'vue', 'angular', 'nodejs', 'python',
-    
+
     // 서버 및 인프라
     'server', 'database', 'mongodb', 'postgresql', 'mysql',
     'redis', 'elasticsearch', 'docker', 'kubernetes',
     'aws', 'gcp', 'azure', 'heroku', 'vercel',
-    
+
     // 내부 구조
     'architecture', 'schema', 'endpoint', 'route',
     'controller', 'service', 'repository', 'model',
     'algorithm', 'implementation', 'codebase',
-    
+
     // 한국어 변형
     '지피티', 'gpt', '오픈ai', '오픈에이아이',
     '플러터', '다트', '파이어베이스', '클라우드플레어',
@@ -44,29 +44,30 @@ class SystemInfoProtection {
   static final List<RegExp> _sensitivePatterns = [
     // 버전 정보
     RegExp(r'v?\d+\.\d+(\.\d+)?(-[a-z]+)?', caseSensitive: false),
-    
+
     // URL 및 경로
     RegExp(r'https?://[^\s]+', caseSensitive: false),
     RegExp(r'/[a-z]+/[a-z]+(/[a-z]+)*', caseSensitive: false),
-    
+
     // 환경 변수
     RegExp(r'[A-Z_]+_[A-Z_]+', caseSensitive: false),
     RegExp(r'process\.env\.[A-Z_]+', caseSensitive: false),
-    
+
     // 코드 스니펫
     RegExp(r'```[a-z]*\n[\s\S]+?\n```', caseSensitive: false),
     RegExp(r'function\s+\w+\s*\(', caseSensitive: false),
     RegExp(r'class\s+\w+\s*{', caseSensitive: false),
-    
+
     // 기술적 식별자
-    RegExp(r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}', caseSensitive: false), // UUID
+    RegExp(r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}',
+        caseSensitive: false), // UUID
     RegExp(r'[a-zA-Z0-9]{20,}', caseSensitive: false), // API 키 패턴
   ];
 
   /// 🛡️ 응답에서 시스템 정보 제거
   static String protectSystemInfo(String response) {
     String protected = response;
-    
+
     // 1. 중요 시스템 정보 키워드 제거
     for (final info in _criticalSystemInfo) {
       if (protected.toLowerCase().contains(info.toLowerCase())) {
@@ -74,20 +75,20 @@ class SystemInfoProtection {
         protected = _replaceWithContext(protected, info);
       }
     }
-    
+
     // 2. 민감한 패턴 제거
     for (final pattern in _sensitivePatterns) {
       protected = protected.replaceAllMapped(pattern, (match) {
         return _getSafeReplacement(match.group(0) ?? '');
       });
     }
-    
+
     // 3. 메타데이터 제거
     protected = _removeMetadata(protected);
-    
+
     // 4. 추가 정화
     protected = _additionalSanitization(protected);
-    
+
     return protected;
   }
 
@@ -95,11 +96,11 @@ class SystemInfoProtection {
   static String _replaceWithContext(String text, String sensitiveInfo) {
     final lowerText = text.toLowerCase();
     final lowerInfo = sensitiveInfo.toLowerCase();
-    
+
     // 문장 단위로 분석
     final sentences = text.split(RegExp(r'[.!?]'));
     final result = <String>[];
-    
+
     for (var sentence in sentences) {
       if (sentence.toLowerCase().contains(lowerInfo)) {
         // 전체 문장이 시스템 정보를 설명하는 경우 제거
@@ -112,22 +113,35 @@ class SystemInfoProtection {
       }
       result.add(sentence);
     }
-    
+
     return result.join('. ').trim();
   }
 
   /// 🔍 기술적 설명 문장 감지
   static bool _isTechnicalExplanation(String sentence) {
     final technicalIndicators = [
-      '사용하', '이용하', '구현', '개발', '만들',
-      'using', 'built with', 'powered by', 'based on',
-      '기술', '스택', '프레임워크', '라이브러리',
-      'technology', 'stack', 'framework', 'library',
+      '사용하',
+      '이용하',
+      '구현',
+      '개발',
+      '만들',
+      'using',
+      'built with',
+      'powered by',
+      'based on',
+      '기술',
+      '스택',
+      '프레임워크',
+      '라이브러리',
+      'technology',
+      'stack',
+      'framework',
+      'library',
     ];
-    
+
     final lowerSentence = sentence.toLowerCase();
-    return technicalIndicators.any((indicator) => 
-      lowerSentence.contains(indicator));
+    return technicalIndicators
+        .any((indicator) => lowerSentence.contains(indicator));
   }
 
   /// 📝 단어 대체
@@ -138,12 +152,12 @@ class SystemInfoProtection {
       'openai': '대화 기술',
       'claude': '대화 시스템',
       'model': '시스템',
-      
+
       // 기술 스택
       'flutter': '모바일 기술',
       'firebase': '클라우드 서비스',
       'dart': '프로그래밍 언어',
-      
+
       // 인프라
       'server': '서비스',
       'database': '저장소',
@@ -155,10 +169,10 @@ class SystemInfoProtection {
       'bot': '대화 친구',
       '챗봇': '대화 친구',
     };
-    
+
     final lowerWord = word.toLowerCase();
     final replacement = replacements[lowerWord] ?? '기술';
-    
+
     // 대소문자 유지하며 대체
     return text.replaceAll(
       RegExp(word, caseSensitive: false),
@@ -172,27 +186,27 @@ class SystemInfoProtection {
     if (match.startsWith('http')) {
       return '[링크]';
     }
-    
+
     // 경로인 경우
     if (match.startsWith('/')) {
       return '[경로]';
     }
-    
+
     // UUID인 경우
     if (RegExp(r'^[a-f0-9]{8}-[a-f0-9]{4}').hasMatch(match)) {
       return '[ID]';
     }
-    
+
     // 버전 정보인 경우
     if (RegExp(r'^\d+\.\d+').hasMatch(match)) {
       return '[버전]';
     }
-    
+
     // 긴 문자열(API 키 등)인 경우
     if (match.length > 20 && !match.contains(' ')) {
       return '[보안정보]';
     }
-    
+
     return '[정보]';
   }
 
@@ -203,17 +217,18 @@ class SystemInfoProtection {
       RegExp(r'as an ai.*?[.]', caseSensitive: false),
       RegExp(r'i am.*?(ai|assistant|model).*?[.]', caseSensitive: false),
       RegExp(r'my.*?(training|model|capabilities).*?[.]', caseSensitive: false),
-      RegExp(r'i was.*?(trained|created|developed).*?[.]', caseSensitive: false),
+      RegExp(r'i was.*?(trained|created|developed).*?[.]',
+          caseSensitive: false),
       // 한국어 메타 정보
       RegExp(r'저는.*?(ai|인공지능|모델).*?[.]'),
       RegExp(r'제가.*?(학습|훈련|개발).*?[.]'),
     ];
-    
+
     String cleaned = text;
     for (final pattern in metaPatterns) {
       cleaned = cleaned.replaceAll(pattern, '');
     }
-    
+
     return cleaned;
   }
 
@@ -221,16 +236,15 @@ class SystemInfoProtection {
   static String _additionalSanitization(String text) {
     // 연속된 공백 제거
     text = text.replaceAll(RegExp(r'\s+'), ' ');
-    
+
     // 빈 문장 제거
-    final sentences = text.split(RegExp(r'[.!?]'))
-        .where((s) => s.trim().length > 5)
-        .toList();
-    
+    final sentences =
+        text.split(RegExp(r'[.!?]')).where((s) => s.trim().length > 5).toList();
+
     if (sentences.isEmpty) {
       return '무슨 말씀이신지 잘 모르겠어요.';
     }
-    
+
     return sentences.join('. ').trim() + '.';
   }
 
@@ -243,47 +257,52 @@ class SystemInfoProtection {
       '한국어에 최적화된 시스템이에요',
       '친구처럼 대화할 수 있도록 만들어졌어요',
     ];
-    
+
     return fakeInfo[DateTime.now().millisecond % fakeInfo.length];
   }
 
   /// 📊 정보 유출 위험도 평가
   static double assessLeakageRisk(String text) {
     double risk = 0.0;
-    
+
     // 중요 키워드 검사
     for (final info in _criticalSystemInfo) {
       if (text.toLowerCase().contains(info.toLowerCase())) {
         risk += 0.3;
       }
     }
-    
+
     // 패턴 검사
     for (final pattern in _sensitivePatterns) {
       if (pattern.hasMatch(text)) {
         risk += 0.2;
       }
     }
-    
+
     // 기술적 설명 검사
     if (_containsTechnicalExplanation(text)) {
       risk += 0.4;
     }
-    
+
     return risk.clamp(0.0, 1.0);
   }
 
   /// 🔍 기술적 설명 포함 여부
   static bool _containsTechnicalExplanation(String text) {
     final explanationPatterns = [
-      '어떻게 만들어', '무엇으로 개발', '어떤 기술',
-      '시스템 구조', '내부 동작', '알고리즘',
-      'how it works', 'built with', 'uses',
+      '어떻게 만들어',
+      '무엇으로 개발',
+      '어떤 기술',
+      '시스템 구조',
+      '내부 동작',
+      '알고리즘',
+      'how it works',
+      'built with',
+      'uses',
     ];
-    
+
     final lowerText = text.toLowerCase();
-    return explanationPatterns.any((pattern) => 
-      lowerText.contains(pattern));
+    return explanationPatterns.any((pattern) => lowerText.contains(pattern));
   }
 
   /// 🔒 응답 해시 생성 (로깅용)

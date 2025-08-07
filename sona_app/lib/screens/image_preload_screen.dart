@@ -190,7 +190,8 @@ class _ImagePreloadScreenState extends State<ImagePreloadScreen> {
                       const SizedBox(height: 20),
                       // 퍼센트 표시 (크고 명확하게)
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),

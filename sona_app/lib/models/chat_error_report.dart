@@ -48,13 +48,15 @@ class ChatErrorReport {
       'user': userId,
       'persona': personaId,
       'persona_name': personaName,
-      'chat': recentChats.map((msg) => {
-        'content': msg.content,
-        'isFromUser': msg.isFromUser,
-        'timestamp': Timestamp.fromDate(msg.timestamp),
-        'personaId': msg.personaId,
-        'emotion': msg.emotion?.name,
-      }).toList(),
+      'chat': recentChats
+          .map((msg) => {
+                'content': msg.content,
+                'isFromUser': msg.isFromUser,
+                'timestamp': Timestamp.fromDate(msg.timestamp),
+                'personaId': msg.personaId,
+                'emotion': msg.emotion?.name,
+              })
+          .toList(),
       'created_at': Timestamp.fromDate(createdAt),
       'user_message': userMessage,
       'device_info': deviceInfo,
@@ -64,8 +66,10 @@ class ChatErrorReport {
       'stack_trace': stackTrace,
       'metadata': metadata,
       'occurrence_count': occurrenceCount,
-      'first_occurred': firstOccurred != null ? Timestamp.fromDate(firstOccurred!) : null,
-      'last_occurred': lastOccurred != null ? Timestamp.fromDate(lastOccurred!) : null,
+      'first_occurred':
+          firstOccurred != null ? Timestamp.fromDate(firstOccurred!) : null,
+      'last_occurred':
+          lastOccurred != null ? Timestamp.fromDate(lastOccurred!) : null,
       'error_hash': errorHash,
     };
   }
@@ -77,17 +81,18 @@ class ChatErrorReport {
       userId: map['user'] ?? '',
       personaId: map['persona'] ?? '',
       personaName: map['persona_name'] ?? '',
-      recentChats: (map['chat'] as List<dynamic>?)?.map((chat) => 
-        Message(
-          id: '', // ID는 여기서는 필요 없음
-          content: chat['content'] ?? '',
-          isFromUser: chat['isFromUser'] ?? false,
-          timestamp: (chat['timestamp'] as Timestamp).toDate(),
-          personaId: chat['personaId'] ?? '',
-          emotion: chat['emotion'] ?? 'neutral',
-          type: MessageType.text,
-        )
-      ).toList() ?? [],
+      recentChats: (map['chat'] as List<dynamic>?)
+              ?.map((chat) => Message(
+                    id: '', // ID는 여기서는 필요 없음
+                    content: chat['content'] ?? '',
+                    isFromUser: chat['isFromUser'] ?? false,
+                    timestamp: (chat['timestamp'] as Timestamp).toDate(),
+                    personaId: chat['personaId'] ?? '',
+                    emotion: chat['emotion'] ?? 'neutral',
+                    type: MessageType.text,
+                  ))
+              .toList() ??
+          [],
       createdAt: (map['created_at'] as Timestamp).toDate(),
       userMessage: map['user_message'],
       deviceInfo: map['device_info'] ?? '',
@@ -95,13 +100,15 @@ class ChatErrorReport {
       errorType: map['error_type'],
       errorMessage: map['error_message'],
       stackTrace: map['stack_trace'],
-      metadata: map['metadata'] != null ? Map<String, dynamic>.from(map['metadata']) : null,
-      occurrenceCount: map['occurrence_count'] ?? 1,
-      firstOccurred: map['first_occurred'] != null 
-          ? (map['first_occurred'] as Timestamp).toDate() 
+      metadata: map['metadata'] != null
+          ? Map<String, dynamic>.from(map['metadata'])
           : null,
-      lastOccurred: map['last_occurred'] != null 
-          ? (map['last_occurred'] as Timestamp).toDate() 
+      occurrenceCount: map['occurrence_count'] ?? 1,
+      firstOccurred: map['first_occurred'] != null
+          ? (map['first_occurred'] as Timestamp).toDate()
+          : null,
+      lastOccurred: map['last_occurred'] != null
+          ? (map['last_occurred'] as Timestamp).toDate()
           : null,
       errorHash: map['error_hash'],
     );
@@ -114,7 +121,7 @@ class ChatErrorReport {
     final random = timestamp % 10000; // 마지막 4자리
     return 'ERR${timestamp}_$random';
   }
-  
+
   /// 에러 해시 생성 (중복 체크용)
   static String generateErrorHash({
     required String userId,

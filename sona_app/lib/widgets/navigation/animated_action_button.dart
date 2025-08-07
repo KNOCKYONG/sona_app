@@ -96,7 +96,8 @@ class _AnimatedActionButtonState extends State<AnimatedActionButton>
               ),
               boxShadow: [
                 BoxShadow(
-                  color: widget.shadowColor.withOpacity(0.4 * _shadowAnimation.value),
+                  color: widget.shadowColor
+                      .withOpacity(0.4 * _shadowAnimation.value),
                   blurRadius: 15 * _shadowAnimation.value,
                   offset: Offset(0, 8 * _shadowAnimation.value),
                 ),
@@ -119,7 +120,8 @@ class _AnimatedActionButtonState extends State<AnimatedActionButton>
                           height: widget.iconSize * 0.8,
                           child: const CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : TweenAnimationBuilder<double>(

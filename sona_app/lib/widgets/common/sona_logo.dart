@@ -102,7 +102,8 @@ class SonaLogo extends StatelessWidget {
               fontSize: size * 0.5,
               fontWeight: FontWeight.bold,
               letterSpacing: 2,
-              color: textColor ?? Theme.of(context).textTheme.headlineSmall?.color,
+              color:
+                  textColor ?? Theme.of(context).textTheme.headlineSmall?.color,
             ),
           ),
         ],

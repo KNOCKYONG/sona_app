@@ -32,14 +32,12 @@ class TermsOfServiceScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 30),
-            
             _SectionWidget(
               title: '제1조 (목적)',
               content: '''
 본 약관은 SONA(이하 "회사")가 제공하는 AI 페르소나 대화 매칭 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제2조 (정의)',
               content: '''
@@ -49,7 +47,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 4. "콘텐츠"란 이용자가 서비스를 이용하면서 생성하는 모든 형태의 정보를 의미합니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제3조 (약관의 효력 및 변경)',
               content: '''
@@ -58,7 +55,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 3. 약관이 변경되는 경우 변경사유 및 적용일자를 명시하여 최소 7일 전에 공지합니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제4조 (서비스의 제공)',
               content: '''
@@ -71,7 +67,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 2. 회사는 서비스의 품질 향상을 위해 서비스의 내용을 변경할 수 있습니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제5조 (회원가입)',
               content: '''
@@ -82,7 +77,6 @@ class TermsOfServiceScreen extends StatelessWidget {
    • 사회의 안녕과 질서, 미풍양속을 저해할 목적으로 신청한 경우
               ''',
             ),
-            
             _SectionWidget(
               title: '제6조 (이용자의 의무)',
               content: '''
@@ -98,14 +92,12 @@ class TermsOfServiceScreen extends StatelessWidget {
 2. 이용자는 관계법령, 본 약관의 규정, 이용안내 및 서비스상에 공지한 주의사항, 회사가 통지하는 사항 등을 준수하여야 합니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제7조 (서비스 이용제한)',
               content: '''
 회사는 이용자가 본 약관의 의무를 위반하거나 서비스의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지 등으로 서비스 이용을 단계적으로 제한할 수 있습니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제8조 (서비스 중단)',
               content: '''
@@ -113,7 +105,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 2. 회사는 제1항의 사유로 서비스의 제공이 일시적으로 중단됨으로 인하여 이용자 또는 제3자가 입은 손해에 대하여 배상하지 아니합니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제9조 (면책조항)',
               content: '''
@@ -123,7 +114,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 4. 회사는 AI 페르소나가 제공하는 정보의 정확성, 완전성에 대해 보장하지 않으며, 이로 인한 손해에 대해 책임을 지지 않습니다.
               ''',
             ),
-            
             _SectionWidget(
               title: '제10조 (분쟁해결)',
               content: '''
@@ -131,7 +121,6 @@ class TermsOfServiceScreen extends StatelessWidget {
 2. 본 약관에 관해 분쟁이 있을 경우에는 대한민국법을 적용하며, 서울중앙지방법원을 관할 법원으로 합니다.
               ''',
             ),
-            
             Text(
               '''
 부칙
@@ -146,7 +135,6 @@ class TermsOfServiceScreen extends StatelessWidget {
                 height: 1.6,
               ),
             ),
-            
             SizedBox(height: 40),
           ],
         ),

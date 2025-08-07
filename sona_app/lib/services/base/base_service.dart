@@ -5,10 +5,10 @@ import 'package:flutter/foundation.dart';
 abstract class BaseService extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
-  
+
   bool get isLoading => _isLoading;
   String? get error => _error;
-  
+
   /// 로딩 상태로 작업 실행
   Future<T?> executeWithLoading<T>(
     Future<T> Function() action, {
@@ -18,7 +18,7 @@ abstract class BaseService extends ChangeNotifier {
     _isLoading = true;
     _error = null;
     notifyListeners();
-    
+
     try {
       final result = await action();
       _isLoading = false;
@@ -26,17 +26,17 @@ abstract class BaseService extends ChangeNotifier {
       return result;
     } catch (e) {
       _isLoading = false;
-      
+
       if (showError) {
         _error = _getErrorMessage(e);
       }
-      
+
       handleError(e, errorContext ?? runtimeType.toString());
       notifyListeners();
       return null;
     }
   }
-  
+
   /// 로딩 상태 없이 작업 실행
   Future<T?> executeSafely<T>(
     Future<T> Function() action, {
@@ -50,7 +50,7 @@ abstract class BaseService extends ChangeNotifier {
       return defaultValue;
     }
   }
-  
+
   /// 동기 작업을 안전하게 실행
   T? executeSafelySync<T>(
     T Function() action, {
@@ -64,7 +64,7 @@ abstract class BaseService extends ChangeNotifier {
       return defaultValue;
     }
   }
-  
+
   /// 에러 핸들링
   @protected
   void handleError(dynamic error, String context) {
@@ -75,13 +75,13 @@ abstract class BaseService extends ChangeNotifier {
       }
     }
   }
-  
+
   /// 에러 메시지 변환
   @protected
   String _getErrorMessage(dynamic error) {
     if (error is Exception) {
       final errorString = error.toString();
-      
+
       // Firebase Auth 에러 코드별 한글 메시지 매핑
       if (errorString.contains('[firebase_auth/network-request-failed]')) {
         return '네트워크 연결을 확인해주세요. 인터넷 연결이 불안정하거나 Firebase 서버에 연결할 수 없습니다.';
@@ -99,21 +99,27 @@ abstract class BaseService extends ChangeNotifier {
         return '이미 사용 중인 이메일입니다.\n로그인을 시도하거나 다른 이메일을 사용해주세요.';
       } else if (errorString.contains('[firebase_auth/weak-password]')) {
         return '비밀번호는 최소 6자 이상이어야 합니다.\n더 강력한 비밀번호를 입력해주세요.';
-      } else if (errorString.contains('[firebase_auth/operation-not-allowed]')) {
+      } else if (errorString
+          .contains('[firebase_auth/operation-not-allowed]')) {
         return '이메일/비밀번호 로그인이 비활성화되어 있습니다.\n관리자에게 문의해주세요.';
       } else if (errorString.contains('[firebase_auth/invalid-credential]')) {
         return '이메일 또는 비밀번호가 올바르지 않습니다.\n입력한 정보를 다시 확인해주세요.';
       }
-      
+
       // Google Sign-In 관련 에러 처리
-      if (errorString.contains('google_sign_in') || errorString.contains('GoogleSignIn')) {
-        if (errorString.contains('sign_in_canceled') || errorString.contains('cancelled') || errorString.contains('canceled')) {
+      if (errorString.contains('google_sign_in') ||
+          errorString.contains('GoogleSignIn')) {
+        if (errorString.contains('sign_in_canceled') ||
+            errorString.contains('cancelled') ||
+            errorString.contains('canceled')) {
           return '구글 로그인이 취소되었습니다.\n다시 시도해주세요.';
-        } else if (errorString.contains('network_error') || errorString.contains('network')) {
+        } else if (errorString.contains('network_error') ||
+            errorString.contains('network')) {
           return '네트워크 연결을 확인하고 다시 시도해주세요.\n인터넷 연결이 불안정합니다.';
         } else if (errorString.contains('sign_in_failed')) {
           return '구글 로그인에 실패했습니다.\nGoogle Play 서비스를 업데이트하고 다시 시도해주세요.';
-        } else if (errorString.contains('account_exists_with_different_credential')) {
+        } else if (errorString
+            .contains('account_exists_with_different_credential')) {
           return '이미 다른 방법으로 가입된 이메일입니다.\n이메일 로그인을 시도해보세요.';
         } else if (errorString.contains('credential_already_in_use')) {
           return '이미 사용 중인 구글 계정입니다.\n다른 계정을 시도하거나 로그인해주세요.';
@@ -121,7 +127,7 @@ abstract class BaseService extends ChangeNotifier {
           return '구글 로그인 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.';
         }
       }
-      
+
       // PlatformException 에러 처리 (Google Sign-In에서 자주 발생)
       if (errorString.contains('PlatformException')) {
         if (errorString.contains('sign_in_canceled')) {
@@ -140,17 +146,20 @@ abstract class BaseService extends ChangeNotifier {
           return '구글 로그인 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.';
         }
       }
-      
+
       // 기타 Firebase 에러
       if (errorString.contains('[firebase_auth/')) {
-        return errorString.replaceAll('Exception: ', '').replaceAll('[firebase_auth/', '[').replaceAll(']', '] ');
+        return errorString
+            .replaceAll('Exception: ', '')
+            .replaceAll('[firebase_auth/', '[')
+            .replaceAll(']', '] ');
       }
-      
+
       return errorString.replaceAll('Exception: ', '');
     }
     return '알 수 없는 오류가 발생했습니다';
   }
-  
+
   /// 로딩 상태 수동 설정
   @protected
   void setLoading(bool loading) {
@@ -159,7 +168,7 @@ abstract class BaseService extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   /// 에러 상태 수동 설정
   @protected
   void setError(String? error) {
@@ -168,7 +177,7 @@ abstract class BaseService extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   /// 에러 클리어
   void clearError() {
     if (_error != null) {
@@ -176,7 +185,7 @@ abstract class BaseService extends ChangeNotifier {
       notifyListeners();
     }
   }
-  
+
   /// 상태 리셋
   @protected
   void resetState() {

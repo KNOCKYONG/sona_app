@@ -11,7 +11,7 @@ class TermsAgreementWidget extends StatefulWidget {
   final Function(bool) onTermsChanged;
   final Function(bool) onPrivacyChanged;
   final Function(bool) onMarketingChanged;
-  
+
   const TermsAgreementWidget({
     super.key,
     required this.agreedToTerms,
@@ -37,9 +37,9 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
 
   void _checkAllAgreed() {
     setState(() {
-      _allAgreed = widget.agreedToTerms && 
-                   widget.agreedToPrivacy && 
-                   widget.agreedToMarketing;
+      _allAgreed = widget.agreedToTerms &&
+          widget.agreedToPrivacy &&
+          widget.agreedToMarketing;
     });
   }
 
@@ -57,7 +57,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,12 +69,12 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         // 전체 동의
         Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark 
-                ? Colors.grey[800] 
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[800]
                 : Colors.grey[100],
             borderRadius: BorderRadius.circular(8),
           ),
@@ -94,7 +94,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
         const SizedBox(height: 8),
         const Divider(),
         const SizedBox(height: 8),
-        
+
         // 서비스 이용약관 (필수)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -130,7 +130,8 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const TermsOfServiceScreen(),
+                                builder: (context) =>
+                                    const TermsOfServiceScreen(),
                               ),
                             );
                           },
@@ -143,7 +144,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             ],
           ),
         ),
-        
+
         // 개인정보 처리방침 (필수)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -179,7 +180,8 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PrivacyPolicyScreen(),
+                                builder: (context) =>
+                                    const PrivacyPolicyScreen(),
                               ),
                             );
                           },
@@ -192,7 +194,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             ],
           ),
         ),
-        
+
         // 마케팅 수신 동의 (선택)
         CheckboxListTile(
           title: Text(
@@ -205,7 +207,11 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
             localizations.marketingDescription,
             style: TextStyle(
               fontSize: 12,
-              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+              color: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.color
+                  ?.withOpacity(0.7),
             ),
           ),
           value: widget.agreedToMarketing,
@@ -218,7 +224,7 @@ class _TermsAgreementWidgetState extends State<TermsAgreementWidget> {
           controlAffinity: ListTileControlAffinity.leading,
           checkColor: Colors.white,
         ),
-        
+
         const SizedBox(height: 16),
         Text(
           localizations.ageConfirmation,

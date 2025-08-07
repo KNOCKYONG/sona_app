@@ -40,13 +40,15 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
   }
 
   void _initializeAnimations() {
-    debugPrint('AnimatedTutorialGuide - Step ${widget.currentStep + 1}: Duration = ${widget.step.stepDuration}');
-    
+    debugPrint(
+        'AnimatedTutorialGuide - Step ${widget.currentStep + 1}: Duration = ${widget.step.stepDuration}');
+
     // 타이머로 스텝 duration 관리
     _stepTimer?.cancel();
     _stepTimer = Timer(widget.step.stepDuration, () {
       if (mounted) {
-        debugPrint('AnimatedTutorialGuide - Step ${widget.currentStep + 1} completed after ${widget.step.stepDuration}, moving to next');
+        debugPrint(
+            'AnimatedTutorialGuide - Step ${widget.currentStep + 1} completed after ${widget.step.stepDuration}, moving to next');
         widget.step.onComplete?.call();
         widget.onNext();
       }
@@ -77,7 +79,8 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
   void didUpdateWidget(AnimatedTutorialGuide oldWidget) {
     super.didUpdateWidget(oldWidget);
     // 스텝이 변경되면 애니메이션 재초기화
-    if (oldWidget.step != widget.step || oldWidget.currentStep != widget.currentStep) {
+    if (oldWidget.step != widget.step ||
+        oldWidget.currentStep != widget.currentStep) {
       _stepTimer?.cancel();
       for (var controller in _animationControllers) {
         controller.dispose();
@@ -101,7 +104,7 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
     return Stack(
       children: [
         // dim 화면 제거 - 애니메이션과 하이라이트만 표시
-        
+
         // 하이라이트 애니메이션 효과
         if (widget.step.highlightArea != null)
           HighlightAnimator(
@@ -120,7 +123,7 @@ class _AnimatedTutorialGuideState extends State<AnimatedTutorialGuide>
 
         // Skip 버튼 - 튜토리얼 종료 (가장 위에 렌더링)
         SkipButton(
-          onSkip: widget.onSkip,  // 튜토리얼 전체를 스킵
+          onSkip: widget.onSkip, // 튜토리얼 전체를 스킵
           currentStep: widget.currentStep,
           totalSteps: widget.totalSteps,
         ),

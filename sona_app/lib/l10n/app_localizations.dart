@@ -183,6 +183,7 @@ class AppLocalizations {
   String get meetNewPersonas =>
       isKorean ? '새로운 페르소나를 만나러 가볼까요?' : 'Want to meet new personas?';
   String get meetPersonas => isKorean ? '페르소나 만나기' : 'Meet Personas';
+  String get allPersonasMatched => isKorean ? '모든 페르소나와 매칭되었습니다! 대화를 나눠보세요.' : 'All personas matched! Start chatting with them.';
   String get refreshingChatList =>
       isKorean ? '채팅 목록을 새로고침하는 중...' : 'Refreshing chat list...';
   String refreshComplete(int count) => isKorean

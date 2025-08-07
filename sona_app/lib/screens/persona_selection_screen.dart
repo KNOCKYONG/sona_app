@@ -337,16 +337,22 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
     if (filteredPersonas.isEmpty) {
       debugPrint('⚠️ All available personas are already matched');
-      // 모든 페르소나가 매칭된 경우, 재매칭 가능 메시지와 함께 일부 페르소나 표시
-      if (personas.length >= minPersonaCards) {
-        debugPrint('🔄 Showing some personas for re-matching option');
-        final shuffledPersonas = List.from(personas)..shuffle(_random);
-        _cardItems = shuffledPersonas.take(minPersonaCards).toList();
-        _cardsKey = 'rematch_${DateTime.now().millisecondsSinceEpoch}';
-        return;
-      }
+      // 모든 페르소나가 매칭된 경우, 빈 카드 세트 반환
       _cardItems = [];
       _cardsKey = '';
+      
+      // 사용자에게 모든 페르소나가 매칭되었음을 알림
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(localizations.allPersonasMatched),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.orange,
+            ),
+          );
+        }
+      });
       return;
     }
 
@@ -354,24 +360,15 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         '🔥 Filtered out ${personas.length - filteredPersonas.length} already matched personas');
     debugPrint('✅ Remaining personas for cards: ${filteredPersonas.length}');
 
-    // 🎯 필터링된 페르소나가 너무 적으면 보충
+    // 🎯 필터링된 페르소나만 사용 (매칭된 페르소나는 절대 추가하지 않음)
     List<Persona> cardPersonas = filteredPersonas;
-    if (filteredPersonas.length < minPersonaCards &&
-        personas.length >= minPersonaCards) {
+    if (filteredPersonas.length < minPersonaCards) {
       debugPrint(
-          '⚡ Not enough filtered personas (${filteredPersonas.length}), adding more...');
-      // 매칭된 페르소나 중 일부를 추가하여 최소 수량 확보
-      final additionalNeeded = minPersonaCards - filteredPersonas.length;
-      final matchedPersonas =
-          personas.where((p) => matchedIds.contains(p.id)).toList();
-      if (matchedPersonas.isNotEmpty) {
-        matchedPersonas.shuffle(_random);
-        final additionalPersonas =
-            matchedPersonas.take(additionalNeeded).toList();
-        cardPersonas = [...filteredPersonas, ...additionalPersonas];
-        debugPrint(
-            '✅ Added ${additionalPersonas.length} matched personas for better experience');
-      }
+          '⚡ Only ${filteredPersonas.length} unmatched personas available (less than ${minPersonaCards})');
+      // 매칭되지 않은 페르소나만 사용 - 매칭된 페르소나는 절대 추가하지 않음
+      // 카드 수가 적어도 사용자의 하트를 낭비하지 않도록 함
+      debugPrint(
+          '✅ Using only unmatched personas to prevent duplicate matching');
     }
 
     // 중복 페르소나 체크

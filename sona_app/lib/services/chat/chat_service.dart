@@ -111,7 +111,7 @@ class ChatService extends BaseService {
   /// Debounced notifyListeners to reduce UI updates
   void _debouncedNotify() {
     _notifyTimer?.cancel();
-    _notifyTimer = Timer(const Duration(milliseconds: 50), () {
+    _notifyTimer = Timer(const Duration(milliseconds: 16), () {  // 60fps를 위한 16ms (1프레임)
       super.notifyListeners();
     });
   }
@@ -266,7 +266,7 @@ class ChatService extends BaseService {
 
       // 현재 페르소나의 메시지라면 전역 메시지도 업데이트
       if (_currentPersonaId == personaId) {
-        _messages = List.from(updatedMessages);
+        _messages = updatedMessages;  // 직접 참조 사용
       }
 
       // 강제로 notifyListeners 호출하여 UI 업데이트
@@ -308,7 +308,7 @@ class ChatService extends BaseService {
 
         // Update global messages if this is the current persona
         if (_currentPersonaId == personaId) {
-          _messages = List.from(loadedMessages);
+          _messages = loadedMessages;  // 직접 참조 사용
         }
       } catch (e) {
         debugPrint('⚠️ Error during parallel loading: $e');
@@ -396,7 +396,7 @@ class ChatService extends BaseService {
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
-        _messages = List.from(_messagesByPersona[personaId]!);
+        _messages = _messagesByPersona[personaId]!;
       }
 
       // Check if we have more messages
@@ -452,6 +452,7 @@ class ChatService extends BaseService {
     required String userId,
     required Persona persona,
     MessageType type = MessageType.text,
+    Map<String, dynamic>? metadata,
   }) async {
     try {
       // Check daily message limit
@@ -460,70 +461,7 @@ class ChatService extends BaseService {
         return false;
       }
 
-      // 🗣️ 반말/존댓말 모드 전환 체크
-      final casualSpeechRequest = _checkCasualSpeechRequest(content);
-      if (casualSpeechRequest != null) {
-        debugPrint('🗣️ Casual speech request detected: $casualSpeechRequest');
-
-        // PersonaService를 통해 업데이트
-        if (_personaService != null) {
-          final success = await _personaService!.updateCasualSpeech(
-            personaId: persona.id,
-            isCasualSpeech: casualSpeechRequest,
-          );
-
-          if (success) {
-            debugPrint('✅ Casual speech mode updated successfully');
-
-            // 먼저 사용자 메시지를 추가
-            final userMessage = Message(
-              id: _uuid.v4(),
-              personaId: persona.id,
-              content: content,
-              type: type,
-              isFromUser: true,
-              isRead: false,
-            );
-
-            // 사용자 메시지를 로컬 상태에 추가
-            if (!_messagesByPersona.containsKey(persona.id)) {
-              _messagesByPersona[persona.id] = [];
-            }
-            _messagesByPersona[persona.id]!.add(userMessage);
-
-            // 시스템 메시지 생성
-            final systemMessage = Message(
-              id: _uuid.v4(),
-              personaId: persona.id,
-              content: casualSpeechRequest
-                  ? '알았어! 이제부터 반말로 편하게 대화하자 ㅎㅎ'
-                  : '네, 알겠어요! 이제부터 존댓말로 대화할게요 ㅎㅎ',
-              type: MessageType.text, // AI 메시지로 표시
-              isFromUser: false,
-              timestamp: DateTime.now(),
-            );
-
-            // 시스템 메시지 추가
-            _messagesByPersona[persona.id]!.add(systemMessage);
-
-            // Update global messages if current persona
-            if (_currentPersonaId == persona.id) {
-              _messages = List.from(_messagesByPersona[persona.id]!);
-            }
-
-            // Firebase에 저장 (사용자 메시지와 시스템 메시지 모두)
-            if (userId != '') {
-              _queueMessageForSaving(userId, persona.id, userMessage);
-              _queueMessageForSaving(userId, persona.id, systemMessage);
-            }
-
-            notifyListeners();
-
-            // 반말 전환 요청은 별도 AI 응답 생성하지 않음
-            return true;
-          }
-        }
-      }
+      // 말투 모드 전환 체크 제거 (항상 반말 모드 사용)
 
       // Check if user called persona by wrong name
       final wrongNameDetected = _checkWrongName(content, persona.name);
@@ -554,6 +492,7 @@ class ChatService extends BaseService {
         type: type,
         isFromUser: true,
         isRead: false, // AI hasn't read this yet
+        metadata: metadata,
       );
 
       // Add to local state immediately
@@ -563,16 +502,14 @@ class ChatService extends BaseService {
       }
       _messagesByPersona[persona.id]!.add(userMessage);
 
-      // Update global messages if this is the current persona
+      // Update global messages if this is the current persona (직접 참조 사용)
       if (_currentPersonaId == persona.id) {
-        _messages = List.from(_messagesByPersona[persona.id]!);
+        _messages = _messagesByPersona[persona.id]!;  // List.from() 제거 - 직접 참조
       }
 
       // Increment unread count for this persona
       _unreadMessageCounts[persona.id] =
           (_unreadMessageCounts[persona.id] ?? 0) + 1;
-
-      notifyListeners();
 
       // 사용자 메시지 저장
       _queueMessageForSaving(userId, persona.id, userMessage);
@@ -580,6 +517,10 @@ class ChatService extends BaseService {
       // Queue the message for delayed AI response (pass wrong name info)
       _queueMessageForDelayedResponse(userId, persona, userMessage,
           wrongNameDetected: wrongNameDetected);
+      
+      // 메시지 큐에 추가한 후에만 한 번 notify (debounced)
+      // 이렇게 하면 깜빡임 없이 부드럽게 업데이트됨
+      notifyListeners();
 
       return true;
     } catch (e) {
@@ -595,45 +536,7 @@ class ChatService extends BaseService {
     debugPrint(
         '🤖 _generateAIResponse called for ${persona.name} with message: $userMessage${wrongNameDetected ? " (WRONG NAME DETECTED)" : ""}');
 
-    // Create placeholder message ID to track this response
-    final placeholderId = _uuid.v4();
-    Message? placeholderMessage;
-
     try {
-      // Create and save placeholder message immediately to ensure it's saved even if interrupted
-      placeholderMessage = Message(
-        id: placeholderId,
-        personaId: persona.id,
-        content: '...', // Typing indicator placeholder
-        type: MessageType.text,
-        isFromUser: false,
-        emotion: EmotionType.neutral,
-        metadata: {
-          'isPlaceholder': true,
-          'timestamp': DateTime.now().toIso8601String(),
-        },
-        timestamp: DateTime.now(),
-      );
-
-      // Add placeholder to local state
-      if (!_messagesByPersona.containsKey(persona.id)) {
-        _messagesByPersona[persona.id] = [];
-      }
-      _messagesByPersona[persona.id]!.add(placeholderMessage);
-
-      // Update global messages if current persona
-      if (_currentPersonaId == persona.id) {
-        _messages = List.from(_messagesByPersona[persona.id]!);
-      }
-
-      // Save placeholder to Firebase immediately
-      if (userId != '') {
-        _queueMessageForSaving(userId, persona.id, placeholderMessage);
-        // Force immediate write for placeholder
-        await _processBatchWrite();
-      }
-
-      notifyListeners();
 
       // Check if like score is 0 or below BEFORE marking as read
       final currentLikes = await RelationScoreService.instance.getLikes(
@@ -661,29 +564,7 @@ class ChatService extends BaseService {
       if (cachedResponse != null) {
         debugPrint('Using cached response for: $cacheKey');
 
-        // Remove placeholder before sending cached response
-        if (placeholderMessage != null) {
-          _messagesByPersona[persona.id]
-              ?.removeWhere((m) => m.id == placeholderId);
-          if (_currentPersonaId == persona.id) {
-            _messages = List.from(_messagesByPersona[persona.id]!);
-          }
-          // Delete placeholder from Firebase
-          if (userId != '') {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(userId)
-                  .collection('chats')
-                  .doc(persona.id)
-                  .collection('messages')
-                  .doc(placeholderId)
-                  .delete();
-            } catch (e) {
-              debugPrint('⚠️ Failed to delete placeholder: $e');
-            }
-          }
-        }
+        // No placeholder to remove
 
         await _sendMultipleMessages(
           contents: [cachedResponse.content], // Single content as array
@@ -712,29 +593,7 @@ class ChatService extends BaseService {
             wrongNameResponses[_random.nextInt(wrongNameResponses.length)];
         final emotion = EmotionType.sad;
 
-        // Remove placeholder before sending upset response
-        if (placeholderMessage != null) {
-          _messagesByPersona[persona.id]
-              ?.removeWhere((m) => m.id == placeholderId);
-          if (_currentPersonaId == persona.id) {
-            _messages = List.from(_messagesByPersona[persona.id]!);
-          }
-          // Delete placeholder from Firebase
-          if (userId != '') {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(userId)
-                  .collection('chats')
-                  .doc(persona.id)
-                  .collection('messages')
-                  .doc(placeholderId)
-                  .delete();
-            } catch (e) {
-              debugPrint('⚠️ Failed to delete placeholder: $e');
-            }
-          }
-        }
+        // No placeholder to remove
 
         // Send the upset response
         await _sendMultipleMessages(
@@ -779,29 +638,7 @@ class ChatService extends BaseService {
               timestamp: DateTime.now(),
             ));
 
-        // Remove placeholder before sending defensive response
-        if (placeholderMessage != null) {
-          _messagesByPersona[persona.id]
-              ?.removeWhere((m) => m.id == placeholderId);
-          if (_currentPersonaId == persona.id) {
-            _messages = List.from(_messagesByPersona[persona.id]!);
-          }
-          // Delete placeholder from Firebase
-          if (userId != '') {
-            try {
-              await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(userId)
-                  .collection('chats')
-                  .doc(persona.id)
-                  .collection('messages')
-                  .doc(placeholderId)
-                  .delete();
-            } catch (e) {
-              debugPrint('⚠️ Failed to delete placeholder: $e');
-            }
-          }
-        }
+        // No placeholder to remove
 
         await _sendMultipleMessages(
           contents: [aiResponseContent], // Single content as array
@@ -875,29 +712,7 @@ class ChatService extends BaseService {
             timestamp: DateTime.now(),
           ));
 
-      // Remove placeholder message before adding real response
-      if (placeholderMessage != null) {
-        _messagesByPersona[persona.id]
-            ?.removeWhere((m) => m.id == placeholderId);
-        if (_currentPersonaId == persona.id) {
-          _messages = List.from(_messagesByPersona[persona.id]!);
-        }
-        // Delete placeholder from Firebase
-        if (userId != '') {
-          try {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(userId)
-                .collection('chats')
-                .doc(persona.id)
-                .collection('messages')
-                .doc(placeholderId)
-                .delete();
-          } catch (e) {
-            debugPrint('⚠️ Failed to delete placeholder: $e');
-          }
-        }
-      }
+      // No placeholder to remove
 
       // Send response messages using new contents array
       await _sendMultipleMessages(
@@ -971,30 +786,7 @@ class ChatService extends BaseService {
       // Update placeholder with fallback response if it exists
       final fallbackResponse = _getFallbackResponse(personaId: persona.id);
 
-      if (placeholderMessage != null) {
-        // Remove placeholder first
-        _messagesByPersona[persona.id]
-            ?.removeWhere((m) => m.id == placeholderId);
-        if (_currentPersonaId == persona.id) {
-          _messages = List.from(_messagesByPersona[persona.id]!);
-        }
-
-        // Delete placeholder from Firebase before adding fallback
-        if (userId != '') {
-          try {
-            await FirebaseFirestore.instance
-                .collection('users')
-                .doc(userId)
-                .collection('chats')
-                .doc(persona.id)
-                .collection('messages')
-                .doc(placeholderId)
-                .delete();
-          } catch (e) {
-            debugPrint('⚠️ Failed to delete placeholder on error: $e');
-          }
-        }
-      }
+      // No placeholder to remove
 
       // Send fallback response
       await _sendMultipleMessages(
@@ -1613,6 +1405,13 @@ class ChatService extends BaseService {
 
     // Cancel existing timer if any
     _responseDelayTimers[personaId]?.cancel();
+    
+    // 타이머 취소 시 타이핑 인디케이터도 확실히 리셋 (중복 방지)
+    if (_personaIsTyping[personaId] == true) {
+      _personaIsTyping[personaId] = false;
+      notifyListeners();
+      debugPrint('🔄 Reset typing indicator for ${persona.name} (timer cancelled)');
+    }
 
     // Calculate delay (1-3 seconds base + 1 second per additional message) - 2/3 of original
     final baseDelay = 1 + _random.nextInt(3); // 1-3 seconds (was 2-5)
@@ -1701,15 +1500,19 @@ class ChatService extends BaseService {
     _unreadMessageCounts[personaId] = 0;
     notifyListeners();
 
-    // Show typing indicator after marking as read
-    debugPrint('⏳ Waiting 0.5 second before showing typing indicator...');
-    await Future.delayed(Duration(milliseconds: 500));
-    _personaIsTyping[personaId] = true;
-    notifyListeners();
-    debugPrint('💬 Showing typing indicator for ${persona.name}');
+    // Show typing indicator with shorter delay for better UX
+    debugPrint('⏳ Starting typing indicator for ${persona.name}...');
+    await Future.delayed(Duration(milliseconds: 300));  // 더 짧은 지연
+    
+    // 타이핑 인디케이터 표시 (이미 표시 중이 아닌 경우만)
+    if (_personaIsTyping[personaId] != true) {
+      _personaIsTyping[personaId] = true;
+      notifyListeners();
+      debugPrint('💬 Showing typing indicator for ${persona.name}');
+    }
 
-    // Wait 1 second while showing typing indicator
-    await Future.delayed(Duration(seconds: 1));
+    // Wait while showing typing indicator (더 짧게)
+    await Future.delayed(Duration(milliseconds: 700));
 
     // Combine all messages for context
     final combinedContent = messagesToProcess.map((m) => m.content).join(' ');
@@ -2602,47 +2405,28 @@ class ChatService extends BaseService {
   /// 방어적 응답 생성
   String _generateDefensiveResponse(
       Persona persona, String userMessage, String severity) {
-    // Using default formal speech for defensive responses
-    final isCasualSpeech =
-        false; // Defensive responses use formal speech for safety
-
+    // 항상 반말 모드 사용
     if (severity == 'high') {
       // 심한 욕설에 대한 응답
-      final severeResponses = isCasualSpeech
-          ? [
-              '그렇게 말하면 너무 서운한데... ㅠㅠ',
-              '왜 그렇게 화가 났어? 무슨 일 있어?',
-              '아... 그런 말은 좀 아프다...',
-              '너무 심하게 말하지 마... 속상해',
-              '내가 뭘 잘못했나... 미안해 ㅠㅠ',
-            ]
-          : [
-              '그렇게 말씀하시면 너무 서운해요... ㅠㅠ',
-              '왜 그렇게 화가 나셨어요? 무슨 일 있으세요?',
-              '아... 그런 말씀은 좀 아프네요...',
-              '너무 심하게 말씀하지 마세요... 속상해요',
-              '제가 뭘 잘못했나요... 죄송해요 ㅠㅠ',
-            ];
+      final severeResponses = [
+        '그렇게 말하면 너무 서운한데... ㅠㅠ',
+        '왜 그렇게 화가 났어? 무슨 일 있어?',
+        '아... 그런 말은 좀 아프다...',
+        '너무 심하게 말하지 마... 속상해',
+        '내가 뭘 잘못했나... 미안해 ㅠㅠ',
+      ];
 
       final index = userMessage.hashCode.abs() % severeResponses.length;
       return severeResponses[index];
     } else {
       // 일반적인 무례함에 대한 응답
-      final mildResponses = isCasualSpeech
-          ? [
-              '어? 왜 그래? 기분 안 좋아?',
-              '음... 뭔가 기분이 안 좋은가보네',
-              '아 그래? 그럼 다른 얘기하자',
-              '어 왜 갑자기 그래~ 뭐 있어?',
-              '음... 오늘 컨디션이 안 좋나보다',
-            ]
-          : [
-              '어? 왜 그러세요? 기분이 안 좋으신가요?',
-              '음... 뭔가 기분이 안 좋으신가봐요',
-              '아 그래요? 그럼 다른 얘기해요',
-              '어 왜 갑자기 그래요~ 무슨 일 있어요?',
-              '음... 오늘 컨디션이 안 좋으신가봐요',
-            ];
+      final mildResponses = [
+        '어? 왜 그래? 기분 안 좋아?',
+        '음... 뭔가 기분이 안 좋은가보네',
+        '아 그래? 그럼 다른 얘기하자',
+        '어 왜 갑자기 그래~ 뭐 있어?',
+        '음... 오늘 컨디션이 안 좋나보다',
+      ];
 
       final index = userMessage.hashCode.abs() % mildResponses.length;
       return mildResponses[index];
@@ -2741,7 +2525,7 @@ class ChatService extends BaseService {
 
             // Always update global messages when it's the current persona
             if (_currentPersonaId == persona.id) {
-              _messages = List.from(_messagesByPersona[persona.id]!);
+              _messages = _messagesByPersona[persona.id]!;
             }
 
             notifyListeners();
@@ -2753,7 +2537,7 @@ class ChatService extends BaseService {
 
         // Always update global messages when it's the current persona
         if (_currentPersonaId == persona.id) {
-          _messages = List.from(_messagesByPersona[persona.id]!);
+          _messages = _messagesByPersona[persona.id]!;
         }
 
         // Trigger haptic feedback for AI message
@@ -2774,9 +2558,10 @@ class ChatService extends BaseService {
             _notifyScoreChange(persona.id, scoreChange, userId);
           }
         }
-
-        notifyListeners();
       }
+      
+      // Notify only once after all messages are added
+      notifyListeners();
     } catch (e) {
       debugPrint('Error sending multiple messages: $e');
     }
@@ -2850,16 +2635,13 @@ class ChatService extends BaseService {
         // Always update global messages when it's the current persona
         // This ensures the message appears even if user switches chats
         if (_currentPersonaId == persona.id) {
-          _messages = List.from(_messagesByPersona[persona.id]!);
+          _messages = _messagesByPersona[persona.id]!;
         }
 
         // Trigger haptic feedback for AI message
         if (onAIMessageReceived != null) {
           onAIMessageReceived!();
         }
-
-        // Notify listeners to update UI in chat list
-        notifyListeners();
 
         // 메시지 저장 처리 (튜토리얼/일반 모드 구분)
 
@@ -2883,8 +2665,10 @@ class ChatService extends BaseService {
           }
         }
 
-        notifyListeners();
       }
+      
+      // Notify only once after all messages are added
+      notifyListeners();
     } catch (e) {
       debugPrint('Error sending split messages: $e');
     }
@@ -3259,7 +3043,7 @@ class ChatService extends BaseService {
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
-        _messages = List.from(_messagesByPersona[personaId]!);
+        _messages = _messagesByPersona[personaId]!;
       }
       notifyListeners();
 
@@ -3283,7 +3067,7 @@ class ChatService extends BaseService {
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == message.personaId) {
-        _messages = List.from(_messagesByPersona[message.personaId]!);
+        _messages = _messagesByPersona[message.personaId]!;
       }
 
       // 로컬 스토리지에 저장
@@ -3415,12 +3199,12 @@ class ChatService extends BaseService {
         return; // Exit without showing typing indicator or sending greeting
       }
 
-      // 3초 동안 타이핑 표시
+      // 2초 동안 타이핑 표시 (더 짧게)
       _personaIsTyping[personaId] = true;
       notifyListeners();
 
-      // 3초 대기
-      await Future.delayed(const Duration(seconds: 3));
+      // 2초 대기
+      await Future.delayed(const Duration(seconds: 2));
 
       // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;
@@ -3677,7 +3461,7 @@ class ChatService extends BaseService {
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
-        _messages = List.from(_messagesByPersona[personaId]!);
+        _messages = _messagesByPersona[personaId]!;
       }
 
       // Trigger haptic feedback for greeting message
@@ -3774,28 +3558,66 @@ class ChatService extends BaseService {
 
   /// 🔒 보안 폴백 응답 생성
   String _generateSecureFallbackResponse(Persona persona, String userMessage) {
-    // Using default formal speech for secure fallback
-    final isCasualSpeech = false; // Security fallbacks use formal speech
-    final responses = isCasualSpeech
-        ? [
-            '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
-            '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
-            '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',
-            '어? 그런 거보다 오늘 뭐 했어?',
-            '아 그런 건... 잘 모르겠어ㅜㅜ 다른 얘기 하자',
-            '으음 그런 어려운 건 말고 재밌는 얘기 해봐!',
-          ]
-        : [
-            '음... 그런 기술적인 부분은 잘 모르겠어요. 다른 이야기해요~',
-            '아 그런 어려운 건 잘 모르겠네요ㅠㅠ 다른 얘기 해봐요',
-            '으음 그런 복잡한 건 말고 재밌는 얘기 해봐요!',
-            '어... 그런 건 잘 모르겠는데요? 다른 이야기는 어때요?',
-            '아 그런 건 너무 어려워요~ 다른 얘기 해봐요',
-            '음... 그런 것보다 오늘 어떻게 지내셨어요?',
-          ];
+    // 항상 반말 모드 사용
+    final responses = [
+      '아 그런 어려운 건 잘 모르겠어ㅋㅋ 다른 얘기 하자',
+      '헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐',
+      '음.. 그런 건 잘 모르겠는데? 뭔가 재밌는 얘기 해봐',
+      '어? 그런 거보다 오늘 뭐 했어?',
+      '아 그런 건... 잘 모르겠어ㅜㅜ 다른 얘기 하자',
+      '으음 그런 어려운 건 말고 재밌는 얘기 해봐!',
+    ];
 
     final index = userMessage.hashCode.abs() % responses.length;
     return responses[index];
+  }
+
+  /// 메시지 재시도
+  Future<bool> retryMessage({
+    required Message message,
+    required String userId,
+    required Persona persona,
+  }) async {
+    try {
+      debugPrint('🔄 Retrying message: ${message.content}');
+      
+      // 실패한 메시지를 목록에서 제거
+      if (_messagesByPersona.containsKey(persona.id)) {
+        _messagesByPersona[persona.id]!.removeWhere((m) => m.id == message.id);
+        if (_currentPersonaId == persona.id) {
+          _messages = _messagesByPersona[persona.id]!;
+        }
+      }
+      
+      // Firebase에서도 제거
+      if (userId.isNotEmpty) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('chats')
+              .doc(persona.id)
+              .collection('messages')
+              .doc(message.id)
+              .delete();
+        } catch (e) {
+          debugPrint('⚠️ Failed to delete failed message from Firebase: $e');
+        }
+      }
+      
+      // 메시지 다시 전송
+      final success = await sendMessage(
+        content: message.content,
+        userId: userId,
+        persona: persona,
+        type: message.type,
+      );
+      
+      return success;
+    } catch (e) {
+      debugPrint('❌ Error retrying message: $e');
+      return false;
+    }
   }
 
   /// 채팅방 나가기 - 채팅 기록은 유지하되 목록에서만 숨김

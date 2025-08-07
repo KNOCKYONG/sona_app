@@ -29,7 +29,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
     // Fade in/out animation for the whole indicator
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 200),  // 더 빠른 페이드 인
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(
@@ -38,13 +38,13 @@ class _TypingIndicatorState extends State<TypingIndicator>
     );
     _fadeController.forward();
 
-    // iOS-style pulse animation for dots
+    // iOS-style pulse animation for dots - 더 부드럽게
     _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(milliseconds: 1600),  // 약간 느리게
       vsync: this,
     )..repeat();
 
-    // Create staggered animations for each dot
+    // Create staggered animations for each dot - 더 명확한 순차 애니메이션
     _dotAnimations = List.generate(3, (index) {
       return Tween<double>(
         begin: 0.0,
@@ -53,8 +53,8 @@ class _TypingIndicatorState extends State<TypingIndicator>
         CurvedAnimation(
           parent: _pulseController,
           curve: Interval(
-            index * 0.2,
-            0.6 + index * 0.2,
+            index * 0.15,  // 더 타이트한 간격
+            0.5 + index * 0.15,  // 더 짧은 애니메이션
             curve: Curves.easeInOut,
           ),
         ),
@@ -145,8 +145,9 @@ class _TypingIndicatorState extends State<TypingIndicator>
                   return AnimatedBuilder(
                     animation: _dotAnimations[index],
                     builder: (context, child) {
-                      final scale = 0.5 + (_dotAnimations[index].value * 0.5);
-                      final opacity = 0.4 + (_dotAnimations[index].value * 0.6);
+                      // 더 미묘한 애니메이션 - 크기 변화 줄이고 투명도 위주로
+                      final scale = 0.8 + (_dotAnimations[index].value * 0.2);  // 크기 변화 최소화
+                      final opacity = 0.3 + (_dotAnimations[index].value * 0.7);  // 투명도 변화 증가
                       
                       return Container(
                         margin: EdgeInsets.symmetric(
@@ -157,8 +158,8 @@ class _TypingIndicatorState extends State<TypingIndicator>
                           child: Opacity(
                             opacity: opacity,
                             child: Container(
-                              width: 9,
-                              height: 9,
+                              width: 8,  // 약간 작게
+                              height: 8,  // 약간 작게
                               decoration: BoxDecoration(
                                 color: const Color(0xFF8E8E93), // iOS dot color
                                 shape: BoxShape.circle,
@@ -179,77 +180,3 @@ class _TypingIndicatorState extends State<TypingIndicator>
   }
 }
 
-class TypingIndicatorSimple extends StatefulWidget {
-  const TypingIndicatorSimple({super.key});
-
-  @override
-  State<TypingIndicatorSimple> createState() => _TypingIndicatorSimpleState();
-}
-
-class _TypingIndicatorSimpleState extends State<TypingIndicatorSimple>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
-      vsync: this,
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [
-          AnimatedBuilder(
-            animation: _animationController,
-            builder: (context, child) {
-              return Row(
-                children: List.generate(3, (index) {
-                  final delay = index * 0.3;
-                  final animationValue = Curves.easeInOut.transform(
-                    (_animationController.value + delay) % 1.0,
-                  );
-
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 2),
-                    child: Opacity(
-                      opacity: 0.4 + (animationValue * 0.6),
-                      child: Container(
-                        width: 8,
-                        height: 8,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFFF6B9D),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-          Text(
-            '입력 중...',
-            style: TextStyle(
-              color: Colors.grey[600],
-              fontSize: 12,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
@@ -59,6 +60,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   ChatService? _chatService;
   String? _userId;
   Persona? _currentPersona;
+  
+  // 스크롤 위치 기억용 Map (personaId -> scrollPosition)
+  final Map<String, double> _savedScrollPositions = {};
 
   @override
   void initState() {
@@ -79,6 +83,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
       final scrollThreshold = 100.0;
+      final paginationThreshold = 300.0; // 페이지네이션 임계값 증가
 
       // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
@@ -87,14 +92,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         setState(() {
           _isNearBottom = isNearBottom;
           // 맨 아래로 돌아왔으면 읽지 않은 메시지 카운트 초기화
-          if (isNearBottom) {
+          if (isNearBottom && _unreadAIMessageCount > 0) {
             _unreadAIMessageCount = 0;
           }
         });
+      } else if (isNearBottom && _unreadAIMessageCount > 0) {
+        // 이미 맨 아래에 있는데 카운트가 있으면 초기화
+        _unreadAIMessageCount = 0;
+        if (mounted) setState(() {});
       }
 
-      // 상단 근처에서 추가 메시지 로드 (상단 100픽셀 이내)
-      if (currentScroll <= minScroll + 100 && !_isLoadingMore) {
+      // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내로 변경)
+      if (currentScroll <= minScroll + paginationThreshold && !_isLoadingMore) {
         _loadMoreMessages();
       }
 
@@ -121,11 +130,20 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   void _setupKeyboardListener() {
     // 키보드 상태 감지를 위한 FocusNode 리스너
+    bool wasHasFocus = false;
     _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        // 키보드가 올라올 때 자동 스크롤 하지 않음
-        // 사용자가 위의 메시지를 보면서 타이핑할 수 있도록 함
+      final hasFocus = _focusNode.hasFocus;
+      // 포커스가 새로 활성화될 때만 스크롤
+      if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
+        // 키보드가 올라올 때 마지막 메시지로 스크롤
+        // 사용자가 마지막 메시지를 보면서 입력할 수 있도록 함
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _scrollController.hasClients && _focusNode.hasFocus) {
+            _scrollToBottom(force: true, smooth: true);
+          }
+        });
       }
+      wasHasFocus = hasFocus;
     });
   }
 
@@ -135,9 +153,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _userId == null ||
         _userId!.isEmpty) return;
 
-    setState(() {
-      _isLoadingMore = true;
-    });
+    _isLoadingMore = true;
+    if (mounted) setState(() {});
 
     final chatService = Provider.of<ChatService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
@@ -164,9 +181,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       });
     }
 
-    setState(() {
-      _isLoadingMore = false;
-    });
+    _isLoadingMore = false;
+    if (mounted) setState(() {});
   }
 
   Future<void> _initializeChat() async {
@@ -185,6 +201,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // Set up haptic feedback callback for incoming AI messages
     chatService.onAIMessageReceived = () {
       HapticService.messageReceived();
+      
+      // 사용자가 맨 아래에 있지 않으면 새 메시지 카운트 증가
+      if (!_isNearBottom && mounted) {
+        setState(() {
+          _unreadAIMessageCount++;
+        });
+      }
     };
 
     debugPrint(
@@ -238,30 +261,62 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           _showWelcomeMessage();
         } else {
           debugPrint('💬 Messages exist, skipping welcome message');
-          // 메시지가 있으면 마지막 메시지로 스크롤 (double frame callback for proper layout)
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (_scrollController.hasClients) {
-              // First frame: let layout complete
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (_scrollController.hasClients) {
-                  // Second frame: scroll after layout is complete
-                  final maxScroll = _scrollController.position.maxScrollExtent;
-                  _scrollController.jumpTo(maxScroll);
-                  
-                  // Small delay then animate to ensure last message is fully visible
-                  Future.delayed(const Duration(milliseconds: 100), () {
-                    if (mounted && _scrollController.hasClients) {
-                      _scrollController.animateTo(
-                        _scrollController.position.maxScrollExtent,
-                        duration: const Duration(milliseconds: 200),
-                        curve: Curves.easeOut,
-                      );
-                    }
-                  });
-                }
-              });
-            }
-          });
+          
+          // 저장된 스크롤 위치가 있는지 확인
+          final savedPosition = _savedScrollPositions[personaService.currentPersona!.id];
+          
+          if (savedPosition != null && savedPosition > 0) {
+            // 저장된 위치로 복원
+            debugPrint('📍 Restoring scroll position for ${personaService.currentPersona!.name}: $savedPosition');
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scrollController.hasClients) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (_scrollController.hasClients) {
+                    // 저장된 위치로 점프
+                    final maxScroll = _scrollController.position.maxScrollExtent;
+                    final targetPosition = savedPosition.clamp(0.0, maxScroll);
+                    _scrollController.jumpTo(targetPosition);
+                    
+                    // 부드러운 애니메이션으로 위치 조정
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      if (mounted && _scrollController.hasClients) {
+                        _scrollController.animateTo(
+                          targetPosition,
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOutCubic,
+                        );
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          } else {
+            // 저장된 위치가 없으면 마지막 메시지로 스크롤
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scrollController.hasClients) {
+                // First frame: let layout complete
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (_scrollController.hasClients) {
+                    // Second frame: scroll after layout is complete
+                    final maxScroll = _scrollController.position.maxScrollExtent;
+                    _scrollController.jumpTo(maxScroll);
+                    
+                    // Small delay then animate to ensure last message is fully visible
+                    Future.delayed(const Duration(milliseconds: 100), () {
+                      if (mounted && _scrollController.hasClients) {
+                        _scrollController.animateTo(
+                          _scrollController.position.maxScrollExtent,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeOut,
+                        );
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -377,15 +432,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     _messageController.clear();
     
-    // Clear reply state
-    if (_replyingToMessage != null) {
-      setState(() {
-        _replyingToMessage = null;
-      });
+    // Clear reply state without setState
+    final hadReply = _replyingToMessage != null;
+    _replyingToMessage = null;
+    
+    // Single setState for UI update if needed
+    if (hadReply && mounted) {
+      setState(() {});
     }
     
-    // 메시지 전송 후 즉시 맨 아래로 스크롤
-    _scrollToBottom(force: true, smooth: true);
+    // 스크롤은 메시지 추가 후에 한 번만 실행
 
     final persona = personaService.currentPersona;
     if (persona == null) {
@@ -407,37 +463,46 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return;
     }
 
+    // 답장 정보를 메타데이터에 포함
+    Map<String, dynamic>? metadata;
+    if (_replyingToMessage != null) {
+      metadata = {
+        'replyTo': {
+          'id': _replyingToMessage!.id,
+          'content': _replyingToMessage!.content,
+          'isFromUser': _replyingToMessage!.isFromUser,
+          'senderName': _replyingToMessage!.isFromUser 
+              ? AppLocalizations.of(context)!.you 
+              : persona.name,
+        },
+      };
+    }
+    
     final success = await chatService.sendMessage(
       content: content,
       userId: userId,
       persona: persona,
+      metadata: metadata,
     );
 
     if (success) {
-      // Mark the user message for animation
+      // 답장 상태 초기화와 애니메이션 ID 추가를 한 번에 처리
       final messages = chatService.getMessages(persona.id);
       if (messages.isNotEmpty) {
         setState(() {
+          _replyingToMessage = null;
           _newMessageIds.add(messages.last.id);
         });
+      } else if (_replyingToMessage != null) {
+        setState(() {
+          _replyingToMessage = null;
+        });
       }
-      // 메시지가 실제로 화면에 추가되고 렌더링된 후에 스크롤
-      // 두 번의 프레임 후에 실행하여 확실하게 렌더링이 완료되도록 함
+      
+      // 스크롤은 _scrollToBottom 메서드로 통일
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted && _scrollController.hasClients) {
-          // 한 번 더 다음 프레임에서 실행하여 확실하게 처리
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted && _scrollController.hasClients) {
-              // 최대 스크롤 위치로 이동 (패딩이 이미 설정되어 있음)
-              final targetScroll = _scrollController.position.maxScrollExtent;
-
-              _scrollController.animateTo(
-                targetScroll,
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutCubic,
-              );
-            }
-          });
+        if (mounted) {
+          _scrollToBottom(force: true, smooth: true);
         }
       });
     } else {
@@ -451,6 +516,83 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         );
       }
     }
+  }
+
+  // 날짜 구분선을 위한 헬퍼 함수들
+  String _getDateLabel(DateTime date) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = today.subtract(const Duration(days: 1));
+    final messageDate = DateTime(date.year, date.month, date.day);
+    
+    if (messageDate == today) {
+      return '오늘';
+    } else if (messageDate == yesterday) {
+      return '어제';
+    } else if (messageDate.isAfter(today.subtract(const Duration(days: 7)))) {
+      // 이번 주
+      final weekdays = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+      return weekdays[date.weekday - 1];
+    } else {
+      // 더 오래된 날짜는 월/일 형식으로
+      return DateFormat('M월 d일').format(date);
+    }
+  }
+  
+  bool _shouldShowDateSeparator(Message currentMessage, Message? previousMessage) {
+    if (previousMessage == null) return true;
+    
+    final currentDate = DateTime(
+      currentMessage.timestamp.year,
+      currentMessage.timestamp.month,
+      currentMessage.timestamp.day,
+    );
+    
+    final previousDate = DateTime(
+      previousMessage.timestamp.year,
+      previousMessage.timestamp.month,
+      previousMessage.timestamp.day,
+    );
+    
+    return currentDate != previousDate;
+  }
+  
+  Widget _buildDateSeparator(DateTime date) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              height: 1,
+              color: Colors.grey.withOpacity(0.2),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Text(
+              _getDateLabel(date),
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.grey[600],
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              height: 1,
+              color: Colors.grey.withOpacity(0.2),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _scrollToBottom({bool force = false, bool smooth = true}) {
@@ -551,6 +693,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.paused ||
         state == AppLifecycleState.inactive) {
+      // 스크롤 위치 저장
+      if (_currentPersona != null && _scrollController.hasClients) {
+        _savedScrollPositions[_currentPersona!.id] = _scrollController.position.pixels;
+        debugPrint('📍 Saved scroll position on pause for ${_currentPersona!.name}: ${_scrollController.position.pixels}');
+      }
       // Mark messages as read when app goes to background
       _markMessagesAsReadOnExit();
     }
@@ -568,6 +715,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    // 현재 스크롤 위치 저장
+    if (_currentPersona != null && _scrollController.hasClients) {
+      _savedScrollPositions[_currentPersona!.id] = _scrollController.position.pixels;
+      debugPrint('📍 Saved scroll position for ${_currentPersona!.name}: ${_scrollController.position.pixels}');
+    }
+    
     WidgetsBinding.instance.removeObserver(this);
     // Mark all messages as read when leaving chat
     _markMessagesAsReadOnExit();
@@ -673,11 +826,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
                             // AI 메시지가 추가되었을 때 처리
                             if (hasNewAIMessage) {
-                              // Mark new messages for animation
-                              for (int i = messages.length - newMessageCount;
-                                  i < messages.length;
-                                  i++) {
-                                _newMessageIds.add(messages[i].id);
+                              // Mark only the last new message for animation
+                              if (newMessageCount > 0 && messages.isNotEmpty) {
+                                _newMessageIds.add(messages.last.id);
                               }
                               
                               // 채팅방에 있을 때는 즉시 읽음 처리
@@ -697,10 +848,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 });
                               }
 
-                              // 스크롤 처리
-                              WidgetsBinding.instance.addPostFrameCallback((_) {
-                                _scrollToBottom(force: true);
-                              });
+                              // 사용자가 맨 아래에 있을 때만 자동 스크롤
+                              if (_isNearBottom) {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  _scrollToBottom(force: true);
+                                });
+                              }
                             }
                           }
 
@@ -714,9 +867,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                             });
                           }
 
-                          // Use ListView.builder for better performance
+                          // Use ListView.builder with optimizations
                           return ListView.builder(
+                            key: ValueKey('chat_list_${currentPersona.id}'),
                             controller: _scrollController,
+                            cacheExtent: 500.0, // 캐시 범위 설정으로 스크롤 성능 개선
+                            addAutomaticKeepAlives: false, // 불필요한 위젯 유지 방지
+                            addRepaintBoundaries: true, // 리페인트 최적화
                             padding: EdgeInsets.only(
                               left: 16,
                               right: 16,
@@ -768,9 +925,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 );
                               }
 
-                              // Regular message
+                              // Regular message with date separator
                               if (messageIndex < messages.length) {
                                 final message = messages[messageIndex];
+                                final previousMessage = messageIndex > 0 
+                                    ? messages[messageIndex - 1] 
+                                    : null;
+                                final showDateSeparator = _shouldShowDateSeparator(
+                                    message, previousMessage);
                                 final isNew = _newMessageIds.contains(message.id);
                                 
                                 // Clear new message flag after animation
@@ -784,16 +946,31 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                   });
                                 }
                                 
-                                return SwipeableMessageBubble(
-                                  key: ValueKey(message.id),
-                                  message: message,
-                                  onScoreChange: () {
-                                    // Handle score change if needed
-                                  },
-                                  onSwipeReply: _handleSwipeReply,
-                                  onReaction: _handleReaction,
-                                  isNewMessage: isNew,
-                                  index: messageIndex,
+                                // 날짜 구분선과 메시지를 Column으로 묶어서 반환
+                                return Column(
+                                  children: [
+                                    if (showDateSeparator)
+                                      _buildDateSeparator(message.timestamp),
+                                    SwipeableMessageBubble(
+                                      key: ValueKey(message.id),
+                                      message: message,
+                                      onScoreChange: () {
+                                        // Handle score change if needed
+                                      },
+                                      onSwipeReply: (msg) {
+                                        _replyingToMessage = msg;
+                                        if (mounted) setState(() {});
+                                        // 키보드 포커스
+                                        _focusNode.requestFocus();
+                                      },
+                                      onReaction: (msg, emoji) {
+                                        // 리액션 처리 (향후 구현)
+                                        debugPrint('🎉 Reaction: $emoji on message ${msg.id}');
+                                      },
+                                      isNewMessage: isNew,
+                                      index: messageIndex,
+                                    ),
+                                  ],
                                 );
                               }
 
@@ -802,76 +979,83 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           );
                         },
                       ),
-                      // 스크롤 상태 표시기 (맨 아래로 이동 버튼)
+                      // 새 메시지 알림 플로팅 버튼
                       if (!_isNearBottom)
                         Positioned(
                           bottom: 16,
                           right: 16,
-                          child: AnimatedOpacity(
-                            opacity: _isNearBottom ? 0.0 : 1.0,
-                            duration: const Duration(milliseconds: 200),
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween(
+                              begin: 0.0,
+                              end: 1.0,
+                            ),
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeOutBack,
+                            builder: (context, value, child) {
+                              return Transform.scale(
+                                scale: value,
+                                child: child,
+                              );
+                            },
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
+                                color: _unreadAIMessageCount > 0 
+                                    ? const Color(0xFFFF6B9D)
+                                    : Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  _unreadAIMessageCount > 0 ? 20 : 24,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.1),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
+                                    color: Colors.black.withOpacity(0.15),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
                                   ),
                                 ],
                               ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(24),
+                                  borderRadius: BorderRadius.circular(
+                                    _unreadAIMessageCount > 0 ? 20 : 24,
+                                  ),
                                   onTap: () {
+                                    HapticService.lightImpact();
                                     _scrollToBottom(force: true);
-                                    setState(() {
-                                      _unreadAIMessageCount = 0;
-                                    });
+                                    _unreadAIMessageCount = 0;
+                                    if (mounted) setState(() {});
                                   },
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(12),
-                                        child: const Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: Color(0xFFFF6B9D),
-                                          size: 24,
-                                        ),
-                                      ),
-                                      // 읽지 않은 AI 메시지 개수 표시
-                                      if (_unreadAIMessageCount > 0)
-                                        Positioned(
-                                          top: 4,
-                                          right: 4,
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            decoration: const BoxDecoration(
-                                              color: Color(0xFFFF6B9D),
-                                              shape: BoxShape.circle,
-                                            ),
-                                            constraints: const BoxConstraints(
-                                              minWidth: 18,
-                                              minHeight: 18,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                _unreadAIMessageCount
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 10,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: _unreadAIMessageCount > 0 ? 16 : 12,
+                                      vertical: _unreadAIMessageCount > 0 ? 10 : 12,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        if (_unreadAIMessageCount > 0) ...[
+                                          Text(
+                                            _unreadAIMessageCount == 1
+                                                ? '새 메시지 1개'
+                                                : '새 메시지 $_unreadAIMessageCount개',
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                           ),
+                                          const SizedBox(width: 8),
+                                        ],
+                                        Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: _unreadAIMessageCount > 0
+                                              ? Colors.white
+                                              : const Color(0xFFFF6B9D),
+                                          size: 24,
                                         ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -1031,11 +1215,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final currentPersona = personaService.currentPersona;
 
       if (userId.isNotEmpty && currentPersona != null) {
-        // 먼저 채팅방 나가기 처리
-        await chatService.leaveChatRoom(userId, currentPersona.id);
-
-        // 매칭된 페르소나 목록에서도 제거
-        personaService.removeFromMatchedPersonas(currentPersona.id);
+        // 채팅방 나가기는 단순히 화면 전환만 처리
+        // 이별 기능과 구분하여 데이터는 유지
 
         // Navigate back to main navigation
         if (mounted) {

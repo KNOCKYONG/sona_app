@@ -54,6 +54,8 @@ class Message {
   final int? likesChange;
   final bool isRead;
   final bool isFirstInSequence;
+  final bool isSending; // 전송 중 상태
+  final bool hasFailed; // 전송 실패 상태
 
   // 다국어 지원 필드
   final String? originalLanguage; // 원문 언어 코드 (예: 'ko', 'en')
@@ -75,6 +77,8 @@ class Message {
     this.likesChange,
     this.isRead = false,
     this.isFirstInSequence = true,
+    this.isSending = false,
+    this.hasFailed = false,
     this.originalLanguage,
     this.translatedContent,
     this.targetLanguage,
@@ -94,6 +98,8 @@ class Message {
       'likesChange': likesChange,
       'isRead': isRead,
       'isFirstInSequence': isFirstInSequence,
+      'isSending': isSending,
+      'hasFailed': hasFailed,
       'originalLanguage': originalLanguage,
       'translatedContent': translatedContent,
       'targetLanguage': targetLanguage,
@@ -125,6 +131,8 @@ class Message {
           json['likesChange'] ?? json['relationshipScoreChange'], // 호환성
       isRead: json['isRead'] ?? false,
       isFirstInSequence: json['isFirstInSequence'] ?? true,
+      isSending: json['isSending'] ?? false,
+      hasFailed: json['hasFailed'] ?? false,
       originalLanguage: json['originalLanguage'],
       translatedContent: json['translatedContent'],
       targetLanguage: json['targetLanguage'],
@@ -142,6 +150,8 @@ class Message {
     int? likesChange,
     bool? isRead,
     bool? isFirstInSequence,
+    bool? isSending,
+    bool? hasFailed,
     String? originalLanguage,
     String? translatedContent,
     String? targetLanguage,
@@ -159,6 +169,8 @@ class Message {
       likesChange: likesChange ?? this.likesChange,
       isRead: isRead ?? this.isRead,
       isFirstInSequence: isFirstInSequence ?? this.isFirstInSequence,
+      isSending: isSending ?? this.isSending,
+      hasFailed: hasFailed ?? this.hasFailed,
       originalLanguage: originalLanguage ?? this.originalLanguage,
       translatedContent: translatedContent ?? this.translatedContent,
       targetLanguage: targetLanguage ?? this.targetLanguage,

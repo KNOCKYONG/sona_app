@@ -38,30 +38,31 @@ class _AnimatedMessageBubbleState extends State<AnimatedMessageBubble>
     super.initState();
     
     _animationController = AnimationController(
-      duration: Duration(milliseconds: widget.isNewMessage ? 400 : 300),
+      duration: Duration(milliseconds: widget.isNewMessage ? 400 : 0),
       vsync: this,
     );
     
-    // Slide animation - messages slide in from side
-    _slideAnimation = Tween<double>(
-      begin: widget.message.isFromUser ? 50.0 : -50.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
-    
-    // Fade animation
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-    ));
-    
-    // Scale animation for bounce effect (new messages only)
+    // Only animate new messages
     if (widget.isNewMessage) {
+      // Slide animation - messages slide in from side
+      _slideAnimation = Tween<double>(
+        begin: widget.message.isFromUser ? 50.0 : -50.0,
+        end: 0.0,
+      ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOutCubic,
+      ));
+      
+      // Fade animation
+      _fadeAnimation = Tween<double>(
+        begin: 0.0,
+        end: 1.0,
+      ).animate(CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
+      ));
+      
+      // Scale animation for bounce effect
       _scaleAnimation = TweenSequence<double>([
         TweenSequenceItem(
           tween: Tween<double>(begin: 0.0, end: 1.1)
@@ -79,22 +80,18 @@ class _AnimatedMessageBubbleState extends State<AnimatedMessageBubble>
           weight: 15.0,
         ),
       ]).animate(_animationController);
+      
+      // Start animation immediately for new messages
+      _animationController.forward();
     } else {
-      _scaleAnimation = Tween<double>(
-        begin: 0.95,
-        end: 1.0,
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutBack,
-      ));
+      // No animation for existing messages - show immediately
+      _slideAnimation = AlwaysStoppedAnimation<double>(0.0);
+      _fadeAnimation = AlwaysStoppedAnimation<double>(1.0);
+      _scaleAnimation = AlwaysStoppedAnimation<double>(1.0);
+      
+      // Complete animation immediately
+      _animationController.value = 1.0;
     }
-    
-    // Stagger animation for multiple messages
-    Future.delayed(Duration(milliseconds: widget.index * 50), () {
-      if (mounted) {
-        _animationController.forward();
-      }
-    });
   }
   
   @override

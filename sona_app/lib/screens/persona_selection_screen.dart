@@ -124,12 +124,21 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     if (state == AppLifecycleState.resumed) {
       // App resumed from background
       debugPrint('🔄 App resumed');
-      _loadPersonas();
+      
+      // 캐시 확인 - 이미 로드된 데이터가 있으면 리로드하지 않음
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      if (personaService.availablePersonas.isEmpty || 
+          DateTime.now().difference(_lastLoadTime).inMinutes > 10) {
+        // 10분 이상 지났거나 데이터가 없을 때만 리로드
+        _loadPersonas();
+      }
 
       // 🆕 백그라운드에서 새로운 이미지 체크
       _checkForNewImagesInBackground();
     }
   }
+  
+  DateTime _lastLoadTime = DateTime.now();
 
   /// 이미지 프리로드 확인 및 실행
   Future<void> _checkAndPreloadImages() async {
@@ -513,6 +522,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   }
 
   Future<void> _loadPersonas() async {
+    // 로드 시간 업데이트
+    _lastLoadTime = DateTime.now();
+    
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);

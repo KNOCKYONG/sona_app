@@ -21,6 +21,30 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
   void initState() {
     super.initState();
     _preloadLikes();
+    _preloadPersonaImages();
+  }
+  
+  Future<void> _preloadPersonaImages() async {
+    // 매칭된 페르소나들의 썸네일 이미지 프리로드
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    final personas = personaService.matchedPersonas;
+    
+    // 최대 10개까지만 프리로드 (성능 고려)
+    final preloadCount = personas.length > 10 ? 10 : personas.length;
+    
+    for (int i = 0; i < preloadCount; i++) {
+      final imageUrl = personas[i].getThumbnailUrl();
+      if (imageUrl != null && imageUrl.isNotEmpty) {
+        try {
+          await precacheImage(
+            CachedNetworkImageProvider(imageUrl),
+            context,
+          );
+        } catch (e) {
+          debugPrint('Failed to preload persona image: $e');
+        }
+      }
+    }
   }
 
   Future<void> _preloadLikes() async {

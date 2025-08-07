@@ -84,7 +84,7 @@ class FirebasePersonaService extends ChangeNotifier {
         // 'currentRelationship': RelationshipType.friend.name,
         'currentRelationship': 'friend', // 임시로 문자열 사용
         'likes': 0, // Use new likes field
-        'isCasualSpeech': false,
+        'isCasualSpeech': true, // 항상 반말 모드
         'gender': 'female', // 기본값
         'mbti': 'ENFP', // 기본값
         'isActive': true,
@@ -211,7 +211,7 @@ class FirebasePersonaService extends ChangeNotifier {
         'isActive': true,
         'matchedAt': FieldValue.serverTimestamp(),
         'likes': 0, // Use new likes field
-        'isCasualSpeech': false,
+        'isCasualSpeech': true, // 항상 반말 모드
       });
 
       _swipedPersonaIds.add(personaId);

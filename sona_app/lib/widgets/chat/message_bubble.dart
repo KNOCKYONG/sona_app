@@ -6,6 +6,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../../services/persona/persona_service.dart';
+import '../../services/chat/chat_service.dart';
+import '../../services/auth/auth_service.dart';
 import '../../services/ui/haptic_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
@@ -190,15 +192,65 @@ class _TextMessageState extends State<_TextMessage> {
                             width: 1,
                           ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 10,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                        // 답장 정보 표시
+                        if (widget.message.metadata != null && 
+                            widget.message.metadata!['replyTo'] != null) ...[
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: isFromUser 
+                                    ? Colors.white.withOpacity(0.15)
+                                    : Colors.grey.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border(
+                                  left: BorderSide(
+                                    color: widget.message.metadata!['replyTo']['isFromUser'] == true
+                                        ? AppTheme.primaryColor
+                                        : AppTheme.secondaryColor,
+                                    width: 2,
+                                  ),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    widget.message.metadata!['replyTo']['senderName'] ?? '',
+                                    style: TextStyle(
+                                      color: isFromUser ? Colors.white70 : Colors.grey[600],
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    widget.message.metadata!['replyTo']['content'] ?? '',
+                                    style: TextStyle(
+                                      color: isFromUser ? Colors.white60 : Colors.grey[500],
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                         // 번역이 있는 메시지 (실제 번역이 있고, 유효한 번역일 때만 표시)
                         if (!isFromUser &&
                             widget.message.translatedContent != null &&
@@ -279,16 +331,6 @@ class _TextMessageState extends State<_TextMessage> {
                                               color: Colors.blue[900],
                                               fontSize: 16,
                                               height: 1.4,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          // 언어 표시
-                                          Text(
-                                            'Translated',
-                                            style: TextStyle(
-                                              color: Colors.blue[700],
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ],
@@ -372,8 +414,81 @@ class _TextMessageState extends State<_TextMessage> {
                           message: widget.message,
                           isFromUser: isFromUser,
                         ),
-                      ],
-                    ),
+                          ],
+                        ),
+                      ),
+                      // 전송 실패 시 재시도 버튼
+                      if (widget.message.hasFailed && isFromUser)
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                await HapticService.lightImpact();
+                                // 재시도 로직 호출
+                                final chatService = Provider.of<ChatService>(context, listen: false);
+                                final personaService = Provider.of<PersonaService>(context, listen: false);
+                                final authService = Provider.of<AuthService>(context, listen: false);
+                                
+                                if (personaService.currentPersona != null) {
+                                  await chatService.retryMessage(
+                                    message: widget.message,
+                                    userId: authService.user?.uid ?? '',
+                                    persona: personaService.currentPersona!,
+                                  );
+                                }
+                              },
+                              borderRadius: BorderRadius.circular(12),
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: const [
+                                    Icon(
+                                      Icons.refresh,
+                                      size: 14,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(width: 3),
+                                    Text(
+                                      '재시도',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(width: 2),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      // 전송 중 표시기
+                      if (widget.message.isSending && isFromUser)
+                        Positioned(
+                          bottom: 4,
+                          right: 4,
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            child: SizedBox(
+                              width: 14,
+                              height: 14,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
               ),

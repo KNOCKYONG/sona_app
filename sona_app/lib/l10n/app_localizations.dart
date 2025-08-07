@@ -71,7 +71,7 @@ class AppLocalizations {
       isKorean ? '정말 로그아웃하시겠습니까?' : 'Are you sure you want to logout?';
   String get basicInfo => isKorean ? '기본 정보' : 'Basic Information';
   String get enterBasicInfo => isKorean
-      ? '계정 생성을 위한 기본 정보를 입력해주세요'
+      ? '계정 생성을 위한 기본 정보를 입력해줘'
       : 'Please enter basic information to create an account';
   String get email => isKorean ? '이메일' : 'Email';
   String get password => isKorean ? '비밀번호' : 'Password';
@@ -330,7 +330,7 @@ class AppLocalizations {
   String get refreshFailed =>
       isKorean ? '새로고침 실패. 다시 시도해주세요.' : 'Refresh failed. Please try again.';
   String get loginFailedTryAgain =>
-      isKorean ? '로그인에 실패했습니다. 다시 시도해주세요.' : 'Login failed. Please try again.';
+      isKorean ? '로그인에 실패했어. 다시 시도해봐.' : 'Login failed. Please try again.';
   String get imageNotAvailable =>
       isKorean ? '이미지가 없습니다' : 'Image not available';
   String get internetConnectionCheck =>

@@ -109,8 +109,8 @@ class OptimizedPersonaImage extends StatelessWidget {
         width: width,
         height: height,
         fit: fit,
-        fadeInDuration: const Duration(milliseconds: 200),
-        fadeOutDuration: const Duration(milliseconds: 100),
+        fadeInDuration: const Duration(milliseconds: 150), // 200 -> 150
+        fadeOutDuration: const Duration(milliseconds: 50),  // 100 -> 50
         // 메모리 캐시 크기 제한
         memCacheWidth: _getMemCacheWidth(),
         memCacheHeight: _getMemCacheHeight(),

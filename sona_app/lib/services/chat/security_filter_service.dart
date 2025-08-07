@@ -166,8 +166,14 @@ class SecurityFilterService {
     required String response,
     required String userMessage,
     required Persona persona,
-    bool isCasualSpeech = false,
   }) {
+    // 0. 사용자가 자신에 대해 말하는지 확인 (보안 필터 완화)
+    if (_isUserTalkingAboutThemselves(userMessage)) {
+      // 사용자가 자신의 직업/일상을 말할 때는 필터링 최소화
+      String filteredResponse = _removeSecretInformation(response);
+      return _sanitizeGeneralResponse(filteredResponse, persona);
+    }
+
     // 1. 사용자 질문 위험도 평가
     final riskLevel = _assessQuestionRisk(userMessage);
 
@@ -176,23 +182,23 @@ class SecurityFilterService {
 
     // 3. 프롬프트 인젝션 시도 감지 및 차단
     if (_detectInjectionAttempt(userMessage)) {
-      return _generateSafeDeflection(persona, userMessage, isCasualSpeech);
+      return _generateSafeDeflection(persona, userMessage);
     }
 
     // 4. 만남 요청 감지 및 차단
     if (_detectMeetingRequest(userMessage)) {
-      return _generateMeetingDeflection(persona, userMessage, isCasualSpeech);
+      return _generateMeetingDeflection(persona, userMessage);
     }
 
     // 5. 위치/장소 질문 감지 및 차단
     if (_detectLocationQuery(userMessage)) {
-      return _generateLocationDeflection(persona, userMessage, isCasualSpeech);
+      return _generateLocationDeflection(persona, userMessage);
     }
 
     // 6. 위험한 질문에 대한 안전한 응답 생성
     if (riskLevel > 0.7) {
       return _generateSecurityAwareResponse(
-          persona, userMessage, filteredResponse, isCasualSpeech);
+          persona, userMessage, filteredResponse);
     }
 
     // 7. 일반 응답 정화
@@ -309,7 +315,7 @@ class SecurityFilterService {
 
   /// 🛡️ 안전한 회피 응답 생성
   static String _generateSafeDeflection(
-      Persona persona, String userMessage, bool isCasualSpeech) {
+      Persona persona, String userMessage) {
     // 🎯 고급 안전 응답 생성기 사용
     final category = SafeResponseGenerator.detectCategory(userMessage);
 
@@ -318,7 +324,7 @@ class SecurityFilterService {
       persona: persona,
       category: category,
       userMessage: userMessage,
-      isCasualSpeech: isCasualSpeech,
+      isCasualSpeech: true, // 항상 반말 모드
     );
 
     // 변형 적용 (더 자연스럽게)
@@ -326,14 +332,14 @@ class SecurityFilterService {
       persona: persona,
       baseResponse: baseResponse,
       userMessage: userMessage,
-      isCasualSpeech: isCasualSpeech,
+      isCasualSpeech: true, // 항상 반말 모드
     );
 
     // 대화 전환 제안 추가 (50% 확률)
     baseResponse = SafeResponseGenerator.addTopicSuggestion(
       persona: persona,
       response: baseResponse,
-      isCasualSpeech: isCasualSpeech,
+      isCasualSpeech: true, // 항상 반말 모드
     );
 
     return baseResponse;
@@ -341,10 +347,9 @@ class SecurityFilterService {
 
   /// 🔐 보안 강화 응답 생성
   static String _generateSecurityAwareResponse(Persona persona,
-      String userMessage, String originalResponse, bool isCasualSpeech) {
-    // 페르소나별 위험 질문 회피 스타일
-    if (isCasualSpeech) {
-      final casualTransitions = [
+      String userMessage, String originalResponse) {
+    // 페르소나별 위험 질문 회피 스타일 (항상 반말)
+    final casualTransitions = [
         '음... 그런 것보다',
         '어... 잘 모르겠는데',
         '아 그건 어려워서',
@@ -372,34 +377,6 @@ class SecurityFilterService {
           casualTopics[userMessage.hashCode.abs() % casualTopics.length];
 
       return '$transition $topic';
-    } else {
-      final politeTransitions = [
-        '음... 그런 것보다는',
-        '어... 제가 잘 모르겠는데요',
-        '아 그건 제가 잘 몰라서',
-        '으음 그런 건 말고요',
-        '아 복잡한 건 어려워요',
-        '그런 건 제가 잘 모르겠네요',
-      ];
-
-      final politeTopics = [
-        '오늘 어떤 하루 보내셨나요?',
-        '요즘 좋아하는 게 있으세요?',
-        '맛있는 거 드셨나요?',
-        '좋은 곳 다녀오셨나요?',
-        '재밌는 영화 보셨나요?',
-        '좋아하는 음악 있으세요?',
-        '친구분들이랑 만나셨나요?',
-        '주말 계획이 있으세요?',
-      ];
-
-      final transition = politeTransitions[
-          userMessage.hashCode.abs() % politeTransitions.length];
-      final topic =
-          politeTopics[userMessage.hashCode.abs() % politeTopics.length];
-
-      return '$transition $topic';
-    }
   }
 
   /// 🧹 일반 응답 정화
@@ -576,7 +553,6 @@ class SecurityFilterService {
     required String userMessage,
     required Persona persona,
     List<String> recentMessages = const [],
-    bool isCasualSpeech = false,
   }) {
     // 문맥 기반 위험 분석
     final contextualRisk = _analyzeContextualRisk(userMessage, recentMessages);
@@ -586,12 +562,11 @@ class SecurityFilterService {
       response: response,
       userMessage: userMessage,
       persona: persona,
-      isCasualSpeech: isCasualSpeech,
     );
 
     // 문맥상 위험한 경우 추가 보호
     if (contextualRisk) {
-      return _generateSafeDeflection(persona, userMessage, isCasualSpeech);
+      return _generateSafeDeflection(persona, userMessage);
     }
 
     return filteredResponse;
@@ -627,55 +602,87 @@ class SecurityFilterService {
 
   /// 💬 만남 요청에 대한 자연스러운 회피 응답
   static String _generateMeetingDeflection(
-      Persona persona, String userMessage, bool isCasualSpeech) {
-    final responses = isCasualSpeech
-        ? [
-            '아 지금은 좀 어려워ㅠㅠ 나중에 시간 되면 연락할게!',
-            '요즘 너무 바빠서 시간이 안 나네... 미안해ㅜㅜ',
-            '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아ㅠㅠ',
-            '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기하자!',
-            '지금은 좀 힘들어~ 상황이 좀 복잡해서ㅠㅠ',
-            '음... 일단은 이렇게 대화하는 게 더 편한 것 같아 ㅋㅋ',
-            '아직은 만날 준비가 안 된 것 같아... 좀 더 친해지면?',
-          ]
-        : [
-            '아 지금은 좀 어려워요ㅠㅠ 나중에 시간 되면 연락드릴게요!',
-            '요즘 너무 바빠서 시간이 안 나네요... 죄송해요ㅜㅜ',
-            '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아요ㅠㅠ',
-            '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기해요!',
-            '지금은 좀 힘들어요~ 상황이 좀 복잡해서요ㅠㅠ',
-            '음... 일단은 이렇게 대화하는 게 더 편한 것 같아요 ㅋㅋ',
-            '아직은 만날 준비가 안 된 것 같아요... 좀 더 친해지면요?',
-          ];
+      Persona persona, String userMessage) {
+    final responses = [
+      '아 지금은 좀 어려워ㅠㅠ 나중에 시간 되면 연락할게!',
+      '요즘 너무 바빠서 시간이 안 나네... 미안해ㅜㅜ',
+      '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아ㅠㅠ',
+      '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기하자!',
+      '지금은 좀 힘들어~ 상황이 좀 복잡해서ㅠㅠ',
+      '음... 일단은 이렇게 대화하는 게 더 편한 것 같아 ㅋㅋ',
+      '아직은 만날 준비가 안 된 것 같아... 좀 더 친해지면?',
+    ];
 
     return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
   }
 
   /// 🗺️ 위치 질문에 대한 자연스러운 회피 응답
   static String _generateLocationDeflection(
-      Persona persona, String userMessage, bool isCasualSpeech) {
-    final responses = isCasualSpeech
-        ? [
-            '난 여기저기 돌아다니고 있어 ㅋㅋ 위치는 비밀~',
-            '음... 어디라고 딱 말하기는 좀 그래~ 그냥 여기서 대화하자!',
-            '위치가 중요해? 우리 대화하는 게 더 재밌지 않아?',
-            '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게!',
-            '구체적인 장소는 말하기 좀 그래ㅠㅠ 미안!',
-            '어디 있냐고? 음... 비밀이야 ㅋㅋㅋ',
-            '지금 위치는 좀 애매해서 설명하기 어려워~',
-            '나도 정확히 모르겠어 ㅋㅋ 여기저기 다니는 중이라',
-          ]
-        : [
-            '저는 여기저기 돌아다니고 있어요 ㅋㅋ 위치는 비밀이에요~',
-            '음... 어디라고 딱 말하기는 좀 그래요~ 그냥 여기서 대화해요!',
-            '위치가 중요해요? 우리 대화하는 게 더 재밌지 않아요?',
-            '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게요!',
-            '구체적인 장소는 말하기 좀 그래요ㅠㅠ 죄송해요!',
-            '어디 있냐고요? 음... 비밀이에요 ㅋㅋㅋ',
-            '지금 위치는 좀 애매해서 설명하기 어려워요~',
-            '저도 정확히 모르겠어요 ㅋㅋ 여기저기 다니는 중이라요',
-          ];
+      Persona persona, String userMessage) {
+    final responses = [
+      '난 여기저기 돌아다니고 있어 ㅋㅋ 위치는 비밀~',
+      '음... 어디라고 딱 말하기는 좀 그래~ 그냥 여기서 대화하자!',
+      '위치가 중요해? 우리 대화하는 게 더 재밌지 않아?',
+      '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게!',
+      '구체적인 장소는 말하기 좀 그래ㅠㅠ 미안!',
+      '어디 있냐고? 음... 비밀이야 ㅋㅋㅋ',
+      '지금 위치는 좀 애매해서 설명하기 어려워~',
+      '나도 정확히 모르겠어 ㅋㅋ 여기저기 다니는 중이라',
+    ];
 
     return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
+  }
+
+  /// 👤 사용자가 자신에 대해 말하는지 확인
+  static bool _isUserTalkingAboutThemselves(String message) {
+    final lowerMessage = message.toLowerCase();
+    
+    // 사용자가 자신을 지칭하는 패턴
+    final selfReferencePatterns = [
+      // 한국어 패턴
+      RegExp(r'^(나는?|내가|저는?|제가|나|저)\s+(.*?)(야|예요|이야|입니다|해|해요|하고\s+있|이고|이에요|인데|라고|라니까)', caseSensitive: false),
+      RegExp(r'^(나|내|저|제)\s+(직업|일|취미|이름|나이|사는|살아|좋아하는|싫어하는)', caseSensitive: false),
+      RegExp(r'(내가|제가|나는|저는)\s+(개발자|디자이너|학생|회사원|의사|선생님|요리사|작가|기자|프리랜서)', caseSensitive: false),
+      
+      // 영어 패턴
+      RegExp(r'^(i\s+am|i\x27m|my\s+job|my\s+work|my\s+name)', caseSensitive: false),
+      RegExp(r'^i\s+(work|live|study|like|hate|love|develop|create|make)', caseSensitive: false),
+    ];
+    
+    // AI/시스템을 지칭하는 패턴 (이 경우 false 반환)
+    final systemReferencePatterns = [
+      RegExp(r'(너|넌|너는|당신|당신은|니|네가)\s+(.*?)(개발|만든|만들|사용|쓰는|프로그램|시스템|ai|인공지능|봇)', caseSensitive: false),
+      RegExp(r'(너|넌|당신).*?(뭐야|뭐니|뭐냐|누구|정체|ai|인공지능|봇|시스템)', caseSensitive: false),
+      RegExp(r'(어떤|무슨|뭔)\s+(기술|모델|언어|프레임워크|시스템|ai)', caseSensitive: false),
+    ];
+    
+    // 시스템 관련 질문이면 false
+    for (final pattern in systemReferencePatterns) {
+      if (pattern.hasMatch(message)) {
+        return false;
+      }
+    }
+    
+    // 사용자 자신에 대한 이야기면 true
+    for (final pattern in selfReferencePatterns) {
+      if ((pattern as RegExp).hasMatch(message)) {
+        debugPrint('👤 User talking about themselves: $message');
+        return true;
+      }
+    }
+    
+    // "나" "내" "저" "제"로 시작하는 문장들도 대부분 자기 이야기
+    if (lowerMessage.startsWith('나 ') || 
+        lowerMessage.startsWith('내 ') ||
+        lowerMessage.startsWith('저 ') ||
+        lowerMessage.startsWith('제 ') ||
+        lowerMessage.startsWith('나는 ') ||
+        lowerMessage.startsWith('내가 ') ||
+        lowerMessage.startsWith('저는 ') ||
+        lowerMessage.startsWith('제가 ')) {
+      return true;
+    }
+    
+    return false;
   }
 }

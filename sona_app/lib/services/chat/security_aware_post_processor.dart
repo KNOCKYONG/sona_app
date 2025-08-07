@@ -24,6 +24,9 @@ class SecurityAwarePostProcessor {
 
     // 4단계: 갑작스러운 주제 변경 감지 및 수정
     processed = _smoothTopicTransition(processed);
+    
+    // 5단계: 이별 관련 부적절한 내용 필터링
+    processed = _filterInappropriateBreakupContent(processed);
 
     // 길이 제한은 ChatOrchestrator에서 메시지 분리로 처리
 
@@ -486,6 +489,44 @@ class SecurityAwarePostProcessor {
       }
     }
 
+    return text;
+  }
+  
+  /// 이별 관련 부적절한 내용 필터링
+  static String _filterInappropriateBreakupContent(String text) {
+    // 이별 관련 부적절한 표현들
+    final inappropriateBreakupPhrases = [
+      '이제 그만 만나자',
+      '우리 헤어지자',
+      '이별하자',
+      '관계를 끝내자',
+      '더 이상 못 만나겠어',
+      '마음이 식었어',
+      '정이 떨어졌어',
+      '사랑이 식었어',
+      '이제 끝이야',
+      '여기까지야'
+    ];
+    
+    // 부적절한 이별 표현이 있는지 확인
+    for (final phrase in inappropriateBreakupPhrases) {
+      if (text.contains(phrase)) {
+        debugPrint('⚠️ Inappropriate breakup phrase detected and filtered: $phrase');
+        
+        // 부적절한 이별 표현을 부드러운 표현으로 변경
+        text = text.replaceAll(phrase, '우리 좀 더 얘기해보자');
+      }
+    }
+    
+    // 갑작스러운 이별 암시 표현들도 필터링
+    if (text.contains('안녕') && text.contains('영원히')) {
+      text = text.replaceAll('영원히', '나중에');
+    }
+    
+    if (text.contains('마지막') && text.contains('인사')) {
+      text = text.replaceAll('마지막 인사', '오늘 인사');
+    }
+    
     return text;
   }
 }

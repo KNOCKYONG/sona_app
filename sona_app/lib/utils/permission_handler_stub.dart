@@ -18,6 +18,7 @@ class PermissionStatus {
   static const PermissionStatus denied = PermissionStatus._('denied');
   static const PermissionStatus permanentlyDenied =
       PermissionStatus._('permanentlyDenied');
+  static const PermissionStatus restricted = PermissionStatus._('restricted');
 
   final String value;
   const PermissionStatus._(this.value);
@@ -25,6 +26,7 @@ class PermissionStatus {
   bool get isGranted => this == granted;
   bool get isDenied => this == denied;
   bool get isPermanentlyDenied => this == permanentlyDenied;
+  bool get isRestricted => this == restricted;
 }
 
 Future<bool> openAppSettings() async {

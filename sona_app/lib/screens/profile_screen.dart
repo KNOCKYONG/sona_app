@@ -26,6 +26,31 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final ImagePicker _picker = ImagePicker();
   bool _isUploadingImage = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _preloadUserImage();
+  }
+  
+  Future<void> _preloadUserImage() async {
+    // 사용자 프로필 이미지 프리로드
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userService = Provider.of<UserService>(context, listen: false);
+    final imageUrl = userService.currentUser?.profileImageUrl ?? 
+                     authService.user?.photoURL;
+    
+    if (imageUrl != null && imageUrl.isNotEmpty && !imageUrl.startsWith('data:')) {
+      try {
+        await precacheImage(
+          CachedNetworkImageProvider(imageUrl),
+          context,
+        );
+      } catch (e) {
+        debugPrint('Failed to preload profile image: $e');
+      }
+    }
+  }
 
   Future<void> _pickAndUploadImage() async {
     // Haptic feedback when opening image picker

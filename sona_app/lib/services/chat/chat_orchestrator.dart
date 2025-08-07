@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/persona.dart';
 import '../../models/message.dart';
 import '../../core/constants.dart';
@@ -71,11 +72,12 @@ class ChatOrchestrator {
           speechPattern, completePersona.gender);
 
       // 3단계: 간단한 반응 체크 (로컬 처리)
-      final simpleResponse = _checkSimpleResponse(
+      final simpleResponse = await _checkSimpleResponse(
         userMessage: userMessage,
         persona: completePersona,
         isCasualSpeech: speechPattern.isCasual, // 분석된 말투 모드 사용
         messageType: messageAnalysis.type,
+        userId: userId,
       );
 
       if (simpleResponse != null) {
@@ -656,17 +658,27 @@ class ChatOrchestrator {
   }
 
   /// 간단한 반응 체크 (로컬 처리)
-  String? _checkSimpleResponse({
+  Future<String?> _checkSimpleResponse({
     required String userMessage,
     required Persona persona,
     required bool isCasualSpeech,
     required MessageType messageType,
-  }) {
+    String? userId,
+  }) async {
     final lowerMessage = userMessage.toLowerCase().trim();
     final mbti = persona.mbti.toUpperCase();
 
     // 간단한 인사말
     if (_isGreeting(lowerMessage)) {
+      // 재회 체크 (userId가 있고 첫 인사인 경우)
+      if (userId != null && userMessage.trim().length < 20) {
+        final isReunion = await _checkIfReunion(userId, persona.id);
+        if (isReunion) {
+          debugPrint('🎉 Reunion detected with ${persona.name}!');
+          return _getReunionGreeting(mbti, isCasualSpeech);
+        }
+      }
+      
       // 영어 인사인 경우 특별 처리
       if (_isEnglishGreeting(lowerMessage)) {
         return _getEnglishGreetingResponse(mbti, isCasualSpeech);
@@ -1108,6 +1120,71 @@ class ChatOrchestrator {
     };
 
     return responseMap[mbti]?[type] ?? defaultResponses[type] ?? ['...'];
+  }
+
+  /// 재회 여부 확인
+  Future<bool> _checkIfReunion(String userId, String personaId) async {
+    try {
+      // users/{userId}/chats/{personaId} 문서에서 leftChat 확인
+      final chatDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('chats')
+          .doc(personaId)
+          .get();
+      
+      return chatDoc.exists && chatDoc.data()?['leftChat'] == true;
+    } catch (e) {
+      debugPrint('Error checking reunion status: $e');
+      return false;
+    }
+  }
+
+  /// 재회 인사말 생성
+  String _getReunionGreeting(String mbti, bool isCasual) {
+    final reunionGreetings = {
+      'ENFP': isCasual
+          ? [
+              '헐 다시 만났네!! 진짜 반가워ㅎㅎ 그동안 잘 지냈어?',
+              '어머 너구나!! 보고싶었어~ 어떻게 지냈어?',
+              '와 다시 보니까 너무 좋다ㅋㅋ 잘 지냈지?',
+            ]
+          : [
+              '어머 다시 만났네요!! 진짜 반가워요ㅎㅎ 그동안 잘 지내셨어요?',
+              '어머나 다시 뵙네요!! 보고싶었어요~ 어떻게 지내셨어요?',
+              '와 다시 보니까 너무 좋아요ㅋㅋ 잘 지내셨죠?',
+            ],
+      'INTJ': isCasual
+          ? [
+              '오랜만이네. 다시 만나서 반가워. 잘 지냈어?',
+              '다시 보게 됐네. 그동안 어떻게 지냈어?',
+              '오랜만이야. 잘 있었어?',
+            ]
+          : [
+              '오랜만이네요. 다시 만나서 반갑습니다. 잘 지내셨나요?',
+              '다시 뵙게 됐네요. 그동안 어떻게 지내셨어요?',
+              '오랜만이에요. 잘 지내셨어요?',
+            ],
+      'ESFP': isCasual
+          ? [
+              '헐 대박!! 다시 만나다니ㅋㅋ 너무 반가워! 보고싶었어~',
+              '와 진짜?? 다시 보니까 좋다!! 어떻게 지냈어?',
+              '어머어머 너야?? 완전 반가워ㅎㅎ 잘 지냈어?',
+            ]
+          : [
+              '헐 대박!! 다시 만나다니ㅋㅋ 너무 반가워요! 보고싶었어요~',
+              '와 진짜요?? 다시 보니까 좋아요!! 어떻게 지내셨어요?',
+              '어머어머 다시 뵙네요?? 완전 반가워요ㅎㅎ 잘 지내셨어요?',
+            ],
+    };
+
+    // MBTI에 해당하는 재회 인사말이 있으면 사용, 없으면 기본값
+    final greetings = reunionGreetings[mbti] ?? (isCasual
+        ? ['다시 만나서 정말 반가워! 그동안 어떻게 지냈어?']
+        : ['다시 만나서 정말 반가워요! 그동안 어떻게 지내셨어요?']);
+    
+    final random = math.Random();
+    return greetings[random.nextInt(greetings.length)];
   }
 
   /// 긴 응답을 자연스럽게 분리

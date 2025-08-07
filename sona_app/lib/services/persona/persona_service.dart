@@ -404,6 +404,17 @@ class PersonaService extends BaseService {
         return false;
       }
 
+      // 재매칭 시 leftChat 플래그 리셋
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUserId!)
+          .collection('chats')
+          .doc(personaId)
+          .set({
+        'leftChat': false,
+        'rejoinedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+      
       // Create relationship data
       final relationshipData = {
         'userId': _currentUserId!,
@@ -482,6 +493,17 @@ class PersonaService extends BaseService {
       }
 
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
+
+      // 재매칭 시 leftChat 플래그 리셋
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUserId!)
+          .collection('chats')
+          .doc(personaId)
+          .set({
+        'leftChat': false,
+        'rejoinedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
 
       // Create relationship data with super like relationship score (1000)
       final relationshipData = {

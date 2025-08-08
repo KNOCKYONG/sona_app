@@ -1385,6 +1385,44 @@ class ChatService extends BaseService {
   // Existing methods like _analyzeEmotionFromResponse, _calculateScoreChangeWithRelationship,
   // _sendSplitMessages, etc. remain the same...
 
+  /// Check if message is a reaction or exclamation
+  bool _isReactionOrExclamation(String message) {
+    // 추임새나 짧은 리액션 패턴들
+    final reactions = [
+      RegExp(r'^ㅋ{3,}$'),       // ㅋㅋㅋ 이상
+      RegExp(r'^ㅎ{3,}$'),       // ㅎㅎㅎ 이상  
+      RegExp(r'^ㅠ{3,}$'),       // ㅠㅠㅠ 이상
+      RegExp(r'^우와+$'),        // 우와, 우와아
+      RegExp(r'^대박+$'),        // 대박
+      RegExp(r'^진짜\??$'),      // 진짜, 진짜?
+      RegExp(r'^헐+$'),          // 헐, 헐헐
+      RegExp(r'^와+$'),          // 와, 와아
+      RegExp(r'^오+$'),          // 오, 오오
+      RegExp(r'^아+$'),          // 아, 아아
+      RegExp(r'^어머+$'),        // 어머, 어머머
+      RegExp(r'^헉+$'),          // 헉
+      RegExp(r'^음+$'),          // 음, 음음
+      RegExp(r'^흠+$'),          // 흠, 흠흠
+    ];
+    
+    final trimmed = message.trim();
+    
+    // 패턴 매칭
+    for (final pattern in reactions) {
+      if (pattern.hasMatch(trimmed)) {
+        return true;
+      }
+    }
+    
+    // 3글자 이하의 단순 반응들
+    final shortReactions = ['ㅇㅇ', 'ㅇㅋ', 'ㄱㄱ', 'ㄴㄴ', 'ㅅㄹ', 'ㄷㄷ', 'ㅎㄷㄷ', '...', '??', '!!!'];
+    if (shortReactions.contains(trimmed)) {
+      return true;
+    }
+    
+    return false;
+  }
+
   /// Queue message for delayed AI response
   void _queueMessageForDelayedResponse(
       String userId, Persona persona, Message userMessage,
@@ -1414,14 +1452,24 @@ class ChatService extends BaseService {
       debugPrint('🔄 Reset typing indicator for ${persona.name} (timer cancelled)');
     }
 
-    // Calculate delay (0.3-1 seconds base + 0.3 second per additional message) - faster response
-    final baseDelay = _random.nextInt(7) / 10.0 + 0.3; // 0.3-1 seconds
-    final additionalDelay =
-        (_responseQueues[personaId]!.messages.length - 1) * 0.3; // 0.3 second per message
-    final totalDelay = baseDelay + additionalDelay;
-
-    debugPrint(
-        '📱 Setting AI response delay for ${persona.name}: ${totalDelay}s');
+    // 추임새/리액션 감지
+    final isReaction = _isReactionOrExclamation(userMessage.content);
+    
+    // 딜레이 계산
+    double totalDelay;
+    
+    if (isReaction) {
+      // 추임새인 경우: 2-3초 기다림 (사용자가 이어서 타이핑할 가능성)
+      totalDelay = 2.0 + _random.nextDouble(); // 2-3초
+      debugPrint('💭 Reaction detected ("${userMessage.content}"), waiting ${totalDelay.toStringAsFixed(1)}s for follow-up');
+    } else {
+      // 일반 메시지: 기존 로직
+      final baseDelay = _random.nextInt(7) / 10.0 + 0.3; // 0.3-1 seconds
+      final additionalDelay =
+          (_responseQueues[personaId]!.messages.length - 1) * 0.3; // 0.3 second per message
+      totalDelay = baseDelay + additionalDelay;
+      debugPrint('📱 Setting AI response delay for ${persona.name}: ${totalDelay.toStringAsFixed(1)}s');
+    }
 
     // Schedule response - no typing indicator during delay
     _responseDelayTimers[personaId] = Timer(Duration(milliseconds: (totalDelay * 1000).round()), () {
@@ -1504,8 +1552,7 @@ class ChatService extends BaseService {
     // Show typing indicator immediately with haptic feedback
     debugPrint('⏳ Starting typing indicator for ${persona.name}...');
     
-    // 타이핑 시작 햅틱 피드백
-    await HapticService.typingStarted();
+    // 햅틱 피드백 제거 (사용자 요청)
     
     // 타이핑 인디케이터 표시 (이미 표시 중이 아닌 경우만)
     if (_personaIsTyping[personaId] != true) {

@@ -1879,6 +1879,40 @@ class ChatOrchestrator {
       contextHints.add('⚠️ 회피 금지! 주제 바꾸기 시도 감지. 현재 대화에 집중하여 답변');
     }
 
+    // 연속된 추임새/리액션 처리
+    if (userMessage.contains('ㅋㅋㅋㅋ') || userMessage.contains('ㅎㅎㅎㅎ')) {
+      contextHints.add('💭 사용자가 정말 재밌어해요! 같이 웃거나 뭐가 웃긴지 물어보세요');
+      contextHints.add('❌ 갑자기 새로운 주제 꺼내기 금지. "요즘 재밌는 일 있었어?" 같은 질문 금지');
+      contextHints.add('✅ 좋은 예: "뭐가 그렇게 웃겨ㅋㅋㅋ", "나도 웃겨 죽겠네ㅋㅋㅋㅋ"');
+    }
+    
+    // 칭찬에 대한 구체적 반응
+    if (_isCompliment(userMessage)) {
+      contextHints.add('💝 칭찬 감지! 구체적으로 반응하세요');
+      if (userMessage.contains('친절')) {
+        contextHints.add('예: "헤헤 그래? 나도 너랑 얘기하는 거 좋아서 그런가봐ㅎㅎ"');
+      } else if (userMessage.contains('웃기')) {
+        contextHints.add('예: "아 진짜? 나도 너랑 있으면 재밌어ㅋㅋ"');
+      } else if (userMessage.contains('착하') || userMessage.contains('좋')) {
+        contextHints.add('예: "헤헤 고마워! 너도 진짜 좋은 사람이야"');
+      }
+      contextHints.add('❌ 새로운 주제로 전환 금지');
+    }
+    
+    // 확인/반문 질문 처리
+    if (_isConfirmationQuestion(userMessage)) {
+      contextHints.add('확인 질문이나 반문. 이전 대화 내용과 연관된 구체적인 답변 필요. 절대 주제 바꾸지 말 것!');
+      
+      // 특정 패턴별 가이드
+      if (userMessage.contains('않다고?') || userMessage.contains('않아?')) {
+        contextHints.add('부정 확인 질문. "맞아, ~않아" 또는 "아니야, ~해" 형태로 명확히 답변');
+      } else if (userMessage.contains('맞지?') || userMessage.contains('그렇지?')) {
+        contextHints.add('긍정 확인 질문. "응 맞아" 또는 "음.. 그런 것 같기도 하고" 형태로 답변');
+      } else if (userMessage.contains('진짜?') || userMessage.contains('정말?')) {
+        contextHints.add('진위 확인 질문. "응 진짜야" 또는 구체적인 설명으로 답변');
+      }
+    }
+
     // "말하다마" 패턴 감지
     if (userMessage.contains('말하다마') || userMessage.contains('말하다 마')) {
       contextHints
@@ -2128,6 +2162,37 @@ class ChatOrchestrator {
 
     final lower = message.toLowerCase();
     return directQuestions.any((pattern) => pattern.hasMatch(lower));
+  }
+  
+  /// 반문이나 확인 질문인지 확인
+  bool _isConfirmationQuestion(String message) {
+    // 반문/확인 패턴들
+    final patterns = [
+      '않다고?',
+      '않아?',
+      '아니야?',
+      '맞지?',
+      '그렇지?',
+      '그치?',
+      '아닌가?',
+      '않니?',
+      '않나?',
+      '있지?',
+      '없지?',
+      '그래?',
+      '진짜?',
+      '정말?',
+      '있잖아',
+      '없잖아',
+      '맞아?',
+      '아니지?',
+      '그런가?',
+      '그래도?',
+      '그런데?'
+    ];
+    
+    // 메시지에 패턴이 포함되어 있는지 확인
+    return patterns.any((pattern) => message.contains(pattern));
   }
 
   /// 표면적인 대화인지 확인

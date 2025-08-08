@@ -198,9 +198,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     chatService.setPersonaService(personaService);
     chatService.setCurrentUserId(_userId!);
 
-    // Set up haptic feedback callback for incoming AI messages
+    // Set up callback for incoming AI messages (햅틱 제거)
     chatService.onAIMessageReceived = () {
-      HapticService.messageReceived();
+      // 햅틱 피드백 제거 (사용자 요청)
       
       // 사용자가 맨 아래에 있지 않으면 새 메시지 카운트 증가
       if (!_isNearBottom && mounted) {
@@ -379,8 +379,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final content = _messageController.text.trim();
     if (content.isEmpty) return;
 
-    // 메시지 전송 햅틱 피드백
-    HapticService.messageSent();
+    // 햅틱 피드백 제거 (사용자 요청)
 
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);

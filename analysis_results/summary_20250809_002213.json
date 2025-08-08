@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250809_002213",
+  "total_reports_analyzed": 1,
+  "average_coherence_score": 85.0,
+  "critical_issues_count": 0,
+  "high_issues_count": 1,
+  "personas_with_issues": {
+    "하연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 85.0,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    }
+  }
+}

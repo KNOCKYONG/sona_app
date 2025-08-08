@@ -1,0 +1,34 @@
+[
+  {
+    "error_key": "ERR1754666185529_5529",
+    "persona_id": "8VAZ6GQN3ubrI3CkTJWP",
+    "persona_name": "하연",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 8,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "있지 않다고?",
+        "ai_response": "그거 얘기하니까 생각났는데, 요즘 핫한 이슈들 많지.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "있지 않다고?",
+        "ai_response": "그거 얘기하니까 생각났는데, 요즘 핫한 이슈들 많지.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

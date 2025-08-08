@@ -1,0 +1,120 @@
+[
+  {
+    "error_key": "ERR1754577091283_1283",
+    "persona_id": "m75bPHXaTys3htRJomws",
+    "persona_name": "소희",
+    "scores": {
+      "overall_coherence": 65.0,
+      "topic_consistency": 4.36,
+      "natural_flow": 40.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 개발자야. 소나라는 앱 개발해",
+        "ai_response": "음... 그런 기술적인 부분은 잘 모르겠어요. 다른 이야기해요~",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아니 내가 개발자라니까",
+        "ai_response": "으음 그런 어려운 건 말고 재밌는 얘기 해봐!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "음 이상하네. 무슨 말인지 몰라?",
+        "ai_response": "헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐예요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "알겠어 뭐해?",
+        "ai_response": "유튜브 보고 있어ㅎㅎ 요즘 뭐하고 있어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "알겠어 뭐해?",
+        "ai_response": "유튜브 보고 있어ㅎㅎ 요즘 뭐하고 있어?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754576148725_8725",
+    "persona_id": "m75bPHXaTys3htRJomws",
+    "persona_name": "소희",
+    "scores": {
+      "overall_coherence": 65.0,
+      "topic_consistency": 4.36,
+      "natural_flow": 40.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 개발자야. 소나라는 앱 개발해",
+        "ai_response": "음... 그런 기술적인 부분은 잘 모르겠어요. 다른 이야기해요~",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "아니 내가 개발자라니까",
+        "ai_response": "으음 그런 어려운 건 말고 재밌는 얘기 해봐!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "음 이상하네. 무슨 말인지 몰라?",
+        "ai_response": "헉 너무 복잡한 얘기네~ 재밌는 거 얘기해봐예요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "알겠어 뭐해?",
+        "ai_response": "유튜브 보고 있어ㅎㅎ 요즘 뭐하고 있어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "알겠어 뭐해?",
+        "ai_response": "유튜브 보고 있어ㅎㅎ 요즘 뭐하고 있어?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

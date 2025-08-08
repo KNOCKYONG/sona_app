@@ -184,6 +184,18 @@ class HapticService {
       // 무시
     }
   }
+  
+  /// 타이핑 시작 피드백 - 매우 가벼운 단일 탭
+  static Future<void> typingStarted() async {
+    if (!_isEnabled) return;
+
+    try {
+      // 매우 가벼운 선택 클릭으로 타이핑 시작을 알림
+      await selectionClick();
+    } catch (e) {
+      // 무시
+    }
+  }
 
   /// 스와이프 피드백 (좋아요/패스)
   static Future<void> swipeFeedback({required bool isLike}) async {

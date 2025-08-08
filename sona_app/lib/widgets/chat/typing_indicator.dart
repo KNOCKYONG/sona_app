@@ -29,7 +29,7 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
     // Fade in/out animation for the whole indicator
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 200),  // 더 빠른 페이드 인
+      duration: const Duration(milliseconds: 100),  // 매우 빠른 페이드 인/아웃
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(

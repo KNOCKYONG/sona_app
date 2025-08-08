@@ -25,6 +25,7 @@ import '../relationship/like_cooldown_system.dart';
 import '../../models/chat_error_report.dart';
 import 'error_recovery_service.dart';
 import 'error_aggregation_service.dart';
+import '../ui/haptic_service.dart';
 
 /// 무례한 메시지 체크 결과
 class RudeMessageCheck {
@@ -1413,17 +1414,17 @@ class ChatService extends BaseService {
       debugPrint('🔄 Reset typing indicator for ${persona.name} (timer cancelled)');
     }
 
-    // Calculate delay (1-3 seconds base + 1 second per additional message) - 2/3 of original
-    final baseDelay = 1 + _random.nextInt(3); // 1-3 seconds (was 2-5)
+    // Calculate delay (0.3-1 seconds base + 0.3 second per additional message) - faster response
+    final baseDelay = _random.nextInt(7) / 10.0 + 0.3; // 0.3-1 seconds
     final additionalDelay =
-        (_responseQueues[personaId]!.messages.length - 1) * 1; // 1 second per message (was 2)
+        (_responseQueues[personaId]!.messages.length - 1) * 0.3; // 0.3 second per message
     final totalDelay = baseDelay + additionalDelay;
 
     debugPrint(
         '📱 Setting AI response delay for ${persona.name}: ${totalDelay}s');
 
     // Schedule response - no typing indicator during delay
-    _responseDelayTimers[personaId] = Timer(Duration(seconds: totalDelay), () {
+    _responseDelayTimers[personaId] = Timer(Duration(milliseconds: (totalDelay * 1000).round()), () {
       _processDelayedResponse(userId, persona);
     });
   }
@@ -1500,9 +1501,11 @@ class ChatService extends BaseService {
     _unreadMessageCounts[personaId] = 0;
     notifyListeners();
 
-    // Show typing indicator with shorter delay for better UX
+    // Show typing indicator immediately with haptic feedback
     debugPrint('⏳ Starting typing indicator for ${persona.name}...');
-    await Future.delayed(Duration(milliseconds: 300));  // 더 짧은 지연
+    
+    // 타이핑 시작 햅틱 피드백
+    await HapticService.typingStarted();
     
     // 타이핑 인디케이터 표시 (이미 표시 중이 아닌 경우만)
     if (_personaIsTyping[personaId] != true) {
@@ -1511,20 +1514,23 @@ class ChatService extends BaseService {
       debugPrint('💬 Showing typing indicator for ${persona.name}');
     }
 
-    // Wait while showing typing indicator (더 짧게)
-    await Future.delayed(Duration(milliseconds: 700));
+    // Minimal wait to show typing animation
+    await Future.delayed(Duration(milliseconds: 200));
 
     // Combine all messages for context
     final combinedContent = messagesToProcess.map((m) => m.content).join(' ');
     debugPrint('📝 Combined message content: $combinedContent');
 
     // Generate AI response (pass wrong name flag)
+    // Note: Typing indicator will be stopped inside _generateAIResponse just before sending message
     await _generateAIResponse(userId, persona, combinedContent,
         wrongNameDetected: wrongNameDetected);
-
-    // Stop typing indicator
-    _personaIsTyping[personaId] = false;
-    notifyListeners();
+    
+    // Ensure typing indicator is stopped (fallback)
+    if (_personaIsTyping[personaId] == true) {
+      _personaIsTyping[personaId] = false;
+      notifyListeners();
+    }
     debugPrint('✅ Response process completed for ${persona.name}');
   }
 
@@ -2448,6 +2454,12 @@ class ChatService extends BaseService {
       for (int i = 0; i < contents.length; i++) {
         final messagePart = contents[i];
         final isLastMessage = i == contents.length - 1;
+        
+        // 첫 번째 메시지 추가 직전에 타이핑 인디케이터 제거 (부드러운 전환)
+        if (i == 0 && _personaIsTyping[persona.id] == true) {
+          _personaIsTyping[persona.id] = false;
+          // notifyListeners는 메시지 추가와 함께 한 번에 처리
+        }
 
         // Natural typing delays between messages
         if (i > 0) {

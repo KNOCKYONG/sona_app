@@ -1,0 +1,52 @@
+[
+  {
+    "error_key": "ERR1754577944527_4527",
+    "persona_id": "m75bPHXaTys3htRJomws",
+    "persona_name": "소희",
+    "scores": {
+      "overall_coherence": 70.0,
+      "topic_consistency": 3.33,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "친근하게 대화할 수 있는거? 그리고 되게 자연스러워졌어",
+        "ai_response": "헐, 진짜 그거 맞아ㅋㅋㅋ 반말로 하면 대화가 훨씬 부드러워지고",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐 딱히 생각나는 건 없어. 넌 어떻게 생각해?",
+        "ai_response": "아, 그런 것처럼 반말로 하니까 서로 더 편하게 얘기할 수 있는 것",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐 딱히 생각나는 건 없어. 넌 어떻게 생각해?",
+        "ai_response": "아, 그런 것처럼 반말로 하니까 서로 더 편하게 얘기할 수 있는 것",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "맞아ㅋㅋㅋㅋ 아 고칠게 아직도 많네",
+        "ai_response": "그니까ㅋㅋㅋ 근데 좀씩 발전하는 게 중요하니까, 괜찮아.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  }
+]

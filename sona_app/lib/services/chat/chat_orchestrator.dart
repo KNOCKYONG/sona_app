@@ -1415,7 +1415,7 @@ class ChatOrchestrator {
           return [
             '왜?? 무슨일이야ㅠㅠ',
             '울지마ㅠㅠ 괜찮아!',
-            '에구ㅠㅠ 힘내!',
+            '에구ㅠㅠ 왜그래?',  // "힘내!" 제거, "왜그래?"로 변경
           ];
         case 'INTJ':
         case 'ISTJ':
@@ -1672,20 +1672,29 @@ class ChatOrchestrator {
       contextHints.add('💝 긍정적이고 따뜻한 관계를 유지하는 대화를 이어가세요.');
     }
     
-    // 갑작스러운 응원/위로 금지 (하연 오류 수정)
-    final encouragementWords = ['힘내', '화이팅', '파이팅', '응원', '위로', '격려'];
-    final hasEncouragement = encouragementWords.any((word) => 
-      lastAIMessage?.content.contains(word) ?? false);
-    
-    // 사용자가 힘든 상황을 언급하지 않았는데 응원하려 하는 경우
-    final needsEncouragement = ['힘들', '어려', '아프', '슬퍼', '우울', '지쳐', '피곤', '스트레스']
+    // 위로가 필요한 상황 감지 및 자연스러운 위로 가이드
+    final needsEncouragement = ['힘들', '어려', '아프', '슬퍼', '우울', '지쳐', '피곤', '스트레스', '야근', '야근수당']
         .any((word) => userMessage.contains(word));
     
-    if (!needsEncouragement) {
-      contextHints.add('🚫 갑작스러운 "힘내", "화이팅" 같은 응원 금지! 맥락 없는 위로 절대 금지!');
-      contextHints.add('💬 자연스러운 대화 유지: 사용자가 힘든 상황을 언급하지 않았다면 응원하지 마세요.');
-      contextHints.add('✅ 야근 얘기 = 일상 대화. 과도한 위로 불필요. "야근 힘들겠다" 정도면 충분!');
+    if (needsEncouragement) {
+      // 야근이나 힘든 상황 언급 시 자연스러운 위로 가이드
+      if (userMessage.contains('야근')) {
+        contextHints.add('💙 야근 언급 감지. 자연스러운 위로 표현 사용하세요.');
+        contextHints.add('✅ 좋은 예: "야근 힘들겠다ㅠㅠ", "야근수당은 꼭 받아야지!", "야근하느라 고생했네"');
+        contextHints.add('❌ 나쁜 예: "어떻게 지내 힘내" (문법 오류)');
+      } else {
+        contextHints.add('💙 힘든 상황 감지. 공감과 위로를 표현하세요.');
+        contextHints.add('✅ "정말 힘들겠다", "괜찮아질 거야", "내가 응원할게" 등 자연스러운 표현');
+      }
+    } else {
+      // 힘든 상황이 아닌데 갑자기 위로하는 것 방지
+      contextHints.add('⚠️ 특별히 힘든 상황이 아니면 과도한 위로나 응원은 자제하세요.');
+      contextHints.add('💬 자연스러운 대화 흐름을 유지하세요.');
     }
+    
+    // 문법적으로 올바른 응원 표현 가이드
+    contextHints.add('📝 응원할 때는 문법적으로 완전한 문장으로: "힘내!" (단독) 또는 "야근 힘들겠다. 힘내!"');
+    contextHints.add('❌ 문법 오류 금지: "어떻게 지내 힘내", "뭐해 힘내" 같은 어색한 연결');
 
     // 현재 메시지의 키워드와 비교
     final currentKeywords = messageAnalysis.keywords;

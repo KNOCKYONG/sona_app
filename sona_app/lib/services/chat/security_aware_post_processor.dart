@@ -27,6 +27,9 @@ class SecurityAwarePostProcessor {
     
     // 5단계: 이별 관련 부적절한 내용 필터링
     processed = _filterInappropriateBreakupContent(processed);
+    
+    // 6단계: 맥락 없는 응원 표현 필터링
+    processed = _filterUncontextualEncouragement(processed);
 
     // 길이 제한은 ChatOrchestrator에서 메시지 분리로 처리
 
@@ -526,6 +529,43 @@ class SecurityAwarePostProcessor {
     if (text.contains('마지막') && text.contains('인사')) {
       text = text.replaceAll('마지막 인사', '오늘 인사');
     }
+    
+    return text;
+  }
+  
+  /// 문법적으로 어색한 응원 표현 수정
+  static String _filterUncontextualEncouragement(String text) {
+    // 문법적으로 어색한 패턴들만 수정
+    final awkwardPatterns = [
+      // "어떻게 지내 힘내" 같은 문법 오류 패턴
+      RegExp(r'어떻게\s+지내\s+힘내'),
+      RegExp(r'뭐\s*해\s+힘내'),
+      RegExp(r'괜찮아\s+힘내'),
+      // 두 개의 독립적인 문장이 붙어있는 경우
+      RegExp(r'([가-힣]+[아야어])\s+(힘내|화이팅|파이팅)([!?]?)'),
+    ];
+    
+    // 문법 오류 수정
+    if (text.contains('어떻게 지내 힘내')) {
+      // "어떻게 지내 힘내" -> "어떻게 지내? 힘내!"
+      text = text.replaceAll('어떻게 지내 힘내', '어떻게 지내? 힘내!');
+    }
+    
+    if (text.contains('뭐해 힘내')) {
+      text = text.replaceAll('뭐해 힘내', '뭐해? 힘내!');
+    }
+    
+    if (text.contains('괜찮아 힘내')) {
+      text = text.replaceAll('괜찮아 힘내', '괜찮아? 힘내!');
+    }
+    
+    // "너는 요즘 어떻게 지내 힘내?" 같은 패턴 수정
+    text = text.replaceAll(RegExp(r'너는\s+요즘\s+어떻게\s+지내\s+힘내'), '너는 요즘 어떻게 지내?');
+    
+    // 야근 관련 대화에서는 자연스러운 위로 유지
+    // "야근 힘들겠다. 힘내!" (O)
+    // "야근수당 안 나와? 힘내!" (O)
+    // 이런 자연스러운 표현은 그대로 유지
     
     return text;
   }

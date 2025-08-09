@@ -57,6 +57,11 @@ unlinked_spec.ds
 /android/app/upload-keystore.jks
 /android/app/signing/
 
+# Keystore files
+*.keystore
+sona-app-release.keystore
+teamsona-chatapp-release.keystore
+
 # iOS
 /ios/Flutter/App.framework
 /ios/Flutter/Flutter.framework

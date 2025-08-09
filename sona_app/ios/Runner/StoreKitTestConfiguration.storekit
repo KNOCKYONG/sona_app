@@ -1,0 +1,72 @@
+{
+  "identifier": "E95B6849",
+  "nonRenewingSubscriptions": [],
+  "products": [
+    {
+      "displayPrice": "1.99",
+      "familyShareable": false,
+      "internalID": "6FA7C4E9",
+      "localizations": [
+        {
+          "description": "10개의 하트를 구매합니다",
+          "displayName": "하트 10개",
+          "locale": "ko"
+        },
+        {
+          "description": "Get 10 hearts",
+          "displayName": "10 Hearts",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.nohbrother.teamsona.chatapp.hearts_10",
+      "referenceName": "Hearts 10",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "4.99",
+      "familyShareable": false,
+      "internalID": "6FA7C4EA",
+      "localizations": [
+        {
+          "description": "30개의 하트를 구매합니다",
+          "displayName": "하트 30개",
+          "locale": "ko"
+        },
+        {
+          "description": "Get 30 hearts",
+          "displayName": "30 Hearts",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.nohbrother.teamsona.chatapp.hearts_30",
+      "referenceName": "Hearts 30",
+      "type": "Consumable"
+    },
+    {
+      "displayPrice": "7.99",
+      "familyShareable": false,
+      "internalID": "6FA7C4EB",
+      "localizations": [
+        {
+          "description": "50개의 하트를 구매합니다",
+          "displayName": "하트 50개",
+          "locale": "ko"
+        },
+        {
+          "description": "Get 50 hearts",
+          "displayName": "50 Hearts",
+          "locale": "en_US"
+        }
+      ],
+      "productID": "com.nohbrother.teamsona.chatapp.hearts_50",
+      "referenceName": "Hearts 50",
+      "type": "Consumable"
+    }
+  ],
+  "settings": {},
+  "subscriptions": [],
+  "version": {
+    "major": 1,
+    "minor": 2
+  }
+}

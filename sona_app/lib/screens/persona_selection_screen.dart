@@ -130,6 +130,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       if (personaService.availablePersonas.isEmpty || 
           DateTime.now().difference(_lastLoadTime).inMinutes > 10) {
         // 10분 이상 지났거나 데이터가 없을 때만 리로드
+        _lastLoadTime = DateTime.now();
         _loadPersonas();
       }
 
@@ -534,9 +535,27 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       firebaseUserId: authService.user?.uid,
     );
 
-    debugPrint('🆔 Loading personas with userId: $currentUserId');
+    debugPrint('🆔 Checking personas with userId: $currentUserId');
     debugPrint(
-        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] PersonaSelectionScreen starting persona load...');
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] PersonaSelectionScreen checking personas...');
+
+    // PersonaService가 이미 초기화되었는지 확인
+    if (personaService.allPersonas.isNotEmpty && 
+        personaService.matchedPersonasLoaded) {
+      // 이미 데이터가 로드되어 있음 - 재초기화 불필요
+      debugPrint('✅ PersonaService already initialized with:');
+      debugPrint('   - All personas: ${personaService.allPersonas.length}');
+      debugPrint('   - Matched personas: ${personaService.matchedPersonas.length}');
+      
+      // UI 업데이트만 수행
+      setState(() {
+        _isLoading = false;
+      });
+      
+      // 카드 준비
+      _prepareCardItems(personaService.availablePersonas);
+      return;
+    }
 
     // 디바이스 정보 로그 (디버깅용)
     await DeviceIdService.logDeviceInfo();
@@ -578,7 +597,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       }
     }
 
-    // 일반 모드에서는 전체 초기화
+    // PersonaService가 초기화되지 않은 경우에만 초기화
+    debugPrint('⚠️ PersonaService not initialized, initializing now...');
     await personaService.initialize(userId: currentUserId);
 
     // 🔥 매칭된 페르소나 로드 완료 확인

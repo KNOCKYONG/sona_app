@@ -1899,6 +1899,13 @@ class ChatOrchestrator {
       contextHints.add('❌ 새로운 주제로 전환 금지');
     }
     
+    // 무의미한 입력 또는 오타 처리
+    if (_isGibberishOrTypo(userMessage)) {
+      contextHints.add('무의미한 입력 또는 오타 감지! 자연스럽게 다시 물어보거나 이해 못했다고 표현');
+      contextHints.add('예: "뭐라고요?ㅋㅋ", "오타 나신 것 같은데 다시 말해주세요!", "응? 뭐라구요?"');
+      contextHints.add('절대 무의미한 입력에 억지로 의미 부여하지 말 것!');
+    }
+    
     // 확인/반문 질문 처리
     if (_isConfirmationQuestion(userMessage)) {
       contextHints.add('확인 질문이나 반문. 이전 대화 내용과 연관된 구체적인 답변 필요. 절대 주제 바꾸지 말 것!');
@@ -2193,6 +2200,118 @@ class ChatOrchestrator {
     
     // 메시지에 패턴이 포함되어 있는지 확인
     return patterns.any((pattern) => message.contains(pattern));
+  }
+  
+  /// 무의미한 입력 또는 오타 감지
+  bool _isGibberishOrTypo(String message) {
+    final trimmed = message.trim();
+    
+    // 너무 짧은 입력 (1-2글자는 허용)
+    if (trimmed.length <= 2) return false;
+    
+    // 자음/모음만으로 구성된 경우
+    final consonantVowelOnly = RegExp(r'^[ㄱ-ㅎㅏ-ㅣ]+$');
+    if (consonantVowelOnly.hasMatch(trimmed)) {
+      // 3글자 이상의 자음/모음만으로 구성
+      return trimmed.length >= 3;
+    }
+    
+    // 무작위 문자 패턴 감지
+    // 예: "ㄹㄴㄷㄹㅎㅎㅎㅇ", "asdfasdf", "qwerty"
+    final randomPatterns = [
+      RegExp(r'^[ㄱ-ㅎ]{4,}$'), // 자음만 4개 이상
+      RegExp(r'^[ㅏ-ㅣ]{4,}$'), // 모음만 4개 이상
+      RegExp(r'^[a-z]{1,2}(?:[a-z]{1,2})+$', caseSensitive: false), // 반복되는 영문
+      RegExp(r'^(?:qwerty|asdf|zxcv|qwer|asdfg|zxcvb)', caseSensitive: false), // 키보드 패턴
+    ];
+    
+    for (final pattern in randomPatterns) {
+      if (pattern.hasMatch(trimmed)) return true;
+    }
+    
+    // 특수문자만으로 구성
+    if (RegExp(r'^[!@#$%^&*()_+=\[\]{};:,.<>/?\\|`~-]+$').hasMatch(trimmed)) {
+      return true;
+    }
+    
+    // 숫자만으로 구성 (전화번호 등 제외)
+    if (RegExp(r'^\d+$').hasMatch(trimmed) && trimmed.length < 7) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  /// 공격적이거나 부적절한 패턴 감지
+  bool _isHostileOrInappropriate(String message) {
+    final trimmed = message.trim().toLowerCase();
+    
+    // 욕설 패턴 (일부만 표시)
+    final profanityPatterns = [
+      '시발', '씨발', 'ㅅㅂ', 'ㅆㅂ', '병신', 'ㅂㅅ', '개새끼',
+      '니미', '느금마', '꺼져', '닥쳐', '죽어', '멍청', '바보',
+      '쓰레기', '짜증', '싫어', '혐오'
+    ];
+    
+    for (final pattern in profanityPatterns) {
+      if (trimmed.contains(pattern)) return true;
+    }
+    
+    // 반복적인 도발 패턴
+    if (RegExp(r'(.)\1{5,}').hasMatch(trimmed)) { // 같은 문자 6번 이상 반복
+      return true;
+    }
+    
+    return false;
+  }
+  
+  /// 부적절한 입력에 대한 like score 차감 계산
+  int calculateLikePenalty(String message, {List<Message>? recentMessages}) {
+    int penalty = 0;
+    
+    // 무의미한 입력
+    if (_isGibberishOrTypo(message)) {
+      penalty += 5; // -5 likes
+      debugPrint('💔 무의미한 입력 감지: -5 likes');
+      
+      // 연속된 무의미한 입력 체크 (최근 3개 메시지)
+      if (recentMessages != null && recentMessages.isNotEmpty) {
+        int consecutiveGibberish = 0;
+        for (final msg in recentMessages.take(3)) {
+          if (msg.isFromUser && _isGibberishOrTypo(msg.content)) {
+            consecutiveGibberish++;
+          }
+        }
+        
+        if (consecutiveGibberish >= 2) {
+          penalty += 10; // 추가 -10 likes for persistent gibberish
+          debugPrint('💔 연속된 무의미 입력 감지: 추가 -10 likes');
+        }
+      }
+    }
+    
+    // 공격적/부적절한 내용
+    if (_isHostileOrInappropriate(message)) {
+      penalty += 10; // -10 likes
+      debugPrint('💔 공격적 패턴 감지: -10 likes');
+      
+      // 연속된 공격적 패턴 체크
+      if (recentMessages != null && recentMessages.isNotEmpty) {
+        int consecutiveHostile = 0;
+        for (final msg in recentMessages.take(3)) {
+          if (msg.isFromUser && _isHostileOrInappropriate(msg.content)) {
+            consecutiveHostile++;
+          }
+        }
+        
+        if (consecutiveHostile >= 2) {
+          penalty += 15; // 추가 -15 likes for persistent hostility
+          debugPrint('💔 연속된 공격적 패턴: 추가 -15 likes');
+        }
+      }
+    }
+    
+    return penalty;
   }
 
   /// 표면적인 대화인지 확인

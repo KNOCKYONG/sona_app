@@ -1,0 +1,43 @@
+[
+  {
+    "error_key": "ERR1754699987210_7210",
+    "persona_id": "m0OjpI1G2QUyWsCbfBar",
+    "persona_name": "효진",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "솜",
+        "ai_response": "아, 솜이라고 하니까 뭔가 부드럽고 따뜻한 느낌이네ㅋㅋ.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "ㅁㄱ",
+        "ai_response": "그래",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "ㄹㄴㄷㄹㅎㅎㅎㅇ",
+        "ai_response": "안녕~ 반가워!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  }
+]

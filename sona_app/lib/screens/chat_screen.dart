@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -55,11 +56,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   // Reply functionality
   Message? _replyingToMessage;
   final Set<String> _newMessageIds = {}; // Track new messages for animation
+  
+  // 스크롤 디바운싱 관련 변수
+  Timer? _scrollDebounceTimer;
+  bool _isScrolling = false; // 현재 스크롤 중인지 추적
 
   // Service references for dispose method
   ChatService? _chatService;
   String? _userId;
   Persona? _currentPersona;
+  bool _isInitialized = false;  // 🔥 Add initialization flag
   
   // 스크롤 위치 기억용 Map (personaId -> scrollPosition)
   final Map<String, double> _savedScrollPositions = {};
@@ -133,15 +139,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     bool wasHasFocus = false;
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
-      // 포커스가 새로 활성화될 때만 스크롤
+      // 포커스가 새로 활성화될 때만 스크롤 (조건 강화)
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
-        // 키보드가 올라올 때 마지막 메시지로 스크롤
-        // 사용자가 마지막 메시지를 보면서 입력할 수 있도록 함
-        Future.delayed(const Duration(milliseconds: 300), () {
-          if (mounted && _scrollController.hasClients && _focusNode.hasFocus) {
-            _scrollToBottom(force: true, smooth: true);
-          }
-        });
+        // 사용자가 이미 맨 아래에 있을 때만 스크롤
+        if (_isNearBottom) {
+          // 키보드가 올라올 때 마지막 메시지로 스크롤
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted && _scrollController.hasClients && _focusNode.hasFocus && _isNearBottom) {
+              _scrollToBottom(force: false, smooth: true);
+            }
+          });
+        }
       }
       wasHasFocus = hasFocus;
     });
@@ -215,14 +223,33 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona) {
+      // 🔥 Clear any existing chat state before loading new persona
+      setState(() {
+        _isInitialized = false;
+      });
+      
       await personaService.selectPersona(args);
       _currentPersona = args; // Store current persona for dispose method
+      
+      // 🔥 Verify the persona was actually selected
+      if (personaService.currentPersona?.id != args.id) {
+        debugPrint('⚠️ Persona selection mismatch, retrying...');
+        await personaService.selectPersona(args);
+      }
+      
       // 🔧 FIX: Force refresh relationship data from Firebase for accurate display
       debugPrint('🔄 Forcing relationship refresh for persona: ${args.name}');
       await personaService.refreshMatchedPersonasRelationships();
     }
 
     if (personaService.currentPersona != null) {
+      // 🔥 Final verification that we have the correct persona
+      if (_currentPersona != null && 
+          personaService.currentPersona!.id != _currentPersona!.id) {
+        debugPrint('⚠️ Persona mismatch detected, correcting...');
+        await personaService.selectPersona(_currentPersona!);
+      }
+      
       try {
         // Only load chat history if user is authenticated
         if (_userId!.isNotEmpty) {
@@ -266,54 +293,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           final savedPosition = _savedScrollPositions[personaService.currentPersona!.id];
           
           if (savedPosition != null && savedPosition > 0) {
-            // 저장된 위치로 복원
+            // 저장된 위치로 복원 (단순화: 중복 애니메이션 제거)
             debugPrint('📍 Restoring scroll position for ${personaService.currentPersona!.name}: $savedPosition');
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_scrollController.hasClients) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (_scrollController.hasClients) {
-                    // 저장된 위치로 점프
-                    final maxScroll = _scrollController.position.maxScrollExtent;
-                    final targetPosition = savedPosition.clamp(0.0, maxScroll);
-                    _scrollController.jumpTo(targetPosition);
-                    
-                    // 부드러운 애니메이션으로 위치 조정
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      if (mounted && _scrollController.hasClients) {
-                        _scrollController.animateTo(
-                          targetPosition,
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOutCubic,
-                        );
-                      }
-                    });
-                  }
-                });
+                final maxScroll = _scrollController.position.maxScrollExtent;
+                final targetPosition = savedPosition.clamp(0.0, maxScroll);
+                // jumpTo만 사용하여 즉시 위치 복원
+                _scrollController.jumpTo(targetPosition);
               }
             });
           } else {
             // 저장된 위치가 없으면 마지막 메시지로 스크롤
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_scrollController.hasClients) {
-                // First frame: let layout complete
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (_scrollController.hasClients) {
-                    // Second frame: scroll after layout is complete
-                    final maxScroll = _scrollController.position.maxScrollExtent;
-                    _scrollController.jumpTo(maxScroll);
-                    
-                    // Small delay then animate to ensure last message is fully visible
-                    Future.delayed(const Duration(milliseconds: 100), () {
-                      if (mounted && _scrollController.hasClients) {
-                        _scrollController.animateTo(
-                          _scrollController.position.maxScrollExtent,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeOut,
-                        );
-                      }
-                    });
-                  }
-                });
+                // 단순화: 즉시 마지막으로 이동
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
               }
             });
           }
@@ -324,6 +319,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
     } else {
       debugPrint('⚠️ No current persona available for chat');
+    }
+    
+    // 🔥 Mark as initialized after all loading is complete
+    if (mounted) {
+      setState(() {
+        _isInitialized = true;
+      });
     }
   }
 
@@ -603,47 +605,41 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return;
     }
     
+    // 이미 스크롤 중이면 무시 (중복 스크롤 방지)
+    if (_isScrolling && !force) {
+      return;
+    }
+    
     // Clear first load flag after first scroll
     if (_isFirstLoad) {
       _isFirstLoad = false;
     }
 
-    // force가 true면 즉시 실행, 아니면 다음 프레임에서 실행
-    if (force) {
-      if (_scrollController.hasClients) {
-        final targetScroll = _scrollController.position.maxScrollExtent;
+    // 디바운싱: 이전 타이머 취소
+    _scrollDebounceTimer?.cancel();
+    
+    // 디바운싱: 새로운 스크롤 요청을 100ms 후에 실행
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
+      if (!mounted || !_scrollController.hasClients) return;
+      
+      _isScrolling = true;
+      final targetScroll = _scrollController.position.maxScrollExtent;
 
-        if (smooth) {
-          // 부드러운 스크롤 애니메이션
-          _scrollController.animateTo(
-            targetScroll,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
-          );
-        } else {
-          // 즉시 이동
-          _scrollController.jumpTo(targetScroll);
-        }
+      if (smooth) {
+        // 부드러운 스크롤 애니메이션
+        _scrollController.animateTo(
+          targetScroll,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOutCubic,
+        ).then((_) {
+          _isScrolling = false;
+        });
+      } else {
+        // 즉시 이동
+        _scrollController.jumpTo(targetScroll);
+        _isScrolling = false;
       }
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_scrollController.hasClients) {
-          final targetScroll = _scrollController.position.maxScrollExtent;
-
-          if (smooth) {
-            // 부드러운 스크롤 애니메이션
-            _scrollController.animateTo(
-              targetScroll,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeOutCubic,
-            );
-          } else {
-            // 즉시 이동
-            _scrollController.jumpTo(targetScroll);
-          }
-        }
-      });
-    }
+    });
   }
 
   @override
@@ -859,11 +855,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           // 타이핑 인디케이터 상태 변경 감지
                           final isTyping =
                               chatService.isPersonaTyping(currentPersona.id);
-                          if (isTyping && _previousIsTyping != isTyping) {
+                          // 실제로 false -> true로 변경될 때만 스크롤
+                          if (isTyping && !_previousIsTyping && _isNearBottom) {
                             _previousIsTyping = isTyping;
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              _scrollToBottom(force: true);
-                            });
+                            // 사용자가 맨 아래에 있을 때만 스크롤
+                            _scrollToBottom(force: false);
+                          } else if (!isTyping && _previousIsTyping) {
+                            // 타이핑이 끝났을 때 상태만 업데이트
+                            _previousIsTyping = isTyping;
                           }
 
                           // Use ListView.builder with optimizations

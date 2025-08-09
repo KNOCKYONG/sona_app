@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   // 진행률 관련 변수
   double _progress = 0.0;
+  double _targetProgress = 0.0; // 목표 진행률 (스무스 애니메이션용)
   String _loadingMessage = '';
   bool _showProgress = false;
 
@@ -58,8 +59,9 @@ class _SplashScreenState extends State<SplashScreen>
     setState(() {
       _showProgress = true;
       _loadingMessage = '앱을 시작하고 있어요';
-      _progress = 0.1;
+      _targetProgress = 0.1;
     });
+    _animateProgress();
 
     await _animationController.forward();
 
@@ -67,10 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
       debugPrint(
           '🚀 [SplashScreen] Animation completed, starting auth check...');
 
-      setState(() {
-        _progress = 0.2;
-        _loadingMessage = '사용자 정보 확인 중';
-      });
+      _updateProgress(0.2, '사용자 정보 확인 중');
 
       final authService = Provider.of<AuthService>(context, listen: false);
       final userService = Provider.of<UserService>(context, listen: false);
@@ -82,7 +81,7 @@ class _SplashScreenState extends State<SplashScreen>
         debugPrint(
             '🚀 [SplashScreen] Waiting for Firebase Auth initialization...');
         setState(() {
-          _progress = 0.3;
+          _targetProgress = 0.3;
           _loadingMessage = '서버 연결 중';
         });
         await Future.delayed(const Duration(seconds: 1));
@@ -92,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen>
           debugPrint(
               '🚀 [SplashScreen] Auth user is null, waiting for auth state...');
           setState(() {
-            _progress = 0.4;
+            _targetProgress = 0.4;
             _loadingMessage = '인증 확인 중';
           });
           await authService.waitForAuthState();
@@ -106,10 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
           debugPrint(
               '🔐 [SplashScreen] User is authenticated: ${authService.currentUser!.uid}');
 
-          setState(() {
-            _progress = 0.5;
-            _loadingMessage = '프로필 불러오는 중';
-          });
+          _updateProgress(0.5, '프로필 불러오는 중');
 
           // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌 (최대 5초)
           int retries = 0;
@@ -122,9 +118,7 @@ class _SplashScreenState extends State<SplashScreen>
             retries++;
 
             // 진행률 업데이트 (0.5 -> 0.8)
-            setState(() {
-              _progress = 0.5 + (0.3 * (retries / maxRetries));
-            });
+            _updateProgress(0.5 + (0.3 * (retries / maxRetries)), null);
 
             if (retries % 5 == 0) {
               // 1초마다 로그 출력
@@ -141,25 +135,34 @@ class _SplashScreenState extends State<SplashScreen>
                 '🔐 [SplashScreen] Setting user info for PersonaService: ${userService.currentUser!.gender}, genderAll: ${userService.currentUser!.genderAll}');
             personaService.setCurrentUser(userService.currentUser!);
 
-            setState(() {
-              _progress = 0.9;
-              _loadingMessage = '페르소나 준비 중';
-            });
-
-            // PersonaService 초기화
-            debugPrint('🔐 [SplashScreen] Initializing PersonaService...');
+            // PersonaService 완전 초기화 - 진행률 표시와 함께
+            debugPrint('🔐 [SplashScreen] Starting full PersonaService initialization...');
+            
+            // 베이스 진행률 0.8에서 시작
+            final baseProgress = 0.8;
             await personaService.initialize(
-                userId: authService.currentUser!.uid);
+              userId: authService.currentUser!.uid,
+              onProgress: (progress, message) {
+                // PersonaService의 진행률 (0.0~1.0)을 0.8~1.0 범위로 매핑
+                final mappedProgress = baseProgress + (progress * 0.2);
+                _updateProgress(mappedProgress, message);
+                
+                // 페르소나 개수 표시를 위한 특별 처리
+                if (message.contains('페르소나 데이터') && personaService.allPersonas.isNotEmpty) {
+                  final count = personaService.allPersonas.length;
+                  _updateProgress(mappedProgress, '페르소나 준비 중... ($count명)');
+                }
+              },
+            );
+            
+            debugPrint('✅ [SplashScreen] PersonaService fully loaded with ${personaService.allPersonas.length} personas');
 
-            setState(() {
-              _progress = 1.0;
-              _loadingMessage = '완료!';
-            });
+            _updateProgress(1.0, '완료!');
 
             await Future.delayed(const Duration(milliseconds: 300));
 
             debugPrint(
-                '✅ [SplashScreen] All services initialized, navigating to main screen');
+                '✅ [SplashScreen] All services ready, navigating to main screen');
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/main', (route) => false);
           } else {
@@ -173,10 +176,7 @@ class _SplashScreenState extends State<SplashScreen>
           debugPrint(
               '🔐 [SplashScreen] User is not authenticated, showing welcome dialog');
           // 로그인되지 않은 경우
-          setState(() {
-            _progress = 1.0;
-            _loadingMessage = '환영합니다!';
-          });
+          _updateProgress(1.0, '환영합니다!');
           await Future.delayed(const Duration(milliseconds: 500));
           _showWelcomeDialog();
         }
@@ -185,6 +185,31 @@ class _SplashScreenState extends State<SplashScreen>
         _showWelcomeDialog();
       }
     }
+  }
+
+  // 스무스한 프로그레스 애니메이션
+  void _animateProgress() {
+    if (!mounted) return;
+    
+    // 현재 진행률이 목표에 도달하지 않았으면 계속 애니메이션
+    if (_progress < _targetProgress) {
+      setState(() {
+        _progress = _progress + ((_targetProgress - _progress) * 0.1);
+        if ((_targetProgress - _progress).abs() < 0.001) {
+          _progress = _targetProgress;
+        }
+      });
+      Future.delayed(const Duration(milliseconds: 16), _animateProgress);
+    }
+  }
+
+  void _updateProgress(double target, String? message) {
+    if (!mounted) return;
+    setState(() {
+      _targetProgress = target;
+      if (message != null) _loadingMessage = message;
+    });
+    _animateProgress();
   }
 
   void _showWelcomeDialog() {

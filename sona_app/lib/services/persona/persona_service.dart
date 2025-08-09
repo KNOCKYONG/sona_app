@@ -148,9 +148,9 @@ class PersonaService extends BaseService {
     // Check memory cache first
     if (_personaMemoryCache.containsKey(personaId)) {
       final cached = _personaMemoryCache[personaId];
-      // Return cached if less than 5 minutes old
+      // Return cached if less than 1 minute old (reduced from 5 for better consistency)
       if (_lastPersonaCacheUpdate != null &&
-          DateTime.now().difference(_lastPersonaCacheUpdate!).inMinutes < 5) {
+          DateTime.now().difference(_lastPersonaCacheUpdate!).inMinutes < 1) {
         return cached;
       }
     }
@@ -250,7 +250,10 @@ class PersonaService extends BaseService {
   List<Persona> get myPersonas => _matchedPersonas;
 
   /// Initialize service with parallel loading
-  Future<void> initialize({String? userId}) async {
+  Future<void> initialize({
+    String? userId,
+    Function(double progress, String message)? onProgress,
+  }) async {
     // Prevent duplicate initialization
     if (_loadingCompleter != null && !_loadingCompleter!.isCompleted) {
       return _loadingCompleter!.future;
@@ -259,14 +262,17 @@ class PersonaService extends BaseService {
     _loadingCompleter = Completer<void>();
 
     await executeWithLoading(() async {
-      await _initializeNormalMode(userId);
+      await _initializeNormalMode(userId, onProgress);
 
       _loadingCompleter!.complete();
     }, errorContext: 'initialize', showError: false);
   }
 
   /// Normal mode initialization with parallel loading
-  Future<void> _initializeNormalMode(String? userId) async {
+  Future<void> _initializeNormalMode(
+    String? userId,
+    Function(double progress, String message)? onProgress,
+  ) async {
     _currentUserId = await DeviceIdService.getCurrentUserId(
       firebaseUserId: userId,
     );
@@ -276,6 +282,9 @@ class PersonaService extends BaseService {
     // isLoading is managed by BaseService
     notifyListeners();
 
+    // Report progress: Loading matched personas
+    onProgress?.call(0.1, '매칭된 페르소나 확인 중');
+
     // 🔥 매칭된 페르소나를 먼저 로드하여 필터링 준비
     debugPrint(
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting matched personas load...');
@@ -284,6 +293,9 @@ class PersonaService extends BaseService {
     debugPrint(
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
 
+    // Report progress: Loading all personas
+    onProgress?.call(0.3, '페르소나 데이터 불러오는 중');
+
     // 그 다음 나머지 데이터 병렬 로드
     final results = await Future.wait([
       _loadFromFirebaseOrFallback(),
@@ -291,8 +303,14 @@ class PersonaService extends BaseService {
       _loadActionedPersonaIds(),
     ]);
 
+    // Report progress: Checking images
+    onProgress?.call(0.7, '이미지 준비 중');
+
     // 🆕 Check and download new images after loading personas
     await checkAndDownloadNewImages();
+
+    // Report progress: Final preparation
+    onProgress?.call(0.9, '마지막 준비 중');
 
     // Preload first 20 persona images for better performance
     if (_allPersonas.isNotEmpty) {
@@ -301,6 +319,9 @@ class PersonaService extends BaseService {
       debugPrint(
           '🖼️ Preloading images for ${personasToPreload.length} personas');
     }
+
+    // Report completion
+    onProgress?.call(1.0, '완료!');
 
     // isLoading is managed by BaseService
     notifyListeners();
@@ -339,6 +360,17 @@ class PersonaService extends BaseService {
 
   /// Set current persona with cached relationship data
   Future<void> setCurrentPersona(Persona persona) async {
+    // 🔥 Clear previous persona immediately to prevent flash of wrong data
+    if (_currentPersona?.id != persona.id) {
+      debugPrint('🔄 Clearing previous persona: ${_currentPersona?.name}');
+      _currentPersona = null;
+      _currentPersonaCasualSpeech = false;
+      notifyListeners(); // Immediate UI update to clear old data
+      
+      // Small delay to ensure UI is cleared
+      await Future.delayed(const Duration(milliseconds: 50));
+    }
+    
     if (_currentUserId != null) {
       // Check cache first
       final cachedRelationship = _getFromCache(persona.id);
@@ -349,6 +381,7 @@ class PersonaService extends BaseService {
           imageUrls: persona.imageUrls, // Preserve imageUrls
         );
         _currentPersonaCasualSpeech = cachedRelationship.isCasualSpeech;
+        debugPrint('✅ Loaded ${persona.name} from cache (likes: ${cachedRelationship.score})');
         notifyListeners();
         return;
       }
@@ -356,10 +389,10 @@ class PersonaService extends BaseService {
       // Load from Firebase if not cached
       final relationshipData = await _loadUserPersonaRelationship(persona.id);
       if (relationshipData != null) {
+        final likes = relationshipData['likes'] ??
+            relationshipData['relationshipScore'] ?? 50;
         _currentPersona = persona.copyWith(
-          likes: relationshipData['likes'] ??
-              relationshipData['relationshipScore'] ??
-              50,
+          likes: likes,
           imageUrls: persona.imageUrls, // Preserve imageUrls
         );
         _currentPersonaCasualSpeech =
@@ -369,19 +402,20 @@ class PersonaService extends BaseService {
         _addToCache(
             persona.id,
             _CachedRelationship(
-              score: relationshipData['likes'] ??
-                  relationshipData['relationshipScore'] ??
-                  50,
+              score: likes,
               isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
               timestamp: DateTime.now(),
             ));
+        debugPrint('✅ Loaded ${persona.name} from Firebase (likes: $likes)');
       } else {
         _currentPersona = persona;
         _currentPersonaCasualSpeech = false; // 기본값
+        debugPrint('✅ Set ${persona.name} with default values');
       }
     } else {
       _currentPersona = persona;
       _currentPersonaCasualSpeech = false; // 기본값
+      debugPrint('✅ Set ${persona.name} for guest user');
     }
     notifyListeners();
   }
@@ -420,7 +454,6 @@ class PersonaService extends BaseService {
         'userId': _currentUserId!,
         'personaId': personaId,
         'likes': 50,
-        'likes': 50, // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'like',
         'isMatched': true,
@@ -510,7 +543,6 @@ class PersonaService extends BaseService {
         'userId': _currentUserId!,
         'personaId': personaId,
         'likes': 1000, // 🌟 Super like starts with 1000 (perfect love level)
-        'likes': 1000, // 🔧 FIX: Write both fields for consistency
         'isCasualSpeech': false,
         'swipeAction': 'super_like',
         'isMatched': true,

@@ -84,28 +84,27 @@ void main() async {
     };
   }
 
-  // 캐시 매니저 초기화
-  await CacheManager.instance.initialize();
+  // 병렬 초기화로 성능 개선
+  final initFutures = <Future>[
+    CacheManager.instance.initialize(),
+    PreferencesManager.initialize(),
+    HapticService.initialize(),
+    AppInfoService.instance.initialize(),
+  ];
 
-  // PreferencesManager 초기화
-  await PreferencesManager.initialize();
-
-  // ThemeService 초기화
+  // ThemeService와 LocaleService는 의존성이 있으므로 별도 처리
   final themeService = ThemeService();
-  await themeService.initialize();
-
-  // HapticService 초기화
-  await HapticService.initialize();
-
-  // LocaleService 초기화
-  debugPrint('🌐 [Main] Initializing LocaleService...');
   final localeService = LocaleService();
-  await localeService.initialize();
-  debugPrint(
-      '🌐 [Main] LocaleService initialized. Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
+  
+  // 병렬 실행
+  await Future.wait([
+    ...initFutures,
+    themeService.initialize(),
+    localeService.initialize(),
+  ]);
 
-  // AppInfoService 초기화
-  await AppInfoService.instance.initialize();
+  debugPrint('🌐 [Main] All services initialized');
+  debugPrint('🌐 [Main] Locale: ${localeService.locale}, UseSystem: ${localeService.useSystemLanguage}');
   AppInfoService.instance.printDebugInfo();
 
   runApp(SonaApp(

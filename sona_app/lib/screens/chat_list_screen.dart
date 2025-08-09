@@ -31,6 +31,7 @@ class _ChatListScreenState extends State<ChatListScreen>
   bool _hasInitialized = false;
   final Map<String, bool> _leftChatStatus = {};
   final Map<String, int> _cachedLikes = {}; // Like score 로컬 캐시
+  DateTime _lastRefreshTime = DateTime.now(); // 마지막 새로고침 시간
 
   @override
   void initState() {
@@ -42,7 +43,13 @@ class _ChatListScreenState extends State<ChatListScreen>
   Future<void> _loadInitialData() async {
     if (!mounted || _hasInitialized) return;
     _hasInitialized = true;
-    await _initializeChatList();
+    
+    // 데이터가 오래된 경우에만 새로고침 (30초)
+    final now = DateTime.now();
+    if (now.difference(_lastRefreshTime).inSeconds > 30) {
+      await _initializeChatList();
+      _lastRefreshTime = now;
+    }
   }
 
   /// 🔄 채팅 목록 초기화 및 새로고침
@@ -83,33 +90,54 @@ class _ChatListScreenState extends State<ChatListScreen>
 
       // 병렬로 모든 페르소나의 메시지 로드 (성능 개선)
       if (matchedPersonas.isNotEmpty) {
-        final loadFutures = <Future<void>>[];
-        for (final persona in matchedPersonas) {
+        // 보이는 항목만 먼저 로드 (최대 5개)
+        final visiblePersonas = matchedPersonas.take(5).toList();
+        final invisiblePersonas = matchedPersonas.skip(5).toList();
+        
+        // 보이는 항목 먼저 로드
+        final visibleFutures = <Future<void>>[];
+        for (final persona in visiblePersonas) {
           debugPrint(
-              '📨 Loading messages for persona: ${persona.name} (${persona.id})');
-          // loadChatHistory를 사용하여 전체 채팅 기록 로드
-          loadFutures
+              '📨 Priority loading messages for: ${persona.name} (${persona.id})');
+          visibleFutures
               .add(chatService.loadChatHistory(currentUserId, persona.id));
         }
+        await Future.wait(visibleFutures);
+        
+        // UI 업데이트
+        if (mounted) setState(() {});
+        
+        // 나머지 백그라운드에서 로드
+        if (invisiblePersonas.isNotEmpty) {
+          final invisibleFutures = <Future<void>>[];
+          for (final persona in invisiblePersonas) {
+            debugPrint(
+                '📨 Background loading messages for: ${persona.name} (${persona.id})');
+            invisibleFutures
+                .add(chatService.loadChatHistory(currentUserId, persona.id));
+          }
+          Future.wait(invisibleFutures).then((_) {
+            if (mounted) setState(() {});
+          });
+        }
 
-        // 모든 메시지 로드 대기
-        await Future.wait(loadFutures);
-
-        // Like scores 프리로드 (캐싱)
+        // Like scores 병렬 프리로드 (성능 개선)
         if (currentUserId.isNotEmpty) {
-          await RelationScoreService.instance.preloadLikes(
+          // 비동기로 Like scores 프리로드
+          RelationScoreService.instance.preloadLikes(
             userId: currentUserId,
             personaIds: matchedPersonas.map((p) => p.id).toList(),
-          );
-
-          // 로컬 캐시 업데이트
-          for (final persona in matchedPersonas) {
-            final likes = RelationScoreService.instance.getCachedLikes(
-              userId: currentUserId,
-              personaId: persona.id,
-            );
-            _cachedLikes[persona.id] = likes > 0 ? likes : persona.likes;
-          }
+          ).then((_) {
+            // 로컬 캐시 업데이트
+            for (final persona in matchedPersonas) {
+              final likes = RelationScoreService.instance.getCachedLikes(
+                userId: currentUserId,
+                personaId: persona.id,
+              );
+              _cachedLikes[persona.id] = likes > 0 ? likes : persona.likes;
+            }
+            if (mounted) setState(() {});
+          });
         }
       } else {
         debugPrint(
@@ -204,6 +232,34 @@ class _ChatListScreenState extends State<ChatListScreen>
     }
   }
 
+  // 예측 프리로드를 위한 메서드
+  Future<void> _preloadChatData(Persona persona) async {
+    try {
+      final personaService =
+          Provider.of<PersonaService>(context, listen: false);
+      final chatService = Provider.of<ChatService>(context, listen: false);
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final userId = authService.user?.uid;
+      
+      if (userId == null) return;
+      
+      // 이미 선택된 페르소나면 스킵
+      if (personaService.currentPersona?.id == persona.id) return;
+      
+      // 병렬로 프리로드
+      await Future.wait([
+        // 페르소나 선택 프리로드
+        personaService.selectPersona(persona),
+        // 채팅 히스토리 프리로드 (이미 로드된 경우 빠르게 리턴)
+        chatService.loadChatHistory(userId, persona.id),
+      ]);
+      
+      debugPrint('🚀 Preloaded chat data for ${persona.name}');
+    } catch (e) {
+      debugPrint('⚠️ Failed to preload chat data: $e');
+    }
+  }
+
   int _getCachedLikes(BuildContext context, Persona persona) {
     final authService = Provider.of<AuthService>(context, listen: false);
     final userId = authService.user?.uid;
@@ -238,13 +294,17 @@ class _ChatListScreenState extends State<ChatListScreen>
     final colorScheme = theme.colorScheme;
     final textTheme = theme.textTheme;
 
-    // 화면이 처음 빌드될 때 데이터 로드
+    // 화면이 처음 빌드될 때 데이터 로드 (중복 방지)
     if (!_hasInitialized && !_isLoading) {
       _isLoading = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         if (mounted) {
           await _loadInitialData();
-          _isLoading = false;
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         }
       });
     }
@@ -477,11 +537,31 @@ class _ChatListScreenState extends State<ChatListScreen>
                 onTap: () async {
                   // iOS-style light haptic for list item tap
                   await HapticService.lightImpact();
+                  
+                  // 프리로드 완료 대기 (최대 100ms)
+                  await Future.wait([
+                    _preloadChatData(persona),
+                    Future.delayed(const Duration(milliseconds: 100)),
+                  ]).timeout(
+                    const Duration(milliseconds: 100),
+                    onTimeout: () => [],
+                  );
+                  
                   Navigator.pushNamed(
                     context,
                     '/chat',
                     arguments: persona,
                   );
+                },
+                onLongPress: () {
+                  // 길게 눌렀을 때도 프리로드
+                  _preloadChatData(persona);
+                },
+                onHover: (hovering) {
+                  // 마우스 호버 시 프리로드 (웹)
+                  if (hovering) {
+                    _preloadChatData(persona);
+                  }
                 },
                 child: Container(
                   padding:
@@ -497,16 +577,18 @@ class _ChatListScreenState extends State<ChatListScreen>
                   ),
                   child: Row(
                     children: [
-                      // 프로필 이미지
-                      Stack(
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: colorScheme.primary.withOpacity(0.2),
+                      // 프로필 이미지 with Hero animation
+                      Hero(
+                        tag: 'persona_avatar_${persona.id}',
+                        child: Stack(
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: colorScheme.primary.withOpacity(0.2),
                                 width: 2,
                               ),
                             ),
@@ -539,7 +621,8 @@ class _ChatListScreenState extends State<ChatListScreen>
                                 ),
                               ),
                             ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(width: 16),
 

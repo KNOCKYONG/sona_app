@@ -484,6 +484,30 @@ class ChatService extends BaseService {
 
         // Note: SnackBar will be shown from the UI layer instead
       }
+      
+      // Check for inappropriate content and apply penalties
+      // Get recent messages for consecutive pattern checking
+      final recentMessages = _messagesByPersona[persona.id] ?? [];
+      final likePenalty = ChatOrchestrator.instance.calculateLikePenalty(
+        content,
+        recentMessages: recentMessages.reversed.take(5).toList(),
+      );
+      
+      if (likePenalty > 0) {
+        debugPrint('💔 Applying like penalty: -$likePenalty for inappropriate content');
+        
+        final currentLikes = await RelationScoreService.instance.getLikes(
+          userId: userId,
+          personaId: persona.id,
+        );
+
+        await RelationScoreService.instance.updateLikes(
+          userId: userId,
+          personaId: persona.id,
+          likeChange: -likePenalty,
+          currentLikes: currentLikes,
+        );
+      }
 
       // Create user message
       final userMessage = Message(
@@ -2502,32 +2526,44 @@ class ChatService extends BaseService {
         final messagePart = contents[i];
         final isLastMessage = i == contents.length - 1;
         
-        // 첫 번째 메시지 추가 직전에 타이핑 인디케이터 제거 (부드러운 전환)
+        // 첫 번째 메시지 전: 타이핑 인디케이터 제거하고 메시지 표시
         if (i == 0 && _personaIsTyping[persona.id] == true) {
           _personaIsTyping[persona.id] = false;
-          // notifyListeners는 메시지 추가와 함께 한 번에 처리
+          notifyListeners();
+          await Future.delayed(const Duration(milliseconds: 100)); // 부드러운 전환
         }
 
-        // Natural typing delays between messages
+        // 두 번째 이후 메시지: 타이핑 인디케이터 표시 → 대기 → 제거 → 메시지 표시
         if (i > 0) {
+          // 타이핑 인디케이터 표시
+          _personaIsTyping[persona.id] = true;
+          notifyListeners();
+          
+          // 메시지 길이에 따른 타이핑 시간 계산
           final charCount = messagePart.length;
-          int delay;
+          int typingDuration;
 
           if (charCount <= 20) {
-            delay = 300 + Random().nextInt(500);
+            typingDuration = 800 + Random().nextInt(400);  // 0.8-1.2초
           } else if (charCount <= 40) {
-            delay = 800 + Random().nextInt(700);
+            typingDuration = 1200 + Random().nextInt(600); // 1.2-1.8초
           } else {
-            delay = 1200 + Random().nextInt(800);
+            typingDuration = 1800 + Random().nextInt(700); // 1.8-2.5초
           }
 
+          // 생각하는 듯한 패턴이 있으면 시간 추가
           if (messagePart.contains('음') ||
               messagePart.contains('그') ||
               messagePart.contains('...')) {
-            delay += 300 + Random().nextInt(400);
+            typingDuration += 500 + Random().nextInt(500);
           }
 
-          await Future.delayed(Duration(milliseconds: delay));
+          await Future.delayed(Duration(milliseconds: typingDuration));
+          
+          // 타이핑 인디케이터 제거
+          _personaIsTyping[persona.id] = false;
+          notifyListeners();
+          await Future.delayed(const Duration(milliseconds: 100)); // 부드러운 전환
         }
 
         // 각 메시지에 해당하는 번역 가져오기
@@ -2599,7 +2635,7 @@ class ChatService extends BaseService {
           _messages = _messagesByPersona[persona.id]!;
         }
 
-        // Trigger haptic feedback for AI message
+        // Trigger callback for AI message (햅틱 제거)
         if (onAIMessageReceived != null) {
           onAIMessageReceived!();
         }
@@ -2697,7 +2733,7 @@ class ChatService extends BaseService {
           _messages = _messagesByPersona[persona.id]!;
         }
 
-        // Trigger haptic feedback for AI message
+        // Trigger callback for AI message (햅틱 제거)
         if (onAIMessageReceived != null) {
           onAIMessageReceived!();
         }

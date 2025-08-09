@@ -4,6 +4,7 @@ import 'package:animations/animations.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
+import '../services/chat/chat_service.dart';
 import '../widgets/common/sona_logo.dart';
 import '../l10n/app_localizations.dart';
 
@@ -138,24 +139,52 @@ class _SplashScreenState extends State<SplashScreen>
             // PersonaService 완전 초기화 - 진행률 표시와 함께
             debugPrint('🔐 [SplashScreen] Starting full PersonaService initialization...');
             
-            // 베이스 진행률 0.8에서 시작
-            final baseProgress = 0.8;
+            // 베이스 진행률 0.6에서 시작
+            final baseProgress = 0.6;
             await personaService.initialize(
               userId: authService.currentUser!.uid,
               onProgress: (progress, message) {
-                // PersonaService의 진행률 (0.0~1.0)을 0.8~1.0 범위로 매핑
-                final mappedProgress = baseProgress + (progress * 0.2);
+                // PersonaService의 진행률 (0.0~1.0)을 0.6~0.9 범위로 매핑
+                final mappedProgress = baseProgress + (progress * 0.3);
                 _updateProgress(mappedProgress, message);
                 
                 // 페르소나 개수 표시를 위한 특별 처리
                 if (message.contains('페르소나 데이터') && personaService.allPersonas.isNotEmpty) {
                   final count = personaService.allPersonas.length;
                   _updateProgress(mappedProgress, '페르소나 준비 중... ($count명)');
+                } else if (message.contains('매칭된 페르소나') && personaService.matchedPersonas.isNotEmpty) {
+                  final count = personaService.matchedPersonas.length;
+                  _updateProgress(mappedProgress, '대화 상대 확인 중... ($count명)');
                 }
               },
             );
             
             debugPrint('✅ [SplashScreen] PersonaService fully loaded with ${personaService.allPersonas.length} personas');
+            debugPrint('✅ [SplashScreen] Matched personas: ${personaService.matchedPersonas.length}');
+
+            // 대화 데이터 미리 로드
+            if (personaService.matchedPersonas.isNotEmpty) {
+              _updateProgress(0.9, '대화 내용 불러오는 중...');
+              
+              final chatService = Provider.of<ChatService>(context, listen: false);
+              chatService.setCurrentUserId(authService.currentUser!.uid);
+              
+              // 최대 5개의 매칭된 페르소나 대화만 미리 로드 (성능 최적화)
+              final personasToPreload = personaService.matchedPersonas.take(5).toList();
+              final chatFutures = <Future<void>>[];
+              
+              for (final persona in personasToPreload) {
+                debugPrint('💬 [SplashScreen] Preloading chat for ${persona.name}');
+                chatFutures.add(
+                  chatService.loadChatHistory(authService.currentUser!.uid, persona.id)
+                );
+              }
+              
+              await Future.wait(chatFutures);
+              debugPrint('✅ [SplashScreen] Chat histories preloaded for ${personasToPreload.length} personas');
+              
+              _updateProgress(0.95, '대화 준비 완료!');
+            }
 
             _updateProgress(1.0, '완료!');
 

@@ -37,7 +37,7 @@ class PersonaService extends BaseService {
 
   // Caching system
   final Map<String, _CachedRelationship> _relationshipCache = {};
-  static const Duration _cacheTTL = Duration(minutes: 5);
+  static const Duration _cacheTTL = Duration(hours: 24);
   static const int _maxCacheSize = 100;
 
   // Memory cache for persona data
@@ -282,26 +282,29 @@ class PersonaService extends BaseService {
     // isLoading is managed by BaseService
     notifyListeners();
 
+    // Report progress: Loading all personas first
+    onProgress?.call(0.1, '페르소나 데이터 불러오는 중');
+
+    // 🔥 먼저 모든 페르소나 데이터를 로드
+    debugPrint(
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting all personas load...');
+    await _loadFromFirebaseOrFallback();
+    debugPrint(
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] All personas loaded: ${_allPersonas.length}');
+
     // Report progress: Loading matched personas
-    onProgress?.call(0.1, '매칭된 페르소나 확인 중');
+    onProgress?.call(0.3, '매칭된 페르소나 확인 중');
 
-    // 🔥 매칭된 페르소나를 먼저 로드하여 필터링 준비
-    debugPrint(
-        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting matched personas load...');
-    await _loadMatchedPersonas();
-    _matchedPersonasLoaded = true;
-    debugPrint(
-        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
-
-    // Report progress: Loading all personas
-    onProgress?.call(0.3, '페르소나 데이터 불러오는 중');
-
-    // 그 다음 나머지 데이터 병렬 로드
+    // 이제 _allPersonas가 로드된 후 매칭된 페르소나 로드
     final results = await Future.wait([
-      _loadFromFirebaseOrFallback(),
+      _loadMatchedPersonas(),
       _loadSwipedPersonas(),
       _loadActionedPersonaIds(),
     ]);
+    
+    _matchedPersonasLoaded = true;
+    debugPrint(
+        '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
 
     // Report progress: Checking images
     onProgress?.call(0.7, '이미지 준비 중');
@@ -2258,8 +2261,8 @@ class PersonaService extends BaseService {
       if (timestamp == null) return true;
 
       final cacheTime = DateTime.parse(timestamp);
-      // Consider cache stale after 1 hour
-      return DateTime.now().difference(cacheTime).inHours >= 1;
+      // Consider cache stale after 24 hours
+      return DateTime.now().difference(cacheTime).inHours >= 24;
     } catch (e) {
       return true;
     }

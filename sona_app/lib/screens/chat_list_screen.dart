@@ -78,9 +78,14 @@ class _ChatListScreenState extends State<ChatListScreen>
       }
 
       // 3. 🔥 PersonaService가 초기화되지 않았으면 초기화
-      if (personaService.matchedPersonas.isEmpty) {
-        debugPrint('🔄 Initializing PersonaService for chat list...');
+      if (personaService.allPersonas.isEmpty) {
+        debugPrint('🔄 PersonaService not initialized, initializing now...');
         await personaService.initialize(userId: currentUserId);
+      } else if (!personaService.matchedPersonasLoaded) {
+        debugPrint('🔄 Loading matched personas for chat list...');
+        await personaService.loadMatchedPersonasIfNeeded();
+      } else {
+        debugPrint('✅ PersonaService already initialized with ${personaService.matchedPersonas.length} matched personas');
       }
 
       // 4. 매칭된 페르소나들의 채팅 메시지 로드

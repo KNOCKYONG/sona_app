@@ -558,17 +558,8 @@ class ChatOrchestrator {
         targetLanguage: userLanguage,  // 언어 정보 전달
       );
 
-      // 6단계: 간단한 후처리 (텍스트 정리만, 강제 자르기 제거)
-      final processedResponse = SecurityAwarePostProcessor.processResponse(
-        rawResponse: rawResponse,
-        persona: completePersona,
-        userNickname: userNickname,
-        userMessage: userMessage,
-        recentMessages: chatHistory.map((m) => m.content).toList(),
-      );
-
-      // 6.1단계: 다국어 응답 파싱 (사용자가 한국어가 아닌 언어를 선호하는 경우)
-      String finalResponse = processedResponse;
+      // 6단계: 먼저 다국어 응답 파싱 (태그가 있는 원본 응답 파싱)
+      String finalResponse = rawResponse;
       String? translatedContent;
       List<String>? translatedContents; // 각 메시지별 번역 저장
       
@@ -576,7 +567,7 @@ class ChatOrchestrator {
       if (userLanguage != null && userLanguage != 'ko') {
         debugPrint('🌍 Processing multilingual response for language: $userLanguage');
         final multilingualParsed =
-            _parseMultilingualResponse(processedResponse, userLanguage);
+            _parseMultilingualResponse(rawResponse, userLanguage);
         
         // 한국어 응답이 파싱되면 사용, 아니면 원본 사용
         if (multilingualParsed['korean'] != null) {
@@ -586,9 +577,18 @@ class ChatOrchestrator {
         } else {
           debugPrint('⚠️ Failed to parse tags, using original response');
           // 태그가 없으면 전체를 한국어로 간주
-          finalResponse = processedResponse;
+          finalResponse = rawResponse;
         }
       }
+
+      // 6.1단계: 파싱된 한국어 응답에 대해 후처리 적용
+      finalResponse = SecurityAwarePostProcessor.processResponse(
+        rawResponse: finalResponse,
+        persona: completePersona,
+        userNickname: userNickname,
+        userMessage: userMessage,
+        recentMessages: chatHistory.map((m) => m.content).toList(),
+      );
 
       // 6.5단계: 만남 제안 필터링 및 초기 인사 패턴 방지
       var filteredResponse = _filterMeetingAndGreetingPatterns(
@@ -700,7 +700,7 @@ class ChatOrchestrator {
           score: currentScore,
           personaName: completePersona.name,
           userMessage: userMessage,
-          aiResponse: processedResponse,
+          aiResponse: finalResponse,
           isCasualSpeech: completePersona.personality.contains('casual') || 
                           completePersona.personality.contains('반말'),
         );
@@ -715,7 +715,7 @@ class ChatOrchestrator {
       Map<String, dynamic> metadata = {
         'processingTime': DateTime.now().millisecondsSinceEpoch,
         'promptTokens': _estimateTokens(prompt),
-        'responseTokens': _estimateTokens(processedResponse),
+        'responseTokens': _estimateTokens(finalResponse),
         'messageCount': responseContents.length,
         'hasTranslation': translatedContent != null,
       };
@@ -972,29 +972,48 @@ class ChatOrchestrator {
     
     if (hasKoTag && hasLangTag) {
       // 태그가 모두 있으면 정확히 파싱
-      // [KO] 다음 내용부터 다음 태그 또는 끝까지
-      final koPattern = RegExp(
-          r'\[KO\]\s*(.+?)(?:\[$langTag\]|$)',
-          multiLine: true,
-          dotAll: true);
-      final koMatch = koPattern.firstMatch(response);
+      // [KO]와 [EN] 태그의 위치 찾기
+      final koIndex = response.indexOf('[KO]');
+      final langIndex = response.indexOf('[$langTag]');
+      
+      if (koIndex != -1 && langIndex != -1 && langIndex > koIndex) {
+        // [KO] 태그 다음부터 [EN] 태그 전까지가 한국어 내용
+        final koreanStart = koIndex + 4; // '[KO]'.length = 4
+        final koreanEnd = langIndex;
+        result['korean'] = response.substring(koreanStart, koreanEnd).trim();
+        
+        // [EN] 태그 다음부터 끝까지 또는 다음 태그까지가 영어 번역
+        final translationStart = langIndex + langTag.length + 2; // '[$langTag]'.length
+        result['translated'] = response.substring(translationStart).trim();
+        
+        debugPrint('✅ Successfully parsed with index method:');
+        debugPrint('   Korean: ${result['korean']}');
+        debugPrint('   Translation: ${result['translated']}');
+      } else {
+        // Fallback to regex if index method fails
+        final koPattern = RegExp(
+            r'\[KO\]\s*(.+?)\s*\[$langTag\]',
+            multiLine: true,
+            dotAll: true);
+        final koMatch = koPattern.firstMatch(response);
 
-      // [LANG] 태그로 시작하는 번역 부분 찾기
-      final langPattern = RegExp(
-          r'\[$langTag\]\s*(.+?)(?:\[|$)',
-          multiLine: true,
-          dotAll: true);
-      final langMatch = langPattern.firstMatch(response);
+        // [LANG] 태그로 시작하는 번역 부분 찾기
+        final langPattern = RegExp(
+            r'\[$langTag\]\s*(.+?)$',
+            multiLine: true,
+            dotAll: true);
+        final langMatch = langPattern.firstMatch(response);
 
-      // 매칭된 내용 추출
-      if (koMatch != null) {
-        result['korean'] = koMatch.group(1)?.trim();
-        debugPrint('✅ Found Korean: ${result['korean']}');
-      }
+        // 매칭된 내용 추출
+        if (koMatch != null) {
+          result['korean'] = koMatch.group(1)?.trim();
+          debugPrint('✅ Found Korean with regex: ${result['korean']}');
+        }
 
-      if (langMatch != null) {
-        result['translated'] = langMatch.group(1)?.trim();
-        debugPrint('✅ Found Translation: ${result['translated']}');
+        if (langMatch != null) {
+          result['translated'] = langMatch.group(1)?.trim();
+          debugPrint('✅ Found Translation with regex: ${result['translated']}');
+        }
       }
     } else if (hasKoTag && !hasLangTag) {
       // [KO] 태그만 있는 경우 - 전체를 한국어로 처리

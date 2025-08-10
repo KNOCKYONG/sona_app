@@ -15,6 +15,7 @@ import '../services/relationship/relation_score_service.dart';
 import '../widgets/skeleton/skeleton_widgets.dart';
 import '../l10n/app_localizations.dart';
 import 'chat_screen.dart';
+import '../utils/performance_monitor.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -55,6 +56,9 @@ class _ChatListScreenState extends State<ChatListScreen>
 
   /// 🔄 채팅 목록 초기화 및 새로고침
   Future<void> _initializeChatList() async {
+    // 성능 측정 시작
+    PerformanceMonitor.startMeasure('chat_list_init');
+    
     final chatService = Provider.of<ChatService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -96,6 +100,9 @@ class _ChatListScreenState extends State<ChatListScreen>
 
       // 병렬로 모든 페르소나의 메시지 로드 (성능 개선)
       if (matchedPersonas.isNotEmpty) {
+        // 메시지 로드 성능 측정
+        PerformanceMonitor.startMeasure('message_load');
+        
         // 보이는 항목만 먼저 로드 (최대 5개)
         final visiblePersonas = matchedPersonas.take(5).toList();
         final invisiblePersonas = matchedPersonas.skip(5).toList();
@@ -109,6 +116,9 @@ class _ChatListScreenState extends State<ChatListScreen>
               .add(chatService.loadChatHistory(currentUserId, persona.id));
         }
         await Future.wait(visibleFutures);
+        
+        final loadTime = PerformanceMonitor.endMeasure('message_load');
+        debugPrint('📊 Visible messages loaded in ${loadTime}ms');
         
         // UI 업데이트
         if (mounted) setState(() {});
@@ -177,8 +187,18 @@ class _ChatListScreenState extends State<ChatListScreen>
       if (mounted) {
         setState(() {});
       }
+      
+      // 전체 초기화 시간 측정
+      final totalTime = PerformanceMonitor.endMeasure('chat_list_init');
+      debugPrint('📊 Total chat list init time: ${totalTime}ms');
+      
+      // 성능 리포트 출력 (디버그 모드)
+      if (totalTime > 1000) {
+        PerformanceMonitor.printReport();
+      }
     } catch (e) {
       debugPrint('❌ Error initializing chat list: $e');
+      PerformanceMonitor.endMeasure('chat_list_init');
     }
   }
 

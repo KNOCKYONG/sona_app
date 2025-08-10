@@ -983,8 +983,26 @@ class ChatOrchestrator {
         result['korean'] = response.substring(koreanStart, koreanEnd).trim();
         
         // [EN] 태그 다음부터 끝까지 또는 다음 태그까지가 영어 번역
-        final translationStart = langIndex + langTag.length + 2; // '[$langTag]'.length
-        result['translated'] = response.substring(translationStart).trim();
+        // '[EN]'.length = 4 (대괄호 포함)
+        final translationStart = langIndex + 4;
+        var translatedText = response.substring(translationStart).trim();
+        
+        // 과도한 띄어쓰기 제거 (2개 이상의 공백을 1개로)
+        translatedText = translatedText.replaceAll(RegExp(r'\s{2,}'), ' ');
+        
+        // 번역에 한글이 섞여있는지 검증
+        final koreanPattern = RegExp(r'[가-힣]');
+        if (koreanPattern.hasMatch(translatedText)) {
+          debugPrint('⚠️ Warning: Korean text found in translation: $translatedText');
+          // 한글이 포함된 부분 제거 시도
+          final cleanTranslation = translatedText.split(koreanPattern).first.trim();
+          if (cleanTranslation.isNotEmpty) {
+            translatedText = cleanTranslation;
+            debugPrint('🔧 Cleaned translation: $translatedText');
+          }
+        }
+        
+        result['translated'] = translatedText;
         
         debugPrint('✅ Successfully parsed with index method:');
         debugPrint('   Korean: ${result['korean']}');
@@ -1011,7 +1029,10 @@ class ChatOrchestrator {
         }
 
         if (langMatch != null) {
-          result['translated'] = langMatch.group(1)?.trim();
+          var translatedText = langMatch.group(1)?.trim() ?? '';
+          // 과도한 띄어쓰기 제거
+          translatedText = translatedText.replaceAll(RegExp(r'\s{2,}'), ' ');
+          result['translated'] = translatedText;
           debugPrint('✅ Found Translation with regex: ${result['translated']}');
         }
       }
@@ -1031,7 +1052,10 @@ class ChatOrchestrator {
     
     // 번역이 없으면 간단한 번역 생성 (외국어 입력 시 무조건 번역 활성화)
     if (result['translated'] == null && result['korean'] != null && targetLanguage != 'ko') {
-      result['translated'] = _generateSimpleTranslation(result['korean']!, targetLanguage);
+      var fallbackTranslation = _generateSimpleTranslation(result['korean']!, targetLanguage);
+      // 과도한 띄어쓰기 제거
+      fallbackTranslation = fallbackTranslation?.replaceAll(RegExp(r'\s{2,}'), ' ') ?? '';
+      result['translated'] = fallbackTranslation;
       debugPrint('💬 Generated fallback translation for $targetLanguage');
     }
 

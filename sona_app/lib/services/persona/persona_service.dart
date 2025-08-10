@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -723,7 +724,7 @@ class PersonaService extends BaseService {
         currentScore: currentScore,
       );
 
-      final newScore = (currentScore + change).clamp(0, 1000);
+      final newScore = max(0, currentScore + change);  // 상한선 제거, 하한선만 0으로 유지
       debugPrint('📊 Score calculation: $currentScore + $change = $newScore');
 
       // Update relationship in Firebase

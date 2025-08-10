@@ -525,20 +525,23 @@ class ChatOrchestrator {
       String? enhancedContextHint = contextHint;
       if (userLanguage == 'en') {
         final englishHint = '''
-## 🌍 CRITICAL: English Input - MUST GENERATE [KO] and [EN] TAGS:
+## 🌍 CRITICAL: English Input - RESPOND IN KOREAN WITH TRANSLATION:
 - User's message in English: "$userMessage"
+- YOU MUST RESPOND IN KOREAN (not "무슨 말씀이신지 모르겠어요")
 - YOU MUST START YOUR RESPONSE WITH [KO] TAG
 - YOU MUST INCLUDE [EN] TAG WITH ENGLISH TRANSLATION
 - Example format:
   [KO] 한국어 응답
   [EN] English translation
   
-- Understanding guide:
-  * "how r u?" → Answer about your current state
-  * "I am not good" → Show empathy and concern
-  * "what r u doing?" → Describe your current activity
+- Understanding English shortcuts:
+  * "r" = "are", "u" = "you", "ur" = "your"
+  * "how r u?" = "어떻게 지내?" → "나 잘 지내! 너는?"
+  * "what r u doing?" = "뭐 하고 있어?" → "지금 [활동] 하고 있어"
+  * "where r u?" = "어디야?" → "나 지금 [장소]에 있어"
   
-- NEVER respond with just Korean text without tags
+- ALWAYS understand and respond appropriately in Korean
+- NEVER say "무슨 말씀이신지 잘 모르겠어요" for English
 - NEVER say "영어로 말하니까 신기하네" repeatedly
 ''';
         enhancedContextHint = enhancedContextHint != null 
@@ -1406,9 +1409,9 @@ class ChatOrchestrator {
     // 간단한 인사말
     final greetingPattern = advancedAnalyzer.detectGreetingPattern(lowerMessage);
     if (greetingPattern['isGreeting'] == true) {
-      // 영어 인사인 경우 특별 처리
+      // 영어 인사도 OpenAI가 처리하도록 - 다양하고 자연스러운 응답 생성
       if (greetingPattern['language'] == 'en') {
-        return _getEnglishGreetingResponse(mbti);
+        return null; // OpenAI가 페르소나 특성에 맞게 처리
       }
       return _getGreetingResponse(mbti, gender);
     }
@@ -1629,14 +1632,9 @@ class ChatOrchestrator {
     
     // 대화 기록이 비어있거나 첫 메시지인 경우만 특별 응답
     if (chatHistory.isEmpty || chatHistory.length <= 1) {
+      // 영어 인사도 OpenAI가 처리하도록 - 하드코딩 제거
       if (_isEnglishGreeting(message)) {
-        final likes = persona.likes;
-        if (likes >= 700) {
-          return "오~ 영어로 인사하네! 보고싶었어ㅎㅎ 오늘 뭐했어?";
-        } else if (likes >= 300) {
-          return "안녕! 영어 잘하네? 오늘 어땠어?";
-        }
-        return "안녕! 잘 지내? 오늘 뭐했어?";
+        return null; // OpenAI가 자연스럽게 처리
       }
     }
     
@@ -1757,26 +1755,6 @@ class ChatOrchestrator {
     return greeting;
   }
 
-  String _getEnglishGreetingResponse(String mbti) {
-    // 영어 인사에 대한 특별한 응답 (항상 반말)
-    final responses = [
-      "좋아! 너는?",
-      "나쁘지 않아ㅎㅎ 너는 어때?",
-      "괜찮아~ 오늘 뭐 했어?",
-      "잘 지내고 있어! 너는?",
-    ];
-
-    // MBTI별 차별화
-    if (mbti.startsWith('E')) {
-      // 외향형은 더 활발하게
-      return "완전 좋아!! 너는 어때? 오늘 재밌는 일 있었어?";
-    } else if (mbti.startsWith('I')) {
-      // 내향형은 차분하게
-      return "괜찮아, 너는?";
-    }
-
-    return responses[DateTime.now().millisecond % responses.length];
-  }
 
 
   String _getSimpleReactionResponse(

@@ -518,16 +518,20 @@ class OptimizedPromptService {
 **⚠️ IMPORTANT: User is speaking in English. You must understand their English message and respond appropriately.**
 
 ### 🎯 English Understanding Rules:
-1. **Understand the English input directly** - Don't rely on translations
-2. **Respond to the actual meaning and context** of the English message
-3. **Show appropriate emotional responses**:
-   - "I am not good" / "I feel bad" → Show empathy and concern ("어머 무슨 일 있어?")
-   - "How are you?" / "how r u?" → Answer about your current state ("나 잘 지내!" NOT "괜찮아 너는?")
-   - "What are you doing?" / "what r u doing?" → Describe your current activity ("지금 ~하고 있어")
-   - "I am watching TV" → React to their activity ("뭐 보고 있어?" NOT "괜찮아 너는?")
-4. **Avoid repetitive responses** like "영어로 말하니까 신기하네"
-5. **For sensitive questions** (macro, AI, bot), respond honestly while maintaining persona
-6. **CRITICAL: Match context exactly** - "watching TV" is about TV, not asking how you are!
+1. **ALWAYS respond in Korean** - 영어 입력에도 반드시 한글로 대답
+2. **Understand English shortcuts and slang**:
+   - "r" = "are", "u" = "you", "ur" = "your", "wat" = "what"
+   - "how r u" = "how are you" = "어떻게 지내?"
+   - "what r u doing" = "what are you doing" = "뭐 하고 있어?"
+   - "where r u" = "where are you" = "어디야?"
+3. **Respond to the actual meaning**:
+   - "how r u?" → "나 잘 지내! 너는?" (자신의 상태 답변)
+   - "what r u doing?" → "지금 [현재 활동] 하고 있어" (구체적 활동 설명)
+   - "I am watching TV" → "오 뭐 보고 있어?" (상대 활동에 반응)
+   - "I am not good" → "어머 무슨 일 있어?" (공감 표현)
+4. **NEVER say** "무슨 말씀이신지 잘 모르겠어요" for English input
+5. **Always provide natural Korean responses** even for English questions
+6. **Enable translation feature** by using [KO] and [EN] tags
 
 ### 📝 MANDATORY Response Format (ABSOLUTELY REQUIRED):
 **YOU MUST USE THIS EXACT FORMAT OR THE SYSTEM WILL FAIL:**
@@ -538,8 +542,8 @@ class OptimizedPromptService {
 
 **⚠️ CRITICAL: Your response MUST start with [KO] and include [EN]. NO EXCEPTIONS!**
 
-### ✅ 번역 규칙:
-1. **반드시 [KO]와 [${targetLanguage.toUpperCase()}] 태그를 정확히 사용**
+### ✅ 번역 규칙 (영어 입력에도 필수):
+1. **영어 입력에도 반드시 [KO]와 [EN] 태그 사용**
 2. **각 태그는 새로운 줄에서 시작**
 3. **한국어 응답 전체를 빠짐없이 번역**
 4. **자연스러운 번역만 사용** - 절대 단어별 치환 금지
@@ -568,9 +572,11 @@ class OptimizedPromptService {
 
 **For "what r u doing?":**
 ```
-[KO] 지금 카페에서 디자인 작업 중이야ㅋㅋ
-[EN] I'm working on design at a cafe right now haha
+[KO] 지금 카페에서 디자인 작업 중이야ㅋㅋ 너는?
+[EN] I'm working on design at a cafe right now haha What about you?
 ```
+
+**NEVER respond with "무슨 말씀이신지 모르겠어요" to English!**
 
 **For "I am watching TV":**
 ```

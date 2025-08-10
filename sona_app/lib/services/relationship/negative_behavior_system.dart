@@ -58,13 +58,43 @@ class NegativeBehaviorSystem {
 
   /// 레벨 3: 심각한 위협/욕설 (즉시 이별)
   NegativeAnalysisResult _checkSevereLevel(String message) {
-    // 폭력적 위협
+    // 애니메이션/게임 캐릭터 화이트리스트 (3인칭 서술로 간주)
+    final characterWhitelist = [
+      '아르민', '에렌', '미카사', '리바이', '하지메', '사스케', '나루토',
+      '루피', '조로', '상디', '나미', '탄지로', '네즈코', '이노스케',
+      '고죠', '이타도리', '메구미', '노바라', '스쿠나',
+      '키리토', '아스나', '유지오', '앨리스',
+      '시로', '사쿠라', '히나타', '카구야', '치요',
+      '레이', '아스카', '신지', '미사토', '카오루',
+      '아냐', '요르', '로이드', '본드',
+      '데쿠', '바쿠고', '토도로키', '올마이트',
+      '이치고', '루키아', '우류', '오리히메',
+      '캐릭터', '주인공', '히로인', '빌런', '악역', '보스',
+      '엔딩', '스포', '작품', '애니', '만화', '드라마', '영화'
+    ];
+    
+    // 캐릭터 관련 맥락인지 확인
+    bool isCharacterContext = false;
+    for (final character in characterWhitelist) {
+      if (message.contains(character)) {
+        // "아르민이 죽었다"처럼 3인칭 서술인 경우
+        if (message.contains('$character이') || 
+            message.contains('$character가') ||
+            message.contains('$character는') ||
+            message.contains('$character도') ||
+            message.contains(character)) {  // 캐릭터 이름만 있어도 맥락으로 인정
+          isCharacterContext = true;
+          break;
+        }
+      }
+    }
+    
+    // 폭력적 위협 (캐릭터 맥락이 아닌 경우만)
     final violenceThreats = [
       '죽어',
       '죽을',
       '죽여',
       '죽이',
-      '자살',
       '살인',
       '칼로',
       '총으로',
@@ -104,12 +134,35 @@ class NegativeBehaviorSystem {
       '악마'
     ];
 
-    if (violenceThreats.any((word) => message.contains(word))) {
+    // 자살 암시 표현은 캐릭터 맥락과 관계없이 레벨 2로 처리
+    if (message.contains('죽고 싶') || message.contains('죽을까') || 
+        message.contains('자살')) {
       return NegativeAnalysisResult(
-        level: 3,
-        category: 'violence',
-        message: '폭력적인 위협은 절대 용납할 수 없어요.',
+        level: 2,
+        category: 'harsh',
+        message: '힘든 일이 있나봐요. 대화로 해결해보자.',
       );
+    }
+    
+    // 캐릭터 맥락이 아닌 경우에만 폭력 위협으로 처리
+    if (!isCharacterContext && violenceThreats.any((word) => message.contains(word))) {
+      // 추가로 직접적인 위협인지 확인 (너, 네가, 니가 등)
+      bool isDirectThreat = message.contains('너') || 
+                            message.contains('네가') || 
+                            message.contains('니가') ||
+                            message.contains('당신');
+      
+      // 직접적인 위협이거나, "죽어"같은 명령형인 경우만 레벨 3
+      if (isDirectThreat || message.trim() == '죽어' || message.trim() == '죽을래') {
+        return NegativeAnalysisResult(
+          level: 3,
+          category: 'violence',
+          message: '폭력적인 위협은 절대 용납할 수 없어요.',
+        );
+      }
+      
+      // 기타 간접적이거나 맥락이 모호한 경우 무시
+      return NegativeAnalysisResult(level: 0, category: 'none');
     }
 
     if (sexualInsults.any((word) => message.contains(word))) {

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -85,17 +86,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   void _setupScrollListener() {
     _scrollController.addListener(() {
+      // 스크롤 중이거나 로딩 중이면 리스너 무시 (충돌 방지)
+      if (_isScrolling || _isLoadingMore) return;
+      
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
-      final scrollThreshold = 50.0; // 더 정확한 감지를 위해 임계값 감소
+      final scrollThreshold = 100.0; // 임계값 증가하여 민감도 감소
       final paginationThreshold = 300.0; // 페이지네이션 임계값
 
-      // 사용자가 맨 아래에 가까운지 확인 (50픽셀 이내)
+      // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
 
       // 사용자가 위로 스크롤했는지 감지 (현재 위치가 맨 아래에서 멀어졌을 때)
-      if (!isNearBottom && _isNearBottom) {
+      // 단, 로딩 중이 아닐 때만 상태 변경
+      if (!isNearBottom && _isNearBottom && !_isLoadingMore) {
         // 사용자가 위로 스크롤함 - 자동 스크롤 차단
         setState(() {
           _isUserScrolling = true;
@@ -114,7 +119,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
 
       // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내)
-      if (currentScroll <= minScroll + paginationThreshold && !_isLoadingMore) {
+      // 스크롤 속도를 체크하여 의도적인 스크롤일 때만 로드
+      if (currentScroll <= minScroll + paginationThreshold && 
+          !_isLoadingMore && 
+          !_isScrolling) {
         _loadMoreMessages();
       }
     });
@@ -128,9 +136,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // 포커스가 새로 활성화될 때만 스크롤 (조건 강화)
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
         // 사용자가 이미 맨 아래에 있고 스크롤 중이 아닐 때만 스크롤
-        if (_isNearBottom && !_isUserScrolling) {
-          // 키보드가 올라올 때 더 빠르게 반응
-          Future.delayed(const Duration(milliseconds: 50), () {
+        if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+          // 키보드가 올라올 때 약간의 딜레이로 레이아웃 업데이트 대기
+          Future.delayed(const Duration(milliseconds: 150), () {
             if (mounted && _scrollController.hasClients && _focusNode.hasFocus && 
                 _isNearBottom && !_isUserScrolling) {
               final bottomInset = MediaQuery.of(context).viewInsets.bottom;
@@ -613,31 +621,42 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 매우 짧은 딜레이 후 실행
-    _scrollDebounceTimer = Timer(const Duration(milliseconds: 10), () {
+    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 50), () {
       if (!mounted || !_scrollController.hasClients) return;
       
       // 다시 한번 사용자 스크롤 상태 확인
       if (_isUserScrolling && !force) return;
       
       _isScrolling = true;
-      final targetScroll = _scrollController.position.maxScrollExtent;
+      
+      // 키보드 높이를 고려한 스크롤 위치 계산
+      final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+      var targetScroll = _scrollController.position.maxScrollExtent;
+      
+      // 키보드가 올라와 있으면 추가 오프셋 적용
+      if (keyboardHeight > 0) {
+        // 키보드 위에 여백을 두고 마지막 메시지가 보이도록
+        targetScroll = _scrollController.position.maxScrollExtent;
+      }
 
       if (smooth) {
         // 부드럽고 자연스러운 스크롤 애니메이션
         _scrollController.animateTo(
           targetScroll,
-          duration: const Duration(milliseconds: 200),  // 더 빠른 애니메이션
-          curve: Curves.easeOut,  // 더 직접적인 커브
+          duration: const Duration(milliseconds: 250),  // 약간 느린 애니메이션
+          curve: Curves.easeOutCubic,  // 더 부드러운 커브
         ).then((_) {
           _isScrolling = false;
           _isNearBottom = true;
+          _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
         });
       } else {
         // 즉시 이동
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
         _isNearBottom = true;
+        _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
       }
     });
   }
@@ -739,17 +758,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (mounted) {
       final bottomInset = MediaQuery.of(context).viewInsets.bottom;
       // 키보드가 올라왔고, 사용자가 맨 아래에 있으며, 사용자가 스크롤 중이 아닐 때만
-      if (bottomInset > 100 && _isNearBottom && !_isUserScrolling) {
+      if (bottomInset > 100 && _isNearBottom && !_isUserScrolling && !_isScrolling) {
         // 짧은 딜레이 후 부드럽게 스크롤 (레이아웃 업데이트 대기)
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (_scrollController.hasClients && _isNearBottom && !_isUserScrolling) {
-            final targetScroll = _scrollController.position.maxScrollExtent;
-            // animateTo로 부드럽게 이동
-            _scrollController.animateTo(
-              targetScroll,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.easeOut,
-            );
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted && _scrollController.hasClients && _isNearBottom && !_isUserScrolling) {
+            // 키보드가 올라왔을 때 스크롤 (smooth 옵션으로 부드럽게)
+            _scrollToBottom(force: false, smooth: true);
           }
         });
       }
@@ -758,33 +772,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    Widget scaffold = PopScope(
-      canPop: false,
-      onPopInvoked: (didPop) async {
-        if (didPop) return;
-
-        // 캐시 업데이트 (현재 like score를 캐시에 반영)
-        final authService = Provider.of<AuthService>(context, listen: false);
-        final userId = authService.user?.uid;
-        if (userId != null && _currentPersona != null) {
-          // 현재 persona의 최신 likes를 캐시에 업데이트
-          RelationScoreService.instance.getLikes(
-            userId: userId,
-            personaId: _currentPersona!.id,
-          );
-        }
-
-        // Navigate to chat list instead of popping
-        Navigator.pushReplacementNamed(
-          context,
-          '/main',
-          arguments: {'initialIndex': 1}, // 채팅 목록 탭
-        );
-      },
-      child: Scaffold(
-        appBar: _buildAppBar(),
-        resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
-        body: Stack(
+    // iOS와 Android 플랫폼별 처리
+    final scaffold = Scaffold(
+      appBar: _buildAppBar(),
+      resizeToAvoidBottomInset: true, // 키보드가 올라올 때 화면 크기 조정
+      body: Stack(
           children: [
             Column(
               children: [
@@ -872,9 +864,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               }
 
                               // 사용자가 맨 아래에 있고 스크롤 중이 아닐 때만 자동 스크롤
-                              if (_isNearBottom && !_isUserScrolling) {
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  _scrollToBottom(force: false, smooth: true);
+                              if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+                                // 키보드가 올라와 있으면 딜레이를 더 줌
+                                final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+                                final delay = keyboardHeight > 0 
+                                    ? const Duration(milliseconds: 200)
+                                    : const Duration(milliseconds: 100);
+                                
+                                Future.delayed(delay, () {
+                                  if (mounted && _isNearBottom && !_isUserScrolling) {
+                                    _scrollToBottom(force: false, smooth: true);
+                                  }
                                 });
                               }
                             }
@@ -904,10 +904,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               left: 16,
                               right: 16,
                               top: 16,
-                              bottom: 100 +
-                                  MediaQuery.of(context)
-                                      .viewInsets
-                                      .bottom, // 메시지 박스와 마지막 메시지가 완전히 보이도록 패딩 증가
+                              bottom: MediaQuery.of(context).viewInsets.bottom > 0
+                                  ? 160 + MediaQuery.of(context).viewInsets.bottom  // 키보드가 올라왔을 때 더 큰 여백
+                                  : 120, // 기본 여백 증가
                             ),
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior
@@ -1125,7 +1124,37 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       ),
     );
 
-    return scaffold;
+    // iOS는 기본 스와이프 백 제스처 사용, Android는 PopScope로 커스텀 처리
+    if (Platform.isIOS) {
+      return scaffold;
+    } else {
+      // Android는 기존 PopScope 로직 유지
+      return PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) return;
+
+          // 캐시 업데이트 (현재 like score를 캐시에 반영)
+          final authService = Provider.of<AuthService>(context, listen: false);
+          final userId = authService.user?.uid;
+          if (userId != null && _currentPersona != null) {
+            // 현재 persona의 최신 likes를 캐시에 업데이트
+            RelationScoreService.instance.getLikes(
+              userId: userId,
+              personaId: _currentPersona!.id,
+            );
+          }
+
+          // Navigate to chat list instead of popping
+          Navigator.pushReplacementNamed(
+            context,
+            '/main',
+            arguments: {'initialIndex': 1}, // 채팅 목록 탭
+          );
+        },
+        child: scaffold,
+      );
+    }
   }
 
   Future<void> _handleErrorReport() async {
@@ -1252,6 +1281,149 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             arguments: {'initialIndex': 1}, // 채팅 목록 탭
           );
         }
+      }
+    }
+  }
+
+  Future<void> _handleRestartChat() async {
+    final personaService = Provider.of<PersonaService>(context, listen: false);
+    final purchaseService = Provider.of<PurchaseService>(context, listen: false);
+    final relationScoreService = Provider.of<RelationScoreService>(context, listen: false);
+    final authService = Provider.of<AuthService>(context, listen: false);
+    
+    final currentPersona = personaService.currentPersona;
+    if (currentPersona == null) return;
+    
+    // 현재 하트 개수 확인
+    final currentHearts = purchaseService.hearts;
+    
+    // 확인 다이얼로그 표시
+    final shouldRestart = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('다시 대화하기'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('${currentPersona.name}와 다시 대화를 시작하시겠어요?'),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Icon(Icons.favorite, color: Colors.red[400], size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  '하트 1개가 필요합니다',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: currentHearts >= 1 ? null : Colors.red[400],
+                  ),
+                ),
+              ],
+            ),
+            if (currentHearts < 1)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text(
+                  '하트가 부족합니다. (현재: $currentHearts개)',
+                  style: TextStyle(
+                    color: Colors.red[400],
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('취소'),
+          ),
+          TextButton(
+            onPressed: currentHearts >= 1 
+              ? () => Navigator.of(context).pop(true)
+              : null,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.favorite, size: 16, color: currentHearts >= 1 ? Colors.red[400] : Colors.grey),
+                const SizedBox(width: 4),
+                Text(
+                  '하트 1개 사용하기',
+                  style: TextStyle(
+                    color: currentHearts >= 1 ? Colors.red[400] : Colors.grey,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+    
+    if (shouldRestart == true && currentHearts >= 1) {
+      try {
+        // 로딩 다이얼로그 표시
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+        
+        // 1. 하트 1개 사용
+        final heartUsed = await purchaseService.useHearts(1);
+        
+        if (heartUsed) {
+          // 2. likes를 50으로 리셋
+          final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+          
+          await relationScoreService.updateLikes(
+            userId: userId,
+            personaId: currentPersona.id,
+            likeChange: 50 - currentPersona.likes, // 현재 likes에서 50으로 만들기 위한 변화량
+            currentLikes: currentPersona.likes,
+          );
+          
+          // 3. PersonaService에서 persona 정보 갱신
+          await personaService.refreshCurrentPersona();
+          
+          // 로딩 다이얼로그 닫기
+          Navigator.of(context).pop();
+          
+          // 성공 메시지 표시
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('${currentPersona.name}와 다시 대화를 시작합니다!'),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        } else {
+          // 로딩 다이얼로그 닫기
+          Navigator.of(context).pop();
+          
+          // 실패 메시지
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('하트 사용에 실패했습니다.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } catch (e) {
+        // 로딩 다이얼로그 닫기
+        Navigator.of(context).pop();
+        
+        debugPrint('Error restarting chat: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('오류가 발생했습니다. 다시 시도해주세요.'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
   }
@@ -1441,7 +1613,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       elevation: 0.5,
       leading: Center(
         child: ModernIconButton(
-          icon: Icons.arrow_back_ios_rounded,
+          icon: Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back_ios_rounded,
           onPressed: () async {
             // Mark all messages as read before leaving
             final chatService =
@@ -1486,13 +1658,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               await Future.delayed(const Duration(milliseconds: 100));
             }
 
-            // Navigate back to main navigation with chat list tab
+            // iOS는 일반 pop, Android는 pushReplacement 사용
             if (mounted) {
-              Navigator.pushReplacementNamed(
-                context,
-                '/main',
-                arguments: {'initialIndex': 1}, // 채팅 목록 탭
-              );
+              if (Platform.isIOS) {
+                Navigator.of(context).pop();
+              } else {
+                Navigator.pushReplacementNamed(
+                  context,
+                  '/main',
+                  arguments: {'initialIndex': 1}, // 채팅 목록 탭
+                );
+              }
             }
           },
           tooltip: AppLocalizations.of(context)!.backButton,
@@ -1518,73 +1694,103 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   await _handleErrorReport();
                 } else if (value == 'translation_error') {
                   await _handleTranslationError();
+                } else if (value == 'restart_chat') {
+                  await _handleRestartChat();
                 } else if (value == 'leave_chat') {
                   await _handleLeaveChat();
                 }
               },
-              itemBuilder: (BuildContext context) => [
-                PopupMenuItem<String>(
-                  value: 'error_report',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.bug_report_outlined,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        '대화 오류 전송하기',
-                        style: TextStyle(
+              itemBuilder: (BuildContext context) {
+                final personaService = Provider.of<PersonaService>(context, listen: false);
+                final currentPersona = personaService.currentPersona;
+                final isOffline = currentPersona != null && currentPersona.likes <= 0;
+                
+                return [
+                  PopupMenuItem<String>(
+                    value: 'error_report',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.bug_report_outlined,
                           color: Theme.of(context).textTheme.bodyLarge?.color,
-                          fontWeight: FontWeight.w500,
+                          size: 20,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 12),
+                        Text(
+                          '대화 오류 전송하기',
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                PopupMenuItem<String>(
-                  value: 'translation_error',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.translate,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 12),
-                      Text(
-                        AppLocalizations.of(context)!.translationError,
-                        style: TextStyle(
+                  PopupMenuItem<String>(
+                    value: 'translation_error',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.translate,
                           color: Theme.of(context).textTheme.bodyLarge?.color,
-                          fontWeight: FontWeight.w500,
+                          size: 20,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.translationError,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const PopupMenuDivider(),
-                PopupMenuItem<String>(
-                  value: 'leave_chat',
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.exit_to_app,
-                        color: Colors.red[400],
-                        size: 20,
+                  const PopupMenuDivider(),
+                  // 오프라인 상태일 때만 '다시 대화하기' 표시
+                  if (isOffline)
+                    PopupMenuItem<String>(
+                      value: 'restart_chat',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.refresh,
+                            color: Colors.green[400],
+                            size: 20,
+                          ),
+                          const SizedBox(width: 12),
+                          Text(
+                            '다시 대화하기',
+                            style: TextStyle(
+                              color: Colors.green[400],
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 12),
-                      Text(
-                        AppLocalizations.of(context)!.leaveChatRoom,
-                        style: TextStyle(
+                    ),
+                  PopupMenuItem<String>(
+                    value: 'leave_chat',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.exit_to_app,
                           color: Colors.red[400],
-                          fontWeight: FontWeight.w500,
+                          size: 20,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 12),
+                        Text(
+                          AppLocalizations.of(context)!.leaveChatRoom,
+                          style: TextStyle(
+                            color: Colors.red[400],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ];
+              },
             ),
           ),
         ),

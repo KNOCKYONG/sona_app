@@ -1884,6 +1884,42 @@ class PersonaService extends BaseService {
     await setCurrentPersona(persona, clearPrevious: clearPrevious);
   }
 
+  /// Refresh current persona data from Firebase
+  Future<void> refreshCurrentPersona() async {
+    if (_currentPersona == null || _currentUserId == null) return;
+    
+    try {
+      // Get fresh data from Firebase
+      final relationshipData = await _getRelationshipData(_currentPersona!.id);
+      
+      if (relationshipData != null) {
+        final likes = relationshipData['likes'] ?? 
+            relationshipData['relationshipScore'] ?? 50;
+        
+        // Update current persona with new likes value
+        _currentPersona = _currentPersona!.copyWith(
+          likes: likes,
+          imageUrls: _currentPersona!.imageUrls, // Preserve imageUrls
+        );
+        
+        // Also update cache
+        _addToCache(
+          _currentPersona!.id,
+          _CachedRelationship(
+            score: likes,
+            isCasualSpeech: relationshipData['isCasualSpeech'] ?? false,
+            timestamp: DateTime.now(),
+          ),
+        );
+        
+        debugPrint('✅ Refreshed ${_currentPersona!.name} - likes: $likes');
+        notifyListeners();
+      }
+    } catch (e) {
+      debugPrint('❌ Error refreshing current persona: $e');
+    }
+  }
+
   Future<bool> passPersona(String personaId) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();

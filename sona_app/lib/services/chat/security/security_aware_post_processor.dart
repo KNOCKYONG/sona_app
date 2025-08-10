@@ -380,6 +380,48 @@ class SecurityAwarePostProcessor {
     final cleanText = text.replaceAll(RegExp(r'[.!]+$'), '').trim();
     final lower = cleanText.toLowerCase();
 
+    // 감탄문 패턴 먼저 체크 (의문문으로 오인되는 것 방지)
+    final exclamationPatterns = [
+      '완전 좋아해',
+      '진짜 좋아해',
+      '정말 좋아해',
+      '너무 좋아해',
+      '완전 싫어해',
+      '진짜 싫어해',
+      '정말 싫어해',
+      '너무 싫어해',
+      '완전 재밌어',
+      '진짜 재밌어',
+      '정말 재밌어',
+      '너무 재밌어',
+      '완전 멋있어',
+      '진짜 멋있어',
+      '정말 멋있어',
+      '너무 멋있어',
+      '완전 예뻐',
+      '진짜 예뻐',
+      '정말 예뻐',
+      '너무 예뻐',
+      '완전 귀여워',
+      '진짜 귀여워',
+      '정말 귀여워',
+      '너무 귀여워',
+      '대박',
+      '짱이야',
+      '최고야',
+      '개좋아',
+      '개멋있어',
+      '개웃겨',
+      '개귀여워'
+    ];
+    
+    // 감탄문 패턴이면 의문문이 아님
+    for (final pattern in exclamationPatterns) {
+      if (lower.contains(pattern)) {
+        return false;
+      }
+    }
+
     // 의문사가 포함된 경우
     for (final word in questionWords) {
       if (lower.contains(word)) return true;

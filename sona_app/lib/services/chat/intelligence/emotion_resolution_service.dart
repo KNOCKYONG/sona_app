@@ -621,15 +621,17 @@ class EmotionResolutionService {
       strategies.add('차분히 경청하고 공감');
     }
     
-    // 페르소나 특성별 접근
-    if (persona.traits.contains('운동')) {
-      strategies.add('운동이나 활동적인 해결 제안');
-    }
-    if (persona.traits.contains('예술')) {
-      strategies.add('창의적인 표현으로 감정 해소');
-    }
-    if (persona.traits.contains('음악')) {
-      strategies.add('음악 추천이나 공유로 위로');
+    // 페르소나 특성별 접근 (keywords 기반)
+    if (persona.keywords != null) {
+      if (persona.keywords!.contains('운동')) {
+        strategies.add('운동이나 활동적인 해결 제안');
+      }
+      if (persona.keywords!.contains('예술')) {
+        strategies.add('창의적인 표현으로 감정 해소');
+      }
+      if (persona.keywords!.contains('음악')) {
+        strategies.add('음악 추천이나 공유로 위로');
+      }
     }
     
     return {

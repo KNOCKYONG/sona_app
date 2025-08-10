@@ -1121,8 +1121,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             // More menu overlay removed - using PopupMenuButton instead
           ],
         ),
-      ),
-    );
+      );
 
     // iOS는 기본 스와이프 백 제스처 사용, Android는 PopScope로 커스텀 처리
     if (Platform.isIOS) {

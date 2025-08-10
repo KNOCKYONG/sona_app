@@ -1890,7 +1890,7 @@ class PersonaService extends BaseService {
     
     try {
       // Get fresh data from Firebase
-      final relationshipData = await _getRelationshipData(_currentPersona!.id);
+      final relationshipData = await _loadUserPersonaRelationship(_currentPersona!.id);
       
       if (relationshipData != null) {
         final likes = relationshipData['likes'] ?? 

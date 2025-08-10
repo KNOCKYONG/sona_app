@@ -3432,6 +3432,9 @@ class ChatService extends BaseService {
         }
       }
 
+      // Using default formal speech for first message  
+      final isCasual = false; // First messages use formal speech
+      
       // MBTI 성격 유형별 인사 메시지
       List<String> greetings;
 
@@ -3664,9 +3667,10 @@ class ChatService extends BaseService {
       return '안녕하세요! 대화해봐요 ㅎㅎ';
     }
 
-    // Using default formal speech for first message
-    final isCasual = false; // First messages use formal speech
     final mbti = persona.mbti.toUpperCase();
+    
+    // Using default formal speech for preview message
+    final isCasual = false; // Preview messages use formal speech
 
     // MBTI와 말투에 따른 개성있는 인사 메시지들
     final greetings = <String>[];

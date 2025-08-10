@@ -88,9 +88,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      _loadPersonas();
+      // 페르소나 로딩을 먼저 하고
+      await _loadPersonas();
       _checkFirstTimeUser();
-      _checkAndPreloadImages();
+      
+      // 이미지 프리로드는 백그라운드에서 천천히
+      Future.delayed(const Duration(seconds: 1), () {
+        if (mounted) {
+          _checkAndPreloadImages();
+        }
+      });
     });
   }
 
@@ -141,59 +148,40 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   
   DateTime _lastLoadTime = DateTime.now();
 
-  /// 이미지 프리로드 확인 및 실행
+  /// 이미지 프리로드 확인 및 실행 (최적화)
   Future<void> _checkAndPreloadImages() async {
     try {
       final personaService =
           Provider.of<PersonaService>(context, listen: false);
-      final personas =
-          personaService.allPersonas.where((p) => _hasR2Image(p)).toList();
+      
+      // 첫 화면에 보일 페르소나들만 선택 (최대 15개)
+      final visiblePersonas = personaService.availablePersonas
+          .where((p) => _hasR2Image(p))
+          .take(15)
+          .toList();
 
-      if (personas.isEmpty) return;
+      if (visiblePersonas.isEmpty) return;
 
-      // 이미 프리로드가 완료되었는지 확인
+      // 이미 캐시된 이미지가 있는지 빠르게 확인
       final isCompleted = await _imagePreloadService.isPreloadCompleted();
-
-      // 새로운 이미지가 있는지 확인
-      final hasNewImages = await _imagePreloadService.hasNewImages(personas);
-
-      if (isCompleted && !hasNewImages) {
-        debugPrint('✅ All images already cached, no preloading needed');
+      if (isCompleted) {
+        debugPrint('✅ Images already cached');
         return;
       }
 
-      if (hasNewImages) {
-        debugPrint('🆕 New images detected, starting incremental preload...');
-
-        // 프리로드 시작 (증분 로딩만)
-        setState(() {
-          _isPreloadingImages = true;
-          _preloadProgress = 0.0;
-        });
-
-        await _imagePreloadService.preloadNewImages(personas);
-
-        setState(() {
-          _isPreloadingImages = false;
-        });
-      } else if (!isCompleted) {
-        // 첫 번째 로딩인 경우
-        setState(() {
-          _isPreloadingImages = true;
-          _preloadProgress = 0.0;
-        });
-
-        await _imagePreloadService.preloadAllPersonaImages(personas);
-
-        setState(() {
-          _isPreloadingImages = false;
-        });
-      }
-    } catch (e) {
-      debugPrint('❌ Error preloading images: $e');
-      setState(() {
-        _isPreloadingImages = false;
+      // 썸네일만 우선 로드 (작은 이미지만)
+      debugPrint('🖼️ Preloading thumbnails for first ${visiblePersonas.length} personas...');
+      
+      // 백그라운드에서 조용히 로드 (UI 차단 없이)
+      _imagePreloadService.preloadNewImages(visiblePersonas).then((_) {
+        debugPrint('✅ Thumbnail preload complete');
+      }).catchError((error) {
+        debugPrint('⚠️ Preload error (ignored): $error');
       });
+      
+      // UI 로딩 인디케이터는 표시하지 않음 (사용자 경험 개선)
+    } catch (e) {
+      debugPrint('❌ Error in image preload check: $e');
     }
   }
 
@@ -1987,7 +1975,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   anim_model.TutorialAnimation(
                     type: anim_model.TutorialAnimationType.tap,
                     startPosition: Offset(screenWidth * 0.25,
-                        screenHeight * 0.85), // 0.74 → 0.85로 조정
+                        screenHeight * 0.88), // 0.85 → 0.88로 조정
                     duration: const Duration(seconds: 1),
                     delay: const Duration(milliseconds: 500),
                   ),
@@ -1995,7 +1983,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   anim_model.TutorialAnimation(
                     type: anim_model.TutorialAnimationType.tap,
                     startPosition: Offset(screenWidth * 0.5,
-                        screenHeight * 0.85), // 0.74 → 0.85로 조정
+                        screenHeight * 0.88), // 0.85 → 0.88로 조정
                     duration: const Duration(seconds: 1),
                     delay: const Duration(seconds: 2, milliseconds: 500),
                   ),
@@ -2003,7 +1991,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                   anim_model.TutorialAnimation(
                     type: anim_model.TutorialAnimationType.tap,
                     startPosition: Offset(screenWidth * 0.75,
-                        screenHeight * 0.85), // 0.74 → 0.85로 조정
+                        screenHeight * 0.88), // 0.85 → 0.88로 조정
                     duration: const Duration(seconds: 1),
                     delay: const Duration(seconds: 4),
                   ),

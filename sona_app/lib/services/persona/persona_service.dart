@@ -310,19 +310,18 @@ class PersonaService extends BaseService {
     // Report progress: Checking images
     onProgress?.call(0.7, '이미지 준비 중');
 
-    // 🆕 Check and download new images after loading personas
-    await checkAndDownloadNewImages();
+    // 🆕 Check and download new images in background (don't wait)
+    checkAndDownloadNewImages().then((_) {
+      debugPrint('✅ Background image check complete');
+    }).catchError((error) {
+      debugPrint('⚠️ Background image check error (ignored): $error');
+    });
 
     // Report progress: Final preparation
     onProgress?.call(0.9, '마지막 준비 중');
 
-    // Preload first 20 persona images for better performance
-    if (_allPersonas.isNotEmpty) {
-      final personasToPreload = _allPersonas.take(20).toList();
-      ImagePreloadService.instance.preloadNewImages(personasToPreload);
-      debugPrint(
-          '🖼️ Preloading images for ${personasToPreload.length} personas');
-    }
+    // Skip image preloading here - will be done in PersonaSelectionScreen
+    // This speeds up initial loading significantly
 
     // Report completion
     onProgress?.call(1.0, '완료!');

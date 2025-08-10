@@ -88,49 +88,34 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
-      final scrollThreshold = 200.0; // 증가된 임계값으로 더 여유있게 판단
-      final paginationThreshold = 300.0; // 페이지네이션 임계값 증가
+      final scrollThreshold = 50.0; // 더 정확한 감지를 위해 임계값 감소
+      final paginationThreshold = 300.0; // 페이지네이션 임계값
 
-      // 사용자가 맨 아래에 가까운지 확인 (200픽셀 이내)
+      // 사용자가 맨 아래에 가까운지 확인 (50픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
 
-      if (_isNearBottom != isNearBottom) {
+      // 사용자가 위로 스크롤했는지 감지 (현재 위치가 맨 아래에서 멀어졌을 때)
+      if (!isNearBottom && _isNearBottom) {
+        // 사용자가 위로 스크롤함 - 자동 스크롤 차단
         setState(() {
-          _isNearBottom = isNearBottom;
-          // 맨 아래로 돌아왔으면 읽지 않은 메시지 카운트 초기화
-          if (isNearBottom && _unreadAIMessageCount > 0) {
+          _isUserScrolling = true;
+          _isNearBottom = false;
+        });
+      } else if (isNearBottom && !_isNearBottom) {
+        // 사용자가 다시 맨 아래로 왔음
+        setState(() {
+          _isNearBottom = true;
+          _isUserScrolling = false;  // 맨 아래로 왔으니 자동 스크롤 허용
+          // 읽지 않은 메시지 카운트 초기화
+          if (_unreadAIMessageCount > 0) {
             _unreadAIMessageCount = 0;
           }
         });
-      } else if (isNearBottom && _unreadAIMessageCount > 0) {
-        // 이미 맨 아래에 있는데 카운트가 있으면 초기화
-        _unreadAIMessageCount = 0;
-        if (mounted) setState(() {});
       }
 
-      // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내로 변경)
+      // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내)
       if (currentScroll <= minScroll + paginationThreshold && !_isLoadingMore) {
         _loadMoreMessages();
-      }
-
-      // 사용자가 스크롤 중인지 감지 - 개선된 로직
-      if (_scrollController.position.isScrollingNotifier.value) {
-        if (!_isUserScrolling) {
-          setState(() {
-            _isUserScrolling = true;
-          });
-        }
-      } else {
-        // 스크롤이 멈췄을 때 - 딜레이 증가로 사용자 의도 더 잘 파악
-        Future.delayed(const Duration(seconds: 1), () {
-          if (mounted &&
-              !_scrollController.position.isScrollingNotifier.value &&
-              _isNearBottom) {
-            setState(() {
-              _isUserScrolling = false;
-            });
-          }
-        });
       }
     });
   }
@@ -142,15 +127,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final hasFocus = _focusNode.hasFocus;
       // 포커스가 새로 활성화될 때만 스크롤 (조건 강화)
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
-        // 사용자가 이미 맨 아래에 있을 때만 스크롤
-        if (_isNearBottom) {
+        // 사용자가 이미 맨 아래에 있고 스크롤 중이 아닐 때만 스크롤
+        if (_isNearBottom && !_isUserScrolling) {
           // 키보드가 올라올 때 더 빠르게 반응
           Future.delayed(const Duration(milliseconds: 50), () {
-            if (mounted && _scrollController.hasClients && _focusNode.hasFocus && _isNearBottom) {
+            if (mounted && _scrollController.hasClients && _focusNode.hasFocus && 
+                _isNearBottom && !_isUserScrolling) {
               final bottomInset = MediaQuery.of(context).viewInsets.bottom;
               if (bottomInset > 0) {
                 // 키보드가 올라왔을 때만 스크롤
-                _scrollToBottom(force: false, smooth: false);
+                _scrollToBottom(force: false, smooth: true);
               }
             }
           });
@@ -602,11 +588,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _scrollToBottom({bool force = false, bool smooth = false}) {
-    // 자동 스크롤 조건 체크
-    // 1. force가 true이거나
-    // 2. 초기 스크롤이 필요하고 아직 안했거나
-    // 3. 사용자가 스크롤 중이 아니고 맨 아래에 가까이 있을 때만 자동 스크롤
-    if (!force && _hasInitiallyScrolled && (_isUserScrolling || !_isNearBottom)) {
+    // 사용자가 위로 스크롤 중이고 강제가 아니면 자동 스크롤 차단
+    if (_isUserScrolling && !force) {
+      debugPrint('📌 User is scrolling up, skip auto-scroll');
+      return;
+    }
+    
+    // 맨 아래에 있지 않고 강제가 아니면 자동 스크롤 차단  
+    if (!_isNearBottom && !force && _hasInitiallyScrolled) {
+      debugPrint('📌 Not near bottom, skip auto-scroll');
       return;
     }
     
@@ -627,6 +617,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     _scrollDebounceTimer = Timer(const Duration(milliseconds: 10), () {
       if (!mounted || !_scrollController.hasClients) return;
       
+      // 다시 한번 사용자 스크롤 상태 확인
+      if (_isUserScrolling && !force) return;
+      
       _isScrolling = true;
       final targetScroll = _scrollController.position.maxScrollExtent;
 
@@ -638,14 +631,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           curve: Curves.easeOut,  // 더 직접적인 커브
         ).then((_) {
           _isScrolling = false;
-          // 사용자 스크롤 상태는 유지
           _isNearBottom = true;
         });
       } else {
         // 즉시 이동
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
-        // 사용자 스크롤 상태는 유지
         _isNearBottom = true;
       }
     });
@@ -747,14 +738,20 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // Handle keyboard appearance immediately
     if (mounted) {
       final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-      // 키보드가 올라왔고 사용자가 맨 아래에 있을 때
+      // 키보드가 올라왔고, 사용자가 맨 아래에 있으며, 사용자가 스크롤 중이 아닐 때만
       if (bottomInset > 100 && _isNearBottom && !_isUserScrolling) {
-        // 즉시 스크롤 실행 (딜레이 없이)
-        if (_scrollController.hasClients) {
-          final targetScroll = _scrollController.position.maxScrollExtent;
-          // jumpTo로 즉시 이동
-          _scrollController.jumpTo(targetScroll);
-        }
+        // 짧은 딜레이 후 부드럽게 스크롤 (레이아웃 업데이트 대기)
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients && _isNearBottom && !_isUserScrolling) {
+            final targetScroll = _scrollController.position.maxScrollExtent;
+            // animateTo로 부드럽게 이동
+            _scrollController.animateTo(
+              targetScroll,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOut,
+            );
+          }
+        });
       }
     }
   }
@@ -874,10 +871,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 });
                               }
 
-                              // 사용자가 맨 아래에 있을 때만 자동 스크롤
-                              if (_isNearBottom) {
+                              // 사용자가 맨 아래에 있고 스크롤 중이 아닐 때만 자동 스크롤
+                              if (_isNearBottom && !_isUserScrolling) {
                                 WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  _scrollToBottom(force: true);
+                                  _scrollToBottom(force: false, smooth: true);
                                 });
                               }
                             }
@@ -887,10 +884,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           final isTyping =
                               chatService.isPersonaTyping(currentPersona.id);
                           // 실제로 false -> true로 변경될 때만 스크롤
-                          if (isTyping && !_previousIsTyping && _isNearBottom) {
+                          if (isTyping && !_previousIsTyping && _isNearBottom && !_isUserScrolling) {
                             _previousIsTyping = isTyping;
-                            // 사용자가 맨 아래에 있을 때만 스크롤
-                            _scrollToBottom(force: false);
+                            // 사용자가 맨 아래에 있고 스크롤 중이 아닐 때만 스크롤
+                            _scrollToBottom(force: false, smooth: true);
                           } else if (!isTyping && _previousIsTyping) {
                             // 타이핑이 끝났을 때 상태만 업데이트
                             _previousIsTyping = isTyping;

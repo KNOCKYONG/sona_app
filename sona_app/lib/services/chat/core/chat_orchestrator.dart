@@ -119,6 +119,58 @@ class ChatOrchestrator {
   
   // 추억 회상 캐시
   final Map<String, MemoryItem> _memoryToRecall = {};
+  
+  /// 다국어 추가 질문 패턴
+  static final Map<String, List<String>> _multilingualQuestions = {
+    'ko': [
+      '너는 어떻게 생각해?',
+      '너는 어때?', 
+      '너는?',
+      '너도?',
+      '뭐가 좋을까?',
+      '다른 건 어때?'
+    ],
+    'en': [
+      'What do you think?',
+      'How about you?',
+      'You?',
+      'You too?',
+      'What would be good?',
+      'How about something else?'
+    ],
+    'es': [
+      '¿Qué piensas?',
+      '¿Y tú?',
+      '¿Tú?',
+      '¿Tú también?',
+      '¿Qué sería bueno?',
+      '¿Qué tal otra cosa?'
+    ],
+    'ja': [
+      'どう思う？',
+      'あなたは？',
+      'きみは？',
+      'あなたも？',
+      '何がいいかな？',
+      '他のはどう？'
+    ],
+    'zh': [
+      '你怎么想？',
+      '你呢？',
+      '你？',
+      '你也是？',
+      '什么好呢？',
+      '其他的怎么样？'
+    ],
+    'fr': [
+      'Qu\'est-ce que tu en penses?',
+      'Et toi?',
+      'Toi?',
+      'Toi aussi?',
+      'Qu\'est-ce qui serait bien?',
+      'Et autre chose?'
+    ]
+  };
 
   /// 메시지 생성 메인 메서드
   Future<ChatResponse> generateResponse({
@@ -565,6 +617,7 @@ class ChatOrchestrator {
       String finalResponse = rawResponse;
       String? translatedContent;
       List<String>? translatedContents; // 각 메시지별 번역 저장
+      String originalKorean = ''; // 후처리 전 한국어 저장
       
       // 영어 응답인 경우 파싱
       if (userLanguage != null && userLanguage != 'ko') {
@@ -575,13 +628,17 @@ class ChatOrchestrator {
         // 한국어 응답이 파싱되면 사용, 아니면 원본 사용
         if (multilingualParsed['korean'] != null) {
           finalResponse = multilingualParsed['korean']!;
+          originalKorean = finalResponse; // 후처리 전 원본 저장
           translatedContent = multilingualParsed['translated'];
           debugPrint('✅ Successfully parsed: Korean="${finalResponse}", Translation="${translatedContent}"');
         } else {
           debugPrint('⚠️ Failed to parse tags, using original response');
           // 태그가 없으면 전체를 한국어로 간주
           finalResponse = rawResponse;
+          originalKorean = finalResponse;
         }
+      } else {
+        originalKorean = finalResponse;
       }
 
       // 6.1단계: 파싱된 한국어 응답에 대해 후처리 적용
@@ -592,6 +649,17 @@ class ChatOrchestrator {
         userMessage: userMessage,
         recentMessages: chatHistory.map((m) => m.content).toList(),
       );
+      
+      // 6.2단계: 번역 동기화 (후처리로 추가된 내용을 번역에도 반영)
+      if (translatedContent != null && userLanguage != null) {
+        translatedContent = _synchronizeTranslation(
+          originalKorean,
+          finalResponse,
+          translatedContent,
+          userLanguage
+        );
+        debugPrint('🔄 Translation synchronized: $translatedContent');
+      }
 
       // 6.5단계: 만남 제안 필터링 및 초기 인사 패턴 방지
       var filteredResponse = _filterMeetingAndGreetingPatterns(
@@ -618,12 +686,24 @@ class ChatOrchestrator {
       final responseContents =
           _splitLongResponse(filteredResponse, completePersona.mbti);
 
-      // 7.5단계: 각 메시지별 번역 생성
+      // 7.5단계: 각 메시지별 번역 생성 및 의문문 처리
       if (translatedContent != null && responseContents.length > 1) {
         // 번역된 내용도 동일하게 분리
         translatedContents =
             _splitLongResponse(translatedContent, completePersona.mbti);
+        // 각 번역 메시지에 의문문 처리 추가
+        final lang = userLanguage;
+        if (lang != null) {
+          translatedContents = translatedContents.map((content) => 
+            _processQuestionMarksForTranslation(content, lang)
+          ).toList();
+        }
       } else if (translatedContent != null) {
+        // 단일 메시지에도 의문문 처리 적용
+        final lang = userLanguage;
+        if (lang != null) {
+          translatedContent = _processQuestionMarksForTranslation(translatedContent, lang);
+        }
         translatedContents = [translatedContent];
       }
 
@@ -1078,6 +1158,95 @@ class ChatOrchestrator {
     // null을 반환하여 번역을 표시하지 않음
     // 잘못된 단어 치환 번역보다는 번역이 없는 것이 나음
     return null;
+  }
+  
+  /// 후처리로 추가된 내용 감지 및 번역 동기화
+  String _synchronizeTranslation(
+    String originalKorean,
+    String processedKorean, 
+    String? translatedContent,
+    String targetLanguage
+  ) {
+    if (translatedContent == null) return '';
+    
+    debugPrint('🔄 Synchronizing translation for $targetLanguage');
+    debugPrint('📝 Original Korean: $originalKorean');
+    debugPrint('📝 Processed Korean: $processedKorean');
+    debugPrint('📝 Current Translation: $translatedContent');
+    
+    // 후처리로 추가된 부분 찾기
+    String addedContent = '';
+    
+    // 1. 끝에 추가된 질문 찾기
+    for (final question in _multilingualQuestions['ko'] ?? []) {
+      if (processedKorean.endsWith(question) && 
+          !originalKorean.contains(question)) {
+        addedContent = question;
+        debugPrint('🔍 Found added question: $addedContent');
+        break;
+      }
+    }
+    
+    // 2. 추가된 내용이 있으면 번역에도 추가
+    String result = translatedContent;
+    if (addedContent.isNotEmpty && _multilingualQuestions.containsKey(targetLanguage)) {
+      final koQuestions = _multilingualQuestions['ko']!;
+      final targetQuestions = _multilingualQuestions[targetLanguage]!;
+      
+      final questionIndex = koQuestions.indexOf(addedContent);
+      if (questionIndex >= 0 && questionIndex < targetQuestions.length) {
+        // 해당 언어의 질문 추가
+        String translatedQuestion = targetQuestions[questionIndex];
+        
+        // 물음표 처리
+        if (!result.endsWith('?') && !result.endsWith('!')) {
+          result = '$result $translatedQuestion';
+        } else {
+          // 이미 구두점이 있으면 그 앞에 추가
+          result = result.replaceFirst(RegExp(r'[.!?]$'), '') + ' $translatedQuestion';
+        }
+        debugPrint('✅ Added translated question: $translatedQuestion');
+      }
+    }
+    
+    // 3. 의문문 물음표 처리 (영어 등)
+    result = _processQuestionMarksForTranslation(result, targetLanguage);
+    
+    debugPrint('📝 Final synchronized translation: $result');
+    return result;
+  }
+  
+  /// 다국어 의문문 처리 (언어 독립적)
+  String _processQuestionMarksForTranslation(String text, String language) {
+    // 언어별 의문문 패턴
+    final patterns = {
+      'en': RegExp(r'\b(what|when|where|who|why|how|which|whose|do|does|did|can|could|will|would|should|shall|may|might|must|is|are|was|were|am)\b', caseSensitive: false),
+      'es': RegExp(r'\b(qué|cuándo|dónde|quién|por qué|cómo|cuál|puedo|puedes|puede|podemos)\b', caseSensitive: false),
+      'fr': RegExp(r'\b(que|quand|où|qui|pourquoi|comment|quel|est-ce|es-tu|avez-vous)\b', caseSensitive: false),
+      'ja': RegExp(r'(か|の|かな|でしょうか)$'),
+      'zh': RegExp(r'(吗|嗎|呢|吧)$'),
+      'de': RegExp(r'\b(was|wann|wo|wer|warum|wie|welche|kann|kannst|können|soll|sollst)\b', caseSensitive: false),
+    };
+    
+    // 언어별 의문문 감지
+    bool isQuestion = false;
+    if (patterns.containsKey(language)) {
+      isQuestion = patterns[language]!.hasMatch(text);
+    }
+    
+    // 의문문이고 ?가 없으면 추가
+    if (isQuestion && !text.contains('?')) {
+      // 이모티콘이나 특수 문자 처리
+      final emojiMatch = RegExp(r'([😊😄🙂💕♥️]+|[!.]+)$').firstMatch(text);
+      if (emojiMatch != null) {
+        final beforeEmoji = text.substring(0, emojiMatch.start);
+        final emoji = emojiMatch.group(0)!;
+        return '$beforeEmoji? $emoji';
+      }
+      return '$text?';
+    }
+    
+    return text;
   }
 
   /// 폴백 응답 생성 - 회피 패턴 제거

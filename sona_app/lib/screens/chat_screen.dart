@@ -1438,10 +1438,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final currentUser = userService.currentUser;
 
     if (userId.isNotEmpty && currentPersona != null) {
-      // Get recent messages with translations
+      // Get recent messages with translations (실제 번역 내용이 있는 메시지만)
       final messages = chatService.getMessages(currentPersona.id);
       final translatedMessages = messages
-          .where((msg) => !msg.isFromUser && msg.translatedContent != null)
+          .where((msg) => 
+              !msg.isFromUser && 
+              msg.translatedContent != null && 
+              msg.translatedContent!.isNotEmpty)
           .toList();
 
       if (translatedMessages.isEmpty) {

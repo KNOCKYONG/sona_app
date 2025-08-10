@@ -696,11 +696,15 @@ class ChatOrchestrator {
       final responseContents =
           _splitLongResponse(filteredResponse, completePersona.mbti);
 
-      // 7.5단계: 각 메시지별 번역 생성 및 의문문 처리
+      // 7.5단계: 각 메시지별 번역 생성 및 의문문 처리 (개선된 매핑 기반)
       if (translatedContent != null && responseContents.length > 1) {
-        // 번역된 내용도 동일하게 분리
-        translatedContents =
-            _splitLongResponse(translatedContent, completePersona.mbti);
+        // 매핑 기반으로 번역 분할 - 한글과 번역이 정확히 대응되도록
+        translatedContents = _splitTranslationWithMapping(
+          koreanMessages: responseContents,
+          translatedContent: translatedContent,
+          targetLanguage: userLanguage ?? 'en',
+        );
+        
         // 각 번역 메시지에 의문문 처리 추가
         final lang = userLanguage;
         if (lang != null) {
@@ -1043,7 +1047,7 @@ class ChatOrchestrator {
     return (text.length * 1.5).round();
   }
 
-  /// 다국어 응답 파싱
+  /// 다국어 응답 파싱 (개선된 버전)
   Map<String, String?> _parseMultilingualResponse(
       String response, String targetLanguage) {
     final Map<String, String?> result = {
@@ -1069,33 +1073,62 @@ class ChatOrchestrator {
       final koIndex = response.indexOf('[KO]');
       final langIndex = response.indexOf('[$langTag]');
       
-      if (koIndex != -1 && langIndex != -1 && langIndex > koIndex) {
-        // [KO] 태그 다음부터 [EN] 태그 전까지가 한국어 내용
-        final koreanStart = koIndex + 4; // '[KO]'.length = 4
-        final koreanEnd = langIndex;
-        result['korean'] = response.substring(koreanStart, koreanEnd).trim();
+      if (koIndex != -1 && langIndex != -1) {
+        String koreanText = '';
+        String translatedText = '';
         
-        // [EN] 태그 다음부터 끝까지 또는 다음 태그까지가 영어 번역
-        // '[EN]'.length = 4 (대괄호 포함)
-        final translationStart = langIndex + 4;
-        var translatedText = response.substring(translationStart).trim();
+        if (koIndex < langIndex) {
+          // [KO]가 먼저 나오는 경우
+          final koreanStart = koIndex + 4; // '[KO]'.length = 4
+          final koreanEnd = langIndex;
+          koreanText = response.substring(koreanStart, koreanEnd).trim();
+          
+          // [EN] 태그 다음부터 끝까지 또는 다음 [KO] 태그까지
+          final translationStart = langIndex + langTag.length + 2; // '[XX]'.length
+          final nextKoIndex = response.indexOf('[KO]', translationStart);
+          if (nextKoIndex != -1) {
+            translatedText = response.substring(translationStart, nextKoIndex).trim();
+          } else {
+            translatedText = response.substring(translationStart).trim();
+          }
+        } else {
+          // [EN]이 먼저 나오는 경우 (드물지만 처리)
+          final translationStart = langIndex + langTag.length + 2;
+          final translationEnd = koIndex;
+          translatedText = response.substring(translationStart, translationEnd).trim();
+          
+          final koreanStart = koIndex + 4;
+          koreanText = response.substring(koreanStart).trim();
+        }
+        
+        // 결과 저장
+        result['korean'] = koreanText;
+        result['translated'] = translatedText;
         
         // 과도한 띄어쓰기 제거 (2개 이상의 공백을 1개로)
-        translatedText = translatedText.replaceAll(RegExp(r'\s{2,}'), ' ');
+        if (result['korean'] != null) {
+          result['korean'] = result['korean']!.replaceAll(RegExp(r'\s{2,}'), ' ');
+        }
+        if (result['translated'] != null) {
+          result['translated'] = result['translated']!.replaceAll(RegExp(r'\s{2,}'), ' ');
+        }
         
         // 번역에 한글이 섞여있는지 검증
         final koreanPattern = RegExp(r'[가-힣]');
-        if (koreanPattern.hasMatch(translatedText)) {
-          debugPrint('⚠️ Warning: Korean text found in translation: $translatedText');
+        if (result['translated'] != null && koreanPattern.hasMatch(result['translated']!)) {
+          debugPrint('⚠️ Warning: Korean text found in translation: ${result['translated']}');
           // 한글이 포함된 부분 제거 시도
-          final cleanTranslation = translatedText.split(koreanPattern).first.trim();
+          final cleanTranslation = result['translated']!.split(koreanPattern).first.trim();
           if (cleanTranslation.isNotEmpty) {
-            translatedText = cleanTranslation;
-            debugPrint('🔧 Cleaned translation: $translatedText');
+            result['translated'] = cleanTranslation;
+            debugPrint('🔧 Cleaned translation: ${result['translated']}');
           }
         }
         
-        result['translated'] = translatedText;
+        // 구두점 동기화: 한글의 구두점을 영어 번역에도 맞춤
+        if (result['korean'] != null && result['translated'] != null) {
+          result['translated'] = _synchronizePunctuation(result['korean']!, result['translated']!);
+        }
         
         debugPrint('✅ Successfully parsed with index method:');
         debugPrint('   Korean: ${result['korean']}');
@@ -1170,60 +1203,195 @@ class ChatOrchestrator {
     return null;
   }
   
-  /// 후처리로 추가된 내용 감지 및 번역 동기화
+  /// 구두점 동기화 메서드
+  String _synchronizePunctuation(String korean, String translation) {
+    // 한글 문장의 마지막 구두점 확인
+    String lastPunctuation = '';
+    if (korean.endsWith('?')) {
+      lastPunctuation = '?';
+    } else if (korean.endsWith('!')) {
+      lastPunctuation = '!';
+    } else if (korean.endsWith('.')) {
+      lastPunctuation = '.';
+    } else if (korean.endsWith('~')) {
+      // 한국어의 ~ 는 영어에서는 보통 없음
+      lastPunctuation = '';
+    }
+    
+    // 번역 문장의 마지막 구두점 제거
+    String cleanTranslation = translation.replaceAll(RegExp(r'[.!?]+$'), '');
+    
+    // 한글과 동일한 구두점 추가
+    if (lastPunctuation.isNotEmpty) {
+      cleanTranslation = '$cleanTranslation$lastPunctuation';
+    }
+    
+    return cleanTranslation;
+  }
+  
+  /// 후처리로 추가된 내용 감지 및 번역 동기화 (개선된 버전)
   String _synchronizeTranslation(
     String originalKorean,
     String processedKorean, 
     String? translatedContent,
     String targetLanguage
   ) {
-    if (translatedContent == null) return '';
+    if (translatedContent == null || translatedContent.isEmpty) return '';
     
     debugPrint('🔄 Synchronizing translation for $targetLanguage');
     debugPrint('📝 Original Korean: $originalKorean');
     debugPrint('📝 Processed Korean: $processedKorean');
     debugPrint('📝 Current Translation: $translatedContent');
     
-    // 후처리로 추가된 부분 찾기
-    String addedContent = '';
-    
-    // 1. 끝에 추가된 질문 찾기
-    for (final question in _multilingualQuestions['ko'] ?? []) {
-      if (processedKorean.endsWith(question) && 
-          !originalKorean.contains(question)) {
-        addedContent = question;
-        debugPrint('🔍 Found added question: $addedContent');
-        break;
-      }
-    }
-    
-    // 2. 추가된 내용이 있으면 번역에도 추가
     String result = translatedContent;
-    if (addedContent.isNotEmpty && _multilingualQuestions.containsKey(targetLanguage)) {
-      final koQuestions = _multilingualQuestions['ko']!;
-      final targetQuestions = _multilingualQuestions[targetLanguage]!;
-      
-      final questionIndex = koQuestions.indexOf(addedContent);
-      if (questionIndex >= 0 && questionIndex < targetQuestions.length) {
-        // 해당 언어의 질문 추가
-        String translatedQuestion = targetQuestions[questionIndex];
+    
+    // 1. 문장 구조 분석 - 한글과 영어 문장 매칭
+    final koreanSentences = _splitIntoSentences(processedKorean);
+    final translationSentences = _splitIntoSentences(translatedContent);
+    
+    debugPrint('📊 Korean sentences: ${koreanSentences.length}');
+    debugPrint('📊 Translation sentences: ${translationSentences.length}');
+    
+    // 2. 문장 수가 다르면 보정 시도
+    if (koreanSentences.length != translationSentences.length) {
+      // 한글이 더 많은 경우 - 번역이 누락된 부분 찾기
+      if (koreanSentences.length > translationSentences.length) {
+        debugPrint('⚠️ Translation missing sentences, attempting to fix...');
         
-        // 물음표 처리
-        if (!result.endsWith('?') && !result.endsWith('!')) {
-          result = '$result $translatedQuestion';
-        } else {
-          // 이미 구두점이 있으면 그 앞에 추가
-          result = result.replaceFirst(RegExp(r'[.!?]$'), '') + ' $translatedQuestion';
+        // 후처리로 추가된 질문 확인
+        for (final question in _multilingualQuestions['ko'] ?? []) {
+          if (processedKorean.endsWith(question) && 
+              !originalKorean.contains(question)) {
+            // 해당 언어 질문 추가
+            final addedContent = _getTranslatedQuestion(question, targetLanguage);
+            if (addedContent.isNotEmpty) {
+              result = _appendToTranslation(result, addedContent);
+              debugPrint('✅ Added missing question: $addedContent');
+            }
+            break;
+          }
         }
-        debugPrint('✅ Added translated question: $translatedQuestion');
+      }
+      // 번역이 더 많은 경우 - 중복 제거 또는 병합
+      else {
+        debugPrint('⚠️ Translation has extra sentences, checking for duplicates...');
+        result = _removeDuplicateSentences(result, targetLanguage);
       }
     }
     
-    // 3. 의문문 물음표 처리 (영어 등)
+    // 3. 구두점 동기화
+    result = _synchronizePunctuation(processedKorean, result);
+    
+    // 4. 의문문 물음표 처리
     result = _processQuestionMarksForTranslation(result, targetLanguage);
+    
+    // 5. 최종 검증 - 어색한 부분 수정
+    result = _finalizeTranslation(result, targetLanguage);
     
     debugPrint('📝 Final synchronized translation: $result');
     return result;
+  }
+  
+  /// 문장 단위로 분리
+  List<String> _splitIntoSentences(String text) {
+    // 구두점 기준 분리 (?, !, . 등)
+    final sentences = text.split(RegExp(r'[.!?]+'));
+    return sentences
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+  }
+  
+  /// 번역된 질문 가져오기
+  String _getTranslatedQuestion(String koreanQuestion, String targetLanguage) {
+    if (!_multilingualQuestions.containsKey(targetLanguage)) return '';
+    
+    final koQuestions = _multilingualQuestions['ko']!;
+    final targetQuestions = _multilingualQuestions[targetLanguage]!;
+    
+    final index = koQuestions.indexOf(koreanQuestion);
+    if (index >= 0 && index < targetQuestions.length) {
+      return targetQuestions[index];
+    }
+    return '';
+  }
+  
+  /// 번역에 내용 추가
+  String _appendToTranslation(String translation, String addition) {
+    if (translation.endsWith('.') || translation.endsWith('!') || translation.endsWith('?')) {
+      // 구두점 앞에 추가
+      final lastChar = translation[translation.length - 1];
+      return '${translation.substring(0, translation.length - 1)} $addition$lastChar';
+    }
+    return '$translation $addition';
+  }
+  
+  /// 중복 문장 제거
+  String _removeDuplicateSentences(String text, String language) {
+    final sentences = _splitIntoSentences(text);
+    final uniqueSentences = <String>[];
+    
+    for (final sentence in sentences) {
+      // 비슷한 문장이 이미 있는지 확인
+      bool isDuplicate = false;
+      for (final existing in uniqueSentences) {
+        if (_areSentencesSimilar(sentence, existing, language)) {
+          isDuplicate = true;
+          break;
+        }
+      }
+      
+      if (!isDuplicate) {
+        uniqueSentences.add(sentence);
+      }
+    }
+    
+    return uniqueSentences.join('. ') + '.';
+  }
+  
+  /// 문장 유사도 체크
+  bool _areSentencesSimilar(String s1, String s2, String language) {
+    // 소문자로 변환하여 비교
+    final lower1 = s1.toLowerCase();
+    final lower2 = s2.toLowerCase();
+    
+    // 완전히 같으면 중복
+    if (lower1 == lower2) return true;
+    
+    // 80% 이상 겹치면 유사한 것으로 판단
+    final words1 = lower1.split(' ');
+    final words2 = lower2.split(' ');
+    
+    int matchCount = 0;
+    for (final word in words1) {
+      if (words2.contains(word)) matchCount++;
+    }
+    
+    final similarity = matchCount / words1.length;
+    return similarity > 0.8;
+  }
+  
+  /// 최종 번역 정리
+  String _finalizeTranslation(String text, String language) {
+    String result = text;
+    
+    // 연속된 공백 제거
+    result = result.replaceAll(RegExp(r'\s+'), ' ');
+    
+    // 구두점 정리
+    result = result.replaceAll(RegExp(r'\s+([.!?,])'), r'$1');
+    
+    // 문장 시작 대문자 (영어의 경우)
+    if (language == 'en' && result.isNotEmpty) {
+      result = result[0].toUpperCase() + result.substring(1);
+      // 각 문장 시작을 대문자로
+      result = result.replaceAllMapped(
+        RegExp(r'[.!?]\s+([a-z])'),
+        (match) => '${match.group(0)![0]} ${match.group(1)!.toUpperCase()}'
+      );
+    }
+    
+    return result.trim();
   }
   
   /// 다국어 의문문 처리 (언어 독립적)
@@ -2208,7 +2376,7 @@ class ChatOrchestrator {
     return responses[type] ?? ['응', '그래', 'ㅇㅇ'];
   }
 
-  /// 긴 응답을 자연스럽게 분리
+  /// 긴 응답을 자연스럽게 분리 (개선된 버전)
   List<String> _splitLongResponse(String response, String mbti) {
     final responseLength =
         PersonaPromptBuilder.getMBTIResponseLength(mbti.toUpperCase());
@@ -2224,37 +2392,51 @@ class ChatOrchestrator {
 
     while (remaining.isNotEmpty) {
       // 현재 조각의 최대 길이
-      int maxLength =
-          messages.isEmpty ? responseLength.max : responseLength.max;
+      int maxLength = responseLength.max;
 
       if (remaining.length <= maxLength) {
-        messages.add(remaining.trim());
+        // 남은 부분이 너무 짧지 않으면 추가
+        if (remaining.length >= 20 || messages.isEmpty) {
+          messages.add(remaining.trim());
+        } else if (messages.isNotEmpty) {
+          // 너무 짧은 조각은 이전 메시지에 합치기
+          messages[messages.length - 1] = '${messages.last} ${remaining.trim()}';
+        }
         break;
       }
 
-      // 자연스러운 분리점 찾기 (문장 부호, 줄바꿈 등)
-      int splitIndex = _findNaturalSplitPoint(remaining, maxLength);
+      // 완전한 문장 단위로 분리할 수 있는 위치 찾기
+      int splitIndex = _findCompleteSentenceSplitPoint(remaining, maxLength);
 
       if (splitIndex > 0 && splitIndex <= maxLength) {
+        // 완전한 문장 단위로 분리
         messages.add(remaining.substring(0, splitIndex).trim());
         remaining = remaining.substring(splitIndex).trim();
       } else {
-        // 자연스러운 분리점을 찾지 못하면 공백에서 분리
-        int spaceIndex = remaining.lastIndexOf(' ', maxLength);
-        if (spaceIndex > maxLength * 0.5) {
-          messages.add(remaining.substring(0, spaceIndex).trim());
-          remaining = remaining.substring(spaceIndex).trim();
+        // 완전한 문장을 찾지 못하면 절 단위로 분리 시도
+        splitIndex = _findClauseSplitPoint(remaining, maxLength);
+        
+        if (splitIndex > 0 && splitIndex <= maxLength) {
+          messages.add(remaining.substring(0, splitIndex).trim());
+          remaining = remaining.substring(splitIndex).trim();
         } else {
-          // 공백도 적절하지 않으면 강제 분리
-          messages.add(remaining.substring(0, maxLength).trim());
-          remaining = remaining.substring(maxLength).trim();
+          // 절도 찾지 못하면 공백에서 분리
+          int spaceIndex = remaining.lastIndexOf(' ', maxLength);
+          if (spaceIndex > maxLength * 0.7) { // 70% 이상이면 허용
+            messages.add(remaining.substring(0, spaceIndex).trim());
+            remaining = remaining.substring(spaceIndex).trim();
+          } else {
+            // 공백도 적절하지 않으면 강제 분리 (마지막 수단)
+            messages.add(remaining.substring(0, maxLength).trim());
+            remaining = remaining.substring(maxLength).trim();
+          }
         }
       }
 
       // 너무 많은 메시지로 분리되지 않도록 제한
       if (messages.length >= 3) {
-        messages[messages.length - 1] =
-            messages[messages.length - 1] + ' ' + remaining;
+        // 남은 내용은 마지막 메시지에 합치기
+        messages[messages.length - 1] = '${messages.last} ${remaining.trim()}';
         break;
       }
     }
@@ -2262,43 +2444,199 @@ class ChatOrchestrator {
     return messages;
   }
 
-  /// 자연스러운 분리점 찾기
-  int _findNaturalSplitPoint(String text, int maxLength) {
-    // 우선순위: 마침표/물음표/느낌표 > 쉼표 > ㅋㅋ/ㅎㅎ/ㅠㅠ > 줄바꿈
-    final punctuations = [
-      ['.', '!', '?', '~'], // 문장 끝
-      ['ㅋ', 'ㅎ', 'ㅠ'], // 감정 표현
-      ['\n'], // 줄바꿈
+  /// 완전한 문장 단위로 분리할 수 있는 위치 찾기
+  int _findCompleteSentenceSplitPoint(String text, int maxLength) {
+    // 한국어 문장 종결 패턴
+    final sentenceEndings = [
+      // 종결 어미 + 구두점
+      RegExp(r'[다요어지까][\.!\?]'),
+      // 감정 표현이 문장 끝에 있는 경우
+      RegExp(r'[다요어지까][ㅋㅎㅠ]+[\.!\?]?'),
+      // 감탄사로 끝나는 문장
+      RegExp(r'[ㅋㅎㅠ]{2,}[\.!\?]'),
+      // 단독 구두점 (문장 끝을 명확히 표시)
+      RegExp(r'[\.!\?]\s'),
     ];
 
-    for (final punctGroup in punctuations) {
-      int bestIndex = -1;
-
-      for (final punct in punctGroup) {
-        int index = text.lastIndexOf(punct, maxLength);
-
-        // 분리점이 너무 앞쪽이면 무시
-        if (index > maxLength * 0.5) {
-          // 반복되는 문자 뒤까지 포함
-          int endIndex = index + 1;
-          while (endIndex < text.length &&
-              endIndex < maxLength &&
-              text[endIndex] == punct) {
-            endIndex++;
+    // maxLength 내에서 가장 뒤쪽의 완전한 문장 찾기
+    int bestIndex = -1;
+    
+    for (final pattern in sentenceEndings) {
+      final matches = pattern.allMatches(text);
+      
+      for (final match in matches) {
+        int endIndex = match.end;
+        
+        // maxLength를 초과하지 않고, 충분한 길이를 가진 위치
+        if (endIndex <= maxLength && endIndex > maxLength * 0.3) {
+          // 다음 문자가 공백이거나 텍스트 끝이면 확실한 문장 끝
+          if (endIndex >= text.length || 
+              text[endIndex] == ' ' || 
+              text[endIndex] == '\n') {
+            if (endIndex > bestIndex) {
+              bestIndex = endIndex;
+            }
           }
+        }
+      }
+    }
 
+    // 감정 표현 후 처리 (문장 끝에만)
+    if (bestIndex == -1) {
+      // ㅋㅋ, ㅎㅎ 등이 문장 끝에 있는 경우
+      final emotionPattern = RegExp(r'[ㅋㅎㅠ]{2,}$');
+      final searchText = text.substring(0, math.min(text.length, maxLength));
+      
+      for (int i = searchText.length - 1; i > maxLength * 0.5; i--) {
+        final testText = searchText.substring(0, i + 1);
+        if (emotionPattern.hasMatch(testText)) {
+          // 다음이 공백이거나 끝이면 여기서 분리
+          if (i + 1 >= text.length || text[i + 1] == ' ') {
+            bestIndex = i + 1;
+            break;
+          }
+        }
+      }
+    }
+
+    return bestIndex;
+  }
+  
+  /// 절 단위로 분리할 수 있는 위치 찾기
+  int _findClauseSplitPoint(String text, int maxLength) {
+    // 절 구분 패턴 (연결 어미)
+    final clausePatterns = [
+      RegExp(r'[고,] '), // ~고, ~고
+      RegExp(r'[서,] '), // ~서, ~서
+      RegExp(r'[는데,] '), // ~는데
+      RegExp(r'[지만,] '), // ~지만
+      RegExp(r'[아서,] '), // ~아서
+      RegExp(r', '), // 쉼표
+    ];
+    
+    int bestIndex = -1;
+    
+    for (final pattern in clausePatterns) {
+      final matches = pattern.allMatches(text);
+      
+      for (final match in matches) {
+        int endIndex = match.end;
+        
+        // 절 분리는 어느 정도 길이가 있어야 함
+        if (endIndex <= maxLength && endIndex > maxLength * 0.5) {
           if (endIndex > bestIndex) {
             bestIndex = endIndex;
           }
         }
       }
-
-      if (bestIndex > 0) {
-        return bestIndex;
+    }
+    
+    return bestIndex;
+  }
+  
+  /// 매핑 기반 번역 분할 - 한글 메시지와 번역을 1:1로 매핑
+  List<String> _splitTranslationWithMapping({
+    required List<String> koreanMessages,
+    required String translatedContent,
+    required String targetLanguage,
+  }) {
+    debugPrint('🗺️ Mapping-based translation split');
+    debugPrint('📝 Korean messages: ${koreanMessages.length}');
+    debugPrint('🌍 Target language: $targetLanguage');
+    
+    // 1. 전체 한글 텍스트 재구성 (분할 전 원본)
+    final fullKorean = koreanMessages.join(' ');
+    
+    // 2. 한글 문장들을 개별적으로 분석
+    final koreanSentences = _extractSentences(fullKorean, 'ko');
+    final translatedSentences = _extractSentences(translatedContent, targetLanguage);
+    
+    debugPrint('📊 Korean sentences: ${koreanSentences.length}');
+    debugPrint('📊 Translated sentences: ${translatedSentences.length}');
+    
+    // 3. 문장 수가 같으면 직접 매핑
+    if (koreanSentences.length == translatedSentences.length && 
+        koreanMessages.length == koreanSentences.length) {
+      debugPrint('✅ Perfect 1:1 mapping');
+      return translatedSentences;
+    }
+    
+    // 4. 문장 수가 다르면 비율 기반 분할
+    final result = <String>[];
+    
+    if (koreanMessages.length == 1) {
+      // 단일 메시지면 그대로 반환
+      return [translatedContent];
+    }
+    
+    // 5. 각 한글 메시지의 길이 비율 계산
+    final totalKoreanLength = fullKorean.length;
+    int processedTranslationIndex = 0;
+    
+    for (int i = 0; i < koreanMessages.length; i++) {
+      final koreanMsg = koreanMessages[i];
+      final ratio = koreanMsg.length / totalKoreanLength;
+      
+      // 해당 비율만큼의 번역 문장 할당
+      final targetSentenceCount = 
+          (translatedSentences.length * ratio).round();
+      
+      if (i == koreanMessages.length - 1) {
+        // 마지막 메시지는 남은 모든 문장 포함
+        final remaining = translatedSentences
+            .skip(processedTranslationIndex)
+            .join(' ');
+        result.add(remaining);
+      } else {
+        // 비율에 따른 문장 할당
+        final sentences = <String>[];
+        for (int j = 0; j < targetSentenceCount && 
+             processedTranslationIndex < translatedSentences.length; j++) {
+          sentences.add(translatedSentences[processedTranslationIndex]);
+          processedTranslationIndex++;
+        }
+        
+        if (sentences.isEmpty && processedTranslationIndex < translatedSentences.length) {
+          // 최소 1개 문장은 포함
+          sentences.add(translatedSentences[processedTranslationIndex]);
+          processedTranslationIndex++;
+        }
+        
+        result.add(sentences.join(' '));
       }
     }
-
-    return -1;
+    
+    debugPrint('📦 Final translation split: ${result.length} messages');
+    return result;
+  }
+  
+  /// 언어별 문장 추출
+  List<String> _extractSentences(String text, String language) {
+    if (language == 'ko') {
+      // 한국어 문장 추출
+      final pattern = RegExp(
+        r'[^.!?]+[.!?]+(?:[ㅋㅎㅠ]+)?|[^.!?]+[ㅋㅎㅠ]{2,}'
+      );
+      return pattern.allMatches(text)
+          .map((m) => m.group(0)?.trim() ?? '')
+          .where((s) => s.isNotEmpty)
+          .toList();
+    } else if (language == 'en') {
+      // 영어 문장 추출
+      final pattern = RegExp(
+        r'[^.!?]+[.!?]+(?:\s+|$)'
+      );
+      return pattern.allMatches(text)
+          .map((m) => m.group(0)?.trim() ?? '')
+          .where((s) => s.isNotEmpty)
+          .toList();
+    } else {
+      // 기타 언어는 기본 구두점 기준
+      return text.split(RegExp(r'[.!?]+'))
+          .map((s) => s.trim())
+          .where((s) => s.isNotEmpty)
+          .toList();
+    }
   }
 
   /// 호칭 가이드 생성 (담백한 이름 부르기)

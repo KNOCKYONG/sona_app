@@ -688,14 +688,14 @@ class ChatService extends BaseService {
         return;
       }
 
-      // Get user nickname, age, and preferred language
+      // Get user nickname and age (language는 메시지별로 감지)
       String? userNickname;
       int? userAge;
-      String? userLanguage;
+      String? userLanguage = null; // 언어는 ChatOrchestrator에서 메시지별로 감지
       if (_userService?.currentUser != null) {
         userNickname = _userService!.currentUser!.nickname;
         userAge = _userService!.currentUser!.age;
-        userLanguage = _userService!.currentUser!.preferredLanguage;
+        // preferredLanguage는 사용하지 않음 - 각 메시지마다 언어 감지
       }
 
       // Use new ChatOrchestrator for normal messages

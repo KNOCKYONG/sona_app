@@ -220,35 +220,8 @@ class SecurityAwarePostProcessor {
     // 부드러운 표현으로 변환
     text = _softenExpression(text);
 
-    // 의문문은 반드시 ?로 끝나도록
-    if (_isQuestion(text) && !text.contains('?')) {
-      // 마지막 문장을 찾아서 처리
-      final sentences = text.split(RegExp(r'[.!?]\s*'));
-      if (sentences.isNotEmpty) {
-        final lastSentence = sentences.last.trim();
-
-        // ㅋㅋ, ㅎㅎ, ㅠㅠ 등으로 끝나는 경우
-        final laughMatch = RegExp(r'([ㅋㅎㅠ]+)$').firstMatch(lastSentence);
-        if (laughMatch != null) {
-          // "뭐해ㅋㅋ" -> "뭐해?ㅋㅋ"
-          final beforeLaugh = lastSentence.substring(0, laughMatch.start);
-          final laugh = laughMatch.group(0)!;
-
-          // 이미 처리된 부분 + 수정된 마지막 문장
-          final beforeLastSentence = sentences.length > 1
-              ? sentences.sublist(0, sentences.length - 1).join('. ') + '. '
-              : '';
-          text = beforeLastSentence + beforeLaugh + '?' + laugh;
-        } else {
-          // 마침표를 물음표로 변경
-          if (text.endsWith('.')) {
-            text = text.substring(0, text.length - 1) + '?';
-          } else {
-            text += '?';
-          }
-        }
-      }
-    }
+    // 모든 문장을 개별적으로 처리하여 의문문에 물음표 추가
+    text = _ensureProperPunctuation(text);
 
     return text;
   }
@@ -921,5 +894,101 @@ class SecurityAwarePostProcessor {
     }
     
     return text;
+  }
+  
+  /// 모든 문장에 적절한 구두점 추가
+  static String _ensureProperPunctuation(String text) {
+    if (text.isEmpty) return text;
+    
+    // 문장을 분리 (구두점, 줄바꿈, 이모티콘 기준)
+    final sentences = <String>[];
+    final sentencePattern = RegExp(r'([^.!?\n]+(?:[.!?]+|[\n]|$))');
+    final matches = sentencePattern.allMatches(text);
+    
+    if (matches.isEmpty) {
+      // 패턴 매칭이 안 되면 전체 텍스트를 하나의 문장으로 처리
+      sentences.add(text);
+    } else {
+      for (final match in matches) {
+        final sentence = match.group(0)?.trim() ?? '';
+        if (sentence.isNotEmpty) {
+          sentences.add(sentence);
+        }
+      }
+    }
+    
+    // 각 문장 처리
+    final processedSentences = <String>[];
+    for (var sentence in sentences) {
+      if (sentence.isEmpty) continue;
+      
+      // 이미 구두점이 있으면 그대로 유지
+      if (sentence.endsWith('.') || sentence.endsWith('!') || sentence.endsWith('?')) {
+        processedSentences.add(sentence);
+        continue;
+      }
+      
+      // ㅋㅋ, ㅎㅎ, ㅠㅠ 등으로 끝나는 경우 처리
+      final emotionMatch = RegExp(r'(.+?)([\s]*[ㅋㅎㅠ~]+)$').firstMatch(sentence);
+      String mainPart = sentence;
+      String emotionPart = '';
+      
+      if (emotionMatch != null) {
+        mainPart = emotionMatch.group(1) ?? sentence;
+        emotionPart = emotionMatch.group(2) ?? '';
+      }
+      
+      // 의문문 체크
+      if (_isQuestion(mainPart)) {
+        // 의문문이면 물음표 추가
+        processedSentences.add(mainPart.trim() + '?' + emotionPart);
+      } 
+      // 감탄사나 강한 감정 표현 체크
+      else if (_isExclamation(mainPart)) {
+        // 느낌표 추가
+        processedSentences.add(mainPart.trim() + '!' + emotionPart);
+      }
+      // 일반 평서문
+      else {
+        // 마침표 추가 (캐주얼한 대화체에서는 마침표 생략 가능)
+        if (emotionPart.isNotEmpty || mainPart.length < 10) {
+          // 짧은 문장이나 이모티콘이 있으면 마침표 생략 가능
+          processedSentences.add(sentence);
+        } else {
+          // 긴 문장은 마침표 추가
+          processedSentences.add(mainPart.trim() + '.' + emotionPart);
+        }
+      }
+    }
+    
+    // 문장들을 다시 합치기
+    return processedSentences.join(' ');
+  }
+  
+  /// 감탄문인지 확인
+  static bool _isExclamation(String text) {
+    final exclamationPatterns = [
+      '와', '우와', '헐', '대박', '진짜', '완전',
+      '미친', '개', '너무', '정말', '엄청',
+      '아', '아이고', '어머', '맙소사', '세상에',
+      '짱', '최고', '굿', '나이스', '멋져',
+      '싫어', '좋아', '사랑해', '미워', '화나'
+    ];
+    
+    final lower = text.toLowerCase().trim();
+    
+    // 감탄 패턴으로 시작하는 경우
+    for (final pattern in exclamationPatterns) {
+      if (lower.startsWith(pattern)) {
+        return true;
+      }
+    }
+    
+    // 강한 감정 표현이 포함된 경우
+    if (lower.contains('진짜') && (lower.contains('좋') || lower.contains('싫') || lower.contains('멋'))) {
+      return true;
+    }
+    
+    return false;
   }
 }

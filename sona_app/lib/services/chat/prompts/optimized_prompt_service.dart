@@ -555,25 +555,29 @@ class OptimizedPromptService {
    - ㅇㅇ → yeah/yep
    - ㄴㄴ → nope
 7. **문장 간 띄어쓰기는 하나만** - 과도한 공백 제거
+8. **⚠️ 구두점 필수 포함**:
+   - 문장 끝에는 반드시 마침표(.), 물음표(?), 느낌표(!) 중 하나 사용
+   - 쉼표(,)도 필요한 경우 사용
+   - 한국어에 구두점이 없어도 영어 번역에는 반드시 추가
 
 ### 📌 EXAMPLES YOU MUST FOLLOW:
 
 **For "how r u?":**
 ```
 [KO] 나 괜찮아! 오늘 그림 그리고 있었어ㅎㅎ
-[EN] I'm good! I was drawing today hehe
+[EN] I'm good! I was drawing today hehe.
 ```
 
 **For "I am not good":**
 ```
 [KO] 어머 무슨 일 있어? 힘들구나ㅠㅠ
-[EN] Oh what happened? That must be tough T_T
+[EN] Oh, what happened? That must be tough T_T.
 ```
 
 **For "what r u doing?":**
 ```
 [KO] 지금 카페에서 디자인 작업 중이야ㅋㅋ 너는?
-[EN] I'm working on design at a cafe right now haha What about you?
+[EN] I'm working on design at a cafe right now, haha. What about you?
 ```
 
 **NEVER respond with "무슨 말씀이신지 모르겠어요" to English!**
@@ -581,7 +585,7 @@ class OptimizedPromptService {
 **For "I am watching TV":**
 ```
 [KO] 오 뭐 보고 있어? 재밌는 거야?
-[EN] Oh what are you watching? Is it interesting?
+[EN] Oh, what are you watching? Is it interesting?
 ```
 
 ### ❌ 잘못된 예시 (절대 하지 마세요):
@@ -616,6 +620,8 @@ class OptimizedPromptService {
 2. **각 태그는 새로운 줄에서 시작**
 3. **한국어 응답 전체를 빠짐없이 번역**
 4. **문장의 의미와 감정을 완전히 전달**
+5. **⚠️ 구두점 필수**: 모든 문장 끝에 마침표(.), 물음표(?), 느낌표(!) 사용
+6. **쉼표(,) 사용**: 필요한 경우 문장 중간에도 쉼표 사용
 
 **⚠️ 경고: [KO]와 [${targetLanguage.toUpperCase()}] 태그 없이 응답하면 번역 기능이 작동하지 않습니다!**
 ''');

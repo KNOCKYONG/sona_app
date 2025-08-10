@@ -2559,32 +2559,45 @@ class ChatService extends BaseService {
         if (i == 0 && _personaIsTyping[persona.id] == true) {
           _personaIsTyping[persona.id] = false;
           notifyListeners();
-          await Future.delayed(const Duration(milliseconds: 100)); // 부드러운 전환
+          // 번역 모드에서는 딜레이 최소화
+          final isTranslationMode = translatedContents != null && translatedContents.isNotEmpty;
+          final transitionDelay = isTranslationMode ? 20 : 100;
+          await Future.delayed(Duration(milliseconds: transitionDelay)); // 부드러운 전환
         }
 
         // 두 번째 이후 메시지: 타이핑 인디케이터 표시 → 대기 → 제거 → 메시지 표시
         if (i > 0) {
+          // 번역 모드인지 확인 (translatedContents가 있으면 번역 모드)
+          final isTranslationMode = translatedContents != null && translatedContents.isNotEmpty;
+          
           // 타이핑 인디케이터 표시
           _personaIsTyping[persona.id] = true;
           notifyListeners();
           
-          // 메시지 길이에 따른 타이핑 시간 계산
-          final charCount = messagePart.length;
           int typingDuration;
-
-          if (charCount <= 20) {
-            typingDuration = 800 + Random().nextInt(400);  // 0.8-1.2초
-          } else if (charCount <= 40) {
-            typingDuration = 1200 + Random().nextInt(600); // 1.2-1.8초
+          
+          if (isTranslationMode) {
+            // 번역 모드에서는 최소한의 딜레이만 적용 (50-100ms)
+            typingDuration = 50 + Random().nextInt(50);
           } else {
-            typingDuration = 1800 + Random().nextInt(700); // 1.8-2.5초
-          }
+            // 일반 모드에서는 기존 로직 사용
+            // 메시지 길이에 따른 타이핑 시간 계산
+            final charCount = messagePart.length;
 
-          // 생각하는 듯한 패턴이 있으면 시간 추가
-          if (messagePart.contains('음') ||
-              messagePart.contains('그') ||
-              messagePart.contains('...')) {
-            typingDuration += 500 + Random().nextInt(500);
+            if (charCount <= 20) {
+              typingDuration = 800 + Random().nextInt(400);  // 0.8-1.2초
+            } else if (charCount <= 40) {
+              typingDuration = 1200 + Random().nextInt(600); // 1.2-1.8초
+            } else {
+              typingDuration = 1800 + Random().nextInt(700); // 1.8-2.5초
+            }
+
+            // 생각하는 듯한 패턴이 있으면 시간 추가
+            if (messagePart.contains('음') ||
+                messagePart.contains('그') ||
+                messagePart.contains('...')) {
+              typingDuration += 500 + Random().nextInt(500);
+            }
           }
 
           await Future.delayed(Duration(milliseconds: typingDuration));
@@ -2592,7 +2605,9 @@ class ChatService extends BaseService {
           // 타이핑 인디케이터 제거
           _personaIsTyping[persona.id] = false;
           notifyListeners();
-          await Future.delayed(const Duration(milliseconds: 100)); // 부드러운 전환
+          // 번역 모드에서는 전환 딜레이도 최소화
+          final transitionDelay = isTranslationMode ? 20 : 100;
+          await Future.delayed(Duration(milliseconds: transitionDelay)); // 부드러운 전환
         }
 
         // 각 메시지에 해당하는 번역 가져오기
@@ -2799,17 +2814,13 @@ class ChatService extends BaseService {
   }
 
   List<String> _splitMessageContent(String content, {bool isExpert = false}) {
-    // 메시지를 자연스럽게 분할
+    // 구두점 기반으로 문장을 자연스럽게 분할
     final List<String> result = [];
 
-    // 메시지 길이 설정
-    final maxChunkLength = 120;
-    final minSentenceLength = 30;
-
-    // Korean-aware sentence splitting
+    // Korean-aware sentence splitting (구두점 기반)
     final sentences = _splitIntoSentences(content);
 
-    // Group sentences more naturally - keep related sentences together
+    // Group sentences - 연결 어미로 끝나는 문장은 다음 문장과 결합
     String currentChunk = '';
 
     for (final sentence in sentences) {
@@ -2818,16 +2829,15 @@ class ChatService extends BaseService {
       if (currentChunk.isEmpty) {
         currentChunk = trimmedSentence;
       } else {
-        // Check if sentences should be kept together
+        // Check if sentences should be kept together (불완전한 문장 체크)
         final shouldCombine =
             _shouldCombineSentences(currentChunk, trimmedSentence);
 
-        if (shouldCombine &&
-            currentChunk.length + trimmedSentence.length < maxChunkLength) {
-          // Keep related sentences together
+        if (shouldCombine) {
+          // 불완전한 문장은 무조건 결합 (길이 제한 없음)
           currentChunk += ' ' + trimmedSentence;
         } else {
-          // Save current chunk and start new one
+          // 완전한 문장은 저장하고 새로 시작
           if (currentChunk.isNotEmpty) {
             result.add(currentChunk);
           }
@@ -2841,67 +2851,37 @@ class ChatService extends BaseService {
       result.add(currentChunk);
     }
 
-    // If result is still too long, split further
+    // 극히 긴 문장(300자 이상)의 경우에만 예외적으로 분할
     final finalResult = <String>[];
     for (final chunk in result) {
-      if (chunk.length > maxChunkLength) {
-        // Split long chunks by natural break points
+      if (chunk.length > 300) {
+        // 매우 긴 문장만 자연스러운 분기점에서 분할
         final breakPoints = ['근데', '그리고', '아니면', '그래서', '하지만', '그런데'];
         String remaining = chunk;
-
-        final splitThreshold = 100;
-        while (remaining.length > splitThreshold) {
+        
+        while (remaining.length > 300) {
           int breakIndex = -1;
-
+          
           // Find natural break point
           for (final breakPoint in breakPoints) {
-            final index = remaining.indexOf(breakPoint);
-            if (index > minSentenceLength && index < splitThreshold) {
+            final index = remaining.indexOf(breakPoint, 100); // 최소 100자 이후
+            if (index > 0 && index < 250) {
               breakIndex = index;
               break;
             }
           }
-
+          
           if (breakIndex > 0) {
             finalResult.add(remaining.substring(0, breakIndex).trim());
             remaining = remaining.substring(breakIndex).trim();
           } else {
-            // No natural break, find better split point
-            if (remaining.length > splitThreshold) {
-              int cutPoint = splitThreshold;
-              
-              // 뒤에서부터 탐색하여 자연스러운 분할점 찾기
-              for (int i = splitThreshold - 1; i > minSentenceLength && i > 0; i--) {
-                final char = remaining[i];
-                final prevChar = i > 0 ? remaining[i - 1] : '';
-                final nextChar = i < remaining.length - 1 ? remaining[i + 1] : '';
-                
-                // 공백에서 분할 (가장 우선)
-                if (char == ' ') {
-                  cutPoint = i;
-                  break;
-                }
-                // 조사 뒤에서 분할 (자연스러운 한국어 분할)
-                else if ('은는이가을를에서도만까지부터로와과나며'.contains(char) && nextChar == ' ') {
-                  cutPoint = i + 1;
-                  break;
-                }
-                // 쉼표나 세미콜론에서 분할
-                else if ((char == ',' || char == ';') && nextChar == ' ') {
-                  cutPoint = i + 2;
-                  break;
-                }
-              }
-              
-              finalResult.add(remaining.substring(0, cutPoint).trim());
-              remaining = remaining.substring(cutPoint).trim();
-            } else {
-              break;
-            }
+            // 자연스러운 분기점이 없으면 그대로 유지
+            finalResult.add(remaining);
+            break;
           }
         }
-
-        if (remaining.isNotEmpty) {
+        
+        if (remaining.isNotEmpty && remaining.length < 300) {
           finalResult.add(remaining);
         }
       } else {
@@ -2909,7 +2889,7 @@ class ChatService extends BaseService {
       }
     }
 
-    return finalResult.isEmpty ? [content] : finalResult;
+    return finalResult.isEmpty ? result : finalResult;
   }
 
   List<String> _splitIntoSentences(String text) {

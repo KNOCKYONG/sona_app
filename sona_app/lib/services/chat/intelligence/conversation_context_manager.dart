@@ -10,6 +10,20 @@ class UserKnowledge {
   final Map<String, dynamic> personalInfo = {}; // 개인 정보
   final Map<String, dynamic> recentTopics = {}; // 최근 대화 주제
   final List<String> sharedActivities = []; // 공유한 활동들
+  
+  // 새로 추가: 동적 맥락 정보
+  final Map<String, dynamic> currentEvents = {}; // 현재 진행 중인 이벤트
+  final Map<String, String> causalRelations = {}; // 원인-결과 관계
+  final List<String> recentEmotions = []; // 최근 감정 상태
+  final Map<String, dynamic> stressFactors = {}; // 스트레스 요인들
+  
+  // 🔥 NEW: 눈치 백단 - 암시적 신호와 행동 패턴
+  final Map<String, dynamic> implicitSignals = {}; // 암시적 감정 신호
+  final Map<String, int> avoidedTopics = {}; // 회피한 주제들
+  final List<String> moodIndicators = []; // 기분 지표
+  final Map<String, dynamic> behaviorPatterns = {}; // 행동 패턴
+  final Map<String, dynamic> conversationEnergy = {}; // 대화 에너지 레벨
+  
   final DateTime lastUpdated = DateTime.now();
   
   // 정보가 이미 알려졌는지 확인
@@ -18,6 +32,11 @@ class UserKnowledge {
   bool hasPersonalInfo(String key) => personalInfo.containsKey(key);
   bool hasRecentTopic(String topic) => recentTopics.containsKey(topic);
   bool hasSharedActivity(String activity) => sharedActivities.contains(activity);
+  
+  // 새로 추가: 동적 정보 확인
+  bool hasCurrentEvent(String event) => currentEvents.containsKey(event);
+  bool hasCausalRelation(String cause) => causalRelations.containsKey(cause);
+  bool hasStressFactor(String factor) => stressFactors.containsKey(factor);
 }
 
 /// 대화 컨텍스트 관리자
@@ -65,6 +84,24 @@ class ConversationContextManager {
     
     // 5. 대화 주제 업데이트
     _updateRecentTopics(userMessage, knowledge);
+    
+    // 6. 인과관계 추출 (새로 추가)
+    _extractCausalRelations(userMessage, knowledge);
+    
+    // 7. 스트레스 요인 추출 (새로 추가)
+    _extractStressFactors(userMessage, knowledge);
+    
+    // 8. 감정 상태 추적 (새로 추가)
+    _trackEmotions(userMessage, chatHistory, knowledge);
+    
+    // 🔥 NEW: 9. 암시적 신호 추출 (눈치 백단)
+    _extractImplicitSignals(userMessage, chatHistory, knowledge);
+    
+    // 🔥 NEW: 10. 행간 읽기
+    _readBetweenTheLines(userMessage, chatHistory, knowledge);
+    
+    // 🔥 NEW: 11. 대화 에너지 측정
+    _measureConversationEnergy(userMessage, chatHistory, knowledge);
     
     // Firestore에 저장 (비동기)
     _saveToFirestore(userId, personaId, knowledge).catchError((e) {
@@ -422,6 +459,308 @@ class ConversationContextManager {
     return null;
   }
   
+  /// 인과관계 추출 (새로 추가)
+  void _extractCausalRelations(String message, UserKnowledge knowledge) {
+    // "A 때문에 B", "A해서 B", "A라서 B" 패턴
+    final causalPatterns = [
+      RegExp(r'(.+?)(?:때문에|라서|해서|니까)\s*(.+)'),
+      RegExp(r'(.+?)(?:한테|에게)\s*욕\s*했'),
+    ];
+    
+    for (final pattern in causalPatterns) {
+      final match = pattern.firstMatch(message);
+      if (match != null) {
+        final cause = match.group(1)?.trim() ?? '';
+        final effect = match.group(2)?.trim() ?? message;
+        
+        if (cause.isNotEmpty) {
+          knowledge.causalRelations[cause] = effect;
+          knowledge.currentEvents['last_causal'] = {
+            'cause': cause,
+            'effect': effect,
+            'timestamp': DateTime.now(),
+          };
+        }
+      }
+    }
+  }
+  
+  /// 스트레스 요인 추출 (새로 추가)
+  void _extractStressFactors(String message, UserKnowledge knowledge) {
+    final stressKeywords = ['욕', '짜증', '스트레스', '열받', '빡쳐', '힘들'];
+    final stressTargets = ['부장', '상사', '팀장', '과장', '대리', '회사', '직장'];
+    
+    for (final keyword in stressKeywords) {
+      if (message.contains(keyword)) {
+        // 스트레스 대상 찾기
+        for (final target in stressTargets) {
+          if (message.contains(target)) {
+            knowledge.stressFactors[target] = {
+              'type': keyword,
+              'mentionedAt': DateTime.now(),
+              'context': message,
+            };
+            break;
+          }
+        }
+      }
+    }
+  }
+  
+  /// 감정 상태 추적 (새로 추가)
+  void _trackEmotions(String message, List<Message> chatHistory, UserKnowledge knowledge) {
+    // 감정 키워드
+    final emotionKeywords = {
+      'happy': ['기뻐', '좋아', '행복', '신나', '최고'],
+      'sad': ['슬퍼', '우울', '힘들', '외로'],
+      'angry': ['화나', '짜증', '열받', '빡쳐'],
+      'stressed': ['스트레스', '피곤', '지쳐'],
+    };
+    
+    for (final entry in emotionKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          knowledge.recentEmotions.add(entry.key);
+          // 최대 10개까지만 유지
+          if (knowledge.recentEmotions.length > 10) {
+            knowledge.recentEmotions.removeAt(0);
+          }
+          break;
+        }
+      }
+    }
+  }
+  
+  /// 🔥 NEW: 암시적 신호 추출 (눈치 백단)
+  void _extractImplicitSignals(String message, List<Message> chatHistory, UserKnowledge knowledge) {
+    // 메시지 길이 분석
+    final avgLength = chatHistory.isNotEmpty 
+        ? chatHistory.map((m) => m.content.length).reduce((a, b) => a + b) ~/ chatHistory.length
+        : 50;
+    
+    if (message.length < avgLength * 0.5) {
+      knowledge.implicitSignals['short_response'] = {
+        'meaning': '관심 저하 또는 피곤함',
+        'confidence': 0.7,
+        'timestamp': DateTime.now(),
+      };
+    } else if (message.length > avgLength * 1.5) {
+      knowledge.implicitSignals['long_response'] = {
+        'meaning': '관심 높음 또는 설명하고 싶은 것 있음',
+        'confidence': 0.8,
+        'timestamp': DateTime.now(),
+      };
+    }
+    
+    // 답변 회피 패턴
+    if (message.contains('글쎄') || message.contains('모르겠') || message.contains('그냥')) {
+      knowledge.implicitSignals['avoidance'] = {
+        'meaning': '민감한 주제이거나 대답하기 싫음',
+        'confidence': 0.75,
+        'context': message,
+      };
+    }
+    
+    // 말줄임표와 생략 패턴
+    if (message.contains('...') || message.contains('..')) {
+      knowledge.implicitSignals['ellipsis'] = {
+        'meaning': '말하기 힘든 것이 있음',
+        'confidence': 0.8,
+        'context': message,
+      };
+    }
+    
+    // 시간 언급 패턴
+    if (message.contains('늦었') || message.contains('자야') || message.contains('피곤')) {
+      knowledge.implicitSignals['time_mention'] = {
+        'meaning': '대화 종료 신호일 가능성',
+        'confidence': 0.6,
+        'timestamp': DateTime.now(),
+      };
+    }
+    
+    // 감정 표현 부재
+    final hasEmoticon = message.contains('ㅋ') || message.contains('ㅎ') || 
+                       message.contains('ㅠ') || message.contains('!') ||
+                       RegExp(r'[\u{1F300}-\u{1F9FF}]', unicode: true).hasMatch(message);
+    
+    if (!hasEmoticon && chatHistory.length > 5) {
+      // 이전 메시지들에서 이모티콘 사용 비율 확인
+      final recentMessages = chatHistory.take(5).where((m) => m.isUser);
+      final emotionCount = recentMessages.where((m) => 
+        m.content.contains('ㅋ') || m.content.contains('ㅎ') || 
+        m.content.contains('ㅠ') || m.content.contains('!')
+      ).length;
+      
+      if (emotionCount > 2) {
+        // 평소엔 이모티콘 많이 쓰는데 지금은 안 씀
+        knowledge.implicitSignals['emotion_absence'] = {
+          'meaning': '감정 표현 자제 - 진지하거나 기분이 안 좋을 가능성',
+          'confidence': 0.7,
+          'timestamp': DateTime.now(),
+        };
+      }
+    }
+  }
+  
+  /// 🔥 NEW: 행간 읽기
+  void _readBetweenTheLines(String message, List<Message> chatHistory, UserKnowledge knowledge) {
+    // 주제 전환 시도
+    if (chatHistory.length > 2) {
+      final previousTopic = _extractKeywords(chatHistory[chatHistory.length - 2].content);
+      final currentTopic = _extractKeywords(message);
+      
+      // 이전 주제와 현재 주제가 완전히 다름
+      if (previousTopic.isNotEmpty && currentTopic.isNotEmpty) {
+        final overlap = previousTopic.toSet().intersection(currentTopic.toSet());
+        if (overlap.isEmpty) {
+          knowledge.behaviorPatterns['topic_change'] = {
+            'reason': '불편한 주제 회피 또는 관심 전환',
+            'from': previousTopic.first,
+            'to': currentTopic.first,
+            'timestamp': DateTime.now(),
+          };
+          
+          // 회피한 주제로 기록
+          final avoidedTopic = previousTopic.first;
+          knowledge.avoidedTopics[avoidedTopic] = 
+              (knowledge.avoidedTopics[avoidedTopic] ?? 0) + 1;
+        }
+      }
+    }
+    
+    // 반복 질문 패턴
+    if (message.endsWith('?')) {
+      final recentQuestions = chatHistory
+          .take(10)
+          .where((m) => m.isUser && m.content.endsWith('?'))
+          .map((m) => m.content)
+          .toList();
+      
+      if (recentQuestions.length > 3) {
+        knowledge.behaviorPatterns['frequent_questions'] = {
+          'meaning': '대화 주도권을 넘기려함 또는 자신 얘기 꺼려함',
+          'count': recentQuestions.length,
+          'timestamp': DateTime.now(),
+        };
+      }
+    }
+    
+    // 구체성 부족
+    final vagueWords = ['뭔가', '그냥', '그런', '어떤', '무언가', '아무튼'];
+    final vagueCount = vagueWords.where((word) => message.contains(word)).length;
+    
+    if (vagueCount >= 2) {
+      knowledge.behaviorPatterns['vagueness'] = {
+        'meaning': '구체적으로 말하기 싫거나 정리가 안 됨',
+        'level': vagueCount,
+        'timestamp': DateTime.now(),
+      };
+    }
+    
+    // 과거형 vs 현재형 사용
+    if (message.contains('었어') || message.contains('었지') || message.contains('었는데')) {
+      knowledge.behaviorPatterns['past_tense'] = {
+        'meaning': '끝난 일이나 과거 회상 모드',
+        'timestamp': DateTime.now(),
+      };
+    }
+  }
+  
+  /// 🔥 NEW: 대화 에너지 측정
+  void _measureConversationEnergy(String message, List<Message> chatHistory, UserKnowledge knowledge) {
+    // 응답 속도 (이전 메시지와의 시간 차이)
+    if (chatHistory.isNotEmpty) {
+      final lastMessage = chatHistory.last;
+      final timeDiff = DateTime.now().difference(lastMessage.timestamp).inSeconds;
+      
+      String energyLevel;
+      if (timeDiff < 10) {
+        energyLevel = 'very_high';
+        knowledge.moodIndicators.add('즉각 반응 - 높은 관심');
+      } else if (timeDiff < 30) {
+        energyLevel = 'high';
+        knowledge.moodIndicators.add('빠른 반응 - 관심 있음');
+      } else if (timeDiff < 120) {
+        energyLevel = 'medium';
+      } else {
+        energyLevel = 'low';
+        knowledge.moodIndicators.add('느린 반응 - 다른 일 하는 중');
+      }
+      
+      knowledge.conversationEnergy['response_speed'] = {
+        'level': energyLevel,
+        'seconds': timeDiff,
+        'timestamp': DateTime.now(),
+      };
+    }
+    
+    // 메시지 복잡도
+    final questionCount = '?'.allMatches(message).length;
+    final exclamationCount = '!'.allMatches(message).length;
+    final commaCount = ','.allMatches(message).length;
+    
+    final complexity = questionCount + exclamationCount + (commaCount * 0.5);
+    knowledge.conversationEnergy['message_complexity'] = {
+      'score': complexity,
+      'questions': questionCount,
+      'exclamations': exclamationCount,
+      'timestamp': DateTime.now(),
+    };
+    
+    // 감정 표현 강도
+    int emotionIntensity = 0;
+    if (message.contains('너무')) emotionIntensity += 2;
+    if (message.contains('진짜')) emotionIntensity += 2;
+    if (message.contains('완전')) emotionIntensity += 2;
+    if (message.contains('정말')) emotionIntensity += 2;
+    if (message.contains('ㅋㅋㅋ') || message.contains('ㅎㅎㅎ')) emotionIntensity += 3;
+    if (message.contains('ㅠㅠ') || message.contains('ㅜㅜ')) emotionIntensity += 3;
+    
+    knowledge.conversationEnergy['emotion_intensity'] = {
+      'score': emotionIntensity,
+      'timestamp': DateTime.now(),
+    };
+    
+    // 전체 에너지 레벨 계산
+    double overallEnergy = 0.5; // 기본값
+    
+    // 응답 속도 반영
+    if (knowledge.conversationEnergy['response_speed'] != null) {
+      final speed = knowledge.conversationEnergy['response_speed']['level'];
+      if (speed == 'very_high') overallEnergy += 0.3;
+      else if (speed == 'high') overallEnergy += 0.2;
+      else if (speed == 'low') overallEnergy -= 0.2;
+    }
+    
+    // 메시지 복잡도 반영
+    if (complexity > 3) overallEnergy += 0.1;
+    if (complexity > 5) overallEnergy += 0.1;
+    
+    // 감정 강도 반영
+    if (emotionIntensity > 4) overallEnergy += 0.2;
+    else if (emotionIntensity > 2) overallEnergy += 0.1;
+    
+    knowledge.conversationEnergy['overall'] = {
+      'level': overallEnergy.clamp(0.0, 1.0),
+      'description': overallEnergy > 0.7 ? '활발한 대화' : 
+                     overallEnergy > 0.4 ? '보통 대화' : '차분한 대화',
+      'timestamp': DateTime.now(),
+    };
+    
+    // 기분 지표 업데이트
+    if (overallEnergy > 0.7) {
+      knowledge.moodIndicators.add('대화 에너지 높음 - 즐거워함');
+    } else if (overallEnergy < 0.3) {
+      knowledge.moodIndicators.add('대화 에너지 낮음 - 피곤하거나 관심 적음');
+    }
+    
+    // 최대 10개 기분 지표만 유지
+    if (knowledge.moodIndicators.length > 10) {
+      knowledge.moodIndicators.removeRange(0, knowledge.moodIndicators.length - 10);
+    }
+  }
+  
   /// Firestore에 저장
   Future<void> _saveToFirestore(String userId, String personaId, UserKnowledge knowledge) async {
     try {
@@ -434,6 +773,16 @@ class ConversationContextManager {
         'personalInfo': knowledge.personalInfo,
         'recentTopics': knowledge.recentTopics,
         'sharedActivities': knowledge.sharedActivities,
+        'currentEvents': knowledge.currentEvents,
+        'causalRelations': knowledge.causalRelations,
+        'recentEmotions': knowledge.recentEmotions,
+        'stressFactors': knowledge.stressFactors,
+        // 🔥 NEW: 눈치 백단 데이터 저장
+        'implicitSignals': knowledge.implicitSignals,
+        'avoidedTopics': knowledge.avoidedTopics,
+        'moodIndicators': knowledge.moodIndicators,
+        'behaviorPatterns': knowledge.behaviorPatterns,
+        'conversationEnergy': knowledge.conversationEnergy,
         'lastUpdated': FieldValue.serverTimestamp(),
       });
     } catch (e) {

@@ -10,7 +10,17 @@ class EmotionalState {
   DateTime lastUpdated = DateTime.now();
   Map<String, int> emotionFrequency = {};
   
+  // 🔥 NEW: 미세 감정 변화 추적
+  Map<String, double> microEmotions = {}; // 감정별 미세 강도
+  List<Map<String, dynamic>> emotionTransitions = []; // 감정 전환 기록
+  double emotionVolatility = 0.0; // 감정 변동성 (0.0 ~ 1.0)
+  String emotionTrend = 'stable'; // rising, falling, stable, volatile
+  
   void updateEmotion(String emotion, double newIntensity) {
+    // 이전 감정 저장
+    final previousEmotion = primaryEmotion;
+    final previousIntensity = intensity;
+    
     primaryEmotion = emotion;
     intensity = newIntensity;
     lastUpdated = DateTime.now();
@@ -23,6 +33,76 @@ class EmotionalState {
     
     // 빈도 업데이트
     emotionFrequency[emotion] = (emotionFrequency[emotion] ?? 0) + 1;
+    
+    // 🔥 NEW: 감정 전환 기록
+    if (previousEmotion != emotion) {
+      emotionTransitions.add({
+        'from': previousEmotion,
+        'to': emotion,
+        'intensityChange': newIntensity - previousIntensity,
+        'timestamp': DateTime.now(),
+      });
+      
+      // 최대 20개 전환만 유지
+      if (emotionTransitions.length > 20) {
+        emotionTransitions.removeAt(0);
+      }
+    }
+    
+    // 🔥 NEW: 미세 감정 업데이트
+    microEmotions[emotion] = newIntensity;
+    _calculateEmotionVolatility();
+    _determineEmotionTrend();
+  }
+  
+  // 🔥 NEW: 감정 변동성 계산
+  void _calculateEmotionVolatility() {
+    if (emotionHistory.length < 3) {
+      emotionVolatility = 0.0;
+      return;
+    }
+    
+    // 최근 5개 감정의 변화 횟수 계산
+    final recentEmotions = emotionHistory.length > 5 
+        ? emotionHistory.sublist(emotionHistory.length - 5)
+        : emotionHistory;
+    
+    int changes = 0;
+    for (int i = 1; i < recentEmotions.length; i++) {
+      if (recentEmotions[i] != recentEmotions[i - 1]) {
+        changes++;
+      }
+    }
+    
+    emotionVolatility = changes / (recentEmotions.length - 1);
+  }
+  
+  // 🔥 NEW: 감정 트렌드 파악
+  void _determineEmotionTrend() {
+    if (emotionTransitions.length < 2) {
+      emotionTrend = 'stable';
+      return;
+    }
+    
+    // 최근 3개 전환의 강도 변화 분석
+    final recentTransitions = emotionTransitions.length > 3
+        ? emotionTransitions.sublist(emotionTransitions.length - 3)
+        : emotionTransitions;
+    
+    double totalChange = 0;
+    for (final transition in recentTransitions) {
+      totalChange += transition['intensityChange'] as double;
+    }
+    
+    if (emotionVolatility > 0.6) {
+      emotionTrend = 'volatile';
+    } else if (totalChange > 0.3) {
+      emotionTrend = 'rising';
+    } else if (totalChange < -0.3) {
+      emotionTrend = 'falling';
+    } else {
+      emotionTrend = 'stable';
+    }
   }
   
   String getDominantEmotion() {
@@ -96,6 +176,27 @@ class EmotionalTransferService {
     final mbtiStyle = _getMbtiEmotionalStyle(persona.mbti, currentEmotion.emotion);
     if (mbtiStyle.isNotEmpty) {
       guide.writeln('🧬 $mbtiStyle');
+    }
+    
+    // 🔥 NEW: 6. 감정 트렌드 반영
+    if (emotionalState.emotionTrend != 'stable') {
+      final trendGuide = _generateTrendGuide(emotionalState.emotionTrend);
+      guide.writeln('📈 $trendGuide');
+    }
+    
+    // 🔥 NEW: 7. 감정 변동성 대응
+    if (emotionalState.emotionVolatility > 0.5) {
+      guide.writeln('⚡ 감정 변동성 높음: 안정적이고 차분한 톤으로 대응');
+    }
+    
+    // 🔥 NEW: 8. 미세 감정 신호
+    final microSignals = _detectMicroEmotionalChanges(
+      userMessage, 
+      chatHistory, 
+      emotionalState
+    );
+    if (microSignals.isNotEmpty) {
+      guide.writeln('🔬 미세 신호: $microSignals');
     }
     
     return guide.toString().trim();
@@ -292,6 +393,119 @@ class EmotionalTransferService {
              emotion == 'anger' ? '원인 분석과 대안 제시' :
              '차분한 감정 인정';
     }
+  }
+  
+  /// 🔥 NEW: 감정 트렌드 가이드 생성
+  String _generateTrendGuide(String trend) {
+    switch (trend) {
+      case 'rising':
+        return '감정 상승 중: 긍정적 에너지 함께 올려주기';
+      case 'falling':
+        return '감정 하락 중: 부드럽게 위로하고 격려하기';
+      case 'volatile':
+        return '감정 기복 심함: 안정적이고 일관된 톤 유지';
+      default:
+        return '';
+    }
+  }
+  
+  /// 🔥 NEW: 미세 감정 변화 감지
+  String _detectMicroEmotionalChanges(
+    String message,
+    List<Message> chatHistory,
+    EmotionalState state,
+  ) {
+    final signals = <String>[];
+    
+    // 1. 메시지 길이 변화
+    if (chatHistory.length > 3) {
+      final recentLengths = chatHistory
+          .take(3)
+          .where((m) => m.isUser)
+          .map((m) => m.content.length)
+          .toList();
+      
+      if (recentLengths.isNotEmpty) {
+        final avgLength = recentLengths.reduce((a, b) => a + b) ~/ recentLengths.length;
+        if (message.length < avgLength * 0.6) {
+          signals.add('짧은 답변 - 피곤하거나 관심 저하');
+        } else if (message.length > avgLength * 1.5) {
+          signals.add('긴 답변 - 흥분되거나 설명하고 싶음');
+        }
+      }
+    }
+    
+    // 2. 이모티콘 사용 변화
+    final currentEmoticonCount = _countEmoticons(message);
+    if (chatHistory.length > 3) {
+      final recentEmoticonCounts = chatHistory
+          .take(3)
+          .where((m) => m.isUser)
+          .map((m) => _countEmoticons(m.content))
+          .toList();
+      
+      if (recentEmoticonCounts.isNotEmpty) {
+        final avgEmoticons = recentEmoticonCounts.reduce((a, b) => a + b) / recentEmoticonCounts.length;
+        if (currentEmoticonCount == 0 && avgEmoticons > 1) {
+          signals.add('이모티콘 없음 - 진지하거나 기분 안 좋음');
+        } else if (currentEmoticonCount > avgEmoticons * 2) {
+          signals.add('이모티콘 증가 - 기분 좋아짐');
+        }
+      }
+    }
+    
+    // 3. 문장 부호 변화
+    final exclamationCount = '!'.allMatches(message).length;
+    final questionCount = '?'.allMatches(message).length;
+    
+    if (exclamationCount > 2) {
+      signals.add('느낌표 많음 - 흥분 상태');
+    }
+    if (questionCount > 2) {
+      signals.add('질문 많음 - 궁금하거나 불안함');
+    }
+    
+    // 4. 감정 전환 패턴
+    if (state.emotionTransitions.length > 2) {
+      final recentTransitions = state.emotionTransitions.length > 3
+          ? state.emotionTransitions.sublist(state.emotionTransitions.length - 3)
+          : state.emotionTransitions;
+      
+      // 긍정 → 부정 전환 감지
+      for (final transition in recentTransitions) {
+        if (_isPositive(transition['from']) && _isNegative(transition['to'])) {
+          signals.add('긍정→부정 전환 - 뭔가 안 좋은 일 발생');
+          break;
+        } else if (_isNegative(transition['from']) && _isPositive(transition['to'])) {
+          signals.add('부정→긍정 전환 - 기분 전환 시도');
+          break;
+        }
+      }
+    }
+    
+    return signals.join(', ');
+  }
+  
+  /// 🔥 NEW: 이모티콘 개수 세기
+  int _countEmoticons(String text) {
+    int count = 0;
+    
+    // 한글 이모티콘
+    count += 'ㅋ'.allMatches(text).length;
+    count += 'ㅎ'.allMatches(text).length;
+    count += 'ㅠ'.allMatches(text).length;
+    count += 'ㅜ'.allMatches(text).length;
+    
+    // 특수문자 이모티콘
+    count += '!'.allMatches(text).length;
+    count += '~'.allMatches(text).length;
+    count += '^'.allMatches(text).length;
+    
+    // 유니코드 이모지
+    final emojiPattern = RegExp(r'[\u{1F300}-\u{1F9FF}]', unicode: true);
+    count += emojiPattern.allMatches(text).length;
+    
+    return count;
   }
   
   /// 헬퍼 메서드들

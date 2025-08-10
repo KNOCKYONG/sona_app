@@ -246,9 +246,9 @@ class TemporalContextService {
         '저녁 먹었어?',
         '오늘 어땠어?',
         '퇴근했어?',
-        '수고했어 오늘도',
         '저녁 뭐해?',
         '피곤하겠다',
+        '오늘 하루 어땠어?',
       ];
       return greetings[DateTime.now().millisecond % greetings.length];
     } else if (hour >= 22 && hour < 24) {

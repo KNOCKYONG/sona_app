@@ -2,8 +2,13 @@
 /// 사용자의 말투 특징을 세밀하게 분석하고 학습하여
 /// 페르소나가 자연스럽게 적응하도록 지원
 class UserSpeechPatternAnalyzer {
+  // 🔥 NEW: 개인화 패턴 학습 캐시
+  static final Map<String, PersonalizedPattern> _patternCache = {};
+  static final Map<String, List<String>> _vocabularyCache = {};
+  static final Map<String, Map<String, int>> _phraseFrequency = {};
+  
   /// 사용자 말투 패턴 분석
-  static SpeechPattern analyzeSpeechPattern(List<String> userMessages) {
+  static SpeechPattern analyzeSpeechPattern(List<String> userMessages, {String? userId}) {
     if (userMessages.isEmpty) {
       return SpeechPattern();
     }
@@ -12,6 +17,11 @@ class UserSpeechPatternAnalyzer {
     final recentMessages = userMessages.length > 10
         ? userMessages.sublist(userMessages.length - 10)
         : userMessages;
+    
+    // 🔥 NEW: 개인화 패턴 학습
+    if (userId != null) {
+      _learnPersonalizedPatterns(userId, recentMessages);
+    }
 
     // 1. 기본 말투 모드 (반말/존댓말)
     final isCasual = _detectCasualSpeech(recentMessages);
@@ -595,6 +605,161 @@ class UserSpeechPatternAnalyzer {
 
     return buffer.toString();
   }
+  
+  /// 🔥 NEW: 개인화 패턴 학습
+  static void _learnPersonalizedPatterns(String userId, List<String> messages) {
+    // 개인 어휘 학습
+    _vocabularyCache[userId] ??= [];
+    final vocabulary = _vocabularyCache[userId]!;
+    
+    for (final msg in messages) {
+      // 특징적인 단어 추출 (2글자 이상, 일반적이지 않은 단어)
+      final words = msg.split(RegExp(r'\s+'));
+      for (final word in words) {
+        if (word.length >= 2 && !_isCommonWord(word)) {
+          if (!vocabulary.contains(word)) {
+            vocabulary.add(word);
+            // 최대 100개 단어만 유지
+            if (vocabulary.length > 100) {
+              vocabulary.removeAt(0);
+            }
+          }
+        }
+      }
+      
+      // 구문 빈도 학습
+      _learnPhraseFrequency(userId, msg);
+    }
+    
+    // 개인화 패턴 생성
+    _patternCache[userId] = PersonalizedPattern(
+      favoriteWords: _extractFavoriteWords(userId),
+      uniquePhrases: _extractUniquePhrases(userId),
+      responsePatterns: _extractResponsePatterns(messages),
+      timeBasedPatterns: _extractTimeBasedPatterns(messages),
+    );
+  }
+  
+  /// 🔥 NEW: 구문 빈도 학습
+  static void _learnPhraseFrequency(String userId, String message) {
+    _phraseFrequency[userId] ??= {};
+    final phrases = _phraseFrequency[userId]!;
+    
+    // 2-3단어 구문 추출
+    final words = message.split(RegExp(r'\s+'));
+    for (int i = 0; i < words.length - 1; i++) {
+      // 2단어 구문
+      final phrase2 = '${words[i]} ${words[i + 1]}';
+      phrases[phrase2] = (phrases[phrase2] ?? 0) + 1;
+      
+      // 3단어 구문
+      if (i < words.length - 2) {
+        final phrase3 = '${words[i]} ${words[i + 1]} ${words[i + 2]}';
+        phrases[phrase3] = (phrases[phrase3] ?? 0) + 1;
+      }
+    }
+  }
+  
+  /// 🔥 NEW: 자주 사용하는 단어 추출
+  static List<String> _extractFavoriteWords(String userId) {
+    final vocabulary = _vocabularyCache[userId] ?? [];
+    final wordCount = <String, int>{};
+    
+    for (final word in vocabulary) {
+      wordCount[word] = (wordCount[word] ?? 0) + 1;
+    }
+    
+    // 빈도순 정렬 후 상위 10개 반환
+    final sorted = wordCount.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    return sorted.take(10).map((e) => e.key).toList();
+  }
+  
+  /// 🔥 NEW: 독특한 구문 추출
+  static List<String> _extractUniquePhrases(String userId) {
+    final phrases = _phraseFrequency[userId] ?? {};
+    
+    // 2번 이상 사용된 구문 중 상위 10개
+    final filtered = phrases.entries
+        .where((e) => e.value >= 2)
+        .toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
+    
+    return filtered.take(10).map((e) => e.key).toList();
+  }
+  
+  /// 🔥 NEW: 응답 패턴 추출
+  static Map<String, String> _extractResponsePatterns(List<String> messages) {
+    final patterns = <String, String>{};
+    
+    for (final msg in messages) {
+      // 인사 응답 패턴
+      if (msg.contains('안녕') || msg.contains('하이')) {
+        patterns['greeting'] = msg;
+      }
+      // 감사 응답 패턴
+      if (msg.contains('고마워') || msg.contains('감사')) {
+        patterns['thanks'] = msg;
+      }
+      // 동의 패턴
+      if (msg.contains('맞아') || msg.contains('그래') || msg.contains('ㅇㅇ')) {
+        patterns['agreement'] = msg;
+      }
+      // 부정 패턴
+      if (msg.contains('아니') || msg.contains('ㄴㄴ') || msg.contains('안')) {
+        patterns['disagreement'] = msg;
+      }
+    }
+    
+    return patterns;
+  }
+  
+  /// 🔥 NEW: 시간대별 패턴 추출
+  static Map<String, dynamic> _extractTimeBasedPatterns(List<String> messages) {
+    // 실제 구현에서는 메시지 타임스탬프를 활용
+    // 여기서는 간단한 예시만 제공
+    return {
+      'morning_style': '아침엔 짧고 간결하게',
+      'evening_style': '저녁엔 더 친근하고 길게',
+      'weekend_style': '주말엔 더 캐주얼하게',
+    };
+  }
+  
+  /// 🔥 NEW: 일반적인 단어인지 확인
+  static bool _isCommonWord(String word) {
+    final commonWords = [
+      '그래', '응', '네', '아니', '나', '너', '우리', '이', '그', '저',
+      '있어', '없어', '해', '하는', '한', '할', '했어', '했', '되', '된',
+      '좋아', '싫어', '맞아', '아니야', '모르겠어', '뭐', '왜', '어디',
+      '언제', '누구', '어떻게', '얼마나', '하고', '에서', '으로', '부터',
+    ];
+    
+    return commonWords.contains(word);
+  }
+  
+  /// 🔥 NEW: 개인화 말투 힌트 생성
+  static String generatePersonalizedHint(String userId) {
+    final pattern = _patternCache[userId];
+    if (pattern == null) return '';
+    
+    final buffer = StringBuffer();
+    buffer.writeln('🎯 개인화 말투 학습 결과:');
+    
+    if (pattern.favoriteWords.isNotEmpty) {
+      buffer.writeln('• 자주 쓰는 단어: ${pattern.favoriteWords.take(5).join(', ')}');
+    }
+    
+    if (pattern.uniquePhrases.isNotEmpty) {
+      buffer.writeln('• 특징적 표현: ${pattern.uniquePhrases.take(3).join(', ')}');
+    }
+    
+    if (pattern.responsePatterns.isNotEmpty) {
+      buffer.writeln('• 응답 스타일 학습됨');
+    }
+    
+    return buffer.toString();
+  }
 }
 
 /// 사용자 말투 패턴 데이터 클래스
@@ -688,5 +853,20 @@ class RepetitionPattern {
   RepetitionPattern({
     this.charRepetition = 0,
     this.wordRepetition = 0,
+  });
+}
+
+/// 🔥 NEW: 개인화 패턴 클래스
+class PersonalizedPattern {
+  final List<String> favoriteWords;
+  final List<String> uniquePhrases;
+  final Map<String, String> responsePatterns;
+  final Map<String, dynamic> timeBasedPatterns;
+  
+  PersonalizedPattern({
+    required this.favoriteWords,
+    required this.uniquePhrases,
+    required this.responsePatterns,
+    required this.timeBasedPatterns,
   });
 }

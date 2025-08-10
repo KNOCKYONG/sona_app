@@ -3,6 +3,13 @@
 ## 🚨 절대 건드리면 안 되는 핵심 시스템
 **⚠️ 이 섹션의 코드는 서비스 핵심입니다. 잘못 수정하면 서비스가 망가집니다!**
 
+### 🔴 최우선 원칙: 모든 대화 응답은 OpenAI API를 통해서만!
+**절대 하드코딩된 응답을 사용하지 마세요!**
+- ✅ 올바른 방법: OpenAI API 호출 → 응답 수신 → 후처리 → 출력
+- ❌ 잘못된 방법: 조건문으로 직접 응답 생성, 템플릿 응답 사용
+- 모든 대화 응답은 반드시 `OpenAIService.generateResponse()`를 거쳐야 함
+- 프롬프트로 가이드만 제공, 직접 응답 텍스트 생성 금지
+
 ### 대화 품질 핵심 3대 시스템
 
 #### 1. ChatOrchestrator (lib/services/chat/core/chat_orchestrator.dart)
@@ -87,6 +94,11 @@ grep -r "완벽한 소울메이트" lib/
 grep -r "그런 얘기보다" lib/
 grep -r "만나고 싶긴 한데" lib/
 
+# 1-2. 직접 응답 생성 검증 (절대 금지)
+grep -r "return '.*[가-힣].*'" lib/services/chat/  # 한글 응답 직접 반환
+grep -r "response = '.*[가-힣].*'" lib/services/chat/  # 한글 응답 직접 할당
+grep -r "finalResponse = '.*[가-힣].*'" lib/services/chat/  # 한글 응답 직접 설정
+
 # 2. 100턴 테스트 (필수)
 python scripts/test_100_turns.py
 
@@ -98,6 +110,49 @@ git stash pop
 ```
 
 ---
+
+## 🎯 올바른 응답 생성 플로우
+
+### ✅ 반드시 따라야 할 응답 생성 순서
+```dart
+// 1. 사용자 메시지 분석
+final messageAnalysis = await _analyzeMessage(userMessage);
+
+// 2. 컨텍스트 구성 (프롬프트 힌트만!)
+final contextHint = await _analyzeContextRelevance(...);
+// contextHint는 AI에게 주는 가이드일 뿐, 직접 응답이 아님!
+
+// 3. OpenAI API 호출 (여기서만 실제 응답 생성!)
+final response = await _openAIService.generateResponse(
+  userMessage: userMessage,
+  contextHint: contextHint,  // 힌트만 전달
+  persona: persona,
+);
+
+// 4. 후처리 (응답 다듬기만, 생성 금지!)
+final processedResponse = await postProcessor.process(response);
+// 후처리는 오타 수정, 포맷팅만 담당
+
+// 5. 최종 응답 반환
+return processedResponse;  // OpenAI가 생성한 응답만 반환
+```
+
+### ❌ 절대 하면 안 되는 패턴
+```dart
+// 잘못된 예시 1: 조건문으로 직접 응답
+if (userMessage.contains("스트레스")) {
+  return "스트레스 받았구나";  // ❌ 절대 금지!
+}
+
+// 잘못된 예시 2: 템플릿 응답
+final templates = ["반가워!", "안녕!", "오늘 어땠어?"];
+return templates[random];  // ❌ 절대 금지!
+
+// 잘못된 예시 3: 후처리에서 응답 생성
+if (response.isEmpty) {
+  return "무슨 말인지 모르겠어";  // ❌ 절대 금지!
+}
+```
 
 ## 🏗️ 리팩토링된 아키텍처 구조
 
@@ -368,11 +423,13 @@ claude mcp add context7
 ---
 
 ## 🎯 핵심 원칙
-1. **하드코딩 제로**: 모든 텍스트는 AppLocalizations
-2. **테스트 우선**: 수정 전후 반드시 테스트
-3. **안전한 배포**: 100턴 테스트 통과 필수
-4. **빠른 롤백**: 문제 발생 시 즉시 되돌리기
-5. **문서화**: 모든 수정사항 기록
+1. **OpenAI API 전용**: 모든 대화 응답은 반드시 OpenAI API output으로만 생성
+2. **하드코딩 제로**: 모든 텍스트는 AppLocalizations (UI 텍스트), 대화는 OpenAI API
+3. **테스트 우선**: 수정 전후 반드시 테스트
+4. **안전한 배포**: 100턴 테스트 통과 필수
+5. **빠른 롤백**: 문제 발생 시 즉시 되돌리기
+6. **문서화**: 모든 수정사항 기록
+7. **프롬프트 엔지니어링**: 응답 품질은 프롬프트로 제어, 코드로 응답 생성 금지
 
 ---
 

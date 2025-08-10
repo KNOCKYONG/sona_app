@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../models/message.dart';
 import '../../../models/persona.dart';
+import 'fuzzy_memory_service.dart';
 
 /// 관계 이벤트 클래스
 class RelationshipEvent {
@@ -243,6 +244,21 @@ class ConversationMemoryService {
     if (content.contains('일') || content.contains('직장')) tags.add('work');
     if (content.contains('취미') || content.contains('좋아하는')) tags.add('hobbies');
     if (content.contains('꿈') || content.contains('목표')) tags.add('dreams');
+    
+    // 인과관계 태그 (새로 추가)
+    if (content.contains('때문에') || content.contains('라서') || 
+        content.contains('해서') || content.contains('니까')) {
+      tags.add('causal_relation');
+    }
+    
+    // 스트레스/감정 원인 태그 (새로 추가)
+    if (content.contains('욕') || content.contains('짜증') || 
+        content.contains('스트레스') || content.contains('열받')) {
+      tags.add('stress_cause');
+    }
+    if (content.contains('부장') || content.contains('상사') || 
+        content.contains('팀장') || content.contains('과장')) {
+      tags.add('work_stress');
 
     // 특별한 순간 태그
     if (message.likesChange != null && message.likesChange! > 5) {
@@ -614,11 +630,19 @@ class ConversationMemoryService {
     final memories = await _getImportantMemories(userId, personaId,
         limit: 10); // 5 -> 10개로 증가
     if (memories.isNotEmpty) {
-      final memoryText = '중요한 기억들:\n' +
-          memories
-              .map((m) =>
-                  '- ${m.content} (${m.timestamp.month}/${m.timestamp.day})')
-              .join('\n');
+      // FuzzyMemoryService를 사용한 자연스러운 기억 표현
+      final memoryTexts = <String>[];
+      for (final m in memories) {
+        final fuzzyExpr = FuzzyMemoryService.generateFuzzyMemoryExpression(
+          content: m.content,
+          timestamp: m.timestamp,
+          emotion: m.emotion.name,
+          isDetailed: m.importance > 7,
+        );
+        memoryTexts.add('- $fuzzyExpr');
+      }
+      
+      final memoryText = '중요한 기억들 (흐릿한 회상):\n' + memoryTexts.join('\n');
       if (estimatedTokens + 600 <= maxTokens) {
         // 300 -> 600 토큰으로 증가
         contextParts.add(memoryText);
@@ -648,7 +672,72 @@ class ConversationMemoryService {
       contextParts.add('최근 대화:\n$recentContext');
     }
 
+    // 5. 현재 대화 맥락과 인과관계 (~200 tokens) - 새로 추가
+    final currentContext = await _buildCurrentContext(userId, personaId, recentMessages);
+    if (currentContext.isNotEmpty && estimatedTokens + 200 <= maxTokens) {
+      contextParts.add('현재 맥락:\n$currentContext');
+      estimatedTokens += 200;
+    }
+
     return contextParts.join('\n\n');
+  }
+  
+  /// 현재 대화 맥락 구축 (새로 추가)
+  Future<String> _buildCurrentContext(String userId, String personaId, List<Message> recentMessages) async {
+    final contextItems = <String>[];
+    
+    // 최근 메모리에서 스트레스/감정 원인 찾기
+    final memories = await _getImportantMemories(userId, personaId, limit: 15);
+    
+    // FuzzyMemoryService를 사용한 연관 기억 트리거
+    if (recentMessages.isNotEmpty) {
+      final currentTopic = recentMessages.last.content;
+      final associations = FuzzyMemoryService.getAssociativeMemories(
+        currentTopic: currentTopic,
+        memories: memories,
+      );
+      if (associations.isNotEmpty) {
+        contextItems.add('연관 기억: ${associations.first}');
+      }
+    }
+    
+    for (final memory in memories) {
+      if (memory.tags.contains('stress_cause') || memory.tags.contains('work_stress')) {
+        // 자연스러운 기억 표현 사용
+        final naturalRecall = FuzzyMemoryService.generateNaturalRecall(
+          topic: '스트레스',
+          memories: memories,
+        );
+        if (naturalRecall.isNotEmpty) {
+          contextItems.add(naturalRecall);
+        } else {
+          contextItems.add('스트레스 원인: ${memory.content}');
+        }
+      }
+      if (memory.tags.contains('causal_relation')) {
+        contextItems.add('인과관계: ${memory.content}');
+      }
+    }
+    
+    // 최근 감정 흐름
+    final recentEmotions = memories
+        .where((m) => m.emotion != EmotionType.neutral)
+        .map((m) => m.emotion.name)
+        .toList();
+    if (recentEmotions.isNotEmpty && recentEmotions.length > 1) {
+      contextItems.add('감정 흐름: ${recentEmotions.take(5).join(' → ')}');
+    }
+    
+    return contextItems.join('\n');
+  }
+
+  /// 최근 메모리 가져오기 (public method for FuzzyMemoryService)
+  Future<List<ConversationMemory>> getRecentMemories({
+    required String userId,
+    required String personaId,
+    int limit = 10,
+  }) async {
+    return await _getImportantMemories(userId, personaId, limit: limit);
   }
 
   /// 📖 저장된 중요한 기억들 가져오기

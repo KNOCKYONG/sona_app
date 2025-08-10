@@ -292,10 +292,19 @@ class ServiceOrchestrationController {
     required String userMessage,
     required DateTime currentTime,
     required UserKnowledge? knowledge,
+    DateTime? personaMatchedAt,
   }) async {
     final prefs = await SharedPreferences.getInstance();
     if (!(prefs.getBool('daily_care_enabled') ?? true)) {
       return false;
+    }
+    
+    // 대화 시작한지 최소 24시간이 지나야 일상 케어 메시지 활성화
+    if (personaMatchedAt != null) {
+      final hoursSinceMatch = DateTime.now().difference(personaMatchedAt).inHours;
+      if (hoursSinceMatch < 24) {
+        return false;
+      }
     }
     
     final hour = currentTime.hour;

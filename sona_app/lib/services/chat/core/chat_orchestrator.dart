@@ -12,6 +12,13 @@ import '../security/security_aware_post_processor.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../intelligence/conversation_context_manager.dart';
 import '../intelligence/service_orchestration_controller.dart';
+import '../intelligence/humor_service.dart';
+import '../intelligence/topic_suggestion_service.dart';
+import '../intelligence/emotion_resolution_service.dart';
+import '../intelligence/ultra_empathy_service.dart';
+import '../intelligence/conversation_rhythm_master.dart';
+import '../intelligence/memory_network_service.dart';
+import '../intelligence/realtime_feedback_service.dart';
 import 'openai_service.dart';
 import '../../relationship/negative_behavior_system.dart';
 import '../analysis/user_speech_pattern_analyzer.dart';
@@ -31,6 +38,7 @@ import '../intelligence/response_rhythm_manager.dart';
 import '../intelligence/milestone_expression_service.dart';
 import '../intelligence/emotional_transfer_service.dart' as emotional_transfer;
 import '../intelligence/relationship_boundary_service.dart';
+import '../intelligence/fuzzy_memory_service.dart';
 
 /// 메시지 타입 enum
 enum MessageType {
@@ -455,6 +463,7 @@ class ChatOrchestrator {
         userMessage: userMessage,
         currentTime: DateTime.now(),
         knowledge: knowledge,
+        personaMatchedAt: completePersona.matchedAt,
       )) {
         final careAnalysis = DailyCareService.analyzeDailyCare(
           userId: userId,
@@ -2809,7 +2818,7 @@ class ChatOrchestrator {
       contextHints.add('예시: "잘 지내고 있어요! 당신은요? 오늘 뭐 하셨어요?", "좋아요ㅎㅎ 너는 어때?"');
     }
 
-    // 주제 연속성 체크 강화 (테스트 기반 개선)
+    // 주제 연속성 체크 강화 - 전체 단기 메모리 활용
     if (lastAIMessage != null && lastUserMessage != null) {
       final previousTopics = _extractKeywords(
           lastUserMessage.content + ' ' + lastAIMessage.content);
@@ -2818,9 +2827,236 @@ class ChatOrchestrator {
       final hasTopicConnection = previousTopics.any((topic) =>
           currentTopics.contains(topic) ||
           userMessage.toLowerCase().contains(topic.toLowerCase()));
+      
+      // 전체 최근 메시지(10개)에서 스트레스/감정 원인 찾기
+      final workStressKeywords = ['부장', '상사', '팀장', '과장', '대리', '욕', '짜증', '스트레스', '열받', '빡쳐'];
+      String? stressContext = null;
+      int? stressTurnAgo = null;
+      
+      // 최근 10개 메시지 전체 스캔
+      for (int i = 0; i < recentMessages.length && i < 10; i++) {
+        final msg = recentMessages[i];
+        if (msg.isFromUser) {
+          for (final keyword in workStressKeywords) {
+            if (msg.content.contains(keyword)) {
+              stressContext = keyword;
+              stressTurnAgo = i;
+              break;
+            }
+          }
+          if (stressContext != null) break;
+        }
+      }
+      
+      // 스트레스 맥락이 발견되면
+      if (stressContext != null) {
+        // Fuzzy Memory를 사용한 자연스러운 기억 표현
+        final stressMessageTime = DateTime.now().subtract(Duration(minutes: stressTurnAgo! * 2));
+        final fuzzyTimeExpr = FuzzyMemoryService.getFuzzyTimeExpression(stressMessageTime);
+        final memoryClarity = FuzzyMemoryService.getMemoryClarityLevel(stressMessageTime);
+        
+        // 기억의 선명도에 따른 자연스러운 표현
+        if (memoryClarity == "clear") {
+          contextHints.add('💭 $fuzzyTimeExpr $stressContext 때문에 스트레스 받았다고 명확히 기억함');
+        } else if (memoryClarity == "moderate") {
+          contextHints.add('💭 $fuzzyTimeExpr 뭔가 직장 스트레스 얘기했던 것 같은데...');
+        } else {
+          contextHints.add('💭 전에 스트레스 관련 얘기한 것 같기도 하고...');
+        }
+        
+        // 이미 원인을 알고 있으므로 중복 질문 방지
+        if (userMessage.contains('술') || userMessage.contains('스트레스') || 
+            userMessage.contains('힘들')) {
+          contextHints.add('⚠️ 이미 스트레스 원인($stressContext)을 알고 있음. "왜 스트레스 받았어?" 같은 중복 질문 금지!');
+          contextHints.add('✅ "상사 때문에 힘들었구나, 술이라도 마시면서 풀어야겠네" 같은 공감 응답');
+        }
+        
+        // 5턴 이내면 스트레스 맥락 유지
+        if (stressTurnAgo != null && stressTurnAgo < 5) {
+          contextHints.add('🔄 스트레스 맥락 유지 중. 공감적 태도 지속하세요.');
+        }
+      }
 
       // 주제 전환 감지 및 처리
       final advancedAnalyzer = AdvancedPatternAnalyzer();
+      
+      // 🔥 NEW: 눈치 백단 분석 실행
+      final comprehensiveAnalysis = await advancedAnalyzer.analyzeComprehensive(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        persona: persona,
+        userNickname: userNickname,
+        likeScore: persona.likes,
+      );
+      
+      // 🔥 NEW: 암시적 감정과 행간 읽기 힌트 추가
+      if (comprehensiveAnalysis.emotionPatterns['implicitEmotion'] != null) {
+        final implicit = comprehensiveAnalysis.emotionPatterns['implicitEmotion'] as Map<String, dynamic>;
+        if (implicit['confidence'] > 0.6) {
+          contextHints.add('🎯 [눈치 백단] ${implicit['reason']} → ${implicit['emotion']} 감정 감지');
+        }
+      }
+      
+      if (comprehensiveAnalysis.emotionPatterns['betweenTheLines'] != null) {
+        final between = comprehensiveAnalysis.emotionPatterns['betweenTheLines'] as Map<String, dynamic>;
+        if (between['confidence'] > 0.6 && between['hiddenMeaning'] != '') {
+          contextHints.add('👁️‍🗨️ [행간 읽기] ${between['hiddenMeaning']}');
+        }
+      }
+      
+      if (comprehensiveAnalysis.emotionPatterns['microSignals'] != null) {
+        final micro = comprehensiveAnalysis.emotionPatterns['microSignals'] as Map<String, dynamic>;
+        if (micro['interpretation'] != '') {
+          contextHints.add('🔬 [미세 신호] ${micro['interpretation']}');
+        }
+      }
+      
+      // 🔥 NEW: ConversationContextManager의 눈치 백단 정보 활용
+      final knowledge = ConversationContextManager.instance.getKnowledge(userId, persona.id);
+      if (knowledge != null) {
+        // 암시적 신호가 있으면 힌트 추가
+        if (knowledge.implicitSignals.isNotEmpty) {
+          final latestSignal = knowledge.implicitSignals.entries.last;
+          contextHints.add('💭 암시: ${latestSignal.value['meaning']}');
+        }
+        
+        // 대화 에너지 정보
+        if (knowledge.conversationEnergy['overall'] != null) {
+          final energy = knowledge.conversationEnergy['overall'];
+          contextHints.add('⚡ ${energy['description']}');
+        }
+        
+        // 회피한 주제가 있으면 주의
+        if (knowledge.avoidedTopics.isNotEmpty) {
+          final avoidedList = knowledge.avoidedTopics.keys.take(3).join(', ');
+          contextHints.add('⚠️ 회피 주제: $avoidedList');
+        }
+        
+        // 행동 패턴 힌트
+        if (knowledge.behaviorPatterns.isNotEmpty) {
+          final latestPattern = knowledge.behaviorPatterns.entries.last;
+          if (latestPattern.value['meaning'] != null) {
+            contextHints.add('🎯 행동: ${latestPattern.value['meaning']}');
+          }
+        }
+        
+        // 기분 지표 추가
+        if (knowledge.moodIndicators.isNotEmpty && knowledge.moodIndicators.length > 2) {
+          final recentMood = knowledge.moodIndicators.last;
+          contextHints.add('🌡️ 기분: $recentMood');
+        }
+      }
+      
+      // 🎯 NEW: 유머 시스템 활용
+      final humorGuide = HumorService.instance.generateHumorGuide(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        persona: persona,
+        likeScore: persona.likes,
+        userId: userId,
+      );
+      
+      if (humorGuide['useHumor'] == true) {
+        contextHints.add('😄 유머: ${humorGuide['guide']}');
+        contextHints.add('⏰ 타이밍: ${humorGuide['timing']}');
+      }
+      
+      // 🎯 NEW: 화제 추천 시스템 활용
+      final topicSuggestion = TopicSuggestionService.instance.generateTopicSuggestion(
+        chatHistory: chatHistory,
+        persona: persona,
+        userId: userId,
+        likeScore: persona.likes,
+      );
+      
+      if (topicSuggestion['suggestTopic'] == true) {
+        final topic = topicSuggestion['topic'] as Map<String, dynamic>;
+        contextHints.add('💬 화제 추천: ${topic['guide']}');
+        contextHints.add('➡️ 전환: ${topicSuggestion['transitionStyle']}');
+      }
+      
+      // 🎯 NEW: 복합 감정 인식 시스템
+      final emotionAnalysis = EmotionResolutionService.instance.analyzeComplexEmotion(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        userId: userId,
+        persona: persona,
+      );
+      
+      if (emotionAnalysis['responseGuide'] != null) {
+        contextHints.add('🎭 ${emotionAnalysis['responseGuide']}');
+      }
+      
+      // 🎯 NEW: 울트라 공감 시스템
+      if (emotionAnalysis['complexEmotion'] != null) {
+        final complexEmotion = ComplexEmotion(
+          primary: emotionAnalysis['complexEmotion']['primary'],
+          secondary: emotionAnalysis['complexEmotion']['secondary'],
+          nuances: List<String>.from(emotionAnalysis['complexEmotion']['nuances'] ?? []),
+          intensity: emotionAnalysis['complexEmotion']['intensity'],
+          authenticity: emotionAnalysis['complexEmotion']['authenticity'],
+          hiddenEmotions: List<String>.from(emotionAnalysis['complexEmotion']['hiddenEmotions'] ?? []),
+          volatility: emotionAnalysis['complexEmotion']['volatility'],
+          timestamp: DateTime.now(),
+        );
+        
+        final empathyGuide = UltraEmpathyService.instance.generateUltraEmpathy(
+          userMessage: userMessage,
+          chatHistory: chatHistory,
+          emotion: complexEmotion,
+          persona: persona,
+          userId: userId,
+          likeScore: persona.likes,
+        );
+        
+        if (empathyGuide['guide'] != null) {
+          contextHints.add('💝 ${empathyGuide['guide']}');
+        }
+      }
+      
+      // 🎯 NEW: 대화 리듬 최적화
+      final rhythmOptimization = ConversationRhythmMaster.instance.optimizeRhythm(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        userId: userId,
+        persona: persona,
+        likeScore: persona.likes,
+      );
+      
+      if (rhythmOptimization['rhythmGuide'] != null) {
+        contextHints.add('🎵 ${rhythmOptimization['rhythmGuide']}');
+      }
+      
+      // 🎯 NEW: 연관 기억 네트워크
+      final memoryNetwork = MemoryNetworkService.instance.activateMemory(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        userId: userId,
+        persona: persona,
+        likeScore: persona.likes,
+      );
+      
+      if (memoryNetwork['memoryGuide'] != null) {
+        contextHints.add('🧠 ${memoryNetwork['memoryGuide']}');
+      }
+      
+      // 🎯 NEW: 실시간 피드백
+      final realtimeFeedback = RealtimeFeedbackService.instance.generateRealtimeFeedback(
+        userMessage: userMessage,
+        chatHistory: chatHistory,
+        userId: userId,
+        persona: persona,
+        likeScore: persona.likes,
+        lastAIResponse: chatHistory.isNotEmpty && !chatHistory.first.isUser 
+            ? chatHistory.first.content 
+            : null,
+      );
+      
+      if (realtimeFeedback['feedbackGuide'] != null) {
+        contextHints.add('🔄 ${realtimeFeedback['feedbackGuide']}');
+      }
+      
+      // 기존 주제 전환 로직
       if (!hasTopicConnection &&
           userMessage.length > 10 &&
           advancedAnalyzer.detectGreetingPattern(userMessage.toLowerCase())['isGreeting'] != true) {
@@ -4801,6 +5037,7 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
       // 감정 표현
       '좋아', '싫어', '사랑', '미워', '기뻐', '슬퍼', '화나', '짜증',
       '행복', '우울', '외로', '그리워', '보고싶', '걱정',
+      '욕', '열받아', '빡쳐', '스트레스', '답답',
       // 활동
       '영화', '게임', '음악', '운동', '요리', '공부', '일', '여행',
       '쇼핑', '독서', '드라마', '유튜브', '넷플릭스',
@@ -4813,6 +5050,9 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
       // 관계
       '친구', '가족', '엄마', '아빠', '형', '누나', '동생', '애인',
       '남자친구', '여자친구', '결혼', '연애',
+      // 직장 관계
+      '부장', '상사', '팀장', '과장', '대리', '사장', '직장', '회사',
+      '동료', '선배', '후배', '팀원', '야근', '퇴근',
       // 감정/상태
       '피곤', '졸려', '배고파', '배불러', '아파', '건강',
       // 장소

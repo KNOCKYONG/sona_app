@@ -286,6 +286,15 @@ class AdvancedPatternAnalyzer {
     
     // 위로/격려 필요도
     patterns['comfortNeeded'] = _checkComfortNeed(message);
+    
+    // 🔥 NEW: 암시적 감정 감지 (눈치 백단!)
+    patterns['implicitEmotion'] = _detectImplicitEmotion(message, chatHistory);
+    
+    // 🔥 NEW: 행간 읽기
+    patterns['betweenTheLines'] = _readBetweenTheLines(message, chatHistory);
+    
+    // 🔥 NEW: 미세 감정 신호
+    patterns['microSignals'] = _detectMicroEmotionalSignals(message);
 
     return patterns;
   }
@@ -402,6 +411,59 @@ class AdvancedPatternAnalyzer {
 
     if (emotionPatterns['comfortNeeded'] == true) {
       guidelines.add('🤗 위로 필요! "힘들었겠다", "고생했네" 같은 따뜻한 표현');
+    }
+    
+    // 🔥 NEW: 암시적 감정 기반 가이드라인
+    if (emotionPatterns['implicitEmotion'] != null) {
+      final implicit = emotionPatterns['implicitEmotion'] as Map<String, dynamic>;
+      if (implicit['confidence'] > 0.6) {
+        switch (implicit['emotion']) {
+          case 'stressed':
+            guidelines.add('😔 숨겨진 스트레스 감지! 먼저 물어보기: "오늘 무슨 일 있었어?" "힘든 일 있었구나"');
+            break;
+          case 'depressed_or_busy':
+            guidelines.add('😟 우울/바쁨 감지! "밥은 꼭 챙겨 먹어야 해" "많이 바빴나보네"');
+            break;
+          case 'avoiding':
+            guidelines.add('🤐 회피 패턴! 억지로 캐묻지 말고 "괜찮아, 말하고 싶을 때 말해"');
+            break;
+          case 'low_mood':
+            guidelines.add('😞 기분 저하! 밝은 에너지보다는 차분하게 "오늘 뭔가 힘든가봐"');
+            break;
+          case 'hiding_feelings':
+            guidelines.add('😶 감정 숨김! "정말 괜찮아?" "내가 들어줄게"');
+            break;
+          case 'worried_insomnia':
+            guidelines.add('🌙 불면/고민! "무슨 고민 있어?" "잠 못 자면 더 힘들 텐데"');
+            break;
+        }
+      }
+    }
+    
+    // 🔥 NEW: 행간 읽기 기반 가이드라인
+    if (emotionPatterns['betweenTheLines'] != null) {
+      final between = emotionPatterns['betweenTheLines'] as Map<String, dynamic>;
+      if (between['confidence'] > 0.6 && between['hiddenMeaning'] != '') {
+        guidelines.add('👁️ 숨은 의미: ${between['hiddenMeaning']}');
+        
+        if (between['patterns'].contains('sudden_topic_change')) {
+          guidelines.add('↩️ 이전 주제로 돌아가지 말고 자연스럽게 새 주제 따라가기');
+        }
+        if (between['patterns'].contains('minimal_response')) {
+          guidelines.add('💤 대화 의욕 없음! 짧고 부담 없는 응답으로');
+        }
+        if (between['patterns'].contains('mood_drop')) {
+          guidelines.add('📉 기분 하락! 텐션 맞춰서 차분하게');
+        }
+      }
+    }
+    
+    // 🔥 NEW: 미세 신호 기반 가이드라인
+    if (emotionPatterns['microSignals'] != null) {
+      final micro = emotionPatterns['microSignals'] as Map<String, dynamic>;
+      if (micro['interpretation'] != '') {
+        guidelines.add('🔍 미세 신호: ${micro['interpretation']}');
+      }
     }
 
     // 대화 패턴 기반
@@ -1936,5 +1998,253 @@ class AdvancedPatternAnalyzer {
     }
 
     return false;
+  }
+  
+  // ==================== 🔥 NEW: 눈치 백단 기능들 ====================
+  
+  /// 암시적 감정 감지 - 직접 표현하지 않은 감정 읽기
+  Map<String, dynamic> _detectImplicitEmotion(String message, List<Message> chatHistory) {
+    final result = <String, dynamic>{
+      'emotion': 'neutral',
+      'confidence': 0.0,
+      'reason': '',
+      'signals': <String>[],
+    };
+    
+    // 1. "오늘 회사 일찍 나왔어" → 힘든 일 있었을 가능성
+    if (message.contains('일찍') && (message.contains('회사') || message.contains('학교'))) {
+      result['emotion'] = 'stressed';
+      result['confidence'] = 0.75;
+      result['reason'] = '평소와 다른 퇴근/하교 시간';
+      result['signals'].add('early_leave');
+    }
+    
+    // 2. "밥 안 먹었어" / "안 먹어" → 우울하거나 바쁨
+    if ((message.contains('안 먹') || message.contains('안먹')) && 
+        (message.contains('밥') || message.contains('아침') || message.contains('점심') || message.contains('저녁'))) {
+      result['emotion'] = 'depressed_or_busy';
+      result['confidence'] = 0.7;
+      result['reason'] = '식사 거름 = 정서적 문제 또는 과도한 업무';
+      result['signals'].add('skipped_meal');
+    }
+    
+    // 3. "그냥..." / "별로..." → 말하기 싫은 무언가
+    if (message.startsWith('그냥') || message.startsWith('별로')) {
+      if (message.contains('...') || message.length < 10) {
+        result['emotion'] = 'avoiding';
+        result['confidence'] = 0.85;
+        result['reason'] = '회피성 답변 패턴';
+        result['signals'].add('avoidance_pattern');
+      }
+    }
+    
+    // 4. 짧은 답변 + 평소보다 느낌표/이모티콘 없음 → 기분 안 좋음
+    if (message.length < 10 && !message.contains('!') && !message.contains('ㅎ') && !message.contains('ㅋ')) {
+      // 최근 메시지와 비교
+      final recentUserMessages = chatHistory.where((m) => m.isFromUser).take(5).toList();
+      if (recentUserMessages.isNotEmpty) {
+        final avgLength = recentUserMessages.map((m) => m.content.length).reduce((a, b) => a + b) ~/ recentUserMessages.length;
+        if (message.length < avgLength * 0.5) {
+          result['emotion'] = 'low_mood';
+          result['confidence'] = 0.65;
+          result['reason'] = '평소보다 현저히 짧은 답변';
+          result['signals'].add('short_response');
+        }
+      }
+    }
+    
+    // 5. "괜찮아" / "아니야" 반복 → 실제로는 괜찮지 않음
+    if ((message.contains('괜찮') || message.contains('아니야') || message.contains('아무것도')) && 
+        message.length < 15) {
+      result['emotion'] = 'hiding_feelings';
+      result['confidence'] = 0.6;
+      result['reason'] = '감정 숨기기 패턴';
+      result['signals'].add('denial_pattern');
+    }
+    
+    // 6. 새벽 시간 + "못 자" / "안 자" → 고민이나 불면
+    final hour = DateTime.now().hour;
+    if ((hour >= 1 && hour <= 5) && (message.contains('못 자') || message.contains('안 자') || message.contains('잠이'))) {
+      result['emotion'] = 'worried_insomnia';
+      result['confidence'] = 0.8;
+      result['reason'] = '새벽 불면 = 고민 또는 스트레스';
+      result['signals'].add('late_night_awake');
+    }
+    
+    return result;
+  }
+  
+  /// 행간 읽기 - 말하지 않은 것에서 의미 찾기
+  Map<String, dynamic> _readBetweenTheLines(String message, List<Message> chatHistory) {
+    final interpretation = <String, dynamic>{
+      'hiddenMeaning': '',
+      'confidence': 0.0,
+      'patterns': <String>[],
+    };
+    
+    // 1. 갑자기 주제 전환 → 이전 주제가 불편함
+    if (chatHistory.isNotEmpty) {
+      final lastUserMsg = chatHistory.lastWhere((m) => m.isFromUser, orElse: () => Message(content: '', isFromUser: true, timestamp: DateTime.now()));
+      final lastTopic = _extractMainTopic(lastUserMsg.content);
+      final currentTopic = _extractMainTopic(message);
+      
+      if (lastTopic != currentTopic && lastTopic.isNotEmpty && currentTopic.isNotEmpty) {
+        if (message.contains('그런데') || message.contains('근데') || message.contains('아 맞다')) {
+          interpretation['hiddenMeaning'] = '이전 주제($lastTopic)가 불편하거나 부담스러움';
+          interpretation['confidence'] = 0.7;
+          interpretation['patterns'].add('sudden_topic_change');
+        }
+      }
+    }
+    
+    // 2. 질문에 질문으로 답 → 대답하기 싫음
+    if (chatHistory.isNotEmpty) {
+      final lastAIMsg = chatHistory.lastWhere((m) => !m.isFromUser, orElse: () => Message(content: '', isFromUser: false, timestamp: DateTime.now()));
+      if (lastAIMsg.content.contains('?') && message.contains('?')) {
+        interpretation['hiddenMeaning'] = '질문에 답하고 싶지 않아서 화제 전환 시도';
+        interpretation['confidence'] = 0.65;
+        interpretation['patterns'].add('question_deflection');
+      }
+    }
+    
+    // 3. "ㅇㅇ" / "ㅇㅋ" 같은 초단답 → 대화 의욕 없음
+    if (message == 'ㅇㅇ' || message == 'ㅇㅋ' || message == 'ㄱㅅ' || message == 'ㄴㄴ') {
+      interpretation['hiddenMeaning'] = '대화하고 싶지 않지만 예의상 답변';
+      interpretation['confidence'] = 0.8;
+      interpretation['patterns'].add('minimal_response');
+    }
+    
+    // 4. "..." 많이 사용 → 말하기 어려운 무언가
+    final ellipsisCount = '...'.allMatches(message).length;
+    if (ellipsisCount >= 2) {
+      interpretation['hiddenMeaning'] = '망설임, 고민, 또는 말하기 어려운 상황';
+      interpretation['confidence'] = 0.75;
+      interpretation['patterns'].add('hesitation');
+    }
+    
+    // 5. 평소와 다른 말투 → 감정 변화
+    if (chatHistory.length > 5) {
+      final recentMessages = chatHistory.where((m) => m.isFromUser).take(10).map((m) => m.content).toList();
+      final hasEmoticon = recentMessages.any((m) => m.contains('ㅎ') || m.contains('ㅋ') || m.contains('~'));
+      final currentHasEmoticon = message.contains('ㅎ') || message.contains('ㅋ') || message.contains('~');
+      
+      if (hasEmoticon && !currentHasEmoticon) {
+        interpretation['hiddenMeaning'] = '평소보다 기분이 가라앉음';
+        interpretation['confidence'] = 0.6;
+        interpretation['patterns'].add('mood_drop');
+      }
+    }
+    
+    return interpretation;
+  }
+  
+  /// 미세 감정 신호 감지
+  Map<String, dynamic> _detectMicroEmotionalSignals(String message) {
+    final signals = <String, dynamic>{
+      'punctuation': _analyzePunctuation(message),
+      'length': _analyzeMessageLength(message),
+      'timing': _analyzeResponseTiming(),
+      'emoticons': _analyzeEmoticonUsage(message),
+      'interpretation': '',
+    };
+    
+    // 종합 해석
+    String interpretation = '';
+    
+    // 느낌표 개수로 흥분도 측정
+    if (signals['punctuation']['exclamation'] > 2) {
+      interpretation += '매우 흥분되거나 신난 상태. ';
+    } else if (signals['punctuation']['exclamation'] == 0 && 
+               signals['punctuation']['question'] == 0) {
+      interpretation += '감정이 평평하거나 가라앉은 상태. ';
+    }
+    
+    // 물음표 개수로 혼란도 측정
+    if (signals['punctuation']['question'] > 2) {
+      interpretation += '혼란스럽거나 이해 못하는 상태. ';
+    }
+    
+    // 메시지 길이로 대화 의욕 측정
+    if (signals['length']['isVeryShort']) {
+      interpretation += '대화 의욕 낮음. ';
+    } else if (signals['length']['isVeryLong']) {
+      interpretation += '할 말이 많거나 설명하고 싶은 욕구. ';
+    }
+    
+    // 이모티콘으로 감정 상태 측정
+    if (signals['emoticons']['count'] == 0) {
+      interpretation += '진지하거나 무거운 감정. ';
+    } else if (signals['emoticons']['count'] > 3) {
+      interpretation += '감정 표현 욕구 강함. ';
+    }
+    
+    signals['interpretation'] = interpretation.trim();
+    return signals;
+  }
+  
+  /// 구두점 분석
+  Map<String, int> _analyzePunctuation(String message) {
+    return {
+      'exclamation': '!'.allMatches(message).length,
+      'question': '?'.allMatches(message).length,
+      'ellipsis': '...'.allMatches(message).length,
+      'tilde': '~'.allMatches(message).length,
+    };
+  }
+  
+  /// 메시지 길이 분석
+  Map<String, dynamic> _analyzeMessageLength(String message) {
+    return {
+      'length': message.length,
+      'isVeryShort': message.length < 5,
+      'isShort': message.length < 10,
+      'isNormal': message.length >= 10 && message.length <= 50,
+      'isLong': message.length > 50,
+      'isVeryLong': message.length > 100,
+    };
+  }
+  
+  /// 응답 타이밍 분석 (실제 구현 시 타임스탬프 필요)
+  Map<String, dynamic> _analyzeResponseTiming() {
+    // TODO: 실제 구현 시 메시지 간 시간 차이 계산
+    return {
+      'isImmediate': false,
+      'isDelayed': false,
+      'averageResponseTime': 0,
+    };
+  }
+  
+  /// 이모티콘 사용 분석
+  Map<String, dynamic> _analyzeEmoticonUsage(String message) {
+    final emoticons = ['ㅎ', 'ㅋ', 'ㅠ', 'ㅜ', '^^', 'ㅇㅇ'];
+    int count = 0;
+    final used = <String>[];
+    
+    for (final emoticon in emoticons) {
+      if (message.contains(emoticon)) {
+        count++;
+        used.add(emoticon);
+      }
+    }
+    
+    return {
+      'count': count,
+      'used': used,
+      'hasHappy': message.contains('ㅎ') || message.contains('ㅋ') || message.contains('^^'),
+      'hasSad': message.contains('ㅠ') || message.contains('ㅜ'),
+    };
+  }
+  
+  /// 주요 주제 추출 (헬퍼 메서드)
+  String _extractMainTopic(String message) {
+    // 주제 키워드 데이터베이스 활용
+    for (final entry in _topicKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (message.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    return '';
   }
 }

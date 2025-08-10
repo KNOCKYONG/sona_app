@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,6 +59,13 @@ class PurchaseService extends BaseService {
   /// 초기화
   Future<void> _initialize() async {
     try {
+      // 프로덕션 환경 체크
+      if (!kDebugMode) {
+        debugPrint('🚀 Running in Production mode (TestFlight/App Store)');
+      } else {
+        debugPrint('🔧 Running in Debug mode');
+      }
+      
       // 스토어 연결 가능 여부 확인
       _isAvailable = await _inAppPurchase.isAvailable();
 
@@ -65,7 +73,13 @@ class PurchaseService extends BaseService {
         debugPrint('❌ In-App Purchase is not available');
         // 플랫폼별 에러 메시지
         if (Platform.isIOS) {
-          _queryProductError = 'App Store에 연결할 수 없습니다. 설정에서 로그인 상태를 확인해주세요.';
+          if (!kDebugMode) {
+            // TestFlight/App Store 환경
+            _queryProductError = 'App Store 연결 실패. 인터넷 연결과 App Store 로그인 상태를 확인해주세요.';
+          } else {
+            // 개발 환경
+            _queryProductError = 'App Store에 연결할 수 없습니다. 시뮬레이터에서는 테스트가 제한됩니다.';
+          }
         } else {
           _queryProductError = 'Google Play Services를 사용할 수 없습니다. 기기에 Google Play가 설치되어 있고 로그인되어 있는지 확인하세요.';
         }
@@ -76,7 +90,9 @@ class PurchaseService extends BaseService {
       debugPrint('❌ Error checking store availability: $e');
       _isAvailable = false;
       _queryProductError = Platform.isIOS 
-          ? 'App Store 연결 실패: $e' 
+          ? !kDebugMode 
+            ? 'App Store 연결 실패. 네트워크 연결을 확인해주세요.' 
+            : 'App Store 연결 실패: $e'
           : 'Google Play Services 연결 실패: $e';
       notifyListeners();
       return;
@@ -140,18 +156,27 @@ class PurchaseService extends BaseService {
 
       if (response.notFoundIDs.isNotEmpty) {
         debugPrint('⚠️ Products not found: ${response.notFoundIDs}');
-        // iOS 디버그 모드에서는 StoreKit Configuration을 사용해야 함
+        // 프로덕션 환경(TestFlight/App Store)에서는 App Store Connect 설정 확인 필요
         if (Platform.isIOS) {
-          debugPrint('💡 iOS Debug: Make sure StoreKit Configuration is set in Xcode scheme');
+          if (kDebugMode) {
+            debugPrint('💡 iOS Debug: Local testing requires StoreKit Configuration in Xcode');
+          } else {
+            debugPrint('⚠️ iOS Production: Check App Store Connect product configuration');
+            _queryProductError = 'App Store Connect에 상품이 등록되지 않았거나 승인되지 않았습니다.';
+          }
         }
       }
 
       if (response.error != null) {
         _queryProductError = response.error!.message;
         debugPrint('❌ Query product error: $_queryProductError');
-        // iOS 특정 에러 처리
-        if (Platform.isIOS && response.error!.message.contains('StoreKit')) {
-          _queryProductError = 'StoreKit 설정을 확인해주세요. Xcode에서 StoreKit Configuration 파일을 선택했는지 확인하세요.';
+        // iOS 특정 에러 처리 - 프로덕션과 개발 환경 구분
+        if (Platform.isIOS) {
+          if (kDebugMode && response.error!.message.contains('StoreKit')) {
+            _queryProductError = '개발 환경: Xcode에서 StoreKit Configuration 설정이 필요합니다.';
+          } else if (!kDebugMode) {
+            _queryProductError = 'App Store 연결 오류: App Store Connect 상품 설정을 확인해주세요.';
+          }
         }
         notifyListeners();
         return;

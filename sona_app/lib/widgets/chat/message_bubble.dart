@@ -257,148 +257,99 @@ class _TextMessageState extends State<_TextMessage> {
                             widget.message.translatedContent!.isNotEmpty &&
                             !widget.message.translatedContent!.startsWith('[') && // [Translation processing...] 같은 메시지 제외
                             !widget.message.translatedContent!.contains('Translation')) ...[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
-                              if (!_showTranslation) ...[
-                                Stack(
-                                  children: [
-                                    // 한국어 메시지 텍스트
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 35),
-                                      child: Text(
-                                        widget.message.content,
-                                        style: _TextMessage._aiTextStyle,
-                                      ),
-                                    ),
-                                    // 번역 버튼 (우측 상단) - 탭 가능한 영역
-                                    Positioned(
-                                      top: -4,
-                                      right: -4,
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            // Light haptic for translation toggle
-                                            await HapticService.selectionClick();
-                                            setState(() {
-                                              _showTranslation = !_showTranslation;
-                                            });
-                                          },
-                                          borderRadius: BorderRadius.circular(12),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            child: Icon(
-                                              Icons.language,
-                                              size: 18,
-                                              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                              // 번역 모드 (회색 배경)
-                              if (_showTranslation) ...[
-                                Stack(
-                                  children: [
-                                    Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.only(
-                                        left: 12,
-                                        right: 35,
-                                        top: 8,
-                                        bottom: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue.withOpacity(0.08),
-                                        borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(
-                                          color: Colors.blue.withOpacity(0.2),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          // 번역된 텍스트
-                                          Text(
-                                            widget.message.translatedContent!,
-                                            style: TextStyle(
-                                              color: Colors.blue[900],
-                                              fontSize: 16,
-                                              height: 1.4,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // 지구본 토글 버튼 (우측 상단) - X 버튼 대신 지구본으로 토글
-                                    Positioned(
-                                      top: -4,
-                                      right: -4,
-                                      child: Material(
-                                        color: Colors.transparent,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            // Light haptic for translation toggle
-                                            await HapticService.selectionClick();
-                                            setState(() {
-                                              _showTranslation = !_showTranslation;
-                                            });
-                                          },
-                                          borderRadius: BorderRadius.circular(12),
-                                          child: Container(
-                                            padding: const EdgeInsets.all(4),
-                                            child: Icon(
-                                              Icons.language,
-                                              size: 18,
-                                              color: Colors.blue[700]?.withOpacity(0.8),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 6),
-                                // 원문 표시 (작은 글씨)
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 4,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
+                          // 전체 메시지를 감싸는 GestureDetector
+                          GestureDetector(
+                            onTap: () async {
+                              // Light haptic for translation toggle
+                              await HapticService.selectionClick();
+                              setState(() {
+                                _showTranslation = !_showTranslation;
+                              });
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
+                                if (!_showTranslation) ...[
+                                  Stack(
                                     children: [
-                                      Icon(
-                                        Icons.format_quote,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                      const SizedBox(width: 4),
-                                      Flexible(
+                                      // 한국어 메시지 텍스트
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 35),
                                         child: Text(
                                           widget.message.content,
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 12,
-                                            fontStyle: FontStyle.italic,
+                                          style: _TextMessage._aiTextStyle,
+                                        ),
+                                      ),
+                                      // 번역 아이콘 표시 (우측 상단) - 시각적 표시용
+                                      Positioned(
+                                        top: -4,
+                                        right: -4,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Icon(
+                                            Icons.language,
+                                            size: 18,
+                                            color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
+                                ],
+                                // 번역 모드 (회색 배경)
+                                if (_showTranslation) ...[
+                                  Stack(
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.only(
+                                          left: 12,
+                                          right: 35,
+                                          top: 8,
+                                          bottom: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue.withOpacity(0.08),
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(
+                                            color: Colors.blue.withOpacity(0.2),
+                                            width: 1,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            // 번역된 텍스트
+                                            Text(
+                                              widget.message.translatedContent!,
+                                              style: TextStyle(
+                                                color: Colors.blue[900],
+                                                fontSize: 16,
+                                                height: 1.4,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // 지구본 아이콘 표시 (우측 상단) - 시각적 표시용
+                                      Positioned(
+                                        top: -4,
+                                        right: -4,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(4),
+                                          child: Icon(
+                                            Icons.language,
+                                            size: 18,
+                                            color: Colors.blue.withOpacity(0.8),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ] else ...[
                           // 번역이 없는 일반 메시지

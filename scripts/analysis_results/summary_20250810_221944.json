@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250810_221944",
+  "total_reports_analyzed": 2,
+  "average_coherence_score": 84.445,
+  "critical_issues_count": 0,
+  "high_issues_count": 1,
+  "personas_with_issues": {
+    "예슬": {
+      "total_conversations": 2,
+      "avg_coherence_score": 84.44,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 4,
+        "irrelevant_answer": 1
+      }
+    }
+  }
+}

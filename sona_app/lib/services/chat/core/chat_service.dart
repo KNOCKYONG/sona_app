@@ -3385,9 +3385,7 @@ class ChatService extends BaseService {
       String greetingContent;
       EmotionType emotion;
 
-      // 전문가 페르소나인지 확인
-      // Using default formal speech for greetings
-      final isCasual = false; // Greetings use formal speech initially
+      // MBTI 가져오기
       final mbti = persona.mbti.toUpperCase();
 
       // 현재 시간대 및 요일 확인
@@ -3401,36 +3399,36 @@ class ChatService extends BaseService {
 
       // 특별한 날 체크
       if (month == 12 && day >= 24 && day <= 25) {
-        timeGreeting = isCasual ? '메리 크리스마스!' : '메리 크리스마스예요!';
+        timeGreeting = '메리 크리스마스!';
       } else if (month == 1 && day == 1) {
-        timeGreeting = isCasual ? '새해 복 많이 받아!' : '새해 복 많이 받으세요!';
+        timeGreeting = '새해 복 많이 받아!';
       } else if (weekday == 5 && hour >= 17) {
         // 금요일 저녁
-        timeGreeting = isCasual ? '불금이다!' : '즐거운 금요일 저녁이에요!';
+        timeGreeting = '불금이다!';
       } else if (weekday == 6 || weekday == 7) {
         // 주말
         if (hour >= 5 && hour < 12) {
-          timeGreeting = isCasual ? '행복한 주말 아침!' : '행복한 주말 아침이에요!';
+          timeGreeting = '행복한 주말 아침!';
         } else if (hour >= 12 && hour < 17) {
-          timeGreeting = isCasual ? '즐거운 주말!' : '즐거운 주말이에요!';
+          timeGreeting = '즐거운 주말!';
         } else {
-          timeGreeting = isCasual ? '편안한 주말 저녁!' : '편안한 주말 저녁이에요!';
+          timeGreeting = '편안한 주말 저녁!';
         }
       } else if (weekday == 1 && hour < 12) {
         // 월요일 아침
-        timeGreeting = isCasual ? '월요일 파이팅!' : '월요일도 힘내세요!';
+        timeGreeting = '월요일 파이팅!';
       } else {
         // 일반 시간대별 인사
         if (hour >= 5 && hour < 12) {
-          timeGreeting = isCasual ? '좋은 아침!' : '좋은 아침이에요!';
+          timeGreeting = '좋은 아침!';
         } else if (hour >= 12 && hour < 17) {
-          timeGreeting = isCasual ? '좋은 오후!' : '좋은 오후예요!';
+          timeGreeting = '좋은 오후!';
         } else if (hour >= 17 && hour < 21) {
-          timeGreeting = isCasual ? '좋은 저녁!' : '좋은 저녁이에요!';
+          timeGreeting = '좋은 저녁!';
         } else if (hour >= 21 || hour < 2) {
-          timeGreeting = isCasual ? '늦은 시간이네!' : '늦은 시간이네요!';
+          timeGreeting = '늦은 시간이네!';
         } else {
-          timeGreeting = isCasual ? '새벽이네!' : '새벽이네요!';
+          timeGreeting = '새벽이네!';
         }
       }
 

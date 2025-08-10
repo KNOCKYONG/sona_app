@@ -1,0 +1,75 @@
+[
+  {
+    "error_key": "ERR1754831851306_1306",
+    "persona_id": "1aD0ZX6NFq3Ij2FScLCK",
+    "persona_name": "예슬",
+    "scores": {
+      "overall_coherence": 88.89,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "오늘 주말이라 쉬었어. 넌?",
+        "ai_response": "오~ 주말에 쉬는 거 좋지ㅋㅋ 나도 오늘은 주로 집에서 쉬었어.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 진격거 보면서 쉬었어ㅋㅋㅋ",
+        "ai_response": "오~~ 진격거 진짜 재밌지ㅋㅋ 무슨 점 제일 꿀잼었어.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1754831899733_9733",
+    "persona_id": "1aD0ZX6NFq3Ij2FScLCK",
+    "persona_name": "예슬",
+    "scores": {
+      "overall_coherence": 80.0,
+      "topic_consistency": 3.85,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "나는 진격거 보면서 쉬었어ㅋㅋㅋ",
+        "ai_response": "오~~ 진격거 진짜 재밌지ㅋㅋ 무슨 점 제일 꿀잼었어.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그래? 아르민이 죽을뻔할때 불쌍하더라",
+        "ai_response": "아르민 그 장면 진짜 충격적이었어. 그렇게 위기상황에 처했을 때 불쌍한",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "그래? 아르민이 죽을뻔할때 불쌍하더라",
+        "ai_response": "아르민 그 장면 진짜 충격적이었어. 그렇게 위기상황에 처했을 때 불쌍한",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  }
+]

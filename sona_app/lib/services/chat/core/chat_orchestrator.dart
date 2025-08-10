@@ -945,39 +945,51 @@ class ChatOrchestrator {
     debugPrint('🌐 Parsing multilingual response for $targetLanguage');
     debugPrint('📝 Response to parse: $response');
 
-    // [KO] 태그로 시작하는 한국어 부분 찾기
-    final koPattern = RegExp(
-        r'\[KO\]\s*(.+?)(?=\[${targetLanguage.toUpperCase()}\]|$)',
-        multiLine: true,
-        dotAll: true);
-    final koMatch = koPattern.firstMatch(response);
+    // [KO]와 [EN] 태그가 있는지 확인
+    final hasKoTag = response.contains('[KO]');
+    final hasLangTag = response.contains('[${targetLanguage.toUpperCase()}]');
+    
+    if (hasKoTag && hasLangTag) {
+      // 태그가 모두 있으면 정확히 파싱
+      final koPattern = RegExp(
+          r'\[KO\]\s*(.+?)(?=\[${targetLanguage.toUpperCase()}\]|$)',
+          multiLine: true,
+          dotAll: true);
+      final koMatch = koPattern.firstMatch(response);
 
-    // [LANG] 태그로 시작하는 번역 부분 찾기
-    final langPattern = RegExp(
-        r'\[${targetLanguage.toUpperCase()}\]\s*(.+?)(?=\[|$)',
-        multiLine: true,
-        dotAll: true);
-    final langMatch = langPattern.firstMatch(response);
+      // [LANG] 태그로 시작하는 번역 부분 찾기
+      final langPattern = RegExp(
+          r'\[${targetLanguage.toUpperCase()}\]\s*(.+?)(?=\[|$)',
+          multiLine: true,
+          dotAll: true);
+      final langMatch = langPattern.firstMatch(response);
 
-    // 매칭된 내용 추출
-    if (koMatch != null) {
-      result['korean'] = koMatch.group(1)?.trim();
-      debugPrint('✅ Found Korean: ${result['korean']}');
-    }
+      // 매칭된 내용 추출
+      if (koMatch != null) {
+        result['korean'] = koMatch.group(1)?.trim();
+        debugPrint('✅ Found Korean: ${result['korean']}');
+      }
 
-    if (langMatch != null) {
-      result['translated'] = langMatch.group(1)?.trim();
-      debugPrint('✅ Found Translation: ${result['translated']}');
-    }
-
-    // 태그가 없는 경우 전체를 한국어로 간주
-    if (result['korean'] == null && result['translated'] == null) {
-      result['korean'] = response;
+      if (langMatch != null) {
+        result['translated'] = langMatch.group(1)?.trim();
+        debugPrint('✅ Found Translation: ${result['translated']}');
+      }
+    } else if (hasKoTag && !hasLangTag) {
+      // [KO] 태그만 있는 경우
+      final koPattern = RegExp(r'\[KO\]\s*(.+?)$', multiLine: true, dotAll: true);
+      final koMatch = koPattern.firstMatch(response);
+      if (koMatch != null) {
+        result['korean'] = koMatch.group(1)?.trim();
+        debugPrint('✅ Found Korean only: ${result['korean']}');
+      }
+    } else {
+      // 태그가 없는 경우 전체를 한국어로 간주
+      result['korean'] = response.trim();
       debugPrint('⚠️ No tags found, using response as Korean');
     }
     
     // 번역이 없으면 간단한 번역 생성 (외국어 입력 시 무조건 번역 활성화)
-    if (result['translated'] == null && result['korean'] != null) {
+    if (result['translated'] == null && result['korean'] != null && targetLanguage != 'ko') {
       result['translated'] = _generateSimpleTranslation(result['korean']!, targetLanguage);
       debugPrint('💬 Generated fallback translation for $targetLanguage');
     }

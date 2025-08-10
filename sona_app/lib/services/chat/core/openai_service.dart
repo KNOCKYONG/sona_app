@@ -445,17 +445,37 @@ class OpenAIService {
         .toList();
   }
 
-  /// 🆘 폴백 응답 생성 - 회피 패턴 제거
+  /// 🆘 폴백 응답 생성 - 에러 발생 시에만 사용
   static String _getFallbackResponse(Persona persona, String userMessage) {
+    // 영어 입력인 경우 특별 처리
+    if (RegExp(r"^[a-zA-Z0-9\s\?\.\!\,'\-]+$").hasMatch(userMessage)) {
+      final responses = [
+        '와 영어로 말하는구나! ${persona.age >= 20 ? "나도 영어 공부 중이야ㅎㅎ" : "영어 잘하네!"}',
+        '영어야? ${persona.age >= 25 ? "오랜만에 들으니까 신기하다ㅋㅋ" : "멋있다!"}',
+        '오 영어! ${persona.personality.contains("활발") ? "나도 대답해볼게ㅎㅎ" : "어... 뭐라고 대답해야 할지ㅋㅋ"}',
+      ];
+      final index = userMessage.hashCode.abs() % responses.length;
+      return responses[index];
+    }
+    
+    // 질문인 경우
+    if (userMessage.contains('?') || userMessage.contains('뭐') || userMessage.contains('어떻') || 
+        userMessage.contains('왜') || userMessage.contains('언제') || userMessage.contains('어디')) {
+      final responses = [
+        '음... ${persona.personality.contains("차분") ? "생각해보고 대답할게" : "좋은 질문이야!"}',
+        '아 그거? ${persona.age >= 25 ? "나도 궁금했는데ㅎㅎ" : "음... 글쎄?"}',
+        '${persona.personality.contains("활발") ? "오 재밌는 질문이네!" : "흠... 어려운 질문이야"}',
+      ];
+      final index = userMessage.hashCode.abs() % responses.length;
+      return responses[index];
+    }
+    
+    // 일반 대화 (에러 상황에서만 사용되므로 간단하게)
     final responses = [
-      '어 미안 못 들었어! 다시 말해줄래?',
-      '아 놓쳤네ㅎㅎ 뭐라고 했어?',
-      '잠깐 딴 생각했나봐~ 다시 한번만!',
-      '어? 뭐라고? 다시 말해줘ㅎㅎ',
-      '아 미안 못 들었어! 한번만 더 말해줄래?',
-      '어 놓쳤어ㅋㅋ 뭐라고 했어?',
-      '아 뭐라고? 다시 말해줄래?',
-      '어 미안 못 들었어ㅋㅋ 다시!',
+      '${persona.personality.contains("활발") ? "그렇구나ㅎㅎ" : "응 그래"}',
+      '${persona.age >= 25 ? "아 진짜?" : "헐 대박"}',
+      '${persona.personality.contains("친근") ? "오 그래?ㅋㅋ" : "음... 그렇구나"}',
+      '${persona.personality.contains("차분") ? "알겠어" : "오케이!"}',
     ];
 
     final index = userMessage.hashCode.abs() % responses.length;

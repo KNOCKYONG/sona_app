@@ -512,15 +512,23 @@ class OptimizedPromptService {
     // 6. 다국어 지원 (사용자가 영어 등 외국어 사용 시)
     if (targetLanguage != null && targetLanguage != 'ko') {
       promptParts.add('''
-## 🌍 다국어 응답 가이드
+## 🌍 다국어 응답 가이드 [최우선]
 - 사용자가 ${_getLanguageName(targetLanguage)}로 메시지를 보냈습니다
-- 반드시 한국어로 자연스럽게 응답하되, 마지막에 [${targetLanguage.toUpperCase()}] 태그로 번역 제공
-- 형식: 
-  [KO] 한국어 응답 내용
-  [${targetLanguage.toUpperCase()}] 영어/외국어 번역
+- **반드시 아래 형식을 정확히 지켜서 응답**:
+
+[KO] 한국어 응답 내용 (완전한 문장으로)
+[${targetLanguage.toUpperCase()}] ${_getLanguageName(targetLanguage)} 번역 (완전한 문장으로)
+
+- **중요**: 
+  * 반드시 [KO]와 [${targetLanguage.toUpperCase()}] 태그를 정확히 사용
+  * 각 태그는 새로운 줄에서 시작
+  * 태그 뒤에 공백 한 칸 후 내용 작성
+  * 두 언어 모두 완전한 문장으로 작성
+  * 한국어 응답의 감정과 뉘앙스를 번역에도 반영
+
 - 예시:
-  [KO] 나도 잘 지내고 있어ㅎㅎ 오늘 뭐했어?
-  [EN] I'm doing well too haha What did you do today?
+[KO] 나도 잘 지내고 있어ㅎㅎ 오늘 뭐했어?
+[EN] I'm doing well too haha What did you do today?
 ''');
     }
 

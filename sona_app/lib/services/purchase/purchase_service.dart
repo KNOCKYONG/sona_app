@@ -63,15 +63,21 @@ class PurchaseService extends BaseService {
 
       if (!_isAvailable) {
         debugPrint('❌ In-App Purchase is not available');
-        _queryProductError =
-            'Google Play Services를 사용할 수 없습니다. 기기에 Google Play가 설치되어 있고 로그인되어 있는지 확인하세요.';
+        // 플랫폼별 에러 메시지
+        if (Platform.isIOS) {
+          _queryProductError = 'App Store에 연결할 수 없습니다. 설정에서 로그인 상태를 확인해주세요.';
+        } else {
+          _queryProductError = 'Google Play Services를 사용할 수 없습니다. 기기에 Google Play가 설치되어 있고 로그인되어 있는지 확인하세요.';
+        }
         notifyListeners();
         return;
       }
     } catch (e) {
       debugPrint('❌ Error checking store availability: $e');
       _isAvailable = false;
-      _queryProductError = 'Google Play Services 연결 실패: $e';
+      _queryProductError = Platform.isIOS 
+          ? 'App Store 연결 실패: $e' 
+          : 'Google Play Services 연결 실패: $e';
       notifyListeners();
       return;
     }
@@ -119,9 +125,14 @@ class PurchaseService extends BaseService {
 
   /// 상품 정보 로드
   Future<void> loadProducts() async {
-    if (!_isAvailable) return;
+    if (!_isAvailable) {
+      debugPrint('⚠️ Store not available, skipping product load');
+      return;
+    }
 
     try {
+      debugPrint('🔍 Loading products: ${ProductIds.allProducts}');
+      
       final ProductDetailsResponse response =
           await _inAppPurchase.queryProductDetails(
         ProductIds.allProducts.toSet(),
@@ -129,11 +140,19 @@ class PurchaseService extends BaseService {
 
       if (response.notFoundIDs.isNotEmpty) {
         debugPrint('⚠️ Products not found: ${response.notFoundIDs}');
+        // iOS 디버그 모드에서는 StoreKit Configuration을 사용해야 함
+        if (Platform.isIOS) {
+          debugPrint('💡 iOS Debug: Make sure StoreKit Configuration is set in Xcode scheme');
+        }
       }
 
       if (response.error != null) {
         _queryProductError = response.error!.message;
         debugPrint('❌ Query product error: $_queryProductError');
+        // iOS 특정 에러 처리
+        if (Platform.isIOS && response.error!.message.contains('StoreKit')) {
+          _queryProductError = 'StoreKit 설정을 확인해주세요. Xcode에서 StoreKit Configuration 파일을 선택했는지 확인하세요.';
+        }
         notifyListeners();
         return;
       }
@@ -142,6 +161,9 @@ class PurchaseService extends BaseService {
       _products.sort((a, b) => a.price.compareTo(b.price));
 
       debugPrint('✅ Loaded ${_products.length} products');
+      for (var product in _products) {
+        debugPrint('  - ${product.id}: ${product.title} - ${product.price}');
+      }
       notifyListeners();
     } catch (e) {
       debugPrint('❌ Error loading products: $e');

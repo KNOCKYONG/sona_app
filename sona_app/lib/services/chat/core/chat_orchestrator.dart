@@ -943,11 +943,15 @@ class ChatOrchestrator {
     };
 
     debugPrint('🌐 Parsing multilingual response for $targetLanguage');
-    debugPrint('📝 Response to parse: $response');
+    debugPrint('📝 Full API Response: $response');
+    debugPrint('📊 Response length: ${response.length} characters');
 
     // [KO]와 [EN] 태그가 있는지 확인
     final hasKoTag = response.contains('[KO]');
     final hasLangTag = response.contains('[${targetLanguage.toUpperCase()}]');
+    
+    debugPrint('🏷️ Has [KO] tag: $hasKoTag');
+    debugPrint('🏷️ Has [${targetLanguage.toUpperCase()}] tag: $hasLangTag');
     
     if (hasKoTag && hasLangTag) {
       // 태그가 모두 있으면 정확히 파싱
@@ -999,86 +1003,17 @@ class ChatOrchestrator {
 
   /// 간단한 번역 생성 (폴백용)
   String? _generateSimpleTranslation(String koreanText, String targetLanguage) {
-    // 간단한 패턴 기반 번역 생성
-    // API가 번역을 제공하지 못했을 때 기본적인 번역 제공
+    // API가 번역을 제공하지 못했을 때의 처리
+    // 잘못된 번역보다는 번역을 표시하지 않는 것이 나음
     
-    // 일반적인 한국어 패턴과 번역 매핑
-    final Map<String, Map<String, String>> commonTranslations = {
-      'en': {
-        '안녕': 'Hi',
-        '반가워': 'Nice to meet you',
-        '잘 지내': 'How are you',
-        '고마워': 'Thanks',
-        '미안': 'Sorry',
-        '사랑해': 'I love you',
-        '좋아': 'Good',
-        '괜찮아': "It's okay",
-        '뭐해': 'What are you doing',
-        '어때': 'How is it',
-        '왜': 'Why',
-        '진짜': 'Really',
-        '대박': 'Awesome',
-        '맞아': "That's right",
-        '그래': 'Yeah',
-        '응': 'Yes',
-        '아니': 'No',
-      },
-      'ja': {
-        '안녕': 'こんにちは',
-        '반가워': 'はじめまして',
-        '고마워': 'ありがとう',
-        '미안': 'ごめん',
-        '사랑해': '愛してる',
-        '좋아': 'いいね',
-        '괜찮아': '大丈夫',
-      },
-    };
+    debugPrint('⚠️ Translation not provided by API');
+    debugPrint('📝 Korean text: $koreanText');
+    debugPrint('🌍 Target language: $targetLanguage');
+    debugPrint('❌ API should have included [KO] and [${targetLanguage.toUpperCase()}] tags');
     
-    // 해당 언어의 번역 맵 가져오기
-    final translations = commonTranslations[targetLanguage] ?? {};
-    
-    // 간단한 패턴 매칭으로 번역 시도
-    String translated = koreanText;
-    for (final entry in translations.entries) {
-      if (koreanText.contains(entry.key)) {
-        // 첫 번째 매칭되는 패턴으로 간단한 번역 생성
-        translated = koreanText.replaceAll(entry.key, entry.value);
-        if (translated != koreanText) {
-          return translated;
-        }
-      }
-    }
-    
-    // 패턴 매칭 실패 시 기본 영어 응답
-    if (targetLanguage == 'en') {
-      // 질문인 경우
-      if (koreanText.contains('?')) {
-        return "What do you mean?";
-      }
-      // 감탄사인 경우
-      if (koreanText.contains('!')) {
-        return "That's interesting!";
-      }
-      // 기본 응답
-      return "I understand.";
-    }
-    
-    // 다른 언어는 처리 중 메시지
-    final Map<String, String> processingMessages = {
-      'ja': "わかりました",
-      'zh': "我明白了",
-      'es': "Entiendo",
-      'fr': "Je comprends",
-      'de': "Ich verstehe",
-      'ru': "Понимаю",
-      'vi': "Tôi hiểu",
-      'th': "เข้าใจแล้ว",
-      'id': "Saya mengerti",
-      'ar': "أفهم",
-      'hi': "मैं समझता हूं",
-    };
-    
-    return processingMessages[targetLanguage] ?? "I understand.";
+    // null을 반환하여 번역을 표시하지 않음
+    // 잘못된 단어 치환 번역보다는 번역이 없는 것이 나음
+    return null;
   }
 
   /// 폴백 응답 생성 - 회피 패턴 제거

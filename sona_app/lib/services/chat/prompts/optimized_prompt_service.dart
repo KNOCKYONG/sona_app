@@ -512,23 +512,58 @@ class OptimizedPromptService {
     // 6. 다국어 지원 (사용자가 영어 등 외국어 사용 시)
     if (targetLanguage != null && targetLanguage != 'ko') {
       promptParts.add('''
-## 🌍 다국어 응답 가이드 [최우선]
-- 사용자가 ${_getLanguageName(targetLanguage)}로 메시지를 보냈습니다
-- **반드시 아래 형식을 정확히 지켜서 응답**:
+## 🌍 번역 규칙 [최우선 - 반드시 준수] 🌍
+**⚠️ 중요: 번역 기능은 핵심 서비스입니다. 반드시 아래 형식을 정확히 따르세요.**
 
-[KO] 한국어 응답 내용 (완전한 문장으로)
-[${targetLanguage.toUpperCase()}] ${_getLanguageName(targetLanguage)} 번역 (완전한 문장으로)
+### 📝 필수 응답 형식 (절대 변경 금지):
+```
+[KO] 한국어 전체 응답
+[${targetLanguage.toUpperCase()}] Complete ${_getLanguageName(targetLanguage)} translation of the entire Korean response
+```
 
-- **중요**: 
-  * 반드시 [KO]와 [${targetLanguage.toUpperCase()}] 태그를 정확히 사용
-  * 각 태그는 새로운 줄에서 시작
-  * 태그 뒤에 공백 한 칸 후 내용 작성
-  * 두 언어 모두 완전한 문장으로 작성
-  * 한국어 응답의 감정과 뉘앙스를 번역에도 반영
+### ✅ 번역 규칙:
+1. **반드시 [KO]와 [${targetLanguage.toUpperCase()}] 태그를 정확히 사용**
+2. **각 태그는 새로운 줄에서 시작**
+3. **한국어 응답 전체를 빠짐없이 번역**
+4. **단어 단위 치환 절대 금지** (예: "아 진짜?" → "Oh really?" ✓, "아 Really?" ✗)
+5. **문장의 의미와 감정을 완전히 전달**
+6. **한국어 감정 표현 번역**:
+   - ㅋㅋ/ㅋㅋㅋ → haha/lol
+   - ㅎㅎ → hehe
+   - ㅠㅠ/ㅜㅜ → T_T / :(
+   - ㅇㅇ → yeah/yep
+   - ㄴㄴ → nope
 
-- 예시:
+### 📌 올바른 예시:
+```
+[KO] 아 진짜? 어떻게 생각해?ㅋㅋ
+[${targetLanguage.toUpperCase()}] Oh really? What do you think? haha
+```
+
+```
 [KO] 나도 잘 지내고 있어ㅎㅎ 오늘 뭐했어?
-[EN] I'm doing well too haha What did you do today?
+[${targetLanguage.toUpperCase()}] I'm doing well too hehe What did you do today?
+```
+
+```
+[KO] 와 대박이다! 너무 좋아ㅠㅠ
+[${targetLanguage.toUpperCase()}] Wow that's amazing! I love it so much T_T
+```
+
+### ❌ 잘못된 예시 (절대 하지 마세요):
+- "아 진짜?" → "아 Really?" (단어 치환 ✗)
+- "어떻게 생각해?" → "How think?" (불완전한 번역 ✗)
+- [KO] 태그만 있고 [${targetLanguage.toUpperCase()}] 태그 없음 (✗)
+
+### 🎯 번역 체크리스트:
+□ [KO] 태그로 시작하는가?
+□ [${targetLanguage.toUpperCase()}] 태그가 있는가?
+□ 한국어 응답이 완전한가?
+□ ${_getLanguageName(targetLanguage)} 번역이 완전한가?
+□ 감정 표현이 적절히 번역되었는가?
+□ 문화적 맥락이 고려되었는가?
+
+**⚠️ 경고: [KO]와 [${targetLanguage.toUpperCase()}] 태그 없이 응답하면 번역 기능이 작동하지 않습니다!**
 ''');
     }
 
@@ -555,40 +590,6 @@ ${userNickname != null && userNickname.isNotEmpty ? '- "내 이름이 뭐야?", 
 ${isMinor ? '⚠️ 미성년자이므로 친구 관계 유지하며 건전한 대화만 하세요.' : ''}
 ''');
 
-    // 7. 다국어 지원 (번역이 필요한 경우)
-    if (targetLanguage != null && targetLanguage != 'ko') {
-      final languageNames = {
-        'en': '영어',
-        'ja': '일본어',
-        'zh': '중국어',
-        'es': '스페인어',
-        'fr': '프랑스어',
-        'de': '독일어',
-        'ru': '러시아어',
-        'vi': '베트남어',
-        'th': '태국어',
-        'id': '인도네시아어',
-        'ar': '아랍어',
-        'hi': '힌디어',
-      };
-
-      final langName = languageNames[targetLanguage] ?? targetLanguage;
-
-      promptParts.add('''
-## 🌐 다국어 응답 형식
-- 한국어로 자연스럽게 대화 후, 같은 내용을 ${langName}로 번역
-- 형식: 
-  [KO] 한국어 응답 (완전한 문장으로)
-  [${targetLanguage.toUpperCase()}] 완전한 ${langName} 번역 (전체 내용 포함)
-- 번역 규칙:
-  * 반드시 한국어 응답 전체를 빠짐없이 번역
-  * 문장 중간에 끊기지 않도록 완전한 문장으로 번역
-  * "무슨 기능이 들어가나요?" → "What features are included?" (완전한 번역)
-  * 이모티콘과 감정 표현도 문화에 맞게 조정
-  * ${langName} 문화권의 표현 방식 고려
-  * 존댓말/반말 등의 뉘앙스도 적절히 반영
-''');
-    }
 
     // 8. 패턴 분석 기반 동적 가이드라인 (PatternAnalysis 사용)
     if (patternAnalysis != null && patternAnalysis.hasAnyPattern) {

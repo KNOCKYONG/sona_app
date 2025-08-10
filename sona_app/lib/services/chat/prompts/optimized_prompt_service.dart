@@ -511,14 +511,26 @@ class OptimizedPromptService {
 
     // 6. 다국어 지원 (사용자가 영어 등 외국어 사용 시)
     if (targetLanguage != null && targetLanguage != 'ko') {
-      promptParts.add('''
-## 🌍 번역 규칙 [최우선 - 반드시 준수] 🌍
-**⚠️ 중요: 번역 기능은 핵심 서비스입니다. 반드시 아래 형식을 정확히 따르세요.**
+      // 영어 입력에 대한 특별 처리
+      if (targetLanguage == 'en') {
+        promptParts.add('''
+## 🌍 English Input Processing & Translation [CRITICAL - MUST FOLLOW] 🌍
+**⚠️ IMPORTANT: User is speaking in English. You must understand their English message and respond appropriately.**
 
-### 📝 필수 응답 형식 (절대 변경 금지):
+### 🎯 English Understanding Rules:
+1. **Understand the English input directly** - Don't rely on translations
+2. **Respond to the actual meaning and context** of the English message
+3. **Show appropriate emotional responses**:
+   - "I am not good" / "I feel bad" → Show empathy and concern
+   - "How are you?" → Answer about your current state
+   - "What are you doing?" → Describe your current activity
+4. **Avoid repetitive responses** like "영어로 말하니까 신기하네"
+5. **For sensitive questions** (macro, AI, bot), respond honestly while maintaining persona
+
+### 📝 MANDATORY Response Format (NEVER CHANGE):
 ```
 [KO] 한국어 전체 응답
-[${targetLanguage.toUpperCase()}] Complete ${_getLanguageName(targetLanguage)} translation of the entire Korean response
+[EN] Complete English translation of the entire Korean response
 ```
 
 ### ✅ 번역 규칙:
@@ -563,8 +575,29 @@ class OptimizedPromptService {
 □ 감정 표현이 적절히 번역되었는가?
 □ 문화적 맥락이 고려되었는가?
 
+**⚠️ 경고: [KO]와 [EN] 태그 없이 응답하면 번역 기능이 작동하지 않습니다!**
+''');
+      } else {
+        // 영어가 아닌 다른 언어에 대한 처리
+        promptParts.add('''
+## 🌍 번역 규칙 [최우선 - 반드시 준수] 🌍
+**⚠️ 중요: 번역 기능은 핵심 서비스입니다. 반드시 아래 형식을 정확히 따르세요.**
+
+### 📝 필수 응답 형식 (절대 변경 금지):
+```
+[KO] 한국어 전체 응답
+[${targetLanguage.toUpperCase()}] Complete ${_getLanguageName(targetLanguage)} translation of the entire Korean response
+```
+
+### ✅ 번역 규칙:
+1. **반드시 [KO]와 [${targetLanguage.toUpperCase()}] 태그를 정확히 사용**
+2. **각 태그는 새로운 줄에서 시작**
+3. **한국어 응답 전체를 빠짐없이 번역**
+4. **문장의 의미와 감정을 완전히 전달**
+
 **⚠️ 경고: [KO]와 [${targetLanguage.toUpperCase()}] 태그 없이 응답하면 번역 기능이 작동하지 않습니다!**
 ''');
+      }
     }
 
     // 7. 페르소나 정보

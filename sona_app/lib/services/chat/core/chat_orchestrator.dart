@@ -171,45 +171,43 @@ class ChatOrchestrator {
       // 말투 모드 결정: 항상 반말 모드 사용
       bool currentSpeechMode = true; // 항상 반말 모드
 
-      // 2.5단계: 다국어 입력 처리 - 영어의 경우 번역 후 계속 진행
-      // 영어 입력은 번역하여 프롬프트에 포함시키고, 특별한 패턴만 즉시 응답
-      String? translatedUserMessage;
+      // 2.5단계: 다국어 입력 처리
+      // 영어 입력은 첫 인사만 특별 처리, 나머지는 API에서 직접 처리
       if (userLanguage != null && userLanguage == 'en') {
-        // 영어 메시지를 한국어로 번역 (프롬프트에 포함시키기 위해)
-        translatedUserMessage = _translateToKorean(userMessage);
-        debugPrint('🌍 English message translated: $userMessage -> $translatedUserMessage');
-        
-        // 특별한 패턴에 대해서만 즉시 응답 (인사말 등)
-        // 그 외의 경우는 OpenAI로 처리하도록 null 반환
-        final specialResponse = _generateSpecialMultilingualResponse(
-          userLanguage,
-          userMessage,
-          completePersona,
-          chatHistory,
-        );
-        
-        if (specialResponse != null) {
-          debugPrint('🌍 Special multilingual response generated: $specialResponse');
-          
-          // 다국어 응답도 감정 분석 및 점수 계산
-          final emotion = _analyzeEmotion(specialResponse);
-          final scoreChange = await _calculateScoreChange(
-            emotion: emotion,
-            userMessage: userMessage,
-            persona: completePersona,
-            chatHistory: chatHistory,
+        // 첫 인사말만 특별 처리 (대화 시작을 부드럽게)
+        if (chatHistory.isEmpty || chatHistory.length <= 1) {
+          final specialResponse = _generateSpecialMultilingualResponse(
+            userLanguage,
+            userMessage,
+            completePersona,
+            chatHistory,
           );
           
-          return ChatResponse(
-            content: specialResponse,
-            emotion: emotion,
-            scoreChange: scoreChange,
-            metadata: {
-              'isMultilingual': true,
-              'detectedLanguage': userLanguage,
-            },
-          );
+          if (specialResponse != null) {
+            debugPrint('🌍 Special greeting response generated: $specialResponse');
+            
+            // 다국어 응답도 감정 분석 및 점수 계산
+            final emotion = _analyzeEmotion(specialResponse);
+            final scoreChange = await _calculateScoreChange(
+              emotion: emotion,
+              userMessage: userMessage,
+              persona: completePersona,
+              chatHistory: chatHistory,
+            );
+            
+            return ChatResponse(
+              content: specialResponse,
+              emotion: emotion,
+              scoreChange: scoreChange,
+              metadata: {
+                'isMultilingual': true,
+                'detectedLanguage': userLanguage,
+              },
+            );
+          }
         }
+        // 영어 입력은 이제 API에서 직접 처리하도록 계속 진행
+        debugPrint('🌍 English input detected, will be processed by API: $userMessage');
       } else if (userLanguage != null && userLanguage != 'ko') {
         // 다른 언어는 기존 로직 유지
         final multilingualResponse = _generateMultilingualResponse(
@@ -521,21 +519,20 @@ class ChatOrchestrator {
       }
 
       // 5단계: API 호출
-      // 영어 메시지의 경우 번역된 메시지와 원본 모두 전달
-      final messageForAPI = (userLanguage == 'en' && translatedUserMessage != null) 
-          ? '$translatedUserMessage (Original: $userMessage)'
-          : userMessage;
+      // 영어 입력은 원본 그대로 전달하고, targetLanguage 파라미터 추가
       
-      // 영어 입력 시 특별 컨텍스트 힌트 추가
+      // 영어 입력 시 특별 컨텍스트 힌트 추가  
       String? enhancedContextHint = contextHint;
       if (userLanguage == 'en') {
         final englishHint = '''
-## 🌍 영어 입력 감지:
-- 사용자가 영어로 질문: "$userMessage"
-- 한국어 번역: "${translatedUserMessage ?? userMessage}"
-- 반드시 질문의 내용에 직접 답변하세요
-- "영어로 말하니까 신기하네" 같은 반복 응답 금지
-- macro, AI, bot 키워드가 있으면 솔직하게 답변하되 페르소나 유지
+## 🌍 English Input Detected:
+- User's message in English: "$userMessage"
+- Please understand the English message and respond appropriately in Korean
+- Include both [KO] Korean response and [EN] English translation
+- Focus on the meaning and context, not just literal translation
+- If user says "I am not good" or "I feel bad", show empathy
+- Avoid repetitive responses like "영어로 말하니까 신기하네"
+- For macro/AI/bot questions, respond honestly while maintaining persona
 ''';
         enhancedContextHint = enhancedContextHint != null 
             ? '$enhancedContextHint\n\n$englishHint'
@@ -545,13 +542,13 @@ class ChatOrchestrator {
       final rawResponse = await OpenAIService.generateResponse(
         persona: completePersona,
         chatHistory: chatHistory,
-        userMessage: messageForAPI,
+        userMessage: userMessage,  // 원본 메시지 그대로 전달
         relationshipType: _getRelationshipType(completePersona),
         userNickname: userNickname,
         userAge: userAge,
         isCasualSpeech: true, // 항상 반말 모드
         contextHint: enhancedContextHint,
-        targetLanguage: userLanguage, // 번역 언어 전달
+        targetLanguage: userLanguage,  // 언어 정보 전달
       );
 
       // 6단계: 간단한 후처리 (텍스트 정리만, 강제 자르기 제거)
@@ -1494,32 +1491,73 @@ class ChatOrchestrator {
     return null;
   }
 
-  /// 영어 메시지를 한국어로 번역
+  // _translateToKorean 메서드 제거됨 - 영어 입력은 API에서 직접 처리
+  // 이전의 하드코딩된 번역은 부정확하고 맥락을 놓치는 문제가 있었음
+  // 이제 OpenAI API가 영어를 직접 이해하고 적절한 응답 생성
+  /*
   String _translateToKorean(String englishMessage) {
     final lower = englishMessage.toLowerCase();
     
-    // 기본적인 번역 매핑
+    // 감정 표현 번역
+    if (lower.contains('not good') || lower.contains('feel bad') || lower.contains('feel so bad')) {
+      return "기분이 안 좋아";
+    } else if (lower.contains('sad')) {
+      return "슬퍼";
+    } else if (lower.contains('tired')) {
+      return "피곤해";
+    } else if (lower.contains('happy')) {
+      return "행복해";
+    } else if (lower.contains('angry')) {
+      return "화나";
+    }
+    
+    // 인사말 번역
+    if (lower == 'hello' || lower == 'hi') {
+      return "안녕";
+    } else if (lower.contains('how are you') || lower.contains('how r u')) {
+      return "어떻게 지내?";
+    } else if (lower.contains('good morning')) {
+      return "좋은 아침";
+    } else if (lower.contains('good night')) {
+      return "잘자";
+    }
+    
+    // 일상 대화 번역
     if (lower.contains('watching') && lower.contains('tv')) {
-      return "TV 보고 있어요";
-    } else if (lower.contains('how about') || lower.contains('how r u')) {
-      return "너는 어때?";
-    } else if (lower.contains('r u macro') || lower.contains('are you macro')) {
-      return "너 매크로야?";
-    } else if (lower.contains('r u ai') || lower.contains('are you ai')) {
-      return "너 AI야?";
-    } else if (lower.contains('omg')) {
-      return "헐...";
+      return "TV 보고 있어";
     } else if (lower.contains('what') && lower.contains('doing')) {
       return "뭐해?";
+    } else if (lower.contains('where are you')) {
+      return "어디야?";
     } else if (lower.contains('love')) {
       return "사랑해";
     } else if (lower.contains('miss')) {
       return "보고싶어";
     }
     
+    // 특수 패턴 번역
+    if (lower.contains('r u macro') || lower.contains('are you macro')) {
+      return "너 매크로야?";
+    } else if (lower.contains('r u ai') || lower.contains('are you ai')) {
+      return "너 AI야?";
+    } else if (lower.contains('omg')) {
+      return "헐...";
+    }
+    
+    // 상태 응답 번역
+    if (lower.contains('i am') || lower.contains("i'm")) {
+      if (lower.contains('good') || lower.contains('fine')) {
+        return "나는 괜찮아";
+      } else if (lower.contains('not')) {
+        return "나는 안 좋아";
+      }
+    }
+    
     // 번역할 수 없으면 원문 반환
+    debugPrint('⚠️ Could not translate: $englishMessage');
     return englishMessage;
   }
+  */
   
   /// 특별한 영어 패턴에 대해서만 즉시 응답 생성 (첫 인사 등)
   String? _generateSpecialMultilingualResponse(String language, String message, Persona persona, List<Message> chatHistory) {

@@ -1543,6 +1543,103 @@ class AdvancedPatternAnalyzer {
     return result;
   }
 
+  /// 매크로/봇 의심 패턴 감지
+  Map<String, dynamic> detectMacroPattern(String message) {
+    final result = <String, dynamic>{
+      'isMacroQuestion': false,
+      'confidence': 0.0,
+      'type': 'none', // direct, indirect, accusation
+    };
+    
+    final lower = message.toLowerCase();
+    
+    // 직접적인 매크로/봇 질문
+    if (lower.contains('macro') || lower.contains('매크로') || 
+        lower.contains('bot') || lower.contains('봇')) {
+      result['isMacroQuestion'] = true;
+      result['confidence'] = 0.9;
+      result['type'] = 'direct';
+      return result;
+    }
+    
+    // "r u macro?", "are you macro?" 등
+    if ((lower.contains('r u') || lower.contains('are you')) && 
+        (lower.contains('macro') || lower.contains('bot'))) {
+      result['isMacroQuestion'] = true;
+      result['confidence'] = 1.0;
+      result['type'] = 'direct';
+      return result;
+    }
+    
+    // 간접적 의심
+    if (lower.contains('진짜 사람') || lower.contains('사람이야') ||
+        lower.contains('사람 맞아') || lower.contains('자동응답')) {
+      result['isMacroQuestion'] = true;
+      result['confidence'] = 0.7;
+      result['type'] = 'indirect';
+      return result;
+    }
+    
+    // 같은 말 반복 지적
+    if (lower.contains('똑같은 말') || lower.contains('반복') ||
+        lower.contains('계속 같은')) {
+      result['isMacroQuestion'] = true;
+      result['confidence'] = 0.6;
+      result['type'] = 'accusation';
+    }
+    
+    return result;
+  }
+  
+  /// AI 의심 패턴 감지
+  Map<String, dynamic> detectAIPattern(String message) {
+    final result = <String, dynamic>{
+      'isAIQuestion': false,
+      'confidence': 0.0,
+      'type': 'none', // direct, indirect, technical
+    };
+    
+    final lower = message.toLowerCase();
+    
+    // 직접적인 AI 질문
+    if (lower.contains('ai') || lower.contains('인공지능') || 
+        lower.contains('artificial') || lower.contains('gpt') ||
+        lower.contains('챗봇') || lower.contains('chatbot')) {
+      result['isAIQuestion'] = true;
+      result['confidence'] = 0.9;
+      result['type'] = 'direct';
+      return result;
+    }
+    
+    // "r u ai?", "are you ai?" 등
+    if ((lower.contains('r u') || lower.contains('are you')) && 
+        (lower.contains('ai') || lower.contains('artificial'))) {
+      result['isAIQuestion'] = true;
+      result['confidence'] = 1.0;
+      result['type'] = 'direct';
+      return result;
+    }
+    
+    // 기술적 질문
+    if (lower.contains('프로그램') || lower.contains('알고리즘') ||
+        lower.contains('코드') || lower.contains('시스템')) {
+      result['isAIQuestion'] = true;
+      result['confidence'] = 0.5;
+      result['type'] = 'technical';
+      return result;
+    }
+    
+    // 간접적 질문
+    if (lower.contains('진짜야') || lower.contains('가짜') ||
+        lower.contains('만들어진')) {
+      result['isAIQuestion'] = true;
+      result['confidence'] = 0.6;
+      result['type'] = 'indirect';
+    }
+    
+    return result;
+  }
+  
   /// 놀람/감탄 패턴 감지
   Map<String, dynamic> detectSurprisePattern(String message) {
     final result = <String, dynamic>{

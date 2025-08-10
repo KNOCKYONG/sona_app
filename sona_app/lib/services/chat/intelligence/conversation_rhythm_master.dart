@@ -348,7 +348,7 @@ class ConversationRhythmMaster {
     
     // 멀티턴 전략
     bool allowMultiTurn = false;
-    if (tempo.consistency > 0.7 && likeScore > 400) {
+    if (tempo.consistency > 0.7 && pattern.preferredTempo == 'fast') {
       allowMultiTurn = true; // 안정적이고 친밀하면 여러 번 이어서 대답 가능
     }
     
@@ -519,7 +519,7 @@ class ConversationRhythmMaster {
   String _analyzeResponseSpeed(List<Message> history) {
     if (history.length < 2) return 'moderate';
     
-    final userMessages = history.where((m) => m.isUser).toList();
+    final userMessages = history.where((m) => m.isFromUser).toList();
     if (userMessages.length < 2) return 'moderate';
     
     // 사용자 메시지 간격 평균
@@ -556,7 +556,7 @@ class ConversationRhythmMaster {
   double _calculateQuestionFrequency(List<Message> history) {
     if (history.isEmpty) return 0.2;
     
-    final userMessages = history.where((m) => m.isUser).take(10);
+    final userMessages = history.where((m) => m.isFromUser).take(10);
     if (userMessages.isEmpty) return 0.2;
     
     final questionCount = userMessages
@@ -670,7 +670,7 @@ class ConversationRhythmMaster {
     }
     
     final recent = history.take(10).toList();
-    final userCount = recent.where((m) => m.isUser).length;
+    final userCount = recent.where((m) => m.isFromUser).length;
     final aiCount = recent.length - userCount;
     
     final dominance = userCount / recent.length;

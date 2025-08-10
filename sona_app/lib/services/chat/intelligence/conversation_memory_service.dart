@@ -259,6 +259,7 @@ class ConversationMemoryService {
     if (content.contains('부장') || content.contains('상사') || 
         content.contains('팀장') || content.contains('과장')) {
       tags.add('work_stress');
+    }
 
     // 특별한 순간 태그
     if (message.likesChange != null && message.likesChange! > 5) {

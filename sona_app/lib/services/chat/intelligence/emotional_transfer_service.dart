@@ -421,7 +421,7 @@ class EmotionalTransferService {
     if (chatHistory.length > 3) {
       final recentLengths = chatHistory
           .take(3)
-          .where((m) => m.isUser)
+          .where((m) => m.isFromUser)
           .map((m) => m.content.length)
           .toList();
       
@@ -440,7 +440,7 @@ class EmotionalTransferService {
     if (chatHistory.length > 3) {
       final recentEmoticonCounts = chatHistory
           .take(3)
-          .where((m) => m.isUser)
+          .where((m) => m.isFromUser)
           .map((m) => _countEmoticons(m.content))
           .toList();
       

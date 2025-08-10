@@ -372,6 +372,7 @@ class ChatOrchestrator {
           messageAnalysis: messageAnalysis,
           persona: completePersona,
           userNickname: userNickname,
+          userId: userId,
         );
       }
       
@@ -2703,6 +2704,7 @@ class ChatOrchestrator {
     required MessageAnalysis messageAnalysis,
     required Persona persona,
     String? userNickname,
+    required String userId,
   }) async {
     // 관계 깊이별 감정 표현 추가
     final relationshipHints = _getRelationshipDepthHints(
@@ -3047,7 +3049,7 @@ class ChatOrchestrator {
         userId: userId,
         persona: persona,
         likeScore: persona.likes,
-        lastAIResponse: chatHistory.isNotEmpty && !chatHistory.first.isUser 
+        lastAIResponse: chatHistory.isNotEmpty && !chatHistory.first.isFromUser 
             ? chatHistory.first.content 
             : null,
       );

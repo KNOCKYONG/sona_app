@@ -117,32 +117,32 @@ class EmotionResolutionService {
     
     // 기쁨 관련
     if (_containsAny(message, ['기뻐', '좋아', '행복', '신나', '최고'])) {
-      emotionScores['joy'] += 3;
-      emotionScores['excitement'] += 2;
+      emotionScores['joy'] = emotionScores['joy']! + 3;
+      emotionScores['excitement'] = emotionScores['excitement']! + 2;
     }
     
     // 슬픔 관련
     if (_containsAny(message, ['슬퍼', '우울', '힘들', '외로'])) {
-      emotionScores['sadness'] += 3;
-      emotionScores['loneliness'] += 1;
+      emotionScores['sadness'] = emotionScores['sadness']! + 3;
+      emotionScores['loneliness'] = emotionScores['loneliness']! + 1;
     }
     
     // 화남 관련
     if (_containsAny(message, ['화나', '짜증', '열받', '빡쳐'])) {
-      emotionScores['anger'] += 3;
-      emotionScores['frustration'] += 2;
+      emotionScores['anger'] = emotionScores['anger']! + 3;
+      emotionScores['frustration'] = emotionScores['frustration']! + 2;
     }
     
     // 불안 관련
     if (_containsAny(message, ['불안', '걱정', '무서', '두려'])) {
-      emotionScores['anxiety'] += 3;
-      emotionScores['fear'] += 2;
+      emotionScores['anxiety'] = emotionScores['anxiety']! + 3;
+      emotionScores['fear'] = emotionScores['fear']! + 2;
     }
     
     // 사랑 관련
     if (_containsAny(message, ['사랑', '좋아해', '보고싶', '그리워'])) {
-      emotionScores['love'] += 3;
-      emotionScores['anticipation'] += 1;
+      emotionScores['love'] = emotionScores['love']! + 3;
+      emotionScores['anticipation'] = emotionScores['anticipation']! + 1;
     }
     
     // 가장 높은 점수의 감정 반환

@@ -586,7 +586,7 @@ class ConversationContextManager {
     
     if (!hasEmoticon && chatHistory.length > 5) {
       // 이전 메시지들에서 이모티콘 사용 비율 확인
-      final recentMessages = chatHistory.take(5).where((m) => m.isUser);
+      final recentMessages = chatHistory.take(5).where((m) => m.isFromUser);
       final emotionCount = recentMessages.where((m) => 
         m.content.contains('ㅋ') || m.content.contains('ㅎ') || 
         m.content.contains('ㅠ') || m.content.contains('!')
@@ -633,7 +633,7 @@ class ConversationContextManager {
     if (message.endsWith('?')) {
       final recentQuestions = chatHistory
           .take(10)
-          .where((m) => m.isUser && m.content.endsWith('?'))
+          .where((m) => m.isFromUser && m.content.endsWith('?'))
           .map((m) => m.content)
           .toList();
       

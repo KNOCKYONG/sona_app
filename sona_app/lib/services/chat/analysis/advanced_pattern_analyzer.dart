@@ -2084,7 +2084,14 @@ class AdvancedPatternAnalyzer {
     
     // 1. 갑자기 주제 전환 → 이전 주제가 불편함
     if (chatHistory.isNotEmpty) {
-      final lastUserMsg = chatHistory.lastWhere((m) => m.isFromUser, orElse: () => Message(content: '', isFromUser: true, timestamp: DateTime.now()));
+      final lastUserMsg = chatHistory.lastWhere((m) => m.isFromUser, orElse: () => Message(
+        id: 'temp_id',
+        personaId: '',
+        content: '',
+        type: MessageType.text,
+        isFromUser: true,
+        timestamp: DateTime.now(),
+      ));
       final lastTopic = _extractMainTopic(lastUserMsg.content);
       final currentTopic = _extractMainTopic(message);
       
@@ -2099,7 +2106,14 @@ class AdvancedPatternAnalyzer {
     
     // 2. 질문에 질문으로 답 → 대답하기 싫음
     if (chatHistory.isNotEmpty) {
-      final lastAIMsg = chatHistory.lastWhere((m) => !m.isFromUser, orElse: () => Message(content: '', isFromUser: false, timestamp: DateTime.now()));
+      final lastAIMsg = chatHistory.lastWhere((m) => !m.isFromUser, orElse: () => Message(
+        id: 'temp_id',
+        personaId: '',
+        content: '',
+        type: MessageType.text,
+        isFromUser: false,
+        timestamp: DateTime.now(),
+      ));
       if (lastAIMsg.content.contains('?') && message.contains('?')) {
         interpretation['hiddenMeaning'] = '질문에 답하고 싶지 않아서 화제 전환 시도';
         interpretation['confidence'] = 0.65;

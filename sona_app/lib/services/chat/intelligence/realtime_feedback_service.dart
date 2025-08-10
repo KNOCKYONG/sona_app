@@ -628,7 +628,7 @@ class RealtimeFeedbackService {
     // 짧은 응답 연속
     if (message.length < 5) {
       final recentShort = history.take(3)
-          .where((m) => m.isUser && m.content.length < 10)
+          .where((m) => m.isFromUser && m.content.length < 10)
           .length;
       return recentShort >= 2;
     }
@@ -720,7 +720,7 @@ class RealtimeFeedbackService {
   double _calculateEngagement(List<Message> history) {
     if (history.isEmpty) return 0.5;
     
-    final userMessages = history.where((m) => m.isUser).take(5).toList();
+    final userMessages = history.where((m) => m.isFromUser).take(5).toList();
     if (userMessages.isEmpty) return 0.5;
     
     // 평균 메시지 길이
@@ -805,7 +805,7 @@ class RealtimeFeedbackService {
     
     // 다양한 반응 패턴
     final reactions = history
-        .where((m) => !m.isUser)
+        .where((m) => !m.isFromUser)
         .map((m) => m.content.substring(0, min(10, m.content.length)))
         .toSet();
     

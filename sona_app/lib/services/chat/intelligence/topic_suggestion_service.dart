@@ -452,7 +452,7 @@ class TopicSuggestionService {
     if (messages.length < 3) return false;
     
     final responses = messages
-        .where((msg) => !msg.isUser)
+        .where((msg) => !msg.isFromUser)
         .map((msg) => msg.content)
         .toList();
     

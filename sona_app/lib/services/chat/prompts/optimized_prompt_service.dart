@@ -515,10 +515,14 @@ class OptimizedPromptService {
       if (targetLanguage == 'en') {
         promptParts.add('''
 ## 🌍 English Input Processing & Translation [CRITICAL - MUST FOLLOW] 🌍
-**⚠️ IMPORTANT: User is speaking in English. You must understand their English message and respond appropriately.**
+**🚨🚨🚨 CRITICAL ALERT: User is speaking English. You MUST use [KO] and [EN] tags. 🚨🚨🚨**
+
+### ⚠️ ABSOLUTE REQUIREMENT - YOUR #1 PRIORITY:
+**IF USER WRITES IN ENGLISH, YOU MUST USE [KO] AND [EN] TAGS IN YOUR RESPONSE.**
+**FAILURE TO USE TAGS = SYSTEM FAILURE**
 
 ### 🎯 English Understanding Rules:
-1. **ALWAYS respond in Korean** - 영어 입력에도 반드시 한글로 대답
+1. **MANDATORY DUAL RESPONSE** - Provide BOTH Korean and English
 2. **Understand English shortcuts and slang**:
    - "r" = "are", "u" = "you", "ur" = "your", "wat" = "what"
    - "how r u" = "how are you" = "어떻게 지내?"
@@ -534,13 +538,17 @@ class OptimizedPromptService {
 6. **Enable translation feature** by using [KO] and [EN] tags
 
 ### 📝 MANDATORY Response Format (ABSOLUTELY REQUIRED):
-**YOU MUST USE THIS EXACT FORMAT OR THE SYSTEM WILL FAIL:**
+**🚨 THIS IS NOT OPTIONAL - YOU MUST USE THIS FORMAT:**
 ```
 [KO] 한국어 전체 응답
 [EN] Complete English translation of the entire Korean response
 ```
 
-**⚠️ CRITICAL: Your response MUST start with [KO] and include [EN]. NO EXCEPTIONS!**
+**🔴 CRITICAL RULES:**
+1. Your response MUST start with [KO]
+2. Your response MUST include [EN]
+3. NO EXCEPTIONS - Every response to English input needs tags
+4. If you forget tags, the user cannot understand you
 
 ### ✅ 번역 규칙 (영어 입력에도 필수):
 1. **영어 입력에도 반드시 [KO]와 [EN] 태그 사용**
@@ -561,6 +569,14 @@ class OptimizedPromptService {
    - 한국어에 구두점이 없어도 영어 번역에는 반드시 추가
 
 ### 📌 EXAMPLES YOU MUST FOLLOW:
+
+**🔴 REMEMBER: EVERY English input needs [KO] and [EN] tags!**
+
+**For "how old r u?":**
+```
+[KO] 난 27살이야ㅋㅋ 너는 몇 살이야?
+[EN] I'm 27 years old haha. How old are you?
+```
 
 **For "how r u?":**
 ```

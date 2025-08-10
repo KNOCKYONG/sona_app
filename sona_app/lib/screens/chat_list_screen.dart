@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/chat/chat_service.dart';
+import '../services/chat/core/chat_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
@@ -14,6 +14,7 @@ import '../widgets/persona/optimized_persona_image.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../widgets/skeleton/skeleton_widgets.dart';
 import '../l10n/app_localizations.dart';
+import 'chat_screen.dart';
 
 class ChatListScreen extends StatefulWidget {
   const ChatListScreen({super.key});
@@ -210,8 +211,25 @@ class _ChatListScreenState extends State<ChatListScreen>
     return preview;
   }
 
-  String _getLastMessageTime(List<Message> messages) {
-    if (messages.isEmpty) return '';
+  String _getLastMessageTime(List<Message> messages, {DateTime? matchedAt}) {
+    if (messages.isEmpty) {
+      // If no messages but we have matchedAt, show that time
+      if (matchedAt != null) {
+        final now = DateTime.now();
+        final difference = now.difference(matchedAt);
+        
+        if (difference.inDays > 0) {
+          return AppLocalizations.of(context)!.daysAgo(difference.inDays);
+        } else if (difference.inHours > 0) {
+          return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
+        } else if (difference.inMinutes > 0) {
+          return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
+        } else {
+          return AppLocalizations.of(context)!.justNow;
+        }
+      }
+      return '';
+    }
 
     final lastMessage = messages.last;
 
@@ -219,6 +237,21 @@ class _ChatListScreenState extends State<ChatListScreen>
     final localizations = AppLocalizations.of(context)!;
     if (lastMessage.content == localizations.startConversation ||
         lastMessage.content == localizations.startConversationWithSona) {
+      // Use matchedAt as fallback for tutorial messages
+      if (matchedAt != null) {
+        final now = DateTime.now();
+        final difference = now.difference(matchedAt);
+        
+        if (difference.inDays > 0) {
+          return AppLocalizations.of(context)!.daysAgo(difference.inDays);
+        } else if (difference.inHours > 0) {
+          return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
+        } else if (difference.inMinutes > 0) {
+          return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
+        } else {
+          return AppLocalizations.of(context)!.justNow;
+        }
+      }
       return '';
     }
 
@@ -253,8 +286,8 @@ class _ChatListScreenState extends State<ChatListScreen>
       
       // 병렬로 프리로드
       await Future.wait([
-        // 페르소나 선택 프리로드
-        personaService.selectPersona(persona),
+        // 페르소나 선택 프리로드 - clearPrevious를 false로 설정하여 데이터 유지
+        personaService.selectPersona(persona, clearPrevious: false),
         // 채팅 히스토리 프리로드 (이미 로드된 경우 빠르게 리턴)
         chatService.loadChatHistory(userId, persona.id),
       ]);
@@ -340,13 +373,15 @@ class _ChatListScreenState extends State<ChatListScreen>
             onPressed: () async {
               // 🔄 수동 새로고침
               // 로딩 인디케이터 표시
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content:
-                      Text(AppLocalizations.of(context)!.refreshingChatList),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context)
+                ..clearSnackBars()
+                ..showSnackBar(
+                  SnackBar(
+                    content:
+                        Text(AppLocalizations.of(context)!.refreshingChatList),
+                    duration: const Duration(seconds: 2),
+                  ),
+                );
 
               try {
                 // 전체 채팅 목록 새로고침
@@ -355,28 +390,30 @@ class _ChatListScreenState extends State<ChatListScreen>
                 if (mounted) {
                   final personaService =
                       Provider.of<PersonaService>(context, listen: false);
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!
-                          .refreshComplete(
-                              personaService.matchedPersonas.length)),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!
+                            .refreshComplete(
+                                personaService.matchedPersonas.length)),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
                 }
               } catch (e) {
                 if (mounted) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:
-                          Text(AppLocalizations.of(context)!.refreshFailed),
-                      duration: const Duration(seconds: 2),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(
+                      SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context)!.refreshFailed),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                 }
               }
             },
@@ -405,23 +442,32 @@ class _ChatListScreenState extends State<ChatListScreen>
             // Get last interaction time for A
             DateTime? lastTimeA;
             if (messagesA.isNotEmpty) {
-              lastTimeA = messagesA.last.timestamp;
-            } else if (a.matchedAt != null) {
-              lastTimeA = a.matchedAt;
+              // Filter out tutorial messages for timestamp
+              final realMessagesA = messagesA.where((m) => 
+                m.content != AppLocalizations.of(context)!.startConversation &&
+                m.content != AppLocalizations.of(context)!.startConversationWithSona
+              ).toList();
+              if (realMessagesA.isNotEmpty) {
+                lastTimeA = realMessagesA.last.timestamp;
+              }
             }
+            // Fallback to matchedAt if no messages
+            lastTimeA ??= a.matchedAt ?? DateTime.now().subtract(const Duration(days: 30));
 
             // Get last interaction time for B
             DateTime? lastTimeB;
             if (messagesB.isNotEmpty) {
-              lastTimeB = messagesB.last.timestamp;
-            } else if (b.matchedAt != null) {
-              lastTimeB = b.matchedAt;
+              // Filter out tutorial messages for timestamp
+              final realMessagesB = messagesB.where((m) => 
+                m.content != AppLocalizations.of(context)!.startConversation &&
+                m.content != AppLocalizations.of(context)!.startConversationWithSona
+              ).toList();
+              if (realMessagesB.isNotEmpty) {
+                lastTimeB = realMessagesB.last.timestamp;
+              }
             }
-
-            // If both have no interaction time, maintain original order
-            if (lastTimeA == null && lastTimeB == null) return 0;
-            if (lastTimeA == null) return 1;
-            if (lastTimeB == null) return -1;
+            // Fallback to matchedAt if no messages
+            lastTimeB ??= b.matchedAt ?? DateTime.now().subtract(const Duration(days: 30));
 
             return lastTimeB
                 .compareTo(lastTimeA); // Descending order (newest first)
@@ -552,10 +598,47 @@ class _ChatListScreenState extends State<ChatListScreen>
                     onTimeout: () => [],
                   );
                   
-                  Navigator.pushNamed(
+                  // Use custom page route for smooth slide animation
+                  Navigator.push(
                     context,
-                    '/chat',
-                    arguments: persona,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return const ChatScreen();
+                      },
+                      settings: RouteSettings(
+                        name: '/chat',
+                        arguments: persona,
+                      ),
+                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                        // Smooth slide from right animation
+                        const begin = Offset(1.0, 0.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeOutCubic;
+
+                        var tween = Tween(begin: begin, end: end).chain(
+                          CurveTween(curve: curve),
+                        );
+
+                        var offsetAnimation = animation.drive(tween);
+
+                        // Add fade effect for smoother transition
+                        var fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(
+                          CurvedAnimation(
+                            parent: animation,
+                            curve: const Interval(0.0, 0.3),
+                          ),
+                        );
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: FadeTransition(
+                            opacity: fadeAnimation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      transitionDuration: const Duration(milliseconds: 350),
+                    ),
                   );
                 },
                 onLongPress: () {
@@ -691,16 +774,15 @@ class _ChatListScreenState extends State<ChatListScreen>
                                     ],
                                   ),
                                 ),
-                                if (messages.isNotEmpty)
-                                  Text(
-                                    _getLastMessageTime(messages),
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: hasUnread
-                                          ? colorScheme.primary
-                                          : textTheme.bodySmall?.color,
-                                    ),
+                                Text(
+                                  _getLastMessageTime(messages, matchedAt: persona.matchedAt),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: hasUnread
+                                        ? colorScheme.primary
+                                        : textTheme.bodySmall?.color,
                                   ),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 4),

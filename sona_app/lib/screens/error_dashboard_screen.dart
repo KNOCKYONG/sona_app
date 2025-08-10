@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/chat_error_report.dart';
 import '../helpers/firebase_helper.dart';
-import '../services/chat/error_recovery_service.dart';
+import '../services/chat/utils/error_recovery_service.dart';
 import 'dart:math' as math;
 
 /// 대화 오류 대시보드 화면

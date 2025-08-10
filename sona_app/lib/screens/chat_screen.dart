@@ -7,7 +7,7 @@ import '../services/auth/auth_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
-import '../services/chat/chat_service.dart';
+import '../services/chat/core/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
@@ -50,7 +50,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool _previousIsTyping = false;
   // Track welcome messages per persona to prevent repetition
   final Map<String, bool> _hasShownWelcomePerPersona = {};
-  bool _isFirstLoad = true; // Track if this is the first load to force scroll
+  bool _hasInitiallyScrolled = false; // Track if we've done initial scroll for this chat
   // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
   
   // Reply functionality
@@ -88,10 +88,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
-      final scrollThreshold = 100.0;
+      final scrollThreshold = 200.0; // 증가된 임계값으로 더 여유있게 판단
       final paginationThreshold = 300.0; // 페이지네이션 임계값 증가
 
-      // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
+      // 사용자가 맨 아래에 가까운지 확인 (200픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
 
       if (_isNearBottom != isNearBottom) {
@@ -113,7 +113,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _loadMoreMessages();
       }
 
-      // 사용자가 스크롤 중인지 감지
+      // 사용자가 스크롤 중인지 감지 - 개선된 로직
       if (_scrollController.position.isScrollingNotifier.value) {
         if (!_isUserScrolling) {
           setState(() {
@@ -121,10 +121,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           });
         }
       } else {
-        // 스크롤이 멈췄을 때
-        Future.delayed(const Duration(milliseconds: 100), () {
+        // 스크롤이 멈췄을 때 - 딜레이 증가로 사용자 의도 더 잘 파악
+        Future.delayed(const Duration(seconds: 1), () {
           if (mounted &&
-              !_scrollController.position.isScrollingNotifier.value) {
+              !_scrollController.position.isScrollingNotifier.value &&
+              _isNearBottom) {
             setState(() {
               _isUserScrolling = false;
             });
@@ -143,10 +144,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
         // 사용자가 이미 맨 아래에 있을 때만 스크롤
         if (_isNearBottom) {
-          // 키보드가 올라올 때 마지막 메시지로 스크롤
-          Future.delayed(const Duration(milliseconds: 300), () {
+          // 키보드가 올라올 때 더 빠르게 반응
+          Future.delayed(const Duration(milliseconds: 50), () {
             if (mounted && _scrollController.hasClients && _focusNode.hasFocus && _isNearBottom) {
-              _scrollToBottom(force: false, smooth: true);
+              final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+              if (bottomInset > 0) {
+                // 키보드가 올라왔을 때만 스크롤
+                _scrollToBottom(force: false, smooth: false);
+              }
             }
           });
         }
@@ -596,12 +601,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     );
   }
 
-  void _scrollToBottom({bool force = false, bool smooth = true}) {
+  void _scrollToBottom({bool force = false, bool smooth = false}) {
     // 자동 스크롤 조건 체크
     // 1. force가 true이거나
-    // 2. 첫 로드이거나 (isFirstLoad)
+    // 2. 초기 스크롤이 필요하고 아직 안했거나
     // 3. 사용자가 스크롤 중이 아니고 맨 아래에 가까이 있을 때만 자동 스크롤
-    if (!force && !_isFirstLoad && (_isUserScrolling || !_isNearBottom)) {
+    if (!force && _hasInitiallyScrolled && (_isUserScrolling || !_isNearBottom)) {
       return;
     }
     
@@ -610,34 +615,38 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return;
     }
     
-    // Clear first load flag after first scroll
-    if (_isFirstLoad) {
-      _isFirstLoad = false;
+    // 초기 스크롤 완료 표시
+    if (!_hasInitiallyScrolled) {
+      _hasInitiallyScrolled = true;
     }
 
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 100ms 후에 실행
-    _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
+    // 디바운싱: 새로운 스크롤 요청을 매우 짧은 딜레이 후 실행
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 10), () {
       if (!mounted || !_scrollController.hasClients) return;
       
       _isScrolling = true;
       final targetScroll = _scrollController.position.maxScrollExtent;
 
       if (smooth) {
-        // 부드러운 스크롤 애니메이션
+        // 부드럽고 자연스러운 스크롤 애니메이션
         _scrollController.animateTo(
           targetScroll,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOutCubic,
+          duration: const Duration(milliseconds: 200),  // 더 빠른 애니메이션
+          curve: Curves.easeOut,  // 더 직접적인 커브
         ).then((_) {
           _isScrolling = false;
+          // 사용자 스크롤 상태는 유지
+          _isNearBottom = true;
         });
       } else {
         // 즉시 이동
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
+        // 사용자 스크롤 상태는 유지
+        _isNearBottom = true;
       }
     });
   }
@@ -663,7 +672,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();
         // 페르소나가 변경되면 첫 로드 플래그 설정하고 메시지 로드 후 스크롔
-        _isFirstLoad = true;
+        _hasInitiallyScrolled = false;
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted && _scrollController.hasClients) {
             // Double frame callback for proper layout
@@ -720,15 +729,34 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // Mark all messages as read when leaving chat
     _markMessagesAsReadOnExit();
 
-    // Clean up haptic feedback callback
+    // Clean up chat service state without clearing messages
     if (_chatService != null) {
       _chatService!.onAIMessageReceived = null;
+      _chatService!.clearCurrentChatState();
     }
 
     _messageController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    // Handle keyboard appearance immediately
+    if (mounted) {
+      final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+      // 키보드가 올라왔고 사용자가 맨 아래에 있을 때
+      if (bottomInset > 100 && _isNearBottom && !_isUserScrolling) {
+        // 즉시 스크롤 실행 (딜레이 없이)
+        if (_scrollController.hasClients) {
+          final targetScroll = _scrollController.position.maxScrollExtent;
+          // jumpTo로 즉시 이동
+          _scrollController.jumpTo(targetScroll);
+        }
+      }
+    }
   }
 
   @override
@@ -769,7 +797,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     children: [
                       Consumer2<ChatService, PersonaService>(
                         builder: (context, chatService, personaService, child) {
-                          if (chatService.isLoading) {
+                          // Don't show loading indicator on initial load
+                          // Messages are already preloaded from chat_list_screen
+                          if (chatService.isLoading && chatService.messages.isNotEmpty) {
+                            // Only show loading for additional operations
                             return const Center(
                               child: CircularProgressIndicator(
                                 color: Color(0xFFFF6B9D),

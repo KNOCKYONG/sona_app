@@ -1,0 +1,61 @@
+[
+  {
+    "error_key": "ERR1754805139377_9377",
+    "persona_id": "n2OeC5bVKZf0vZAdLtur",
+    "persona_name": "세빈",
+    "scores": {
+      "overall_coherence": 60.0,
+      "topic_consistency": 4.76,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "how r u?",
+        "ai_response": "안녕! 잘 지내? 오늘 뭐했어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "I am watching at tv",
+        "ai_response": "커피 한잔 어때~? ㅎㅎ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "coffee? I like it",
+        "ai_response": "아 헐 몰랐어 나도 그래?ㅎㅎ",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "you suggest coffee right?",
+        "ai_response": "아 그러고보니 커피 얘기 나왔네ㅎㅎ 무슨 커피를 좋아해. 나는 아메리카노랑 라떼도 좋아해.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "you suggest coffee right?",
+        "ai_response": "아 그러고보니 커피 얘기 나왔네ㅎㅎ 무슨 커피를 좋아해. 나는 아메리카노랑 라떼도 좋아해.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  }
+]

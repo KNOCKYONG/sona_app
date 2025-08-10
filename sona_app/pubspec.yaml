@@ -66,12 +66,21 @@ dependencies:
   
   # Fonts
   google_fonts: ^6.1.0
+  
+  # Push Notifications
+  firebase_messaging: ^15.0.0
+  flutter_local_notifications: ^17.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
   flutter_launcher_icons: ^0.13.1
+  fake_cloud_firestore: ^3.0.0
+  firebase_auth_mocks: ^0.14.2
+  google_sign_in_mocks: ^0.3.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.8
 
 flutter:
   uses-material-design: true

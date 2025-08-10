@@ -124,9 +124,15 @@ $RECYCLE.BIN/
 # Temporary scripts
 batch_update_personas.js
 update_persona_images.js
+scripts/temp_*.py
+scripts/test_*.py
 
 # Generated/output files
 scripts/output/
+
+# Analysis results
+analysis_results/*.json
+analysis_results_archive/
 
 # Claude settings (local only)
 .claude/settings.local.json

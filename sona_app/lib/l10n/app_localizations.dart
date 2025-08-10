@@ -692,7 +692,7 @@ class AppLocalizations {
   String get sonaPrivacyPolicy =>
       isKorean ? 'SONA 개인정보 처리방침' : 'SONA Privacy Policy';
   String get lastUpdated =>
-      isKorean ? '마지막 업데이트: 2024년 7월 24일' : 'Last updated: July 24, 2024';
+      isKorean ? '마지막 업데이트: 2025년 1월 28일' : 'Last updated: January 28, 2025';
 
   String get privacySection1Title => isKorean
       ? '1. 개인정보 수집 및 이용 목적'
@@ -700,16 +700,32 @@ class AppLocalizations {
   String get privacySection1Content => isKorean
       ? '''SONA(이하 "앱")는 다음 목적으로 개인정보를 수집 및 이용합니다:
 
+기본 서비스 (필수):
 • 회원 가입 및 계정 관리
-• AI 페르소나 대화 서비스 제공
-• 서비스 품질 향상 및 맞춤형 서비스 제공
+• AI 페르소나와의 대화 서비스 제공
+• 개인 맞춤형 대화 응답 생성
+• 감정 분석을 통한 공감 응답 제공
+• 대화 지속성 강화 (이전 대화 기억 및 연결)
+• 일상 케어 메시지 제공 (식사, 수면, 건강 챙김)
+• 관심사 기반 대화 주제 제공
+• 추억 저장 및 회상 기능
+• 관계 발전 단계 관리
+• 사용자 선호도 학습 및 개인화
 • 고객 지원 및 문의 대응
 • 서비스 이용 통계 분석'''
       : '''SONA (the "App") collects and uses personal information for the following purposes:
 
+Basic Services (Required):
 • Member registration and account management
 • AI persona chat service provision
-• Service quality improvement and personalized service
+• Personalized conversation response generation
+• Empathetic responses through emotion analysis
+• Enhanced conversation continuity (remembering and connecting previous chats)
+• Daily care messages (meals, sleep, health care)
+• Interest-based conversation topics
+• Memory saving and recall features
+• Relationship development stage management
+• User preference learning and personalization
 • Customer support and inquiry response
 • Service usage statistics analysis''';
 
@@ -718,24 +734,54 @@ class AppLocalizations {
   String get privacySection2Content => isKorean
       ? '''앱에서 수집하는 개인정보는 다음과 같습니다:
 
-필수 정보:
-• Google 계정 정보 (이메일, 프로필 사진, 이름)
-• 기기 정보 (기기 ID, 운영체제 버전)
-• 서비스 이용 기록 (대화 내역, 이용 시간)
+필수 항목:
+• 계정 정보: 닉네임, 이메일, 프로필 사진
+• 대화 내용: 사용자와 AI 페르소나 간의 모든 대화
+• 대화 분석 정보:
+  - 감정 상태 및 변화 패턴
+  - 일상 활동 정보 (식사 시간, 수면 패턴, 운동 여부)
+  - 관심사 및 취미 (게임, 영화, 음악, 운동 등)
+  - 대화 주제 및 빈도
+  - 스트레스 지표 및 건강 관련 언급
+  - 시간대별 대화 패턴
+  - 특별한 순간 및 추억
 
-선택 정보:
-• 사용자 설정 정보
-• 피드백 및 문의 내용'''
+선택 항목:
+• 나이: 연령대별 맞춤 서비스
+• 성별: 개인화된 경험 제공
+• 위치 정보: 날씨 기반 대화 서비스 (선택 시)
+
+자동 수집 항목:
+• 기기 정보 (기기 ID, 운영체제 버전)
+• 앱 사용 기록: 서비스 개선
+• 대화 패턴 자동 분석
+• 감정 상태 자동 감지
+• 관심사 자동 추출'''
       : '''The personal information collected by the app includes:
 
 Required Information:
-• Google account information (email, profile picture, name)
-• Device information (device ID, OS version)
-• Service usage records (chat history, usage time)
+• Account Information: Nickname, email, profile photo
+• Conversation Content: All conversations between user and AI personas
+• Conversation Analysis Data:
+  - Emotional states and patterns
+  - Daily activity information (meal times, sleep patterns, exercise)
+  - Interests and hobbies (games, movies, music, sports, etc.)
+  - Conversation topics and frequency
+  - Stress indicators and health mentions
+  - Time-based conversation patterns
+  - Special moments and memories
 
 Optional Information:
-• User preference settings
-• Feedback and inquiry content''';
+• Age: Age-appropriate services
+• Gender: Personalized experience
+• Location: Weather-based conversation service (if selected)
+
+Automatically Collected:
+• Device information (device ID, OS version)
+• App usage history: Service improvement
+• Automatic conversation pattern analysis
+• Automatic emotion detection
+• Automatic interest extraction''';
 
   String get privacySection3Title => isKorean
       ? '3. 개인정보 보관 및 이용 기간'
@@ -769,12 +815,18 @@ Optional Information:
   String get privacySection5Content => isKorean
       ? '''• Firebase 보안 시스템을 통한 데이터 암호화
 • HTTPS 통신을 통한 전송 구간 암호화
+• 대화 분석 데이터의 익명화/가명화 처리
 • 접근 권한 관리 및 로그 모니터링
-• 정기적인 보안 점검 및 업데이트'''
+• 정기적인 보안 점검 및 업데이트
+• 최소 수집 원칙 준수
+• 목적 달성 후 즉시 파기'''
       : '''• Data encryption through Firebase security system
 • Transmission encryption through HTTPS communication
+• Anonymization/pseudonymization of conversation analysis data
 • Access control management and log monitoring
-• Regular security checks and updates''';
+• Regular security checks and updates
+• Compliance with minimal collection principle
+• Immediate deletion after purpose achievement''';
 
   String get privacySection6Title => isKorean ? '6. 이용자의 권리' : '6. User Rights';
   String get privacySection6Content => isKorean
@@ -1096,6 +1148,230 @@ Faster processing is available when you provide your purchase receipt.''';
   String get technicalError => isKorean ? '기술적 오류' : 'Technical Error';
   String get otherError => isKorean ? '기타 오류' : 'Other Error';
 
+  // Terms of Service (already defined above)
+  String get sonaTermsOfService => 
+      isKorean ? 'SONA 서비스 이용약관' : 'SONA Terms of Service';
+  
+  String get termsSection1Title => isKorean ? '제1조 (목적)' : 'Article 1 (Purpose)';
+  String get termsSection1Content => isKorean
+      ? '본 약관은 SONA(이하 "회사")가 제공하는 AI 페르소나 대화 매칭 서비스(이하 "서비스")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.'
+      : 'These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter "Company") and users regarding the use of the AI persona conversation matching service (hereinafter "Service") provided by the Company.';
+  
+  String get termsSection2Title => isKorean ? '제2조 (정의)' : 'Article 2 (Definitions)';
+  String get termsSection2Content => isKorean
+      ? '''1. "서비스"란 회사가 제공하는 AI 페르소나 대화 매칭 플랫폼을 의미합니다.
+2. "이용자"란 본 약관에 따라 회사와 이용계약을 체결하고 서비스를 이용하는 자를 의미합니다.
+3. "페르소나"란 AI 기술을 활용하여 구현된 가상의 대화 상대를 의미합니다.
+4. "콘텐츠"란 이용자가 서비스를 이용하면서 생성하는 모든 형태의 정보를 의미합니다.'''
+      : '''1. "Service" refers to the AI persona conversation matching platform provided by the Company.
+2. "User" refers to a person who enters into a service agreement with the Company and uses the Service according to these terms.
+3. "Persona" refers to a virtual conversation partner implemented using AI technology.
+4. "Content" refers to all forms of information generated by users while using the Service.''';
+  
+  String get termsSection3Title => isKorean ? '제3조 (약관의 효력 및 변경)' : 'Article 3 (Effect and Modification of Terms)';
+  String get termsSection3Content => isKorean
+      ? '''1. 본 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다.
+2. 회사는 관련 법령을 위배하지 않는 범위에서 본 약관을 변경할 수 있습니다.
+3. 약관이 변경되는 경우 변경사유 및 적용일자를 명시하여 최소 7일 전에 공지합니다.'''
+      : '''1. These terms become effective by posting on the service screen or notifying users through other methods.
+2. The Company may modify these terms within the scope that does not violate relevant laws.
+3. When terms are changed, the reasons for change and the effective date will be notified at least 7 days in advance.''';
+  
+  String get termsSection4Title => isKorean ? '제4조 (서비스의 제공)' : 'Article 4 (Provision of Service)';
+  String get termsSection4Content => isKorean
+      ? '''1. 회사는 다음과 같은 서비스를 제공합니다:
+   • AI 페르소나와의 대화 서비스
+   • 개인 맞춤형 페르소나 추천
+   • 대화 기록 관리
+   • 감정 분석 및 공감 응답
+   • 대화 지속성 강화
+   • 일상 케어 메시지
+   • 관심사 공유 및 추천
+   • 특별한 순간 보관
+   • 날씨 기반 대화 맥락
+   • 기타 회사가 정하는 서비스
+
+2. 회사는 서비스의 품질 향상을 위해 서비스의 내용을 변경할 수 있습니다.'''
+      : '''1. The Company provides the following services:
+   • Conversation service with AI personas
+   • Personalized persona recommendations
+   • Conversation history management
+   • Emotion analysis and empathetic responses
+   • Enhanced conversation continuity
+   • Daily care messages
+   • Interest sharing and recommendations
+   • Special moment storage
+   • Weather-based conversation context
+   • Other services determined by the Company
+
+2. The Company may modify the service content to improve service quality.''';
+  
+  String get termsSection5Title => isKorean ? '제5조 (회원가입)' : 'Article 5 (Membership Registration)';
+  String get termsSection5Content => isKorean
+      ? '''1. 이용자는 회사가 정한 가입 양식에 따라 회원정보를 기입한 후 본 약관에 동의한다는 의사표시를 함으로써 회원가입을 신청합니다.
+2. 회사는 다음 각 호에 해당하는 신청에 대하여는 승낙하지 않을 수 있습니다:
+   • 타인의 명의를 이용한 경우
+   • 허위의 정보를 기재한 경우
+   • 사회의 안녕과 질서, 미풍양속을 저해할 목적으로 신청한 경우'''
+      : '''1. Users apply for membership by filling in the membership information according to the registration form set by the Company and expressing their agreement to these terms.
+2. The Company may not approve applications that fall under the following:
+   • Using another person's name
+   • Providing false information
+   • Applying for purposes that harm social peace, order, or public morals''';
+  
+  String get termsSection6Title => isKorean ? '제6조 (이용자의 의무)' : 'Article 6 (User Obligations)';
+  String get termsSection6Content => isKorean
+      ? '''1. 이용자는 다음 행위를 하여서는 안 됩니다:
+   • 신청 또는 변경 시 허위 내용의 등록
+   • 타인의 정보 도용
+   • 회사가 게시한 정보의 변경
+   • 회사가 정한 정보 이외의 정보(컴퓨터 프로그램 등) 등의 송신 또는 게시
+   • 회사 기타 제3자의 저작권 등 지적재산권에 대한 침해
+   • 회사 기타 제3자의 명예를 손상시키거나 업무를 방해하는 행위
+   • 외설 또는 폭력적인 메시지, 화상, 음성, 기타 공서양속에 반하는 정보를 서비스에 공개 또는 게시하는 행위
+
+2. 이용자는 관계법령, 본 약관의 규정, 이용안내 및 서비스상에 공지한 주의사항, 회사가 통지하는 사항 등을 준수하여야 합니다.'''
+      : '''1. Users must not engage in the following activities:
+   • Registering false information during application or modification
+   • Stealing others' information
+   • Modifying information posted by the Company
+   • Transmitting or posting information (computer programs, etc.) other than those designated by the Company
+   • Infringing on intellectual property rights such as copyrights of the Company or third parties
+   • Damaging the reputation or interfering with the business of the Company or third parties
+   • Disclosing or posting obscene or violent messages, images, sounds, or other information contrary to public order and morals
+
+2. Users must comply with relevant laws, these terms, usage guidelines, notices posted on the service, and matters notified by the Company.''';
+  
+  String get termsSection7Title => isKorean ? '제7조 (서비스 이용제한)' : 'Article 7 (Service Usage Restrictions)';
+  String get termsSection7Content => isKorean
+      ? '회사는 이용자가 본 약관의 의무를 위반하거나 서비스의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지 등으로 서비스 이용을 단계적으로 제한할 수 있습니다.'
+      : 'The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.';
+  
+  String get termsSection8Title => isKorean ? '제8조 (서비스 중단)' : 'Article 8 (Service Interruption)';
+  String get termsSection8Content => isKorean
+      ? '''1. 회사는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신의 두절 등의 사유가 발생한 경우에는 서비스의 제공을 일시적으로 중단할 수 있습니다.
+2. 회사는 제1항의 사유로 서비스의 제공이 일시적으로 중단됨으로 인하여 이용자 또는 제3자가 입은 손해에 대하여 배상하지 아니합니다.'''
+      : '''1. The Company may temporarily interrupt service provision in cases of maintenance, replacement, failure of information and communication equipment such as computers, or communication disruption.
+2. The Company shall not compensate for damages incurred by users or third parties due to temporary service interruption for the reasons stated in Paragraph 1.''';
+  
+  String get termsSection9Title => isKorean ? '제9조 (면책조항)' : 'Article 9 (Disclaimer)';
+  String get termsSection9Content => isKorean
+      ? '''1. 회사는 천재지변 또는 이에 준하는 불가항력으로 인하여 서비스를 제공할 수 없는 경우에는 서비스 제공에 관한 책임이 면제됩니다.
+2. 회사는 이용자의 귀책사유로 인한 서비스 이용의 장애에 대하여는 책임을 지지 않습니다.
+3. 회사는 이용자가 서비스를 이용하여 기대하는 수익을 상실한 것에 대하여 책임을 지지 않습니다.
+4. 회사는 AI 페르소나가 제공하는 정보의 정확성, 완전성에 대해 보장하지 않으며, 이로 인한 손해에 대해 책임을 지지 않습니다.'''
+      : '''1. The Company is exempt from responsibility for service provision when unable to provide services due to natural disasters or equivalent force majeure.
+2. The Company is not responsible for service usage disruptions caused by user's fault.
+3. The Company is not responsible for the loss of expected profits from using the service.
+4. The Company does not guarantee the accuracy or completeness of information provided by AI personas and is not responsible for resulting damages.''';
+  
+  String get termsSection10Title => isKorean ? '제10조 (분쟁해결)' : 'Article 10 (Dispute Resolution)';
+  String get termsSection10Content => isKorean
+      ? '''1. 회사는 이용자가 제기하는 정당한 의견이나 불만을 반영하고 그 피해의 보상 등에 관하여 처리하기 위하여 피해보상처리기구를 설치·운영합니다.
+2. 본 약관에 관해 분쟁이 있을 경우에는 대한민국법을 적용하며, 서울중앙지방법원을 관할 법원으로 합니다.'''
+      : '''1. The Company establishes and operates a damage compensation processing organization to reflect legitimate opinions or complaints raised by users and handle compensation for damages.
+2. In case of disputes regarding these terms, Korean law shall apply, and the Seoul Central District Court shall have jurisdiction.''';
+  
+  String get termsSection11Title => isKorean ? '제11조 (AI 서비스 특별조항)' : 'Article 11 (AI Service Special Provisions)';
+  String get termsSection11Content => isKorean
+      ? '''1. AI 페르소나는 인공지능 기술을 기반으로 하며, 실제 인간이 아닙니다.
+2. AI 페르소나의 응답은 학습된 데이터를 기반으로 생성되며, 전문적인 조언이나 상담으로 간주되어서는 안 됩니다.
+3. 회사는 사용자의 대화 내용을 분석하여 서비스 품질을 개선할 수 있습니다:
+   • 감정 상태 분석 및 적절한 응답 생성
+   • 대화 주제 및 관심사 파악
+   • 일상 패턴 인식 및 케어 메시지 제공
+   • 특별한 순간 감지 및 저장
+4. 모든 개인정보는 암호화되어 안전하게 보호됩니다.'''
+      : '''1. AI personas are based on artificial intelligence technology and are not actual humans.
+2. AI persona responses are generated based on learned data and should not be considered professional advice or consultation.
+3. The Company may analyze user conversation content to improve service quality:
+   • Analyzing emotional states and generating appropriate responses
+   • Identifying conversation topics and interests
+   • Recognizing daily patterns and providing care messages
+   • Detecting and saving special moments
+4. All personal information is encrypted and securely protected.''';
+  
+  String get termsSection12Title => isKorean ? '제12조 (데이터 수집 및 활용)' : 'Article 12 (Data Collection and Usage)';
+  String get termsSection12Content => isKorean
+      ? '''1. 서비스 제공을 위해 다음의 데이터를 수집·분석합니다:
+   • 대화 내용 및 맥락
+   • 감정 표현 및 패턴
+   • 일상 활동 정보 (식사, 수면, 운동 등)
+   • 관심사 및 취미
+   • 날씨 정보 (위치 기반)
+   • 특별한 순간과 추억
+
+2. 수집된 데이터는 다음 목적으로만 사용됩니다:
+   • 개인화된 대화 응답 생성
+   • 감정 분석 및 공감 응답 제공
+   • 일상 케어 메시지 생성
+   • 관심사 기반 추천
+   • 서비스 품질 개선
+
+3. 이용자는 언제든지 데이터 삭제를 요청할 수 있습니다.'''
+      : '''1. The following data is collected and analyzed for service provision:
+   • Conversation content and context
+   • Emotional expressions and patterns
+   • Daily activity information (meals, sleep, exercise, etc.)
+   • Interests and hobbies
+   • Weather information (location-based)
+   • Special moments and memories
+
+2. Collected data is used only for the following purposes:
+   • Generating personalized conversation responses
+   • Providing emotion analysis and empathetic responses
+   • Creating daily care messages
+   • Interest-based recommendations
+   • Improving service quality
+
+3. Users can request data deletion at any time.''';
+  
+  String get termsSupplementary => isKorean
+      ? '''부칙
+
+본 약관은 2025년 1월 28일부터 적용됩니다.
+
+문의사항이 있으시면 앱 내 고객센터 또는 support@sona-app.com으로 연락주시기 바랍니다.'''
+      : '''Supplementary Provisions
+
+These terms are effective from January 28, 2025.
+
+For inquiries, please contact us through the in-app customer center or at support@sona-app.com.''';
+
+  // Privacy Settings
+  String get privacySettings => isKorean ? '프라이버시 설정' : 'Privacy Settings';
+  String get dataCollection => isKorean ? '데이터 수집 설정' : 'Data Collection Settings';
+  String get emotionAnalysis => isKorean ? '감정 분석' : 'Emotion Analysis';
+  String get emotionAnalysisDesc => isKorean 
+      ? '대화 중 감정을 분석하여 공감 응답 제공' 
+      : 'Analyze emotions for empathetic responses';
+  String get memoryAlbum => isKorean ? '추억 앨범' : 'Memory Album';
+  String get memoryAlbumDesc => isKorean 
+      ? '특별한 순간을 자동으로 저장하고 회상' 
+      : 'Automatically save and recall special moments';
+  String get weatherContext => isKorean ? '날씨 컨텍스트' : 'Weather Context';
+  String get weatherContextDesc => isKorean 
+      ? '날씨 정보를 활용한 대화 맥락 제공' 
+      : 'Provide conversation context based on weather';
+  String get dailyCare => isKorean ? '일상 케어' : 'Daily Care';
+  String get dailyCareDesc => isKorean 
+      ? '식사, 수면, 건강 등 일상 챙김 메시지' 
+      : 'Daily care messages for meals, sleep, health';
+  String get interestSharing => isKorean ? '관심사 공유' : 'Interest Sharing';
+  String get interestSharingDesc => isKorean 
+      ? '공통 관심사 발견 및 추천' 
+      : 'Discover and recommend shared interests';
+  String get conversationContinuity => isKorean ? '대화 연속성' : 'Conversation Continuity';
+  String get conversationContinuityDesc => isKorean 
+      ? '이전 대화 기억 및 주제 연결' 
+      : 'Remember previous conversations and connect topics';
+  String get allFeaturesRequired => isKorean 
+      ? '※ 모든 기능은 서비스 제공을 위해 필요합니다' 
+      : '※ All features are required for service provision';
+  String get privacySettingsInfo => isKorean
+      ? '각 기능을 개별적으로 끄면 해당 서비스를 이용할 수 없습니다'
+      : 'Disabling individual features will make those services unavailable';
+  
   // Language codes map
   String getLanguageName(String code) {
     switch (code) {

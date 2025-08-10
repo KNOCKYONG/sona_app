@@ -9,7 +9,7 @@ import '../services/auth/auth_service.dart';
 import '../utils/permission_helper.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
-import '../services/chat/chat_service.dart';
+import '../services/chat/core/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/ui/haptic_service.dart';
 import 'matched_personas_screen.dart';

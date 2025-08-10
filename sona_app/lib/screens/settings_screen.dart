@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'language_settings_screen.dart';
+import 'privacy_settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -120,6 +121,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (value) {
                   await HapticService.lightImpact();
                 }
+              },
+            ),
+
+            // 프라이버시 설정
+            _buildSectionTitle(localizations.privacySettings),
+            _buildMenuItem(
+              icon: Icons.privacy_tip_outlined,
+              title: localizations.privacySettings,
+              subtitle: localizations.isKorean 
+                  ? '감정분석, 메모리앨범 등 개인정보 보호 설정'
+                  : 'Emotion analysis, memory album, etc.',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const PrivacySettingsScreen(),
+                  ),
+                );
               },
             ),
 
@@ -293,6 +312,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+
 
   Widget _buildMenuItem({
     required IconData icon,

@@ -4,7 +4,7 @@ import 'package:animations/animations.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/persona/persona_service.dart';
-import '../services/chat/chat_service.dart';
+import '../services/chat/core/chat_service.dart';
 import '../widgets/common/sona_logo.dart';
 import '../l10n/app_localizations.dart';
 

@@ -1,12 +1,9 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import '../services/auth/user_service.dart';
-import '../models/app_user.dart';
 import '../theme/app_theme.dart';
 import '../widgets/auth/terms_agreement_widget.dart';
 import '../utils/permission_helper.dart';
@@ -42,13 +39,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int? _selectedDay;
   bool _genderAll = false;
   RangeValues _preferredAgeRange = const RangeValues(20, 35);
-  List<String> _selectedInterests = [];
+  final List<String> _selectedInterests = [];
   File? _profileImage;
 
-  // 새로운 필드들
-  String? _selectedPurpose;
-  List<String> _selectedPreferredMbti = [];
-  List<String> _selectedPreferredTopics = [];
+  // 선택 필드들
+  final List<String> _selectedPreferredTopics = [];
 
   // Terms agreement
   bool _agreedToTerms = false;
@@ -171,9 +166,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         interests: _selectedInterests,
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
-        purpose: _selectedPurpose,
-        preferredMbti:
-            _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        purpose: null, // Optional - removed from signup
+        preferredMbti: null, // Optional - removed from signup
         preferredTopics:
             _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
@@ -197,9 +191,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         interests: _selectedInterests,
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
-        purpose: _selectedPurpose,
-        preferredMbti:
-            _selectedPreferredMbti.isEmpty ? null : _selectedPreferredMbti,
+        purpose: null, // Optional - removed from signup
+        preferredMbti: null, // Optional - removed from signup
         preferredTopics:
             _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
@@ -223,27 +216,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     bool canProceed = false;
 
     switch (_currentPage) {
-      case 0: // 기본 정보 페이지
-        canProceed = _validateBasicInfo();
+      case 0: // 계정 & 프로필 페이지
+        canProceed = _validateAccountAndProfile();
         break;
-      case 1: // 프로필 정보 페이지
-        canProceed = _validateProfileInfo();
+      case 1: // 관심사 & 주제 페이지
+        canProceed = _validateInterestsAndTopics();
         break;
-      case 2: // 사용 목적 페이지
-        canProceed = _validatePurpose();
-        break;
-      case 3: // 선호 설정 페이지
-        canProceed = _validatePreferences();
-        break;
-      case 4: // 관심사 페이지
-        canProceed = _validateInterests();
-        break;
-      case 5: // 선호 주제 페이지
-        canProceed = _validateTopics();
+      case 2: // 약관 동의 페이지
+        canProceed = _validateTermsAgreement();
         break;
     }
 
-    if (canProceed && _currentPage < 6) {
+    if (canProceed && _currentPage < 2) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -251,7 +235,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
   }
 
-  bool _validateBasicInfo() {
+  bool _validateAccountAndProfile() {
     // 이메일 가입인 경우
     if (!widget.isGoogleSignUp) {
       // 이메일 검사
@@ -290,11 +274,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return false;
     }
 
-    return true;
-  }
-
-  bool _validateProfileInfo() {
-    // 성별 검사 (선택사항이므로 체크하지 않음)
+    // 성별 검사 (필수로 변경)
+    if (_selectedGender == null) {
+      _showErrorSnackBar(AppLocalizations.of(context)!.selectGender);
+      return false;
+    }
 
     // 생년월일 검사 (필수)
     if (_selectedBirth == null) {
@@ -307,12 +291,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
 
-  bool _validatePreferences() {
-    // 선호 성별과 나이 범위는 기본값이 있으므로 체크하지 않음
-    return true;
-  }
 
-  bool _validateInterests() {
+  bool _validateInterestsAndTopics() {
     if (_selectedInterests.isEmpty) {
       _showErrorSnackBar(
           AppLocalizations.of(context)!.selectAtLeastOneInterest);
@@ -321,18 +301,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return true;
   }
 
-  bool _validatePurpose() {
-    if (_selectedPurpose == null) {
-      _showErrorSnackBar(AppLocalizations.of(context)!.selectPurpose);
-      return false;
-    }
-    return true;
-  }
-
-  bool _validateTopics() {
-    // 선택사항이므로 항상 true
-    return true;
-  }
 
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
@@ -357,7 +325,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _canProceedToNextPage() {
     switch (_currentPage) {
-      case 0: // 기본 정보 페이지
+      case 0: // 계정 & 프로필 페이지
         // 이메일 가입인 경우
         if (!widget.isGoogleSignUp) {
           if (_emailController.text.isEmpty ||
@@ -368,27 +336,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
           }
         }
         // 닉네임 검사
-        return _nicknameController.text.length >= 3 &&
+        bool nicknameValid = _nicknameController.text.length >= 3 &&
             _nicknameController.text.length <= 10 &&
             _isNicknameAvailable &&
             !_isCheckingNickname;
+        // 성별과 생년월일 검사
+        return nicknameValid && _selectedGender != null && _selectedBirth != null;
 
-      case 1: // 프로필 정보 페이지
-        return _selectedBirth != null;
-
-      case 2: // 사용 목적 페이지
-        return _selectedPurpose != null;
-
-      case 3: // 선호 설정 페이지
-        return true; // 기본값이 있으므로 항상 true
-
-      case 4: // 관심사 페이지
+      case 1: // 관심사 & 주제 페이지
         return _selectedInterests.isNotEmpty;
 
-      case 5: // 선호 주제 페이지
-        return true; // 선택사항이므로 항상 true
-
-      case 6: // 약관 동의 페이지
+      case 2: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
 
       default:
@@ -423,7 +381,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 7,
+                value: (_currentPage + 1) / 3,
                 backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
@@ -441,12 +399,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    _buildBasicInfoPage(),
-                    _buildProfileInfoPage(),
-                    _buildPurposePage(), // 새로운 페이지
-                    _buildPreferencePage(),
-                    _buildInterestsPage(),
-                    _buildTopicsPage(), // 새로운 페이지
+                    _buildAccountAndProfilePage(), // 통합된 계정 & 프로필 페이지
+                    _buildInterestsAndTopicsPage(), // 통합된 관심사 & 주제 페이지
                     _buildTermsAgreementPage(),
                   ],
                 ),
@@ -465,7 +419,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                     else
                       const SizedBox(width: 60),
-                    if (_currentPage < 6)
+                    if (_currentPage < 2)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
@@ -520,7 +474,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildBasicInfoPage() {
+  // 통합된 계정 & 프로필 페이지
+  Widget _buildAccountAndProfilePage() {
     final localizations = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
@@ -528,7 +483,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            localizations.basicInfo,
+            '계정 & 프로필 정보',
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -536,10 +491,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            AppLocalizations.of(context)!.basicInfoDescription,
+            '기본 정보를 입력해주세요',
             style: TextStyle(color: Colors.grey),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 24),
+
+          // Profile image (선택)
+          Center(
+            child: GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.grey[200],
+                  image: _profileImage != null
+                      ? DecorationImage(
+                          image: FileImage(_profileImage!),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                child: _profileImage == null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.camera_alt, size: 32, color: Colors.grey),
+                          Text(
+                            localizations.optional,
+                            style: TextStyle(color: Colors.grey, fontSize: 10),
+                          ),
+                        ],
+                      )
+                    : null,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
 
           // Email & Password (이메일 가입시에만)
           if (!widget.isGoogleSignUp) ...[
@@ -580,14 +569,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return null;
               },
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
           ],
 
           // Nickname
           TextFormField(
             controller: _nicknameController,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.nicknameLabel,
+              labelText: localizations.nicknameLabel,
               hintText: '3~10자 한글/영문/숫자',
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
@@ -650,74 +639,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
               return null;
             },
           ),
-        ],
-      ),
-    );
-  }
+          const SizedBox(height: 16),
 
-  Widget _buildProfileInfoPage() {
-    final localizations = AppLocalizations.of(context)!;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.profileInfo,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.profileInfoDescription,
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 32),
-
-          // Profile image
-          Center(
-            child: GestureDetector(
-              onTap: _pickImage,
-              child: Container(
-                width: 120,
-                height: 120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey[200],
-                  image: _profileImage != null
-                      ? DecorationImage(
-                          image: FileImage(_profileImage!),
-                          fit: BoxFit.cover,
-                        )
-                      : null,
-                ),
-                child: _profileImage == null
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.camera_alt, size: 40, color: Colors.grey),
-                          Text(
-                            AppLocalizations.of(context)!.profilePhoto,
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                        ],
-                      )
-                    : null,
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Center(
-            child: Text(
-              AppLocalizations.of(context)!.optional,
-              style: const TextStyle(color: Colors.grey, fontSize: 12),
-            ),
-          ),
-          const SizedBox(height: 32),
-
-          // Gender
+          // Gender (필수)
           Text(localizations.genderRequired,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
@@ -733,6 +657,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _selectedGender = value;
                     });
                   },
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
               Expanded(
@@ -745,6 +670,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _selectedGender = value;
                     });
                   },
+                  contentPadding: EdgeInsets.zero,
                 ),
               ),
             ],
@@ -758,10 +684,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 _selectedGender = value;
               });
             },
+            contentPadding: EdgeInsets.zero,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
-          // Birth date
+          // Birth date (필수)
           Text(localizations.birthDateRequired,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
@@ -771,7 +698,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.year,
+                    labelText: localizations.year,
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
@@ -789,7 +716,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onChanged: (value) {
                     setState(() {
                       _selectedYear = value;
-                      // 선택된 날짜가 유효하지 않으면 초기화
                       if (_selectedDay != null &&
                           _selectedDay! > _getValidDays().length) {
                         _selectedDay = null;
@@ -804,7 +730,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.month,
+                    labelText: localizations.month,
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
@@ -819,7 +745,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   onChanged: (value) {
                     setState(() {
                       _selectedMonth = value;
-                      // 선택된 날짜가 유효하지 않으면 초기화
                       if (_selectedDay != null &&
                           _selectedDay! > _getValidDays().length) {
                         _selectedDay = null;
@@ -834,7 +759,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Expanded(
                 child: DropdownButtonFormField<int>(
                   decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.day,
+                    labelText: localizations.day,
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   ),
@@ -855,46 +780,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
-          // Introduction
+          // Introduction (선택)
           TextFormField(
             controller: _introController,
             decoration: InputDecoration(
-              labelText: AppLocalizations.of(context)!.selfIntroduction,
-              hintText: AppLocalizations.of(context)!.selfIntroductionHint,
+              labelText: localizations.selfIntroduction,
+              hintText: localizations.selfIntroductionHint,
               alignLabelWithHint: true,
             ),
             maxLines: 3,
             maxLength: 100,
           ),
-        ],
-      ),
-    );
-  }
+          const SizedBox(height: 16),
 
-  Widget _buildPreferencePage() {
-    final localizations = AppLocalizations.of(context)!;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.preferenceSettings,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.aiPersonaPreferenceDescription,
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 32),
-
-          // Gender All checkbox
+          // Gender preference (선택)
           Text(
             localizations.personaGenderPreference,
             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -910,12 +811,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               });
             },
             controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
 
-          // Preferred age range
+          // Preferred age range (선택)
           Text(
-            AppLocalizations.of(context)!.preferredPersonaAgeRange,
+            localizations.preferredPersonaAgeRange,
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
@@ -944,197 +846,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildPurposePage() {
-    final localizations = AppLocalizations.of(context)!;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            localizations.usagePurpose,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).textTheme.headlineSmall?.color,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.sonaUsagePurpose,
-            style: TextStyle(
-              color: Theme.of(context).textTheme.bodySmall?.color,
-            ),
-          ),
-          const SizedBox(height: 32),
-          ..._buildPurposeOptions(),
-        ],
-      ),
-    );
-  }
-
-  List<Widget> _buildPurposeOptions() {
-    final localizations = AppLocalizations.of(context)!;
-    final purposes = [
-      {
-        'key': 'friendship',
-        'title': localizations.makeFriends,
-        'icon': Icons.people,
-      },
-      {
-        'key': 'dating',
-        'title': localizations.emotionalConnection,
-        'icon': Icons.favorite,
-      },
-      {
-        'key': 'entertainment',
-        'title': localizations.entertainmentFun,
-        'icon': Icons.theater_comedy,
-      },
-    ];
-
-    return purposes.map((purpose) {
-      final key = purpose['key'] as String;
-      final title = purpose['title'] as String;
-      final icon = purpose['icon'] as IconData;
-
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: InkWell(
-          onTap: () {
-            setState(() {
-              _selectedPurpose = key;
-            });
-          },
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: _selectedPurpose == key
-                    ? AppTheme.primaryColor
-                    : Colors.grey[300]!,
-                width: _selectedPurpose == key ? 2 : 1,
-              ),
-              borderRadius: BorderRadius.circular(12),
-              color: _selectedPurpose == key
-                  ? AppTheme.primaryColor.withOpacity(0.05)
-                  : null,
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  icon,
-                  size: 32,
-                  color: _selectedPurpose == key
-                      ? AppTheme.primaryColor
-                      : Colors.grey[600],
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: _selectedPurpose == key
-                              ? AppTheme.primaryColor
-                              : Theme.of(context).textTheme.bodyLarge?.color,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        _getPurposeDescription(key),
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.color
-                              ?.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                if (_selectedPurpose == key)
-                  const Icon(
-                    Icons.check_circle,
-                    color: AppTheme.primaryColor,
-                  ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }).toList();
-  }
-
-  IconData _getPurposeIcon(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return Icons.people;
-      case 'dating':
-        return Icons.favorite;
-      case 'counseling':
-        return Icons.psychology;
-      case 'entertainment':
-        return Icons.theater_comedy;
-      default:
-        return Icons.chat;
-    }
-  }
-
-  String _getPurposeDescription(String purpose) {
-    switch (purpose) {
-      case 'friendship':
-        return AppLocalizations.of(context)!.friendshipDescription;
-      case 'dating':
-        return AppLocalizations.of(context)!.datingDescription;
-      case 'counseling':
-        return AppLocalizations.of(context)!.counselingDescription;
-      case 'entertainment':
-        return AppLocalizations.of(context)!.entertainmentDescription;
-      default:
-        return '';
-    }
-  }
-
-  List<Map<String, String>> _getLocalizedInterests() {
-    final localizations = AppLocalizations.of(context)!;
-    return [
-      {'key': 'gaming', 'title': localizations.gaming},
-      {'key': 'movies', 'title': localizations.movies},
-      {'key': 'music', 'title': localizations.music},
-      {'key': 'travel', 'title': localizations.travel},
-      {'key': 'sports', 'title': localizations.sports},
-      {'key': 'reading', 'title': localizations.reading},
-      {'key': 'cooking', 'title': localizations.cooking},
-      {'key': 'photography', 'title': localizations.photography},
-      {'key': 'art', 'title': localizations.art},
-      {'key': 'fashion', 'title': localizations.fashion},
-      {'key': 'pets', 'title': localizations.pets},
-      {'key': 'technology', 'title': localizations.technology},
-    ];
-  }
-
-  List<Map<String, String>> _getLocalizedTopics() {
-    final localizations = AppLocalizations.of(context)!;
-    return [
-      {'key': 'daily_chat', 'title': localizations.dailyChat},
-      {'key': 'dating_advice', 'title': localizations.datingAdvice},
-      {'key': 'hobby_talk', 'title': localizations.hobbyTalk},
-      {'key': 'emotional_support', 'title': localizations.emotionalSupport},
-      {'key': 'life_advice', 'title': localizations.lifeAdvice},
-      {'key': 'fun_chat', 'title': localizations.funChat},
-      {'key': 'deep_talk', 'title': localizations.deepTalk},
-      {'key': 'light_talk', 'title': localizations.lightTalk},
-    ];
-  }
-
-  Widget _buildInterestsPage() {
+  // 통합된 관심사 & 주제 페이지
+  Widget _buildInterestsAndTopicsPage() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -1153,6 +866,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
+          // 관심사 선택 (필수)
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1177,30 +891,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
               );
             }).toList(),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTopicsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+          const SizedBox(height: 32),
+          
+          // 선호 주제 (선택)
           Text(
             AppLocalizations.of(context)!.preferredTopics,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           Text(
             AppLocalizations.of(context)!.whatTopicsToTalk,
-            style: TextStyle(color: Colors.grey),
+            style: TextStyle(color: Colors.grey, fontSize: 14),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -1217,45 +923,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       _selectedPreferredTopics.add(key);
                     } else {
                       _selectedPreferredTopics.remove(key);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 32),
-          Text(
-            AppLocalizations.of(context)!.preferredMbti,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.selectPreferredMbti,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: MbtiOptions.allTypes.map((mbti) {
-              final isSelected = _selectedPreferredMbti.contains(mbti);
-              return FilterChip(
-                label: Text(mbti),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedPreferredMbti.add(mbti);
-                    } else {
-                      _selectedPreferredMbti.remove(mbti);
                     }
                   });
                 },
@@ -1312,4 +979,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  List<Map<String, String>> _getLocalizedInterests() {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      {'key': 'gaming', 'title': localizations.gaming},
+      {'key': 'movies', 'title': localizations.movies},
+      {'key': 'music', 'title': localizations.music},
+      {'key': 'travel', 'title': localizations.travel},
+      {'key': 'sports', 'title': localizations.sports},
+      {'key': 'reading', 'title': localizations.reading},
+      {'key': 'cooking', 'title': localizations.cooking},
+      {'key': 'photography', 'title': localizations.photography},
+      {'key': 'art', 'title': localizations.art},
+      {'key': 'fashion', 'title': localizations.fashion},
+      {'key': 'pets', 'title': localizations.pets},
+      {'key': 'technology', 'title': localizations.technology},
+    ];
+  }
+
+  List<Map<String, String>> _getLocalizedTopics() {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      {'key': 'daily_chat', 'title': localizations.dailyChat},
+      {'key': 'dating_advice', 'title': localizations.datingAdvice},
+      {'key': 'hobby_talk', 'title': localizations.hobbyTalk},
+      {'key': 'emotional_support', 'title': localizations.emotionalSupport},
+      {'key': 'life_advice', 'title': localizations.lifeAdvice},
+      {'key': 'fun_chat', 'title': localizations.funChat},
+      {'key': 'deep_talk', 'title': localizations.deepTalk},
+      {'key': 'light_talk', 'title': localizations.lightTalk},
+    ];
+  }
+
 }

@@ -230,8 +230,39 @@ class Persona {
       'topics': topics,
       'keywords': keywords,
       'hasValidR2Image': hasValidR2Image,
+      // Store matchedAt as Timestamp for Firebase or ISO string for local storage
       if (matchedAt != null) 'matchedAt': matchedAt!.toIso8601String(),
     };
+  }
+
+  // Helper method to parse matchedAt from various formats
+  static DateTime? _parseMatchedAt(dynamic matchedAtData) {
+    if (matchedAtData == null) return null;
+    
+    // Handle Firebase Timestamp
+    if (matchedAtData is Map && matchedAtData['_seconds'] != null) {
+      final seconds = matchedAtData['_seconds'] as int;
+      final nanoseconds = (matchedAtData['_nanoseconds'] as int?) ?? 0;
+      return DateTime.fromMillisecondsSinceEpoch(
+        seconds * 1000 + (nanoseconds ~/ 1000000),
+      );
+    }
+    
+    // Handle ISO8601 string
+    if (matchedAtData is String) {
+      try {
+        return DateTime.parse(matchedAtData);
+      } catch (e) {
+        return null;
+      }
+    }
+    
+    // Handle DateTime object (shouldn't happen but just in case)
+    if (matchedAtData is DateTime) {
+      return matchedAtData;
+    }
+    
+    return null;
   }
 
   factory Persona.fromJson(Map<String, dynamic> json) {
@@ -264,8 +295,7 @@ class Persona {
       topics: json['topics'] != null ? List<String>.from(json['topics']) : null,
       keywords:
           json['keywords'] != null ? List<String>.from(json['keywords']) : null,
-      matchedAt:
-          json['matchedAt'] != null ? DateTime.parse(json['matchedAt']) : null,
+      matchedAt: _parseMatchedAt(json['matchedAt']),
       hasValidR2Image: json['hasValidR2Image'] ?? null,
     );
   }

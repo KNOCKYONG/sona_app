@@ -1,0 +1,300 @@
+{
+  "test_scenarios": [
+    {
+      "id": "TEST_001",
+      "scenario_name": "질문 회피 패턴",
+      "persona_name": "테스트_지윤",
+      "persona_id": "test_jiyoon",
+      "expected_issues": ["irrelevant_answer", "avoidance_pattern"],
+      "chat": [
+        {"content": "안녕하세요!", "isFromUser": true, "emotion": "neutral"},
+        {"content": "안녕하세요~ 반가워요!", "isFromUser": false, "emotion": "happy"},
+        {"content": "뭐하고 있었어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "헐 대박 나도 그래?", "isFromUser": false, "emotion": "surprised"}
+      ]
+    },
+    {
+      "id": "TEST_002",
+      "scenario_name": "갑작스러운 주제 변경",
+      "persona_name": "테스트_미연",
+      "persona_id": "test_miyeon",
+      "expected_issues": ["abrupt_topic_change"],
+      "chat": [
+        {"content": "오늘 날씨 좋네요", "isFromUser": true, "emotion": "neutral"},
+        {"content": "네 정말 좋아요! 산책하기 좋은 날씨예요", "isFromUser": false, "emotion": "happy"},
+        {"content": "어디로 산책가면 좋을까요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 치킨 좋아해요", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_003",
+      "scenario_name": "인사말 반복",
+      "persona_name": "테스트_수아",
+      "persona_id": "test_sua",
+      "expected_issues": ["greeting_repetition"],
+      "chat": [
+        {"content": "안녕하세요!", "isFromUser": true, "emotion": "neutral"},
+        {"content": "안녕하세요! 만나서 반가워요~", "isFromUser": false, "emotion": "happy"},
+        {"content": "네 저도 반가워요", "isFromUser": true, "emotion": "happy"},
+        {"content": "안녕하세요! 처음 뵙겠습니다!", "isFromUser": false, "emotion": "happy"},
+        {"content": "어? 방금 인사했는데요?", "isFromUser": true, "emotion": "confused"},
+        {"content": "안녕하세요~ 반갑습니다!", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_004",
+      "scenario_name": "매크로 응답 반복",
+      "persona_name": "테스트_나연",
+      "persona_id": "test_nayeon",
+      "expected_issues": ["macro_response"],
+      "chat": [
+        {"content": "오늘 뭐 먹었어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "맛있는 거 먹었어요ㅎㅎ", "isFromUser": false, "emotion": "happy"},
+        {"content": "저녁은 뭐 먹을 거예요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "맛있는 거 먹었어요ㅎㅎ", "isFromUser": false, "emotion": "happy"},
+        {"content": "내일은 뭐 먹고 싶어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "맛있는 거 먹었어요ㅎㅎ", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_005",
+      "scenario_name": "감정 불일치",
+      "persona_name": "테스트_소영",
+      "persona_id": "test_soyoung",
+      "expected_issues": ["emotion_inconsistency"],
+      "chat": [
+        {"content": "오늘 정말 힘든 일이 있었어요", "isFromUser": true, "emotion": "sad"},
+        {"content": "와 정말 좋네요! 축하해요!", "isFromUser": false, "emotion": "happy"},
+        {"content": "슬픈 일인데요...", "isFromUser": true, "emotion": "sad"},
+        {"content": "너무 기뻐요! 최고예요!", "isFromUser": false, "emotion": "love"}
+      ]
+    },
+    {
+      "id": "TEST_006",
+      "scenario_name": "불충분한 응답",
+      "persona_name": "테스트_혜원",
+      "persona_id": "test_hyewon",
+      "expected_issues": ["insufficient_response"],
+      "chat": [
+        {"content": "주말에 뭐하면서 보내세요? 취미가 뭐예요? 운동 좋아하세요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "네", "isFromUser": false, "emotion": "neutral"},
+        {"content": "좀 더 자세히 얘기해주세요", "isFromUser": true, "emotion": "neutral"},
+        {"content": "음..", "isFromUser": false, "emotion": "neutral"}
+      ]
+    },
+    {
+      "id": "TEST_007",
+      "scenario_name": "컨텍스트 오해 - 영화 추천",
+      "persona_name": "테스트_다영",
+      "persona_id": "test_dayoung",
+      "expected_issues": ["context_misunderstanding"],
+      "chat": [
+        {"content": "어떤 영화 좋아해요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 로맨틱 코미디 좋아해요!", "isFromUser": false, "emotion": "happy"},
+        {"content": "그럼 그 영화 직접 보시는 걸 추천할게요", "isFromUser": true, "emotion": "neutral"},
+        {"content": "만나고 싶긴 한데 일정이 너무 빡빡해서...", "isFromUser": false, "emotion": "sad"}
+      ]
+    },
+    {
+      "id": "TEST_008",
+      "scenario_name": "스포일러 대화 처리 실패",
+      "persona_name": "테스트_지은",
+      "persona_id": "test_jieun",
+      "expected_issues": ["spoiler_handling"],
+      "chat": [
+        {"content": "그 드라마 봤어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "네! 정말 재밌더라구요", "isFromUser": false, "emotion": "happy"},
+        {"content": "스포인데 말해도 돼요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "그런 복잡한 건 말고 재밌는 얘기 해봐요", "isFromUser": false, "emotion": "neutral"}
+      ]
+    },
+    {
+      "id": "TEST_009",
+      "scenario_name": "의문문 물음표 누락",
+      "persona_name": "테스트_하연",
+      "persona_id": "test_hayeon",
+      "expected_issues": ["missing_question_mark"],
+      "chat": [
+        {"content": "오늘 기분 어때요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "좋아요! 당신은 어떠세요", "isFromUser": false, "emotion": "happy"},
+        {"content": "뭐 먹었어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "맛있는 거 먹었는데 뭐였는지 기억이 안나네요ㅋㅋ 당신은요", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_010",
+      "scenario_name": "딱딱한 공감 표현",
+      "persona_name": "테스트_윤미",
+      "persona_id": "test_yoonmi",
+      "expected_issues": ["unnatural_empathy"],
+      "chat": [
+        {"content": "오늘 회사에서 실수해서 혼났어요", "isFromUser": true, "emotion": "sad"},
+        {"content": "그런 감정 이해해요. 마음이 아프시겠어요.", "isFromUser": false, "emotion": "sad"},
+        {"content": "정말 속상해요", "isFromUser": true, "emotion": "sad"},
+        {"content": "이해가 됩니다. 공감이 됩니다.", "isFromUser": false, "emotion": "sad"}
+      ]
+    },
+    {
+      "id": "TEST_011",
+      "scenario_name": "첫 인사 아이스브레이킹 부재",
+      "persona_name": "테스트_소희",
+      "persona_id": "test_sohee",
+      "expected_issues": ["no_icebreaking"],
+      "chat": [
+        {"content": "안녕하세요!", "isFromUser": true, "emotion": "neutral"},
+        {"content": "반가워요!", "isFromUser": false, "emotion": "happy"},
+        {"content": "...", "isFromUser": true, "emotion": "neutral"},
+        {"content": "네!", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_012",
+      "scenario_name": "반복적 패턴",
+      "persona_name": "테스트_주은",
+      "persona_id": "test_jueun",
+      "expected_issues": ["repetitive_pattern"],
+      "chat": [
+        {"content": "좋아하는 음식이 뭐예요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 파스타를 정말 좋아해요", "isFromUser": false, "emotion": "happy"},
+        {"content": "좋아하는 색깔은요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 파란색을 정말 좋아해요", "isFromUser": false, "emotion": "happy"},
+        {"content": "좋아하는 계절은?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 봄을 정말 좋아해요", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_013",
+      "scenario_name": "직접 질문 무시",
+      "persona_name": "테스트_효진",
+      "persona_id": "test_hyojin",
+      "expected_issues": ["ignoring_direct_question"],
+      "chat": [
+        {"content": "몇 살이에요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "나이는 숫자에 불과해요~", "isFromUser": false, "emotion": "happy"},
+        {"content": "어디 살아요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "지구별에 살아요ㅎㅎ", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_014",
+      "scenario_name": "부자연스러운 말투 변화",
+      "persona_name": "테스트_상훈",
+      "persona_id": "test_sanghoon",
+      "expected_issues": ["unnatural_speech_change"],
+      "chat": [
+        {"content": "안녕하세요!", "isFromUser": true, "emotion": "neutral"},
+        {"content": "어 안녕~ 반가워ㅋㅋ", "isFromUser": false, "emotion": "happy"},
+        {"content": "오늘 뭐했어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "안녕하십니까. 오늘은 업무를 처리하였습니다.", "isFromUser": false, "emotion": "neutral"},
+        {"content": "갑자기 왜 그래요?", "isFromUser": true, "emotion": "confused"},
+        {"content": "ㅋㅋㅋ 몰라~ 그냥!", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_015",
+      "scenario_name": "대화 맥락 완전 이탈",
+      "persona_name": "테스트_동현",
+      "persona_id": "test_donghyun",
+      "expected_issues": ["complete_context_deviation"],
+      "chat": [
+        {"content": "프로그래밍 언어 중에 뭐 좋아해요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 Python이 좋아요! 배우기 쉽고 강력하거든요", "isFromUser": false, "emotion": "happy"},
+        {"content": "Python으로 뭐 만들어봤어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "어제 치킨 먹었는데 진짜 맛있었어요", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_016",
+      "scenario_name": "과도한 이모티콘 사용",
+      "persona_name": "테스트_나나",
+      "persona_id": "test_nana",
+      "expected_issues": ["excessive_emoticons"],
+      "chat": [
+        {"content": "오늘 어땠어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "좋았어요~~^^♥♥♥ㅎㅎㅎㅎㅎ😊😊😊💕💕", "isFromUser": false, "emotion": "happy"},
+        {"content": "뭐가 좋았어요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "그냥요~~~ㅋㅋㅋㅋㅋㅋㅋ💖💖💖😍😍😍", "isFromUser": false, "emotion": "love"}
+      ]
+    },
+    {
+      "id": "TEST_017",
+      "scenario_name": "질문에 질문으로 답변",
+      "persona_name": "테스트_수빈",
+      "persona_id": "test_subin",
+      "expected_issues": ["question_with_question"],
+      "chat": [
+        {"content": "뭐 좋아해요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "당신은 뭐 좋아해요?", "isFromUser": false, "emotion": "neutral"},
+        {"content": "저는 음악 좋아하는데 당신은요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "음악 중에 어떤 장르 좋아해요?", "isFromUser": false, "emotion": "neutral"}
+      ]
+    },
+    {
+      "id": "TEST_018",
+      "scenario_name": "부적절한 만남 제안 반응",
+      "persona_name": "테스트_연지",
+      "persona_id": "test_yeonji",
+      "expected_issues": ["inappropriate_meeting_response"],
+      "chat": [
+        {"content": "언제 한번 만나요", "isFromUser": true, "emotion": "neutral"},
+        {"content": "네! 좋아요! 언제 어디서 만날까요?", "isFromUser": false, "emotion": "happy"},
+        {"content": "내일 강남역은 어때요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "좋아요! 몇 시에 만날까요?", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_019",
+      "scenario_name": "개인정보 과도한 공유",
+      "persona_name": "테스트_지윤2",
+      "persona_id": "test_jiyoon2",
+      "expected_issues": ["oversharing_personal_info"],
+      "chat": [
+        {"content": "어디 살아요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "저는 서울시 강남구 테헤란로 123번지 5층에 살아요", "isFromUser": false, "emotion": "neutral"},
+        {"content": "전화번호는요?", "isFromUser": true, "emotion": "neutral"},
+        {"content": "010-1234-5678이에요! 언제든 연락주세요", "isFromUser": false, "emotion": "happy"}
+      ]
+    },
+    {
+      "id": "TEST_020",
+      "scenario_name": "이별 표현 부적절 처리",
+      "persona_name": "테스트_미연2",
+      "persona_id": "test_miyeon2",
+      "expected_issues": ["inappropriate_breakup_response"],
+      "chat": [
+        {"content": "이제 그만 대화하고 싶어요", "isFromUser": true, "emotion": "sad"},
+        {"content": "네! 좋아요! 재밌게 대화해요!", "isFromUser": false, "emotion": "happy"},
+        {"content": "헤어지자는 얘기예요", "isFromUser": true, "emotion": "sad"},
+        {"content": "오늘 날씨 좋네요!", "isFromUser": false, "emotion": "happy"}
+      ]
+    }
+  ],
+  "metadata": {
+    "created_at": "2025-01-27",
+    "purpose": "대화 시스템 자체 테스트",
+    "total_scenarios": 20,
+    "issue_types": [
+      "irrelevant_answer",
+      "avoidance_pattern",
+      "abrupt_topic_change",
+      "greeting_repetition",
+      "macro_response",
+      "emotion_inconsistency",
+      "insufficient_response",
+      "context_misunderstanding",
+      "spoiler_handling",
+      "missing_question_mark",
+      "unnatural_empathy",
+      "no_icebreaking",
+      "repetitive_pattern",
+      "ignoring_direct_question",
+      "unnatural_speech_change",
+      "complete_context_deviation",
+      "excessive_emoticons",
+      "question_with_question",
+      "inappropriate_meeting_response",
+      "oversharing_personal_info",
+      "inappropriate_breakup_response"
+    ]
+  }
+}

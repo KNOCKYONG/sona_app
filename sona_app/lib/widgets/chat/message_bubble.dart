@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../../services/persona/persona_service.dart';
-import '../../services/chat/chat_service.dart';
+import '../../services/chat/core/chat_service.dart';
 import '../../services/auth/auth_service.dart';
 import '../../services/ui/haptic_service.dart';
 import '../../theme/app_theme.dart';

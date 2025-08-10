@@ -669,9 +669,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFF6B9D),
                     ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.login,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1680,7 +1680,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                 if (index < 0 || index >= _cardItems.length) {
                                   debugPrint(
                                       '⚠️ Card builder index out of bounds: $index (total: ${_cardItems.length})');
-                                  return const SizedBox.shrink();
+                                  // 범위 초과 시 스켈레톤 카드 표시
+                                  return const PersonaCardSkeleton();
                                 }
 
                                 final item = _cardItems[index];

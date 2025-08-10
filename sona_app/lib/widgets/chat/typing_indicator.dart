@@ -29,22 +29,22 @@ class _TypingIndicatorState extends State<TypingIndicator>
 
     // Fade in/out animation for the whole indicator
     _fadeController = AnimationController(
-      duration: const Duration(milliseconds: 100),  // 매우 빠른 페이드 인/아웃
+      duration: const Duration(milliseconds: 200),  // Smooth fade in
       vsync: this,
     );
     _fadeAnimation = CurvedAnimation(
       parent: _fadeController,
-      curve: Curves.easeOut,
+      curve: Curves.easeInOut,
     );
     _fadeController.forward();
 
-    // iOS-style pulse animation for dots - 더 부드럽게
+    // iOS-style pulse animation for dots - smooth wave effect
     _pulseController = AnimationController(
-      duration: const Duration(milliseconds: 1600),  // 약간 느리게
+      duration: const Duration(milliseconds: 1400),  // Optimal speed
       vsync: this,
     )..repeat();
 
-    // Create staggered animations for each dot - 더 명확한 순차 애니메이션
+    // Create staggered animations for each dot - wave pattern
     _dotAnimations = List.generate(3, (index) {
       return Tween<double>(
         begin: 0.0,
@@ -53,9 +53,9 @@ class _TypingIndicatorState extends State<TypingIndicator>
         CurvedAnimation(
           parent: _pulseController,
           curve: Interval(
-            index * 0.15,  // 더 타이트한 간격
-            0.5 + index * 0.15,  // 더 짧은 애니메이션
-            curve: Curves.easeInOut,
+            index * 0.2,  // Sequential timing
+            0.4 + index * 0.2,  // Wave effect
+            curve: Curves.easeInOutSine,  // Smooth sine wave
           ),
         ),
       );

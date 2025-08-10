@@ -19,13 +19,14 @@ import 'screens/admin_quality_dashboard_screen.dart';
 import 'screens/main_navigation_screen.dart';
 import 'screens/settings_screen.dart';
 import 'screens/theme_settings_screen.dart';
+import 'screens/privacy_settings_screen.dart';
 import 'screens/purchase_screen.dart';
 import 'screens/purchase_policy_screen.dart';
 
 import 'services/auth/auth_service.dart';
 import 'services/auth/user_service.dart';
 import 'services/persona/persona_service.dart';
-import 'services/chat/chat_service.dart';
+import 'services/chat/core/chat_service.dart';
 import 'services/purchase/purchase_service.dart';
 import 'services/storage/cache_manager.dart';
 import 'services/theme/theme_service.dart';
@@ -170,6 +171,36 @@ class SonaApp extends StatelessWidget {
             return child!;
           },
           initialRoute: '/',
+          onGenerateRoute: (settings) {
+            // /chat 라우트에 대해 슬라이딩 애니메이션 적용
+            if (settings.name == '/chat') {
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  // ChatScreen은 arguments를 ModalRoute를 통해 받음
+                  return const ChatScreen();
+                },
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
+
+                  var tween = Tween(begin: begin, end: end).chain(
+                    CurveTween(curve: curve),
+                  );
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+                transitionDuration: const Duration(milliseconds: 300),
+              );
+            }
+            
+            // 다른 라우트는 기본 설정 사용
+            return null;
+          },
           routes: {
             '/': (context) => const SplashScreen(),
             '/login': (context) => const LoginScreen(),
@@ -183,7 +214,7 @@ class SonaApp extends StatelessWidget {
             },
             '/persona-selection': (context) => const MainNavigationScreen(),
             '/refresh-download': (context) => const RefreshDownloadScreen(),
-            '/chat': (context) => const ChatScreen(),
+            // '/chat' 라우트는 onGenerateRoute에서 처리
             '/chat-list': (context) =>
                 const MainNavigationScreen(initialIndex: 1),
             '/profile': (context) => const MainNavigationScreen(),
@@ -193,6 +224,7 @@ class SonaApp extends StatelessWidget {
                 const AdminQualityDashboardScreen(),
             '/settings': (context) => const SettingsScreen(),
             '/theme-settings': (context) => const ThemeSettingsScreen(),
+            '/privacy-settings': (context) => const PrivacySettingsScreen(),
             '/purchase': (context) => const PurchaseScreen(),
             '/purchase-policy': (context) => const PurchasePolicyScreen(),
           },

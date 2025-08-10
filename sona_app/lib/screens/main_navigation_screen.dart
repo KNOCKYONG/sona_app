@@ -5,7 +5,7 @@ import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
 import '../services/storage/cache_manager.dart';
-import '../services/chat/chat_service.dart';
+import '../services/chat/core/chat_service.dart';
 import '../services/auth/auth_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/ui/haptic_service.dart';

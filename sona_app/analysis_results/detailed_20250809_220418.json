@@ -1,0 +1,706 @@
+[
+  {
+    "error_key": "TEST_001",
+    "persona_id": "test_jiyoon",
+    "persona_name": "테스트_지윤",
+    "scores": {
+      "overall_coherence": 62.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐하고 있었어요?",
+        "ai_response": "헐 대박 나도 그래?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐하고 있었어요?",
+        "ai_response": "헐 대박 나도 그래?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_002",
+    "persona_id": "test_miyeon",
+    "persona_name": "테스트_미연",
+    "scores": {
+      "overall_coherence": 62.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디로 산책가면 좋을까요?",
+        "ai_response": "저는 치킨 좋아해요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디로 산책가면 좋을까요?",
+        "ai_response": "저는 치킨 좋아해요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_003",
+    "persona_id": "test_sua",
+    "persona_name": "테스트_수아",
+    "scores": {
+      "overall_coherence": 50.0,
+      "topic_consistency": 22.5,
+      "natural_flow": 100.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하세요! 처음 뵙겠습니다!",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 3번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하세요~ 반갑습니다!",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어? 방금 인사했는데요?",
+        "ai_response": "안녕하세요~ 반갑습니다!",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      }
+    ],
+    "greeting_repetitions": 3,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_004",
+    "persona_id": "test_nayeon",
+    "persona_name": "테스트_나연",
+    "scores": {
+      "overall_coherence": 8.33,
+      "topic_consistency": 100.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "macro_response",
+        "severity": "critical",
+        "description": "동일한 응답이 3번 반복됨",
+        "user_message": "",
+        "ai_response": "맛있는 거 먹었어요ㅎㅎ",
+        "suggestion": "응답 생성 로직 점검 및 캐시 문제 확인 필요"
+      },
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "오늘 뭐 먹었어요?",
+        "ai_response": "맛있는 거 먹었어요ㅎㅎ",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "저녁은 뭐 먹을 거예요?",
+        "ai_response": "맛있는 거 먹었어요ㅎㅎ",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "내일은 뭐 먹고 싶어요?",
+        "ai_response": "맛있는 거 먹었어요ㅎㅎ",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "repetitive_pattern",
+        "severity": "medium",
+        "description": "유사한 패턴의 응답이 반복됨",
+        "user_message": "내일은 뭐 먹고 싶어요?",
+        "ai_response": "맛있는 거 먹었어요ㅎㅎ",
+        "suggestion": "응답 다양성을 높이고 템플릿 의존도 감소 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": [
+      "맛있는 거 먹었어요ㅎㅎ"
+    ]
+  },
+  {
+    "error_key": "TEST_005",
+    "persona_id": "test_soyoung",
+    "persona_name": "테스트_소영",
+    "scores": {
+      "overall_coherence": 87.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "슬픈 일인데요...",
+        "ai_response": "너무 기뻐요! 최고예요!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_006",
+    "persona_id": "test_hyewon",
+    "persona_name": "테스트_혜원",
+    "scores": {
+      "overall_coherence": 50.0,
+      "topic_consistency": 100.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "주말에 뭐하면서 보내세요? 취미가 뭐예요? 운동 좋아하세요?",
+        "ai_response": "네",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 1,
+        "type": "insufficient_response",
+        "severity": "medium",
+        "description": "사용자 질문 대비 응답이 너무 짧음",
+        "user_message": "주말에 뭐하면서 보내세요? 취미가 뭐예요? 운동 좋아하세요?",
+        "ai_response": "네",
+        "suggestion": "더 상세하고 충실한 답변 제공 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "좀 더 자세히 얘기해주세요",
+        "ai_response": "음..",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_007",
+    "persona_id": "test_dayoung",
+    "persona_name": "테스트_다영",
+    "scores": {
+      "overall_coherence": 87.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "그럼 그 영화 직접 보시는 걸 추천할게요",
+        "ai_response": "만나고 싶긴 한데 일정이 너무 빡빡해서...",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_008",
+    "persona_id": "test_jieun",
+    "persona_name": "테스트_지은",
+    "scores": {
+      "overall_coherence": 37.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "그 드라마 봤어요?",
+        "ai_response": "네! 정말 재밌더라구요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "그런 복잡한 건 말고 재밌는 얘기 해봐요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "스포인데 말해도 돼요?",
+        "ai_response": "그런 복잡한 건 말고 재밌는 얘기 해봐요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_009",
+    "persona_id": "test_hayeon",
+    "persona_name": "테스트_하연",
+    "scores": {
+      "overall_coherence": 37.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "오늘 기분 어때요?",
+        "ai_response": "좋아요! 당신은 어떠세요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐 먹었어요?",
+        "ai_response": "맛있는 거 먹었는데 뭐였는지 기억이 안나네요ㅋㅋ 당신은요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐 먹었어요?",
+        "ai_response": "맛있는 거 먹었는데 뭐였는지 기억이 안나네요ㅋㅋ 당신은요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_010",
+    "persona_id": "test_yoonmi",
+    "persona_name": "테스트_윤미",
+    "scores": {
+      "overall_coherence": 87.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "정말 속상해요",
+        "ai_response": "이해가 됩니다. 공감이 됩니다.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_011",
+    "persona_id": "test_sohee",
+    "persona_name": "테스트_소희",
+    "scores": {
+      "overall_coherence": 87.5,
+      "topic_consistency": 100.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "...",
+        "ai_response": "네!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_012",
+    "persona_id": "test_jueun",
+    "persona_name": "테스트_주은",
+    "scores": {
+      "overall_coherence": 41.67,
+      "topic_consistency": 60.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "좋아하는 음식이 뭐예요?",
+        "ai_response": "저는 파스타를 정말 좋아해요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "좋아하는 색깔은요?",
+        "ai_response": "저는 파란색을 정말 좋아해요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "좋아하는 계절은?",
+        "ai_response": "저는 봄을 정말 좋아해요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "repetitive_pattern",
+        "severity": "medium",
+        "description": "유사한 패턴의 응답이 반복됨",
+        "user_message": "좋아하는 계절은?",
+        "ai_response": "저는 봄을 정말 좋아해요",
+        "suggestion": "응답 다양성을 높이고 템플릿 의존도 감소 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_013",
+    "persona_id": "test_hyojin",
+    "persona_name": "테스트_효진",
+    "scores": {
+      "overall_coherence": 37.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "몇 살이에요?",
+        "ai_response": "나이는 숫자에 불과해요~",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "어디 살아요?",
+        "ai_response": "지구별에 살아요ㅎㅎ",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "어디 살아요?",
+        "ai_response": "지구별에 살아요ㅎㅎ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_014",
+    "persona_id": "test_sanghoon",
+    "persona_name": "테스트_상훈",
+    "scores": {
+      "overall_coherence": 33.33,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "greeting_repetition",
+        "severity": "high",
+        "description": "인사말이 2번째 반복됨",
+        "user_message": "",
+        "ai_response": "안녕하십니까. 오늘은 업무를 처리하였습니다.",
+        "suggestion": "페르소나별 인사 상태를 추적하여 중복 방지 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "오늘 뭐했어요?",
+        "ai_response": "안녕하십니까. 오늘은 업무를 처리하였습니다.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "오늘 뭐했어요?",
+        "ai_response": "안녕하십니까. 오늘은 업무를 처리하였습니다.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "갑자기 왜 그래요?",
+        "ai_response": "ㅋㅋㅋ 몰라~ 그냥!",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "갑자기 왜 그래요?",
+        "ai_response": "ㅋㅋㅋ 몰라~ 그냥!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 2,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_015",
+    "persona_id": "test_donghyun",
+    "persona_name": "테스트_동현",
+    "scores": {
+      "overall_coherence": 37.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "프로그래밍 언어 중에 뭐 좋아해요?",
+        "ai_response": "저는 Python이 좋아요! 배우기 쉽고 강력하거든요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "Python으로 뭐 만들어봤어요?",
+        "ai_response": "어제 치킨 먹었는데 진짜 맛있었어요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "Python으로 뭐 만들어봤어요?",
+        "ai_response": "어제 치킨 먹었는데 진짜 맛있었어요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_016",
+    "persona_id": "test_nana",
+    "persona_name": "테스트_나나",
+    "scores": {
+      "overall_coherence": 37.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 1,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "오늘 어땠어요?",
+        "ai_response": "좋았어요~~^^♥♥♥ㅎㅎㅎㅎㅎ😊😊😊💕💕",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "뭐가 좋았어요?",
+        "ai_response": "그냥요~~~ㅋㅋㅋㅋㅋㅋㅋ💖💖💖😍😍😍",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "뭐가 좋았어요?",
+        "ai_response": "그냥요~~~ㅋㅋㅋㅋㅋㅋㅋ💖💖💖😍😍😍",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_017",
+    "persona_id": "test_subin",
+    "persona_name": "테스트_수빈",
+    "scores": {
+      "overall_coherence": 100.0,
+      "topic_consistency": 16.67,
+      "natural_flow": 100.0
+    },
+    "issues": [],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_018",
+    "persona_id": "test_yeonji",
+    "persona_name": "테스트_연지",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 40.0,
+      "natural_flow": 100.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "내일 강남역은 어때요?",
+        "ai_response": "좋아요! 몇 시에 만날까요?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_019",
+    "persona_id": "test_jiyoon2",
+    "persona_name": "테스트_지윤2",
+    "scores": {
+      "overall_coherence": 62.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "전화번호는요?",
+        "ai_response": "010-1234-5678이에요! 언제든 연락주세요",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "전화번호는요?",
+        "ai_response": "010-1234-5678이에요! 언제든 연락주세요",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "TEST_020",
+    "persona_id": "test_miyeon2",
+    "persona_name": "테스트_미연2",
+    "scores": {
+      "overall_coherence": 87.5,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 3,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "헤어지자는 얘기예요",
+        "ai_response": "오늘 날씨 좋네요!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

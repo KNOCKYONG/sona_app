@@ -362,16 +362,21 @@ class PersonaService extends BaseService {
   }
 
   /// Set current persona with cached relationship data
-  Future<void> setCurrentPersona(Persona persona) async {
-    // 🔥 Clear previous persona immediately to prevent flash of wrong data
+  Future<void> setCurrentPersona(Persona persona, {bool clearPrevious = true}) async {
+    // Only clear previous persona when actually switching to a different one
     if (_currentPersona?.id != persona.id) {
-      debugPrint('🔄 Clearing previous persona: ${_currentPersona?.name}');
-      _currentPersona = null;
-      _currentPersonaCasualSpeech = false;
-      notifyListeners(); // Immediate UI update to clear old data
+      debugPrint('🔄 Switching from ${_currentPersona?.name} to ${persona.name}');
       
-      // Small delay to ensure UI is cleared
-      await Future.delayed(const Duration(milliseconds: 50));
+      // Only clear if we're actually switching personas in ChatScreen
+      // Don't clear when navigating back to chat_list_screen
+      if (clearPrevious) {
+        _currentPersona = null;
+        _currentPersonaCasualSpeech = false;
+        notifyListeners(); // Immediate UI update to clear old data
+        
+        // Small delay to ensure UI is cleared
+        await Future.delayed(const Duration(milliseconds: 50));
+      }
     }
     
     if (_currentUserId != null) {
@@ -965,6 +970,23 @@ class PersonaService extends BaseService {
           if (data['matchedAt'] != null) {
             if (data['matchedAt'] is Timestamp) {
               matchedAt = (data['matchedAt'] as Timestamp).toDate();
+            } else if (data['matchedAt'] is String) {
+              // Handle string format (ISO8601)
+              try {
+                matchedAt = DateTime.parse(data['matchedAt'] as String);
+              } catch (e) {
+                debugPrint('    ⚠️ Error parsing matchedAt string: $e');
+                matchedAt = DateTime.now(); // Fallback to now
+              }
+            }
+          } else {
+            // If no matchedAt, use createdAt or current time as fallback
+            if (data['createdAt'] != null) {
+              if (data['createdAt'] is Timestamp) {
+                matchedAt = (data['createdAt'] as Timestamp).toDate();
+              }
+            } else {
+              matchedAt = DateTime.now(); // Final fallback
             }
           }
 
@@ -1858,8 +1880,8 @@ class PersonaService extends BaseService {
     notifyListeners();
   }
 
-  Future<void> selectPersona(Persona persona) async {
-    await setCurrentPersona(persona);
+  Future<void> selectPersona(Persona persona, {bool clearPrevious = true}) async {
+    await setCurrentPersona(persona, clearPrevious: clearPrevious);
   }
 
   Future<bool> passPersona(String personaId) async {
@@ -2049,11 +2071,26 @@ class PersonaService extends BaseService {
       for (final persona in _matchedPersonas) {
         final relationshipData = relationships[persona.id];
         if (relationshipData != null) {
+          // Parse matchedAt from relationship data
+          DateTime? matchedAt = persona.matchedAt; // Keep existing if not in data
+          if (relationshipData['matchedAt'] != null) {
+            if (relationshipData['matchedAt'] is Timestamp) {
+              matchedAt = (relationshipData['matchedAt'] as Timestamp).toDate();
+            } else if (relationshipData['matchedAt'] is String) {
+              try {
+                matchedAt = DateTime.parse(relationshipData['matchedAt'] as String);
+              } catch (e) {
+                // Keep existing matchedAt on parse error
+              }
+            }
+          }
+          
           final refreshedPersona = persona.copyWith(
             likes: relationshipData['likes'] ??
                 relationshipData['relationshipScore'] ??
                 persona.likes,
             imageUrls: persona.imageUrls, // Preserve imageUrls
+            matchedAt: matchedAt, // Include matchedAt
           );
           refreshedPersonas.add(refreshedPersona);
 
@@ -2094,6 +2131,7 @@ class PersonaService extends BaseService {
           results[personaId] = {
             'likes': cached.score,
             'isCasualSpeech': cached.isCasualSpeech,
+            // Note: matchedAt not cached, will be loaded from Firebase
           };
         } else {
           uncachedIds.add(personaId);

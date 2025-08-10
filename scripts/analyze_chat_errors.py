@@ -571,11 +571,17 @@ def print_analysis_summary(analyses: List[ConversationAnalysis]):
             }.get(issue_type, issue_type)
             print(f"    - {issue_type_korean}: {count}건")
 
-def analyze_chat_errors(recheck=False):
-    """chat_error_fix 컬렉션의 오류 보고서를 분석합니다."""
+def analyze_chat_errors(recheck=False, collection_name=None):
+    """오류 보고서를 분석합니다."""
+    
+    # 컬렉션 이름 설정
+    if collection_name is None:
+        collection_name = 'chat_error_fix'
+    
+    print(f"📂 분석할 컬렉션: {collection_name}")
     
     # 체크되지 않은 문서 조회
-    all_reports = db.collection('chat_error_fix').get()
+    all_reports = db.collection(collection_name).get()
     unchecked_reports = []
     
     for doc in all_reports:
@@ -627,6 +633,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='채팅 오류 분석 도구')
     parser.add_argument('--recheck', action='store_true', help='이미 체크된 문서도 다시 분석')
+    parser.add_argument('--collection', type=str, help='분석할 컬렉션 이름 (기본: chat_error_fix)')
     args = parser.parse_args()
     
-    analyze_chat_errors(recheck=args.recheck)
+    analyze_chat_errors(recheck=args.recheck, collection_name=args.collection)

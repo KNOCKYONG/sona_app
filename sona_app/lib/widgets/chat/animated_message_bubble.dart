@@ -6,8 +6,8 @@ import 'message_bubble.dart';
 import 'message_reaction_picker.dart';
 import '../../services/ui/haptic_service.dart';
 
-/// Animated wrapper for message bubbles with slide-in and bounce effects
-/// Provides WhatsApp/Telegram-level animations for better UX
+/// Optimized animated wrapper for message bubbles with smooth transitions
+/// Provides elegant animations for better UX without performance issues
 class AnimatedMessageBubble extends StatefulWidget {
   final Message message;
   final VoidCallback? onScoreChange;
@@ -28,103 +28,76 @@ class AnimatedMessageBubble extends StatefulWidget {
 
 class _AnimatedMessageBubbleState extends State<AnimatedMessageBubble>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _slideAnimation;
+  late AnimationController _controller;
   late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
+  late Animation<Offset> _slideAnimation;
   
   @override
   void initState() {
     super.initState();
     
-    _animationController = AnimationController(
-      duration: Duration(milliseconds: widget.isNewMessage ? 400 : 0),
+    _controller = AnimationController(
+      duration: widget.isNewMessage 
+          ? const Duration(milliseconds: 350)  // Smooth animation for new messages
+          : Duration.zero,  // No animation for existing messages
       vsync: this,
     );
     
-    // Only animate new messages
+    // Fade animation - gentle fade in
+    _fadeAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    );
+    
+    // Slide animation - subtle slide from bottom
+    _slideAnimation = Tween<Offset>(
+      begin: widget.isNewMessage 
+          ? const Offset(0, 0.1)  // Very subtle slide from bottom
+          : Offset.zero,
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+    ));
+    
+    // Start animation for new messages
     if (widget.isNewMessage) {
-      // Slide animation - messages slide in from side
-      _slideAnimation = Tween<double>(
-        begin: widget.message.isFromUser ? 50.0 : -50.0,
-        end: 0.0,
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutCubic,
-      ));
-      
-      // Fade animation
-      _fadeAnimation = Tween<double>(
-        begin: 0.0,
-        end: 1.0,
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.6, curve: Curves.easeOut),
-      ));
-      
-      // Scale animation for bounce effect
-      _scaleAnimation = TweenSequence<double>([
-        TweenSequenceItem(
-          tween: Tween<double>(begin: 0.0, end: 1.1)
-              .chain(CurveTween(curve: Curves.easeOut)),
-          weight: 70.0,
-        ),
-        TweenSequenceItem(
-          tween: Tween<double>(begin: 1.1, end: 0.95)
-              .chain(CurveTween(curve: Curves.easeInOut)),
-          weight: 15.0,
-        ),
-        TweenSequenceItem(
-          tween: Tween<double>(begin: 0.95, end: 1.0)
-              .chain(CurveTween(curve: Curves.easeOut)),
-          weight: 15.0,
-        ),
-      ]).animate(_animationController);
-      
-      // Start animation immediately for new messages
-      _animationController.forward();
+      _controller.forward();
     } else {
-      // No animation for existing messages - show immediately
-      _slideAnimation = AlwaysStoppedAnimation<double>(0.0);
-      _fadeAnimation = AlwaysStoppedAnimation<double>(1.0);
-      _scaleAnimation = AlwaysStoppedAnimation<double>(1.0);
-      
-      // Complete animation immediately
-      _animationController.value = 1.0;
+      _controller.value = 1.0;
     }
   }
   
   @override
   void dispose() {
-    _animationController.dispose();
+    _controller.dispose();
     super.dispose();
   }
   
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Transform.translate(
-          offset: Offset(_slideAnimation.value, 0),
-          child: Transform.scale(
-            scale: _scaleAnimation.value,
-            alignment: widget.message.isFromUser 
-                ? Alignment.centerRight 
-                : Alignment.centerLeft,
-            child: Opacity(
-              opacity: _fadeAnimation.value,
-              child: MessageBubble(
-                message: widget.message,
-                onScoreChange: widget.onScoreChange,
-              ),
-            ),
-          ),
-        );
-      },
+    if (!widget.isNewMessage) {
+      // Return without animation for existing messages
+      return MessageBubble(
+        message: widget.message,
+        onScoreChange: widget.onScoreChange,
+      );
+    }
+    
+    // Animated version for new messages
+    return FadeTransition(
+      opacity: _fadeAnimation,
+      child: SlideTransition(
+        position: _slideAnimation,
+        child: MessageBubble(
+          message: widget.message,
+          onScoreChange: widget.onScoreChange,
+        ),
+      ),
     );
   }
 }
+
 
 /// Swipeable message wrapper for reply functionality
 class SwipeableMessageBubble extends StatefulWidget {

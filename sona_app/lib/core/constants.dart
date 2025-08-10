@@ -1,3 +1,5 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// 앱 전체에서 사용되는 상수값 중앙 관리
 class AppConstants {
   // Private constructor
@@ -48,8 +50,7 @@ class AppConstants {
 
   // API Configuration
   static const String openAIModel = 'gpt-4o-mini';
-  static const String openAIKey =
-      String.fromEnvironment('OPENAI_API_KEY', defaultValue: '');
+  static String get openAIKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const double openAITemperature = 0.8;
   static const int openAIMaxRetries = 3;
 

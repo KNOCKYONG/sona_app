@@ -525,14 +525,21 @@ class ChatOrchestrator {
       String? enhancedContextHint = contextHint;
       if (userLanguage == 'en') {
         final englishHint = '''
-## 🌍 English Input Detected:
+## 🌍 CRITICAL: English Input - MUST GENERATE [KO] and [EN] TAGS:
 - User's message in English: "$userMessage"
-- Please understand the English message and respond appropriately in Korean
-- Include both [KO] Korean response and [EN] English translation
-- Focus on the meaning and context, not just literal translation
-- If user says "I am not good" or "I feel bad", show empathy
-- Avoid repetitive responses like "영어로 말하니까 신기하네"
-- For macro/AI/bot questions, respond honestly while maintaining persona
+- YOU MUST START YOUR RESPONSE WITH [KO] TAG
+- YOU MUST INCLUDE [EN] TAG WITH ENGLISH TRANSLATION
+- Example format:
+  [KO] 한국어 응답
+  [EN] English translation
+  
+- Understanding guide:
+  * "how r u?" → Answer about your current state
+  * "I am not good" → Show empathy and concern
+  * "what r u doing?" → Describe your current activity
+  
+- NEVER respond with just Korean text without tags
+- NEVER say "영어로 말하니까 신기하네" repeatedly
 ''';
         enhancedContextHint = enhancedContextHint != null 
             ? '$enhancedContextHint\n\n$englishHint'
@@ -564,11 +571,23 @@ class ChatOrchestrator {
       String finalResponse = processedResponse;
       String? translatedContent;
       List<String>? translatedContents; // 각 메시지별 번역 저장
+      
+      // 영어 응답인 경우 파싱
       if (userLanguage != null && userLanguage != 'ko') {
+        debugPrint('🌍 Processing multilingual response for language: $userLanguage');
         final multilingualParsed =
             _parseMultilingualResponse(processedResponse, userLanguage);
-        finalResponse = multilingualParsed['korean'] ?? processedResponse;
-        translatedContent = multilingualParsed['translated'];
+        
+        // 한국어 응답이 파싱되면 사용, 아니면 원본 사용
+        if (multilingualParsed['korean'] != null) {
+          finalResponse = multilingualParsed['korean']!;
+          translatedContent = multilingualParsed['translated'];
+          debugPrint('✅ Successfully parsed: Korean="${finalResponse}", Translation="${translatedContent}"');
+        } else {
+          debugPrint('⚠️ Failed to parse tags, using original response');
+          // 태그가 없으면 전체를 한국어로 간주
+          finalResponse = processedResponse;
+        }
       }
 
       // 6.5단계: 만남 제안 필터링 및 초기 인사 패턴 방지
@@ -945,22 +964,24 @@ class ChatOrchestrator {
 
     // [KO]와 [EN] 태그가 있는지 확인
     final hasKoTag = response.contains('[KO]');
-    final hasLangTag = response.contains('[${targetLanguage.toUpperCase()}]');
+    final langTag = targetLanguage.toUpperCase();
+    final hasLangTag = response.contains('[$langTag]');
     
     debugPrint('🏷️ Has [KO] tag: $hasKoTag');
-    debugPrint('🏷️ Has [${targetLanguage.toUpperCase()}] tag: $hasLangTag');
+    debugPrint('🏷️ Has [$langTag] tag: $hasLangTag');
     
     if (hasKoTag && hasLangTag) {
       // 태그가 모두 있으면 정확히 파싱
+      // [KO] 다음 내용부터 다음 태그 또는 끝까지
       final koPattern = RegExp(
-          r'\[KO\]\s*(.+?)(?=\[${targetLanguage.toUpperCase()}\]|$)',
+          r'\[KO\]\s*(.+?)(?:\[$langTag\]|$)',
           multiLine: true,
           dotAll: true);
       final koMatch = koPattern.firstMatch(response);
 
       // [LANG] 태그로 시작하는 번역 부분 찾기
       final langPattern = RegExp(
-          r'\[${targetLanguage.toUpperCase()}\]\s*(.+?)(?=\[|$)',
+          r'\[$langTag\]\s*(.+?)(?:\[|$)',
           multiLine: true,
           dotAll: true);
       final langMatch = langPattern.firstMatch(response);
@@ -976,12 +997,12 @@ class ChatOrchestrator {
         debugPrint('✅ Found Translation: ${result['translated']}');
       }
     } else if (hasKoTag && !hasLangTag) {
-      // [KO] 태그만 있는 경우
-      final koPattern = RegExp(r'\[KO\]\s*(.+?)$', multiLine: true, dotAll: true);
+      // [KO] 태그만 있는 경우 - 전체를 한국어로 처리
+      final koPattern = RegExp(r'\[KO\]\s*(.+)', multiLine: true, dotAll: true);
       final koMatch = koPattern.firstMatch(response);
       if (koMatch != null) {
         result['korean'] = koMatch.group(1)?.trim();
-        debugPrint('✅ Found Korean only: ${result['korean']}');
+        debugPrint('⚠️ Found Korean only (no translation): ${result['korean']}');
       }
     } else {
       // 태그가 없는 경우 전체를 한국어로 간주

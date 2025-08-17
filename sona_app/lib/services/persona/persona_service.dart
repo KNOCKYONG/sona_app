@@ -41,9 +41,10 @@ class PersonaService extends BaseService {
   static const Duration _cacheTTL = Duration(hours: 24);
   static const int _maxCacheSize = 100;
 
-  // Memory cache for persona data
+  // Memory cache for persona data - Extended TTL for better performance
   final Map<String, Persona> _personaMemoryCache = {};
   DateTime? _lastPersonaCacheUpdate;
+  static const Duration _memoryCacheTTL = Duration(minutes: 30);  // Extended from 1 minute
 
   // Batch operation queue
   final List<_PendingRelationshipUpdate> _pendingUpdates = [];
@@ -149,9 +150,9 @@ class PersonaService extends BaseService {
     // Check memory cache first
     if (_personaMemoryCache.containsKey(personaId)) {
       final cached = _personaMemoryCache[personaId];
-      // Return cached if less than 1 minute old (reduced from 5 for better consistency)
+      // Return cached if less than 30 minutes old (extended for better performance)
       if (_lastPersonaCacheUpdate != null &&
-          DateTime.now().difference(_lastPersonaCacheUpdate!).inMinutes < 1) {
+          DateTime.now().difference(_lastPersonaCacheUpdate!) < _memoryCacheTTL) {
         return cached;
       }
     }
@@ -2291,8 +2292,8 @@ class PersonaService extends BaseService {
         final cacheTime = DateTime.parse(decoded['timestamp'] as String);
         final personasList = decoded['personas'] as List;
 
-        // Check if cache is less than 1 hour old
-        if (DateTime.now().difference(cacheTime).inHours < 1) {
+        // Check if cache is less than 24 hours old (extended for better performance)
+        if (DateTime.now().difference(cacheTime).inHours < 24) {
           _allPersonas = personasList
               .map((data) => Persona.fromJson(data as Map<String, dynamic>))
               .toList();
@@ -2335,8 +2336,8 @@ class PersonaService extends BaseService {
       if (timestamp == null) return true;
 
       final cacheTime = DateTime.parse(timestamp);
-      // Consider cache stale after 24 hours
-      return DateTime.now().difference(cacheTime).inHours >= 24;
+      // Consider cache stale after 7 days (extended for better performance)
+      return DateTime.now().difference(cacheTime).inDays >= 7;
     } catch (e) {
       return true;
     }

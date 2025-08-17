@@ -15,6 +15,7 @@ import 'chat_orchestrator.dart' hide MessageType;
 import '../utils/persona_relationship_cache.dart';
 import '../../persona/persona_service.dart';
 import '../../storage/local_storage_service.dart';
+import '../../storage/cache_manager.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../../auth/user_service.dart';
 import '../../app_info_service.dart';
@@ -349,20 +350,66 @@ class ChatService extends BaseService {
     _unreadMessageCounts[personaId] = 0;
   }
 
-  /// Optimized message loading with pagination
+  /// Optimized message loading with pagination and caching
   Future<List<Message>> _loadMessagesFromFirebase(
       String userId, String personaId) async {
+    // Try to load from cache first
+    final cacheManager = CacheManager.instance;
+    final chatId = '${userId}_$personaId';
+    final cachedMessages = await cacheManager.getCachedMessages(chatId);
+    
+    if (cachedMessages != null && cachedMessages.isNotEmpty) {
+      debugPrint('📦 Loaded ${cachedMessages.length} messages from cache for $personaId');
+      
+      // Check for new messages since last cached message
+      final lastCachedTimestamp = cachedMessages.last.timestamp;
+      final newMessagesQuery = await FirebaseHelper.userChatMessages(userId, personaId)
+          .where('timestamp', isGreaterThan: lastCachedTimestamp)
+          .orderBy('timestamp', descending: false)
+          .get();
+      
+      if (newMessagesQuery.docs.isNotEmpty) {
+        final newMessages = newMessagesQuery.docs
+            .map((doc) => Message.fromJson({...doc.data(), 'id': doc.id}))
+            .toList();
+        
+        // Combine cached and new messages
+        final allMessages = [...cachedMessages, ...newMessages];
+        
+        // Limit to max messages
+        final limitedMessages = allMessages.length > AppConstants.maxMessagesInMemory
+            ? allMessages.sublist(allMessages.length - AppConstants.maxMessagesInMemory)
+            : allMessages;
+        
+        // Save updated cache
+        await cacheManager.cacheMessages(chatId, limitedMessages);
+        
+        return limitedMessages;
+      }
+      
+      return cachedMessages;
+    }
+    
+    // No cache, load from Firebase
     final querySnapshot =
         await FirebaseHelper.userChatMessages(userId, personaId)
             .orderBy('timestamp', descending: true)
             .limit(AppConstants.maxMessagesInMemory)
             .get();
 
-    return querySnapshot.docs
+    final messages = querySnapshot.docs
         .map((doc) => Message.fromJson({...doc.data(), 'id': doc.id}))
         .toList()
         .reversed
         .toList();
+    
+    // Save to cache
+    if (messages.isNotEmpty) {
+      await cacheManager.cacheMessages(chatId, messages);
+      debugPrint('💾 Cached ${messages.length} messages for $personaId');
+    }
+    
+    return messages;
   }
 
   /// Load more messages for pagination
@@ -874,7 +921,7 @@ class ChatService extends BaseService {
     }
   }
 
-  /// Process batch write to Firebase
+  /// Process batch write to Firebase and update cache
   Future<void> _processBatchWrite() async {
     if (_pendingMessages.isEmpty) return;
 
@@ -896,6 +943,9 @@ class ChatService extends BaseService {
     try {
       final batch = FirebaseHelper.batch();
 
+      // Group messages by chat for cache update
+      final messagesByChat = <String, List<Message>>{};
+
       for (final pending in messagesToWrite) {
         final docRef = FirebaseFirestore.instance
             .collection('users')
@@ -906,10 +956,32 @@ class ChatService extends BaseService {
             .doc(pending.message.id);
 
         batch.set(docRef, pending.message.toJson());
+        
+        // Group messages for cache update
+        final chatId = '${pending.userId}_${pending.personaId}';
+        messagesByChat[chatId] ??= [];
+        messagesByChat[chatId]!.add(pending.message);
       }
 
       await batch.commit();
       debugPrint('✅ Batch wrote ${messagesToWrite.length} messages');
+      
+      // Update cache for each chat
+      final cacheManager = CacheManager.instance;
+      for (final entry in messagesByChat.entries) {
+        final chatId = entry.key;
+        final newMessages = entry.value;
+        
+        // Get current persona messages
+        final personaId = newMessages.first.personaId;
+        final currentMessages = _messagesByPersona[personaId] ?? [];
+        
+        if (currentMessages.isNotEmpty) {
+          // Update cache with all messages
+          await cacheManager.cacheMessages(chatId, currentMessages);
+          debugPrint('💾 Updated cache for $chatId with ${currentMessages.length} messages');
+        }
+      }
 
       // 💭 메모리 서비스에 중요한 대화 저장
       await _processConversationMemories(messagesToWrite);

@@ -335,7 +335,7 @@ class ChatOrchestrator {
       // 3.1단계: 인사 상태 확인 및 처리
       String? greetingGuide;
       final relationshipCache = PersonaRelationshipCache.instance;
-      if (relationshipCache.shouldGreet(completePersonaInfo.lastGreetingTime)) {
+      if (relationshipCache.shouldGreet(personaData.lastGreetingTime)) {
         // 24시간 이상 지났거나 처음 대화하는 경우
         if (messageAnalysis.type == MessageType.greeting || chatHistory.isEmpty) {
           // 인사 시간 업데이트

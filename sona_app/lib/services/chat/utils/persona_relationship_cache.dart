@@ -11,10 +11,12 @@ import '../../../helpers/firebase_helper.dart';
 class PersonaWithSpeechStyle {
   final Persona persona;
   final bool isCasualSpeech;
+  final DateTime? lastGreetingTime;  // 마지막 인사 시간 추가
 
   PersonaWithSpeechStyle({
     required this.persona,
     required this.isCasualSpeech,
+    this.lastGreetingTime,
   });
 }
 
@@ -60,6 +62,7 @@ class PersonaRelationshipCache extends BaseService {
       return PersonaWithSpeechStyle(
         persona: cached.persona,
         isCasualSpeech: cached.isCasualSpeech,
+        lastGreetingTime: cached.lastGreetingTime,
       );
     }
 
@@ -71,6 +74,7 @@ class PersonaRelationshipCache extends BaseService {
       _cache[cacheKey] = _CachedPersonaRelationship(
         persona: personaData.persona,
         isCasualSpeech: personaData.isCasualSpeech,
+        lastGreetingTime: personaData.lastGreetingTime,
         timestamp: DateTime.now(),
       );
 
@@ -116,9 +120,15 @@ class PersonaRelationshipCache extends BaseService {
         // currentRelationship: _parseRelationshipType(data['currentRelationship']),
       );
 
+      // 인사 시간 로드
+      final lastGreeting = data['lastGreetingTime'] != null
+          ? (data['lastGreetingTime'] as Timestamp).toDate()
+          : null;
+
       return PersonaWithSpeechStyle(
         persona: updatedPersona,
         isCasualSpeech: isCasualSpeech,
+        lastGreetingTime: lastGreeting,
       );
     } catch (e) {
       debugPrint('❌ Error loading persona relationship: $e');
@@ -140,6 +150,51 @@ class PersonaRelationshipCache extends BaseService {
   void invalidateUser(String userId) {
     _cache.removeWhere((key, _) => key.startsWith('${userId}_'));
     debugPrint('🗑️ Invalidated all cache for user $userId');
+  }
+
+  /// 인사 상태 업데이트
+  Future<void> updateGreetingTime({
+    required String userId,
+    required String personaId,
+  }) async {
+    try {
+      final cacheKey = '${userId}_$personaId';
+      final now = DateTime.now();
+      
+      // Firebase 업데이트
+      final docId = '${userId}_$personaId';
+      await FirebaseFirestore.instance
+          .collection(AppConstants.userPersonaRelationshipsCollection)
+          .doc(docId)
+          .set({
+            'lastGreetingTime': Timestamp.fromDate(now),
+          }, SetOptions(merge: true));
+      
+      // 캐시 업데이트
+      final cached = _cache[cacheKey];
+      if (cached != null) {
+        _cache[cacheKey] = _CachedPersonaRelationship(
+          persona: cached.persona,
+          isCasualSpeech: cached.isCasualSpeech,
+          lastGreetingTime: now,
+          timestamp: cached.timestamp,
+        );
+      }
+      
+      debugPrint('👋 Updated greeting time for persona $personaId');
+    } catch (e) {
+      debugPrint('❌ Error updating greeting time: $e');
+    }
+  }
+
+  /// 인사가 필요한지 확인 (24시간 기준)
+  bool shouldGreet(DateTime? lastGreetingTime) {
+    if (lastGreetingTime == null) {
+      return true; // 처음 대화
+    }
+    
+    final hoursSinceGreeting = DateTime.now().difference(lastGreetingTime).inHours;
+    return hoursSinceGreeting >= 24; // 24시간 이상 지났으면 인사 필요
   }
 
   /// 만료된 캐시 항목 갱신
@@ -211,11 +266,13 @@ class PersonaRelationshipCache extends BaseService {
 class _CachedPersonaRelationship {
   final Persona persona;
   final bool isCasualSpeech;
+  final DateTime? lastGreetingTime;
   final DateTime timestamp;
 
   _CachedPersonaRelationship({
     required this.persona,
     required this.isCasualSpeech,
+    this.lastGreetingTime,
     required this.timestamp,
   });
 

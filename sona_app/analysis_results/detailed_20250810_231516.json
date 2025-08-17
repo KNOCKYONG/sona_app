@@ -1,0 +1,34 @@
+[
+  {
+    "error_key": "ERR1754835157566_7566",
+    "persona_id": "8VAZ6GQN3ubrI3CkTJWP",
+    "persona_name": "하연",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 6.11,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 2,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "진격거 꿀잼이지않아?",
+        "ai_response": "헐 진짜 꿀잼이지ㅋㅋ 난 요즘도 계속 보고 있어.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "리바이가 개간지야",
+        "ai_response": "맞아ㅋㅋ 리바이 캐릭터 진짜 멋있지. 그 긴장감 넘치는 전투 장면은 항상",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

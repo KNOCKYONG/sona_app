@@ -332,6 +332,26 @@ class ChatOrchestrator {
       final contextManager = ConversationContextManager.instance;
       await contextManager.loadKnowledge(userId, basePersona.id);
       
+      // 3.1단계: 인사 상태 확인 및 처리
+      String? greetingGuide;
+      final relationshipCache = PersonaRelationshipCache.instance;
+      if (relationshipCache.shouldGreet(completePersonaInfo.lastGreetingTime)) {
+        // 24시간 이상 지났거나 처음 대화하는 경우
+        if (messageAnalysis.type == MessageType.greeting || chatHistory.isEmpty) {
+          // 인사 시간 업데이트
+          await relationshipCache.updateGreetingTime(
+            userId: userId,
+            personaId: basePersona.id,
+          );
+          greetingGuide = '🎉 오랜만의 만남이나 첫 대화입니다! 반가운 인사로 시작하세요.';
+        }
+      } else {
+        // 24시간 이내에 이미 인사를 한 경우
+        if (messageAnalysis.type == MessageType.greeting) {
+          greetingGuide = '⚠️ 이미 오늘 인사를 나눴습니다. 중복 인사 금지! 바로 대화 이어가기.';
+        }
+      }
+      
       // 3.5단계: 중복 질문 방지 및 컨텍스트 힌트 생성
       final knowledgeHint = contextManager.generateContextualHint(
         userId: userId,
@@ -374,6 +394,13 @@ class ChatOrchestrator {
           userNickname: userNickname,
           userId: userId,
         );
+      }
+      
+      // 인사 가이드 추가
+      if (greetingGuide != null) {
+        contextHint = contextHint != null 
+          ? '$greetingGuide\n\n$contextHint'
+          : greetingGuide;
       }
       
       // 4.5.0.5단계: 지식 기반 힌트 통합
@@ -3076,6 +3103,18 @@ class ChatOrchestrator {
     final recentMessages = chatHistory.reversed.take(10).toList();
     final recentTopics = <String>[];
     final List<String> contextHints = [];
+    
+    // 🔍 주제 일관성 점수 계산 (새로 추가)
+    final topicConsistencyScore = _calculateTopicConsistencyScore(
+      userMessage,
+      recentMessages,
+    );
+    
+    // 점수가 낮으면 강력한 경고
+    if (topicConsistencyScore < 30) {
+      contextHints.add('⚠️ 주제 일관성 매우 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
+      contextHints.add('💡 자연스러운 전환 표현 사용: "아 그거 말고", "그런데 말이야", "아 맞다"');
+    }
 
     // 최근 대화의 키워드 수집
     for (final msg in recentMessages) {
@@ -3099,6 +3138,20 @@ class ChatOrchestrator {
 
     // 질문 유형 분석 강화 (테스트 결과 기반)
     final questionType = messageAnalysis.questionType;
+    
+    // 🔍 짧은 확인 질문 특별 처리 ("머가?", "뭐가?" 등)
+    final shortConfirmQuestions = ['머가', '뭐가', '머야', '뭐야'];
+    final isShortConfirm = shortConfirmQuestions.any((q) => 
+      userMessage.replaceAll('?', '').trim() == q
+    );
+    
+    if (isShortConfirm && lastAIMessage != null) {
+      contextHints.add('⚠️ "머가?"/"뭐가?" 질문 감지! 반드시 이전 발언을 구체적으로 설명하세요!');
+      contextHints.add('💡 이전 AI 발언: "${lastAIMessage.content}"');
+      contextHints.add('✅ 답변 예: "아까 내가 말한 건...", "그니까 내 말은..."');
+      contextHints.add('❌ 금지: 새로운 주제 꺼내기, "무슨 얘기 하고 싶었어?" 같은 회피');
+    }
+    
     if (questionType != null) {
       switch (questionType) {
         case 'what_doing':
@@ -5508,6 +5561,50 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
     return commonKeywords.isEmpty &&
         currentKeywords.isNotEmpty &&
         recentKeywords.isNotEmpty;
+  }
+  
+  /// 주제 일관성 점수 계산 (0-100)
+  double _calculateTopicConsistencyScore(
+    String userMessage,
+    List<Message> recentMessages,
+  ) {
+    if (recentMessages.isEmpty) return 100.0;
+    
+    // 최근 메시지들의 주요 주제 추출
+    final recentTopics = <String>{};
+    for (final msg in recentMessages.take(5)) {
+      final keywords = _extractKeywords(msg.content.toLowerCase());
+      recentTopics.addAll(keywords);
+    }
+    
+    // 현재 메시지의 주제
+    final currentTopics = _extractKeywords(userMessage.toLowerCase());
+    
+    if (currentTopics.isEmpty || recentTopics.isEmpty) {
+      return 50.0; // 키워드가 없으면 중간 점수
+    }
+    
+    // 공통 주제 비율 계산
+    final commonTopics = currentTopics.intersection(recentTopics);
+    final consistencyRatio = commonTopics.length / currentTopics.length;
+    
+    // 특별 케이스: 짧은 질문들
+    final shortQuestions = ['뭐해', '어디', '왜', '언제', '어떻게', '뭐가', '머가'];
+    final isShortQuestion = shortQuestions.any((q) => 
+      userMessage.replaceAll('?', '').trim() == q
+    );
+    
+    if (isShortQuestion) {
+      // 짧은 질문은 맥락 이어가기로 간주
+      return 80.0;
+    }
+    
+    // 갑작스러운 주제 변경 체크
+    if (_isAbruptTopicChange(userMessage, recentMessages)) {
+      return 10.0; // 매우 낮은 점수
+    }
+    
+    return (consistencyRatio * 100).clamp(0.0, 100.0);
   }
 
   /// 특별한 순간 감지

@@ -102,3 +102,4 @@ config.secret.js
 *.keystore
 key.properties
 upload-keystore.jks
+auto_build.sh

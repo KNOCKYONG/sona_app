@@ -39,6 +39,9 @@ import '../intelligence/milestone_expression_service.dart';
 import '../intelligence/emotional_transfer_service.dart' as emotional_transfer;
 import '../intelligence/relationship_boundary_service.dart';
 import '../intelligence/fuzzy_memory_service.dart';
+import '../cache/response_variation_cache.dart';
+import '../learning/user_preference_learning.dart';
+import '../analysis/naturalness_analyzer.dart';
 
 /// 메시지 타입 enum
 enum MessageType {
@@ -638,6 +641,21 @@ class ChatOrchestrator {
             : englishHint;
       }
       
+      // 🧠 실시간 학습: 사용자 선호 기반 프롬프트 조정
+      final learningSystem = UserPreferenceLearning();
+      final userPreferences = learningSystem.adjustResponseForUser(
+        userId: userId,
+        basePrompt: enhancedContextHint ?? '',
+        userMessage: userMessage,
+      );
+      
+      // 학습된 선호도를 contextHint에 반영
+      String finalContextHint = enhancedContextHint ?? '';
+      if (userPreferences['confidence'] as double > 0.3) {
+        debugPrint('🧠 User preferences applied with confidence: ${userPreferences['confidence']}');
+        finalContextHint = userPreferences['adjustedPrompt'] as String;
+      }
+      
       final rawResponse = await OpenAIService.generateResponse(
         persona: completePersona,
         chatHistory: chatHistory,
@@ -646,7 +664,7 @@ class ChatOrchestrator {
         userNickname: userNickname,
         userAge: userAge,
         isCasualSpeech: true, // 항상 반말 모드
-        contextHint: enhancedContextHint,
+        contextHint: finalContextHint,
         targetLanguage: userLanguage,  // 언어 정보 전달
       );
 
@@ -766,6 +784,122 @@ class ChatOrchestrator {
         response: responseContents.first,
         topic: _extractTopicFromMessage(userMessage),
       );
+      
+      // 🧠 8.6단계: 실시간 학습 시스템에 대화 학습
+      // 사용자 만족도는 점수 변화를 기반으로 추정
+      double userSatisfaction = 0.5; // 기본값
+      if (scoreChange > 0) {
+        userSatisfaction = 0.7 + (scoreChange / 10) * 0.3; // 긍정적 반응
+      } else if (scoreChange < 0) {
+        userSatisfaction = 0.3 - (scoreChange.abs() / 10) * 0.2; // 부정적 반응
+      }
+      
+      await learningSystem.learnFromConversation(
+        userId: userId,
+        userMessage: userMessage,
+        aiResponse: responseContents.first,
+        userSatisfaction: math.min(1.0, math.max(0.0, userSatisfaction)),
+        context: {
+          'personaId': completePersona.id,
+          'personaName': completePersona.name,
+          'emotion': emotion.toString(),
+          'scoreChange': scoreChange,
+          'messageType': messageAnalysis.type.toString(),
+          'topic': _extractTopicFromMessage(userMessage),
+        },
+      );
+      debugPrint('🧠 Learning completed with satisfaction: ${userSatisfaction.toStringAsFixed(2)}');
+      
+      // 📊 8.7단계: 자연스러움 평가 및 개선 + 반복 방지
+      final naturalnessAnalyzer = NaturalnessAnalyzer();
+      final responseCache = ResponseVariationCache();
+      
+      // 반복 응답 감지 (먼저 체크)
+      bool isRepetitive = responseCache.isRecentlyUsed(responseContents.first);
+      int regenerationAttempts = 0;
+      const maxRegenerationAttempts = 3;
+      
+      // 반복이 감지되면 최대 3회까지 재생성
+      while (isRepetitive && regenerationAttempts < maxRegenerationAttempts) {
+        regenerationAttempts++;
+        debugPrint('🔄 Repetitive response detected. Regenerating... (Attempt $regenerationAttempts)');
+        
+        // 힌트에 반복 방지 강조 추가
+        contextHints.add('⚠️ 이전 응답과 다른 새로운 표현 사용 필수!');
+        contextHints.add('💡 다양한 어휘와 문장 구조로 응답하세요.');
+        
+        // 재생성 요청
+        final regeneratedResponse = await _openAIService.generateResponse(
+          userMessage: userMessage,
+          contextHint: contextHints.join('\n'),
+          previousResponses: recentMessages.where((m) => !m.isFromUser).map((m) => m.content).toList(),
+          persona: completePersona,
+          useEnhancedPrompt: true,
+          relationshipScore: _likeService.getLikeScoreForPersona(completePersona.id ?? ''),
+          userNickname: _currentUserNickname,
+        );
+        
+        if (regeneratedResponse.isNotEmpty && !responseCache.isRecentlyUsed(regeneratedResponse.first)) {
+          responseContents = regeneratedResponse;
+          isRepetitive = false;
+          debugPrint('✅ Successfully generated non-repetitive response');
+        }
+      }
+      
+      // 응답 캐시에 기록
+      if (!isRepetitive) {
+        responseCache.recordResponse(responseContents.first);
+      }
+      
+      final naturalnessScore = naturalnessAnalyzer.calculateNaturalnessScore(
+        userMessage: userMessage,
+        aiResponse: responseContents.first,
+        chatHistory: chatHistory,
+      );
+      
+      debugPrint('📊 Naturalness score: ${(naturalnessScore * 100).toStringAsFixed(1)}%');
+      
+      // 자연스러움이 낮으면 응답 변형 캐시에서 대체 응답 찾기
+      if (naturalnessScore < 0.6 && !isRepetitive) {
+        // 메시지 타입에 따른 변형 카테고리 선택
+        String? variationCategory;
+        if (messageAnalysis.type == MessageType.greeting) {
+          variationCategory = 'greeting';
+        } else if (messageAnalysis.type == MessageType.question) {
+          variationCategory = 'simple_reaction';
+        } else if (emotion == EmotionType.happy) {
+          variationCategory = 'empathy_happy';
+        } else if (emotion == EmotionType.sad) {
+          variationCategory = 'empathy_sad';
+        }
+        
+        if (variationCategory != null) {
+          final variation = responseCache.getVariation(
+            variationCategory,
+            personaId: completePersona.id,
+          );
+          
+          if (variation != null && !responseCache.isRecentlyUsed(variation)) {
+            debugPrint('📊 Using variation from cache: $variation');
+            responseContents[0] = variation;
+            responseCache.recordResponse(variation);
+          }
+        }
+        
+        // 개선 제안 로깅
+        final improvements = naturalnessAnalyzer.suggestImprovements(
+          userMessage: userMessage,
+          aiResponse: responseContents.first,
+          currentScore: naturalnessScore,
+        );
+        
+        if ((improvements['suggestions'] as List).isNotEmpty) {
+          debugPrint('📊 Improvement suggestions:');
+          for (final suggestion in improvements['suggestions'] as List) {
+            debugPrint('   - $suggestion');
+          }
+        }
+      }
       
       // 8.5.0.5단계: 대화 지식 업데이트 (ConversationContextManager)
       await contextManager.updateKnowledge(
@@ -3150,6 +3284,42 @@ class ChatOrchestrator {
       contextHints.add('💡 이전 AI 발언: "${lastAIMessage.content}"');
       contextHints.add('✅ 답변 예: "아까 내가 말한 건...", "그니까 내 말은..."');
       contextHints.add('❌ 금지: 새로운 주제 꺼내기, "무슨 얘기 하고 싶었어?" 같은 회피');
+    }
+    
+    // 🔥 NEW: "하연이는?" 같은 질문 의도 파악 강화
+    if (userMessage.contains('는?') || userMessage.contains('은?')) {
+      // 이전 맥락에서 주제 파악
+      String? impliedTopic = null;
+      if (lastUserMessage != null) {
+        if (lastUserMessage.content.contains('쉬') || lastUserMessage.content.contains('푹')) {
+          impliedTopic = 'rest_plan';
+        } else if (lastUserMessage.content.contains('먹')) {
+          impliedTopic = 'meal';
+        } else if (lastUserMessage.content.contains('회사') || lastUserMessage.content.contains('일')) {
+          impliedTopic = 'work';
+        } else if (lastUserMessage.content.contains('주말') || lastUserMessage.content.contains('내일')) {
+          impliedTopic = 'schedule';
+        }
+      }
+      
+      if (impliedTopic != null) {
+        contextHints.add('🎯 동일 주제 되물음 감지! 이전 맥락: ${impliedTopic}');
+        switch (impliedTopic) {
+          case 'rest_plan':
+            contextHints.add('✅ "나도 집에서 쉬려고" / "넷플릭스 보면서 쉴 예정"');
+            break;
+          case 'meal':
+            contextHints.add('✅ "나는 아직 안 먹었어" / "방금 먹었어"');
+            break;
+          case 'work':
+            contextHints.add('✅ "나도 내일 일해야 해" / "나는 쉬는 날이야"');
+            break;
+          case 'schedule':
+            contextHints.add('✅ "나는 [구체적 계획] 할 예정이야"');
+            break;
+        }
+        contextHints.add('❌ 금지: "어디 있냐고?" 같은 엉뚱한 해석');
+      }
     }
     
     if (questionType != null) {
@@ -5570,26 +5740,40 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
   ) {
     if (recentMessages.isEmpty) return 100.0;
     
-    // 최근 메시지들의 주요 주제 추출
+    // 최근 메시지들의 주요 주제 추출 (더 많은 메시지 참조)
     final recentTopics = <String>{};
-    for (final msg in recentMessages.take(5)) {
+    final recentContext = <String>{};
+    
+    for (final msg in recentMessages.take(7)) {  // 5 -> 7로 증가
       final keywords = _extractKeywords(msg.content.toLowerCase());
       recentTopics.addAll(keywords);
+      
+      // 문맥 단어도 수집
+      if (msg.content.contains('쉬') || msg.content.contains('푹')) {
+        recentContext.add('rest');
+      }
+      if (msg.content.contains('회사') || msg.content.contains('일')) {
+        recentContext.add('work');
+      }
+      if (msg.content.contains('먹') || msg.content.contains('밥')) {
+        recentContext.add('meal');
+      }
+      if (msg.content.contains('스트레스') || msg.content.contains('힘들')) {
+        recentContext.add('stress');
+      }
     }
     
     // 현재 메시지의 주제
     final currentTopics = _extractKeywords(userMessage.toLowerCase());
     
-    if (currentTopics.isEmpty || recentTopics.isEmpty) {
-      return 50.0; // 키워드가 없으면 중간 점수
+    // 🔥 NEW: "~는?" 패턴은 이전 맥락 이어가기로 간주
+    if (userMessage.contains('는?') || userMessage.contains('은?')) {
+      // 이름 뒤의 "는?"은 같은 주제 되물음으로 높은 점수
+      return 85.0;
     }
     
-    // 공통 주제 비율 계산
-    final commonTopics = currentTopics.intersection(recentTopics);
-    final consistencyRatio = commonTopics.length / currentTopics.length;
-    
     // 특별 케이스: 짧은 질문들
-    final shortQuestions = ['뭐해', '어디', '왜', '언제', '어떻게', '뭐가', '머가'];
+    final shortQuestions = ['뭐해', '어디', '왜', '언제', '어떻게', '뭐가', '머가', '뭐야', '머야'];
     final isShortQuestion = shortQuestions.any((q) => 
       userMessage.replaceAll('?', '').trim() == q
     );
@@ -5599,12 +5783,46 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
       return 80.0;
     }
     
+    // 맥락 오해 체크
+    if (_isMisinterpretation(userMessage, recentMessages)) {
+      return 20.0;  // 맥락 오해는 낮은 점수
+    }
+    
+    if (currentTopics.isEmpty || recentTopics.isEmpty) {
+      // 키워드가 없어도 문맥이 이어지면 높은 점수
+      if (recentContext.isNotEmpty) {
+        return 70.0;
+      }
+      return 50.0;
+    }
+    
+    // 공통 주제 비율 계산
+    final commonTopics = currentTopics.intersection(recentTopics);
+    final consistencyRatio = commonTopics.length / currentTopics.length;
+    
     // 갑작스러운 주제 변경 체크
     if (_isAbruptTopicChange(userMessage, recentMessages)) {
       return 10.0; // 매우 낮은 점수
     }
     
     return (consistencyRatio * 100).clamp(0.0, 100.0);
+  }
+  
+  /// 맥락 오해 감지
+  bool _isMisinterpretation(String userMessage, List<Message> recentMessages) {
+    final lower = userMessage.toLowerCase();
+    
+    // "맥락을 잘 모르는구나" 같은 직접적 지적
+    if (lower.contains('맥락') && (lower.contains('모르') || lower.contains('이해'))) {
+      return true;
+    }
+    
+    // "그게 아니라" 같은 정정
+    if (lower.contains('그게 아니') || lower.contains('아니라고')) {
+      return true;
+    }
+    
+    return false;
   }
 
   /// 특별한 순간 감지

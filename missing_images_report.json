@@ -1,0 +1,1999 @@
+{
+  "timestamp": "2025-08-17T16:20:18.083720",
+  "total_personas": 76,
+  "without_images": [],
+  "with_invalid_urls": [
+    {
+      "id": "1aD0ZX6NFq3Ij2FScLCK",
+      "name": "예슬",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/yeseul/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/yeseul/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/yeseul/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/yeseul/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yeseul/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/yeseul/image1_small.jpg",
+            "large": "https://teamsona.work/personas/yeseul/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/yeseul/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/yeseul/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yeseul/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/yeseul/image2_small.jpg",
+            "large": "https://teamsona.work/personas/yeseul/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/yeseul/main_original.jpg",
+          "medium": "https://teamsona.work/personas/yeseul/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/yeseul/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/yeseul/main_small.jpg",
+          "large": "https://teamsona.work/personas/yeseul/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/yeseul/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/yeseul/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/yeseul/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "1uvYHUIVEc9jf3yjdLoF",
+      "name": "예림",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/yerim/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/yerim/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/yerim/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/yerim/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yerim/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/yerim/image1_small.jpg",
+            "large": "https://teamsona.work/personas/yerim/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/yerim/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/yerim/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yerim/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/yerim/image2_small.jpg",
+            "large": "https://teamsona.work/personas/yerim/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/yerim/main_original.jpg",
+          "medium": "https://teamsona.work/personas/yerim/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/yerim/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/yerim/main_small.jpg",
+          "large": "https://teamsona.work/personas/yerim/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/yerim/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/yerim/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/yerim/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "5Q3POc7ean9ynSEOCV8M",
+      "name": "Dr. 박지은",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/dr-park-jieun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/dr-park-jieun/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/dr-park-jieun/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/dr-park-jieun/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/dr-park-jieun/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/dr-park-jieun/image1_small.jpg",
+            "large": "https://teamsona.work/personas/dr-park-jieun/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/dr-park-jieun/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/dr-park-jieun/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/dr-park-jieun/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/dr-park-jieun/image2_small.jpg",
+            "large": "https://teamsona.work/personas/dr-park-jieun/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/dr-park-jieun/main_original.jpg",
+          "medium": "https://teamsona.work/personas/dr-park-jieun/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/dr-park-jieun/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/dr-park-jieun/main_small.jpg",
+          "large": "https://teamsona.work/personas/dr-park-jieun/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/dr-park-jieun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/dr-park-jieun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/dr-park-jieun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "5ztpOgh1ncDSR8L9IXOY",
+      "name": "윤미",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/yoonmi/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/yoonmi/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/yoonmi/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/yoonmi/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yoonmi/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/yoonmi/image1_small.jpg",
+            "large": "https://teamsona.work/personas/yoonmi/image1_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/yoonmi/main_original.jpg",
+          "medium": "https://teamsona.work/personas/yoonmi/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/yoonmi/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/yoonmi/main_small.jpg",
+          "large": "https://teamsona.work/personas/yoonmi/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/yoonmi/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/yoonmi/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/yoonmi/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "6O8OkOqi1iWV6NPu2L6e",
+      "name": "채연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/chaeyeon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/chaeyeon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/chaeyeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/chaeyeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/chaeyeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "7vBP8KtEsKdulKHzAa4x",
+      "name": "상훈",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/sanghoon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/sanghoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/sanghoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/sanghoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/sanghoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "8JqUxsfrStSPpjxLAGPA",
+      "name": "수진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/sujin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/sujin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/sujin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/sujin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/sujin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "8VAZ6GQN3ubrI3CkTJWP",
+      "name": "하연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/hayeon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/hayeon/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/hayeon/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/hayeon/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/hayeon/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/hayeon/image1_small.jpg",
+            "large": "https://teamsona.work/personas/hayeon/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/hayeon/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/hayeon/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/hayeon/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/hayeon/image2_small.jpg",
+            "large": "https://teamsona.work/personas/hayeon/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/hayeon/main_original.jpg",
+          "medium": "https://teamsona.work/personas/hayeon/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/hayeon/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/hayeon/main_small.jpg",
+          "large": "https://teamsona.work/personas/hayeon/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/hayeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/hayeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/hayeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ADQdsSbeHQ5ASTAMXy2j",
+      "name": "정훈",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jeonghoon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jeonghoon/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/jeonghoon/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/jeonghoon/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/jeonghoon/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/jeonghoon/image1_small.jpg",
+            "large": "https://teamsona.work/personas/jeonghoon/image1_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/jeonghoon/main_original.jpg",
+          "medium": "https://teamsona.work/personas/jeonghoon/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/jeonghoon/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/jeonghoon/main_small.jpg",
+          "large": "https://teamsona.work/personas/jeonghoon/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jeonghoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jeonghoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jeonghoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "AY3RsMbb9B3In4tFRZyn",
+      "name": "지우",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jiwoo/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jiwoo/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jiwoo/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jiwoo/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jiwoo/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "Di1rns1v30eYwMRSn4v3",
+      "name": "혜진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/hyejin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/hyejin/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/hyejin/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/hyejin/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/hyejin/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/hyejin/image1_small.jpg",
+            "large": "https://teamsona.work/personas/hyejin/image1_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/hyejin/main_original.jpg",
+          "medium": "https://teamsona.work/personas/hyejin/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/hyejin/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/hyejin/main_small.jpg",
+          "large": "https://teamsona.work/personas/hyejin/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/hyejin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/hyejin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/hyejin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "FlkZESLYuuUOMrgL40j3",
+      "name": "Dr. 김민서",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/dr-kim-minseo/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/dr-kim-minseo/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/dr-kim-minseo/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/dr-kim-minseo/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/dr-kim-minseo/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "GYWpfNnGK0d2rOmZu37j",
+      "name": "영훈",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/younghoon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/younghoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/younghoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/younghoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/younghoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "GqDNfytwDZCLVFaPczt4",
+      "name": "민준",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/minjun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/minjun/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/minjun/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/minjun/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/minjun/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/minjun/image1_small.jpg",
+            "large": "https://teamsona.work/personas/minjun/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/minjun/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/minjun/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/minjun/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/minjun/image2_small.jpg",
+            "large": "https://teamsona.work/personas/minjun/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/minjun/main_original.jpg",
+          "medium": "https://teamsona.work/personas/minjun/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/minjun/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/minjun/main_small.jpg",
+          "large": "https://teamsona.work/personas/minjun/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/minjun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/minjun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/minjun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "HCHkS3ZRKR7FtXny3Mqj",
+      "name": "지유",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/jiyoo/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/jiyoo/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/jiyoo/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/jiyoo/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/jiyoo/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/jiyoo/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "HouahN4jLcy3bkBCnNUX",
+      "name": "Dr. 조혜진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/johyejin/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/johyejin/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/johyejin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/johyejin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/johyejin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/johyejin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "Iy9BQmdxOGZfqipeuY4H",
+      "name": "형준",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/hyeongjoon/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/hyeongjoon/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/hyeongjoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/hyeongjoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/hyeongjoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/hyeongjoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "JEihxQ8m38TKVgGwF2cm",
+      "name": "지수",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/jisoo/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/jisoo/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/jisoo/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/jisoo/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/jisoo/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/jisoo/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "JnsM74qE44EJSAuE3WMV",
+      "name": "다영",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/dayoung/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/dayoung/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/dayoung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/dayoung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/dayoung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/dayoung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "JodykCBnc17YY8YKQ4SF",
+      "name": "경호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/kyeongho/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/kyeongho/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/kyeongho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/kyeongho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/kyeongho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/kyeongho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "JyBsnD6fi9g2uu3E1MTt",
+      "name": "Dr. 이서연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/leesoyeon/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/leesoyeon/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/leesoyeon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/leesoyeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/leesoyeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/leesoyeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "KinhtKcnmBc0FmdrhgCy",
+      "name": "진호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jinho/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jinho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jinho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jinho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jinho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "MVWyUpcOsG058yxXqdjP",
+      "name": "혜원",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/hyewon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/hyewon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/hyewon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/hyewon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/hyewon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "MbYfxxIOOH47PqpmXk3v",
+      "name": "태호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/taeho/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/taeho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/taeho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/taeho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/taeho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "NQlqZmBLVGcyaxmSkaTA",
+      "name": "리나",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/rina/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/rina/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/rina/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/rina/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/rina/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "O0GdFmJHSsauN2s1jAwK",
+      "name": "동수",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/dongsu/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/dongsu/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/dongsu/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/dongsu/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/dongsu/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "OmpQ91evcAxDnJTgNPAR",
+      "name": "주은",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jueun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jueun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jueun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jueun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jueun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "PUmWIyxv9HrK3H8wEQlR",
+      "name": "변호사 김태형",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/kimtaehyeong/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/kimtaehyeong/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/kimtaehyeong/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/kimtaehyeong/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/kimtaehyeong/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/kimtaehyeong/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "QbjX9EJ0A2Mzzq2YfWRa",
+      "name": "지은",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jieun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jieun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jieun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jieun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jieun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "RaXtRq57hhyJ8dd0Pe6M",
+      "name": "수아",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/sua/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/sua/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/sua/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/sua/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/sua/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "Reuj9HLk5E8PQ66FJxJ3",
+      "name": "은수",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/eunsu/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/eunsu/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/eunsu/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/eunsu/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/eunsu/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "VJdrEsBk2aLmSPhVXe1p",
+      "name": "지윤",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jiyoon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jiyoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jiyoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jiyoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jiyoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "VOvVoFFLAT1B0nZCvcGA",
+      "name": "다은",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/daeun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/daeun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/daeun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/daeun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/daeun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "VPFNA8SKaR0QrEIDlwKR",
+      "name": "유나",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/yoona/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/yoona/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/yoona/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/yoona/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/yoona/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/yoona/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "VaeHPoyOH44Ry2poApG4",
+      "name": "손유진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/sonyoojin/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/sonyoojin/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/sonyoojin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/sonyoojin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/sonyoojin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/sonyoojin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "WAMyc4EL0fgvB8L8CT5c",
+      "name": "은지",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/eunji/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/eunji/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/eunji/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/eunji/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/eunji/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/eunji/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "WEXfPSm7rxczxyHjiqiw",
+      "name": "지율",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/jiyul/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/jiyul/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/jiyul/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/jiyul/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/jiyul/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/jiyul/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "WXHfoFNQaPQl84e8rHmT",
+      "name": "서준",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/seojoon/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/seojoon/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/seojoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/seojoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/seojoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/seojoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "X5mFQ7rccLNNzLhOLCt7",
+      "name": "성민",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/seongmin/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/seongmin/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/seongmin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/seongmin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/seongmin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/seongmin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "XO84j9SW4rIbgTQwbhPy",
+      "name": "대호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/daeho/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/daeho/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/daeho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/daeho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/daeho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/daeho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "YAnViyqBUEqVOH7O40L3",
+      "name": "수연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/sooyeon/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/sooyeon/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/sooyeon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/sooyeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/sooyeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/sooyeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ZRjSoKKQ76T9yA0HyheR",
+      "name": "우진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/woojin/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/woojin/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/woojin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/woojin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/woojin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/woojin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ZzTItnobaerduKNaLwXh",
+      "name": "동호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/dongho/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/dongho/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/dongho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/dongho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/dongho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/dongho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "aHkFd6Lh0ZnoZyyNl3Cz",
+      "name": "선호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/seonho/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/seonho/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/seonho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/seonho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/seonho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/seonho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "agRbuPpiSs6zljRaLfPJ",
+      "name": "성우",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/seongwoo/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/seongwoo/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/seongwoo/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/seongwoo/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/seongwoo/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "c38lgLu28KMRAmbO2dvF",
+      "name": "세리",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/seri/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/seri/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/seri/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/seri/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/seri/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/seri/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "dFZ9PKsDsuzq2ZGQZegW",
+      "name": "지후",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/jihu/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/jihu/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/jihu/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/jihu/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/jihu/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/jihu/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "dXBlte1vcAyXGKIwNIgk",
+      "name": "태준",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/taejun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/taejun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/taejun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/taejun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/taejun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "e63LQ1CLOL5H7MEfdaUL",
+      "name": "연지",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/yeonji/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/yeonji/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/yeonji/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/yeonji/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/yeonji/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/yeonji/image1_small.jpg",
+            "large": "https://teamsona.work/personas/yeonji/image1_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/yeonji/main_original.jpg",
+          "medium": "https://teamsona.work/personas/yeonji/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/yeonji/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/yeonji/main_small.jpg",
+          "large": "https://teamsona.work/personas/yeonji/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/yeonji/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/yeonji/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/yeonji/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "fAFCIq2g9PDZ6MLBSPO2",
+      "name": "범준",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/beomjun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/beomjun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/beomjun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/beomjun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/beomjun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ff0gDvhcdm8yMzwBOELD",
+      "name": "소영",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/soyoung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/soyoung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/soyoung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/soyoung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/soyoung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "gjNWbPRb9QHxxJMsNeJH",
+      "name": "현주",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/hyeonju/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/hyeonju/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/hyeonju/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/hyeonju/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/hyeonju/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "i2pkSXV9AjT4t6P4H7Zn",
+      "name": "태윤",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/taeyoon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/taeyoon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/taeyoon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/taeyoon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/taeyoon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "i73Xr9knkmkWO2P0GkC6",
+      "name": "윤성",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/yoonsung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/yoonsung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/yoonsung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/yoonsung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/yoonsung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ip1ooS92pI8A6HvUM061",
+      "name": "한울",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/hanul/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/hanul/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/hanul/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/hanul/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/hanul/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/hanul/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "jH7p24z8PMer56NFFLsZ",
+      "name": "준석",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/junseok/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/junseok/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/junseok/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/junseok/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/junseok/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "javSezhi97ycKssGF5PE",
+      "name": "이준호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/leejoonho/main_original.jpg"
+        },
+        "additional": [
+          {
+            "jpg": "https://teamsona.work/leejoonho/image1_medium.jpg"
+          }
+        ],
+        "medium": {
+          "jpg": "https://teamsona.work/leejoonho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/leejoonho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/leejoonho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/leejoonho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "l7XWWwDhqNWKP1ATY1w6",
+      "name": "석진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/seokjin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/seokjin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/seokjin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/seokjin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/seokjin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "lASQiz4d9la0HVctfIhp",
+      "name": "민정",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/minjung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/minjung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/minjung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/minjung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/minjung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "lAw4LoIE6StxojBv7nHv",
+      "name": "수빈",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/subin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/subin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/subin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/subin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/subin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "lTeLKtF3vSiPrV7au13c",
+      "name": "나나",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/nana/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/nana/main_medium.jpg"
+        },
+        "additionalImageUrls": {
+          "image1": {
+            "original": "https://teamsona.work/personas/nana/image1_original.jpg",
+            "medium": "https://teamsona.work/personas/nana/image1_medium.jpg",
+            "thumb": "https://teamsona.work/personas/nana/image1_thumb.jpg",
+            "small": "https://teamsona.work/personas/nana/image1_small.jpg",
+            "large": "https://teamsona.work/personas/nana/image1_large.jpg"
+          },
+          "image2": {
+            "original": "https://teamsona.work/personas/nana/image2_original.jpg",
+            "medium": "https://teamsona.work/personas/nana/image2_medium.jpg",
+            "thumb": "https://teamsona.work/personas/nana/image2_thumb.jpg",
+            "small": "https://teamsona.work/personas/nana/image2_small.jpg",
+            "large": "https://teamsona.work/personas/nana/image2_large.jpg"
+          }
+        },
+        "mainImageUrls": {
+          "original": "https://teamsona.work/personas/nana/main_original.jpg",
+          "medium": "https://teamsona.work/personas/nana/main_medium.jpg",
+          "thumb": "https://teamsona.work/personas/nana/main_thumb.jpg",
+          "small": "https://teamsona.work/personas/nana/main_small.jpg",
+          "large": "https://teamsona.work/personas/nana/main_large.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/nana/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/nana/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/nana/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "m0OjpI1G2QUyWsCbfBar",
+      "name": "효진",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/hyojin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/hyojin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/hyojin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/hyojin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/hyojin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "m75bPHXaTys3htRJomws",
+      "name": "소희",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/sohee/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/sohee/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/sohee/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/sohee/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/sohee/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "mHPXbVvpm3qsoibstfmX",
+      "name": "민수",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/minsu/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/minsu/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/minsu/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/minsu/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/minsu/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "n2OeC5bVKZf0vZAdLtur",
+      "name": "세빈",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/sebin/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/sebin/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/sebin/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/sebin/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/sebin/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "n9heEw7UdkprdSaJo46S",
+      "name": "재현",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jaehyun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jaehyun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jaehyun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jaehyun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jaehyun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "nFEbQaFlh8W98gix7Wsp",
+      "name": "미연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/miyeon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/miyeon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/miyeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/miyeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/miyeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "ooaB6VajCv6nFO2YL2rM",
+      "name": "준영",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/junyoung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/junyoung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/junyoung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/junyoung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/junyoung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "s5mb7z4HRU58FOsZCtUx",
+      "name": "성호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/seongho/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/seongho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/seongho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/seongho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/seongho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "uZxyTKOBuDM0NHQ15jHW",
+      "name": "나연",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/nayeon/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/nayeon/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/nayeon/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/nayeon/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/nayeon/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "xm1nnEvCzxbyr95xFjVX",
+      "name": "박준영",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/park-junyoung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/park-junyoung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/park-junyoung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/park-junyoung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/park-junyoung/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "yIWmW3d6rdVKjvflZj9Z",
+      "name": "동현",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/donghyun/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/donghyun/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/donghyun/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/donghyun/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/donghyun/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "yOlN3CvHeec8699B9Xxh",
+      "name": "진욱",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jinwook/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jinwook/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jinwook/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jinwook/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jinwook/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "yzQ6zn6egYJfBXf4exYk",
+      "name": "준호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/junho/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/junho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/junho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/junho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/junho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "zpOJLXVqfRWIoxkHxEQi",
+      "name": "종호",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jongho/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jongho/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jongho/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jongho/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jongho/main_large.jpg"
+        }
+      }
+    },
+    {
+      "id": "zrhAI4LNdCRd9qWyBhTM",
+      "name": "재성",
+      "hasValidR2Image": true,
+      "imageUrls": {
+        "original": {
+          "jpg": "https://teamsona.work/personas/jaesung/main_original.jpg"
+        },
+        "medium": {
+          "jpg": "https://teamsona.work/personas/jaesung/main_medium.jpg"
+        },
+        "thumb": {
+          "jpg": "https://teamsona.work/personas/jaesung/main_thumb.jpg"
+        },
+        "small": {
+          "jpg": "https://teamsona.work/personas/jaesung/main_small.jpg"
+        },
+        "large": {
+          "jpg": "https://teamsona.work/personas/jaesung/main_large.jpg"
+        }
+      }
+    }
+  ],
+  "need_check": [],
+  "with_images_count": 0,
+  "with_images_sample": []
+}

@@ -7,7 +7,7 @@ import '../prompts/persona_prompt_builder.dart';
 class SecurityAwarePostProcessor {
   // 최근 응답 저장 (매크로 감지용)
   static final List<String> _recentResponses = [];
-  static const int _maxRecentResponses = 5;
+  static const int _maxRecentResponses = 30;  // 반복 방지 강화 (5 -> 30)
   
   /// 간소화된 후처리 메인 메서드
   static String processResponse({
@@ -66,7 +66,7 @@ class SecurityAwarePostProcessor {
     return processed;
   }
   
-  /// 매크로 응답 감지 (동일한 응답 반복)
+  /// 매크로 응답 감지 (동일한 응답 반복) - 강화됨
   static bool _isMacroResponse(String response) {
     if (_recentResponses.isEmpty) return false;
     
@@ -76,6 +76,20 @@ class SecurityAwarePostProcessor {
         .replaceAll(RegExp(r'\s+'), '')
         .toLowerCase();
     
+    // 짧은 반복 패턴 감지 (3단어 이하 응답이 반복되면 즉시 매크로 판정)
+    if (normalized.split(' ').length <= 3) {
+      for (final recent in _recentResponses) {
+        String recentNormalized = recent
+            .replaceAll(RegExp(r'[ㅋㅎㅠ~♥♡💕.!?]+'), '')
+            .replaceAll(RegExp(r'\s+'), '')
+            .toLowerCase();
+        if (normalized == recentNormalized) {
+          debugPrint('🔴 Short macro detected: $response');
+          return true;
+        }
+      }
+    }
+    
     int similarCount = 0;
     for (final recent in _recentResponses) {
       String recentNormalized = recent
@@ -83,14 +97,20 @@ class SecurityAwarePostProcessor {
           .replaceAll(RegExp(r'\s+'), '')
           .toLowerCase();
       
-      // 유사도 계산 (80% 이상 유사하면 매크로로 판단)
+      // 유사도 계산 (60% 이상 유사하면 매크로로 판단 - 더 엄격하게)
       double similarity = _calculateSimilarity(normalized, recentNormalized);
-      if (similarity > 0.8) {
+      if (similarity > 0.6) {  // 0.7 -> 0.6으로 더 낮춤
         similarCount++;
+      }
+      
+      // 완전 동일한 경우 즉시 매크로 판정
+      if (normalized == recentNormalized) {
+        debugPrint('🔴 Exact macro detected: $response');
+        return true;
       }
     }
     
-    // 최근 5개 중 2개 이상 유사하면 매크로로 판단
+    // 최근 30개 중 2개 이상 유사하면 매크로로 판단 (더 엄격하게)
     return similarCount >= 2;
   }
   
@@ -110,25 +130,79 @@ class SecurityAwarePostProcessor {
     return union > 0 ? intersection / union : 0.0;
   }
   
-  /// 매크로 응답 변형
+  /// 매크로 응답 변형 - 다양성 강화
   static String _variateResponse(String response, Persona persona) {
-    // 기본 변형 패턴
-    final variations = [
-      '음... 다른 얘기 해볼까요?',
-      '아, 이건 어때요?',
-      '그보다 이거 궁금하지 않아요?',
-      '아 맞다, 이것도 얘기해보고 싶었어요!',
-      '참, 이런 것도 있어요!'
+    // 원본 응답 키워드 추출
+    final keywords = _extractKeywords(response);
+    
+    // MBTI별 다양한 변형 패턴
+    final mbtiVariations = {
+      'INFP': [
+        '음... 나도 그렇게 생각해',
+        '그런 것 같아... 너는 어떻게 생각해?',
+        '아, 그거 말고 이건 어때?',
+        '음... 다시 생각해보니 이런 것도 있네',
+        '조금 다른 얘기지만 궁금한 게 있어'
+      ],
+      'ISFP': [
+        '나도 비슷한 생각이야',
+        '음... 그럴 수도 있겠다',
+        '아, 맞다 이것도 생각났어',
+        '그런데 이건 어떻게 생각해?',
+        '조금 다른 관점에서 보면...'
+      ],
+      'ENFP': [
+        '와 진짜? 나도 그래!',
+        '대박! 근데 이것도 신기하지 않아?',
+        '아 맞아맞아! 그리고 이것도!',
+        '헐 진짜 그러네! 그런데 말이야...',
+        '오 그거 좋다! 이것도 해보자!'
+      ],
+      'ESFP': [
+        '완전 공감! 나도 그래ㅋㅋ',
+        '진짜? 대박이다ㅋㅋ',
+        '아 그거 완전 재밌겠다!',
+        '와 나도 나도! 그런데 이건?',
+        '헐 진짜야? 이것도 궁금해!'
+      ],
+    };
+    
+    // MBTI별 변형 선택
+    List<String> variations = mbtiVariations[persona.mbti] ?? 
+      mbtiVariations['INFP']!;  // 기본값
+    
+    // 키워드 기반 추가 변형
+    if (keywords.contains('좋아') || keywords.contains('사랑')) {
+      variations.add('나도 정말 좋아해');
+      variations.add('그런 마음 너무 좋다');
+    } else if (keywords.contains('싫어') || keywords.contains('힘들')) {
+      variations.add('힘들겠다... 괜찮아?');
+      variations.add('그럴 때 있지... 이해해');
+    }
+    
+    // 시간 기반 랜덤 선택 (더 나은 분산)
+    final now = DateTime.now();
+    final index = (now.millisecond + now.second * 1000) % variations.length;
+    
+    return variations[index];
+  }
+  
+  /// 키워드 추출 헬퍼
+  static List<String> _extractKeywords(String text) {
+    final keywords = <String>[];
+    final keywordPatterns = [
+      '좋아', '싫어', '사랑', '미워', '힘들', '괜찮', '재밌', '심심',
+      '고마', '미안', '배고', '졸려', '피곤', '신나', '우울', '외로'
     ];
     
-    // 페르소나 MBTI에 맞는 변형 선택
-    if (persona.mbti.startsWith('E')) {
-      // 외향적 성격: 더 활발한 변형
-      return variations[DateTime.now().millisecond % 3];
-    } else {
-      // 내향적 성격: 차분한 변형
-      return variations[3 + (DateTime.now().millisecond % 2)];
+    final lower = text.toLowerCase();
+    for (final pattern in keywordPatterns) {
+      if (lower.contains(pattern)) {
+        keywords.add(pattern);
+      }
     }
+    
+    return keywords;
   }
   
   /// 최근 응답 기록 업데이트
@@ -604,7 +678,7 @@ class SecurityAwarePostProcessor {
     return trimmed + '요';
   }
 
-  /// 갑작스러운 주제 변경 감지 및 수정
+  /// 갑작스러운 주제 변경 감지 및 수정 - 강화됨
   static String _smoothTopicTransition(String text) {
     // 주제 전환 표현이 없으면서 특정 패턴으로 시작하는 경우
     final abruptPatterns = [
@@ -617,9 +691,15 @@ class SecurityAwarePostProcessor {
 
       // 일상 주제 갑작스러운 시작
       RegExp(r'^(음식|영화|드라마|웹툰|카페)', caseSensitive: false),
+      
+      // 감정 표현 갑작스러운 시작
+      RegExp(r'^(좋아해|사랑해|싫어해|미워해)', caseSensitive: false),
+      
+      // 질문 갑작스러운 시작
+      RegExp(r'^(너는|넌|있어\?|해봤어\?)', caseSensitive: false),
     ];
 
-    // 자연스러운 전환 표현들
+    // 자연스러운 전환 표현들 - 더 다양하게
     final transitionPhrases = [
       '아 그러고보니',
       '아 맞다',
@@ -628,7 +708,13 @@ class SecurityAwarePostProcessor {
       '말 나온 김에',
       '그런 것처럼',
       '아 참',
-      '근데 있잖아'
+      '근데 있잖아',
+      '그건 그렇고',
+      '다른 얘긴데',
+      '아 그래서 말인데',
+      '생각해보니',
+      '문득 궁금한데',
+      '그러고 보면'
     ];
 
     // 이미 전환 표현이 있는지 확인
@@ -644,9 +730,9 @@ class SecurityAwarePostProcessor {
     if (!hasTransition) {
       for (final pattern in abruptPatterns) {
         if (pattern.hasMatch(text)) {
-          // 랜덤하게 전환 표현 선택
-          final randomIndex =
-              DateTime.now().millisecond % transitionPhrases.length;
+          // 시간 기반으로 더 나은 분산
+          final now = DateTime.now();
+          final randomIndex = (now.millisecond + now.second) % transitionPhrases.length;
           final transition = transitionPhrases[randomIndex];
 
           // 게임 관련이면 더 구체적인 전환

@@ -1172,15 +1172,20 @@ class AdvancedPatternAnalyzer {
       'expectsDetailedAnswer': false,
       'isRhetorical': false,
       'urgency': 'normal',
+      'impliedContext': null,
     };
 
     // 의문사 체크
     final questionWords = ['뭐', '어디', '언제', '누구', '왜', '어떻게', '얼마', '몇', '어느'];
     final hasQuestionWord = questionWords.any((w) => lowerMessage.contains(w));
     
-    // 의문형 어미 체크
-    final questionEndings = ['니', '나요', '까', '까요', '어요', '을까', '는지', '은지', '나', '냐', '지', '죠'];
-    final hasQuestionEnding = questionEndings.any((e) => lowerMessage.endsWith(e) || lowerMessage.endsWith(e + '?'));
+    // 의문형 어미 체크 (개선됨)
+    final questionEndings = ['니', '나요', '까', '까요', '어요', '을까', '는지', '은지', '나', '냐', '지', '죠', '는?', '은?'];
+    final hasQuestionEnding = questionEndings.any((e) => 
+      lowerMessage.endsWith(e) || 
+      lowerMessage.endsWith(e + '?') ||
+      lowerMessage.contains(e)  // "하연이는?" 같은 패턴 감지
+    );
     
     // 물음표 체크
     final hasQuestionMark = message.contains('?');
@@ -1188,8 +1193,14 @@ class AdvancedPatternAnalyzer {
     if (hasQuestionWord || hasQuestionEnding || hasQuestionMark) {
       result['isQuestion'] = true;
       
+      // 🔥 NEW: "~는?" 패턴 특별 처리
+      if (message.contains('는?') || message.contains('은?')) {
+        result['type'] = 'echo_question';  // 되물음 타입
+        result['expectsDetailedAnswer'] = false;
+        result['impliedContext'] = 'same_topic_inquiry';  // 동일 주제 되물음
+      }
       // 질문 유형 분류
-      if (lowerMessage.contains('왜')) {
+      else if (lowerMessage.contains('왜')) {
         result['type'] = 'why';
         result['expectsDetailedAnswer'] = true;
       } else if (lowerMessage.contains('어떻게')) {
@@ -1197,6 +1208,10 @@ class AdvancedPatternAnalyzer {
         result['expectsDetailedAnswer'] = true;
       } else if (lowerMessage.contains('뭐') || lowerMessage.contains('무엇')) {
         result['type'] = 'what';
+        // 🔥 NEW: "뭐할" 패턴 감지
+        if (lowerMessage.contains('뭐할') || lowerMessage.contains('뭐 할')) {
+          result['impliedContext'] = 'activity_plan';
+        }
       } else if (lowerMessage.contains('언제')) {
         result['type'] = 'when';
       } else if (lowerMessage.contains('어디')) {

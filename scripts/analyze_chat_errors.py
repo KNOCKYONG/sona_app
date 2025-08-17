@@ -120,26 +120,45 @@ class ContextAnalyzer:
                         suggestion="페르소나별 인사 상태를 추적하여 중복 방지 필요"
                     ))
         
-        # 2. 매크로 패턴 감지
+        # 2. 매크로 패턴 감지 (개선된 로직)
         ai_message_counts = defaultdict(int)
-        for _, content in ai_messages:
-            ai_message_counts[content] += 1
+        normalized_messages = {}
         
-        for msg, count in ai_message_counts.items():
-            if count > 1:
-                macro_patterns.append(msg)
-                for ai_idx, ai_content in ai_messages:
-                    if ai_content == msg:
-                        context_issues.append(ContextIssue(
-                            message_index=ai_idx,
-                            issue_type="macro_response",
-                            severity=IssueSeverity.CRITICAL,
-                            description=f"동일한 응답이 {count}번 반복됨",
-                            user_message="",
-                            ai_response=ai_content,
-                            suggestion="응답 생성 로직 점검 및 캐시 문제 확인 필요"
-                        ))
-                        break
+        for idx, content in ai_messages:
+            # 정규화된 메시지로 비교 (이모티콘, 공백 제거)
+            normalized = self._normalize_message(content)
+            if normalized in normalized_messages:
+                ai_message_counts[normalized] += 1
+                if ai_message_counts[normalized] == 2:  # 처음 반복 발견 시
+                    macro_patterns.append(content)
+                    context_issues.append(ContextIssue(
+                        message_index=idx,
+                        issue_type="macro_response",
+                        severity=IssueSeverity.CRITICAL,
+                        description=f"동일한 응답이 {ai_message_counts[normalized]}번 반복됨",
+                        user_message="",
+                        ai_response=content,
+                        suggestion="응답 변형 캐시 확대 및 다양성 알고리즘 개선 필요"
+                    ))
+            else:
+                normalized_messages[normalized] = content
+                ai_message_counts[normalized] = 1
+        
+        # 유사 패턴 감지 (70% 이상 유사도)
+        for i, (idx1, content1) in enumerate(ai_messages):
+            for idx2, content2 in ai_messages[i+1:]:
+                similarity = self._calculate_similarity(content1, content2)
+                if similarity > 0.7 and content1 != content2:
+                    context_issues.append(ContextIssue(
+                        message_index=idx2,
+                        issue_type="similar_response",
+                        severity=IssueSeverity.HIGH,
+                        description=f"유사한 응답 패턴 (유사도: {similarity:.1%})",
+                        user_message="",
+                        ai_response=content2,
+                        suggestion="응답 템플릿 다양화 및 개성 표현 강화 필요"
+                    ))
+                    break
         
         # 3. 대화 쌍 맥락 분석
         for pair in conversation_pairs:
@@ -282,10 +301,22 @@ class ContextAnalyzer:
             return True
         
         # 특수 케이스 처리 (예: 인사에 인사로 응답)
-        greeting_words = ['안녕', '반가워', 'hi', 'hello']
+        greeting_words = ['안녕', '반가워', 'hi', 'hello', '하이', '헬로']
         if any(word in question.lower() for word in greeting_words) and \
            any(word in answer.lower() for word in greeting_words):
             return True
+        
+        # 질문 타입별 특수 처리
+        question_types = {
+            '뭐해': ['하고', '있어', '중', '지금'],
+            '어때': ['좋', '괜찮', '별로', '그저'],
+            '먹었': ['먹', '밥', '아직', '배고'],
+            '어디': ['집', '회사', '학교', '카페', '여기'],
+        }
+        
+        for q_type, expected_words in question_types.items():
+            if q_type in question and any(word in answer for word in expected_words):
+                return True
         
         return False
     
@@ -345,11 +376,44 @@ class ContextAnalyzer:
         
         return False
     
+    def _normalize_message(self, message: str) -> str:
+        """메시지를 정규화합니다 (이모티콘, 공백 제거)."""
+        # 이모티콘 및 특수문자 제거
+        normalized = re.sub(r'[ㅋㅎㅠㅜ~!?♥♡💕😊😭.]+', '', message)
+        # 연속 공백 제거
+        normalized = re.sub(r'\s+', ' ', normalized)
+        # 소문자 변환 및 공백 제거
+        normalized = normalized.lower().strip()
+        return normalized
+    
+    def _calculate_similarity(self, text1: str, text2: str) -> float:
+        """두 텍스트의 유사도를 계산합니다 (0.0 ~ 1.0)."""
+        # 정규화
+        norm1 = self._normalize_message(text1)
+        norm2 = self._normalize_message(text2)
+        
+        if not norm1 or not norm2:
+            return 0.0
+        
+        # 단어 집합 비교
+        words1 = set(norm1.split())
+        words2 = set(norm2.split())
+        
+        if not words1 or not words2:
+            return 0.0
+        
+        # Jaccard 유사도
+        intersection = len(words1 & words2)
+        union = len(words1 | words2)
+        
+        return intersection / union if union > 0 else 0.0
+    
     def _is_similar_structure(self, text1: str, text2: str) -> bool:
         """두 텍스트가 유사한 구조를 가지는지 확인합니다."""
         # 문장 시작과 끝 패턴 비교
-        if text1[:10] == text2[:10] or text1[-10:] == text2[-10:]:
-            return True
+        if len(text1) > 10 and len(text2) > 10:
+            if text1[:10] == text2[:10] or text1[-10:] == text2[-10:]:
+                return True
         
         # 문장 구조 유사도 (간단한 구현)
         words1 = text1.split()

@@ -55,8 +55,9 @@ class ConversationMemoryService {
       final message = messages[i];
       final importance = _calculateImportance(message, messages, i);
 
-      if (importance >= 0.65) {
-        // 중요도 65% 이상만 저장 (기준 완화로 더 많은 기억 보존)
+      // 중요도 기준 완화 - 더 많은 컨텍스트 보존
+      if (importance >= 0.5) {  // 0.65 -> 0.5로 낮춤
+        // 중요도 50% 이상만 저장 (10턴 이상 기억을 위해 기준 완화)
         final memory = ConversationMemory(
           id: '${userId}_${personaId}_${message.id}',
           userId: userId,
@@ -608,13 +609,13 @@ class ConversationMemoryService {
     return null;
   }
 
-  /// 🧠 스마트 컨텍스트 구성 (OpenAI API용)
+  /// 🧠 스마트 컨텍스트 구성 (OpenAI API용) - 확장된 메모리
   Future<String> buildSmartContext({
     required String userId,
     required String personaId,
     required List<Message> recentMessages,
     required Persona persona,
-    int maxTokens = 1000,
+    int maxTokens = 1500,  // 1000 -> 1500으로 증가
   }) async {
     final contextParts = <String>[];
     int estimatedTokens = 0;
@@ -627,9 +628,9 @@ class ConversationMemoryService {
     contextParts.add(relationshipInfo);
     estimatedTokens += 50;
 
-    // 2. 저장된 중요한 기억들 (~600 tokens) - 더 많은 기억 포함
+    // 2. 저장된 중요한 기억들 (~800 tokens) - 더 많은 기억 포함
     final memories = await _getImportantMemories(userId, personaId,
-        limit: 10); // 5 -> 10개로 증가
+        limit: 15); // 10 -> 15개로 증가 (10턴 이상 기억)
     if (memories.isNotEmpty) {
       // FuzzyMemoryService를 사용한 자연스러운 기억 표현
       final memoryTexts = <String>[];
@@ -638,16 +639,16 @@ class ConversationMemoryService {
           content: m.content,
           timestamp: m.timestamp,
           emotion: m.emotion.name,
-          isDetailed: m.importance > 7,
+          isDetailed: m.importance > 0.7,  // 중요도 기준 완화
         );
         memoryTexts.add('- $fuzzyExpr');
       }
       
       final memoryText = '중요한 기억들 (흐릿한 회상):\n' + memoryTexts.join('\n');
-      if (estimatedTokens + 600 <= maxTokens) {
-        // 300 -> 600 토큰으로 증가
+      if (estimatedTokens + 800 <= maxTokens) {
+        // 600 -> 800 토큰으로 증가
         contextParts.add(memoryText);
-        estimatedTokens += 600;
+        estimatedTokens += 800;
       }
     }
 

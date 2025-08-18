@@ -75,6 +75,10 @@ android {
     packagingOptions {
         jniLibs {
             useLegacyPackaging = true
+            excludes += setOf("**/libjsc.so", "**/libc++_shared.so")
+        }
+        dex {
+            useLegacyPackaging = true
         }
     }
     
@@ -88,6 +92,11 @@ android {
                 signingConfigs.getByName("release")
             } else {
                 signingConfigs.getByName("debug")
+            }
+            
+            // Disable native debug symbol stripping
+            ndk {
+                debugSymbolLevel = "NONE"
             }
         }
     }

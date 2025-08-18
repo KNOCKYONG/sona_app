@@ -738,7 +738,7 @@ class ChatOrchestrator {
       _updateResponseCache(filteredResponse, userId, completePersona.id);
 
       // 7단계: 긴 응답 분리 처리
-      final responseContents =
+      var responseContents =
           _splitLongResponse(filteredResponse, completePersona.mbti);
 
       // 7.5단계: 각 메시지별 번역 생성 및 의문문 처리 (개선된 매핑 기반)
@@ -824,23 +824,27 @@ class ChatOrchestrator {
         regenerationAttempts++;
         debugPrint('🔄 Repetitive response detected. Regenerating... (Attempt $regenerationAttempts)');
         
-        // 힌트에 반복 방지 강조 추가
-        contextHints.add('⚠️ 이전 응답과 다른 새로운 표현 사용 필수!');
-        contextHints.add('💡 다양한 어휘와 문장 구조로 응답하세요.');
+        // 반복 방지를 위한 새로운 힌트 생성
+        final regenerationHints = <String>[];
+        regenerationHints.add('⚠️ 이전 응답과 다른 새로운 표현 사용 필수!');
+        regenerationHints.add('💡 다양한 어휘와 문장 구조로 응답하세요.');
         
         // 재생성 요청
-        final regeneratedResponse = await _openAIService.generateResponse(
-          userMessage: userMessage,
-          contextHint: contextHints.join('\n'),
-          previousResponses: recentMessages.where((m) => !m.isFromUser).map((m) => m.content).toList(),
+        final regeneratedResponse = await OpenAIService.generateResponse(
           persona: completePersona,
-          useEnhancedPrompt: true,
-          relationshipScore: _likeService.getLikeScoreForPersona(completePersona.id ?? ''),
-          userNickname: _currentUserNickname,
+          chatHistory: chatHistory,
+          userMessage: userMessage,
+          relationshipType: _getRelationshipType(completePersona),
+          userNickname: userNickname,
+          userAge: userAge,
+          isCasualSpeech: true,
+          contextHint: regenerationHints.join('\n'),
+          targetLanguage: userLanguage,
         );
         
-        if (regeneratedResponse.isNotEmpty && !responseCache.isRecentlyUsed(regeneratedResponse.first)) {
-          responseContents = regeneratedResponse;
+        if (regeneratedResponse.isNotEmpty && !responseCache.isRecentlyUsed(regeneratedResponse)) {
+          // responseContents는 List<String>인데 regeneratedResponse는 String이므로 변환
+          responseContents = [regeneratedResponse];
           isRepetitive = false;
           debugPrint('✅ Successfully generated non-repetitive response');
         }

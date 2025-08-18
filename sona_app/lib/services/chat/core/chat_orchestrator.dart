@@ -863,34 +863,10 @@ class ChatOrchestrator {
       
       debugPrint('📊 Naturalness score: ${(naturalnessScore * 100).toStringAsFixed(1)}%');
       
-      // 자연스러움이 낮으면 응답 변형 캐시에서 대체 응답 찾기
+      // 하드코딩된 템플릿 사용 비활성화 - 항상 OpenAI API 응답 사용
+      // 자연스러움이 낮더라도 AI가 생성한 응답을 그대로 사용
       if (naturalnessScore < 0.6 && !isRepetitive) {
-        // 메시지 타입에 따른 변형 카테고리 선택
-        String? variationCategory;
-        if (messageAnalysis.type == MessageType.greeting) {
-          variationCategory = 'greeting';
-        } else if (messageAnalysis.type == MessageType.question) {
-          variationCategory = 'simple_reaction';
-        } else if (emotion == EmotionType.happy) {
-          variationCategory = 'empathy_happy';
-        } else if (emotion == EmotionType.sad) {
-          variationCategory = 'empathy_sad';
-        }
-        
-        if (variationCategory != null) {
-          final variation = responseCache.getVariation(
-            variationCategory,
-            personaId: completePersona.id,
-          );
-          
-          if (variation != null && !responseCache.isRecentlyUsed(variation)) {
-            debugPrint('📊 Using variation from cache: $variation');
-            responseContents[0] = variation;
-            responseCache.recordResponse(variation);
-          }
-        }
-        
-        // 개선 제안 로깅
+        // 개선 제안만 로깅 (하드코딩된 템플릿 사용 제거)
         final improvements = naturalnessAnalyzer.suggestImprovements(
           userMessage: userMessage,
           aiResponse: responseContents.first,
@@ -898,7 +874,8 @@ class ChatOrchestrator {
         );
         
         if ((improvements['suggestions'] as List).isNotEmpty) {
-          debugPrint('📊 Improvement suggestions:');
+          debugPrint('📊 Natural score: $naturalnessScore - but using AI response as is');
+          debugPrint('📊 Improvement suggestions (for reference only):');
           for (final suggestion in improvements['suggestions'] as List) {
             debugPrint('   - $suggestion');
           }

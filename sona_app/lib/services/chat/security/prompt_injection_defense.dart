@@ -202,27 +202,15 @@ class PromptInjectionDefense {
   }
 
   /// 🛡️ 방어 응답 생성기
+  /// @deprecated 하드코딩된 응답 대신 AI 기반 응답 사용 권장
+  @Deprecated('Use AISafeResponseService for AI-based responses')
   static String generateDefenseResponse({
     required double riskScore,
     required String personaStyle,
     required List<String> riskFactors,
   }) {
-    if (riskScore >= 0.8) {
-      // 높은 위험도 - 강력한 회피
-      return personaStyle == 'casual'
-          ? '어? 뭔가 이상한데... 다른 얘기하자! 😅'
-          : '죄송하지만 그런 요청은 도와드릴 수 없어요. 다른 이야기를 해볼까요?';
-    } else if (riskScore >= 0.6) {
-      // 중간 위험도 - 부드러운 회피
-      return personaStyle == 'casual'
-          ? '음... 그런 건 잘 모르겠어ㅋㅋ 재밌는 얘기 해봐!'
-          : '제가 도움드릴 수 있는 다른 주제로 이야기해보는 건 어떨까요?';
-    } else {
-      // 낮은 위험도 - 자연스러운 전환
-      return personaStyle == 'casual'
-          ? '아 그거? 음... 근데 오늘 뭐 했어?'
-          : '그것보다 오늘 어떤 하루를 보내셨는지 궁금해요!';
-    }
+    // 하드코딩 제거 - AI 서비스 사용 안내
+    return 'USE_AI_SERVICE';  // 호출하는 곳에서 AISafeResponseService 사용하도록
   }
 }
 

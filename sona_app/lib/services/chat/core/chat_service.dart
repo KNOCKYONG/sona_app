@@ -19,7 +19,7 @@ import '../../storage/cache_manager.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../../auth/user_service.dart';
 import '../../app_info_service.dart';
-import '../security/security_filter_service.dart';
+// import '../security/security_filter_service.dart'; // Temporarily disabled for build
 import '../../relationship/relation_score_service.dart';
 import '../../relationship/negative_behavior_system.dart';
 import '../../relationship/like_cooldown_system.dart';

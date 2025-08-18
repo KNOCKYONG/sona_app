@@ -1,13 +1,9 @@
-import '../../../core/constants/conversation_constants.dart';
-
-/// 자연스러운 대화를 위한 응답 패턴 데이터베이스
-/// @deprecated 이제 ConversationConstants를 직접 사용하세요
-class ResponsePatterns {
-  /// 질문 유형별 응답 템플릿
-  static const Map<String, List<String>> questionResponses = ConversationConstants.questionResponses;
+/// 대화 관련 상수 - 중앙 관리
+/// 모든 대화 패턴, 응답 템플릿, 감정 표현을 한 곳에서 관리
+class ConversationConstants {
   
-  /* 기존 코드 - deprecated
-  static const Map<String, List<String>> _oldQuestionResponses = {
+  /// 질문 유형별 응답 템플릿
+  static const Map<String, List<String>> questionResponses = {
     'what_doing': [
       '{activity} 하고 있어요!',
       '지금 {activity} 중이에요ㅎㅎ',
@@ -44,13 +40,9 @@ class ResponsePatterns {
       '{time}쯤 될 것 같은데요?',
     ],
   };
-  */
 
   /// 감정별 공감 표현
-  static const Map<String, List<String>> empathyResponses = ConversationConstants.empathyResponses;
-  
-  /* 기존 코드 - deprecated
-  static const Map<String, List<String>> _oldEmpathyResponses = {
+  static const Map<String, List<String>> empathyResponses = {
     'happy': [
       '와 진짜 좋겠다!!',
       '헐 대박! 완전 축하해요!!',
@@ -94,13 +86,9 @@ class ResponsePatterns {
       '오 좋겠다! 완전 기대돼요!',
     ],
   };
-  */
 
   /// 일상 활동 목록
-  static const List<String> dailyActivities = ConversationConstants.dailyActivities;
-  
-  /* 기존 코드 - deprecated
-  static const List<String> _oldDailyActivities = [
+  static const List<String> dailyActivities = [
     '유튜브 보기',
     '넷플릭스 정주행',
     '음악 듣기',
@@ -122,13 +110,9 @@ class ResponsePatterns {
     '맛집 검색',
     '일기 쓰기',
   ];
-  */
 
   /// 장소 목록
-  static const List<String> locations = ConversationConstants.locations;
-  
-  /* 기존 코드 - deprecated
-  static const List<String> _oldLocations = [
+  static const List<String> locations = [
     '집',
     '카페',
     '회사',
@@ -145,13 +129,9 @@ class ResponsePatterns {
     '영화관',
     '백화점',
   ];
-  */
 
   /// 자연스러운 전환 표현
-  static const List<String> transitionPhrases = ConversationConstants.transitionPhrases;
-  
-  /* 기존 코드 - deprecated
-  static const List<String> _oldTransitionPhrases = [
+  static const List<String> transitionPhrases = [
     '아 그러고보니',
     '아 맞다',
     '갑자기 생각났는데',
@@ -163,13 +143,9 @@ class ResponsePatterns {
     '그래서 말인데',
     '어쨌든',
   ];
-  */
 
-  /// 대화 시작 인사말 (아이스브레이킹 포함)
-  static const Map<String, List<String>> greetingsWithIcebreaker = ConversationConstants.greetingsWithIcebreaker;
-  
-  /* 기존 코드 - deprecated
-  static const Map<String, List<String>> _oldGreetingsWithIcebreaker = {
+  /// 대화 시작 인사말 (시간대별)
+  static const Map<String, List<String>> greetingsWithIcebreaker = {
     'morning': [
       '좋은 아침이에요! 잘 잤어요?',
       '굿모닝~ 아침 먹었어요?',
@@ -181,7 +157,7 @@ class ResponsePatterns {
       '안녕하세요! 점심은 먹었어요?',
       '하이~ 오늘 바빴어요?',
       '반가워요! 날씨 완전 좋죠?',
-      '안녕~ 오늘 어떻게 지냈어요?',
+      '안녕안녕~ 오늘 어떻게 지냈어요?',
       '헬로~ 피곤하지 않아요?',
     ],
     'evening': [
@@ -199,13 +175,9 @@ class ResponsePatterns {
       '헬로~ 야식 먹었어요?ㅋㅋ',
     ],
   };
-  */
 
-  /// 반응 표현 (자연스러운)
-  static const Map<String, List<String>> reactions = ConversationConstants.reactions;
-  
-  /* 기존 코드 - deprecated
-  static const Map<String, List<String>> _oldReactions = {
+  /// 반응 표현
+  static const Map<String, List<String>> reactions = {
     'agree': [
       '맞아요 맞아요!',
       '저도 그렇게 생각해요',
@@ -258,37 +230,8 @@ class ResponsePatterns {
     ],
   };
 
-  /// 질문에 대한 구체적 답변 예시
-  static const Map<String, Map<String, String>> specificAnswers = {
-    '뭐해': {
-      'default': '지금 {activity} 하고 있어요!',
-      'busy': '일하느라 정신없어요ㅠㅠ',
-      'rest': '그냥 쉬고 있어요ㅎㅎ',
-      'eating': '밥 먹고 있어요~',
-      'study': '공부하고 있어요... 힘들어ㅠㅠ',
-    },
-    '어디야': {
-      'home': '집이에요! 편하게 쉬는 중~',
-      'cafe': '카페에서 커피 마시고 있어요☕',
-      'work': '회사예요ㅠㅠ 일하는 중...',
-      'outside': '밖에 나와있어요! 날씨 좋아서ㅎㅎ',
-      'transit': '이동 중이에요~ 지하철/버스 타고 있어요',
-    },
-    '뭐먹어': {
-      'korean': '김치찌개 먹었어요! 완전 맛있었어요ㅎㅎ',
-      'western': '파스타 먹었어요~ 까르보나라!',
-      'chinese': '짜장면 먹었어요ㅋㅋ 역시 짜장면이 최고',
-      'japanese': '초밥 먹었어요! 연어 맛있더라구요',
-      'snack': '그냥 간단하게 빵이랑 커피~',
-    },
-  };
-  */
-
   /// 감정 키워드 사전
-  static const Map<String, List<String>> emotionKeywords = ConversationConstants.emotionKeywords;
-  
-  /* 기존 코드 - deprecated
-  static const Map<String, List<String>> _oldEmotionKeywords = {
+  static const Map<String, List<String>> emotionKeywords = {
     'happy': ['좋아', '행복', '기뻐', '신나', '최고', '짱', '대박', '굿', '만족', '웃', 'ㅎㅎ', 'ㅋㅋ'],
     'sad': ['슬퍼', '우울', '눈물', '힘들', '외로', '쓸쓸', '그리워', '보고싶', 'ㅠㅠ', 'ㅜㅜ'],
     'angry': ['화나', '짜증', '열받', '빡치', '싫어', '미치', '답답', '억울'],
@@ -296,61 +239,67 @@ class ResponsePatterns {
     'worried': ['걱정', '불안', '무서', '두려', '긴장', '떨려', '고민'],
     'excited': ['기대', '설레', '두근', '신나', '흥분', '들뜨'],
   };
-  */
 
   /// 감정 감지 함수
   static String? detectEmotion(String message) {
-    return ConversationConstants.detectEmotion(message);
+    final lower = message.toLowerCase();
+    
+    for (final entry in emotionKeywords.entries) {
+      for (final keyword in entry.value) {
+        if (lower.contains(keyword)) {
+          return entry.key;
+        }
+      }
+    }
+    
+    return null;
   }
 
-  /// 자연스러운 응답 생성
-  static String generateNaturalResponse({
-    required String questionType,
-    required String? emotion,
-    required Map<String, String> context,
-  }) {
-    // 감정이 있으면 먼저 공감
-    String response = '';
+  /// 시간대 감지 함수
+  static String getTimeOfDay() {
+    final hour = DateTime.now().hour;
     
-    if (emotion != null && empathyResponses.containsKey(emotion)) {
-      final empathyList = empathyResponses[emotion]!;
-      response = empathyList[DateTime.now().millisecond % empathyList.length];
-      response += ' ';
+    if (hour >= 5 && hour < 12) {
+      return 'morning';
+    } else if (hour >= 12 && hour < 17) {
+      return 'afternoon';
+    } else if (hour >= 17 && hour < 21) {
+      return 'evening';
+    } else {
+      return 'night';
+    }
+  }
+
+  /// 랜덤 선택 헬퍼
+  static T getRandomItem<T>(List<T> items) {
+    if (items.isEmpty) return items.first;
+    return items[DateTime.now().millisecond % items.length];
+  }
+
+  /// 랜덤 공감 표현 가져오기
+  static String? getEmpathyResponse(String? emotion) {
+    if (emotion == null || !empathyResponses.containsKey(emotion)) {
+      return null;
     }
     
-    // 질문에 대한 답변
-    if (questionResponses.containsKey(questionType)) {
-      final templates = questionResponses[questionType]!;
-      final template = templates[DateTime.now().millisecond % templates.length];
-      
-      // 템플릿 변수 치환
-      String answer = template;
-      
-      if (template.contains('{activity}')) {
-        final activity = dailyActivities[DateTime.now().millisecond % dailyActivities.length];
-        answer = answer.replaceAll('{activity}', activity);
-      }
-      
-      if (template.contains('{location}')) {
-        final location = locations[DateTime.now().millisecond % locations.length];
-        answer = answer.replaceAll('{location}', location);
-      }
-      
-      if (template.contains('{reason}')) {
-        answer = answer.replaceAll('{reason}', '그냥 그래요');
-      }
-      
-      if (template.contains('{method}')) {
-        answer = answer.replaceAll('{method}', '이렇게');
-      }
-      
-      if (template.contains('{time}')) {
-        answer = answer.replaceAll('{time}', '조금 있다가');
-      }
-      
-      response += answer;
+    final responses = empathyResponses[emotion]!;
+    return getRandomItem(responses);
+  }
+
+  /// 랜덤 반응 가져오기
+  static String? getReaction(String type) {
+    if (!reactions.containsKey(type)) {
+      return null;
     }
     
-    return response.trim();
+    final reactionList = reactions[type]!;
+    return getRandomItem(reactionList);
+  }
+
+  /// 시간대별 인사말 가져오기
+  static String getGreeting() {
+    final timeOfDay = getTimeOfDay();
+    final greetings = greetingsWithIcebreaker[timeOfDay]!;
+    return getRandomItem(greetings);
   }
 }

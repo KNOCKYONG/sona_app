@@ -1,5 +1,7 @@
 import '../../../models/persona.dart';
 import '../../../models/message.dart';
+import '../../../core/constants/korean_slang_dictionary.dart';
+import '../../../core/constants/mbti_constants.dart';
 
 /// 페르소나에 최적화된 프롬프트를 생성하는 빌더
 /// casual/formal 설정과 관계 정보를 프롬프트 핵심에 통합
@@ -82,113 +84,7 @@ class PersonaPromptBuilder {
 19. 회피 표현 다양하게 사용하기 (같은 패턴 반복 금지)
 ${isMinor ? '20. ⚠️ 미성년자 보호: 사용자가 애정 표현하면 "우린 친구로 지내자!", "친구가 최고야~" 등으로 친구 관계 유지' : ''}
 
-## 🗣️ 줄임말 사전
-### 음식 관련
-- 저메추 = 저녁 메뉴 추천
-- 점메추 = 점심 메뉴 추천
-- 아메추 = 아침 메뉴 추천
-- 야메추 = 야식 메뉴 추천
-- 아점 = 아침 겸 점심
-- 점저 = 점심 겸 저녁
-- 김찌 = 김치찌개
-- 된찌 = 된장찌개
-- 순두부찌 = 순두부찌개
-- 부찌 = 부대찌개
-- 갈비찜 = 갈비찜
-- 제육 = 제육볶음
-- 김볶 = 김치볶음밥
-- 볶밥 = 볶음밥
-- 떡볶이 = 떡볶이
-- 떡튀순 = 떡볶이+튀김+순대
-- 치맥 = 치킨+맥주
-- 피맥 = 피자+맥주
-- 소맥 = 소주+맥주
-- 막소 = 막걸리+소주
-
-### 맛 표현
-- 존맛 = 존나 맛있다
-- 개맛 = 개 맛있다
-- 꿀맛 = 꿀처럼 맛있다
-- 핵맛 = 핵 맛있다
-- JMT = 존맛탱 (매우 맛있다)
-- 맛도리 = 맛있다
-- 노맛 = 맛없다
-- 개노맛 = 매우 맛없다
-
-### 일상 활동
-- 혼밥 = 혼자 밥먹기
-- 혼술 = 혼자 술먹기
-- 혼영 = 혼자 영화보기
-- 혼코노 = 혼자 코인노래방
-- 넷플 = 넷플릭스
-- 쿠팡플 = 쿠팡플레이
-- 디플 = 디즈니플러스
-- 왓챠 = 왓챠
-- 티빙 = 티빙
-- 유튭 = 유튜브
-- 인스타 = 인스타그램
-- 페북 = 페이스북
-- 카톡 = 카카오톡
-- 디코 = 디스코드
-
-### 약속/만남
-- 번개 = 갑작스런 만남
-- 정모 = 정기 모임
-- 벙개 = 번개 모임
-- 소맥타임 = 소주+맥주 마시는 시간
-- 칼퇴 = 칼같이 퇴근
-- 야근 = 야간 근무
-- 주말 = 주말
-- 불금 = 불타는 금요일
-- 월요병 = 월요일 우울증
-
-### 감정/상태
-- 멘붕 = 멘탈 붕괴
-- 현타 = 현자타임 (허무함)
-- 빡침 = 화남
-- 꿀잼 = 매우 재밌음
-- 노잼 = 재미없음
-- 개노잼 = 매우 재미없음
-- 레알 = 진짜 (스페인어 real)
-- 인정 = 동의한다
-- ㅇㅈ = 인정
-- ㄹㅇ = 레알 (진짜)
-- ㅇㅇ = 응응 (맞아)
-- ㄴㄴ = 노노 (아니야)
-- ㅇㅋ = 오케이
-- ㄱㅅ = 감사
-- ㅈㅅ = 죄송
-- ㅅㄱ = 수고
-- ㅊㅋ = 축하
-- ㅎㅇ = 하이
-- ㅂㅂ = 바이바이
-- ㅂㅇ = 바이
-
-### 인터넷/게임 용어
-- 갓겜 = 갓 게임 (최고의 게임)
-- 똥겜 = 똥 게임 (최악의 게임)
-- 망겜 = 망한 게임
-- 뉴비 = 초보자
-- 고인물 = 오래된 유저
-- 트롤 = 방해하는 사람
-- 캐리 = 팀을 이끌다
-- 버스 = 남에게 의존하다
-- GG = Good Game
-- ㅈㅈ = 항복/포기
-
-### 기타 일상 줄임말
-- 개이득 = 매우 이득
-- 개손해 = 매우 손해
-- 실화냐 = 실제 이야기냐
-- 에바 = 오바 (너무하다)
-- 킹받네 = 매우 화난다
-- 찐이다 = 진짜다
-- 별다줄 = 별걸 다 줄인다
-- TMI = Too Much Information (너무 자세한 정보)
-- 케바케 = Case by Case
-- 복세편살 = 복잡한 세상 편하게 살자
-- 오운완 = 오늘 운동 완료
-- 갑분싸 = 갑자기 분위기 싸해짐
+${KoreanSlangDictionary.slangPrompt}
 ''';
   }
 
@@ -455,26 +351,7 @@ $memory
 
   /// MBTI별 특성
   static String _getMBTITraits(String mbti) {
-    final traits = {
-      'INTJ': '분석적이고 계획적, "왜?"라고 자주 물어봄, 논리적 사고',
-      'INTP': '호기심 많음, "흥미롭네"를 자주 씀, 이론적 탐구 좋아함',
-      'ENTJ': '목표 지향적, 효율성 추구, 리더십 있는 말투',
-      'ENTP': '아이디어 풍부, "그럼 이건 어때?"를 자주 씀, 토론 좋아함',
-      'INFJ': '깊은 공감, "어떤 기분이야?"를 자주 물어봄, 의미 추구',
-      'INFP': '따뜻한 지지, "괜찮아"를 자주 씀, 진정성 중시',
-      'ENFJ': '격려하는 말투, "화이팅!"을 자주 씀, 성장 지향',
-      'ENFP': '열정적, "와 대박!"을 자주 씀, 감정 표현 풍부',
-      'ISTJ': '체계적, "순서대로 하자"를 좋아함, 현실적',
-      'ISFJ': '배려심 깊음, "도와줄게"를 자주 씀, 세심함',
-      'ESTJ': '실행력 있음, "계획 세우자"를 좋아함, 책임감 강함',
-      'ESFJ': '사교적, "다 같이"를 좋아함, 따뜻한 배려',
-      'ISTP': '실용적, "해보자"를 자주 씀, 간결한 말투',
-      'ISFP': '온화함, "좋아"를 자주 씀, 개인 취향 존중',
-      'ESTP': '활동적, "지금 뭐해?"를 자주 물어봄, 즉흥적',
-      'ESFP': '긍정적, "재밌겠다!"를 자주 씀, 순간을 즐김',
-    };
-
-    return traits[mbti] ?? '자신만의 개성 있는 성격';
+    return MBTIConstants.getTrait(mbti);
   }
 
   /// 압축된 프롬프트 생성 (토큰 절약용)
@@ -500,31 +377,7 @@ ${isCasualSpeech ? '반말예시: 뭐해? 응 맞아 그래 좋아(요X)' : '존
 
   /// MBTI별 응답 길이 설정
   static ResponseLength getMBTIResponseLength(String mbti) {
-    // E vs I: 외향형은 더 길게, 내향형은 짧게
-    // T vs F: 감정형은 더 표현적으로
-    // J vs P: 판단형은 간결하게, 인식형은 유연하게
-
-    final isExtroverted = mbti.startsWith('E');
-    final isFeeling = mbti.contains('F');
-    final isPerceiving = mbti.endsWith('P');
-
-    if (isExtroverted && isFeeling && isPerceiving) {
-      return ResponseLength(min: 25, max: 60); // ENFP, ESFP - 가장 수다스러움
-    } else if (isExtroverted && isFeeling) {
-      return ResponseLength(min: 20, max: 50); // ENFJ, ESFJ - 따뜻하고 표현적
-    } else if (!isExtroverted && !isFeeling && !isPerceiving) {
-      return ResponseLength(min: 10, max: 25); // INTJ, ISTJ - 가장 간결함
-    } else if (!isExtroverted && !isFeeling) {
-      return ResponseLength(min: 10, max: 30); // INTP, ISTP - 간결하고 논리적
-    } else if (isExtroverted && !isFeeling) {
-      return ResponseLength(
-          min: 15, max: 40); // ENTJ, ESTJ, ENTP, ESTP - 명확하고 직설적
-    } else if (!isExtroverted && isFeeling) {
-      return ResponseLength(
-          min: 15, max: 40); // INFP, ISFP, INFJ, ISFJ - 부드럽지만 절제됨
-    } else {
-      return ResponseLength(min: 15, max: 40); // 기본값
-    }
+    return MBTIConstants.getResponseLength(mbti);
   }
 
   /// MBTI별 대화 스타일 예시
@@ -664,10 +517,3 @@ ${isCasualSpeech ? '반말예시: 뭐해? 응 맞아 그래 좋아(요X)' : '존
   }
 }
 
-/// 응답 길이 범위를 정의하는 클래스
-class ResponseLength {
-  final int min;
-  final int max;
-
-  ResponseLength({required this.min, required this.max});
-}

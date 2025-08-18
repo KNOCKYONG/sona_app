@@ -1,0 +1,19 @@
+{
+  "analysis_timestamp": "20250819_000411",
+  "total_reports_analyzed": 3,
+  "average_coherence_score": 75.55666666666667,
+  "critical_issues_count": 0,
+  "high_issues_count": 4,
+  "personas_with_issues": {
+    "지은": {
+      "total_conversations": 3,
+      "avg_coherence_score": 75.56,
+      "total_issues": 10,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 4,
+        "abrupt_topic_change": 6
+      }
+    }
+  }
+}

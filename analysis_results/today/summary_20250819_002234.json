@@ -1,0 +1,45 @@
+{
+  "analysis_timestamp": "20250819_002234",
+  "total_reports_analyzed": 6,
+  "average_coherence_score": 81.11166666666666,
+  "critical_issues_count": 0,
+  "high_issues_count": 5,
+  "personas_with_issues": {
+    "지은": {
+      "total_conversations": 3,
+      "avg_coherence_score": 75.56,
+      "total_issues": 10,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 4,
+        "abrupt_topic_change": 6
+      }
+    },
+    "동수": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "다은": {
+      "total_conversations": 1,
+      "avg_coherence_score": 90.0,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "미연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 70.0,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    }
+  }
+}

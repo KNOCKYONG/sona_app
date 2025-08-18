@@ -92,10 +92,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       await _loadPersonas();
       _checkFirstTimeUser();
       
-      // 이미지 프리로드는 백그라운드에서 천천히
-      Future.delayed(const Duration(seconds: 1), () {
+      // thumb과 medium은 이미 SplashScreen에서 로드됨
+      // large 이미지는 백그라운드에서 천천히 로드
+      Future.delayed(const Duration(seconds: 2), () {
         if (mounted) {
-          _checkAndPreloadImages();
+          _preloadLargeImagesInBackground();
         }
       });
     });
@@ -148,40 +149,29 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   
   DateTime _lastLoadTime = DateTime.now();
 
-  /// 이미지 프리로드 확인 및 실행 (최적화)
-  Future<void> _checkAndPreloadImages() async {
+  /// large 이미지만 백그라운드로 프리로드
+  Future<void> _preloadLargeImagesInBackground() async {
     try {
       final personaService =
           Provider.of<PersonaService>(context, listen: false);
       
-      // 첫 화면에 보일 페르소나들만 선택 (최대 15개)
-      final visiblePersonas = personaService.availablePersonas
-          .where((p) => _hasR2Image(p))
-          .take(15)
-          .toList();
-
-      if (visiblePersonas.isEmpty) return;
-
-      // 이미 캐시된 이미지가 있는지 빠르게 확인
-      final isCompleted = await _imagePreloadService.isPreloadCompleted();
-      if (isCompleted) {
-        debugPrint('✅ Images already cached');
+      final personas = personaService.allPersonas;
+      if (personas.isEmpty) {
+        debugPrint('⚠️ No personas available to preload large images');
         return;
       }
 
-      // 썸네일만 우선 로드 (작은 이미지만)
-      debugPrint('🖼️ Preloading thumbnails for first ${visiblePersonas.length} personas...');
+      debugPrint('🖼️ Starting background preload of large images for ${personas.length} personas');
       
-      // 백그라운드에서 조용히 로드 (UI 차단 없이)
-      _imagePreloadService.preloadNewImages(visiblePersonas).then((_) {
-        debugPrint('✅ Thumbnail preload complete');
+      // large 이미지를 백그라운드로 프리로드 (UI 차단 없이)
+      _imagePreloadService.preloadLargeImagesInBackground(personas).then((_) {
+        debugPrint('✅ Large images background preload started');
       }).catchError((error) {
-        debugPrint('⚠️ Preload error (ignored): $error');
+        debugPrint('⚠️ Large image preload error (ignored): $error');
       });
       
-      // UI 로딩 인디케이터는 표시하지 않음 (사용자 경험 개선)
     } catch (e) {
-      debugPrint('❌ Error in image preload check: $e');
+      debugPrint('❌ Error preloading large images in background: $e');
     }
   }
 
@@ -587,7 +577,21 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
     // PersonaService가 초기화되지 않은 경우에만 초기화
     debugPrint('⚠️ PersonaService not initialized, initializing now...');
-    await personaService.initialize(userId: currentUserId);
+    
+    // 타임아웃 추가로 무한 로딩 방지
+    try {
+      await personaService.initialize(userId: currentUserId).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          debugPrint('⚠️ PersonaService initialization timeout - using cached data');
+          // 타임아웃 시 로컬 데이터 사용
+          return Future.value();
+        },
+      );
+    } catch (e) {
+      debugPrint('❌ Error initializing PersonaService: $e');
+      // 에러 발생 시에도 계속 진행 (기존 데이터 사용)
+    }
 
     // 🔥 매칭된 페르소나 로드 완료 확인
     debugPrint(

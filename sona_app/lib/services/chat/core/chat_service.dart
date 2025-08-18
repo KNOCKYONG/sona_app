@@ -1497,14 +1497,15 @@ class ChatService extends BaseService {
       }
     }
 
-    // 기본 폴백 응답 - 회피 패턴 제거
-    final responses = [
-      '어? 뭐라고? 다시 말해줄래?',
-      '아 미안 못 들었어ㅎㅎ',
-      '어 잠깐 놓쳤어! 다시 말해줘~',
-      '어 뭐라고 했어? 다시 한번만!',
+    // 기본 폴백 응답 - API 오류 시에만 사용
+    // ⚠️ 절대 "뭐라고?" 같은 회피 응답 사용 금지
+    final emergencyResponses = [
+      '잠시 연결이 불안정해... 곧 다시 대답할게!',
+      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
+      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
+      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
     ];
-    return responses[Random().nextInt(responses.length)];
+    return emergencyResponses[Random().nextInt(emergencyResponses.length)];
   }
 
   // Existing methods like _analyzeEmotionFromResponse, _calculateScoreChangeWithRelationship,

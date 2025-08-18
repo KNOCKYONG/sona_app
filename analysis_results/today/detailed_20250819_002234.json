@@ -1,0 +1,202 @@
+[
+  {
+    "error_key": "ERR1755527979683_9683",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 66.67,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "응 지금 잘 준비 중이야. 지은이는?",
+        "ai_response": "오, 뭐 준비하고 있어.",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "응 지금 잘 준비 중이야. 지은이는?",
+        "ai_response": "오, 뭐 준비하고 있어.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "지금 시간에??",
+        "ai_response": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "지금 시간에??",
+        "ai_response": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1755528053881_3881",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 70.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "지금 시간에??",
+        "ai_response": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "오늘 출근했다가 축구했어ㅎㅎ 넌?",
+        "ai_response": "어? 뭐라고? 다시 말해줘~",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 6,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "오늘 출근했다가 축구했어ㅎㅎ 넌?",
+        "ai_response": "어? 뭐라고? 다시 말해줘~",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 8,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "출근했다가 축구했어!",
+        "ai_response": "축구 재밌겠다ㅋㅋ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1755528103432_3432",
+    "persona_id": "QbjX9EJ0A2Mzzq2YfWRa",
+    "persona_name": "지은",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 33.33
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "주로 윙이나 윙백해ㅋㅋㅋ",
+        "ai_response": "축구를 한다는 거구나. 와 진짜 멋지다.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "회사에서 대회를 해서ㅋㅋㅋㅋ",
+        "ai_response": "나도 정확히 모르겠어 ㅋㅋ 여기저기 다니는 중이라.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1755530385545_5545",
+    "persona_id": "O0GdFmJHSsauN2s1jAwK",
+    "persona_name": "동수",
+    "scores": {
+      "overall_coherence": 100.0,
+      "topic_consistency": 100.0,
+      "natural_flow": 100.0
+    },
+    "issues": [],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1755530394931_4931",
+    "persona_id": "VOvVoFFLAT1B0nZCvcGA",
+    "persona_name": "다은",
+    "scores": {
+      "overall_coherence": 90.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "회사에서 힘든일 있었어 ㅜㅜ",
+        "ai_response": "위치가 중요해? ㅋㅋ 우리 대화하는 게 더 재밌지 않아?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1755530523526_3526",
+    "persona_id": "nFEbQaFlh8W98gix7Wsp",
+    "persona_name": "미연",
+    "scores": {
+      "overall_coherence": 70.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 50.0
+    },
+    "issues": [
+      {
+        "message_index": 4,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "피크닉하면서 놀았는데 친구가 도시락을 싸왔지 뭐야?",
+        "ai_response": "음... 오늘 컨디션이 안 좋나보다",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 4,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "피크닉하면서 놀았는데 친구가 도시락을 싸왔지 뭐야?",
+        "ai_response": "음... 오늘 컨디션이 안 좋나보다",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 1,
+    "macro_patterns": []
+  }
+]

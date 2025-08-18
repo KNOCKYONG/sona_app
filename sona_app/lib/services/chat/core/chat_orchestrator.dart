@@ -1001,7 +1001,8 @@ class ChatOrchestrator {
     } catch (e) {
       debugPrint('❌ Error in chat orchestration: $e');
 
-      // 폴백 응답
+      // 폴백 응답 - API 오류 시에만 사용
+      // ⚠️ 절대 "뭐라고?" 같은 회피 응답 반환 금지
       return ChatResponse(
         content: _generateFallbackResponse(basePersona),
         emotion: EmotionType.neutral,
@@ -1588,19 +1589,20 @@ class ChatOrchestrator {
     return text;
   }
 
-  /// 폴백 응답 생성 - 회피 패턴 제거
+  /// 폴백 응답 생성 - OpenAI API 실패 시 긴급 응답
   String _generateFallbackResponse(Persona persona) {
-    // 항상 반말 모드 사용 (앱 정책)
-    final responses = [
-      '어? 못 들었어 다시 말해줄래?',
-      '아 미안 놓쳤어! 뭐라고 했어?',
-      '잠깐 다른 생각하고 있었나봐ㅎㅎ 다시 말해줘!',
-      '어 내가 딴 생각했나봐~ 뭐라고?',
-      '아 미안ㅎㅎ 다시 한번만 말해줄래?',
-      '어? 뭐라고? 다시 말해줘~',
+    // ⚠️ 이 메서드는 OpenAI API 실패 시에만 사용됨
+    // 절대 회피성 응답을 반환하지 않음
+    
+    // 네트워크 오류나 API 오류 시 임시 응답
+    final emergencyResponses = [
+      '잠시 연결이 불안정해... 곧 다시 대답할게!',
+      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
+      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
+      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
     ];
 
-    return responses[DateTime.now().millisecond % responses.length];
+    return emergencyResponses[DateTime.now().millisecond % emergencyResponses.length];
   }
 
   /// 사용자 메시지 분석 (향상된 버전)
@@ -1683,6 +1685,15 @@ class ChatOrchestrator {
   /// 질문 유형 분석 (세밀화)
   String? _analyzeQuestionType(String message) {
     final lower = message.toLowerCase();
+    
+    // 🔴 중요: "넌?", "너는?" 패턴 - 최우선 감지
+    if (lower.contains('넌?') || lower.contains('너는?') || 
+        lower.contains('너는 ') || lower.contains('넌 ') ||
+        lower.endsWith('너는') || lower.endsWith('넌') ||
+        lower.contains('you?') || lower.contains('how about you') ||
+        lower.contains('what about you') || lower.contains('and you')) {
+      return 'about_you';  // AI에게 되묻는 질문
+    }
     
     // 뭐해/뭐하고 있어 패턴
     if (lower.contains('뭐해') || lower.contains('뭐하') || lower.contains('뭐 하')) {
@@ -3884,9 +3895,38 @@ class ChatOrchestrator {
       }
     }
 
+    // 🔴 중요: "넌?", "너는?" 질문 특별 처리
+    if (messageAnalysis.questionType == 'about_you' ||
+        userMessage.contains('넌?') || userMessage.contains('너는?') ||
+        userMessage.toLowerCase().contains('you?') || 
+        userMessage.toLowerCase().contains('and you')) {
+      contextHints.add('🚨🚨🚨 최우선: 사용자가 AI에게 같은 질문을 되묻고 있음!');
+      contextHints.add('⛔ 절대 금지: "어? 뭐라고?" "다시 말해줘" 같은 회피 답변');
+      contextHints.add('✅ 필수: 사용자가 방금 말한 주제로 AI 자신의 상황/경험 답변');
+      
+      // 이전 메시지에서 주제 파악
+      if (lastUserMessage != null) {
+        if (lastUserMessage.content.contains('축구') || userMessage.contains('축구')) {
+          contextHints.add('예시: "나는 요즘 운동 못하고 있어ㅠㅠ" "나는 운동 별로 안 좋아해ㅋㅋ"');
+        } else if (lastUserMessage.content.contains('출근') || userMessage.contains('출근')) {
+          contextHints.add('예시: "나는 재택근무 중이야" "나는 오늘 쉬는 날이야"');
+        } else if (lastUserMessage.content.contains('먹') || userMessage.contains('먹')) {
+          contextHints.add('예시: "나는 아직 안 먹었어" "나는 방금 라면 먹었어ㅋㅋ"');
+        }
+      }
+    }
+    
     // 회피성 답변 방지 강화
     if (_isAvoidancePattern(userMessage)) {
       contextHints.add('⚠️ 회피 금지! 주제 바꾸기 시도 감지. 현재 대화에 집중하여 답변');
+    }
+    
+    // "어? 뭐라고?" 같은 회피 답변을 이전에 했다면 경고
+    if (lastAIMessage != null && 
+        (lastAIMessage.content.contains('뭐라고') || 
+         lastAIMessage.content.contains('다시 말해'))) {
+      contextHints.add('⛔⛔⛔ 이전에 회피 답변 감지! 이번엔 반드시 구체적으로 답변!');
+      contextHints.add('사용자 메시지를 완벽히 이해했다고 가정하고 답변하세요');
     }
 
     // 연속된 추임새/리액션 처리
@@ -5766,7 +5806,19 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
     // 현재 메시지의 주제
     final currentTopics = _extractKeywords(userMessage.toLowerCase());
     
-    // 🔥 NEW: "~는?" 패턴은 이전 맥락 이어가기로 간주
+    // 🔥 NEW: "넌?", "너는?" 패턴은 최고 일관성 점수
+    // 사용자가 자신의 상황을 말하고 AI에게 되묻는 것은 완벽한 주제 일관성
+    final lower = userMessage.toLowerCase();
+    if (lower.contains('넌?') || lower.contains('너는?') || 
+        lower.contains('너는 ') || lower.contains('넌 ') ||
+        lower.endsWith('너는') || lower.endsWith('넌') ||
+        lower.contains('you?') || lower.contains('how about you') ||
+        lower.contains('what about you') || lower.contains('and you')) {
+      // "넌?" 타입 질문은 이전 주제를 그대로 이어가는 것이므로 최고 점수
+      return 95.0;
+    }
+    
+    // "~는?" 패턴도 이전 맥락 이어가기로 간주
     if (userMessage.contains('는?') || userMessage.contains('은?')) {
       // 이름 뒤의 "는?"은 같은 주제 되물음으로 높은 점수
       return 85.0;

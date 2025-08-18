@@ -346,7 +346,7 @@ class UserPreferenceProfile {
     
     // 길이 선호도 학습
     if (responsePattern['length'] != null) {
-      final normalizedLength = min(1.0, responsePattern['length'] / 200.0);
+      final normalizedLength = min(1.0, (responsePattern['length'] as num).toDouble() / 200.0);
       final error = satisfaction - 0.5;
       modelWeights['lengthPreference'] = modelWeights['lengthPreference']! + 
           learningRate * error * normalizedLength;
@@ -354,7 +354,7 @@ class UserPreferenceProfile {
     
     // 이모지 사용 선호도 학습
     if (responsePattern['emojiCount'] != null) {
-      final normalizedEmoji = min(1.0, responsePattern['emojiCount'] / 5.0);
+      final normalizedEmoji = min(1.0, (responsePattern['emojiCount'] as num).toDouble() / 5.0);
       final error = satisfaction - 0.5;
       modelWeights['emojiUsage'] = modelWeights['emojiUsage']! + 
           learningRate * error * normalizedEmoji;

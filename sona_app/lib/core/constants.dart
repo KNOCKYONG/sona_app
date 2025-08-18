@@ -30,7 +30,7 @@ class AppConstants {
   static const int messagesPerPage = 20; // 추가 로드 시 가져올 메시지 수
   static const int maxCacheSize = 50;
   static const int maxBatchSize = 500;
-  static const int recentMessagesLimit = 10;
+  static const int recentMessagesLimit = 50;
   static const int dailyMessageLimit = 100;
   static const int dailyMessageWarningThreshold = 10;
 

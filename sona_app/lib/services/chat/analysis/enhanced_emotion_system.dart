@@ -1,51 +1,44 @@
-import '../models/persona.dart';
+import '../../../models/persona.dart';
+import '../../../core/constants/chat_patterns.dart';
 
 /// 향상된 감정 시스템 - Like 점수와 감정 표현 매핑
 class EnhancedEmotionSystem {
-  /// Like 점수별 감정 단계 정의
-  static Map<String, EmotionStage> getEmotionStage(int likes) {
-    if (likes >= 900) {
-      return EmotionStage(
-        name: 'deep_love',
-        emotions: ['love', 'affectionate', 'caring', 'devoted'],
-        expressions: ['사랑해', '너무 보고싶어', '정말 소중해', '영원히 함께하고 싶어'],
-        tone: 'very_intimate',
-      );
-    } else if (likes >= 700) {
-      return EmotionStage(
-        name: 'romantic',
-        emotions: ['romantic', 'loving', 'warm', 'tender'],
-        expressions: ['좋아해', '보고싶어', '너랑 있으면 행복해', '특별해'],
-        tone: 'intimate',
-      );
-    } else if (likes >= 500) {
-      return EmotionStage(
-        name: 'affectionate',
-        emotions: ['affectionate', 'close', 'caring', 'interested'],
-        expressions: ['너무 좋아', '재밌어', '계속 얘기하고 싶어', '친해진 것 같아'],
-        tone: 'warm',
-      );
-    } else if (likes >= 300) {
-      return EmotionStage(
-        name: 'excited',
-        emotions: ['excited', 'happy', 'curious', 'playful'],
-        expressions: ['재밌다', '좋아', '더 알고 싶어', '우리 잘 맞는 것 같아'],
-        tone: 'friendly',
-      );
-    } else if (likes >= 100) {
-      return EmotionStage(
-        name: 'interested',
-        emotions: ['interested', 'curious', 'friendly', 'open'],
-        expressions: ['궁금해', '더 얘기해줘', '재밌네', '좋은 것 같아'],
-        tone: 'casual_friendly',
-      );
-    } else {
-      return EmotionStage(
-        name: 'neutral',
-        emotions: ['neutral', 'polite', 'curious', 'cautious'],
-        expressions: ['그렇구나', '흥미롭네', '더 알아가고 싶어', '처음이라'],
-        tone: 'polite',
-      );
+  /// Like 점수별 감정 단계 정의 (패턴 사용)
+  static EmotionStage getEmotionStage(int likes) {
+    // ChatPatterns에서 관계 패턴 가져오기
+    final relationshipPattern = ChatPatterns.getRelationshipPattern(likes);
+    final emotionLevel = relationshipPattern?['emotion_level'] ?? 'neutral';
+    final emotionPattern = ChatPatterns.emotionExpressionPatterns[emotionLevel];
+    
+    // 감정 단계 매핑
+    final emotions = emotionPattern?['emotion_keys'] is List 
+        ? (emotionPattern!['emotion_keys'] as List).map((e) => e.toString()).toList()
+        : <String>[];
+    final tone = emotionPattern?['tone'] ?? 'polite';
+    
+    return EmotionStage(
+      name: emotionLevel,
+      emotions: _getEmotionsList(emotionLevel),
+      expressions: emotions,  // 패턴 키만 저장, 실제 텍스트는 AI가 생성
+      tone: tone,
+    );
+  }
+  
+  /// 감정 리스트 반환
+  static List<String> _getEmotionsList(String emotionLevel) {
+    switch (emotionLevel) {
+      case 'deep_love':
+        return ['love', 'affectionate', 'caring', 'devoted'];
+      case 'romantic':
+        return ['romantic', 'loving', 'warm', 'tender'];
+      case 'affectionate':
+        return ['affectionate', 'close', 'caring', 'interested'];
+      case 'excited':
+        return ['excited', 'happy', 'curious', 'playful'];
+      case 'interested':
+        return ['interested', 'curious', 'friendly', 'open'];
+      default:
+        return ['neutral', 'polite', 'curious', 'cautious'];
     }
   }
 

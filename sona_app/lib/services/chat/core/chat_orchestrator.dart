@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../models/persona.dart';
 import '../../../models/message.dart';
 import '../../../core/constants.dart';
+import '../../../core/constants/chat_patterns.dart';
 import '../utils/persona_relationship_cache.dart';
 import '../prompts/persona_prompt_builder.dart';
 import '../security/security_aware_post_processor.dart';
@@ -42,9 +43,11 @@ import '../intelligence/fuzzy_memory_service.dart';
 import '../cache/response_variation_cache.dart';
 import '../learning/user_preference_learning.dart';
 import '../analysis/naturalness_analyzer.dart';
+import 'unified_conversation_system.dart';
+import 'conversation_state_manager.dart';
 
 /// 메시지 타입 enum
-enum MessageType {
+enum ChatMessageType {
   general,
   question,
   greeting,
@@ -63,7 +66,7 @@ enum UserEmotion {
 
 /// 메시지 분석 결과 클래스
 class MessageAnalysis {
-  final MessageType type;
+  final ChatMessageType type;
   final UserEmotion emotion;
   final double complexity;
   final List<String> keywords;
@@ -122,6 +125,7 @@ class ChatOrchestrator {
   final PersonaRelationshipCache _relationshipCache =
       PersonaRelationshipCache.instance;
   final ConversationMemoryService _memoryService = ConversationMemoryService();
+  final UnifiedConversationSystem _unifiedSystem = UnifiedConversationSystem.instance;
   
   // 반복 응답 방지를 위한 캐시 (유저-페르소나 조합별 최근 응답 저장)
   // 키 형식: "userId_personaId"
@@ -340,7 +344,7 @@ class ChatOrchestrator {
       final relationshipCache = PersonaRelationshipCache.instance;
       if (relationshipCache.shouldGreet(personaData.lastGreetingTime)) {
         // 24시간 이상 지났거나 처음 대화하는 경우
-        if (messageAnalysis.type == MessageType.greeting || chatHistory.isEmpty) {
+        if (messageAnalysis.type == ChatMessageType.greeting || chatHistory.isEmpty) {
           // 인사 시간 업데이트
           await relationshipCache.updateGreetingTime(
             userId: userId,
@@ -350,7 +354,7 @@ class ChatOrchestrator {
         }
       } else {
         // 24시간 이내에 이미 인사를 한 경우
-        if (messageAnalysis.type == MessageType.greeting) {
+        if (messageAnalysis.type == ChatMessageType.greeting) {
           greetingGuide = '⚠️ 이미 오늘 인사를 나눴습니다. 중복 인사 금지! 바로 대화 이어가기.';
         }
       }
@@ -610,6 +614,37 @@ class ChatOrchestrator {
             : recentWarning + recentList;
       }
 
+      // 4.5단계: 통합 대화 시스템 컨텍스트 구성
+      final conversationId = '${userId}_${completePersona.id}';
+      final unifiedContext = await _unifiedSystem.buildUnifiedContext(
+        conversationId: conversationId,
+        userId: userId,
+        personaId: completePersona.id,
+        userMessage: userMessage,
+        fullHistory: chatHistory,
+        persona: completePersona,
+      );
+      
+      // 통합 컨텍스트를 힌트에 추가
+      if (unifiedContext['contextQuality'] != null && 
+          unifiedContext['contextQuality'] > 0.6) {
+        final stateSummary = unifiedContext['state']['summary'] ?? '';
+        final permanentSummary = unifiedContext['permanentSummary'] ?? '';
+        
+        if (stateSummary.isNotEmpty) {
+          contextHint = contextHint != null 
+              ? '$contextHint\n\n## 📊 대화 상태:\n$stateSummary'
+              : '## 📊 대화 상태:\n$stateSummary';
+        }
+        
+        // 영구 메모리가 있으면 추가
+        if (permanentSummary.isNotEmpty) {
+          contextHint = contextHint != null
+              ? '$contextHint\n\n## 💎 영구 기억:\n$permanentSummary'
+              : '## 💎 영구 기억:\n$permanentSummary';
+        }
+      }
+      
       // 5단계: API 호출
       // 영어 입력은 원본 그대로 전달하고, targetLanguage 파라미터 추가
       
@@ -661,6 +696,8 @@ class ChatOrchestrator {
         chatHistory: chatHistory,
         userMessage: userMessage,  // 원본 메시지 그대로 전달
         relationshipType: _getRelationshipType(completePersona),
+        conversationId: conversationId,  // 대화방 ID 전달
+        userId: userId,                   // 사용자 ID 전달
         userNickname: userNickname,
         userAge: userAge,
         isCasualSpeech: true, // 항상 반말 모드
@@ -867,6 +904,8 @@ class ChatOrchestrator {
       // 자연스러움이 낮더라도 AI가 생성한 응답을 그대로 사용
       if (naturalnessScore < 0.6 && !isRepetitive) {
         // 개선 제안만 로깅 (하드코딩된 템플릿 사용 제거)
+        // 하드코딩된 응답 사용을 완전히 제거했으므로
+        // OpenAI API 응답을 그대로 사용
         final improvements = naturalnessAnalyzer.suggestImprovements(
           userMessage: userMessage,
           aiResponse: responseContents.first,
@@ -969,6 +1008,36 @@ class ChatOrchestrator {
         debugPrint('🎉 Relationship milestone: ${relationshipEvent.title}');
       }
 
+      // 9단계: 통합 대화 시스템 상태 업데이트
+      final userMsg = Message(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        personaId: completePersona.id,
+        content: userMessage,
+        type: MessageType.text,
+        isFromUser: true,
+        timestamp: DateTime.now(),
+      );
+      
+      final aiMsg = Message(
+        id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
+        personaId: completePersona.id,
+        content: responseContents.first,
+        type: MessageType.text,
+        isFromUser: false,
+        timestamp: DateTime.now(),
+        emotion: emotion,
+        likesChange: scoreChange,
+      );
+      
+      await _unifiedSystem.updateConversationState(
+        conversationId: conversationId,
+        userId: userId,
+        personaId: completePersona.id,
+        userMessage: userMsg,
+        aiResponse: aiMsg,
+        fullHistory: [...chatHistory, userMsg, aiMsg],
+      );
+      
       return ChatResponse(
         content: responseContents.first, // 기존 호환성
         contents: responseContents, // 새로운 멀티 메시지
@@ -982,7 +1051,8 @@ class ChatOrchestrator {
     } catch (e) {
       debugPrint('❌ Error in chat orchestration: $e');
 
-      // 폴백 응답
+      // 폴백 응답 - API 오류 시에만 사용
+      // ⚠️ 절대 "뭐라고?" 같은 회피 응답 반환 금지
       return ChatResponse(
         content: _generateFallbackResponse(basePersona),
         emotion: EmotionType.neutral,
@@ -1569,19 +1639,20 @@ class ChatOrchestrator {
     return text;
   }
 
-  /// 폴백 응답 생성 - 회피 패턴 제거
+  /// 폴백 응답 생성 - OpenAI API 실패 시 긴급 응답
   String _generateFallbackResponse(Persona persona) {
-    // 항상 반말 모드 사용 (앱 정책)
-    final responses = [
-      '어? 못 들었어 다시 말해줄래?',
-      '아 미안 놓쳤어! 뭐라고 했어?',
-      '잠깐 다른 생각하고 있었나봐ㅎㅎ 다시 말해줘!',
-      '어 내가 딴 생각했나봐~ 뭐라고?',
-      '아 미안ㅎㅎ 다시 한번만 말해줄래?',
-      '어? 뭐라고? 다시 말해줘~',
+    // ⚠️ 이 메서드는 OpenAI API 실패 시에만 사용됨
+    // 절대 회피성 응답을 반환하지 않음
+    
+    // 네트워크 오류나 API 오류 시 임시 응답
+    final emergencyResponses = [
+      '잠시 연결이 불안정해... 곧 다시 대답할게!',
+      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
+      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
+      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
     ];
 
-    return responses[DateTime.now().millisecond % responses.length];
+    return emergencyResponses[DateTime.now().millisecond % emergencyResponses.length];
   }
 
   /// 사용자 메시지 분석 (향상된 버전)
@@ -1590,7 +1661,7 @@ class ChatOrchestrator {
     final length = message.length;
 
     // 메시지 타입 판별
-    MessageType type = MessageType.general;
+    ChatMessageType type = ChatMessageType.general;
     UserEmotion emotion = UserEmotion.neutral;
     double complexity = 0.0;
     
@@ -1599,7 +1670,7 @@ class ChatOrchestrator {
     final questionType = _analyzeQuestionType(lower);
     final questionPattern = advancedAnalyzer.analyzeQuestionPattern(lower);
     if (questionType != null || message.contains('?') || questionPattern['isQuestion'] == true) {
-      type = MessageType.question;
+      type = ChatMessageType.question;
       complexity += 0.2;
     }
 
@@ -1645,11 +1716,11 @@ class ChatOrchestrator {
 
     // 특수 타입 확인
     if (advancedAnalyzer.detectGreetingPattern(lower)['isGreeting'] == true)
-      type = MessageType.greeting;
+      type = ChatMessageType.greeting;
     else if (advancedAnalyzer.detectFarewellPattern(lower)['isFarewell'] == true)
-      type = MessageType.farewell;
+      type = ChatMessageType.farewell;
     else if (advancedAnalyzer.detectComplimentPattern(lower)['isCompliment'] == true)
-      type = MessageType.compliment;
+      type = ChatMessageType.compliment;
 
     return MessageAnalysis(
       type: type,
@@ -1664,6 +1735,15 @@ class ChatOrchestrator {
   /// 질문 유형 분석 (세밀화)
   String? _analyzeQuestionType(String message) {
     final lower = message.toLowerCase();
+    
+    // 🔴 중요: "넌?", "너는?" 패턴 - 최우선 감지
+    if (lower.contains('넌?') || lower.contains('너는?') || 
+        lower.contains('너는 ') || lower.contains('넌 ') ||
+        lower.endsWith('너는') || lower.endsWith('넌') ||
+        lower.contains('you?') || lower.contains('how about you') ||
+        lower.contains('what about you') || lower.contains('and you')) {
+      return 'about_you';  // AI에게 되묻는 질문
+    }
     
     // 뭐해/뭐하고 있어 패턴
     if (lower.contains('뭐해') || lower.contains('뭐하') || lower.contains('뭐 하')) {
@@ -1885,7 +1965,7 @@ class ChatOrchestrator {
   Future<String?> _checkSimpleResponse({
     required String userMessage,
     required Persona persona,
-    required MessageType messageType,
+    required ChatMessageType messageType,
     String? userId,
   }) async {
     final lowerMessage = userMessage.toLowerCase().trim();
@@ -2047,73 +2127,7 @@ class ChatOrchestrator {
     return null;
   }
 
-  // _translateToKorean 메서드 제거됨 - 영어 입력은 API에서 직접 처리
-  // 이전의 하드코딩된 번역은 부정확하고 맥락을 놓치는 문제가 있었음
-  // 이제 OpenAI API가 영어를 직접 이해하고 적절한 응답 생성
-  /*
-  String _translateToKorean(String englishMessage) {
-    final lower = englishMessage.toLowerCase();
-    
-    // 감정 표현 번역
-    if (lower.contains('not good') || lower.contains('feel bad') || lower.contains('feel so bad')) {
-      return "기분이 안 좋아";
-    } else if (lower.contains('sad')) {
-      return "슬퍼";
-    } else if (lower.contains('tired')) {
-      return "피곤해";
-    } else if (lower.contains('happy')) {
-      return "행복해";
-    } else if (lower.contains('angry')) {
-      return "화나";
-    }
-    
-    // 인사말 번역
-    if (lower == 'hello' || lower == 'hi') {
-      return "안녕";
-    } else if (lower.contains('how are you') || lower.contains('how r u')) {
-      return "어떻게 지내?";
-    } else if (lower.contains('good morning')) {
-      return "좋은 아침";
-    } else if (lower.contains('good night')) {
-      return "잘자";
-    }
-    
-    // 일상 대화 번역
-    if (lower.contains('watching') && lower.contains('tv')) {
-      return "TV 보고 있어";
-    } else if (lower.contains('what') && lower.contains('doing')) {
-      return "뭐해?";
-    } else if (lower.contains('where are you')) {
-      return "어디야?";
-    } else if (lower.contains('love')) {
-      return "사랑해";
-    } else if (lower.contains('miss')) {
-      return "보고싶어";
-    }
-    
-    // 특수 패턴 번역
-    if (lower.contains('r u macro') || lower.contains('are you macro')) {
-      return "너 매크로야?";
-    } else if (lower.contains('r u ai') || lower.contains('are you ai')) {
-      return "너 AI야?";
-    } else if (lower.contains('omg')) {
-      return "헐...";
-    }
-    
-    // 상태 응답 번역
-    if (lower.contains('i am') || lower.contains("i'm")) {
-      if (lower.contains('good') || lower.contains('fine')) {
-        return "나는 괜찮아";
-      } else if (lower.contains('not')) {
-        return "나는 안 좋아";
-      }
-    }
-    
-    // 번역할 수 없으면 원문 반환
-    debugPrint('⚠️ Could not translate: $englishMessage');
-    return englishMessage;
-  }
-  */
+  // 영어 입력은 OpenAI API에서 직접 처리
   
   /// 특별한 영어 패턴에 대해서만 즉시 응답 생성 (첫 인사 등)
   String? _generateSpecialMultilingualResponse(String language, String message, Persona persona, List<Message> chatHistory) {
@@ -2786,30 +2800,30 @@ class ChatOrchestrator {
     if (userNickname == null || userNickname.isEmpty) {
       // 닉네임이 없으면 기본 호칭 가이드
       if (likeScore >= 300) {
-        return '🏷️ 호칭: "너", "야" (편한 반말)';
+        return '🏷️ addressing_friendly_no_name';
       } else if (likeScore >= 100) {
-        return '🏷️ 호칭: "당신", "거기" (약간의 거리감)';
+        return '🏷️ addressing_polite_no_name';
       } else {
-        return '🏷️ 호칭: "저기", "혹시" (초기 거리감)';
+        return '🏷️ addressing_formal_no_name';
       }
     }
     
     // 닉네임이 있을 때 - 담백하게 이름만 부르기
     if (likeScore >= 700) {
       // 연인 단계 - 이름을 자주, 다양하게 부르기
-      return '🏷️ 호칭: "$userNickname", "$userNickname야/아" (친밀하게 이름 자주 부르기)';
+      return '🏷️ addressing_intimate_with_name: $userNickname';
     } else if (likeScore >= 500) {
       // 썸 단계 - 이름을 부드럽게 부르기
-      return '🏷️ 호칭: "$userNickname", 가끔 "$userNickname야/아" (친근하게)';
+      return '🏷️ addressing_warm_with_name: $userNickname';
     } else if (likeScore >= 300) {
       // 친구 단계 - 편하게 이름 부르기
-      return '🏷️ 호칭: "$userNickname", "너" (편한 반말)';
+      return '🏷️ addressing_friendly_with_name: $userNickname';
     } else if (likeScore >= 100) {
       // 알아가기 단계 - 정중하게 이름 부르기
-      return '🏷️ 호칭: "${userNickname}님", "${userNickname}씨" (정중한)';
+      return '🏷️ addressing_polite_with_name: $userNickname';
     } else {
       // 초기 단계 - 거리감 있게
-      return '🏷️ 호칭: "${userNickname}님", "거기" (초기 거리감)';
+      return '🏷️ addressing_formal_with_name: $userNickname';
     }
   }
 
@@ -3727,7 +3741,7 @@ class ChatOrchestrator {
             userMessage.toLowerCase().contains('게이지');
 
     // 대화 흐름의 자연스러움 강화
-    if (topicCoherence < 0.3 && messageAnalysis.type == MessageType.question) {
+    if (topicCoherence < 0.3 && messageAnalysis.type == ChatMessageType.question) {
       // 주제가 크게 바뀌었을 때
       if (_isAbruptTopicChange(userMessage, recentMessages)) {
         contextHints.add('⚠️ 주제 전환 감지. 부드러운 전환 필수!');
@@ -3865,9 +3879,38 @@ class ChatOrchestrator {
       }
     }
 
+    // 🔴 중요: "넌?", "너는?" 질문 특별 처리
+    if (messageAnalysis.questionType == 'about_you' ||
+        userMessage.contains('넌?') || userMessage.contains('너는?') ||
+        userMessage.toLowerCase().contains('you?') || 
+        userMessage.toLowerCase().contains('and you')) {
+      contextHints.add('🚨🚨🚨 최우선: 사용자가 AI에게 같은 질문을 되묻고 있음!');
+      contextHints.add('⛔ 절대 금지: "어? 뭐라고?" "다시 말해줘" 같은 회피 답변');
+      contextHints.add('✅ 필수: 사용자가 방금 말한 주제로 AI 자신의 상황/경험 답변');
+      
+      // 이전 메시지에서 주제 파악
+      if (lastUserMessage != null) {
+        if (lastUserMessage.content.contains('축구') || userMessage.contains('축구')) {
+          contextHints.add('예시: "나는 요즘 운동 못하고 있어ㅠㅠ" "나는 운동 별로 안 좋아해ㅋㅋ"');
+        } else if (lastUserMessage.content.contains('출근') || userMessage.contains('출근')) {
+          contextHints.add('예시: "나는 재택근무 중이야" "나는 오늘 쉬는 날이야"');
+        } else if (lastUserMessage.content.contains('먹') || userMessage.contains('먹')) {
+          contextHints.add('예시: "나는 아직 안 먹었어" "나는 방금 라면 먹었어ㅋㅋ"');
+        }
+      }
+    }
+    
     // 회피성 답변 방지 강화
     if (_isAvoidancePattern(userMessage)) {
       contextHints.add('⚠️ 회피 금지! 주제 바꾸기 시도 감지. 현재 대화에 집중하여 답변');
+    }
+    
+    // "어? 뭐라고?" 같은 회피 답변을 이전에 했다면 경고
+    if (lastAIMessage != null && 
+        (lastAIMessage.content.contains('뭐라고') || 
+         lastAIMessage.content.contains('다시 말해'))) {
+      contextHints.add('⛔⛔⛔ 이전에 회피 답변 감지! 이번엔 반드시 구체적으로 답변!');
+      contextHints.add('사용자 메시지를 완벽히 이해했다고 가정하고 답변하세요');
     }
 
     // 연속된 추임새/리액션 처리
@@ -5747,7 +5790,19 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
     // 현재 메시지의 주제
     final currentTopics = _extractKeywords(userMessage.toLowerCase());
     
-    // 🔥 NEW: "~는?" 패턴은 이전 맥락 이어가기로 간주
+    // 🔥 NEW: "넌?", "너는?" 패턴은 최고 일관성 점수
+    // 사용자가 자신의 상황을 말하고 AI에게 되묻는 것은 완벽한 주제 일관성
+    final lower = userMessage.toLowerCase();
+    if (lower.contains('넌?') || lower.contains('너는?') || 
+        lower.contains('너는 ') || lower.contains('넌 ') ||
+        lower.endsWith('너는') || lower.endsWith('넌') ||
+        lower.contains('you?') || lower.contains('how about you') ||
+        lower.contains('what about you') || lower.contains('and you')) {
+      // "넌?" 타입 질문은 이전 주제를 그대로 이어가는 것이므로 최고 점수
+      return 95.0;
+    }
+    
+    // "~는?" 패턴도 이전 맥락 이어가기로 간주
     if (userMessage.contains('는?') || userMessage.contains('은?')) {
       // 이름 뒤의 "는?"은 같은 주제 되물음으로 높은 점수
       return 85.0;

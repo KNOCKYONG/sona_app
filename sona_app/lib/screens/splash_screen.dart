@@ -203,7 +203,36 @@ class _SplashScreenState extends State<SplashScreen>
           }
         } else {
           debugPrint(
-              '🔐 [SplashScreen] User is not authenticated, showing welcome dialog');
+              '🔐 [SplashScreen] User is not authenticated, initializing for guest');
+          
+          // 게스트 사용자도 PersonaService 초기화 (첫 설치 무한 로딩 방지)
+          _updateProgress(0.5, '페르소나 데이터 준비 중...');
+          
+          try {
+            debugPrint('🔐 [SplashScreen] Initializing PersonaService for guest user...');
+            
+            // PersonaService 초기화 (게스트는 userId null로)
+            await personaService.initialize(
+              userId: null,
+              onProgress: (progress, message) {
+                // 진행률 0.5~0.9 범위로 매핑
+                final mappedProgress = 0.5 + (progress * 0.4);
+                _updateProgress(mappedProgress, message);
+                
+                // 페르소나 개수 표시
+                if (message.contains('페르소나 데이터') && personaService.allPersonas.isNotEmpty) {
+                  final count = personaService.allPersonas.length;
+                  _updateProgress(mappedProgress, '페르소나 준비 중... ($count명)');
+                }
+              },
+            );
+            
+            debugPrint('✅ [SplashScreen] Guest PersonaService loaded with ${personaService.allPersonas.length} personas');
+          } catch (e) {
+            debugPrint('⚠️ [SplashScreen] Error initializing PersonaService for guest: $e');
+            // 에러가 발생해도 계속 진행 (로컬 데이터 사용)
+          }
+          
           // 로그인되지 않은 경우
           _updateProgress(1.0, '환영합니다!');
           await Future.delayed(const Duration(milliseconds: 500));

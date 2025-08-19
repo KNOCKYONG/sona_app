@@ -288,11 +288,17 @@ python scripts/firebase_image_updater_english.py
 
 ### 대화 분석
 ```bash
+# 오늘 발생한 오류만 분석 (기본)
+python scripts/analyze_today_errors.py
+
 # 체크 안 된 오류 분석
 python scripts/analyze_chat_errors.py
 
 # 모든 오류 재분석
 python scripts/analyze_chat_errors.py --recheck
+
+# 특정 날짜 오류 분석
+python scripts/analyze_chat_errors.py --date 2025-01-18
 
 # 분석 결과 비교
 python scripts/compare_analysis_results.py

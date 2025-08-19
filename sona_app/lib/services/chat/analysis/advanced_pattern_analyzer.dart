@@ -410,7 +410,7 @@ class AdvancedPatternAnalyzer {
     }
 
     if (emotionPatterns['comfortNeeded'] == true) {
-      guidelines.add('🤗 위로 필요! "힘들었겠다", "고생했네" 같은 따뜻한 표현');
+      guidelines.add('🤗 comfort_needed_pattern');
     }
     
     // 🔥 NEW: 암시적 감정 기반 가이드라인
@@ -961,7 +961,7 @@ class AdvancedPatternAnalyzer {
       }
     }
 
-    // 단순 "고마워"만 있고 다른 대상이 없으면 나에게 하는 것으로 간주
+    // Pattern: simple_thanks_to_me
     if ((message == '고마워' || message == '감사해' || message == 'ㄱㅅ' || 
          message == '땡큐' || message == 'thanks') && 
         !message.contains('세상') && !message.contains('인생')) {
@@ -1208,7 +1208,7 @@ class AdvancedPatternAnalyzer {
         result['expectsDetailedAnswer'] = true;
       } else if (lowerMessage.contains('뭐') || lowerMessage.contains('무엇')) {
         result['type'] = 'what';
-        // 🔥 NEW: "뭐할" 패턴 감지
+        // Pattern: what_to_do_detection
         if (lowerMessage.contains('뭐할') || lowerMessage.contains('뭐 할')) {
           result['impliedContext'] = 'activity_plan';
         }
@@ -2068,7 +2068,7 @@ class AdvancedPatternAnalyzer {
       }
     }
     
-    // 5. "괜찮아" / "아니야" 반복 → 실제로는 괜찮지 않음
+    // Pattern: hiding_feelings_repetition
     if ((message.contains('괜찮') || message.contains('아니야') || message.contains('아무것도')) && 
         message.length < 15) {
       result['emotion'] = 'hiding_feelings';

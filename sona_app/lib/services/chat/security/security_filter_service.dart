@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import '../../../models/persona.dart';
 import '../security/system_info_protection.dart';
-import '../security/safe_response_generator.dart';
+// import '../security/safe_response_generator.dart';  // DEPRECATED: 하드코딩된 응답
+import '../security/ai_safe_response_service.dart';  // NEW: AI 기반 응답
 
 /// 🔒 보안 필터 서비스 - 영업비밀 보호 및 악의적 프롬프트 방어
 ///
@@ -316,13 +317,13 @@ class SecurityFilterService {
   }
 
   /// 🛡️ 안전한 회피 응답 생성
-  static String _generateSafeDeflection(
-      Persona persona, String userMessage) {
+  static Future<String> _generateSafeDeflection(
+      Persona persona, String userMessage) async {
     // 🎯 고급 안전 응답 생성기 사용
     final category = SafeResponseGenerator.detectCategory(userMessage);
 
     // 기본 응답 생성
-    String baseResponse = SafeResponseGenerator.generateSafeResponse(
+    String baseResponse = await SafeResponseGenerator.generateSafeResponse(
       persona: persona,
       category: category,
       userMessage: userMessage,
@@ -330,7 +331,7 @@ class SecurityFilterService {
     );
 
     // 변형 적용 (더 자연스럽게)
-    baseResponse = SafeResponseGenerator.generateVariedResponse(
+    baseResponse = await SafeResponseGenerator.generateVariedResponse(
       persona: persona,
       baseResponse: baseResponse,
       userMessage: userMessage,
@@ -338,7 +339,7 @@ class SecurityFilterService {
     );
 
     // 대화 전환 제안 추가 (50% 확률)
-    baseResponse = SafeResponseGenerator.addTopicSuggestion(
+    baseResponse = await SafeResponseGenerator.addTopicSuggestion(
       persona: persona,
       response: baseResponse,
       isCasualSpeech: true, // 항상 반말 모드
@@ -419,9 +420,9 @@ class SecurityFilterService {
   }
 
   /// 🏠 기본 안전 응답
-  static String _getDefaultSafeResponse(Persona persona) {
+  static Future<String> _getDefaultSafeResponse(Persona persona) async {
     // 🎯 안전 응답 생성기 사용
-    return SafeResponseGenerator.generateSafeResponse(
+    return await SafeResponseGenerator.generateSafeResponse(
       persona: persona,
       category: 'general',
       userMessage: null, // 기본 응답이므로 메시지 없음

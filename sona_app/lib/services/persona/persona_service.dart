@@ -943,15 +943,15 @@ class PersonaService extends BaseService {
       for (final doc in querySnapshot.docs) {
         final data = doc.data();
         final isMatched = data['isMatched'] ?? false;
-        final isActive = data['isActive'] ?? false;
+        final isActive = data['isActive'] ?? true; // 기본값을 true로 변경 (기존 데이터 호환성)
         final swipeAction = data['swipeAction'] ?? '';
 
         debugPrint(
             '  📋 Doc ${doc.id}: isMatched=$isMatched, isActive=$isActive, swipeAction=$swipeAction');
 
-        // Only include liked or super_liked personas
-        if (!isMatched || !isActive) {
-          debugPrint('    ❌ Skipping - not matched or not active');
+        // Only check isMatched - isActive is optional for backward compatibility
+        if (!isMatched) {
+          debugPrint('    ❌ Skipping - not matched');
           continue;
         }
 

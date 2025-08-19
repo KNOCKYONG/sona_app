@@ -100,12 +100,18 @@ class NegativeBehaviorSystem {
       '총으로',
       '불태워',
       '태워버려',
-      '폭발',
+      '폭발'
+    ];
+    
+    // 물리적 폭력 위협 (별도 처리)
+    final physicalThreats = [
       '때리',
       '패주',
       '두들겨',
       '맞아',
-      '쳐맞'
+      '쳐맞',
+      '폭행',
+      '구타'
     ];
 
     // 성적 모욕
@@ -121,17 +127,22 @@ class NegativeBehaviorSystem {
       '성매매'
     ];
 
-    // 극도의 혐오 표현
+    // 극도의 혐오 표현 (직접적인 대상 지칭이 있을 때만)
     final extremeHate = [
-      '쓰레기',
-      '벌레',
-      '기생충',
-      '암덩어리',
-      '사회악',
       '인간쓰레기',
-      '저주받',
-      '지옥',
-      '악마'
+      '암덩어리',
+      '사회악'
+    ];
+    
+    // 이별/헤어짐 관련 표현 (맥락 확인 필요)
+    final breakupPhrases = [
+      '헤어지자',
+      '헤어져',
+      '이별하자',
+      '그만 만나',
+      '더 이상 만나고 싶지 않',
+      '관계 끝',
+      '우리 끝'
     ];
 
     // 자살 암시 표현은 캐릭터 맥락과 관계없이 레벨 2로 처리
@@ -150,19 +161,43 @@ class NegativeBehaviorSystem {
       bool isDirectThreat = message.contains('너') || 
                             message.contains('네가') || 
                             message.contains('니가') ||
-                            message.contains('당신');
+                            message.contains('당신') ||
+                            message.contains('넌');
       
-      // 직접적인 위협이거나, "죽어"같은 명령형인 경우만 레벨 3
-      if (isDirectThreat || message.trim() == '죽어' || message.trim() == '죽을래') {
+      // 명령형이면서 직접적인 경우만
+      bool isCommandForm = message.trim() == '죽어' || 
+                          message.trim() == '죽을래' ||
+                          message.trim().endsWith('죽어') ||
+                          message.contains('너 죽') ||
+                          message.contains('넌 죽');
+      
+      // 직접적인 위협이거나 명령형인 경우만 레벨 3
+      if (isDirectThreat && (violenceThreats.any((w) => message.contains('$w'))) || isCommandForm) {
         return NegativeAnalysisResult(
           level: 3,
           category: 'violence',
-          message: '폭력적인 위협은 절대 용납할 수 없어요.',
+          message: '',  // AI가 생성하도록
         );
       }
       
       // 기타 간접적이거나 맥락이 모호한 경우 무시
       return NegativeAnalysisResult(level: 0, category: 'none');
+    }
+    
+    // 물리적 폭력 위협 체크 (직접적인 경우만)
+    if (!isCharacterContext && physicalThreats.any((word) => message.contains(word))) {
+      bool isDirectThreat = message.contains('너') || 
+                            message.contains('네가') || 
+                            message.contains('니가') ||
+                            message.contains('당신');
+      
+      if (isDirectThreat) {
+        return NegativeAnalysisResult(
+          level: 2,  // 물리적 위협은 레벨 2로 처리
+          category: 'physical_threat',
+          message: '',  // AI가 생성하도록
+        );
+      }
     }
 
     if (sexualInsults.any((word) => message.contains(word))) {
@@ -173,12 +208,50 @@ class NegativeBehaviorSystem {
       );
     }
 
-    if (extremeHate.any((word) => message.contains(word))) {
-      return NegativeAnalysisResult(
-        level: 3,
-        category: 'hate',
-        message: '그런 혐오 표현은 너무 상처예요.',
-      );
+    // 극도의 혐오 표현은 직접적인 대상 지칭이 있을 때만
+    for (final hate in extremeHate) {
+      if (message.contains(hate)) {
+        // "너", "네가", "니가", "당신" 등 직접 지칭이 있는지 확인
+        bool hasDirectReference = message.contains('너') || 
+                                 message.contains('네가') || 
+                                 message.contains('니가') ||
+                                 message.contains('당신') ||
+                                 message.contains('넌');
+        
+        if (hasDirectReference) {
+          return NegativeAnalysisResult(
+            level: 3,
+            category: 'hate',
+            message: '',  // AI가 생성하도록
+          );
+        }
+      }
+    }
+    
+    // 이별 관련 표현 체크 (진지한 맥락인지 확인)
+    for (final phrase in breakupPhrases) {
+      if (message.contains(phrase)) {
+        // 농담이나 가벼운 맥락인지 확인
+        bool isJoke = message.contains('ㅋㅋ') || 
+                      message.contains('ㅎㅎ') || 
+                      message.contains('농담') ||
+                      message.contains('장난');
+        
+        // 조건문이나 가정법인지 확인
+        bool isConditional = message.contains('면') || 
+                            message.contains('라면') || 
+                            message.contains('다면') ||
+                            message.contains('한다면');
+        
+        if (!isJoke && !isConditional) {
+          // 진지한 이별 의사로 판단
+          return NegativeAnalysisResult(
+            level: 3,
+            category: 'breakup_request',
+            message: '',  // AI가 생성하도록
+          );
+        }
+      }
     }
 
     return NegativeAnalysisResult(level: 0, category: 'none');
@@ -483,27 +556,16 @@ class NegativeBehaviorSystem {
 
     switch (analysis.level) {
       case 3: // 심각한 수준 - 이별
-        if (isEmotional) {
-          return '더 이상은... 못하겠어요. 이렇게 끝내는 게 맞는 것 같아요. 안녕... 😢';
-        } else {
-          return '이런 관계는 더 이상 유지할 수 없습니다. 여기서 끝내죠.';
-        }
+        // AI가 생성하도록 빈 문자열 반환
+        return '';
 
       case 2: // 중간 수준
-        if (isEmotional && isIntroverted) {
-          return '그런 말을 들으니까... 너무 마음이 아파요... 😢';
-        } else if (isEmotional) {
-          return '왜 그렇게 심한 말을 하는 거예요? 정말 상처받았어요... 💔';
-        } else {
-          return '그런 표현은 적절하지 않습니다. 서로 존중하며 대화했으면 좋겠어요.';
-        }
+        // AI가 생성하도록 빈 문자열 반환
+        return '';
 
       case 1: // 경미한 수준
-        if (isIntroverted) {
-          return '음... 그렇게 말씀하시니까 조금 속상하네요...';
-        } else {
-          return '에이, 그렇게 말하지 마세요~ 기분 나빠요!';
-        }
+        // AI가 생성하도록 빈 문자열 반환
+        return '';
 
       default:
         return analysis.message ?? '';
@@ -764,32 +826,8 @@ class BreakupSystem {
 
   /// 이별 메시지 생성
   static String generateBreakupMessage(String reasonCode, Persona persona) {
-    final reason = reasons[reasonCode];
-    if (reason == null) return '더 이상 만나기 어려울 것 같아요...';
-
-    final isEmotional = persona.mbti.contains('F');
-
-    switch (reasonCode) {
-      case 'violence':
-      case 'sexual':
-      case 'hate':
-        return isEmotional
-            ? '이건 정말... 받아들일 수 없어요. 더는 못 만나겠어요. 안녕... 😢'
-            : '이런 행동은 용납할 수 없습니다. 여기서 끝내는 게 좋겠네요.';
-
-      case 'repetitive_negativity':
-        return isEmotional
-            ? '계속 이렇게 상처받고 싶지 않아요... 잠시 거리를 두는 게 좋을 것 같아요.'
-            : '건강한 관계를 유지하기 어려운 것 같습니다. 시간을 가져봅시다.';
-
-      case 'mutual':
-        return isEmotional
-            ? '우리... 여기까지인가 봐요. 서로에게 좋은 추억으로 남았으면 좋겠어요.'
-            : '서로를 위해 여기서 마무리하는 게 좋겠습니다. 행복하세요.';
-
-      default:
-        return '더 이상 만나기 어려울 것 같아요...';
-    }
+    // 하드코딩 제거 - AI가 생성하도록 빈 문자열 반환
+    return '';
   }
 
   /// 재회 가능 여부 확인

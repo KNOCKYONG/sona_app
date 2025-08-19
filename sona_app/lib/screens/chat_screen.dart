@@ -621,8 +621,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행
-    _scrollDebounceTimer = Timer(const Duration(milliseconds: 50), () {
+    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (50ms → 100ms로 증가)
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
       if (!mounted || !_scrollController.hasClients) return;
       
       // 다시 한번 사용자 스크롤 상태 확인
@@ -640,23 +640,24 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         targetScroll = _scrollController.position.maxScrollExtent;
       }
 
-      if (smooth) {
-        // 부드럽고 자연스러운 스크롤 애니메이션
+      // iOS에서는 애니메이션 대신 즉시 이동으로 통일 (충돌 방지)
+      if (Platform.isIOS || !smooth) {
+        // iOS 또는 smooth가 false일 때: 즉시 이동
+        _scrollController.jumpTo(targetScroll);
+        _isScrolling = false;
+        _isNearBottom = true;
+        _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
+      } else {
+        // Android에서 smooth가 true일 때만: 애니메이션 스크롤
         _scrollController.animateTo(
           targetScroll,
-          duration: const Duration(milliseconds: 250),  // 약간 느린 애니메이션
+          duration: const Duration(milliseconds: 200),  // 애니메이션 시간 단축
           curve: Curves.easeOutCubic,  // 더 부드러운 커브
         ).then((_) {
           _isScrolling = false;
           _isNearBottom = true;
           _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
         });
-      } else {
-        // 즉시 이동
-        _scrollController.jumpTo(targetScroll);
-        _isScrolling = false;
-        _isNearBottom = true;
-        _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
       }
     });
   }
@@ -685,14 +686,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _hasInitiallyScrolled = false;
         Future.delayed(const Duration(milliseconds: 300), () {
           if (mounted && _scrollController.hasClients) {
-            // Double frame callback for proper layout
+            // 단일 PostFrameCallback으로 단순화
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_scrollController.hasClients) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (_scrollController.hasClients) {
-                    _scrollToBottom(force: true, smooth: false);
-                  }
-                });
+                _scrollToBottom(force: true, smooth: false);
               }
             });
           }
@@ -754,7 +751,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    // Handle keyboard appearance immediately
+    // iOS에서는 FocusNode 리스너에서 처리하므로 여기서는 Android만 처리
+    if (Platform.isIOS) return;
+    
+    // Handle keyboard appearance immediately (Android only)
     if (mounted) {
       final bottomInset = MediaQuery.of(context).viewInsets.bottom;
       // 키보드가 올라왔고, 사용자가 맨 아래에 있으며, 사용자가 스크롤 중이 아닐 때만
@@ -897,7 +897,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           return ListView.builder(
                             key: ValueKey('chat_list_${currentPersona.id}'),
                             controller: _scrollController,
-                            cacheExtent: 500.0, // 캐시 범위 설정으로 스크롤 성능 개선
+                            physics: Platform.isIOS 
+                                ? const ClampingScrollPhysics() // iOS: bounce 효과 제거
+                                : const BouncingScrollPhysics(), // Android: 기본 동작 유지
+                            cacheExtent: 200.0, // 캐시 범위 축소로 메모리 최적화
                             addAutomaticKeepAlives: false, // 불필요한 위젯 유지 방지
                             addRepaintBoundaries: true, // 리페인트 최적화
                             padding: EdgeInsets.only(

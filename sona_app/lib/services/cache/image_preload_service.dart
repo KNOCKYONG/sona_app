@@ -33,23 +33,24 @@ class ImagePreloadService {
   static const String _preloadDateKey = 'images_preload_date';
   static const String _preloadedPersonasKey = 'preloaded_personas';
   static const String _preloadedImagesKey = 'preloaded_images';
+  static const String _largeImagesPreloadedKey = 'large_images_preloaded';
 
   /// 이미지 프리로딩이 완료되었는지 확인
   Future<bool> isPreloadCompleted() async {
     return await PreferencesManager.getBool(_preloadCompletedKey) ?? false;
   }
 
-  /// 새로운 이미지가 있는지 확인
+  /// 새로운 이미지가 있는지 확인 (thumb, medium만 체크)
   Future<bool> hasNewImages(List<Persona> personas) async {
     final prefs = await PreferencesManager.instance;
     final preloadedImages = prefs.getStringList(_preloadedImagesKey) ?? [];
 
-    // 모든 이미지 URL 수집
+    // thumb과 medium 이미지 URL만 수집 (small 제외)
     final currentImages = <String>[];
     for (final persona in personas) {
       currentImages.addAll(persona.getAllImageUrls(size: 'thumb'));
-      currentImages.addAll(persona.getAllImageUrls(size: 'small'));
       currentImages.addAll(persona.getAllImageUrls(size: 'medium'));
+      // small은 사용하지 않으므로 제외
     }
 
     // 새로운 이미지가 있는지 확인
@@ -79,12 +80,11 @@ class ImagePreloadService {
     final newImageUrls = <String>[];
 
     for (final persona in personas) {
-      // 각 크기별로 새로운 이미지 확인
+      // thumb과 medium만 확인 (small 제외)
       final thumbUrls = persona.getAllImageUrls(size: 'thumb');
-      final smallUrls = persona.getAllImageUrls(size: 'small');
       final mediumUrls = persona.getAllImageUrls(size: 'medium');
 
-      for (final url in [...thumbUrls, ...smallUrls, ...mediumUrls]) {
+      for (final url in [...thumbUrls, ...mediumUrls]) {
         if (url.isNotEmpty && !preloadedImagesSet.contains(url)) {
           newImageUrls.add(url);
         }
@@ -159,32 +159,23 @@ class ImagePreloadService {
       final preloadedImages = <String>[];
 
       for (final persona in personas) {
-        // 썸네일 이미지 (카드에서 사용)
+        // 썸네일 이미지 (채팅 목록, 프로필 아바타에서 사용)
         final thumbUrl = persona.getThumbnailUrl();
         if (thumbUrl != null && thumbUrl.isNotEmpty) {
           imageUrls.add(thumbUrl);
           preloadedImages.add(thumbUrl);
         }
 
-        // 작은 이미지 (카드 대체용)
-        final smallUrl = persona.getSmallImageUrl();
-        if (smallUrl != null && smallUrl.isNotEmpty) {
-          imageUrls.add(smallUrl);
-          preloadedImages.add(smallUrl);
-        }
+        // small은 사용하지 않으므로 제외
 
-        // 중간 이미지 (프로필 보기용)
+        // 중간 이미지 (PersonaSelectionScreen 카드에서 사용)
         final mediumUrl = persona.getMediumImageUrl();
         if (mediumUrl != null && mediumUrl.isNotEmpty) {
           imageUrls.add(mediumUrl);
           preloadedImages.add(mediumUrl);
         }
 
-        // 큰 이미지는 선택적으로 (용량 고려)
-        // final largeUrl = persona.getLargeImageUrl();
-        // if (largeUrl != null && largeUrl.isNotEmpty) {
-        //   imageUrls.add(largeUrl);
-        // }
+        // large는 나중에 백그라운드로 로드 (프로필 상세 보기용)
       }
 
       // 프리로드된 이미지 목록 저장
@@ -300,6 +291,59 @@ class ImagePreloadService {
     } catch (e) {
       return 0;
     }
+  }
+
+  /// large 이미지만 백그라운드로 프리로드 (선택적)
+  Future<void> preloadLargeImagesInBackground(List<Persona> personas) async {
+    // 이미 large 이미지가 프리로드되었는지 확인
+    final isLargePreloaded = await PreferencesManager.getBool(_largeImagesPreloadedKey) ?? false;
+    if (isLargePreloaded) {
+      debugPrint('✅ Large images already preloaded');
+      return;
+    }
+
+    debugPrint('🖼️ Starting background preload of large images...');
+    
+    // 백그라운드에서 실행
+    Future.microtask(() async {
+      try {
+        final largeImageUrls = <String>[];
+        
+        for (final persona in personas) {
+          // large 이미지 URL들 수집
+          final largeUrls = persona.getAllImageUrls(size: 'large');
+          largeImageUrls.addAll(largeUrls.where((url) => url.isNotEmpty));
+        }
+        
+        debugPrint('📊 Found ${largeImageUrls.length} large images to preload in background');
+        
+        if (largeImageUrls.isEmpty) {
+          await PreferencesManager.setBool(_largeImagesPreloadedKey, true);
+          return;
+        }
+        
+        // 배치로 다운로드 (백그라운드이므로 더 작은 배치 사용)
+        const batchSize = 3;
+        for (int i = 0; i < largeImageUrls.length; i += batchSize) {
+          final batch = largeImageUrls.skip(i).take(batchSize).toList();
+          
+          await Future.wait(
+            batch.map((url) => _preloadImage(url)),
+            eagerError: false,
+          );
+          
+          // 백그라운드이므로 더 긴 딜레이
+          await Future.delayed(const Duration(milliseconds: 500));
+        }
+        
+        // large 이미지 프리로드 완료 표시
+        await PreferencesManager.setBool(_largeImagesPreloadedKey, true);
+        debugPrint('✅ Large images preloading completed in background');
+        
+      } catch (e) {
+        debugPrint('❌ Error during large image background preloading: $e');
+      }
+    });
   }
 
   void dispose() {

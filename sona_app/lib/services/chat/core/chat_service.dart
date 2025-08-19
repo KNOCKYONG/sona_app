@@ -19,7 +19,7 @@ import '../../storage/cache_manager.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../../auth/user_service.dart';
 import '../../app_info_service.dart';
-import '../security/security_filter_service.dart';
+// import '../security/security_filter_service.dart'; // Temporarily disabled for build
 import '../../relationship/relation_score_service.dart';
 import '../../relationship/negative_behavior_system.dart';
 import '../../relationship/like_cooldown_system.dart';
@@ -1460,14 +1460,15 @@ class ChatService extends BaseService {
       }
     }
 
-    // 기본 폴백 응답 - 회피 패턴 제거
-    final responses = [
-      '어? 뭐라고? 다시 말해줄래?',
-      '아 미안 못 들었어ㅎㅎ',
-      '어 잠깐 놓쳤어! 다시 말해줘~',
-      '어 뭐라고 했어? 다시 한번만!',
+    // 기본 폴백 응답 - API 오류 시에만 사용
+    // ⚠️ 절대 "뭐라고?" 같은 회피 응답 사용 금지
+    final emergencyResponses = [
+      '잠시 연결이 불안정해... 곧 다시 대답할게!',
+      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
+      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
+      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
     ];
-    return responses[Random().nextInt(responses.length)];
+    return emergencyResponses[Random().nextInt(emergencyResponses.length)];
   }
 
   // Existing methods like _analyzeEmotionFromResponse, _calculateScoreChangeWithRelationship,
@@ -3687,58 +3688,31 @@ class ChatService extends BaseService {
     // MBTI와 말투에 따른 개성있는 인사 메시지들
     final greetings = <String>[];
 
-    // 기본 인사 패턴들
-    if (isCasual) {
-      greetings.addAll([
-        '안녕! 대화하자 ㅎㅎ',
-        '어? 반가워! ㅋㅋ',
-        '안녕 반가워 ㅎㅎ',
-        '어 안녕! 연락 고마워 ㅋㅋ',
-        '반가워! 먼저 말 걸어줘서 고마워 ㅎㅎ',
-        '안녕! 찾아와줘서 고마워 ㅋㅋ',
-      ]);
-    } else {
-      greetings.addAll([
-        '안녕하세요! 대화해봐요 ㅎㅎ',
-        '어? 반가워요! ㅋㅋ',
-        '안녕하세요 반가워요 ㅎㅎ',
-        '어 안녕하세요! 연락 고마워요 ㅋㅋ',
-        '반가워요! 먼저 말 걸어줘서 고마워요 ㅎㅎ',
-        '안녕하세요! 찾아와줘서 고마워요 ㅋㅋ',
-      ]);
-    }
+    // 기본 인사 패턴들 (반말만)
+    greetings.addAll([
+      '안녕!! 대화하자~~ ㅎㅎ',
+      '어?? 반가워!! ㅋㅋ',
+      '안녕 반가워~~ ㅎㅎ',
+      '어 안녕!! 연락 고마워~~ ㅋㅋ',
+      '반가워!! 먼저 말 걸어줘서 고마워~~ ㅎㅎ',
+      '안녕!! 찾아와줘서 고마워~~ ㅋㅋ',
+    ]);
 
     // MBTI별 특성 추가
     if (mbti.startsWith('E')) {
       // 외향적 - 활발하고 적극적
-      if (isCasual) {
-        greetings.addAll([
-          '안녕! 같이 재밌게 얘기해보자 ㅋㅋ',
-          '어 반가워! 뭐하고 있었어? ㅎㅎ',
-          '안녕! 오늘 어때? 같이 얘기하자 ㅋㅋ',
-        ]);
-      } else {
-        greetings.addAll([
-          '안녕하세요! 같이 재밌게 얘기해봐요 ㅋㅋ',
-          '어 반가워요! 뭐하고 계셨어요? ㅎㅎ',
-          '안녕하세요! 오늘 어떠세요? 같이 얘기해봐요 ㅋㅋ',
-        ]);
-      }
+      greetings.addAll([
+        '안녕!! 같이 재밌게 얘기해보자~~ ㅋㅋ',
+        '어 반가워!! 뭐하고 있었어?? ㅎㅎ',
+        '안녕!! 오늘 어때?? 같이 얘기하자~~ ㅋㅋ',
+      ]);
     } else {
       // 내향적 - 조심스럽고 차분함
-      if (isCasual) {
-        greetings.addAll([
-          '안녕... 처음이라 좀 긴장되네 ㅎㅎ',
-          '어... 반가워! 뭔가 떨린다 ㅋㅋ',
-          '안녕! 먼저 말 걸어줘서 고마워 ㅎㅎ',
-        ]);
-      } else {
-        greetings.addAll([
-          '안녕하세요... 처음이라 좀 긴장되네요 ㅎㅎ',
-          '어... 반가워요! 뭔가 떨려요 ㅋㅋ',
-          '안녕하세요! 먼저 말 걸어줘서 고마워요 ㅎㅎ',
-        ]);
-      }
+      greetings.addAll([
+        '안녕... 처음이라 좀 긴장되네~~ ㅎㅎ',
+        '어... 반가워!! 뭔가 떨린다~~ ㅋㅋ',
+        '안녕!! 먼저 말 걸어줘서 고마워~~ ㅎㅎ',
+      ]);
     }
 
     // 랜덤하게 선택

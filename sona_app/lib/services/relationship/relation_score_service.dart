@@ -234,7 +234,7 @@ class RelationScoreService extends BaseService {
         return LikeCalculationResult(
           likeChange: -currentLikes, // 0으로 리셋
           reason: 'breakup',
-          message: response.isNotEmpty ? response : '더 이상 만나고 싶지 않아요. 안녕...',
+          message: response.isNotEmpty ? response : '', // 하드코딩 제거, AI가 생성하도록
           isBreakup: true,
         );
 
@@ -244,7 +244,7 @@ class RelationScoreService extends BaseService {
         return LikeCalculationResult(
           likeChange: penalty,
           reason: 'severe_negativity',
-          message: response.isNotEmpty ? response : '그런 말은 너무 상처예요... 😢',
+          message: response.isNotEmpty ? response : '', // 하드코딩 제거
           isWarning: analysis.isWarning,
         );
 
@@ -256,7 +256,7 @@ class RelationScoreService extends BaseService {
           reason: analysis.category == 'casual_swear'
               ? 'casual_swear'
               : 'mild_negativity',
-          message: response.isNotEmpty ? response : '그렇게 말하면 기분이 안 좋아요...',
+          message: response.isNotEmpty ? response : '', // 하드코딩 제거
           isWarning: analysis.isWarning,
         );
 

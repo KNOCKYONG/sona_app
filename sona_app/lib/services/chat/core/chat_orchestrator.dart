@@ -43,9 +43,11 @@ import '../intelligence/fuzzy_memory_service.dart';
 import '../cache/response_variation_cache.dart';
 import '../learning/user_preference_learning.dart';
 import '../analysis/naturalness_analyzer.dart';
+import 'unified_conversation_system.dart';
+import 'conversation_state_manager.dart';
 
 /// 메시지 타입 enum
-enum MessageType {
+enum ChatMessageType {
   general,
   question,
   greeting,
@@ -64,7 +66,7 @@ enum UserEmotion {
 
 /// 메시지 분석 결과 클래스
 class MessageAnalysis {
-  final MessageType type;
+  final ChatMessageType type;
   final UserEmotion emotion;
   final double complexity;
   final List<String> keywords;
@@ -123,6 +125,7 @@ class ChatOrchestrator {
   final PersonaRelationshipCache _relationshipCache =
       PersonaRelationshipCache.instance;
   final ConversationMemoryService _memoryService = ConversationMemoryService();
+  final UnifiedConversationSystem _unifiedSystem = UnifiedConversationSystem.instance;
   
   // 반복 응답 방지를 위한 캐시 (유저-페르소나 조합별 최근 응답 저장)
   // 키 형식: "userId_personaId"
@@ -341,7 +344,7 @@ class ChatOrchestrator {
       final relationshipCache = PersonaRelationshipCache.instance;
       if (relationshipCache.shouldGreet(personaData.lastGreetingTime)) {
         // 24시간 이상 지났거나 처음 대화하는 경우
-        if (messageAnalysis.type == MessageType.greeting || chatHistory.isEmpty) {
+        if (messageAnalysis.type == ChatMessageType.greeting || chatHistory.isEmpty) {
           // 인사 시간 업데이트
           await relationshipCache.updateGreetingTime(
             userId: userId,
@@ -351,7 +354,7 @@ class ChatOrchestrator {
         }
       } else {
         // 24시간 이내에 이미 인사를 한 경우
-        if (messageAnalysis.type == MessageType.greeting) {
+        if (messageAnalysis.type == ChatMessageType.greeting) {
           greetingGuide = '⚠️ 이미 오늘 인사를 나눴습니다. 중복 인사 금지! 바로 대화 이어가기.';
         }
       }
@@ -611,6 +614,37 @@ class ChatOrchestrator {
             : recentWarning + recentList;
       }
 
+      // 4.5단계: 통합 대화 시스템 컨텍스트 구성
+      final conversationId = '${userId}_${completePersona.id}';
+      final unifiedContext = await _unifiedSystem.buildUnifiedContext(
+        conversationId: conversationId,
+        userId: userId,
+        personaId: completePersona.id,
+        userMessage: userMessage,
+        fullHistory: chatHistory,
+        persona: completePersona,
+      );
+      
+      // 통합 컨텍스트를 힌트에 추가
+      if (unifiedContext['contextQuality'] != null && 
+          unifiedContext['contextQuality'] > 0.6) {
+        final stateSummary = unifiedContext['state']['summary'] ?? '';
+        final permanentSummary = unifiedContext['permanentSummary'] ?? '';
+        
+        if (stateSummary.isNotEmpty) {
+          contextHint = contextHint != null 
+              ? '$contextHint\n\n## 📊 대화 상태:\n$stateSummary'
+              : '## 📊 대화 상태:\n$stateSummary';
+        }
+        
+        // 영구 메모리가 있으면 추가
+        if (permanentSummary.isNotEmpty) {
+          contextHint = contextHint != null
+              ? '$contextHint\n\n## 💎 영구 기억:\n$permanentSummary'
+              : '## 💎 영구 기억:\n$permanentSummary';
+        }
+      }
+      
       // 5단계: API 호출
       // 영어 입력은 원본 그대로 전달하고, targetLanguage 파라미터 추가
       
@@ -662,6 +696,8 @@ class ChatOrchestrator {
         chatHistory: chatHistory,
         userMessage: userMessage,  // 원본 메시지 그대로 전달
         relationshipType: _getRelationshipType(completePersona),
+        conversationId: conversationId,  // 대화방 ID 전달
+        userId: userId,                   // 사용자 ID 전달
         userNickname: userNickname,
         userAge: userAge,
         isCasualSpeech: true, // 항상 반말 모드
@@ -868,9 +904,9 @@ class ChatOrchestrator {
       if (naturalnessScore < 0.6 && !isRepetitive) {
         // 메시지 타입에 따른 변형 카테고리 선택
         String? variationCategory;
-        if (messageAnalysis.type == MessageType.greeting) {
+        if (messageAnalysis.type == ChatMessageType.greeting) {
           variationCategory = 'greeting';
-        } else if (messageAnalysis.type == MessageType.question) {
+        } else if (messageAnalysis.type == ChatMessageType.question) {
           variationCategory = 'simple_reaction';
         } else if (emotion == EmotionType.happy) {
           variationCategory = 'empathy_happy';
@@ -993,6 +1029,36 @@ class ChatOrchestrator {
         debugPrint('🎉 Relationship milestone: ${relationshipEvent.title}');
       }
 
+      // 9단계: 통합 대화 시스템 상태 업데이트
+      final userMsg = Message(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        personaId: completePersona.id,
+        content: userMessage,
+        type: MessageType.text,
+        isFromUser: true,
+        timestamp: DateTime.now(),
+      );
+      
+      final aiMsg = Message(
+        id: (DateTime.now().millisecondsSinceEpoch + 1).toString(),
+        personaId: completePersona.id,
+        content: responseContents.first,
+        type: MessageType.text,
+        isFromUser: false,
+        timestamp: DateTime.now(),
+        emotion: emotion,
+        likesChange: scoreChange,
+      );
+      
+      await _unifiedSystem.updateConversationState(
+        conversationId: conversationId,
+        userId: userId,
+        personaId: completePersona.id,
+        userMessage: userMsg,
+        aiResponse: aiMsg,
+        fullHistory: [...chatHistory, userMsg, aiMsg],
+      );
+      
       return ChatResponse(
         content: responseContents.first, // 기존 호환성
         contents: responseContents, // 새로운 멀티 메시지
@@ -1616,7 +1682,7 @@ class ChatOrchestrator {
     final length = message.length;
 
     // 메시지 타입 판별
-    MessageType type = MessageType.general;
+    ChatMessageType type = ChatMessageType.general;
     UserEmotion emotion = UserEmotion.neutral;
     double complexity = 0.0;
     
@@ -1625,7 +1691,7 @@ class ChatOrchestrator {
     final questionType = _analyzeQuestionType(lower);
     final questionPattern = advancedAnalyzer.analyzeQuestionPattern(lower);
     if (questionType != null || message.contains('?') || questionPattern['isQuestion'] == true) {
-      type = MessageType.question;
+      type = ChatMessageType.question;
       complexity += 0.2;
     }
 
@@ -1671,11 +1737,11 @@ class ChatOrchestrator {
 
     // 특수 타입 확인
     if (advancedAnalyzer.detectGreetingPattern(lower)['isGreeting'] == true)
-      type = MessageType.greeting;
+      type = ChatMessageType.greeting;
     else if (advancedAnalyzer.detectFarewellPattern(lower)['isFarewell'] == true)
-      type = MessageType.farewell;
+      type = ChatMessageType.farewell;
     else if (advancedAnalyzer.detectComplimentPattern(lower)['isCompliment'] == true)
-      type = MessageType.compliment;
+      type = ChatMessageType.compliment;
 
     return MessageAnalysis(
       type: type,
@@ -1920,7 +1986,7 @@ class ChatOrchestrator {
   Future<String?> _checkSimpleResponse({
     required String userMessage,
     required Persona persona,
-    required MessageType messageType,
+    required ChatMessageType messageType,
     String? userId,
   }) async {
     final lowerMessage = userMessage.toLowerCase().trim();
@@ -3696,7 +3762,7 @@ class ChatOrchestrator {
             userMessage.toLowerCase().contains('게이지');
 
     // 대화 흐름의 자연스러움 강화
-    if (topicCoherence < 0.3 && messageAnalysis.type == MessageType.question) {
+    if (topicCoherence < 0.3 && messageAnalysis.type == ChatMessageType.question) {
       // 주제가 크게 바뀌었을 때
       if (_isAbruptTopicChange(userMessage, recentMessages)) {
         contextHints.add('⚠️ 주제 전환 감지. 부드러운 전환 필수!');

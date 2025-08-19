@@ -78,47 +78,26 @@ class FirstMeetingDetector {
   }
 
   /// 긴장감 표현 문구 - 회피 패턴 제거
-  static List<String> getNervousExpressions(bool isCasual) {
-    if (isCasual) {
-      return [
-        '처음이라 좀 긴장되네ㅎㅎ',
-        '음... 아직 어색하다',
-        '첫 대화라 떨려',
-        '뭔가 설레는데?',
-        '이렇게 대화하는 거 재밌다',
-        '처음 보는 사이라 신기해',
-      ];
-    } else {
-      return [
-        '처음이라 좀 긴장되네요ㅎㅎ',
-        '음... 아직 어색해요',
-        '첫 대화라 떨려요',
-        '뭔가 설레는데요?',
-        '이렇게 대화하는 거 재밌어요',
-        '처음 보는 사이라 신기해요',
-      ];
-    }
+  static List<String> getNervousExpressions() {
+    return [
+      '처음이라 좀 긴장되네ㅎㅎ',
+      '음... 아직 어색하다~~',
+      '첫 대화라 떨려!!',
+      '뭔가 설레는데??ㅎㅎ',
+      '이렇게 대화하는 거 재밌다!!',
+      '처음 보는 사이라 신기해~~',
+    ];
   }
 
   /// 감사 표현 문구
-  static List<String> getThankfulExpressions(bool isCasual) {
-    if (isCasual) {
-      return [
-        '대화 걸어줘서 고마워',
-        '먼저 연락해줘서 좋다',
-        '연결되어서 반가워',
-        '말 걸어줘서 기뻐',
-        '대화할 수 있어서 좋아',
-      ];
-    } else {
-      return [
-        '대화 걸어주셔서 고마워요',
-        '먼저 연락해주셔서 좋아요',
-        '연결되어서 반가워요',
-        '말 걸어주셔서 기뻐요',
-        '대화할 수 있어서 좋아요',
-      ];
-    }
+  static List<String> getThankfulExpressions() {
+    return [
+      '대화 걸어줘서 고마워!!ㅎㅎ',
+      '먼저 연락해줘서 좋다~~',
+      '연결되어서 반가워!!ㅎㅎ',
+      '말 걸어줘서 기뻐~~',
+      '대화할 수 있어서 좋아!!ㅎㅎ',
+    ];
   }
 }
 

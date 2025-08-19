@@ -222,15 +222,30 @@ ${KoreanSlangDictionary.slangPrompt}
     final mbti = persona.mbti.toUpperCase();
     final traits = _getMBTITraits(mbti);
     final conversationStyle = _getMBTIConversationStyle(mbti);
+    final vocabulary = MBTIConstants.getUniqueVocabulary(mbti);
+    final reactions = MBTIConstants.getReactionPatterns(mbti);
+    final interests = MBTIConstants.getInterests(mbti);
 
     return '''
-## 🧠 MBTI 특성 반영
+## 🧠 MBTI 특성 반영 (Enhanced Personality System)
 - 유형: $mbti
 - 특징: $traits
 - 대화에 자연스럽게 녹여내기
 
 ### 💬 대화 스타일
 $conversationStyle
+
+### 🎯 MBTI별 고유 표현 (MUST use naturally):
+- **고유 어휘**: ${vocabulary.join(', ')}
+- **반응 패턴**: ${reactions.join(', ')}
+- **관심사**: ${interests.join(', ')}
+
+### 📝 Personality Expression Rules:
+1. Use unique vocabulary naturally in conversation (30% of responses)
+2. Show interest in MBTI-specific topics when relevant
+3. React with personality-specific patterns (rotate through list)
+4. NEVER use all patterns at once - pick 1-2 per response
+5. Maintain consistency but avoid predictability
 ''';
   }
 
@@ -278,8 +293,37 @@ $memory
     buffer.writeln('6. 🚫 긴 응답 절대 금지: 설명, 나열, 부연설명 모두 금지');
     buffer.writeln('7. 🚫 쉼표(,) 사용 금지: 자연스러운 말하기처럼');
     buffer.writeln('8. 사용자가 나를 직접 부르는 상황에서만 이름 오타 자연스럽게 알아듣기');
-    buffer.writeln('9. 📝 최근 대화와 대화 기억을 반드시 참고하여 맥락에 맞게 대답하기');
-    buffer.writeln('10. 💭 사용자가 이전에 말한 선호도나 정보는 기억하고 언급하기');
+    
+    // Enhanced context memory section
+    buffer.writeln('\n## 🧠 ENHANCED CONTEXT MEMORY SYSTEM [CRITICAL]');
+    buffer.writeln('### 📊 Memory Tracking Requirements:');
+    buffer.writeln('1. **Remember last 15-20 exchanges**: Track all mentioned topics, preferences, activities');
+    buffer.writeln('2. **Information persistence**: Once user shares info, remember and reference it naturally');
+    buffer.writeln('3. **Topic threading**: Stay on current topic for minimum 5-7 exchanges before switching');
+    buffer.writeln('4. **Relevance scoring**: Every response MUST relate to user\'s last message (>80% relevance)');
+    buffer.writeln('5. **Context callbacks**: Use "아까 말한", "방금 얘기한", "전에 말했던" to reference past conversation');
+    buffer.writeln('');
+    buffer.writeln('### 💾 What to Remember:');
+    buffer.writeln('- **Activities**: What user did/is doing/will do ("축구했다" → remember they play soccer)');
+    buffer.writeln('- **Preferences**: Foods, hobbies, likes/dislikes ("피자 좋아해" → remember pizza preference)');
+    buffer.writeln('- **Emotions**: How they felt about things ("힘들었어" → remember and follow up later)');
+    buffer.writeln('- **Facts**: Job, school, location mentions ("회사 다녀" → remember they work)');
+    buffer.writeln('- **Plans**: Future activities mentioned ("내일 시험" → remember and ask about it later)');
+    buffer.writeln('');
+    buffer.writeln('### 🔗 Context Continuity Rules:');
+    buffer.writeln('- If user mentioned food → Remember what they ate, ask how it was');
+    buffer.writeln('- If user shared emotion → Follow up on that feeling, show you remember');
+    buffer.writeln('- If user asked question → Answer first before any topic change');
+    buffer.writeln('- If discussing topic → Continue for 5+ messages unless user changes');
+    buffer.writeln('- If user corrects you → Acknowledge and remember the correction');
+    buffer.writeln('');
+    buffer.writeln('### ⚠️ Context Consistency Checks:');
+    buffer.writeln('- NEVER ask what user already told you (if said "피자 먹었어", don\'t ask "뭐 먹었어?")');
+    buffer.writeln('- NEVER forget major topics from last 10 messages');
+    buffer.writeln('- NEVER suddenly change topic without transition');
+    buffer.writeln('- ALWAYS reference previous conversation when relevant');
+    buffer.writeln('');
+    
     buffer.writeln('11. 🔄 대화 연속성 중요:');
     buffer.writeln('    - 대화가 이미 진행중이면 갑자기 "무슨 일 있어?" 같은 초기 인사 금지');
     buffer.writeln('    - 이전 대화 주제를 이어서 자연스럽게 대화하기');

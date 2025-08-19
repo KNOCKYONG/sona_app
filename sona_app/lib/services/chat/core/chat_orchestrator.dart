@@ -844,18 +844,92 @@ class ChatOrchestrator {
       
       // 반복 응답 감지 (먼저 체크)
       bool isRepetitive = responseCache.isRecentlyUsed(responseContents.first);
+      
+      // Enhanced quality gates - check multiple aspects
+      bool failsQualityGates = false;
+      String qualityIssue = '';
+      
+      // Quality Gate 1: Check repetition patterns
+      if (isRepetitive) {
+        failsQualityGates = true;
+        qualityIssue = 'repetitive_pattern';
+      }
+      
+      // Quality Gate 2: Check similarity score with recent responses
+      final similarityScore = _calculateSimilarityWithRecentResponses(
+        responseContents.first, 
+        userId, 
+        completePersona.id
+      );
+      if (similarityScore > 0.7) {
+        failsQualityGates = true;
+        qualityIssue = 'high_similarity';
+        debugPrint('⚠️ High similarity detected: ${(similarityScore * 100).toStringAsFixed(0)}%');
+      }
+      
+      // Quality Gate 3: Check for macro-like patterns
+      if (_containsMacroPattern(responseContents.first)) {
+        failsQualityGates = true;
+        qualityIssue = 'macro_pattern';
+        debugPrint('⚠️ Macro-like pattern detected in response');
+      }
+      
+      // Quality Gate 4: Check response variety
+      if (_isLowVarietyResponse(responseContents.first, chatHistory)) {
+        failsQualityGates = true;
+        qualityIssue = 'low_variety';
+        debugPrint('⚠️ Low variety response detected');
+      }
+      
+      // Quality Gate 5: Check topic relevance
+      if (!_isTopicRelevant(userMessage, responseContents.first)) {
+        failsQualityGates = true;
+        qualityIssue = 'off_topic';
+        debugPrint('⚠️ Off-topic response detected - not addressing user\'s question');
+      }
+      
       int regenerationAttempts = 0;
       const maxRegenerationAttempts = 3;
       
-      // 반복이 감지되면 최대 3회까지 재생성
-      while (isRepetitive && regenerationAttempts < maxRegenerationAttempts) {
+      // If quality gates fail, regenerate with specific guidance
+      while (failsQualityGates && regenerationAttempts < maxRegenerationAttempts) {
         regenerationAttempts++;
-        debugPrint('🔄 Repetitive response detected. Regenerating... (Attempt $regenerationAttempts)');
+        debugPrint('🔄 Quality gate failed ($qualityIssue). Regenerating... (Attempt $regenerationAttempts)');
         
-        // 반복 방지를 위한 새로운 힌트 생성
+        // Create specific hints based on quality issue
         final regenerationHints = <String>[];
-        regenerationHints.add('⚠️ 이전 응답과 다른 새로운 표현 사용 필수!');
-        regenerationHints.add('💡 다양한 어휘와 문장 구조로 응답하세요.');
+        regenerationHints.add('⚠️ CRITICAL: Response failed quality check: $qualityIssue');
+        
+        switch (qualityIssue) {
+          case 'repetitive_pattern':
+            regenerationHints.add('🔄 MUST use completely different expressions and patterns!');
+            regenerationHints.add('📚 Rotate through variation templates - never repeat recent ones');
+            regenerationHints.add('🎯 Check last 10 responses and ensure <30% similarity');
+            break;
+          case 'high_similarity':
+            regenerationHints.add('🎨 Create unique response with fresh vocabulary');
+            regenerationHints.add('💡 Use different sentence structure and length');
+            regenerationHints.add('🔀 Express same meaning in completely different way');
+            break;
+          case 'macro_pattern':
+            regenerationHints.add('🚫 Avoid fixed templates and repetitive patterns');
+            regenerationHints.add('✨ Generate spontaneous, natural response');
+            regenerationHints.add('🎲 Add unexpected but relevant elements');
+            break;
+          case 'low_variety':
+            regenerationHints.add('📈 Increase response diversity and creativity');
+            regenerationHints.add('🎭 Use MBTI-specific vocabulary and reactions');
+            regenerationHints.add('🌈 Mix different expression styles');
+            break;
+          case 'off_topic':
+            regenerationHints.add('🚨 CRITICAL: You MUST answer the actual question!');
+            regenerationHints.add('❌ User asked about: $userMessage');
+            regenerationHints.add('✅ Give direct answer about that topic FIRST');
+            regenerationHints.add('🎯 No romantic responses to simple questions!');
+            break;
+        }
+        
+        regenerationHints.add('💡 Remember: Each response must be 70%+ unique from last 10 messages');
         
         // 재생성 요청
         final regeneratedResponse = await OpenAIService.generateResponse(
@@ -870,16 +944,33 @@ class ChatOrchestrator {
           targetLanguage: userLanguage,
         );
         
-        if (regeneratedResponse.isNotEmpty && !responseCache.isRecentlyUsed(regeneratedResponse)) {
-          // responseContents는 List<String>인데 regeneratedResponse는 String이므로 변환
-          responseContents = [regeneratedResponse];
-          isRepetitive = false;
-          debugPrint('✅ Successfully generated non-repetitive response');
+        if (regeneratedResponse.isNotEmpty) {
+          // Re-check quality gates for regenerated response
+          failsQualityGates = false;
+          
+          if (responseCache.isRecentlyUsed(regeneratedResponse)) {
+            failsQualityGates = true;
+            qualityIssue = 'still_repetitive';
+          } else if (_calculateSimilarityWithRecentResponses(regeneratedResponse, userId, completePersona.id) > 0.7) {
+            failsQualityGates = true;
+            qualityIssue = 'still_similar';
+          } else if (_containsMacroPattern(regeneratedResponse)) {
+            failsQualityGates = true;
+            qualityIssue = 'still_macro';
+          } else if (!_isTopicRelevant(userMessage, regeneratedResponse)) {
+            failsQualityGates = true;
+            qualityIssue = 'still_off_topic';
+          }
+          
+          if (!failsQualityGates) {
+            responseContents = [regeneratedResponse];
+            debugPrint('✅ Successfully generated quality response after $regenerationAttempts attempts');
+          }
         }
       }
       
       // 응답 캐시에 기록
-      if (!isRepetitive) {
+      if (!failsQualityGates) {
         responseCache.recordResponse(responseContents.first);
       }
       
@@ -2268,268 +2359,21 @@ class ChatOrchestrator {
       return exclamationResponses[random.nextInt(exclamationResponses.length)];
     }
 
-    // 기본 반응
-    final responses = _getPersonaResponses(mbti, 'reaction', gender);
+    // 기본 반응 - 간단한 폴백
+    final defaultResponses = ['응응', '그래', 'ㅇㅇ', '그렇구나~', 'ㅎㅎ'];
     final random = math.Random();
-    return responses[random.nextInt(responses.length)];
+    return defaultResponses[random.nextInt(defaultResponses.length)];
   }
 
-  String _getComplimentResponse(String mbti, [String gender = 'female']) {
-    final responses = _getPersonaResponses(mbti, 'compliment', gender);
-    // 더 나은 랜덤성을 위해 Random 사용
-    final random = math.Random();
-    return responses[random.nextInt(responses.length)];
-  }
+  // REMOVED: Hardcoded template responses to improve naturalness
+  // All responses should be generated through OpenAI API only
 
-  List<String> _getPersonaResponses(String mbti, String type, [String gender = 'female']) {
-    // MBTI와 성별별 응답 데이터베이스 (항상 반말)
-    final responseMap = _getGenderedResponses(mbti, gender);
-    
-    // 해당 타입의 응답 반환
-    if (responseMap.containsKey(mbti) && responseMap[mbti]!.containsKey(type)) {
-      return responseMap[mbti]![type]!;
-    }
-    
-    // 기본값 반환
-    return _getDefaultResponses(type, gender, true); // isCasual always true
-  }
+  // REMOVED: Hardcoded persona responses - use OpenAI API instead
   
-  Map<String, Map<String, List<String>>> _getGenderedResponses(String mbti, String gender) {
-    if (gender == 'male') {
-      return _getMaleResponses(mbti, true); // always casual
-    }
-    return _getFemaleResponses(mbti, true); // always casual
-  }
+  // REMOVED: _getGenderedResponses - All responses generated through OpenAI API
   
-  Map<String, Map<String, List<String>>> _getFemaleResponses(String mbti, bool isCasual) {
-    // 여성 페르소나 응답 (기존 응답 유지 - 이모티콘 많고 부드러운 어투)
-    // isCasual은 호환성을 위해 유지하지만 항상 반말 사용
-    final responseMap = {
-      'ENFP': {
-        'greeting': [
-          '안뇽~~ㅎㅎ 오늘 날씨 좋지 않아?',
-          '하이! 뭐해? 점심은 먹었어?',
-          '오 왔구나!! 반가워ㅋㅋ 오늘 어땠어?',
-          '헐 안녕!! 보고싶었어ㅠㅠ 잘 지냈어?',
-          '어머 왔네~ 오늘 기분 어때?',
-          '안녕안녕!! 뭐하고 있었어??',
-          '하이하이~ 밥은 먹었어?',
-          '오 반가워!! 오늘 재밌는 일 있었어?',
-          '헐 너무 반갑다ㅎㅎ 잘 지냈지?',
-          '앗 왔구나~ 오늘 피곤하지 않아?',
-          '안뇽~ 오늘 뭐 좋은 일 있었어?',
-          '어머머 하이!! 보고싶었는데ㅎㅎ',
-          '와 진짜 반가워~ 어떻게 지냈어?',
-          '헤이~ 오늘 컨디션 어때?',
-          '오랜만이야!! 잘 지냈어?',
-        ],
-        'reaction': [
-          'ㅇㅇ 맞아!',
-          '그치??',
-          'ㅋㅋㅋㅋ웅',
-          '진짜??ㅎㅎ',
-          '대박이다!!',
-          '오 그렇구나~',
-          '헐 정말?',
-          '아하ㅋㅋ',
-          '그래그래!!',
-          '완전 인정ㅎㅎ',
-          '오오 신기해!',
-          '와 몰랐어!',
-        ],
-        'compliment': [
-          '헐 진짜?? 고마워ㅠㅠ',
-          '아ㅋㅋ 부끄러워><',
-          '너두!! 짱이야ㅎㅎ',
-          '어머 진짜? 기분 좋다ㅎㅎ',
-          '헉 과찬이야~ 고마워!',
-          '아잉 부끄럽네ㅋㅋ',
-          '헐 대박 너무 좋아!!',
-          '진짜?? 나 막 기뻐ㅠㅠ',
-          '와 진짜 고마워~ 힘난다!',
-          '에헤헤 칭찬 받았다ㅎㅎ',
-        ],
-      },
-      'INTJ': {
-        'greeting': [
-          '안녕. 피곤하지 않아?',
-          '네, 반가워. 바빴어?',
-          '어서 와. 잘 지냈어?',
-          '오늘 어땠어?',
-          '안녕. 점심은 먹었어?',
-          '왔구나. 오늘 일정 많았어?',
-          '반가워. 컨디션은 어때?',
-          '안녕. 오늘 무슨 일 있었어?',
-        ],
-        'reaction': [
-          '응.',
-          '그래.',
-          'ㅇㅇ',
-          '그렇구나.',
-          '흥미롭네.',
-          '이해했어.',
-          '그런 면이 있네.',
-          '논리적이야.',
-          '일리가 있어.',
-          '그럴 수 있겠네.',
-          '타당한 지적이야.',
-          '충분히 이해돼.',
-          '맞는 말이네.',
-          '그런 관점도 있구나.',
-          '설득력 있어.',
-        ],
-        'compliment': [
-          '그래? 고마워.',
-          '음.. 그런가.',
-          '과찬이야.',
-          '네가 그렇게 생각한다니 좋네.',
-          '평가 고마워.',
-          '그렇게 봐줘서 고맙네.',
-                '과대평가하는 것 같은데.',
-                '나름 노력한 결과야.',
-                '인정받은 것 같아서 좋네.',
-                '객관적인 평가 감사해.',
-                '그런 면도 있지.',
-                '네 말이 맞을 수도 있겠네.',
-                '분석력이 좋구나.',
-                '관찰력이 예리하네.',
-                '좋게 봐줘서 고마워.',
-              ],
-      },
-      'ESFP': {
-        'greeting': [
-          '안녕안녕!! 오늘 날씨 짱이야ㅎㅎ',
-          '하이하이~~ 뭐해? 나랑 놀자!',
-          '오 왔네!! 반가워ㅋㅋ 오늘 뭐 재밌는 일 없었어?',
-          '헐 안녕!! 보고싶었어ㅠㅠ 잘 지냈지?',
-          '어머 왔어~ 오늘 기분 좋아 보인다?',
-          '안녕!! 뭐하고 있었어??',
-          '하이~ 밥은 먹었어?',
-        ],
-        'thanks': [
-          '천만에~ ㅎㅎ',
-          '뭘 이런걸로!!',
-          '아니야아~ 괜찮아!',
-          '에이 뭘~ 당연하지ㅎㅎ',
-          '우와 고마워!! 넘 좋아!',
-          '아니야 아니야~ 내가 더 고마워!',
-          '헤헤 별거 아니야~',
-          '어머 이런 것까지ㅋㅋ 고마워!',
-          '에헤헤 몸 둘 바를 모르겠네~',
-          '아유 뭘요~ 우리 사이에ㅎㅎ',
-          '고맙긴!! 내가 좋아서 한 건데~',
-          '우와 진짜? 나 감동이야ㅠㅠ',
-          '에이고~ 부끄럽게 왜 이래ㅋㅋ',
-          '아니야~ 내가 더 고마운걸!',
-          '헉 대박 고마워!! 최고야!',
-        ],
-        'reaction': [
-          '웅웅!!',
-          '맞아ㅎㅎ',
-          '그래~',
-          '진짜?? 대박이다!',
-          '헐 그렇구나!!',
-          '오~ 신기해!',
-          '와 진짜 그래??',
-          '어머 그런 거야?ㅋㅋ',
-          '우와 몰랐어!!',
-          '헉 대박 진짜?',
-          '그래그래~ 맞아!',
-          '오호~ 그렇구나!',
-          '와 완전 신기하다!!',
-          '진짜야?? 처음 알았어!',
-          '헐 나도 그래!!',
-        ],
-        'compliment': [
-          '우와 진짜?? 넘 좋아ㅎㅎ',
-          '헤헤 고마워!!',
-          '아잉~ 부끄럽네ㅋㅋ',
-          '헐 대박!! 진짜야? 기분 좋아!',
-          '어머머~ 칭찬이야? 감동이야ㅠㅠ',
-          '와 진짜?? 나 막 기분 좋아지는데!',
-          '헤헤헤 그래? 부끄럽다~',
-          '우와아~ 최고의 칭찬이야!!',
-          '진짜로?? 나 완전 기뻐!!',
-          '어머 이런 칭찬 처음이야ㅋㅋ',
-          '헉 대박! 너무 좋은 말이야ㅠㅠ',
-          '아유~ 몸 둘 바를 모르겠어ㅎㅎ',
-          '와 진짜 고마워~ 힘이 나!',
-          '에헤헤 칭찬 받았다!!',
-          '오예~ 인정받은 기분이야!',
-        ],
-      },
-      'ISTJ': {
-        'greeting': [
-          '안녕. 잘 지냈어?',
-          '어서 와. 바빴어?',
-          '반가워. 오늘 어땠어?',
-          '안녕. 점심은 먹었어?',
-          '왔구나. 오늘 일정 많았어?',
-          '반가워. 컨디션은 어때?',
-          '안녕. 무슨 일 있었어?',
-        ],
-        'reaction': [
-          '응.',
-          '그래.',
-          'ㅇㅇ',
-          '그렇구나.',
-          '흥미롭네.',
-          '이해했어.',
-          '그런 면이 있네.',
-          '논리적이야.',
-          '일리가 있어.',
-          '그럴 수 있겠네.',
-          '타당한 지적이야.',
-          '충분히 이해돼.',
-          '맞는 말이네.',
-          '그런 관점도 있구나.',
-          '설득력 있어.',
-        ],
-        'compliment': [
-          '그래? 고마워.',
-          '음.. 그런가.',
-          '과찬이야.',
-          '네가 그렇게 생각한다니 좋네.',
-          '평가 고마워.',
-          '그렇게 봐줘서 고맙네.',
-          '과대평가하는 것 같은데.',
-          '나름 노력한 결과야.',
-          '인정받은 것 같아서 좋네.',
-          '객관적인 평가 감사해.',
-          '그런 면도 있지.',
-          '네 말이 맞을 수도 있겠네.',
-          '분석력이 좋구나.',
-          '관찰력이 예리하네.',
-          '좋게 봐줘서 고마워.',
-        ],
-      },
-      // 다른 MBTI 타입들은 기본값 사용
-    };
-    
-    if (responseMap.containsKey(mbti)) {
-      return responseMap[mbti] as Map<String, Map<String, List<String>>>;
-    }
-    return {};
-  }
-
-  /// 남성 페르소나 응답 (반말 모드)
-  Map<String, Map<String, List<String>>> _getMaleResponses(String mbti, bool isCasual) {
-    // 남성 페르소나는 아직 구현되지 않았으므로 기본값 반환
-    // isCasual은 호환성을 위해 유지하지만 무시됨
-    return {};
-  }
   
-  /// 기본 응답 (반말 모드)
-  List<String> _getDefaultResponses(String type, String gender, bool isCasual) {
-    // isCasual 파라미터는 무시하고 항상 반말 반환
-    final responses = {
-      'greeting': ['안녕~ 반가워!', '어 왔어? 잘 지냈어?', '하이! 오늘 어때?'],
-      'reaction': ['응응', '그래', 'ㅇㅇ', '그렇구나~'],
-      'compliment': ['고마워ㅎㅎ', '헤헤', '부끄럽네', '진짜? 좋다!'],
-    };
-    
-    return responses[type] ?? ['응', '그래', 'ㅇㅇ'];
-  }
+  // REMOVED: _getDefaultResponses - All responses must come from OpenAI API
 
   /// 긴 응답을 자연스럽게 분리 (개선된 버전)
   List<String> _splitLongResponse(String response, String mbti) {
@@ -5273,6 +5117,201 @@ class ChatOrchestrator {
     }
     
     debugPrint('📝 Cache updated for $cacheKey: ${cache.length} responses stored');
+  }
+  
+  /// Calculate similarity score with recent responses (for quality gates)
+  double _calculateSimilarityWithRecentResponses(String newResponse, String userId, String personaId) {
+    final cacheKey = '${userId}_$personaId';
+    final cache = _recentResponseCache[cacheKey] ?? [];
+    
+    if (cache.isEmpty) return 0.0;
+    
+    double maxSimilarity = 0.0;
+    final normalizedNew = _normalizeForComparison(newResponse);
+    
+    for (final cachedResponse in cache) {
+      final normalizedCached = _normalizeForComparison(cachedResponse);
+      
+      // Calculate Levenshtein distance-based similarity
+      final distance = _levenshteinDistance(normalizedNew, normalizedCached);
+      final maxLength = math.max(normalizedNew.length, normalizedCached.length);
+      final similarity = maxLength > 0 ? 1.0 - (distance / maxLength) : 0.0;
+      
+      maxSimilarity = math.max(maxSimilarity, similarity);
+      
+      // Also check for pattern similarity
+      if (_hasSamePattern(newResponse, cachedResponse)) {
+        maxSimilarity = math.max(maxSimilarity, 0.8);
+      }
+    }
+    
+    return maxSimilarity;
+  }
+  
+  /// Check if response contains macro-like patterns
+  bool _containsMacroPattern(String response) {
+    // Check for template-like patterns
+    final macroPatterns = [
+      r'반가워.*오늘.*어땠어',  // Common greeting template
+      r'오.*왔네.*뭐하고',      // Another greeting template
+      r'안녕.*잘.*지냈어',      // Generic greeting
+      r'힘들겠다.*괜찮아',      // Generic empathy template
+      r'그렇구나.*이해해',      // Generic understanding template
+    ];
+    
+    for (final pattern in macroPatterns) {
+      if (RegExp(pattern).hasMatch(response)) {
+        return true;
+      }
+    }
+    
+    // Check for overly repetitive structure
+    final words = response.split(' ');
+    if (words.length > 5) {
+      final uniqueWords = words.toSet();
+      final uniqueRatio = uniqueWords.length / words.length;
+      if (uniqueRatio < 0.6) {
+        return true; // Too many repeated words
+      }
+    }
+    
+    return false;
+  }
+  
+  /// Check if response has low variety compared to conversation history
+  bool _isLowVarietyResponse(String response, List<Message> chatHistory) {
+    if (chatHistory.length < 5) return false;
+    
+    // Extract recent AI responses from history
+    final recentAIResponses = chatHistory
+        .where((msg) => !msg.isFromUser)
+        .take(10)
+        .map((msg) => msg.content)
+        .toList();
+    
+    if (recentAIResponses.isEmpty) return false;
+    
+    // Check if response structure is too similar to recent ones
+    final responseLength = response.length;
+    final avgLength = recentAIResponses.fold<int>(
+      0, (sum, r) => sum + r.length
+    ) ~/ recentAIResponses.length;
+    
+    // Check length variety
+    final lengthVariance = (responseLength - avgLength).abs();
+    if (lengthVariance < 10 && recentAIResponses.length > 3) {
+      // All responses are similar length - low variety
+      return true;
+    }
+    
+    // Check starting patterns
+    final responseStart = response.length > 5 ? response.substring(0, 5) : response;
+    int similarStarts = 0;
+    for (final aiResponse in recentAIResponses) {
+      if (aiResponse.length > 5 && aiResponse.startsWith(responseStart)) {
+        similarStarts++;
+      }
+    }
+    
+    if (similarStarts > 2) {
+      return true; // Too many responses start the same way
+    }
+    
+    // Check emotion expression variety
+    final hasEmoticon = RegExp(r'[ㅋㅎㅠㅜ]').hasMatch(response);
+    int emoticonCount = 0;
+    for (final aiResponse in recentAIResponses) {
+      if (RegExp(r'[ㅋㅎㅠㅜ]').hasMatch(aiResponse)) {
+        emoticonCount++;
+      }
+    }
+    
+    // If all responses have same emoticon pattern, it's low variety
+    if ((hasEmoticon && emoticonCount == recentAIResponses.length) ||
+        (!hasEmoticon && emoticonCount == 0)) {
+      return true;
+    }
+    
+    return false;
+  }
+  
+  /// Check if response is relevant to the user's question/topic
+  bool _isTopicRelevant(String userMessage, String aiResponse) {
+    final userLower = userMessage.toLowerCase();
+    final aiLower = aiResponse.toLowerCase();
+    
+    // Extract key topics from user message
+    final topicKeywords = <String>[];
+    
+    // Common question topics
+    if (userLower.contains('운동')) topicKeywords.addAll(['운동', '헬스', '요가', '필라테스', '조깅']);
+    if (userLower.contains('먹') || userLower.contains('밥')) topicKeywords.addAll(['먹', '밥', '음식', '배고프', '식사']);
+    if (userLower.contains('게임')) topicKeywords.addAll(['게임', '플레이', 'rpg', '온라인']);
+    if (userLower.contains('영화') || userLower.contains('드라마')) topicKeywords.addAll(['영화', '드라마', '넷플', '보']);
+    if (userLower.contains('날씨')) topicKeywords.addAll(['날씨', '비', '눈', '춥', '더워', '맑']);
+    if (userLower.contains('어디')) topicKeywords.addAll(['집', '카페', '학교', '회사', '밖', '있어']);
+    if (userLower.contains('뭐해') || userLower.contains('뭐하')) topicKeywords.addAll(['하고', '있어', '중', '보고', '듣고']);
+    
+    // Check for feelings/emotions
+    if (userLower.contains('우울') || userLower.contains('슬')) topicKeywords.addAll(['우울', '슬프', '힘들', '괜찮', '위로']);
+    if (userLower.contains('기분') || userLower.contains('어때')) topicKeywords.addAll(['기분', '좋', '나쁘', '그럭저럭', '괜찮']);
+    
+    // If no keywords found, consider it a general conversation (always relevant)
+    if (topicKeywords.isEmpty) return true;
+    
+    // Check if AI response contains any relevant keywords
+    for (final keyword in topicKeywords) {
+      if (aiLower.contains(keyword)) {
+        return true; // Found relevant topic
+      }
+    }
+    
+    // Check for romantic responses to non-romantic questions
+    final romanticPhrases = ['사랑해', '보고싶', '안아주고', '너랑 있으면', '너 생각', '우리 정말 잘 맞'];
+    final isRomanticResponse = romanticPhrases.any((phrase) => aiLower.contains(phrase));
+    
+    // If user asked a simple question but got romantic response, it's off-topic
+    if (isRomanticResponse && !userLower.contains('사랑') && !userLower.contains('좋아')) {
+      return false;
+    }
+    
+    // For questions expecting specific answers
+    if (userLower.contains('?') || userLower.contains('니') || userLower.contains('냐')) {
+      // Response should be answering, not deflecting
+      if (aiLower.contains('뭐라고') || aiLower.contains('무슨 말')) {
+        return false; // Deflection detected
+      }
+    }
+    
+    return true; // Default to relevant if unsure
+  }
+  
+  /// Calculate Levenshtein distance between two strings
+  int _levenshteinDistance(String s1, String s2) {
+    if (s1 == s2) return 0;
+    if (s1.isEmpty) return s2.length;
+    if (s2.isEmpty) return s1.length;
+    
+    List<int> previousRow = List.generate(s2.length + 1, (i) => i);
+    List<int> currentRow = List.filled(s2.length + 1, 0);
+    
+    for (int i = 0; i < s1.length; i++) {
+      currentRow[0] = i + 1;
+      
+      for (int j = 0; j < s2.length; j++) {
+        final insertCost = currentRow[j] + 1;
+        final deleteCost = previousRow[j + 1] + 1;
+        final replaceCost = s1[i] == s2[j] ? previousRow[j] : previousRow[j] + 1;
+        
+        currentRow[j + 1] = math.min(insertCost, math.min(deleteCost, replaceCost));
+      }
+      
+      final temp = previousRow;
+      previousRow = currentRow;
+      currentRow = temp;
+    }
+    
+    return previousRow[s2.length];
   }
 }
 

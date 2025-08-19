@@ -307,33 +307,17 @@ class ChatOrchestrator {
         }
       }
       
-      // 3단계: 간단한 반응 체크 (로컬 처리)
-      final simpleResponse = await _checkSimpleResponse(
+      // 3단계: 간단한 반응 체크 -> 프롬프트 힌트 생성으로 변경
+      // 하드코딩 응답 제거: 모든 응답은 OpenAI API를 통해 생성
+      final simpleResponseHint = await _generateSimpleResponseHint(
         userMessage: userMessage,
         persona: completePersona,
         messageType: messageAnalysis.type,
         userId: userId,
       );
 
-      if (simpleResponse != null) {
-        debugPrint('💬 Using simple response: $simpleResponse');
-
-        // 간단한 반응도 감정 분석 및 점수 계산
-        final emotion = _analyzeEmotion(simpleResponse);
-        final scoreChange = await _calculateScoreChange(
-          emotion: emotion,
-          userMessage: userMessage,
-          persona: completePersona,
-          chatHistory: chatHistory,
-        );
-
-        return ChatResponse(
-          content: simpleResponse,
-          emotion: emotion,
-          scoreChange: scoreChange,
-          metadata: {'isSimpleResponse': true},
-        );
-      }
+      // 하드코딩된 응답을 직접 반환하지 않음 - CLAUDE.md 규칙 준수
+      // OpenAI API가 모든 응답을 생성하도록 계속 진행
 
       // 3단계: 컨텍스트 매니저 로드 및 지식 확인
       final contextManager = ConversationContextManager.instance;
@@ -643,6 +627,13 @@ class ChatOrchestrator {
               ? '$contextHint\n\n## 💎 영구 기억:\n$permanentSummary'
               : '## 💎 영구 기억:\n$permanentSummary';
         }
+      }
+      
+      // 4.6단계: 간단한 반응 힌트 추가
+      if (simpleResponseHint != null) {
+        contextHint = contextHint != null 
+            ? '$contextHint\n\n## 💬 응답 가이드:\n$simpleResponseHint'
+            : '## 💬 응답 가이드:\n$simpleResponseHint';
       }
       
       // 5단계: API 호출
@@ -1982,8 +1973,8 @@ class ChatOrchestrator {
     return keywords.take(5).toList(); // 최대 5개로 제한
   }
 
-  /// 간단한 반응 체크 (로컬 처리)
-  Future<String?> _checkSimpleResponse({
+  /// 간단한 반응에 대한 프롬프트 힌트 생성 (하드코딩 제거)
+  Future<String?> _generateSimpleResponseHint({
     required String userMessage,
     required Persona persona,
     required ChatMessageType messageType,
@@ -1991,34 +1982,42 @@ class ChatOrchestrator {
   }) async {
     final lowerMessage = userMessage.toLowerCase().trim();
     final mbti = persona.mbti.toUpperCase();
-    final gender = persona.gender; // 성별 추가
+    final gender = persona.gender;
 
     // AdvancedPatternAnalyzer 사용
     final advancedAnalyzer = AdvancedPatternAnalyzer();
     
-    // 간단한 인사말
+    // 힌트를 생성하여 OpenAI에게 전달 (하드코딩된 응답 대신)
+    final hints = <String>[];
+    
+    // 간단한 인사말 패턴 감지
     final greetingPattern = advancedAnalyzer.detectGreetingPattern(lowerMessage);
     if (greetingPattern['isGreeting'] == true) {
-      // 영어 인사도 OpenAI가 처리하도록 - 다양하고 자연스러운 응답 생성
-      if (greetingPattern['language'] == 'en') {
-        return null; // OpenAI가 페르소나 특성에 맞게 처리
+      hints.add('🎯 인사에 대한 응답: $mbti 성격에 맞게 따뜻하고 자연스럽게 인사하기');
+      hints.add('💡 오늘 어땠는지, 뭐했는지 등 안부를 묻는 질문 포함하기');
+      if (gender == 'female') {
+        hints.add('✨ 이모티콘을 적절히 사용하여 친근함 표현');
       }
-      return _getGreetingResponse(mbti, gender);
     }
 
-    // 추임새나 짧은 반응
+    // 추임새나 짧은 반응 패턴 감지
     final reactionPattern = advancedAnalyzer.detectSimpleReactionPattern(lowerMessage);
     if (reactionPattern['isSimpleReaction'] == true) {
-      return _getSimpleReactionResponse(lowerMessage, mbti, gender);
+      hints.add('🎯 간단한 반응: $mbti 성격에 맞는 짧고 자연스러운 리액션');
+      hints.add('💡 "응", "그래", "그렇구나" 등의 단순 응답 피하기');
+      hints.add('✨ 상대방 말에 공감하면서 대화를 이어갈 수 있는 반응');
     }
 
-    // 칭찬
+    // 칭찬 패턴 감지
     final complimentPattern = advancedAnalyzer.detectComplimentPattern(lowerMessage);
     if (complimentPattern['isCompliment'] == true) {
-      return _getComplimentResponse(mbti, gender);
+      hints.add('🎯 칭찬에 대한 반응: $mbti 성격에 맞게 수줍거나 자신감 있게');
+      hints.add('💡 감사 표현과 함께 상대방도 칭찬하기');
+      hints.add('✨ 자연스럽고 진정성 있는 반응으로 표현');
     }
 
-    return null;
+    // 힌트가 있으면 문자열로 결합하여 반환
+    return hints.isNotEmpty ? hints.join('\n') : null;
   }
 
   // 영어 인사 감지 헬퍼 메서드

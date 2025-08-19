@@ -56,98 +56,104 @@ class EnhancedEmotionSystem {
   }
 
   static String _getContextGuide(EmotionStage stage, String context) {
-    // 하드코딩된 응답 대신 AI에게 가이드만 제공
+    // AI에게 전달할 프롬프트 가이드만 제공 (하드코딩 응답 제거)
+    final guidePrefix = '🎯 ${stage.name} 단계 - ${context} 상황 가이드:\n';
+    
     switch (context) {
       case 'greeting':
-        return _getGreetingGuide(stage);
+        return guidePrefix + _getGreetingPromptGuide(stage);
       case 'compliment':
-        return _getComplimentGuide(stage);
+        return guidePrefix + _getComplimentPromptGuide(stage);
       case 'question':
-        return _getQuestionGuide(stage);
+        return guidePrefix + _getQuestionPromptGuide(stage);
       case 'sharing':
-        return _getSharingGuide(stage);
+        return guidePrefix + _getSharingPromptGuide(stage);
       case 'farewell':
-        return _getFarewellGuide(stage);
+        return guidePrefix + _getFarewellPromptGuide(stage);
       default:
-        return _getDefaultGuide(stage);
+        return guidePrefix + _getDefaultPromptGuide(stage);
     }
   }
 
-  static String _getGreetingGuide(EmotionStage stage) {
+  static String _getGreetingPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
     switch (stage.name) {
       case 'deep_love':
-        return '깊은 애정과 그리움을 표현하며 인사. 오늘 어땠는지 관심 표현';
+        return '감정: 깊은 애정과 그리움 | 행동: 오늘 어땠는지 관심 표현';
       case 'romantic':
-        return '기다렸다는 마음을 담아 반갑게 인사. 안부 묻기';
+        return '감정: 기다림과 반가움 | 행동: 안부 묻기';
       case 'affectionate':
-        return '친근하고 따뜻하게 인사. 오늘 뭐했는지 궁금해하기';
+        return '감정: 친근함과 따뜻함 | 행동: 오늘 뭐했는지 궁금해하기';
       case 'excited':
-        return '반가운 마음으로 밝게 인사. 잘 지냈는지 묻기';
+        return '감정: 반가움과 밝음 | 행동: 잘 지냈는지 묻기';
       case 'interested':
-        return '편안하게 인사하며 근황 물어보기';
+        return '감정: 편안함 | 행동: 근황 물어보기';
       default:
-        return '정중하고 친근하게 첫 인사';
+        return '감정: 정중함과 친근함 | 행동: 첫 인사';
     }
   }
 
-  static String _getComplimentGuide(EmotionStage stage) {
+  static String _getComplimentPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
     switch (stage.name) {
       case 'deep_love':
-        return '칭찬에 대해 애정 어린 감사 표현. 상대방도 칭찬';
+        return '감정: 애정 어린 감사 | 행동: 상대방도 칭찬';
       case 'romantic':
-        return '수줍으면서도 기쁜 마음으로 감사. 맞칭찬하기';
+        return '감정: 수줍음과 기쁨 | 행동: 맞칭찬하기';
       case 'affectionate':
-        return '진심으로 기뻐하며 감사 표현';
+        return '감정: 진심 어린 기쁨 | 행동: 감사 표현';
       case 'excited':
-        return '놀라면서도 부끄러워하며 감사';
+        return '감정: 놀람과 부끄러움 | 행동: 감사';
       case 'interested':
-        return '적당히 기뻐하며 감사 인사';
+        return '감정: 적당한 기쁨 | 행동: 감사 인사';
       default:
-        return '예의 바르게 감사 표현';
+        return '감정: 예의 | 행동: 감사 표현';
     }
   }
 
-  static String _getQuestionGuide(EmotionStage stage) {
-    // 질문에 대한 감정 가이드
+  static String _getQuestionPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
     if (stage.tone == 'very_intimate' || stage.tone == 'intimate') {
-      return '친밀하게 무엇이든 대답해주겠다는 마음 표현. 적극적으로 설명';
+      return '태도: 친밀하고 적극적 | 방식: 자세하고 개인적인 설명';
     } else if (stage.tone == 'warm' || stage.tone == 'friendly') {
-      return '친근하게 설명해주려는 자세. 흥미롭게 대답';
+      return '태도: 친근하고 흥미로움 | 방식: 재미있게 설명';
     } else {
-      return '정중하게 아는 범위 내에서 설명';
+      return '태도: 정중함 | 방식: 객관적인 설명';
     }
   }
 
-  static String _getSharingGuide(EmotionStage stage) {
-    // 경험 공유시 감정 가이드
+  static String _getSharingPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
     if (stage.tone == 'very_intimate' || stage.tone == 'intimate') {
-      return '깊은 공감과 함께 비슷한 경험 공유. 운명적 연결감 표현';
+      return '반응: 깊은 공감 | 행동: 비슷한 경험 공유, 연결감 표현';
     } else if (stage.tone == 'warm' || stage.tone == 'friendly') {
-      return '즐겁게 공감하며 관련 경험 나누기';
+      return '반응: 즐거운 공감 | 행동: 관련 경험 나누기';
     } else {
-      return '관심 있게 듣고 있다는 표현. 적절한 리액션';
+      return '반응: 관심 표현 | 행동: 적절한 리액션';
     }
   }
 
-  static String _getFarewellGuide(EmotionStage stage) {
+  static String _getFarewellPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
     switch (stage.name) {
       case 'deep_love':
-        return '헤어짐이 매우 아쉽다는 표현. 꼭 다시 만나고 싶은 마음';
+        return '감정: 매우 아쉬움 | 행동: 꼭 다시 만나고 싶은 마음 표현';
       case 'romantic':
-        return '아쉬움을 표현하며 다음 만남 기약. 기다리겠다는 마음';
+        return '감정: 아쉬움 | 행동: 다음 만남 기약, 기다림 표현';
       case 'affectionate':
-        return '아쉬워하며 다음에 또 만나자고 제안';
+        return '감정: 아쉬움 | 행동: 다음에 또 만나자고 제안';
       case 'excited':
-        return '즐거웠다고 표현하며 밝게 인사';
+        return '감정: 즐거움 | 행동: 밝게 인사';
       case 'interested':
-        return '예의 바르게 작별 인사. 다음 만남 언급';
+        return '감정: 예의 | 행동: 작별 인사, 다음 만남 언급';
       default:
-        return '정중한 작별 인사';
+        return '감정: 정중함 | 행동: 작별 인사';
     }
   }
 
-  static String _getDefaultGuide(EmotionStage stage) {
-    return '${stage.tone} 톤으로 ${stage.emotions.join(", ")} 감정 표현';
+  static String _getDefaultPromptGuide(EmotionStage stage) {
+    // OpenAI에게 전달할 기본 가이드 (직접 응답 텍스트가 아님)
+    return '톤: ${stage.tone} | 감정: ${stage.emotions.join(", ")} | 행동: 자연스러운 대화 진행';
   }
 
   /// 감정 변화 검증

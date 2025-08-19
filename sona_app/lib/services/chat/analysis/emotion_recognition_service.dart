@@ -147,161 +147,30 @@ class EmotionRecognitionService {
   
   /// 공감 응답 생성
   static String generateEmpathyResponse(EmotionAnalysis analysis) {
-    if (analysis.primaryEmotion == null) return '';
-    
-    final responses = _empathyResponses[analysis.primaryEmotion] ?? [];
-    if (responses.isEmpty) return '';
-    
-    // 강도에 따라 다른 응답 선택
-    final intensityLevel = analysis.intensity > 0.7 ? 'high' : 
-                          analysis.intensity > 0.4 ? 'medium' : 'low';
-    
-    final levelResponses = responses.where((r) => 
-      r.contains(intensityLevel) || !r.contains('level:')).toList();
-    
-    if (levelResponses.isEmpty) return '';
-    
-    // 랜덤 선택
-    final index = DateTime.now().millisecond % levelResponses.length;
-    String response = levelResponses[index];
-    
-    // 레벨 태그 제거
-    response = response.replaceAll(RegExp(r'level:\w+\s*'), '');
-    
-    return response;
+    // OpenAI API가 감정에 맞는 공감 응답을 생성하도록
+    // 감정 분석 결과만 전달하고 응답 생성은 AI에게 위임
+    return '';
   }
   
   /// 일반 대화용 공감/관심 표현 생성
   static String generateGeneralEmpathy(String userMessage) {
-    final lower = userMessage.toLowerCase();
-    
-    // 음식 관련
-    if (lower.contains('먹었') || lower.contains('먹을') || lower.contains('음식')) {
-      final responses = [
-        '오 맛있었어?',
-        '뭐 먹었는데?',
-        '나도 그거 좋아해!',
-        '배고프겠다ㅎㅎ',
-        '와 맛있겠다!',
-      ];
-      return responses[DateTime.now().millisecond % responses.length];
-    }
-    
-    // 장소/이동 관련
-    if (lower.contains('갔') || lower.contains('갈') || lower.contains('왔')) {
-      final responses = [
-        '어땠어?',
-        '재밌었어?',
-        '다음엔 나도 가보고 싶다!',
-        '오 좋았겠다!',
-        '피곤하지 않아?',
-      ];
-      return responses[DateTime.now().millisecond % responses.length];
-    }
-    
-    // 시청/감상 관련
-    if (lower.contains('봤') || lower.contains('볼') || lower.contains('보고')) {
-      final responses = [
-        '재밌었어?',
-        '어떤 부분이 좋았어?',
-        '나도 봐야겠다!',
-        '오 그거 유명하던데!',
-        '추천해?',
-      ];
-      return responses[DateTime.now().millisecond % responses.length];
-    }
-    
-    // 활동 관련
-    if (lower.contains('했') || lower.contains('할') || lower.contains('하고')) {
-      final responses = [
-        '어떻게 됐어?',
-        '잘 됐어?',
-        '수고했어!',
-        '힘들지 않았어?',
-        '나도 해보고 싶다!',
-      ];
-      return responses[DateTime.now().millisecond % responses.length];
-    }
-    
-    // 기본 관심 표현
-    final defaultResponses = [
-      '너는?',
-      '너는 어때?',
-      '너도 그래?',
-      '너는 어떻게 생각해?',
-      '너도 해봤어?',
-    ];
-    
-    return defaultResponses[DateTime.now().millisecond % defaultResponses.length];
+    // OpenAI API가 자연스럽게 공감하도록 빈 문자열 반환
+    // 프롬프트에서 공감 가이드라인 제공
+    return '';
   }
   
-  /// 공감 응답 데이터베이스
-  static const Map<String, List<String>> _empathyResponses = {
-    'happy': [
-      'level:high 와!! 진짜 대박이네요!! 완전 좋겠다!!',
-      'level:high 헐 대박!! 너무너무 축하해요!!',
-      'level:medium 오 좋으시겠어요ㅎㅎ 부럽다~',
-      'level:medium 와 진짜요? 좋겠네요!',
-      'level:low 오 좋네요ㅎㅎ',
-      'level:low 그렇구나~ 좋으시겠어요',
-    ],
-    'sad': [
-      'level:high 헐... 진짜 많이 힘드시겠어요ㅠㅠ',
-      'level:high 아... 너무 속상하시겠다ㅠㅠ 힘내세요',
-      'level:medium 아이고... 속상하시겠어요',
-      'level:medium 힘드시죠? 괜찮아질 거예요',
-      'level:low 아... 그러셨구나',
-      'level:low 음... 좀 그렇네요',
-    ],
-    'angry': [
-      'level:high 와... 진짜 열받으시겠다',
-      'level:high 헐 저라도 완전 화났을 것 같아요',
-      'level:medium 아 짜증나네요 그거',
-      'level:medium 화날 만하네요...',
-      'level:low 음... 좀 그렇긴 하네요',
-      'level:low 아 그렇구나...',
-    ],
-    'tired': [
-      'level:high 헐... 진짜 많이 피곤하시겠어요ㅠㅠ 푹 쉬세요',
-      'level:high 아이고... 정말 고생하셨네요ㅠㅠ',
-      'level:medium 피곤하시죠? 좀 쉬세요',
-      'level:medium 많이 힘드셨나봐요',
-      'level:low 수고하셨어요~',
-      'level:low 좀 쉬시는 게 좋을 것 같아요',
-    ],
-    'worried': [
-      'level:high 많이 걱정되시죠... 잘 될 거예요 분명!',
-      'level:high 불안하시겠어요ㅠㅠ 힘내세요!',
-      'level:medium 걱정 마세요~ 괜찮을 거예요',
-      'level:medium 음... 걱정되긴 하네요',
-      'level:low 잘 될 거예요~',
-      'level:low 너무 걱정하지 마세요',
-    ],
-    'excited': [
-      'level:high 와!! 완전 설레시겠다!! 대박!!',
-      'level:high 헐 진짜요?? 완전 기대되겠어요!!',
-      'level:medium 오 기대되시겠어요ㅎㅎ',
-      'level:medium 와 좋으시겠다~',
-      'level:low 오 그렇구나ㅎㅎ',
-      'level:low 기대되네요~',
-    ],
-    'grateful': [
-      'level:high 에이~ 뭘요ㅎㅎ 저도 너무 감사해요!',
-      'level:high 아니에요~ 오히려 제가 더 고마워요!',
-      'level:medium 별말씀을요~ 당연한 거죠ㅎㅎ',
-      'level:medium 에이 뭘 이런 걸로~',
-      'level:low 네네ㅎㅎ',
-      'level:low 아니에요~',
-    ],
-    'frustrated': [
-      'level:high 아... 진짜 답답하시겠어요ㅠㅠ',
-      'level:high 헐... 스트레스 받으시겠다',
-      'level:medium 음... 좀 답답하긴 하네요',
-      'level:medium 아이고... 힘드시겠어요',
-      'level:low 그렇구나...',
-      'level:low 음... 좀 그렇네요',
-    ],
-  };
+  /// 공감 응답 감정 분류만 제공
+  /// 실제 응답은 OpenAI API가 생성
+  static const List<String> _emotionCategories = [
+    'happy',
+    'sad',
+    'angry',
+    'tired',
+    'worried',
+    'excited',
+    'grateful',
+    'frustrated',
+  ];
 }
 
 /// 감정 분석 결과

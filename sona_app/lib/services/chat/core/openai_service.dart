@@ -521,6 +521,20 @@ $contextSummary''';
         .toList();
   }
 
+  /// 🆘 폴백 응답 생성 - 에러 발생 시에만 사용
+  static String _getFallbackResponse(Persona persona, String userMessage) {
+    // 폴백 상황에서도 AI가 생성하도록 빈 문자열 반환
+    // 프롬프트에서 폴백 상황 처리 가이드 제공
+    return '';
+  }
+
+  /// 🔒 보안 폴백 응답 생성
+  static String _getSecureFallbackResponse(
+      Persona persona, String userMessage, {bool isCasualSpeech = false}) {
+    // 보안 폴백 상황에서도 AI가 생성하도록 빈 문자열 반환
+    // 하드코딩된 응답 제거 - OpenAI API만 사용
+    return '';
+  }
   /// 🔧 불완전한 문장 완성
   static String _completeUnfinishedSentence(String text) {
     if (text.isEmpty) return text;

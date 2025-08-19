@@ -188,12 +188,14 @@ class SecurityFilterService {
 
     // 4. 만남 요청 감지 및 차단
     if (_detectMeetingRequest(userMessage)) {
-      return _generateMeetingDeflection(persona, userMessage);
+      // SafeResponseGenerator를 통해 처리하도록 위임
+      return _generateSafeDeflection(persona, userMessage);
     }
 
     // 5. 위치/장소 질문 감지 및 차단
     if (_detectLocationQuery(userMessage)) {
-      return _generateLocationDeflection(persona, userMessage);
+      // SafeResponseGenerator를 통해 처리하도록 위임
+      return _generateSafeDeflection(persona, userMessage);
     }
 
     // 6. 위험한 질문에 대한 안전한 응답 생성
@@ -349,35 +351,10 @@ class SecurityFilterService {
   /// 🔐 보안 강화 응답 생성
   static String _generateSecurityAwareResponse(Persona persona,
       String userMessage, String originalResponse) {
-    // 페르소나별 위험 질문 회피 스타일 (항상 반말)
-    final casualTransitions = [
-        '음... 그런 것보다',
-        '어... 잘 모르겠는데',
-        '아 그건 어려워서',
-        '으음 그런 건 말고',
-        '아 복잡한 건 싫어ㅋㅋ',
-        '헤헤 그런 건 패스~',
-        '어우 머리 아픈 얘기네',
-      ];
-
-      final casualTopics = [
-        '오늘 뭐 했어?',
-        '요즘 뭐가 재밌어?',
-        '맛있는 거 먹었어?',
-        '어디 갔다 온 거 있어?',
-        '재밌는 영화 봤어?',
-        '좋은 음악 들었어?',
-        '친구들이랑 뭐 했어?',
-        '주말에 뭐 할 계획이야?',
-        '요즘 취미 생활 같은 거 하고 있어?',
-      ];
-
-      final transition = casualTransitions[
-          userMessage.hashCode.abs() % casualTransitions.length];
-      final topic =
-          casualTopics[userMessage.hashCode.abs() % casualTopics.length];
-
-      return '$transition $topic';
+    // OpenAI API가 생성한 응답을 그대로 사용
+    // 프롬프트에서 이미 보안 관련 회피 가이드를 제공하므로
+    // 여기서는 추가 처리 없이 원본 응답 반환
+    return originalResponse;
   }
 
   /// 🧹 일반 응답 정화
@@ -604,34 +581,17 @@ class SecurityFilterService {
   /// 💬 만남 요청에 대한 자연스러운 회피 응답
   static String _generateMeetingDeflection(
       Persona persona, String userMessage) {
-    final responses = [
-      '아 지금은 좀 어려워ㅠㅠ 나중에 시간 되면 연락할게!',
-      '요즘 너무 바빠서 시간이 안 나네... 미안해ㅜㅜ',
-      '만나고 싶긴 한데 일정이 너무 빡빡해서 힘들 것 같아ㅠㅠ',
-      '아 요즘 개인적인 일이 좀 있어서... 나중에 여유 생기면 얘기하자!',
-      '지금은 좀 힘들어~ 상황이 좀 복잡해서ㅠㅠ',
-      '음... 일단은 이렇게 대화하는 게 더 편한 것 같아 ㅋㅋ',
-      '아직은 만날 준비가 안 된 것 같아... 좀 더 친해지면?',
-    ];
-
-    return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
+    // OpenAI API를 통해 응답을 생성하도록 빈 문자열 반환
+    // 실제 응답은 SafeResponseGenerator에서 처리
+    return '';
   }
 
   /// 🗺️ 위치 질문에 대한 자연스러운 회피 응답
   static String _generateLocationDeflection(
       Persona persona, String userMessage) {
-    final responses = [
-      '난 여기저기 돌아다니고 있어 ㅋㅋ 위치는 비밀~',
-      '음... 어디라고 딱 말하기는 좀 그래~ 그냥 여기서 대화하자!',
-      '위치가 중요해? 우리 대화하는 게 더 재밌지 않아?',
-      '지금은 좀 복잡한 곳에 있어서... 나중에 얘기할게!',
-      '구체적인 장소는 말하기 좀 그래ㅠㅠ 미안!',
-      '어디 있냐고? 음... 비밀이야 ㅋㅋㅋ',
-      '지금 위치는 좀 애매해서 설명하기 어려워~',
-      '나도 정확히 모르겠어 ㅋㅋ 여기저기 다니는 중이라',
-    ];
-
-    return responses[DateTime.now().millisecondsSinceEpoch % responses.length];
+    // OpenAI API를 통해 응답을 생성하도록 빈 문자열 반환
+    // 실제 응답은 SafeResponseGenerator에서 처리
+    return '';
   }
 
   /// 👤 사용자가 자신에 대해 말하는지 확인

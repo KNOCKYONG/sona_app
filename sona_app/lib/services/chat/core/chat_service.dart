@@ -691,49 +691,12 @@ class ChatService extends BaseService {
         return;
       }
 
-      // Check if user was rude and generate appropriate response
+      // Check if user was rude - but don't use hardcoded responses
       final rudeCheck = _checkRudeMessage(userMessage);
-
-      if (rudeCheck.isRude) {
-        // Handle rude message immediately
-        final aiResponseContent = _generateDefensiveResponse(
-            persona, userMessage, rudeCheck.severity);
-        final emotion =
-            rudeCheck.severity == 'high' ? EmotionType.angry : EmotionType.sad;
-
-        // Calculate score change for rude behavior
-        final likeResult = await RelationScoreService.instance.calculateLikes(
-          emotion: emotion,
-          userMessage: userMessage,
-          persona: persona,
-          chatHistory:
-              _messages.where((m) => m.personaId == persona.id).toList(),
-          currentLikes: persona.likes ?? 0,
-          userId: userId,
-        );
-
-        // Cache and send response
-        _addToCache(
-            cacheKey,
-            _CachedResponse(
-              content: aiResponseContent,
-              emotion: emotion,
-              scoreChange: likeResult.likeChange,
-              timestamp: DateTime.now(),
-            ));
-
-        // No placeholder to remove
-
-        await _sendMultipleMessages(
-          contents: [aiResponseContent], // Single content as array
-          persona: persona,
-          userId: userId,
-          emotion: emotion,
-          scoreChange: likeResult.likeChange,
-        );
-
-        return;
-      }
+      
+      // Note: rudeCheck.isRude 체크를 제거하고 
+      // ChatOrchestrator가 무례한 메시지도 자연스럽게 처리하도록 함
+      // 이렇게 하면 하드코딩된 응답 대신 AI가 적절한 응답을 생성
 
       // Get user nickname and age (language는 메시지별로 감지)
       String? userNickname;
@@ -2581,35 +2544,12 @@ class ChatService extends BaseService {
     return RudeMessageCheck(isRude: false, severity: 'none');
   }
 
-  /// 방어적 응답 생성
-  String _generateDefensiveResponse(
+  /// 방어적 응답 생성 - OpenAI API가 처리하도록 null 반환
+  String? _generateDefensiveResponse(
       Persona persona, String userMessage, String severity) {
-    // 항상 반말 모드 사용
-    if (severity == 'high') {
-      // 심한 욕설에 대한 응답
-      final severeResponses = [
-        '그렇게 말하면 너무 서운한데... ㅠㅠ',
-        '왜 그렇게 화가 났어? 무슨 일 있어?',
-        '아... 그런 말은 좀 아프다...',
-        '너무 심하게 말하지 마... 속상해',
-        '내가 뭘 잘못했나... 미안해 ㅠㅠ',
-      ];
-
-      final index = userMessage.hashCode.abs() % severeResponses.length;
-      return severeResponses[index];
-    } else {
-      // 일반적인 무례함에 대한 응답
-      final mildResponses = [
-        '어? 왜 그래? 기분 안 좋아?',
-        '음... 뭔가 기분이 안 좋은가보네',
-        '아 그래? 그럼 다른 얘기하자',
-        '어 왜 갑자기 그래~ 뭐 있어?',
-        '음... 오늘 컨디션이 안 좋나보다',
-      ];
-
-      final index = userMessage.hashCode.abs() % mildResponses.length;
-      return mildResponses[index];
-    }
+    // 하드코딩된 응답을 제거하고 null을 반환하여
+    // OpenAI API가 자연스러운 응답을 생성하도록 함
+    return null;
   }
 
   /// 새로운 메서드: 여러 contents를 처리

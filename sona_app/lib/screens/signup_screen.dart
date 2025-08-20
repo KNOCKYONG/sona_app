@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../services/auth/user_service.dart';
+import '../services/persona/persona_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/auth/terms_agreement_widget.dart';
 import '../utils/permission_helper.dart';
@@ -179,6 +180,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       if (user != null && mounted) {
+        // PersonaService 초기화 추가
+        final personaService = Provider.of<PersonaService>(context, listen: false);
+        
+        // Firebase Auth 토큰 전파를 위한 짧은 딜레이
+        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('🔄 [SignupScreen] Initializing PersonaService for new user: ${user.uid}');
+        
+        try {
+          await personaService.initialize(userId: user.uid);
+          debugPrint('✅ [SignupScreen] PersonaService initialized successfully');
+        } catch (e) {
+          debugPrint('⚠️ [SignupScreen] PersonaService initialization error (continuing): $e');
+          // PersonaService 초기화 실패해도 계속 진행
+        }
+        
         Navigator.pushReplacementNamed(context, '/main');
       }
     } else {
@@ -207,6 +223,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
 
       if (user != null && mounted) {
+        // PersonaService 초기화 추가
+        final personaService = Provider.of<PersonaService>(context, listen: false);
+        
+        // Firebase Auth 토큰 전파를 위한 짧은 딜레이
+        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('🔄 [SignupScreen] Initializing PersonaService for new user: ${user.uid}');
+        
+        try {
+          await personaService.initialize(userId: user.uid);
+          debugPrint('✅ [SignupScreen] PersonaService initialized successfully');
+        } catch (e) {
+          debugPrint('⚠️ [SignupScreen] PersonaService initialization error (continuing): $e');
+          // PersonaService 초기화 실패해도 계속 진행
+        }
+        
         Navigator.pushReplacementNamed(context, '/main');
       }
     }

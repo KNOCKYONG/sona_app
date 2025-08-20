@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
+import '../services/persona/persona_service.dart';
 import '../widgets/common/sona_logo.dart';
 import '../theme/app_theme.dart';
 import 'signup_screen.dart';
@@ -93,7 +94,24 @@ class _LoginScreenState extends State<LoginScreen>
 
       if (user != null && mounted) {
         debugPrint(
-            '✅ [LoginScreen] Login successful, navigating to main screen');
+            '✅ [LoginScreen] Login successful, initializing PersonaService...');
+        
+        // PersonaService 초기화 추가
+        final personaService = Provider.of<PersonaService>(context, listen: false);
+        
+        // Firebase Auth 토큰 전파를 위한 짧은 딜레이
+        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('🔄 [LoginScreen] Initializing PersonaService for user: ${user.uid}');
+        
+        try {
+          await personaService.initialize(userId: user.uid);
+          debugPrint('✅ [LoginScreen] PersonaService initialized successfully');
+        } catch (e) {
+          debugPrint('⚠️ [LoginScreen] PersonaService initialization error (continuing): $e');
+          // PersonaService 초기화 실패해도 계속 진행 (PersonaSelectionScreen에서 재시도)
+        }
+        
+        debugPrint('✅ [LoginScreen] Navigating to main screen');
         Navigator.of(context)
             .pushNamedAndRemoveUntil('/main', (route) => false);
       } else if (mounted) {

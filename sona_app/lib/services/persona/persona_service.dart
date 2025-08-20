@@ -256,9 +256,17 @@ class PersonaService extends BaseService {
     String? userId,
     Function(double progress, String message)? onProgress,
   }) async {
-    // Prevent duplicate initialization
+    // Allow reinitialization if data is empty or previous attempt failed
     if (_loadingCompleter != null && !_loadingCompleter!.isCompleted) {
       return _loadingCompleter!.future;
+    }
+    
+    // Reset completer if previous initialization failed or data is empty
+    if (_loadingCompleter != null && _loadingCompleter!.isCompleted) {
+      if (_allPersonas.isEmpty) {
+        debugPrint('🔄 Resetting completer for reinitialization (empty data)');
+        _loadingCompleter = null;
+      }
     }
 
     _loadingCompleter = Completer<void>();
@@ -280,6 +288,17 @@ class PersonaService extends BaseService {
     );
 
     debugPrint('🚀 PersonaService initializing with userId: $_currentUserId');
+    
+    // Ensure Firebase Auth token is refreshed for new users
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await user.getIdToken(true); // Force token refresh
+        debugPrint('✅ Firebase Auth token refreshed for user: ${user.uid}');
+      } catch (e) {
+        debugPrint('⚠️ Failed to refresh Firebase Auth token: $e');
+      }
+    }
 
     // isLoading is managed by BaseService
     notifyListeners();

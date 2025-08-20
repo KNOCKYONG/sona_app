@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:animations/animations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../services/auth/auth_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/auth/device_id_service.dart';
@@ -533,6 +534,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       // 카드 준비
       _prepareCardItems(personaService.availablePersonas);
       return;
+    }
+    
+    // 데이터가 비어있으면 강제 재초기화
+    if (personaService.allPersonas.isEmpty) {
+      debugPrint('⚠️ PersonaService has empty data, forcing reinitialization...');
+      
+      // Firebase Auth 상태 확인 및 갱신
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        try {
+          await user.reload(); // 사용자 정보 갱신
+          await user.getIdToken(true); // 토큰 강제 갱신
+          debugPrint('✅ Firebase Auth refreshed for user: ${user.uid}');
+        } catch (e) {
+          debugPrint('⚠️ Failed to refresh Firebase Auth: $e');
+        }
+      }
     }
 
     // 디바이스 정보 로그 (디버깅용)

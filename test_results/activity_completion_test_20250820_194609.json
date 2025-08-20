@@ -1,0 +1,86 @@
+{
+  "timestamp": "20250820_194609",
+  "total_scenarios": 8,
+  "results": [
+    {
+      "scenario": "퇴근 완료",
+      "user_message": "아 퇴근했다...",
+      "inappropriate_questions": [
+        "그동안 뭐 했어?",
+        "뭐 하고 있었어?"
+      ],
+      "expected_type": "empathy_and_rest",
+      "status": "configured"
+    },
+    {
+      "scenario": "학교 끝",
+      "user_message": "학교 끝났어",
+      "inappropriate_questions": [
+        "뭐 했어?",
+        "그동안 뭐 했어?"
+      ],
+      "expected_type": "acknowledge_effort",
+      "status": "configured"
+    },
+    {
+      "scenario": "야자 완료",
+      "user_message": "야자 끝나고 왔어",
+      "inappropriate_questions": [
+        "그동안 뭐 했어?",
+        "뭐 하고 있었어?"
+      ],
+      "expected_type": "study_empathy",
+      "status": "configured"
+    },
+    {
+      "scenario": "면접 완료",
+      "user_message": "면접 봤어",
+      "inappropriate_questions": [
+        "뭐 했어?",
+        "그동안 뭐 했어?"
+      ],
+      "expected_type": "interview_result_curiosity",
+      "status": "configured"
+    },
+    {
+      "scenario": "인강 완료",
+      "user_message": "인강 다 들었어",
+      "inappropriate_questions": [
+        "그동안 뭐 했어?",
+        "뭐 하고 있었어?"
+      ],
+      "expected_type": "learning_curiosity",
+      "status": "configured"
+    },
+    {
+      "scenario": "운동 완료",
+      "user_message": "운동하고 왔어",
+      "inappropriate_questions": [
+        "그동안 뭐 했어?",
+        "뭐 했어?"
+      ],
+      "expected_type": "exercise_acknowledgment",
+      "status": "configured"
+    },
+    {
+      "scenario": "스터디 완료",
+      "user_message": "스터디 끝났어",
+      "inappropriate_questions": [
+        "뭐 했어?",
+        "그동안 뭐 했어?"
+      ],
+      "expected_type": "study_acknowledgment",
+      "status": "configured"
+    },
+    {
+      "scenario": "교육 완료",
+      "user_message": "교육 받고 왔어",
+      "inappropriate_questions": [
+        "그동안 뭐 했어?",
+        "뭐 하고 있었어?"
+      ],
+      "expected_type": "education_curiosity",
+      "status": "configured"
+    }
+  ]
+}

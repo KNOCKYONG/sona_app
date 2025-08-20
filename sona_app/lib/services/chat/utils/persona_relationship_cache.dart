@@ -11,12 +11,16 @@ import '../../../helpers/firebase_helper.dart';
 class PersonaWithSpeechStyle {
   final Persona persona;
   final bool isCasualSpeech;
-  final DateTime? lastGreetingTime;  // 마지막 인사 시간 추가
+  final DateTime? lastGreetingTime;  // 마지막 인사 시간
+  final DateTime? lastWellBeingQuestionTime;  // 마지막 안부 질문 시간
+  final Map<String, dynamic>? dailyQuestionStats;  // 일별 질문 통계
 
   PersonaWithSpeechStyle({
     required this.persona,
     required this.isCasualSpeech,
     this.lastGreetingTime,
+    this.lastWellBeingQuestionTime,
+    this.dailyQuestionStats,
   });
 }
 
@@ -75,6 +79,8 @@ class PersonaRelationshipCache extends BaseService {
         persona: personaData.persona,
         isCasualSpeech: personaData.isCasualSpeech,
         lastGreetingTime: personaData.lastGreetingTime,
+        lastWellBeingQuestionTime: personaData.lastWellBeingQuestionTime,
+        dailyQuestionStats: personaData.dailyQuestionStats ?? {},
         timestamp: DateTime.now(),
       );
 
@@ -124,11 +130,21 @@ class PersonaRelationshipCache extends BaseService {
       final lastGreeting = data['lastGreetingTime'] != null
           ? (data['lastGreetingTime'] as Timestamp).toDate()
           : null;
+      
+      // 안부 질문 시간 로드
+      final lastWellBeing = data['lastWellBeingQuestionTime'] != null
+          ? (data['lastWellBeingQuestionTime'] as Timestamp).toDate()
+          : null;
+      
+      // 일별 질문 통계 로드
+      final dailyStats = data['dailyQuestionStats'] as Map<String, dynamic>?;
 
       return PersonaWithSpeechStyle(
         persona: updatedPersona,
         isCasualSpeech: isCasualSpeech,
         lastGreetingTime: lastGreeting,
+        lastWellBeingQuestionTime: lastWellBeing,
+        dailyQuestionStats: dailyStats,
       );
     } catch (e) {
       debugPrint('❌ Error loading persona relationship: $e');
@@ -177,6 +193,8 @@ class PersonaRelationshipCache extends BaseService {
           persona: cached.persona,
           isCasualSpeech: cached.isCasualSpeech,
           lastGreetingTime: now,
+          lastWellBeingQuestionTime: cached.lastWellBeingQuestionTime,
+          dailyQuestionStats: cached.dailyQuestionStats,
           timestamp: cached.timestamp,
         );
       }
@@ -195,6 +213,80 @@ class PersonaRelationshipCache extends BaseService {
     
     final hoursSinceGreeting = DateTime.now().difference(lastGreetingTime).inHours;
     return hoursSinceGreeting >= 24; // 24시간 이상 지났으면 인사 필요
+  }
+  
+  /// 안부 질문 시간 업데이트
+  Future<void> updateWellBeingQuestionTime({
+    required String userId,
+    required String personaId,
+  }) async {
+    try {
+      final cacheKey = '${userId}_$personaId';
+      final now = DateTime.now();
+      final today = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+      
+      // Firebase 업데이트
+      final docId = '${userId}_$personaId';
+      await FirebaseFirestore.instance
+          .collection(AppConstants.userPersonaRelationshipsCollection)
+          .doc(docId)
+          .set({
+            'lastWellBeingQuestionTime': Timestamp.fromDate(now),
+            'dailyQuestionStats': {
+              'date': today,
+              'wellBeingCount': FieldValue.increment(1),
+              'lastQuestionTime': Timestamp.fromDate(now),
+            }
+          }, SetOptions(merge: true));
+      
+      // 캐시 업데이트
+      final cached = _cache[cacheKey];
+      if (cached != null) {
+        final stats = Map<String, dynamic>.from(cached.dailyQuestionStats);
+        if (stats['date'] != today) {
+          stats['date'] = today;
+          stats['wellBeingCount'] = 1;
+        } else {
+          stats['wellBeingCount'] = (stats['wellBeingCount'] ?? 0) + 1;
+        }
+        stats['lastQuestionTime'] = now;
+        
+        _cache[cacheKey] = _CachedPersonaRelationship(
+          persona: cached.persona,
+          isCasualSpeech: cached.isCasualSpeech,
+          lastGreetingTime: cached.lastGreetingTime,
+          lastWellBeingQuestionTime: now,
+          dailyQuestionStats: stats,
+          timestamp: cached.timestamp,
+        );
+      }
+      
+      debugPrint('💬 Updated well-being question time for persona $personaId');
+    } catch (e) {
+      debugPrint('❌ Error updating well-being question time: $e');
+    }
+  }
+  
+  /// 오늘 안부 질문을 했는지 확인
+  bool hasAskedWellBeingToday({
+    required String userId,
+    required String personaId,
+  }) {
+    final cacheKey = '${userId}_$personaId';
+    final cached = _cache[cacheKey];
+    
+    if (cached == null) return false;
+    
+    final today = DateTime.now();
+    final todayStr = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
+    
+    final stats = cached.dailyQuestionStats;
+    if (stats['date'] == todayStr) {
+      final count = stats['wellBeingCount'] ?? 0;
+      return count > 0;  // 오늘 1번이라도 물었으면 true
+    }
+    
+    return false;
   }
 
   /// 만료된 캐시 항목 갱신
@@ -267,14 +359,18 @@ class _CachedPersonaRelationship {
   final Persona persona;
   final bool isCasualSpeech;
   final DateTime? lastGreetingTime;
+  final DateTime? lastWellBeingQuestionTime;  // 안부 질문 시간 추가
+  final Map<String, dynamic> dailyQuestionStats;  // 일별 질문 통계 추가
   final DateTime timestamp;
 
   _CachedPersonaRelationship({
     required this.persona,
     required this.isCasualSpeech,
     this.lastGreetingTime,
+    this.lastWellBeingQuestionTime,
+    Map<String, dynamic>? dailyQuestionStats,
     required this.timestamp,
-  });
+  }) : dailyQuestionStats = dailyQuestionStats ?? {};
 
   /// 캐시가 만료되었는지 확인
   bool get isExpired {

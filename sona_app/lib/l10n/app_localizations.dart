@@ -287,6 +287,13 @@ class AppLocalizations {
   String get purchasePolicy =>
       isKorean ? '구매 및 환불 정책' : 'Purchase & Refund Policy';
   String get help => isKorean ? '도움말' : 'Help';
+  String get frequentlyAskedQuestions => isKorean ? '자주 묻는 질문' : 'Frequently Asked Questions';
+  String get searchFAQ => isKorean ? 'FAQ 검색...' : 'Search FAQ...';
+  String get searchResults => isKorean ? '검색 결과' : 'Search Results';
+  String get relatedFAQ => isKorean ? '관련 FAQ' : 'Related FAQ';
+  String get wasHelpful => isKorean ? '도움이 되었나요?' : 'Was this helpful?';
+  String get thanksFeedback => isKorean ? '피드백 감사합니다!' : 'Thanks for your feedback!';
+  String get sorryNotHelpful => isKorean ? '도움이 되지 못해 죄송합니다' : 'Sorry it wasn\'t helpful';
   String get about => isKorean ? '앱 정보' : 'About';
   String get version => isKorean ? '버전' : 'Version';
   String get others => isKorean ? '기타' : 'Others';

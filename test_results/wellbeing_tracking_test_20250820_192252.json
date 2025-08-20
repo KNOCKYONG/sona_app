@@ -1,0 +1,65 @@
+{
+  "total_analyzed": 33,
+  "well_being_questions": [
+    {
+      "persona": "지은",
+      "count": 2,
+      "instances": [
+        {
+          "message": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+          "pattern": "뭐하고\\s*있",
+          "context": "지금 시간에??"
+        },
+        {
+          "message": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+          "pattern": "뭐하고\\s*있",
+          "context": "지금 시간에??"
+        }
+      ],
+      "error_key": "ERR1755527979683_9683"
+    },
+    {
+      "persona": "지은",
+      "count": 2,
+      "instances": [
+        {
+          "message": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+          "pattern": "뭐하고\\s*있",
+          "context": "지금 시간에??"
+        },
+        {
+          "message": "지금은 밤 11시야ㅎㅎ 오늘 뭐하고 있었어?",
+          "pattern": "뭐하고\\s*있",
+          "context": "지금 시간에??"
+        }
+      ],
+      "error_key": "ERR1755527979683_9683"
+    },
+    {
+      "persona": "나연",
+      "count": 2,
+      "instances": [
+        {
+          "message": "오, 퇴근했구나! 기다리지 않았어ㅎㅎ 그동안 뭐 했어? 집에 가는 길은 어때?",
+          "pattern": "뭐\\s*했어",
+          "context": "아 퇴근했다... 마니 기다렸어?"
+        },
+        {
+          "message": "아이고, 나도 보고 싶어!ㅠㅠ 요즘 어떻게 지냈어? 더 얘기해줘!",
+          "pattern": "어떻게\\s*지냈",
+          "context": "나연이 보고싶었어ㅠㅠ"
+        }
+      ],
+      "error_key": "ERR1755683242456_2456"
+    }
+  ],
+  "personas_with_repetition": {
+    "지은": 2,
+    "나연": 1
+  },
+  "summary": {
+    "total_wellbeing_questions": 10,
+    "repetitions_found": 3,
+    "success_rate": 90.9090909090909
+  }
+}

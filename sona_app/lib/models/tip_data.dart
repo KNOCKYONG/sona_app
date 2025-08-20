@@ -28,7 +28,7 @@ class TipData {
         ),
         const TipData(
           title: "하트 사용 꿀팁",
-          content: "슈퍼 라이크(💖×5)는 특별한 사람에게! 매일 자정 리셋",
+          content: "슈퍼 라이크(💖×5)는 특별한 사람에게! 하트 5개 소모",
           icon: Icons.favorite,
           gradientColors: [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
         ),
@@ -67,6 +67,36 @@ class TipData {
           content: "메시지를 길게 누르면 클립보드에 복사됩니다. 번역된 내용도 복사 가능해요!",
           icon: Icons.copy,
           gradientColors: [Color(0xFFf093fb), Color(0xFFf5576c)],
+        ),
+        const TipData(
+          title: "메시지는 언제 리셋되나요?",
+          content: "매일 한국 시간 자정(00:00)에 100개로 리셋! 하트 1개로 즉시 충전도 가능",
+          icon: Icons.schedule,
+          gradientColors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+        ),
+        const TipData(
+          title: "스와이프 방향 알아두기",
+          content: "오른쪽👉 좋아요(하트 1개) | 왼쪽👈 패스 | 위로👆 슈퍼라이크(하트 5개)",
+          icon: Icons.swipe,
+          gradientColors: [Color(0xFFFC466B), Color(0xFF3F5EFB)],
+        ),
+        const TipData(
+          title: "프로필 사진 꾸미기",
+          content: "프로필 → 카메라 아이콘으로 사진 변경! 좋은 인상으로 매칭률 UP",
+          icon: Icons.camera_alt,
+          gradientColors: [Color(0xFFEE9CA7), Color(0xFFFFDDE1)],
+        ),
+        const TipData(
+          title: "처음 시작하셨나요?",
+          content: "신규 가입 시 하트 10개 무료 지급! 아껴서 특별한 페르소나에게 사용하세요",
+          icon: Icons.card_giftcard,
+          gradientColors: [Color(0xFFA8E063), Color(0xFF56AB2F)],
+        ),
+        const TipData(
+          title: "매칭된 소나 어디있지?",
+          content: "홈 화면 하단 채팅 탭에서 모든 매칭된 페르소나를 확인할 수 있어요",
+          icon: Icons.people,
+          gradientColors: [Color(0xFF89F7FE), Color(0xFF66A6FF)],
         ),
       ];
 }

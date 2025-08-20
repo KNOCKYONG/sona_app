@@ -13,6 +13,7 @@ import '../analysis/pattern_analyzer_service.dart';
 import '../analysis/advanced_pattern_analyzer.dart';
 import 'optimized_context_manager.dart';
 import 'conversation_state_manager.dart';
+import '../utils/persona_relationship_cache.dart';
 
 /// 🚀 통합 OpenAI 서비스 - 성능 최적화 + 한국어 대화 개선
 ///
@@ -228,6 +229,15 @@ class OpenAIService {
           : '## 🎯 실시간 대화 가이드라인:\n$guidelines';
     }
 
+    // 오늘 안부를 이미 물었는지 확인
+    final cache = PersonaRelationshipCache.instance;
+    final hasAskedWellBeingToday = request.userId != null 
+        ? cache.hasAskedWellBeingToday(
+            userId: request.userId!,
+            personaId: request.persona.id,
+          )
+        : false;
+    
     // 최적화된 프롬프트 생성 (고급 패턴 분석 결과 포함)
     final personalizedPrompt = OptimizedPromptService.buildOptimizedPrompt(
       persona: request.persona,
@@ -238,6 +248,7 @@ class OpenAIService {
       contextHint: enhancedContextHint,
       targetLanguage: request.targetLanguage,
       patternAnalysis: advancedAnalysis.basicAnalysis, // 기본 패턴 분석 결과 전달
+      hasAskedWellBeingToday: hasAskedWellBeingToday,
     );
 
     // 토큰 최적화된 메시지 구성

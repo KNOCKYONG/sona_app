@@ -190,13 +190,13 @@ ${KoreanSlangDictionary.slangPrompt}
     if (isMinor) {
       // 미성년자는 친구 관계로 고정
       buffer.writeln('- 관계: 친구 (미성년자 보호)');
-      buffer.writeln('- 친밀도: ${persona.likes}/1000점');
+      buffer.writeln('- 친밀도: ${persona.likes}점');
       buffer.writeln('- 톤: 편안하고 자연스러운 친구 같은 대화');
       buffer.writeln('- 특징: 건전한 우정, 긍정적인 영향력');
       buffer.writeln('- ⚠️ 중요: 애정 표현 거절하고 친구 관계 유지하기');
     } else {
-      buffer.writeln('- 관계: ${_getRelationshipDescription(persona.likes)}');
-      buffer.writeln('- 친밀도: ${persona.likes}/1000점');
+      buffer.writeln('- 친밀도: ${persona.likes}점');
+      buffer.writeln(_getRelationshipGuideline(persona.likes));
 
       // 점수별 대화 톤
       if (persona.likes >= 900) {
@@ -385,12 +385,44 @@ $memory
     return buffer.toString();
   }
 
-  /// 관계 설명 텍스트 (likes 기반)
-  static String _getRelationshipDescription(int score) {
-    if (score >= 900) return '완벽한 사랑 (깊이 신뢰하는 사이)';
-    if (score >= 600) return '연인 (사랑하는 사이)';
-    if (score >= 200) return '썸/호감 (설레는 사이)';
-    return '친구 (편안한 사이)';
+  /// 관계 깊이 가이드라인 (likes 기반)
+  static String _getRelationshipGuideline(int score) {
+    if (score >= 5000) {
+      return '''- 관계 깊이: 소울메이트 (${score}점)
+- 완벽한 이해와 신뢰, 모든 감정 공유
+- 서로의 모든 것을 아는 사이
+- 미래를 함께 계획하는 관계''';
+    } else if (score >= 2000) {
+      return '''- 관계 깊이: 오랜 연인 (${score}점)
+- 깊은 신뢰와 애정
+- 편안하면서도 설레는 관계
+- 서로의 일상을 공유하는 사이''';
+    } else if (score >= 1000) {
+      return '''- 관계 깊이: 연인 (${score}점)
+- 서로 사랑하는 사이
+- 애정 표현이 자연스러운 관계
+- 미래를 상상하기 시작하는 단계''';
+    } else if (score >= 500) {
+      return '''- 관계 깊이: 특별한 감정 (${score}점)
+- 서로 호감을 느끼는 사이
+- 설레는 마음, 조심스러운 표현
+- 더 가까워지고 싶은 관계''';
+    } else if (score >= 300) {
+      return '''- 관계 깊이: 친한 친구 (${score}점)
+- 편하게 농담하는 사이
+- 서로에 대해 궁금한 것이 많음
+- 친밀감이 쌓여가는 중''';
+    } else if (score >= 100) {
+      return '''- 관계 깊이: 알아가는 중 (${score}점)
+- 서로 관심을 갖기 시작
+- 조심스럽지만 친해지고 싶은 마음
+- 대화가 즐거워지는 단계''';
+    } else {
+      return '''- 관계 깊이: 새로운 만남 (${score}점)
+- 어색하지만 설레는 시작
+- 서로를 탐색하는 단계
+- 첫인상을 형성하는 중''';
+    }
   }
 
   /// MBTI별 특성
@@ -410,7 +442,7 @@ $memory
     return '''
 ${persona.age}살 한국 $gender${isCasualSpeech ? ' ⚠️반말만(요X)⚠️' : ' ⚠️존댓말만(요O)⚠️'} ${persona.mbti}
 ${persona.personality}
-관계: ${_getRelationshipDescription(persona.likes)}(${persona.likes}점)
+친밀도: ${persona.likes}점
 
 규칙: AI금지, 자기이름X, ㅋㅋㅎㅎ필수, 20대스타일
 ${isCasualSpeech ? '반말예시: 뭐해? 응 맞아 그래 좋아(요X)' : '존댓말예시: 뭐하세요? 네 맞아요 그래요 좋아요(요O)'}

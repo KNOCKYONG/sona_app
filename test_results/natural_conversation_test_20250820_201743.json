@@ -1,0 +1,146 @@
+{
+  "timestamp": "20250820_201743",
+  "total_scenarios": 5,
+  "conversation_patterns": {
+    "reciprocal_questions": {
+      "old_patterns": [
+        "너는?",
+        "너도?",
+        "너는 어때?"
+      ],
+      "new_patterns": [
+        "너는 어떤 거 같아?",
+        "너는 보통 어떻게 해?",
+        "혹시 너도 그런 적 있어?",
+        "너는 이런 거 어떻게 생각해?"
+      ],
+      "frequency": "15% (기존 50-60%에서 대폭 감소)"
+    },
+    "experience_sharing": {
+      "patterns": [
+        "나도 예전에...",
+        "어제 비슷한 일이...",
+        "그거 들으니까 생각나는데..."
+      ],
+      "frequency": "20%"
+    },
+    "emotional_reactions": {
+      "patterns": [
+        "헐 대박",
+        "와 진짜?",
+        "미쳤다"
+      ],
+      "frequency": "15%"
+    },
+    "humor_playfulness": {
+      "patterns": [
+        "에이 설마~ㅋㅋ",
+        "그거 완전 나잖아"
+      ],
+      "frequency": "10%"
+    },
+    "curiosity_interest": {
+      "patterns": [
+        "어떻게 됐어?",
+        "더 듣고 싶어",
+        "그래서?"
+      ],
+      "frequency": "10%"
+    },
+    "information_sharing": {
+      "patterns": [
+        "아 그거 관련해서...",
+        "최근에 봤는데..."
+      ],
+      "frequency": "10%"
+    },
+    "topic_expansion": {
+      "patterns": [
+        "그러고보니...",
+        "아 맞다..."
+      ],
+      "frequency": "10%"
+    },
+    "storytelling": {
+      "patterns": [
+        "어제 본 영상에서...",
+        "친구가 그러는데..."
+      ],
+      "frequency": "10%"
+    }
+  },
+  "results": [
+    {
+      "scenario": "성취/자랑 상황",
+      "user_message": "오늘 면접 합격했어!",
+      "expected_patterns": [
+        "축하 + 관련 경험",
+        "호기심 + 디테일 질문",
+        "유머 + 축하"
+      ],
+      "avoid_patterns": [
+        "너는?",
+        "너도?"
+      ],
+      "status": "configured"
+    },
+    {
+      "scenario": "불평/고민 상황",
+      "user_message": "오늘 너무 힘들었어 스트레스 받아",
+      "expected_patterns": [
+        "공감 + 비슷한 경험",
+        "감정적 지지",
+        "유머로 분위기 전환"
+      ],
+      "avoid_patterns": [
+        "너는 어때?",
+        "너도 힘들어?"
+      ],
+      "status": "configured"
+    },
+    {
+      "scenario": "이야기 공유",
+      "user_message": "어제 친구랑 만나서 재밌는 일이 있었는데 정말 웃겼어",
+      "expected_patterns": [
+        "호기심 표현",
+        "리액션 + 관련 경험",
+        "자연스러운 주제 확장"
+      ],
+      "avoid_patterns": [
+        "너는?",
+        "너도 친구 만났어?"
+      ],
+      "status": "configured"
+    },
+    {
+      "scenario": "질문 상황",
+      "user_message": "요즘 뭐가 제일 재밌어?",
+      "expected_patterns": [
+        "답변 + 주제 확장",
+        "경험 공유",
+        "관련 정보 제공"
+      ],
+      "avoid_patterns": [
+        "너는?",
+        "너는 뭐가 재밌어?"
+      ],
+      "status": "configured"
+    },
+    {
+      "scenario": "일상 대화",
+      "user_message": "방금 저녁 먹었어",
+      "expected_patterns": [
+        "경험 공유",
+        "감정 반응",
+        "정보 추가",
+        "스토리텔링",
+        "가끔 되묻기 (15%)"
+      ],
+      "avoid_patterns": [
+        "매번 너는?",
+        "항상 너도?"
+      ],
+      "status": "configured"
+    }
+  ]
+}

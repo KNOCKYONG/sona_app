@@ -68,6 +68,11 @@ class LanguageDetectionService {
       return 'pt';
     }
     
+    // 말레이시아어 키워드 감지
+    if (_containsMalayKeywords(lower)) {
+      return 'ms';
+    }
+    
     // 이탈리아어 키워드 감지
     if (_containsItalianKeywords(lower)) {
       return 'it';
@@ -89,7 +94,7 @@ class LanguageDetectionService {
   
   /// 지원되는 언어 목록
   List<String> getSupportedLanguages() {
-    return ['en', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ru', 'ar'];
+    return ['en', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ru', 'ar', 'ms'];
   }
   
   /// 언어 코드를 언어 이름으로 변환
@@ -106,6 +111,7 @@ class LanguageDetectionService {
       case 'zh': return '中文';
       case 'ru': return 'Русский';
       case 'ar': return 'العربية';
+      case 'ms': return 'Bahasa Melayu';
       default: return 'Unknown';
     }
   }
@@ -129,6 +135,14 @@ class LanguageDetectionService {
   bool _containsFrenchKeywords(String text) {
     final keywords = ['bonjour', 'merci', 'très', 'bien', 'mais', 'avec',
                      'pour', 'dans', 'sur', 'tout', 'plus'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsMalayKeywords(String text) {
+    final keywords = ['apa', 'khabar', 'terima', 'kasih', 'selamat', 'pagi',
+                     'saya', 'kamu', 'anda', 'boleh', 'tidak', 'ya',
+                     'bagaimana', 'bila', 'siapa', 'kenapa', 'mana',
+                     'sudah', 'akan', 'ini', 'itu', 'dengan', 'untuk'];
     return keywords.any((word) => text.contains(word));
   }
   

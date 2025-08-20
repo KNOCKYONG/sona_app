@@ -169,6 +169,15 @@ class CompressionStrategy {
 }
 
 class MemoryHierarchy {
+  // 메모리 용량 상수
+  static const int SHORT_TERM_CAPACITY = 20;
+  static const int MEDIUM_TERM_CAPACITY = 50;
+  static const int LONG_TERM_CAPACITY = 100;
+  
+  // 중요도 임계값
+  static const double MEDIUM_IMPORTANCE = 0.5;
+  static const double HIGH_IMPORTANCE = 0.8;
+  
   List<MemoryItem> shortTermMemory = [];   // 최근 대화
   List<MemoryItem> mediumTermMemory = [];  // 중기 기억
   List<MemoryItem> longTermMemory = [];    // 장기 기억
@@ -376,8 +385,8 @@ class MemoryHierarchy {
       'compressed': {
         'batches': compressedMemory.length,
         'totalCompressed': compressedMemory.values
-            .map((c) => c['itemCount'] ?? 0)
-            .fold(0, (a, b) => a + b),
+            .map((c) => (c as Map<String, dynamic>)['itemCount'] ?? 0)
+            .fold<int>(0, (a, b) => a + (b as int)),
       },
       'totalMemories': shortTermMemory.length + mediumTermMemory.length + longTermMemory.length,
     };

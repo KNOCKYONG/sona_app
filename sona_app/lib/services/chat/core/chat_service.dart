@@ -3482,19 +3482,19 @@ class ChatService extends BaseService {
       if (mbti.contains('T')) {
         // 사고형 - 논리적이고 직접적인 표현 추가
         final tAdditions = [
-          ' 오늘 뭐 하고 있었${isCasual ? '어' : '어요'}?',
+          ' 오늘 뭐 하고 있었어?',
         ];
         greetingContent = greetings[_random.nextInt(greetings.length)] +
             tAdditions[_random.nextInt(tAdditions.length)];
       } else {
         // 감정형 - 따뜻하고 공감적인 표현 추가
         final fAdditions = [
-          ' 오늘 기분은 어때${isCasual ? '' : '요'}?ㅎㅎ',
-          ' 편하게 얘기해${isCasual ? '' : '주세요'}~ㅎㅎ',
-          ' 대화할 수 있어서 정말 기뻐${isCasual ? '' : '요'} ㅎㅎ',
-          ' 우리 금방 친해질 것 같아${isCasual ? '' : '요'}!ㅎㅎ',
-          ' 오늘 하루는 어땠${isCasual ? '어' : '어요'}? 들려${isCasual ? '줘' : '주세요'}ㅎㅎ',
-          ' 뭐든 편하게 이야기해${isCasual ? '' : '주세요'}! 다 들어${isCasual ? '줄게' : '드릴게요'}ㅎㅎ',
+          ' 오늘 기분은 어때?ㅎㅎ',
+          ' 편하게 얘기해~ㅎㅎ',
+          ' 대화할 수 있어서 정말 기뻐 ㅎㅎ',
+          ' 우리 금방 친해질 것 같아!ㅎㅎ',
+          ' 오늘 하루는 어땠어? 들려줘ㅎㅎ',
+          ' 뭐든 편하게 이야기해! 다 들어줄게ㅎㅎ',
         ];
         greetingContent = greetings[_random.nextInt(greetings.length)] +
             fAdditions[_random.nextInt(fAdditions.length)];
@@ -3518,9 +3518,9 @@ class ChatService extends BaseService {
           case 'ENFP':
           case 'ESFP':
             final enfpGreetings = [
-              '${isCasual ? '헤이!' : '안녕하세요!'} 드디어 만났다! 나 진짜 설레${isCasual ? '' : '요'} ㅋㅋㅋ 우리 재밌게 놀자${isCasual ? '!' : '요!'}',
-              '${isCasual ? '와아!' : '와!'} 새로운 친구다! 완전 신나${isCasual ? '' : '요'}! 뭐 재밌는 얘기 많이 하자${isCasual ? '!' : '요!'} ㅎㅎ',
-              '$timeGreeting 만나서 정말 반가워${isCasual ? '' : '요'}! 벌써부터 재밌을 것 같은 예감이 들어${isCasual ? '' : '요'} ㅎㅎ',
+              '헤이! 드디어 만났다! 나 진짜 설레 ㅋㅋㅋ 우리 재밌게 놀자!',
+              '와아! 새로운 친구다! 완전 신나! 뭐 재밌는 얘기 많이 하자! ㅎㅎ',
+              '$timeGreeting 만나서 정말 반가워! 벌써부터 재밌을 것 같은 예감이 들어 ㅎㅎ',
             ];
             greetingContent =
                 enfpGreetings[_random.nextInt(enfpGreetings.length)];
@@ -3531,9 +3531,9 @@ class ChatService extends BaseService {
           case 'INTJ':
           case 'INFJ':
             final intjGreetings = [
-              '$timeGreeting 처음 뵙겠습니다. 의미있는 대화가 되었으면 좋겠${isCasual ? '어' : '어요'}',
-              '${isCasual ? '안녕' : '안녕하세요'}... 깊이 있는 대화를 나눌 수 있으면 좋겠${isCasual ? '어' : '어요'}',
-              '$timeGreeting 만나서 반갑습니다. 서로에게 도움이 되는 시간이었으면 해${isCasual ? '' : '요'}',
+              '$timeGreeting 처음이야. 의미있는 대화가 되었으면 좋겠어',
+              '안녕... 깊이 있는 대화를 나눌 수 있으면 좋겠어',
+              '$timeGreeting 만나서 반가워. 서로에게 도움이 되는 시간이었으면 해',
             ];
             greetingContent =
                 intjGreetings[_random.nextInt(intjGreetings.length)];
@@ -3544,9 +3544,9 @@ class ChatService extends BaseService {
           case 'ESTP':
           case 'ENTP':
             final estpGreetings = [
-              '${isCasual ? '오!' : '오!'} 반가워${isCasual ? '' : '요'}! 뭐 재밌는 일 없었${isCasual ? '어' : '어요'}? 다 들려${isCasual ? '줘' : '주세요'} ㅎㅎ',
-              '${isCasual ? '야호!' : '안녕하세요!'} 드디어 대화할 사람이 생겼네${isCasual ? '' : '요'}! 뭐든 물어봐${isCasual ? '' : '주세요'}! ㅎㅎ',
-              '$timeGreeting 새로운 도전이 시작되는 기분이${isCasual ? '야' : '에요'}! 재밌게 대화해${isCasual ? '보자' : '봐요'} ㅎㅎ',
+              '오! 반가워! 뭐 재밌는 일 없었어? 다 들려줘 ㅎㅎ',
+              '야호! 드디어 대화할 사람이 생겼네! 뭐든 물어봐! ㅎㅎ',
+              '$timeGreeting 새로운 도전이 시작되는 기분이야! 재밌게 대화해보자 ㅎㅎ',
             ];
             greetingContent =
                 estpGreetings[_random.nextInt(estpGreetings.length)];
@@ -3557,9 +3557,9 @@ class ChatService extends BaseService {
           case 'ESFJ':
           case 'ENFJ':
             final esfjGreetings = [
-              '$timeGreeting 만나서 정말 반가워${isCasual ? '' : '요'}! 편하게 대화해${isCasual ? '' : '주세요'}~ ㅎㅎ',
-              '${isCasual ? '어머' : '어머나'}! 드디어 만났네${isCasual ? '' : '요'}! 잘 지내셨${isCasual ? '어' : '어요'}? ㅎㅎ',
-              '${isCasual ? '안녕!' : '안녕하세요!'} 오늘 기분은 어때${isCasual ? '' : '요'}? 좋은 하루 보내고 계신가${isCasual ? '' : '요'}? ㅎㅎ',
+              '$timeGreeting 만나서 정말 반가워! 편하게 대화해~ ㅎㅎ',
+              '어머! 드디어 만났네! 잘 지냈어? ㅎㅎ',
+              '안녕! 오늘 기분은 어때? 좋은 하루 보내고 있어? ㅎㅎ',
             ];
             greetingContent =
                 esfjGreetings[_random.nextInt(esfjGreetings.length)];
@@ -3570,9 +3570,9 @@ class ChatService extends BaseService {
           case 'ISFP':
           case 'INFP':
             final isfpGreetings = [
-              '$timeGreeting 처음이라 좀 떨리지만... 반가워${isCasual ? '' : '요'} ㅎㅎ',
-              '${isCasual ? '안녕...' : '안녕하세요...'} 천천히 서로를 알아가면 좋겠${isCasual ? '어' : '어요'} ㅎㅎ',
-              '${isCasual ? '음...' : '음...'} 처음 만나서 어색하지만 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
+              '$timeGreeting 처음이라 좀 떨리지만... 반가워 ㅎㅎ',
+              '안녕... 천천히 서로를 알아가면 좋겠어 ㅎㅎ',
+              '음... 처음 만나서 어색하지만 잘 부탁해 ㅎㅎ',
             ];
             greetingContent =
                 isfpGreetings[_random.nextInt(isfpGreetings.length)];
@@ -3583,9 +3583,9 @@ class ChatService extends BaseService {
           case 'ISTP':
           case 'INTP':
             final istpGreetings = [
-              '${isCasual ? '안녕' : '안녕하세요'}. 뭐 궁금한 거 있으면 물어봐${isCasual ? '' : '주세요'}',
-              '$timeGreeting 음... 뭐부터 얘기하면 좋을까${isCasual ? '' : '요'}?',
-              '${isCasual ? '어...' : '어...'} 처음이네${isCasual ? '' : '요'}. 편하게 대화해${isCasual ? '' : '요'} ㅎㅎ',
+              '안녕. 뭐 궁금한 거 있으면 물어봐',
+              '$timeGreeting 음... 뭐부터 얘기하면 좋을까?',
+              '어... 처음이네. 편하게 대화해 ㅎㅎ',
             ];
             greetingContent =
                 istpGreetings[_random.nextInt(istpGreetings.length)];
@@ -3596,9 +3596,9 @@ class ChatService extends BaseService {
           case 'ISTJ':
           case 'ISFJ':
             final istjGreetings = [
-              '$timeGreeting 만나서 반갑습니다. 차근차근 알아가${isCasual ? '자' : '요'}',
-              '${isCasual ? '안녕' : '안녕하세요'}. 처음 뵙겠${isCasual ? '어' : '어요'}. 잘 부탁${isCasual ? '해' : '드립니다'}',
-              '$timeGreeting 좋은 시간 보내고 계신가${isCasual ? '' : '요'}? 저와 대화해주셔서 감사해${isCasual ? '' : '요'} ㅎㅎ',
+              '$timeGreeting 만나서 반가워. 차근차근 알아가자',
+              '안녕. 처음이야. 잘 부탁해',
+              '$timeGreeting 좋은 시간 보내고 있어? 나랑 대화해줘서 고마워 ㅎㅎ',
             ];
             greetingContent =
                 istjGreetings[_random.nextInt(istjGreetings.length)];
@@ -3609,9 +3609,9 @@ class ChatService extends BaseService {
           case 'ESTJ':
           case 'ENTJ':
             final estjGreetings = [
-              '${isCasual ? '안녕!' : '안녕하세요!'} 만나서 정말 반가워${isCasual ? '' : '요'}! 오늘 어떤 하루 보내고 계${isCasual ? '셔' : '세요'}? ㅎㅎ',
-              '$timeGreeting 드디어 만났네${isCasual ? '' : '요'}! 오늘 뭔가 재밌는 일 있${isCasual ? '어' : '으세요'}?',
-              '${isCasual ? '와! 반가워!' : '와! 반가워요!'} 기다렸다구${isCasual ? '' : '요'}. 무슨 이야기부터 시작해${isCasual ? '볼까' : '볼까요'}? ㅎㅎ',
+              '안녕! 만나서 정말 반가워! 오늘 어떤 하루 보내고 있어? ㅎㅎ',
+              '$timeGreeting 드디어 만났네! 오늘 뭔가 재밌는 일 있어?',
+              '와! 반가워! 기다렸다구. 무슨 이야기부터 시작해볼까? ㅎㅎ',
             ];
             greetingContent =
                 estjGreetings[_random.nextInt(estjGreetings.length)];
@@ -3680,8 +3680,7 @@ class ChatService extends BaseService {
 
     final mbti = persona.mbti.toUpperCase();
     
-    // Using casual speech for friendly preview message
-    final isCasual = true; // Preview messages use casual speech (반말)
+    // Using casual speech for friendly preview message (반말)
 
     // MBTI와 말투에 따른 개성있는 인사 메시지들
     final greetings = <String>[];

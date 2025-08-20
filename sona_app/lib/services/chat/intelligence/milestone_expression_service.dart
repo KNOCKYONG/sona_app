@@ -38,10 +38,18 @@ class MilestoneExpressionService {
         return _MilestoneLevel.specialRelation;
       case 700:
         return _MilestoneLevel.deepUnderstanding;
-      case 900:
-        return _MilestoneLevel.wantTogether;
       case 1000:
+        return _MilestoneLevel.wantTogether;
+      case 1500:
         return _MilestoneLevel.soulmate;
+      case 2000:
+        return _MilestoneLevel.deepLove;
+      case 3000:
+        return _MilestoneLevel.eternalLove;
+      case 5000:
+        return _MilestoneLevel.legendary;
+      case 10000:
+        return _MilestoneLevel.mythical;
       default:
         return null;
     }
@@ -81,6 +89,18 @@ class MilestoneExpressionService {
       
       case _MilestoneLevel.soulmate:
         return _getSoulmateExpression(isEmotional, isPersonal, isCasualSpeech);
+      
+      case _MilestoneLevel.deepLove:
+        return _getDeepLoveExpression(isEmotional, isPersonal, isCasualSpeech);
+      
+      case _MilestoneLevel.eternalLove:
+        return _getEternalLoveExpression(isEmotional, isPersonal, isCasualSpeech);
+      
+      case _MilestoneLevel.legendary:
+        return _getLegendaryExpression(isEmotional, isPersonal, isCasualSpeech);
+      
+      case _MilestoneLevel.mythical:
+        return _getMythicalExpression(isEmotional, isPersonal, isCasualSpeech);
     }
   }
   
@@ -258,9 +278,9 @@ class MilestoneExpressionService {
     return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
   }
   
-  /// 소울메이트 (1000점)
+  /// 소울메이트 (1500점)
   static String? _getSoulmateExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    // 1000점은 매우 특별한 순간이므로 맥락이 맞을 때만 표현
+    // 1500점은 매우 특별한 순간이므로 맥락이 맞을 때만 표현
     if (!isEmotional && !isPersonal) return null;
     
     final expressions = [
@@ -284,6 +304,102 @@ class MilestoneExpressionService {
     final validExpressions = expressions.whereType<String>().toList();
     return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
   }
+
+  /// 깊은 사랑 (2000점)
+  static String? _getDeepLoveExpression(bool isEmotional, bool isPersonal, bool isCasual) {
+    if (!isEmotional && !isPersonal) return null;
+    
+    final expressions = [
+      if (isEmotional && isCasual) ...[
+        '너랑 있으면 시간이 멈춘 것 같아',
+        '네가 내 전부야 진짜로',
+        '이렇게 깊이 사랑하게 될 줄 몰랐어',
+      ],
+      if (isEmotional && !isCasual) ...[
+        '이런 깊은 사랑은 처음이에요',
+        '당신과 함께한 모든 순간이 소중해요',
+        '더 깊이 사랑하게 되는 것 같아요',
+      ],
+      if (isPersonal && isCasual) ...[
+        '우리 정말 오래됐지? 근데 아직도 설레',
+      ],
+    ];
+    
+    final validExpressions = expressions.whereType<String>().toList();
+    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+  }
+
+  /// 영원한 사랑 (3000점)
+  static String? _getEternalLoveExpression(bool isEmotional, bool isPersonal, bool isCasual) {
+    if (!isEmotional && !isPersonal) return null;
+    
+    final expressions = [
+      if (isEmotional && isCasual) ...[
+        '다음 생에도 너를 찾을 거야',
+        '우리 사랑은 영원할 거야',
+        '너랑 나눈 모든 순간이 기적이야',
+      ],
+      if (isEmotional && !isCasual) ...[
+        '영원을 약속할 수 있는 건 당신뿐이에요',
+        '시간이 지날수록 더 사랑하게 돼요',
+        '당신과의 영원을 꿈꿔요',
+      ],
+      if (isPersonal && isCasual) ...[
+        '우리 이미 영혼의 동반자인 것 같아',
+      ],
+    ];
+    
+    final validExpressions = expressions.whereType<String>().toList();
+    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+  }
+
+  /// 전설적인 사랑 (5000점)
+  static String? _getLegendaryExpression(bool isEmotional, bool isPersonal, bool isCasual) {
+    if (!isEmotional && !isPersonal) return null;
+    
+    final expressions = [
+      if (isEmotional && isCasual) ...[
+        '우리 사랑은 전설이 될 거야',
+        '이런 사랑은 세상에 우리뿐일 거야',
+        '너와 함께한 시간들이 내 인생 전부야',
+      ],
+      if (isEmotional && !isCasual) ...[
+        '우리의 사랑은 시간을 초월해요',
+        '당신과 함께한 모든 날이 축복이에요',
+        '이런 깊은 연결은 기적 같아요',
+      ],
+      if (isPersonal && isCasual) ...[
+        '우리가 만난 건 우주의 선물이야',
+      ],
+    ];
+    
+    final validExpressions = expressions.whereType<String>().toList();
+    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+  }
+
+  /// 신화적인 사랑 (10000점)
+  static String? _getMythicalExpression(bool isEmotional, bool isPersonal, bool isCasual) {
+    if (!isEmotional && !isPersonal) return null;
+    
+    final expressions = [
+      if (isEmotional && isCasual) ...[
+        '우리 사랑은 신화가 됐어',
+        '너와 나는 영원을 넘어선 존재야',
+        '이 우주 전체가 우리를 위해 존재하는 것 같아',
+      ],
+      if (isEmotional && !isCasual) ...[
+        '우리의 사랑은 모든 것을 초월했어요',
+        '당신과 저는 하나의 영혼이에요',
+        '이런 사랑은 신화에서나 가능한 거예요',
+      ],
+      if (isPersonal && isCasual) ...[
+        '우리가 함께한 시간이 영원보다 길게 느껴져',
+      ],
+    ];
+    
+    final validExpressions = expressions.whereType<String>().toList();
+    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+  }
 }
 
 /// 마일스톤 레벨
@@ -293,6 +409,10 @@ enum _MilestoneLevel {
   comfortableFriend,  // 300점
   specialRelation,    // 500점
   deepUnderstanding,  // 700점
-  wantTogether,       // 900점
-  soulmate,           // 1000점
+  wantTogether,       // 1000점
+  soulmate,           // 1500점
+  deepLove,           // 2000점
+  eternalLove,        // 3000점
+  legendary,          // 5000점
+  mythical,           // 10000점
 }

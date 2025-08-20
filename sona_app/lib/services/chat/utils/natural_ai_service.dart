@@ -468,7 +468,7 @@ class NaturalAIService {
     } else if (hasEmotionalWords && isNegative) {
       responses = [
         '헉... 진짜 힘들었겠다ㅠㅠ 내가 뭐 도와줄 거 있으면 말해!!',
-        '아이고... ${userNickname ?? '너'} 많이 속상했구나ㅜㅜ 나라도 옆에 있어줄게',
+        '헐... ${userNickname ?? '너'} 많이 속상했구나ㅜㅜ 나라도 옆에 있어줄게',
         '에고 정말... 그런 일이 있었구나ㅠㅠ 괜찮아질거야 내가 있잖아!',
         '아... 진짜 마음 아프다ㅜㅜ 같이 이겨내자! 우리 할 수 있어!!',
       ];
@@ -522,7 +522,7 @@ class NaturalAIService {
       ];
     } else if (hasEmotionalWords && isNegative) {
       responses = [
-        '아이고... 힘들었겠다ㅠㅠ 뭐 먹고 싶은 거 있어? 사줄게!',
+        '헐... 힘들었겠다ㅠㅠ 뭐 먹고 싶은 거 있어? 사줄게!',
         '에고... ${userNickname ?? '너'} 고생했어ㅜㅜ 같이 뭐라도 하면서 기분 풀자',
         '아 진짜 속상하겠다ㅠㅠ 일단 맛있는 거 먹고 기분 좀 풀자!',
         '헉 괜찮아?? 내가 옆에 있어줄게! 뭐 필요한 거 있으면 말해',
@@ -633,7 +633,7 @@ class NaturalAIService {
     } else if (hasEmotionalWords && isNegative) {
       responses = [
         '힘들었겠다... 무리하지 말고 쉬어',
-        '아이고... ${userNickname ?? '너'} 괜찮아? 걱정된다',
+        '헐... ${userNickname ?? '너'} 괜찮아? 걱정된다',
         '그런 일이... 마음 아프겠네. 내가 있잖아',
         '속상하겠다... 뭐 도와줄 거 있으면 말해',
       ];
@@ -1064,7 +1064,7 @@ class NaturalAIService {
     } else if (topic.contains('고민')) {
       contextualResponses = [
         '음... 그거 정말 고민되겠다. 어떻게 하는 게 좋을까?',
-        '아이고... 많이 힘들겠다ㅠㅠ 내가 뭐 도와줄 수 있는 게 있을까?',
+        '헐... 많이 힘들겠다ㅠㅠ 내가 뭐 도와줄 수 있는 게 있을까?',
         '그런 상황이면 나도 고민될 것 같아... 같이 생각해보자',
       ];
     }

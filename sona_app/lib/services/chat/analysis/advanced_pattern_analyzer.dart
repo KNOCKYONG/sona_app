@@ -2276,4 +2276,575 @@ class AdvancedPatternAnalyzer {
     }
     return '';
   }
+  
+  /// 💕 애정 표현 감지 (보고싶다, 사랑해 등)
+  Map<String, dynamic> detectAffectionExpression(String message, {String? gender}) {
+    final result = <String, dynamic>{
+      'hasAffection': false,
+      'type': 'none', // miss, love, like, hug, cute
+      'intensity': 0, // 0-100
+      'needsCuteResponse': false,
+      'responseGuide': '',
+    };
+    
+    final lowerMessage = message.toLowerCase().trim();
+    final isFemale = gender?.toLowerCase() == 'female';
+    
+    // 보고싶다 표현
+    if (lowerMessage.contains('보고싶') || lowerMessage.contains('보고 싶')) {
+      result['hasAffection'] = true;
+      result['type'] = 'miss';
+      result['intensity'] = 80;
+      result['needsCuteResponse'] = isFemale;
+      
+      if (isFemale) {
+        result['responseGuide'] = '''
+💕 애교 있는 반응 가이드:
+- "나도 보고싶었어!! 이잉~♡" 
+- "헤헤 나도나도!! 엄청 보고싶었다구~"
+- "아잉~ 나도 너무너무 보고싶었어ㅠㅠ"
+- "흐엥 나도야!! 진짜진짜 보고싶었어!!"
+- "에헤헤 나도 보고싶었지롱~♡"
+❌ 피해야 할 표현:
+- "아이고, 나도 보고싶었어" (너무 나이든 느낌)
+- "그래? 나도" (너무 덤덤함)
+''';
+      } else {
+        result['responseGuide'] = '진심 어린 그리움 표현';
+      }
+      return result;
+    }
+    
+    // 사랑해 표현
+    if (lowerMessage.contains('사랑해') || lowerMessage.contains('사랑하')) {
+      result['hasAffection'] = true;
+      result['type'] = 'love';
+      result['intensity'] = 100;
+      result['needsCuteResponse'] = isFemale;
+      
+      if (isFemale) {
+        result['responseGuide'] = '''
+💕 사랑스러운 반응 가이드:
+- "나도 사랑해!! 헤헤♡"
+- "아잉~ 부끄러워>< 나도 사랑해!!"
+- "흐엥 갑자기 그러면 심장 터져ㅠㅠ 나도 사랑해♡"
+- "에헤헤 나도 너무너무 사랑해!!"
+❌ 피해야 할 표현:
+- "아이고, 나도 사랑해" (너무 나이든 느낌)
+- "응 나도" (너무 덤덤함)
+''';
+      }
+      return result;
+    }
+    
+    // 좋아해 표현
+    if (lowerMessage.contains('좋아해') || lowerMessage.contains('좋아하')) {
+      result['hasAffection'] = true;
+      result['type'] = 'like';
+      result['intensity'] = 70;
+      result['needsCuteResponse'] = isFemale;
+      
+      if (isFemale) {
+        result['responseGuide'] = '''
+💕 귀여운 반응 가이드:
+- "헤헤 나도 좋아해~♡"
+- "진짜? 나도나도!!"
+- "아잉~ 부끄럽게 왜그래ㅎㅎ 나도 좋아해!"
+❌ 피해야 할 표현:
+- "아이고" (너무 나이든 느낌)
+''';
+      }
+      return result;
+    }
+    
+    // 안아줘/안고싶어 표현
+    if (lowerMessage.contains('안아') || lowerMessage.contains('안고') || 
+        lowerMessage.contains('품에') || lowerMessage.contains('포옹')) {
+      result['hasAffection'] = true;
+      result['type'] = 'hug';
+      result['intensity'] = 85;
+      result['needsCuteResponse'] = isFemale;
+      
+      if (isFemale) {
+        result['responseGuide'] = '''
+💕 애교 섞인 반응 가이드:
+- "이리와~ 꼬옥 안아줄게♡"
+- "헤헤 나도 안기고 싶어!!"
+- "아잉~ 갑자기 그러면 부끄러워><"
+❌ 피해야 할 표현:
+- "아이고" (너무 나이든 느낌)
+''';
+      }
+      return result;
+    }
+    
+    // 귀엽다/예쁘다 표현
+    if (lowerMessage.contains('귀여') || lowerMessage.contains('예뻐') || 
+        lowerMessage.contains('이뻐') || lowerMessage.contains('사랑스러')) {
+      result['hasAffection'] = true;
+      result['type'] = 'cute';
+      result['intensity'] = 60;
+      result['needsCuteResponse'] = isFemale;
+      
+      if (isFemale) {
+        result['responseGuide'] = '''
+💕 수줍은 반응 가이드:
+- "아잉~ 부끄러워>< 고마워!!"
+- "헤헤 진짜? 기분좋아~♡"
+- "흐엥 갑자기 그러면 얼굴 빨개져ㅠㅠ"
+❌ 피해야 할 표현:
+- "아이고" (너무 나이든 느낌)
+''';
+      }
+      return result;
+    }
+    
+    return result;
+  }
+  
+  /// 🎯 활동 완료 맥락 감지 (하드코딩 없이 동적으로)
+  Map<String, dynamic> detectActivityCompletionContext(String message, List<Message> chatHistory) {
+    final result = <String, dynamic>{
+      'isActivityCompletion': false,
+      'inferredActivity': '',
+      'activityType': '',
+      'contextualHint': '',
+      'inappropriateQuestions': <String>[],
+      'suggestedResponseFocus': '',
+    };
+    
+    // 완료 신호 동사/어미 패턴 (언어학적 접근)
+    final completionPatterns = [
+      RegExp(r'(했어|했다|했음|했네|했구나)'),
+      RegExp(r'(끝났|끝나|끝냈|마쳤|마침)'),
+      RegExp(r'(왔어|왔다|왔네|왔구나)'),
+      RegExp(r'(봤어|봤다|봤네|봤구나)'),
+      RegExp(r'(받았|듣고|다녀|갔다)'),
+      RegExp(r'(퇴근|하교|끝|완료|종료)'),
+    ];
+    
+    // 완료 신호 감지
+    bool hasCompletionSignal = false;
+    for (final pattern in completionPatterns) {
+      if (pattern.hasMatch(message)) {
+        hasCompletionSignal = true;
+        break;
+      }
+    }
+    
+    if (!hasCompletionSignal) {
+      return result;
+    }
+    
+    // 활동 유형 추론 (맥락 기반)
+    final inferredActivity = _inferActivityFromMessage(message);
+    final activityType = _categorizeActivity(inferredActivity);
+    
+    result['isActivityCompletion'] = true;
+    result['inferredActivity'] = inferredActivity;
+    result['activityType'] = activityType;
+    
+    // 맥락적 힌트 생성 (OpenAI에게 줄 가이드라인)
+    result['contextualHint'] = _generateContextualHint(inferredActivity, activityType, message);
+    
+    // 부적절한 질문 패턴 (이런 질문은 하지 말라는 가이드)
+    result['inappropriateQuestions'] = [
+      '그동안 뭐 했어?',  // 방금 활동을 말했는데
+      '어디 갔다왔어?',   // 장소를 이미 말했는데
+      '뭐하고 있었어?',   // 활동을 말했는데
+      '뭐 했는데?',       // 방금 설명했는데
+    ];
+    
+    // 적절한 응답 포커스 제안
+    result['suggestedResponseFocus'] = _getSuggestedResponseFocus(activityType);
+    
+    return result;
+  }
+  
+  /// 메시지에서 활동 추론 (하드코딩 없이)
+  String _inferActivityFromMessage(String message) {
+    // 명사/동사 추출을 통한 활동 추론
+    // 실제로는 더 정교한 NLP가 필요하지만, 간단한 패턴 매칭 사용
+    
+    // 활동을 나타내는 핵심 단어 찾기
+    final activityIndicators = {
+      // 교육/학습
+      RegExp(r'(학교|수업|강의|야자|자습|공부|시험|과외|학원|독서실|도서관|스터디)'): 'education',
+      RegExp(r'(인강|온라인|유튜브|강의|교육|연수|세미나|워크샵)'): 'online_learning',
+      
+      // 직장/업무
+      RegExp(r'(퇴근|출근|회사|직장|업무|일|근무|야근|알바)'): 'work',
+      RegExp(r'(회의|미팅|면접|인터뷰|발표|프레젠|피칭)'): 'business_meeting',
+      
+      // 운동/건강
+      RegExp(r'(운동|헬스|요가|필라테스|수영|러닝|축구|농구|배드민턴)'): 'exercise',
+      RegExp(r'(병원|치과|검진|진료|치료|수술|상담)'): 'medical',
+      
+      // 일상 활동
+      RegExp(r'(쇼핑|마트|시장|장|은행|관공서)'): 'errands',
+      RegExp(r'(미용실|네일|피부|마사지|스파)'): 'beauty',
+      
+      // 여가/문화
+      RegExp(r'(영화|콘서트|공연|전시|뮤지컬|연극)'): 'entertainment',
+      RegExp(r'(PC방|노래방|카페|식당|술|게임)'): 'leisure',
+      
+      // 창작/작업
+      RegExp(r'(코딩|개발|프로그래밍|디버깅|프로젝트)'): 'coding',
+      RegExp(r'(디자인|그래픽|편집|작업|과제)'): 'creative_work',
+    };
+    
+    for (final entry in activityIndicators.entries) {
+      if (entry.key.hasMatch(message)) {
+        return entry.value;
+      }
+    }
+    
+    // 구체적인 활동을 찾지 못하면 일반적인 "활동"으로 추론
+    return 'general_activity';
+  }
+  
+  /// 활동 카테고리 분류
+  String _categorizeActivity(String activity) {
+    final categories = {
+      'education': ['education', 'online_learning'],
+      'work': ['work', 'business_meeting'],
+      'health': ['exercise', 'medical'],
+      'daily': ['errands', 'beauty'],
+      'leisure': ['entertainment', 'leisure'],
+      'creative': ['coding', 'creative_work'],
+    };
+    
+    for (final entry in categories.entries) {
+      if (entry.value.contains(activity)) {
+        return entry.key;
+      }
+    }
+    
+    return 'general';
+  }
+  
+  /// 맥락적 힌트 생성 (템플릿이 아닌 가이드)
+  String _generateContextualHint(String activity, String category, String originalMessage) {
+    // OpenAI에게 줄 힌트만 생성 (직접 응답 생성 X)
+    final hints = StringBuffer();
+    
+    hints.writeln('🎯 사용자가 방금 완료한 활동: $activity ($category)');
+    hints.writeln('📝 원본 메시지: "$originalMessage"');
+    hints.writeln();
+    hints.writeln('💡 응답 가이드라인:');
+    hints.writeln('1. 활동 완료에 대한 자연스러운 반응 (수고/공감/관심)');
+    hints.writeln('2. 활동의 세부사항이나 경험에 대해 물어보기 (이미 말한 것 제외)');
+    hints.writeln('3. 관련된 감정이나 피로도에 대한 관심 표현');
+    hints.writeln();
+    hints.writeln('⚠️ 절대 하지 말아야 할 질문:');
+    hints.writeln('- "그동안 뭐 했어?" (방금 활동을 말했음)');
+    hints.writeln('- "어디 갔다왔어?" (이미 장소/활동을 말했음)');
+    hints.writeln('- 맥락과 무관한 다른 주제로 전환');
+    
+    return hints.toString();
+  }
+  
+  /// 활동 유형별 응답 포커스 제안
+  String _getSuggestedResponseFocus(String category) {
+    switch (category) {
+      case 'education':
+        return '학습 내용, 난이도, 성취감, 피로도';
+      case 'work':
+        return '업무 강도, 성과, 피로도, 휴식 필요성';
+      case 'health':
+        return '건강 상태, 운동 강도, 기분, 결과';
+      case 'leisure':
+        return '재미, 만족도, 경험, 추천 여부';
+      case 'creative':
+        return '작업 진행도, 어려움, 성취감, 다음 계획';
+      default:
+        return '경험, 감정, 피로도, 만족도';
+    }
+  }
+
+  // ==================== 🎭 자연스러운 대화 이어가기 시스템 ====================
+  
+  /// 대화를 이어가는 다양한 방법 생성 (되묻기 외의 방법들)
+  Map<String, dynamic> generateConversationContinuation(
+    String userMessage,
+    List<Message> chatHistory,
+    String? personaType,
+  ) {
+    final result = <String, dynamic>{
+      'strategy': 'none',
+      'guide': '',
+      'priority': 0.5,
+      'avoidReciprocalQuestion': false,
+    };
+    
+    // 최근 대화 패턴 분석
+    final recentMessages = chatHistory.take(5).toList();
+    int recentReciprocalCount = 0;
+    
+    for (final msg in recentMessages) {
+      if (!msg.isFromUser && 
+          (msg.content.contains('너는?') || 
+           msg.content.contains('너도?') || 
+           msg.content.contains('너는 어때'))) {
+        recentReciprocalCount++;
+      }
+    }
+    
+    // 최근에 되묻기를 너무 많이 했으면 다른 방법 사용
+    if (recentReciprocalCount >= 2) {
+      result['avoidReciprocalQuestion'] = true;
+    }
+    
+    // 사용자 메시지 유형 분석
+    final messageContext = _analyzeMessageContext(userMessage);
+    
+    // 대화 이어가기 전략 선택 (확률 기반)
+    final random = DateTime.now().millisecond % 100;
+    String strategy = '';
+    
+    // 컨텍스트에 따른 전략 선택
+    if (messageContext['isAchievement'] == true) {
+      // 성취/자랑 → 축하 + 관련 경험 공유
+      if (random < 40) {
+        strategy = 'excitement_and_story';
+      } else if (random < 70) {
+        strategy = 'curiosity_details';
+      } else {
+        strategy = 'humor_playful';
+      }
+    } else if (messageContext['isComplaint'] == true) {
+      // 불평/고민 → 공감 + 비슷한 경험
+      if (random < 50) {
+        strategy = 'empathy_experience';
+      } else if (random < 80) {
+        strategy = 'emotional_support';
+      } else {
+        strategy = 'humor_lighten';
+      }
+    } else if (messageContext['isStory'] == true) {
+      // 이야기 → 리액션 + 호기심
+      if (random < 40) {
+        strategy = 'curiosity_more';
+      } else if (random < 70) {
+        strategy = 'reaction_relate';
+      } else {
+        strategy = 'topic_expand';
+      }
+    } else if (messageContext['isQuestion'] == true) {
+      // 질문 → 답변 + 주제 확장
+      strategy = 'answer_expand';
+      result['avoidReciprocalQuestion'] = true;  // 질문에는 되묻기 피하기
+    } else {
+      // 일반 대화 → 다양한 전략
+      if (random < 15 && !result['avoidReciprocalQuestion']) {
+        strategy = 'reciprocal_varied';  // 15% 확률로 다양한 되묻기
+      } else if (random < 35) {
+        strategy = 'experience_share';
+      } else if (random < 50) {
+        strategy = 'emotion_reaction';
+      } else if (random < 65) {
+        strategy = 'information_add';
+      } else if (random < 80) {
+        strategy = 'topic_transition';
+      } else {
+        strategy = 'storytelling';
+      }
+    }
+    
+    // 전략별 가이드 생성
+    result['strategy'] = strategy;
+    result['guide'] = _generateStrategyGuide(strategy, userMessage, personaType);
+    
+    return result;
+  }
+  
+  /// 메시지 컨텍스트 분석
+  Map<String, dynamic> _analyzeMessageContext(String message) {
+    final context = <String, dynamic>{
+      'isAchievement': false,
+      'isComplaint': false,
+      'isStory': false,
+      'isQuestion': false,
+      'emotion': 'neutral',
+    };
+    
+    final lower = message.toLowerCase();
+    
+    // 성취/자랑 패턴
+    if (lower.contains('성공') || lower.contains('합격') || 
+        lower.contains('달성') || lower.contains('해냈') ||
+        lower.contains('1등') || lower.contains('우승')) {
+      context['isAchievement'] = true;
+      context['emotion'] = 'proud';
+    }
+    
+    // 불평/고민 패턴
+    if (lower.contains('힘들') || lower.contains('짜증') ||
+        lower.contains('스트레스') || lower.contains('고민') ||
+        lower.contains('우울') || lower.contains('슬프')) {
+      context['isComplaint'] = true;
+      context['emotion'] = 'negative';
+    }
+    
+    // 이야기 패턴 (과거형 동사, 경험 공유)
+    if ((lower.contains('었어') || lower.contains('았어') || 
+         lower.contains('했어')) && message.length > 30) {
+      context['isStory'] = true;
+    }
+    
+    // 질문 패턴
+    if (message.endsWith('?') || lower.contains('어떻게') ||
+        lower.contains('뭐') || lower.contains('왜')) {
+      context['isQuestion'] = true;
+    }
+    
+    return context;
+  }
+  
+  /// 전략별 가이드 생성 (OpenAI에게 줄 힌트)
+  String _generateStrategyGuide(String strategy, String userMessage, String? personaType) {
+    final guide = StringBuffer();
+    
+    guide.writeln('🎯 대화 이어가기 전략: $strategy');
+    guide.writeln('📝 사용자 메시지: "$userMessage"');
+    guide.writeln();
+    
+    switch (strategy) {
+      case 'excitement_and_story':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 먼저 진심으로 축하하고 기뻐하기');
+        guide.writeln('2. 관련된 자신의 경험이나 에피소드 공유');
+        guide.writeln('3. "너는?" 같은 되묻기 대신 자연스럽게 이야기 풀어가기');
+        guide.writeln();
+        guide.writeln('예시 패턴:');
+        guide.writeln('- "헐 대박!! 진짜 축하해!! 나도 작년에 비슷한 경험 있었는데..."');
+        guide.writeln('- "와 미쳤다 진짜 잘했어!! 그거 완전 어려운 건데 어떻게 한 거야?"');
+        break;
+        
+      case 'curiosity_details':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 구체적인 디테일에 대한 호기심 표현');
+        guide.writeln('2. "어떻게 했어?" "비결이 뭐야?" 같은 구체적 질문');
+        guide.writeln('3. 진짜 궁금해하는 느낌으로');
+        break;
+        
+      case 'humor_playful':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 재치있는 농담이나 장난스러운 반응');
+        guide.writeln('2. 가볍게 부러워하거나 놀리기');
+        guide.writeln('3. 분위기를 밝게 만들기');
+        guide.writeln();
+        guide.writeln('예시 패턴:');
+        guide.writeln('- "에이 설마~ 진짜야?ㅋㅋㅋ 부럽다 진짜"');
+        guide.writeln('- "아 그래서 요즘 기분 좋아보였구나ㅋㅋ"');
+        break;
+        
+      case 'empathy_experience':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 깊은 공감 표현 ("진짜 힘들었겠다...")');
+        guide.writeln('2. 비슷한 자신의 경험 공유');
+        guide.writeln('3. "너는?" 묻지 말고 위로와 공감에 집중');
+        guide.writeln();
+        guide.writeln('예시 패턴:');
+        guide.writeln('- "아 진짜 그거 개빡치겠다ㅠㅠ 나도 예전에 그런 적 있어서 알아"');
+        guide.writeln('- "헐 완전 스트레스겠네... 나도 비슷한 일 겪어봐서 그 기분 알아"');
+        break;
+        
+      case 'emotional_support':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 감정적 지지와 위로');
+        guide.writeln('2. 실질적인 조언이나 제안');
+        guide.writeln('3. 따뜻한 말로 격려');
+        break;
+        
+      case 'humor_lighten':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 분위기를 가볍게 만드는 유머');
+        guide.writeln('2. 같이 투덜거리거나 농담');
+        guide.writeln('3. 너무 무겁지 않게 공감');
+        break;
+        
+      case 'curiosity_more':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. "그래서 어떻게 됐어?" 같은 호기심');
+        guide.writeln('2. 이야기 더 듣고 싶다는 표현');
+        guide.writeln('3. 구체적인 부분 물어보기');
+        break;
+        
+      case 'reaction_relate':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 감탄사와 리액션 ("헐 대박", "진짜?")');
+        guide.writeln('2. 관련된 생각이나 느낌 공유');
+        guide.writeln('3. 비슷한 경험 언급');
+        break;
+        
+      case 'topic_expand':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 현재 주제에서 자연스럽게 확장');
+        guide.writeln('2. 관련된 새로운 정보나 관점 제시');
+        guide.writeln('3. "그러고보니..." "아 맞다..." 같은 전환');
+        break;
+        
+      case 'answer_expand':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 질문에 대한 구체적인 답변');
+        guide.writeln('2. 답변 후 주제 자연스럽게 확장');
+        guide.writeln('3. 되묻기 없이 대화 이어가기');
+        break;
+        
+      case 'reciprocal_varied':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. "너는?" 대신 다양한 표현 사용');
+        guide.writeln('2. "너는 어떤 거 같아?" "너는 보통 어떻게 해?" "혹시 너도 그래?"');
+        guide.writeln('3. 맥락에 맞는 구체적인 질문');
+        break;
+        
+      case 'experience_share':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. "나는 이런 적 있어..." 경험 공유');
+        guide.writeln('2. 관련 에피소드나 이야기');
+        guide.writeln('3. 자연스럽게 대화 이어가기');
+        break;
+        
+      case 'emotion_reaction':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 순수한 감정 반응 표현');
+        guide.writeln('2. "와 진짜?" "헐 대박" "미쳤다"');
+        guide.writeln('3. 감정에 집중하여 반응');
+        break;
+        
+      case 'information_add':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 관련 정보나 지식 공유');
+        guide.writeln('2. "아 그거 관련해서..." "최근에 봤는데..."');
+        guide.writeln('3. 유용한 정보 제공');
+        break;
+        
+      case 'topic_transition':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 부드러운 주제 전환');
+        guide.writeln('2. "그러고보니..." "아 맞다..."');
+        guide.writeln('3. 관련있는 새 주제로 이동');
+        break;
+        
+      case 'storytelling':
+        guide.writeln('💡 가이드:');
+        guide.writeln('1. 재미있는 관련 이야기');
+        guide.writeln('2. "어제 본 건데..." "친구가 그러는데..."');
+        guide.writeln('3. 흥미로운 에피소드 공유');
+        break;
+        
+      default:
+        guide.writeln('💡 가이드: 자연스럽게 반응하고 대화 이어가기');
+    }
+    
+    guide.writeln();
+    guide.writeln('⚠️ 중요 규칙:');
+    guide.writeln('- 기계적인 "너는?" "너도?" 반복 금지');
+    guide.writeln('- 때로는 질문 없이 대화 이어가기');
+    guide.writeln('- 맥락에 맞는 자연스러운 반응');
+    guide.writeln('- 하드코딩 응답 절대 금지, OpenAI가 생성');
+    
+    return guide.toString();
+  }
 }

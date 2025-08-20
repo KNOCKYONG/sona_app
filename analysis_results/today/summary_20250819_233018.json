@@ -1,0 +1,30 @@
+{
+  "analysis_timestamp": "20250819_233018",
+  "total_reports_analyzed": 7,
+  "average_coherence_score": 83.28571428571429,
+  "critical_issues_count": 0,
+  "high_issues_count": 6,
+  "personas_with_issues": {
+    "리나": {
+      "total_conversations": 6,
+      "avg_coherence_score": 85.5,
+      "total_issues": 14,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 9,
+        "irrelevant_answer": 4,
+        "emotion_inconsistency": 1
+      }
+    },
+    "채연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 70.0,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 2
+      }
+    }
+  }
+}

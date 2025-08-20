@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'language_settings_screen.dart';
 import 'privacy_settings_screen.dart';
+import 'faq_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -175,10 +176,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             _buildMenuItem(
               icon: Icons.help_outline,
-              title: localizations.help,
+              title: localizations.frequentlyAskedQuestions,
               onTap: () {
-                // 도움말 화면으로 이동
-                _showHelpDialog();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const FAQScreen(),
+                  ),
+                );
               },
             ),
             _buildMenuItem(
@@ -372,58 +377,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  void _showHelpDialog() {
-    final localizations = AppLocalizations.of(context)!;
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: Text(localizations.help),
-        content: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                localizations.howToUse,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(localizations.matchPersonaStep),
-              const SizedBox(height: 8),
-              Text(localizations.startConversationStep),
-              const SizedBox(height: 8),
-              Text(localizations.developRelationshipStep),
-              const SizedBox(height: 16),
-              Text(
-                localizations.inquiries,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text('support@sona.app'),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(
-              localizations.confirm,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   void _showAppInfoDialog() {
     final localizations = AppLocalizations.of(context)!;

@@ -40,12 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   int? _selectedMonth;
   int? _selectedDay;
   bool _genderAll = false;
-  RangeValues _preferredAgeRange = const RangeValues(20, 35);
-  final List<String> _selectedInterests = [];
   File? _profileImage;
-
-  // 선택 필드들
-  final List<String> _selectedPreferredTopics = [];
 
   // Terms agreement
   bool _agreedToTerms = false;
@@ -136,14 +131,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    if (_selectedInterests.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text(AppLocalizations.of(context)!.selectAtLeastOneInterest)),
-      );
-      return;
-    }
 
     if (!_agreedToTerms || !_agreedToPrivacy) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -162,17 +149,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         nickname: _nicknameController.text,
         gender: _selectedGender!,
         birth: _selectedBirth!,
-        preferredAgeRange: [
-          _preferredAgeRange.start.toInt(),
-          _preferredAgeRange.end.toInt(),
-        ],
-        interests: _selectedInterests,
+        preferredAgeRange: null,
+        interests: [],
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: null, // Optional - removed from signup
         preferredMbti: null, // Optional - removed from signup
-        preferredTopics:
-            _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        preferredTopics: null,
         genderAll: _genderAll,
         referralEmail: _referralEmailController.text.isEmpty 
             ? null 
@@ -205,17 +188,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         nickname: _nicknameController.text,
         gender: _selectedGender!,
         birth: _selectedBirth!,
-        preferredAgeRange: [
-          _preferredAgeRange.start.toInt(),
-          _preferredAgeRange.end.toInt(),
-        ],
-        interests: _selectedInterests,
+        preferredAgeRange: null,
+        interests: [],
         intro: _introController.text.isEmpty ? null : _introController.text,
         profileImage: _profileImage,
         purpose: null, // Optional - removed from signup
         preferredMbti: null, // Optional - removed from signup
-        preferredTopics:
-            _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
+        preferredTopics: null,
         genderAll: _genderAll,
         referralEmail: _referralEmailController.text.isEmpty 
             ? null 
@@ -258,15 +237,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       case 0: // 계정 & 프로필 페이지
         canProceed = _validateAccountAndProfile();
         break;
-      case 1: // 관심사 & 주제 페이지
-        canProceed = _validateInterestsAndTopics();
-        break;
-      case 2: // 약관 동의 페이지
+      case 1: // 약관 동의 페이지
         canProceed = _validateTermsAgreement();
         break;
     }
 
-    if (canProceed && _currentPage < 2) {
+    if (canProceed && _currentPage < 1) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -331,15 +307,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
 
-  bool _validateInterestsAndTopics() {
-    if (_selectedInterests.isEmpty) {
-      _showErrorSnackBar(
-          AppLocalizations.of(context)!.selectAtLeastOneInterest);
-      return false;
-    }
-    return true;
-  }
-
 
   bool _validateTermsAgreement() {
     if (!_agreedToTerms) {
@@ -382,10 +349,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // 성별과 생년월일 검사
         return nicknameValid && _selectedGender != null && _selectedBirth != null;
 
-      case 1: // 관심사 & 주제 페이지
-        return _selectedInterests.isNotEmpty;
-
-      case 2: // 약관 동의 페이지
+      case 1: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
 
       default:
@@ -420,7 +384,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               // Progress indicator
               LinearProgressIndicator(
-                value: (_currentPage + 1) / 3,
+                value: (_currentPage + 1) / 2,
                 backgroundColor: Colors.grey[300],
                 valueColor: const AlwaysStoppedAnimation<Color>(
                   AppTheme.primaryColor,
@@ -439,7 +403,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
                     _buildAccountAndProfilePage(), // 통합된 계정 & 프로필 페이지
-                    _buildInterestsAndTopicsPage(), // 통합된 관심사 & 주제 페이지
                     _buildTermsAgreementPage(),
                   ],
                 ),
@@ -458,7 +421,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                     else
                       const SizedBox(width: 60),
-                    if (_currentPage < 2)
+                    if (_currentPage < 1)
                       ElevatedButton(
                         onPressed: _canProceedToNextPage() ? _nextPage : null,
                         style: ElevatedButton.styleFrom(
@@ -876,126 +839,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Preferred age range (선택)
-          Text(
-            localizations.preferredPersonaAgeRange,
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            localizations.ageRange(_preferredAgeRange.start.toInt(),
-                _preferredAgeRange.end.toInt()),
-            style: const TextStyle(fontSize: 16),
-          ),
-          RangeSlider(
-            values: _preferredAgeRange,
-            min: 18,
-            max: 50,
-            divisions: 32,
-            labels: RangeLabels(
-              _preferredAgeRange.start.toInt().toString(),
-              _preferredAgeRange.end.toInt().toString(),
-            ),
-            onChanged: (values) {
-              setState(() {
-                _preferredAgeRange = values;
-              });
-            },
-          ),
+          // Removed preferred age range - now using default [20, 35]
         ],
       ),
     );
   }
 
-  // 통합된 관심사 & 주제 페이지
-  Widget _buildInterestsAndTopicsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            AppLocalizations.of(context)!.interests,
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.selectInterests,
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(height: 24),
-          // 관심사 선택 (필수)
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _getLocalizedInterests().map((interest) {
-              final key = interest['key'] as String;
-              final title = interest['title'] as String;
-              final isSelected = _selectedInterests.contains(key);
-              return FilterChip(
-                label: Text(title),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedInterests.add(key);
-                    } else {
-                      _selectedInterests.remove(key);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-          const SizedBox(height: 32),
-          
-          // 선호 주제 (선택)
-          Text(
-            AppLocalizations.of(context)!.preferredTopics,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            AppLocalizations.of(context)!.whatTopicsToTalk,
-            style: TextStyle(color: Colors.grey, fontSize: 14),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: _getLocalizedTopics().map((topic) {
-              final key = topic['key'] as String;
-              final title = topic['title'] as String;
-              final isSelected = _selectedPreferredTopics.contains(key);
-              return FilterChip(
-                label: Text(title),
-                selected: isSelected,
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedPreferredTopics.add(key);
-                    } else {
-                      _selectedPreferredTopics.remove(key);
-                    }
-                  });
-                },
-                selectedColor: AppTheme.primaryColor.withOpacity(0.2),
-                checkmarkColor: AppTheme.primaryColor,
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildTermsAgreementPage() {
     return SingleChildScrollView(
@@ -1041,36 +890,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  List<Map<String, String>> _getLocalizedInterests() {
-    final localizations = AppLocalizations.of(context)!;
-    return [
-      {'key': 'gaming', 'title': localizations.gaming},
-      {'key': 'movies', 'title': localizations.movies},
-      {'key': 'music', 'title': localizations.music},
-      {'key': 'travel', 'title': localizations.travel},
-      {'key': 'sports', 'title': localizations.sports},
-      {'key': 'reading', 'title': localizations.reading},
-      {'key': 'cooking', 'title': localizations.cooking},
-      {'key': 'photography', 'title': localizations.photography},
-      {'key': 'art', 'title': localizations.art},
-      {'key': 'fashion', 'title': localizations.fashion},
-      {'key': 'pets', 'title': localizations.pets},
-      {'key': 'technology', 'title': localizations.technology},
-    ];
-  }
-
-  List<Map<String, String>> _getLocalizedTopics() {
-    final localizations = AppLocalizations.of(context)!;
-    return [
-      {'key': 'daily_chat', 'title': localizations.dailyChat},
-      {'key': 'dating_advice', 'title': localizations.datingAdvice},
-      {'key': 'hobby_talk', 'title': localizations.hobbyTalk},
-      {'key': 'emotional_support', 'title': localizations.emotionalSupport},
-      {'key': 'life_advice', 'title': localizations.lifeAdvice},
-      {'key': 'fun_chat', 'title': localizations.funChat},
-      {'key': 'deep_talk', 'title': localizations.deepTalk},
-      {'key': 'light_talk', 'title': localizations.lightTalk},
-    ];
-  }
 
 }

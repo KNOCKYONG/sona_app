@@ -97,11 +97,25 @@ class _TextMessageState extends State<_TextMessage> {
       case 'zh':
         return '中文';
       case 'id':
-        return 'Bahasa';
+        return 'Bahasa Indonesia';
+      case 'ms':
+        return 'Bahasa Melayu';
       case 'vi':
         return 'Tiếng Việt';
       case 'es':
         return 'Español';
+      case 'fr':
+        return 'Français';
+      case 'de':
+        return 'Deutsch';
+      case 'it':
+        return 'Italiano';
+      case 'pt':
+        return 'Português';
+      case 'ru':
+        return 'Русский';
+      case 'ar':
+        return 'العربية';
       case 'th':
         return 'ไทย';
       case 'ko':

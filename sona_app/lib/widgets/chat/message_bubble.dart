@@ -88,6 +88,77 @@ class _TextMessage extends StatefulWidget {
 class _TextMessageState extends State<_TextMessage> {
   bool _showTranslation = false;
 
+  // 번역 컨텐츠에서 언어 태그 및 한글 제거
+  String _extractTranslatedContent(String content) {
+    // [EN], [JA] 등의 태그가 있으면 태그 이후 부분만 추출
+    final tagPattern = RegExp(r'\[(EN|JA|ZH|ES|FR|DE|IT|PT|RU|AR|TH|ID|MS|VI)\]');
+    final match = tagPattern.firstMatch(content);
+    if (match != null) {
+      final tagEnd = match.end;
+      var translatedText = content.substring(tagEnd).trim();
+      
+      // [KO] 태그가 있으면 그 전까지만
+      final koIndex = translatedText.indexOf('[KO]');
+      if (koIndex != -1) {
+        translatedText = translatedText.substring(0, koIndex).trim();
+      }
+      
+      // 한글이 포함되어 있으면 제거
+      final koreanPattern = RegExp(r'[ᄀ-ᇿ㄰-㆏가-힣]+');
+      if (koreanPattern.hasMatch(translatedText)) {
+        // 한글 이전까지만 추출
+        final koreanMatch = koreanPattern.firstMatch(translatedText);
+        if (koreanMatch != null && koreanMatch.start > 0) {
+          translatedText = translatedText.substring(0, koreanMatch.start).trim();
+        }
+      }
+      
+      return translatedText;
+    }
+    
+    // 태그가 없어도 한글이 포함되어 있으면 제거
+    final koreanPattern = RegExp(r'[ᄀ-ᇿ㄰-㆏가-힣]+');
+    if (koreanPattern.hasMatch(content)) {
+      // [KO] 태그가 있으면 그 전까지만
+      final koTagIndex = content.indexOf('[KO]');
+      if (koTagIndex != -1) {
+        return content.substring(0, koTagIndex).trim();
+      }
+      
+      // 한글 이전까지만 추출
+      final koreanMatch = koreanPattern.firstMatch(content);
+      if (koreanMatch != null && koreanMatch.start > 0) {
+        return content.substring(0, koreanMatch.start).trim();
+      }
+    }
+    
+    return content;
+  }
+
+  // [KO] 태그가 있는 경우 한국어 부분만 추출
+  String _extractKoreanContent(String content) {
+    // [KO] 태그가 있는지 확인
+    if (content.contains('[KO]')) {
+      final koIndex = content.indexOf('[KO]');
+      var koreanStart = koIndex + 4; // '[KO]'.length = 4
+      
+      // 다른 언어 태그가 있으면 그 전까지만 추출
+      var koreanEnd = content.length;
+      final possibleTags = ['[EN]', '[JA]', '[ZH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]', '[TH]', '[ID]', '[MS]', '[VI]'];
+      for (final tag in possibleTags) {
+        final tagIndex = content.indexOf(tag, koreanStart);
+        if (tagIndex != -1 && tagIndex < koreanEnd) {
+          koreanEnd = tagIndex;
+        }
+      }
+      
+      return content.substring(koreanStart, koreanEnd).trim();
+    }
+    
+    // [KO] 태그가 없으면 원본 반환
+    return content;
+  }
+
   String _getLanguageName(String languageCode) {
     switch (languageCode) {
       case 'en':
@@ -287,11 +358,11 @@ class _TextMessageState extends State<_TextMessage> {
                                 if (!_showTranslation) ...[
                                   Stack(
                                     children: [
-                                      // 한국어 메시지 텍스트
+                                      // 한국어 메시지 텍스트 (태그 제거 처리)
                                       Padding(
                                         padding: const EdgeInsets.only(right: 35),
                                         child: Text(
-                                          widget.message.content,
+                                          _extractKoreanContent(widget.message.content),
                                           style: _TextMessage._aiTextStyle,
                                         ),
                                       ),
@@ -334,9 +405,9 @@ class _TextMessageState extends State<_TextMessage> {
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            // 번역된 텍스트
+                                            // 번역된 텍스트 (태그 제거 및 한글 제외)
                                             Text(
-                                              widget.message.translatedContent!,
+                                              _extractTranslatedContent(widget.message.translatedContent!),
                                               style: TextStyle(
                                                 color: Colors.blue[900],
                                                 fontSize: 16,
@@ -366,9 +437,9 @@ class _TextMessageState extends State<_TextMessage> {
                             ),
                           ),
                         ] else ...[
-                          // 번역이 없는 일반 메시지
+                          // 번역이 없는 일반 메시지 (태그 제거 처리)
                           Text(
-                            widget.message.content,
+                            isFromUser ? widget.message.content : _extractKoreanContent(widget.message.content),
                             style: isFromUser
                                 ? _TextMessage._userTextStyle
                                 : _TextMessage._aiTextStyle,

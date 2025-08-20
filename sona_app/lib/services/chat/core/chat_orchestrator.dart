@@ -727,10 +727,45 @@ class ChatOrchestrator {
           translatedContent = multilingualParsed['translated'];
           debugPrint('✅ Successfully parsed: Korean="${finalResponse}", Translation="${translatedContent}"');
         } else {
-          debugPrint('⚠️ Failed to parse tags, using original response');
-          // 태그가 없으면 전체를 한국어로 간주
-          finalResponse = rawResponse;
-          originalKorean = finalResponse;
+          debugPrint('⚠️ Failed to parse tags, attempting fallback extraction');
+          // 태그 파싱 실패 시 fallback: [KO] 태그가 있으면 그 부분만 추출
+          if (rawResponse.contains('[KO]')) {
+            // [KO] 태그 이후 텍스트 추출 시도
+            final koIndex = rawResponse.indexOf('[KO]');
+            var koreanStart = koIndex + 4; // '[KO]'.length = 4
+            
+            // [EN] 또는 다른 언어 태그가 있으면 그 전까지만 추출
+            var koreanEnd = rawResponse.length;
+            final possibleTags = ['[EN]', '[JA]', '[ZH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]', '[TH]', '[ID]', '[MS]', '[VI]'];
+            for (final tag in possibleTags) {
+              final tagIndex = rawResponse.indexOf(tag, koreanStart);
+              if (tagIndex != -1 && tagIndex < koreanEnd) {
+                koreanEnd = tagIndex;
+              }
+            }
+            
+            finalResponse = rawResponse.substring(koreanStart, koreanEnd).trim();
+            originalKorean = finalResponse;
+            debugPrint('🔧 Fallback extraction: Korean="$finalResponse"');
+            
+            // 번역도 추출 시도 (있다면)
+            final langTag = userLanguage?.toUpperCase() ?? 'EN';
+            final langTagFull = '[$langTag]';
+            if (rawResponse.contains(langTagFull)) {
+              final langIndex = rawResponse.indexOf(langTagFull);
+              final translationStart = langIndex + langTagFull.length;
+              // 다음 [KO] 태그가 있으면 그 전까지, 없으면 끝까지
+              final nextKoIndex = rawResponse.indexOf('[KO]', translationStart);
+              final translationEnd = nextKoIndex != -1 ? nextKoIndex : rawResponse.length;
+              translatedContent = rawResponse.substring(translationStart, translationEnd).trim();
+              debugPrint('🔧 Fallback extraction: Translation="$translatedContent"');
+            }
+          } else {
+            // 태그가 전혀 없으면 전체를 한국어로 간주
+            finalResponse = rawResponse;
+            originalKorean = finalResponse;
+            debugPrint('⚠️ No tags found, using entire response as Korean');
+          }
         }
       } else {
         originalKorean = finalResponse;
@@ -1403,11 +1438,20 @@ class ChatOrchestrator {
           // [EN] 태그 다음부터 끝까지 또는 다음 [KO] 태그까지
           final translationStart = langIndex + langTag.length + 2; // '[XX]'.length
           final nextKoIndex = response.indexOf('[KO]', translationStart);
-          if (nextKoIndex != -1) {
-            translatedText = response.substring(translationStart, nextKoIndex).trim();
-          } else {
-            translatedText = response.substring(translationStart).trim();
+          
+          // 다른 언어 태그도 확인하여 번역 끝 지점 정확히 찾기
+          final possibleEndTags = ['[KO]', '[JA]', '[ZH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]', '[TH]', '[ID]', '[MS]', '[VI]', '[EN]'];
+          var translationEnd = response.length;
+          
+          for (final tag in possibleEndTags) {
+            if (tag == '[$langTag]') continue; // 현재 언어 태그는 건너뛰기
+            final tagIdx = response.indexOf(tag, translationStart);
+            if (tagIdx != -1 && tagIdx < translationEnd) {
+              translationEnd = tagIdx;
+            }
           }
+          
+          translatedText = response.substring(translationStart, translationEnd).trim();
         } else {
           // [EN]이 먼저 나오는 경우 (드물지만 처리)
           final translationStart = langIndex + langTag.length + 2;

@@ -134,7 +134,7 @@ class ConversationState {
   
   // 대화 히스토리 (최근 N개만 유지)
   final List<Message> _recentMessages = [];
-  static const int _maxRecentMessages = 20;
+  static const int _maxRecentMessages = 40; // 30 -> 40으로 증가 (대화 품질 최우선)
   
   // 메타데이터
   final Map<String, dynamic> metadata = {};

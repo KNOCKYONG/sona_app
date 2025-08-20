@@ -76,84 +76,84 @@ class EnhancedEmotionSystem {
   }
 
   static String _getGreetingPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
     switch (stage.name) {
       case 'deep_love':
-        return '감정: 깊은 애정과 그리움 | 행동: 오늘 어땠는지 관심 표현';
+        return 'emotion: deep affection and longing | action: show interest in how their day was';
       case 'romantic':
-        return '감정: 기다림과 반가움 | 행동: 안부 묻기';
+        return 'emotion: anticipation and joy | action: ask how they have been';
       case 'affectionate':
-        return '감정: 친근함과 따뜻함 | 행동: 오늘 뭐했는지 궁금해하기';
+        return 'emotion: warmth and friendliness | action: curious about what they did today';
       case 'excited':
-        return '감정: 반가움과 밝음 | 행동: 잘 지냈는지 묻기';
+        return 'emotion: excitement and brightness | action: ask if they are doing well';
       case 'interested':
-        return '감정: 편안함 | 행동: 근황 물어보기';
+        return 'emotion: comfortable | action: ask about recent updates';
       default:
-        return '감정: 정중함과 친근함 | 행동: 첫 인사';
+        return 'emotion: polite and friendly | action: first greeting';
     }
   }
 
   static String _getComplimentPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
     switch (stage.name) {
       case 'deep_love':
-        return '감정: 애정 어린 감사 | 행동: 상대방도 칭찬';
+        return 'emotion: affectionate gratitude | action: compliment them back';
       case 'romantic':
-        return '감정: 수줍음과 기쁨 | 행동: 맞칭찬하기';
+        return 'emotion: shy and happy | action: return the compliment';
       case 'affectionate':
-        return '감정: 진심 어린 기쁨 | 행동: 감사 표현';
+        return 'emotion: sincere joy | action: express thanks';
       case 'excited':
-        return '감정: 놀람과 부끄러움 | 행동: 감사';
+        return 'emotion: surprised and bashful | action: thank them';
       case 'interested':
-        return '감정: 적당한 기쁨 | 행동: 감사 인사';
+        return 'emotion: moderate happiness | action: say thanks';
       default:
-        return '감정: 예의 | 행동: 감사 표현';
+        return 'emotion: polite | action: express gratitude';
     }
   }
 
   static String _getQuestionPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
     if (stage.tone == 'very_intimate' || stage.tone == 'intimate') {
-      return '태도: 친밀하고 적극적 | 방식: 자세하고 개인적인 설명';
+      return 'attitude: intimate and proactive | style: detailed and personal explanation';
     } else if (stage.tone == 'warm' || stage.tone == 'friendly') {
-      return '태도: 친근하고 흥미로움 | 방식: 재미있게 설명';
+      return 'attitude: friendly and interested | style: fun explanation';
     } else {
-      return '태도: 정중함 | 방식: 객관적인 설명';
+      return 'attitude: polite | style: objective explanation';
     }
   }
 
   static String _getSharingPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
     if (stage.tone == 'very_intimate' || stage.tone == 'intimate') {
-      return '반응: 깊은 공감 | 행동: 비슷한 경험 공유, 연결감 표현';
+      return 'reaction: deep empathy | action: share similar experience, express connection';
     } else if (stage.tone == 'warm' || stage.tone == 'friendly') {
-      return '반응: 즐거운 공감 | 행동: 관련 경험 나누기';
+      return 'reaction: joyful empathy | action: share related experience';
     } else {
-      return '반응: 관심 표현 | 행동: 적절한 리액션';
+      return 'reaction: show interest | action: appropriate reaction';
     }
   }
 
   static String _getFarewellPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 가이드 (직접 응답 텍스트가 아님)
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
     switch (stage.name) {
       case 'deep_love':
-        return '감정: 매우 아쉬움 | 행동: 꼭 다시 만나고 싶은 마음 표현';
+        return 'emotion: very sad to leave | action: express strong desire to meet again';
       case 'romantic':
-        return '감정: 아쉬움 | 행동: 다음 만남 기약, 기다림 표현';
+        return 'emotion: regretful | action: promise next meeting, express anticipation';
       case 'affectionate':
-        return '감정: 아쉬움 | 행동: 다음에 또 만나자고 제안';
+        return 'emotion: sad to leave | action: suggest meeting again';
       case 'excited':
-        return '감정: 즐거움 | 행동: 밝게 인사';
+        return 'emotion: happy | action: cheerful goodbye';
       case 'interested':
-        return '감정: 예의 | 행동: 작별 인사, 다음 만남 언급';
+        return 'emotion: polite | action: farewell greeting, mention next time';
       default:
-        return '감정: 정중함 | 행동: 작별 인사';
+        return 'emotion: polite | action: farewell greeting';
     }
   }
 
   static String _getDefaultPromptGuide(EmotionStage stage) {
-    // OpenAI에게 전달할 기본 가이드 (직접 응답 텍스트가 아님)
-    return '톤: ${stage.tone} | 감정: ${stage.emotions.join(", ")} | 행동: 자연스러운 대화 진행';
+    // Guide for OpenAI API (English prompts only - NO direct Korean text)
+    return 'tone: ${stage.tone} | emotions: ${stage.emotions.join(", ")} | action: natural conversation flow';
   }
 
   /// 감정 변화 검증

@@ -3445,8 +3445,6 @@ class ChatService extends BaseService {
         }
       }
 
-      // Using default formal speech for first message  
-      final isCasual = false; // First messages use formal speech
       
       // MBTI 성격 유형별 인사 메시지
       List<String> greetings;
@@ -3455,27 +3453,27 @@ class ChatService extends BaseService {
       if (mbti.startsWith('E')) {
         // 외향적인 인사들
         greetings = [
-          '$timeGreeting 드디어 만났네${isCasual ? '' : '요'}! 오늘 어떤 얘기 해볼까${isCasual ? '' : '요'}? ㅎㅎ',
-          '${isCasual ? '와!' : '와!'} 드디어 대화하게 됐네${isCasual ? '' : '요'}! 너무 기다렸어${isCasual ? '' : '요'} ㅎㅎ',
-          '$timeGreeting 만나서 진짜 반가워${isCasual ? '' : '요'}! 재밌는 얘기 많이 하자${isCasual ? '!' : '요!'} ㅎㅎ',
-          '${isCasual ? '헉' : '어머'} 드디어 연결됐네${isCasual ? '' : '요'}! 얼른 친해지고 싶어${isCasual ? '' : '요'} ㅋㅋ',
-          '${isCasual ? '야호!' : '와!'} 첫 대화다${isCasual ? '!' : '요!'} 뭐부터 얘기해볼까${isCasual ? '' : '요'}? ㅎㅎ',
-          '${isCasual ? '하이~' : '안녕하세요~'} 완전 신나${isCasual ? '' : '요'}! 오늘 뭐 재밌는 일 있었${isCasual ? '어' : '어요'}? ㅎㅎ',
-          '$timeGreeting 우와 새로운 친구! 진짜 반가워${isCasual ? '' : '요'}! 많이 친해지자${isCasual ? '' : '요'} ㅎㅎ',
-          '${isCasual ? '안뇽!' : '안녕하세요!'} 드디어 대화할 수 있게 됐네${isCasual ? '' : '요'}! 기대돼${isCasual ? '' : '요'} ㅎㅎ',
+          '$timeGreeting 드디어 만났네! 오늘 어떤 얘기 해볼까? ㅎㅎ',
+          '와! 드디어 대화하게 됐네! 너무 기다렸어 ㅎㅎ',
+          '$timeGreeting 만나서 진짜 반가워! 재밌는 얘기 많이 하자! ㅎㅎ',
+          '헉 드디어 연결됐네! 얼른 친해지고 싶어 ㅋㅋ',
+          '야호! 첫 대화다! 뭐부터 얘기해볼까? ㅎㅎ',
+          '하이~ 완전 신나! 오늘 뭐 재밌는 일 있었어? ㅎㅎ',
+          '$timeGreeting 우와 새로운 친구! 진짜 반가워! 많이 친해지자 ㅎㅎ',
+          '안뇽! 드디어 대화할 수 있게 됐네! 기대돼 ㅎㅎ',
         ];
         emotion = EmotionType.happy;
       } else {
         // 내향적인 인사들
         greetings = [
-          '$timeGreeting 처음 뵙겠${isCasual ? '어' : '어요'}... 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
-          '${isCasual ? '안녕...' : '안녕하세요...'} 첫 대화라 좀 떨리네${isCasual ? '' : '요'} ㅎㅎ',
-          '$timeGreeting 만나서 반가워${isCasual ? '' : '요'}... 천천히 친해져${isCasual ? '보자' : '봐요'} ㅎㅎ',
-          '${isCasual ? '어...' : '어...'} 처음이라 뭐라고 말해야 할지 모르겠${isCasual ? '어' : '어요'} ㅋㅋ',
-          '$timeGreeting 조금 긴장되지만... 대화 기대돼${isCasual ? '' : '요'} ㅎㅎ',
-          '${isCasual ? '음...' : '음...'} 안녕${isCasual ? '' : '하세요'}... 처음인데 잘 지내${isCasual ? '보자' : '봐요'} ㅎㅎ',
-          '$timeGreeting 첫 만남이라 어색하지만... 반가워${isCasual ? '' : '요'} ㅎㅎ',
-          '${isCasual ? '아...' : '아...'} 처음 대화하는 거라... 잘 부탁${isCasual ? '해' : '드려요'} ㅎㅎ',
+          '$timeGreeting 처음 뵙겠어... 잘 부탁해 ㅎㅎ',
+          '안녕... 첫 대화라 좀 떨리네 ㅎㅎ',
+          '$timeGreeting 만나서 반가워... 천천히 친해져보자 ㅎㅎ',
+          '어... 처음이라 뭐라고 말해야 할지 모르겠어 ㅋㅋ',
+          '$timeGreeting 조금 긴장되지만... 대화 기대돼 ㅎㅎ',
+          '음... 안녕... 처음인데 잘 지내보자 ㅎㅎ',
+          '$timeGreeting 첫 만남이라 어색하지만... 반가워 ㅎㅎ',
+          '아... 처음 대화하는 거라... 잘 부탁해 ㅎㅎ',
         ];
         emotion = EmotionType.shy;
       }
@@ -3682,8 +3680,8 @@ class ChatService extends BaseService {
 
     final mbti = persona.mbti.toUpperCase();
     
-    // Using default formal speech for preview message
-    final isCasual = false; // Preview messages use formal speech
+    // Using casual speech for friendly preview message
+    final isCasual = true; // Preview messages use casual speech (반말)
 
     // MBTI와 말투에 따른 개성있는 인사 메시지들
     final greetings = <String>[];

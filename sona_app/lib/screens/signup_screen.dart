@@ -30,6 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordController = TextEditingController();
   final _nicknameController = TextEditingController();
   final _introController = TextEditingController();
+  final _referralEmailController = TextEditingController(); // 추천인 이메일
 
   // Form data
   String? _selectedGender;
@@ -61,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _passwordController.dispose();
     _nicknameController.dispose();
     _introController.dispose();
+    _referralEmailController.dispose();
     _pageController.dispose();
     _nicknameCheckTimer?.cancel();
     super.dispose();
@@ -171,6 +173,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredTopics:
             _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
+        referralEmail: _referralEmailController.text.isEmpty 
+            ? null 
+            : _referralEmailController.text,
       );
 
       if (user != null && mounted) {
@@ -196,6 +201,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         preferredTopics:
             _selectedPreferredTopics.isEmpty ? null : _selectedPreferredTopics,
         genderAll: _genderAll,
+        referralEmail: _referralEmailController.text.isEmpty 
+            ? null 
+            : _referralEmailController.text,
       );
 
       if (user != null && mounted) {
@@ -635,6 +643,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
               }
               if (!_isNicknameAvailable && value.length >= 3) {
                 return localizations.nicknameAlreadyUsed;
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+
+          // Referral Email (선택)
+          TextFormField(
+            controller: _referralEmailController,
+            decoration: InputDecoration(
+              labelText: '추천인 이메일 (선택)',
+              hintText: '추천해준 사람의 이메일',
+              prefixIcon: const Icon(Icons.people_outline),
+              helperText: '친구의 추천으로 가입하시나요?',
+            ),
+            keyboardType: TextInputType.emailAddress,
+            validator: (value) {
+              // 선택 필드이므로 비어있어도 OK
+              if (value != null && value.isNotEmpty) {
+                if (!value.contains('@')) {
+                  return '올바른 이메일 형식이 아닙니다';
+                }
               }
               return null;
             },

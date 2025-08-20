@@ -55,6 +55,7 @@ class UserService extends BaseService {
     String? communicationStyle,
     List<String>? preferredTopics,
     bool genderAll = false,
+    String? referralEmail,
   }) async {
     return await executeWithLoading<AppUser?>(() async {
       // 1. Firebase Auth로 사용자 생성
@@ -99,6 +100,7 @@ class UserService extends BaseService {
         dailyMessageCount: 0,
         dailyMessageLimit: AppConstants.dailyMessageLimit,
         lastMessageCountReset: DateTime.now(),
+        referralEmail: referralEmail,
       );
 
       await FirebaseHelper.user(newUser.uid).set(
@@ -190,6 +192,7 @@ class UserService extends BaseService {
     String? communicationStyle,
     List<String>? preferredTopics,
     bool genderAll = false,
+    String? referralEmail,
   }) async {
     return await executeWithLoading<AppUser?>(() async {
       if (_firebaseUser == null) {
@@ -228,6 +231,7 @@ class UserService extends BaseService {
         dailyMessageCount: 0,
         dailyMessageLimit: AppConstants.dailyMessageLimit,
         lastMessageCountReset: DateTime.now(),
+        referralEmail: referralEmail,
       );
 
       await FirebaseHelper.user(newUser.uid).set(

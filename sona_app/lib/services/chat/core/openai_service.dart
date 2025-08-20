@@ -27,8 +27,8 @@ class OpenAIService {
   // OpenAI model is defined in AppConstants
 
   // 🎯 토큰 제한 설정
-  static const int _maxInputTokens = 3000; // 충분한 컨텍스트 유지
-  static const int _maxOutputTokens = 200; // 자연스러운 응답 길이
+  static const int _maxInputTokens = 4200; //
+  static const int _maxOutputTokens = 250; // 200 -> 250 (더 자연스러운 응답)
   static const int _maxTranslationTokens = 500; // 번역 품질 보장
   static const double _temperature = 0.85; // 창의성과 일관성 균형 (0.7-0.9 권장)
 
@@ -169,8 +169,9 @@ class OpenAIService {
         if (retryCount >= _maxRetries) {
           debugPrint('🔄 Max retries reached for OpenAI request');
           debugPrint('🔄 Final error: $e');
-          request.completer.complete(
-              _getFallbackResponse(request.persona, request.userMessage));
+          // 간단한 폴백 응답 생성
+          final fallbackResponse = _generateSimpleFallback(request.persona);
+          request.completer.complete(fallbackResponse);
           return;
         }
 
@@ -384,10 +385,11 @@ class OpenAIService {
 
     // 컨텍스트 요약 생성 (이전 대화 압축)
     String contextSummary = '';
-    if (chatHistory.length > 20 && userId != null && personaId != null) {
-      // 20개 이상의 메시지가 있으면 요약 추가
+    if (chatHistory.length > 40 && userId != null && personaId != null) {
+      // 40개 이상의 메시지가 있으면 요약 추가 (30->40으로 증가)
+      // 최근 25개는 그대로 유지, 그 이전 메시지만 요약
       contextSummary = OptimizedContextManager.generateContextSummary(
-        messages: chatHistory.take(chatHistory.length - 10).toList(),
+        messages: chatHistory.take(chatHistory.length - 25).toList(),
         userId: userId,
         personaId: personaId,
       );
@@ -423,6 +425,25 @@ $contextSummary''';
       'content': userMessage,
     });
 
+    // 디버그: 대화 컨텍스트 전달 확인
+    debugPrint('📊 대화 컨텍스트 상태:');
+    debugPrint('  - 전체 히스토리: ${chatHistory.length}개 메시지');
+    debugPrint('  - 전달된 히스토리: ${relevantHistory.length}개 메시지');
+    debugPrint('  - 컨텍스트 요약 포함: ${contextSummary.isNotEmpty}');
+    debugPrint('  - 총 메시지 수: ${messages.length}개');
+    
+    // 최근 3개 메시지 내용 확인 (디버그용)
+    if (relevantHistory.length >= 3) {
+      debugPrint('  - 최근 대화 샘플:');
+      for (int i = relevantHistory.length - 3; i < relevantHistory.length; i++) {
+        final msg = relevantHistory[i];
+        final preview = msg.content.length > 50 
+            ? '${msg.content.substring(0, 50)}...' 
+            : msg.content;
+        debugPrint('    ${msg.isFromUser ? "User" : "AI"}: $preview');
+      }
+    }
+
     return messages;
   }
 
@@ -432,7 +453,8 @@ $contextSummary''';
     if (history.isEmpty) return [];
 
     // OptimizedContextManager 사용하여 스마트하게 선택
-    const maxHistoryMessages = 10; // 8 -> 10으로 약간 증가 (더 나은 컨텍스트)
+    // 대화 맥락 유지를 위해 메시지 수 증가
+    const maxHistoryMessages = 25; // 20 -> 25으로 증가 (대화 품질 최우선)
     
     final selectedMessages = OptimizedContextManager.selectOptimalMessages(
       fullHistory: history,
@@ -440,10 +462,17 @@ $contextSummary''';
       maxMessages: maxHistoryMessages,
     );
     
-    // 메시지 압축하여 토큰 절약
+    // 메시지 압축 최소화 - 대화 품질 최우선
     final compressedMessages = selectedMessages.map((msg) {
-      // 사용자 메시지는 덜 압축, AI 메시지는 더 압축
-      final maxLength = msg.isFromUser ? 120 : 100;
+      // 압축 제한을 대폭 완화하여 대화 품질 보장
+      // 사용자 메시지는 거의 압축하지 않음, AI 메시지도 충분히 보존
+      final maxLength = msg.isFromUser ? 300 : 250; // 200->300, 150->250으로 대폭 완화
+      
+      // 짧은 메시지는 압축하지 않음
+      if (msg.content.length <= maxLength) {
+        return msg;
+      }
+      
       return Message(
         id: msg.id,
         personaId: msg.personaId,
@@ -521,20 +550,6 @@ $contextSummary''';
         .toList();
   }
 
-  /// 🆘 폴백 응답 생성 - 에러 발생 시에만 사용
-  static String _getFallbackResponse(Persona persona, String userMessage) {
-    // 폴백 상황에서도 AI가 생성하도록 빈 문자열 반환
-    // 프롬프트에서 폴백 상황 처리 가이드 제공
-    return '';
-  }
-
-  /// 🔒 보안 폴백 응답 생성
-  static String _getSecureFallbackResponse(
-      Persona persona, String userMessage, {bool isCasualSpeech = false}) {
-    // 보안 폴백 상황에서도 AI가 생성하도록 빈 문자열 반환
-    // 하드코딩된 응답 제거 - OpenAI API만 사용
-    return '';
-  }
   /// 🔧 불완전한 문장 완성
   static String _completeUnfinishedSentence(String text) {
     if (text.isEmpty) return text;
@@ -588,9 +603,18 @@ $contextSummary''';
     return trimmed + '요';
   }
 
-  /// ✅ API 키 유효성 검사
-  static bool isApiKeyValid() {
-    return _apiKey.isNotEmpty && _apiKey != 'your_openai_api_key_here';
+  /// 🆘 간단한 폴백 응답 생성
+  static String _generateSimpleFallback(Persona persona) {
+    final fallbacks = [
+      '아 잠깐만ㅠㅠ',
+      '어? 뭐라고?',
+      '헐 잠시만',
+      '아 미안 다시 말해줘',
+      '네트워크가 불안정한가봐ㅠㅠ',
+    ];
+    
+    final index = DateTime.now().millisecondsSinceEpoch % fallbacks.length;
+    return fallbacks[index];
   }
 
   /// 🧹 리소스 정리
@@ -1143,21 +1167,14 @@ class KoreanSpeechValidator {
       '정말 좋아요': '진짜 좋아',
       '정말 재미있어요': '진짜 재밌어',
       '정말 대단해요': '진짜 대박',
-      '그렇습니다': '그래요',
-      '맞습니다': '맞아요',
-      '좋습니다': '좋아요',
-      '재미있습니다': '재밌어요',
-      '감사합니다': '고마워요',
       '그렇군요': '그렇구나',
       '그런가요': '그런가',
-      '맞나요': '맞나',
-      '좋나요': '좋나',
+      '맞나요': '맞아',
+      '좋나요': '좋아',
       '저녁 메뉴 추천': '저메추',
       '점심 메뉴 추천': '점메추',
       '아침 메뉴 추천': '아메추',
       // '맛있': '존맛', // 제거 - 친밀도가 높을 때만 사용해야 함
-      '재미있': '꿀잼',
-      '재미없': '노잼',
     };
 
     naturalReplacements.forEach((formal, natural) {

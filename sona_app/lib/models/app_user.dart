@@ -32,6 +32,9 @@ class AppUser {
   // 다국어 지원 필드
   final String
       preferredLanguage; // 선호 언어 코드 ('ko', 'en', 'ja', 'zh', 'id', 'vi' 등)
+  
+  // 추천인 이메일 필드
+  final String? referralEmail; // 추천인 이메일 (선택)
 
   AppUser({
     required this.uid,
@@ -57,6 +60,7 @@ class AppUser {
     this.lastMessageCountReset,
     this.dailyMessageLimit = 100,
     this.preferredLanguage = 'ko', // 기본값은 한국어
+    this.referralEmail,
   }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
@@ -98,6 +102,7 @@ class AppUser {
           : null,
       'dailyMessageLimit': dailyMessageLimit,
       'preferredLanguage': preferredLanguage,
+      'referralEmail': referralEmail,
     };
   }
 
@@ -141,6 +146,7 @@ class AppUser {
           : null,
       dailyMessageLimit: data['dailyMessageLimit'] ?? 100,
       preferredLanguage: data['preferredLanguage'] ?? 'ko',
+      referralEmail: data['referralEmail'],
     );
   }
 

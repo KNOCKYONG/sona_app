@@ -1653,14 +1653,30 @@ class ChatOrchestrator {
     return result;
   }
   
-  /// 문장 단위로 분리
+  /// 문장 단위로 분리 (개선됨 - 구두점 보존)
   List<String> _splitIntoSentences(String text) {
-    // 구두점 기준 분리 (?, !, . 등)
-    final sentences = text.split(RegExp(r'[.!?]+'));
-    return sentences
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
+    // 구두점을 포함한 문장 추출
+    final pattern = RegExp(r'[^.!?]+[.!?]+');
+    final matches = pattern.allMatches(text);
+    
+    List<String> sentences = [];
+    for (final match in matches) {
+      final sentence = match.group(0)?.trim();
+      if (sentence != null && sentence.isNotEmpty) {
+        sentences.add(sentence);
+      }
+    }
+    
+    // 마지막에 구두점이 없는 부분 처리
+    final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
+    if (lastIndex < text.length) {
+      final remaining = text.substring(lastIndex).trim();
+      if (remaining.isNotEmpty) {
+        sentences.add(remaining);
+      }
+    }
+    
+    return sentences;
   }
   
   /// 번역된 질문 가져오기
@@ -2888,7 +2904,9 @@ class ChatOrchestrator {
   }) {
     debugPrint('🗺️ Mapping-based translation split');
     debugPrint('📝 Korean messages: ${koreanMessages.length}');
+    debugPrint('📝 Korean content: ${koreanMessages.join(' | ')}');
     debugPrint('🌍 Target language: $targetLanguage');
+    debugPrint('🌍 Translation content: $translatedContent');
     
     // 1. 전체 한글 텍스트 재구성 (분할 전 원본)
     final fullKorean = koreanMessages.join(' ');
@@ -2897,8 +2915,8 @@ class ChatOrchestrator {
     final koreanSentences = _extractSentences(fullKorean, 'ko');
     final translatedSentences = _extractSentences(translatedContent, targetLanguage);
     
-    debugPrint('📊 Korean sentences: ${koreanSentences.length}');
-    debugPrint('📊 Translated sentences: ${translatedSentences.length}');
+    debugPrint('📊 Korean sentences: ${koreanSentences.length} - $koreanSentences');
+    debugPrint('📊 Translated sentences: ${translatedSentences.length} - $translatedSentences');
     
     // 3. 문장 수가 같으면 직접 매핑
     if (koreanSentences.length == translatedSentences.length && 
@@ -2956,33 +2974,66 @@ class ChatOrchestrator {
     return result;
   }
   
-  /// 언어별 문장 추출
+  /// 언어별 문장 추출 (개선됨)
   List<String> _extractSentences(String text, String language) {
+    List<String> sentences = [];
+    
     if (language == 'ko') {
-      // 한국어 문장 추출
-      final pattern = RegExp(
-        r'[^.!?]+[.!?]+(?:[ㅋㅎㅠ]+)?|[^.!?]+[ㅋㅎㅠ]{2,}'
-      );
-      return pattern.allMatches(text)
-          .map((m) => m.group(0)?.trim() ?? '')
-          .where((s) => s.isNotEmpty)
-          .toList();
-    } else if (language == 'en') {
-      // 영어 문장 추출
-      final pattern = RegExp(
-        r'[^.!?]+[.!?]+(?:\s+|$)'
-      );
-      return pattern.allMatches(text)
-          .map((m) => m.group(0)?.trim() ?? '')
-          .where((s) => s.isNotEmpty)
-          .toList();
+      // 한국어 문장 추출 (구두점 보존)
+      // 1. 물음표, 느낌표, 마침표로 끝나는 문장
+      final pattern = RegExp(r'[^.!?]+[.!?]+');
+      final matches = pattern.allMatches(text);
+      
+      for (final match in matches) {
+        final sentence = match.group(0)?.trim();
+        if (sentence != null && sentence.isNotEmpty) {
+          sentences.add(sentence);
+        }
+      }
+      
+      // 2. 마지막에 구두점 없는 부분
+      final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
+      if (lastIndex < text.length) {
+        final remaining = text.substring(lastIndex).trim();
+        if (remaining.isNotEmpty) {
+          sentences.add(remaining);
+        }
+      }
+      
+      // 3. ㅋㅋㅋ, ㅎㅎ 등으로만 끝나는 것도 처리
+      if (sentences.isEmpty && text.isNotEmpty) {
+        sentences.add(text);
+      }
+    } else if (language == 'en' || language == 'EN') {
+      // 영어 문장 추출 (구두점 보존)
+      final pattern = RegExp(r'[^.!?]+[.!?]+');
+      final matches = pattern.allMatches(text);
+      
+      for (final match in matches) {
+        final sentence = match.group(0)?.trim();
+        if (sentence != null && sentence.isNotEmpty) {
+          sentences.add(sentence);
+        }
+      }
+      
+      // 마지막에 구두점 없는 부분
+      final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
+      if (lastIndex < text.length) {
+        final remaining = text.substring(lastIndex).trim();
+        if (remaining.isNotEmpty) {
+          sentences.add(remaining);
+        }
+      }
+      
+      if (sentences.isEmpty && text.isNotEmpty) {
+        sentences.add(text);
+      }
     } else {
-      // 기타 언어는 기본 구두점 기준
-      return text.split(RegExp(r'[.!?]+'))
-          .map((s) => s.trim())
-          .where((s) => s.isNotEmpty)
-          .toList();
+      // 기타 언어
+      sentences = _splitIntoSentences(text);
     }
+    
+    return sentences;
   }
 
   /// 호칭 가이드 생성 (담백한 이름 부르기)

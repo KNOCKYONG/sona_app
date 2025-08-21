@@ -267,6 +267,14 @@ class AppLocalizations {
   String get hearts50 => isKorean ? '하트 50개' : '50 Hearts';
   String get heartDescription =>
       isKorean ? '매칭과 채팅에 사용할 수 있는 하트' : 'Hearts for matching and chatting';
+  
+  // 할인 정보
+  String get originalPrice => isKorean ? '원가' : 'Original';
+  String get discountAmount => isKorean ? '할인' : 'Save';
+  String discountAmountValue(String amount) => 
+      isKorean ? '₩$amount 할인' : 'Save ₩$amount';
+  String get hearts30Discount => isKorean ? '₩400 할인' : 'Save ₩400';
+  String get hearts50Discount => isKorean ? '₩1,600 할인' : 'Save ₩1,600';
 
   // ===== 설정 =====
   String get settings => isKorean ? '설정' : 'Settings';

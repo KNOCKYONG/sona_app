@@ -232,6 +232,10 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     // 상품명에서 정보 추출
     String displayName = product.title;
     String? description;
+    String? originalPrice;
+    String? discountedPrice;
+    String? discountLabel;
+    bool hasDiscount = false;
 
     // Google Play Console의 상품 ID와 매칭
     if (product.id == ProductIds.hearts10) {
@@ -240,9 +244,17 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     } else if (product.id == ProductIds.hearts30) {
       displayName = localizations.hearts30;
       description = localizations.heartDescription;
+      originalPrice = '₩3,300';
+      discountedPrice = '₩2,900';
+      discountLabel = localizations.hearts30Discount;
+      hasDiscount = true;
     } else if (product.id == ProductIds.hearts50) {
       displayName = localizations.hearts50;
       description = localizations.heartDescription;
+      originalPrice = '₩5,500';
+      discountedPrice = '₩3,900';
+      discountLabel = localizations.hearts50Discount;
+      hasDiscount = true;
     }
 
     return Container(
@@ -272,13 +284,41 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        displayName,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).textTheme.bodyLarge?.color,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            displayName,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                            ),
+                          ),
+                          if (hasDiscount) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.red.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.red.withOpacity(0.3),
+                                ),
+                              ),
+                              child: Text(
+                                discountLabel ?? '',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                       if (description != null) ...[
                         const SizedBox(height: 4),
@@ -293,14 +333,38 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     ],
                   ),
                 ),
-                Text(
-                  product.price,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+                if (hasDiscount) 
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        originalPrice ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).textTheme.bodySmall?.color,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        discountedPrice ?? product.price,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Text(
+                    product.price,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
-                ),
               ],
             ),
           ),

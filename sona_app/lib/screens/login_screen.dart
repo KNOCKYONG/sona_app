@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth/auth_service.dart';
@@ -144,6 +145,80 @@ class _LoginScreenState extends State<LoginScreen>
           errorMessage.contains('wrong-password') ||
           errorMessage.contains('invalid-credential');
     });
+  }
+
+  Future<void> _handleAppleSignIn() async {
+    debugPrint('🍎 [LoginScreen] Starting Apple Sign-In...');
+
+    // 이전 상태 초기화
+    setState(() {
+      _currentError = null;
+      _showPasswordReset = false;
+    });
+
+    // 네트워크 연결 확인
+    final isConnected = await NetworkUtils.isConnected();
+    if (!isConnected && mounted) {
+      debugPrint('❌ [LoginScreen] Network connection failed for Apple Sign-In');
+      setState(() {
+        _currentError = AppLocalizations.of(context)!.checkInternetConnection;
+      });
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      final userService = Provider.of<UserService>(context, listen: false);
+      debugPrint('🍎 [LoginScreen] Calling UserService.signInWithApple...');
+      final firebaseUser = await userService.signInWithApple();
+
+      if (firebaseUser != null && mounted) {
+        debugPrint('✅ [LoginScreen] Apple Sign-In successful');
+        // 기존 사용자인지 확인
+        if (userService.currentUser != null) {
+          // 기존 사용자 - PersonaService 초기화 후 메인 화면으로
+          debugPrint('✅ [LoginScreen] Existing Apple user, initializing PersonaService...');
+          
+          final personaService = Provider.of<PersonaService>(context, listen: false);
+          await Future.delayed(const Duration(milliseconds: 500));
+          
+          try {
+            await personaService.initialize(userId: firebaseUser.uid);
+            debugPrint('✅ [LoginScreen] PersonaService initialized successfully');
+          } catch (e) {
+            debugPrint('⚠️ [LoginScreen] PersonaService initialization error (continuing): $e');
+          }
+          
+          debugPrint('✅ [LoginScreen] Navigating to main screen');
+          Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+        } else {
+          // 신규 사용자 - 추가 정보 입력 화면으로
+          debugPrint('🆕 [LoginScreen] New Apple user, navigating to signup screen');
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const SignUpScreen(isAppleSignUp: true),
+            ),
+          );
+        }
+      } else if (mounted) {
+        // 사용자가 취소했거나 다른 이유로 실패한 경우
+        final errorMessage = userService.error ??
+            AppLocalizations.of(context)!.appleLoginCanceled;
+        debugPrint('❌ [LoginScreen] Apple Sign-In failed: $errorMessage');
+        _handleLoginError(errorMessage);
+      }
+    } catch (e) {
+      debugPrint('❌ [LoginScreen] Unexpected error during Apple Sign-In: $e');
+      if (mounted) {
+        _handleLoginError(
+            '${AppLocalizations.of(context)!.unexpectedLoginError}: ${e.toString()}');
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   Future<void> _handleGoogleSignIn() async {
@@ -720,6 +795,54 @@ class _LoginScreenState extends State<LoginScreen>
             ),
           ),
           const SizedBox(height: 12),
+          
+          // Apple 로그인 버튼 (iOS only)
+          if (Platform.isIOS) ...[
+            SizedBox(
+              height: 48,
+              child: OutlinedButton(
+                onPressed: _isLoading ? null : _handleAppleSignIn,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  side: BorderSide(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.apple,
+                      size: 20,
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black
+                          : Colors.white,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.loginWithApple,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
           
           // Guest mode button
           SizedBox(

@@ -9,10 +9,12 @@ import '../../helpers/firebase_helper.dart';
 import '../storage/local_profile_image_service.dart';
 import '../../core/constants.dart';
 import '../../core/preferences_manager.dart';
+import 'auth_service.dart';
 
 class UserService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final AuthService _authService = AuthService();
 
   AppUser? _currentUser;
   User? _firebaseUser;
@@ -183,6 +185,122 @@ class UserService extends BaseService {
         rethrow; // BaseService에서 에러 메시지 처리하도록 전달
       }
     }, errorContext: 'signInWithGoogle');
+  }
+
+  // Apple 로그인
+  Future<User?> signInWithApple() async {
+    debugPrint('🍎 [UserService] Starting Apple Sign-In process...');
+    return await executeWithLoading<User?>(() async {
+      try {
+        // 1. Apple 로그인 진행
+        debugPrint('🍎 [UserService] Step 1: Initiating Apple Sign-In...');
+        final success = await _authService.signInWithApple();
+        
+        if (!success) {
+          debugPrint('⚠️ [UserService] Apple Sign-In failed or was canceled');
+          return null;
+        }
+        
+        // 2. 현재 로그인된 사용자 확인
+        final user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          debugPrint('❌ [UserService] No authenticated user after Apple Sign-In');
+          return null;
+        }
+        
+        debugPrint('✅ [UserService] Apple Sign-In successful: ${user.uid}');
+        
+        // 3. 기존 사용자인지 확인
+        debugPrint('🍎 [UserService] Step 2: Checking if user exists in Firestore...');
+        final userDoc = await FirebaseHelper.user(user.uid).get();
+        
+        if (!userDoc.exists) {
+          // 신규 사용자 - 추가 정보 입력 필요
+          debugPrint('🆕 [UserService] New Apple user detected, additional info required');
+          return user;
+        }
+        
+        // 기존 사용자 - 사용자 정보 로드
+        debugPrint('👤 [UserService] Existing Apple user found, loading user data...');
+        await _loadUserData(user.uid);
+        debugPrint('✅ [UserService] Apple Sign-In completed successfully');
+        
+        return user;
+      } catch (e) {
+        debugPrint('❌ [UserService] Apple Sign-In error: $e');
+        debugPrint('❌ [UserService] Error type: ${e.runtimeType}');
+        rethrow;
+      }
+    }, errorContext: 'signInWithApple');
+  }
+
+  // Apple 로그인 후 추가 정보 저장
+  Future<AppUser?> completeAppleSignUp({
+    required String nickname,
+    String? gender,
+    DateTime? birth,
+    List<int>? preferredAgeRange,
+    List<String>? interests,
+    String? intro,
+    File? profileImage,
+    String? purpose,
+    List<String>? preferredPersonaTypes,
+    List<String>? preferredMbti,
+    String? communicationStyle,
+    List<String>? preferredTopics,
+    bool genderAll = false,
+    String? referralEmail,
+  }) async {
+    return await executeWithLoading<AppUser?>(() async {
+      if (_firebaseUser == null) {
+        throw Exception('로그인된 사용자가 없습니다.');
+      }
+
+      // 프로필 이미지 저장
+      String? profileImagePath;
+      if (profileImage != null) {
+        profileImagePath = await LocalProfileImageService.saveProfileImage(
+          userId: _firebaseUser!.uid,
+          imageFile: profileImage,
+        );
+      }
+
+      // Firestore에 사용자 정보 저장
+      final newUser = AppUser(
+        uid: _firebaseUser!.uid,
+        email: _firebaseUser!.email ?? 'apple_user@sona.app',
+        nickname: nickname,
+        gender: gender,
+        birth: birth,
+        age: birth != null ? AppUser.calculateAge(birth) : null,
+        preferredPersona: PreferredPersona(
+          ageRange: preferredAgeRange ?? [20, 35],
+        ),
+        interests: interests ?? [],
+        intro: intro,
+        profileImageUrl: profileImagePath,
+        createdAt: DateTime.now(),
+        purpose: purpose,
+        preferredMbti: preferredMbti,
+        communicationStyle: communicationStyle,
+        preferredTopics: null,
+        genderAll: genderAll,
+        dailyMessageCount: 0,
+        dailyMessageLimit: AppConstants.dailyMessageLimit,
+        lastMessageCountReset: DateTime.now(),
+        referralEmail: referralEmail,
+      );
+
+      await FirebaseHelper.user(newUser.uid).set(
+        FirebaseHelper.withTimestamps({
+          ...newUser.toFirestore(),
+          'hearts': 10, // 신규 가입 시 기본 하트 10개 지급
+        }),
+      );
+
+      _currentUser = newUser;
+      return newUser;
+    }, errorContext: 'completeAppleSignUp');
   }
 
   // 구글 로그인 후 추가 정보 저장
@@ -463,6 +581,7 @@ class UserService extends BaseService {
     await executeWithLoading(() async {
       await _auth.signOut();
       await _googleSignIn.signOut();
+      // Apple Sign-In doesn't require explicit sign out
       _currentUser = null;
       _firebaseUser = null;
     }, errorContext: 'signOut', showError: false);

@@ -12,10 +12,12 @@ import '../l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
   final bool isGoogleSignUp;
+  final bool isAppleSignUp;
 
   const SignUpScreen({
     super.key,
     this.isGoogleSignUp = false,
+    this.isAppleSignUp = false,
   });
 
   @override
@@ -170,6 +172,43 @@ class _SignUpScreenState extends State<SignUpScreen> {
         
         Navigator.pushReplacementNamed(context, '/main');
       }
+    } else if (widget.isAppleSignUp) {
+      // Apple 로그인 후 추가 정보 저장
+      final user = await userService.completeAppleSignUp(
+        nickname: _nicknameController.text,
+        gender: _selectedGender,
+        birth: _selectedBirth,
+        preferredAgeRange: null,
+        interests: [],
+        intro: _introController.text.isEmpty ? null : _introController.text,
+        profileImage: _profileImage,
+        purpose: null, // Optional - removed from signup
+        preferredMbti: null, // Optional - removed from signup
+        preferredTopics: null,
+        genderAll: _genderAll,
+        referralEmail: _referralEmailController.text.isEmpty 
+            ? null 
+            : _referralEmailController.text,
+      );
+
+      if (user != null && mounted) {
+        // PersonaService 초기화 추가
+        final personaService = Provider.of<PersonaService>(context, listen: false);
+        
+        // Firebase Auth 토큰 전파를 위한 짧은 딜레이
+        await Future.delayed(const Duration(milliseconds: 500));
+        debugPrint('🔄 [SignupScreen] Initializing PersonaService for new Apple user: ${user.uid}');
+        
+        try {
+          await personaService.initialize(userId: user.uid);
+          debugPrint('✅ [SignupScreen] PersonaService initialized successfully');
+        } catch (e) {
+          debugPrint('⚠️ [SignupScreen] PersonaService initialization error (continuing): $e');
+          // PersonaService 초기화 실패해도 계속 진행
+        }
+        
+        Navigator.pushReplacementNamed(context, '/main');
+      }
     } else {
       // 이메일/비밀번호 회원가입
       final user = await userService.signUpWithEmail(
@@ -242,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _validateAccountAndProfile() {
     // 이메일 가입인 경우
-    if (!widget.isGoogleSignUp) {
+    if (!widget.isGoogleSignUp && !widget.isAppleSignUp) {
       // 이메일 검사
       if (_emailController.text.isEmpty) {
         _showErrorSnackBar(AppLocalizations.of(context)!.enterEmail);
@@ -312,7 +351,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     switch (_currentPage) {
       case 0: // 계정 & 프로필 페이지
         // 이메일 가입인 경우
-        if (!widget.isGoogleSignUp) {
+        if (!widget.isGoogleSignUp && !widget.isAppleSignUp) {
           if (_emailController.text.isEmpty ||
               !_emailController.text.contains('@') ||
               _passwordController.text.isEmpty ||
@@ -512,7 +551,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           const SizedBox(height: 24),
 
           // Email & Password (이메일 가입시에만)
-          if (!widget.isGoogleSignUp) ...[
+          if (!widget.isGoogleSignUp && !widget.isAppleSignUp) ...[
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(

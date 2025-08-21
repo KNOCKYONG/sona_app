@@ -21,6 +21,7 @@ dependencies:
   
   # Authentication
   google_sign_in: ^6.2.1
+  sign_in_with_apple: ^6.1.0
   
   # State Management
   provider: ^6.1.1

@@ -59,10 +59,15 @@ class AppLocalizations {
   String get startWithGoogle => isKorean ? 'Google로 시작하기' : 'Start with Google';
   String get loginWithGoogle =>
       isKorean ? 'Google로 로그인' : 'Sign in with Google';
+  String get loginWithApple =>
+      isKorean ? 'Apple로 로그인' : 'Sign in with Apple';
   String get loginError => isKorean ? '로그인에 실패했습니다' : 'Login failed';
   String get googleLoginError => isKorean
       ? 'Google 로그인 중 오류가 발생했습니다.'
       : 'Error occurred during Google login.';
+  String get appleLoginError => isKorean
+      ? 'Apple 로그인 중 오류가 발생했습니다.'
+      : 'Error occurred during Apple login.';
   String get loginCancelled => isKorean ? '로그인이 취소되었습니다' : 'Login cancelled';
   String get loginWithoutAccount =>
       isKorean ? '로그인 없이 둘러보기' : 'Browse without login';
@@ -609,6 +614,9 @@ class AppLocalizations {
   String get googleLoginCanceled => isKorean
       ? '구글 로그인이 취소되었습니다.\n다시 시도해주세요.'
       : 'Google login was canceled.\nPlease try again.';
+  String get appleLoginCanceled => isKorean
+      ? 'Apple 로그인이 취소되었습니다.\n다시 시도해주세요.'
+      : 'Apple login was canceled.\nPlease try again.';
   String get passwordResetEmailPrompt => isKorean
       ? '비밀번호를 재설정할 이메일을 입력해주세요'
       : 'Please enter your email to reset password';

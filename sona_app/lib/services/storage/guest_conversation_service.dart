@@ -464,4 +464,67 @@ class GuestConversationService {
       return {};
     }
   }
+  
+  /// Set left chat status for a persona (guest mode)
+  Future<void> setLeftChatStatus(String personaId, bool leftChat) async {
+    try {
+      final deviceId = await _getDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'guest_leftChat_${deviceId}_$personaId';
+      
+      if (leftChat) {
+        await prefs.setBool(key, true);
+        await prefs.setString('guest_leftAt_${deviceId}_$personaId', 
+            DateTime.now().toIso8601String());
+        debugPrint('🚪 [GuestConversation] Set leftChat status for persona: $personaId');
+      } else {
+        // Remove leftChat status (for rejoining)
+        await prefs.remove(key);
+        await prefs.remove('guest_leftAt_${deviceId}_$personaId');
+        debugPrint('🔓 [GuestConversation] Cleared leftChat status for persona: $personaId');
+      }
+    } catch (e) {
+      debugPrint('❌ [GuestConversation] Error setting leftChat status: $e');
+    }
+  }
+  
+  /// Get left chat status for a persona (guest mode)
+  Future<bool> getLeftChatStatus(String personaId) async {
+    try {
+      final deviceId = await _getDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+      final key = 'guest_leftChat_${deviceId}_$personaId';
+      return prefs.getBool(key) ?? false;
+    } catch (e) {
+      debugPrint('❌ [GuestConversation] Error getting leftChat status: $e');
+      return false;
+    }
+  }
+  
+  /// Get all left chat statuses for guest
+  Future<Map<String, bool>> getAllLeftChatStatuses() async {
+    try {
+      final deviceId = await _getDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+      final keys = prefs.getKeys();
+      final Map<String, bool> leftChatStatuses = {};
+      
+      final prefix = 'guest_leftChat_${deviceId}_';
+      
+      for (final key in keys) {
+        if (key.startsWith(prefix)) {
+          final personaId = key.substring(prefix.length);
+          final isLeft = prefs.getBool(key) ?? false;
+          if (isLeft) {
+            leftChatStatuses[personaId] = true;
+          }
+        }
+      }
+      
+      return leftChatStatuses;
+    } catch (e) {
+      debugPrint('❌ [GuestConversation] Error getting all leftChat statuses: $e');
+      return {};
+    }
+  }
 }

@@ -1272,9 +1272,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final currentPersona = personaService.currentPersona;
 
       if (userId.isNotEmpty && currentPersona != null) {
-        // 채팅방 나가기는 단순히 화면 전환만 처리
-        // 이별 기능과 구분하여 데이터는 유지
-
+        // 채팅방 나가기 상태를 Firebase/로컬에 저장
+        await chatService.leaveChatRoom(userId, currentPersona.id);
+        
         // Navigate back to main navigation
         if (mounted) {
           Navigator.pushReplacementNamed(
@@ -1880,17 +1880,51 @@ class _AppBarTitle extends StatelessWidget {
           return Text(AppLocalizations.of(context)!.selectPersona);
         }
 
-        return Row(
-          children: [
-            Expanded(
-              child: _PersonaTitle(persona: persona),
-            ),
-            // Show message limit indicator if 10 or fewer messages remain
-            if (userService.getRemainingMessages() <= 10)
-              _MessageLimitIndicator(
-                remainingMessages: userService.getRemainingMessages(),
-              ),
-          ],
+        // Check if user is a guest
+        final isGuestFuture = userService.isGuestUser;
+        
+        return FutureBuilder<bool>(
+          future: isGuestFuture,
+          builder: (context, snapshot) {
+            final isGuest = snapshot.data ?? false;
+            final remainingMessages = isGuest 
+                ? userService.getGuestRemainingMessages()
+                : userService.getRemainingMessages();
+            
+            return Row(
+              children: [
+                Expanded(
+                  child: _PersonaTitle(persona: persona),
+                ),
+                // Show guest indicator
+                if (isGuest) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.guestModeTitle.split(' ')[0], // "게스트"
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.blue[700],
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+                // Show message limit indicator (for both guests and regular users when limits are low)
+                if ((isGuest && remainingMessages <= AppConstants.guestWarningThreshold) ||
+                    (!isGuest && remainingMessages <= 10))
+                  _MessageLimitIndicator(
+                    remainingMessages: remainingMessages,
+                    isGuest: isGuest,
+                  ),
+              ],
+            );
+          },
         );
       },
     );
@@ -2095,21 +2129,35 @@ class _OnlineStatus extends StatelessWidget {
 
 class _MessageLimitIndicator extends StatelessWidget {
   final int remainingMessages;
+  final bool isGuest;
 
   const _MessageLimitIndicator({
     required this.remainingMessages,
+    this.isGuest = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Determine color based on remaining messages
+    // Determine color based on remaining messages (different thresholds for guests)
     Color indicatorColor;
-    if (remainingMessages <= 2) {
-      indicatorColor = Colors.red;
-    } else if (remainingMessages <= 5) {
-      indicatorColor = Colors.orange;
+    if (isGuest) {
+      // Guest thresholds
+      if (remainingMessages <= 2) {
+        indicatorColor = Colors.red;
+      } else if (remainingMessages <= AppConstants.guestWarningThreshold) {
+        indicatorColor = Colors.orange;
+      } else {
+        indicatorColor = Colors.blue;
+      }
     } else {
-      indicatorColor = Colors.green;
+      // Regular user thresholds
+      if (remainingMessages <= 2) {
+        indicatorColor = Colors.red;
+      } else if (remainingMessages <= 5) {
+        indicatorColor = Colors.orange;
+      } else {
+        indicatorColor = Colors.green;
+      }
     }
 
     return Container(

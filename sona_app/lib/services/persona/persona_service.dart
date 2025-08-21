@@ -13,6 +13,7 @@ import '../../core/preferences_manager.dart';
 import '../relationship/relation_score_service.dart';
 import 'r2_validation_cache.dart';
 import '../cache/image_preload_service.dart';
+import '../storage/guest_conversation_service.dart';
 import 'dart:convert';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
@@ -470,15 +471,26 @@ class PersonaService extends BaseService {
       }
 
       // 재매칭 시 leftChat 플래그 리셋
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_currentUserId!)
-          .collection('chats')
-          .doc(personaId)
-          .set({
-        'leftChat': false,
-        'rejoinedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final isGuest = currentUser?.isAnonymous ?? false;
+      
+      if (isGuest) {
+        // Guest mode: Clear leftChat status locally
+        await GuestConversationService.instance.setLeftChatStatus(personaId, false);
+        debugPrint('🔓 [PersonaService] Guest leftChat status cleared for persona: $personaId');
+      } else {
+        // Regular user: Reset in Firebase
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUserId!)
+            .collection('chats')
+            .doc(personaId)
+            .set({
+          'leftChat': false,
+          'rejoinedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+        debugPrint('☁️ [PersonaService] User leftChat status reset in Firebase for persona: $personaId');
+      }
       
       // Create relationship data
       final relationshipData = {
@@ -559,15 +571,26 @@ class PersonaService extends BaseService {
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
 
       // 재매칭 시 leftChat 플래그 리셋
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_currentUserId!)
-          .collection('chats')
-          .doc(personaId)
-          .set({
-        'leftChat': false,
-        'rejoinedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final isGuest = currentUser?.isAnonymous ?? false;
+      
+      if (isGuest) {
+        // Guest mode: Clear leftChat status locally
+        await GuestConversationService.instance.setLeftChatStatus(personaId, false);
+        debugPrint('🔓 [PersonaService] Guest leftChat status cleared for persona: $personaId');
+      } else {
+        // Regular user: Reset in Firebase
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUserId!)
+            .collection('chats')
+            .doc(personaId)
+            .set({
+          'leftChat': false,
+          'rejoinedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+        debugPrint('☁️ [PersonaService] User leftChat status reset in Firebase for persona: $personaId');
+      }
 
       // Create relationship data with super like relationship score (1000)
       final relationshipData = {

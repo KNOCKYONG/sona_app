@@ -7,6 +7,7 @@ import '../services/auth/auth_service.dart';
 import '../services/auth/user_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/ui/haptic_service.dart';
+import '../services/storage/guest_conversation_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
@@ -161,7 +162,23 @@ class _ChatListScreenState extends State<ChatListScreen>
       }
 
       // 5. 채팅방 나가기 상태 확인
-      if (currentUserId.isNotEmpty) {
+      _leftChatStatus.clear();
+      
+      // Check if user is guest
+      final userService = Provider.of<UserService>(context, listen: false);
+      final isGuest = await userService.isGuestUser;
+      
+      if (isGuest) {
+        // Load from local storage for guest users
+        try {
+          final guestLeftStatuses = await GuestConversationService.instance.getAllLeftChatStatuses();
+          _leftChatStatus.addAll(guestLeftStatuses);
+          debugPrint('📋 Guest left chat status loaded: ${_leftChatStatus.length} chats left');
+        } catch (e) {
+          debugPrint('Error loading guest leftChat status: $e');
+        }
+      } else if (currentUserId.isNotEmpty) {
+        // Load from Firebase for authenticated users
         try {
           final chatsSnapshot = await FirebaseFirestore.instance
               .collection('users')
@@ -169,7 +186,6 @@ class _ChatListScreenState extends State<ChatListScreen>
               .collection('chats')
               .get();
 
-          _leftChatStatus.clear();
           for (var doc in chatsSnapshot.docs) {
             final data = doc.data();
             if (data['leftChat'] == true) {
@@ -177,7 +193,7 @@ class _ChatListScreenState extends State<ChatListScreen>
             }
           }
           debugPrint(
-              '📋 Left chat status loaded: ${_leftChatStatus.length} chats left');
+              '📋 User left chat status loaded: ${_leftChatStatus.length} chats left');
         } catch (e) {
           debugPrint('Error loading leftChat status: $e');
         }

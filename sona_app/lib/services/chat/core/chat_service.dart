@@ -3866,16 +3866,26 @@ class ChatService extends BaseService {
     try {
       debugPrint('🚪 Leaving chat room for persona: $personaId');
 
-      // Firebase에 채팅방 나가기 상태 저장
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .collection('chats')
-          .doc(personaId)
-          .set({
-        'leftChat': true,
-        'leftAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      // Check if user is guest
+      final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+      
+      if (isGuest) {
+        // Guest mode: Save to local storage
+        await GuestConversationService.instance.setLeftChatStatus(personaId, true);
+        debugPrint('💾 [ChatService] Guest left chat room saved locally');
+      } else {
+        // Regular user: Save to Firebase
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('chats')
+            .doc(personaId)
+            .set({
+          'leftChat': true,
+          'leftAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+        debugPrint('☁️ [ChatService] User left chat room saved to Firebase');
+      }
 
       // 로컬 메시지는 유지 (나중에 다시 대화 시작할 수 있음)
       // 단지 채팅 목록에서만 안 보이게 함

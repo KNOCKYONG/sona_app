@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'language_settings_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'faq_screen.dart';
+import 'profile_edit_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -76,6 +77,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           children: [
             const SizedBox(height: 20),
+
+            // 프로필 설정
+            _buildSectionTitle(localizations.isKorean ? '프로필 설정' : 'Profile Settings'),
+            _buildMenuItem(
+              icon: Icons.person_outline,
+              title: localizations.editProfile,
+              subtitle: localizations.isKorean 
+                  ? '성별, 생년월일, 자기소개 수정'
+                  : 'Edit gender, birthdate, and introduction',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProfileEditScreen(),
+                  ),
+                );
+              },
+            ),
 
             // 알림 설정
             _buildSectionTitle(localizations.notificationSettings),

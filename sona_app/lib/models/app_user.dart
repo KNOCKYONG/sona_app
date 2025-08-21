@@ -5,8 +5,8 @@ class AppUser {
   final String email;
   final String nickname;
   final String? gender;
-  final DateTime birth;
-  final int age;
+  final DateTime? birth;
+  final int? age;
   final PreferredPersona preferredPersona;
   final List<String> interests;
   final String? intro;
@@ -41,8 +41,8 @@ class AppUser {
     required this.email,
     required this.nickname,
     this.gender,
-    required this.birth,
-    required this.age,
+    this.birth,
+    this.age,
     required this.preferredPersona,
     required this.interests,
     this.intro,
@@ -64,7 +64,8 @@ class AppUser {
   }) : actionedPersonaIds = actionedPersonaIds ?? [];
 
   // 나이 계산 함수
-  static int calculateAge(DateTime birth) {
+  static int? calculateAge(DateTime? birth) {
+    if (birth == null) return null;
     final now = DateTime.now();
     int age = now.year - birth.year;
     if (now.month < birth.month ||
@@ -81,7 +82,7 @@ class AppUser {
       'email': email,
       'nickname': nickname,
       'gender': gender,
-      'birth': Timestamp.fromDate(birth),
+      'birth': birth != null ? Timestamp.fromDate(birth!) : null,
       'age': age,
       'preferredPersona': preferredPersona.toMap(),
       'interests': interests,
@@ -114,8 +115,8 @@ class AppUser {
       email: data['email'] ?? '',
       nickname: data['nickname'] ?? '',
       gender: data['gender'],
-      birth: (data['birth'] as Timestamp).toDate(),
-      age: data['age'] ?? 0,
+      birth: data['birth'] != null ? (data['birth'] as Timestamp).toDate() : null,
+      age: data['age'],
       preferredPersona:
           PreferredPersona.fromMap(data['preferredPersona'] ?? {}),
       interests: List<String>.from(data['interests'] ?? []),

@@ -25,6 +25,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   bool _isNicknameAvailable = true;
   String? _selectedGender;
   bool _genderAll = false;
+  DateTime? _selectedBirth;
+  int? _selectedYear;
+  int? _selectedMonth;
+  int? _selectedDay;
 
   @override
   void initState() {
@@ -41,6 +45,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       _introController.text = user.intro ?? '';
       _selectedGender = user.gender;
       _genderAll = user.genderAll;
+      _selectedBirth = user.birth;
+      if (user.birth != null) {
+        _selectedYear = user.birth!.year;
+        _selectedMonth = user.birth!.month;
+        _selectedDay = user.birth!.day;
+      }
     }
   }
 
@@ -99,6 +109,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     final success = await userService.updateUserProfile(
       nickname: _nicknameController.text,
       gender: _selectedGender,
+      birth: _selectedBirth,
       intro: _introController.text.isEmpty ? null : _introController.text,
       profileImage: _profileImage,
       genderAll: _genderAll,
@@ -129,6 +140,27 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
         ),
       );
     }
+  }
+
+  void _updateSelectedBirth() {
+    if (_selectedYear != null &&
+        _selectedMonth != null &&
+        _selectedDay != null) {
+      setState(() {
+        _selectedBirth =
+            DateTime(_selectedYear!, _selectedMonth!, _selectedDay!);
+      });
+    }
+  }
+
+  List<int> _getValidDays() {
+    if (_selectedYear == null || _selectedMonth == null) {
+      return List.generate(31, (index) => index + 1);
+    }
+
+    // 해당 년월의 마지막 날 계산
+    final lastDay = DateTime(_selectedYear!, _selectedMonth! + 1, 0).day;
+    return List.generate(lastDay, (index) => index + 1);
   }
 
   @override
@@ -380,6 +412,128 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         controlAffinity: ListTileControlAffinity.leading,
                         contentPadding: EdgeInsets.zero,
                       ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Birth date (선택)
+                    Text(
+                      AppLocalizations.of(context)!.birthDateOptional,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).textTheme.bodySmall?.color,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // 생년월일 정보
+                    if (_selectedBirth == null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline, size: 16, color: Colors.orange),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context)!.canChangeInSettings,
+                                style: TextStyle(fontSize: 12, color: Colors.orange[700]),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Row(
+                      children: [
+                        // 년도 드롭다운
+                        Expanded(
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.year,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            value: _selectedYear,
+                            items: List.generate(
+                              82, // 18세부터 99세까지
+                              (index) {
+                                final year = DateTime.now().year - 18 - index;
+                                return DropdownMenuItem(
+                                  value: year,
+                                  child: Text('$year'),
+                                );
+                              },
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedYear = value;
+                                if (_selectedDay != null &&
+                                    _selectedDay! > _getValidDays().length) {
+                                  _selectedDay = null;
+                                }
+                                _updateSelectedBirth();
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // 월 드롭다운
+                        Expanded(
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.month,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            value: _selectedMonth,
+                            items: List.generate(
+                              12,
+                              (index) => DropdownMenuItem(
+                                value: index + 1,
+                                child: Text('${index + 1}'),
+                              ),
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedMonth = value;
+                                if (_selectedDay != null &&
+                                    _selectedDay! > _getValidDays().length) {
+                                  _selectedDay = null;
+                                }
+                                _updateSelectedBirth();
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // 일 드롭다운
+                        Expanded(
+                          child: DropdownButtonFormField<int>(
+                            decoration: InputDecoration(
+                              labelText: AppLocalizations.of(context)!.day,
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            ),
+                            value: _selectedDay,
+                            items: _getValidDays()
+                                .map((day) => DropdownMenuItem(
+                                      value: day,
+                                      child: Text('$day'),
+                                    ))
+                                .toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedDay = value;
+                                _updateSelectedBirth();
+                              });
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
 

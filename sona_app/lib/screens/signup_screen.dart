@@ -117,20 +117,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> _signUp() async {
     if (!_formKey.currentState!.validate()) return;
 
+    // If gender is not selected, automatically set genderAll to true
     if (_selectedGender == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.selectGender)),
-      );
-      return;
+      _genderAll = true;
     }
-
-    if (_selectedBirth == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context)!.selectBirthDate)),
-      );
-      return;
-    }
-
 
     if (!_agreedToTerms || !_agreedToPrivacy) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -147,8 +137,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       // 구글 로그인 후 추가 정보 저장
       final user = await userService.completeGoogleSignUp(
         nickname: _nicknameController.text,
-        gender: _selectedGender!,
-        birth: _selectedBirth!,
+        gender: _selectedGender,
+        birth: _selectedBirth,
         preferredAgeRange: null,
         interests: [],
         intro: _introController.text.isEmpty ? null : _introController.text,
@@ -186,8 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text,
         password: _passwordController.text,
         nickname: _nicknameController.text,
-        gender: _selectedGender!,
-        birth: _selectedBirth!,
+        gender: _selectedGender,
+        birth: _selectedBirth,
         preferredAgeRange: null,
         interests: [],
         intro: _introController.text.isEmpty ? null : _introController.text,
@@ -289,19 +279,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return false;
     }
 
-    // 성별 검사 (필수로 변경)
-    if (_selectedGender == null) {
-      _showErrorSnackBar(AppLocalizations.of(context)!.selectGender);
-      return false;
-    }
-
-    // 생년월일 검사 (필수)
-    if (_selectedBirth == null) {
-      _showErrorSnackBar(AppLocalizations.of(context)!.selectBirthDate);
-      return false;
-    }
-
-    // 자기소개는 선택사항이므로 체크하지 않음
+    // 성별과 생년월일은 이제 선택사항이므로 체크하지 않음
+    // 자기소개도 선택사항
 
     return true;
   }
@@ -346,8 +325,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             _nicknameController.text.length <= 10 &&
             _isNicknameAvailable &&
             !_isCheckingNickname;
-        // 성별과 생년월일 검사
-        return nicknameValid && _selectedGender != null && _selectedBirth != null;
+        // 성별과 생년월일은 선택사항이므로 검사하지 않음
+        return nicknameValid;
 
       case 1: // 약관 동의 페이지
         return _agreedToTerms && _agreedToPrivacy;
@@ -665,10 +644,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Gender (필수)
-          Text(localizations.genderRequired,
+          // Gender (선택)
+          Text(localizations.genderOptional,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
+          // 성별 미선택 시 안내 메시지
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: Colors.blue),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    localizations.genderNotSelectedInfo,
+                    style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Row(
             children: [
               Expanded(
@@ -712,10 +712,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Birth date (필수)
-          Text(localizations.birthDateRequired,
+          // Birth date (선택)
+          Text(localizations.birthDateOptional,
               style: const TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
+          // 생년월일 미선택 시 안내 메시지
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: Colors.grey[600]),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    localizations.canChangeInSettings,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                  ),
+                ),
+              ],
+            ),
+          ),
           Row(
             children: [
               // 년도 드롭다운

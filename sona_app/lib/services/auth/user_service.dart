@@ -43,8 +43,8 @@ class UserService extends BaseService {
     required String email,
     required String password,
     required String nickname,
-    required String gender,
-    required DateTime birth,
+    String? gender,
+    DateTime? birth,
     List<int>? preferredAgeRange,
     List<String>? interests,
     String? intro,
@@ -84,7 +84,7 @@ class UserService extends BaseService {
         nickname: nickname,
         gender: gender,
         birth: birth,
-        age: AppUser.calculateAge(birth),
+        age: birth != null ? AppUser.calculateAge(birth) : null,
         preferredPersona: PreferredPersona(
           ageRange: preferredAgeRange ?? [20, 35],
         ),
@@ -180,8 +180,8 @@ class UserService extends BaseService {
   // 구글 로그인 후 추가 정보 저장
   Future<AppUser?> completeGoogleSignUp({
     required String nickname,
-    required String gender,
-    required DateTime birth,
+    String? gender,
+    DateTime? birth,
     List<int>? preferredAgeRange,
     List<String>? interests,
     String? intro,
@@ -215,7 +215,7 @@ class UserService extends BaseService {
         nickname: nickname,
         gender: gender,
         birth: birth,
-        age: AppUser.calculateAge(birth),
+        age: birth != null ? AppUser.calculateAge(birth) : null,
         preferredPersona: PreferredPersona(
           ageRange: preferredAgeRange ?? [20, 35],
         ),
@@ -397,9 +397,14 @@ class UserService extends BaseService {
 
       if (nickname != null) updates['nickname'] = nickname;
       if (gender != null) updates['gender'] = gender;
+      // Handle birth update - can be set to null for optional
       if (birth != null) {
         updates['birth'] = Timestamp.fromDate(birth);
         updates['age'] = AppUser.calculateAge(birth);
+      } else if (birth == null && _currentUser!.birth != null) {
+        // Allow clearing birth date if needed (though UI might not support this)
+        updates['birth'] = null;
+        updates['age'] = null;
       }
       if (preferredAgeRange != null) {
         updates['preferredPersona'] = {

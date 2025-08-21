@@ -117,6 +117,18 @@ class AppLocalizations {
   String get showOppositeGenderOnly => isKorean
       ? '체크하지 않으면 이성 페르소나만 표시됩니다'
       : 'If unchecked, only opposite gender personas will be shown';
+  
+  // Optional field messages
+  String get genderOptional => isKorean ? '성별 (선택)' : 'Gender (Optional)';
+  String get birthDateOptional => isKorean ? '생년월일 (선택)' : 'Birth Date (Optional)';
+  String get genderNotSelectedInfo => isKorean 
+      ? '성별을 선택하지 않으면 모든 성별의 페르소나가 표시됩니다' 
+      : 'If gender is not selected, personas of all genders will be shown';
+  String get canChangeInSettings => isKorean 
+      ? '나중에 설정에서 변경 가능합니다' 
+      : 'You can change this later in settings';
+  String get setNow => isKorean ? '지금 설정하기' : 'Set Now';
+  
   String get usagePurpose => isKorean ? '사용 목적' : 'Usage Purpose';
   String get selectUsagePurpose => isKorean
       ? 'SONA를 사용하시는 목적을 선택해주세요'

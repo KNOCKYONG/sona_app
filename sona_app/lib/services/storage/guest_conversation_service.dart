@@ -527,4 +527,38 @@ class GuestConversationService {
       return {};
     }
   }
+
+  /// Clear all conversation data for a specific persona (for re-matching)
+  /// This ensures a fresh start when re-matching with the same persona
+  Future<void> clearGuestConversationForPersona(String personaId) async {
+    try {
+      final deviceId = await _getDeviceId();
+      final prefs = await SharedPreferences.getInstance();
+      
+      // Clear messages
+      final messagesKey = _generateKey(_messagesPrefix, deviceId, personaId);
+      await prefs.remove(messagesKey);
+      debugPrint('🗑️ [GuestConversation] Cleared messages for persona: $personaId');
+      
+      // Clear memories
+      final memoriesKey = _generateKey(_memoriesPrefix, deviceId, personaId);
+      await prefs.remove(memoriesKey);
+      debugPrint('🗑️ [GuestConversation] Cleared memories for persona: $personaId');
+      
+      // Clear relationship data
+      final relationshipKey = _generateKey(_relationshipPrefix, deviceId, personaId);
+      await prefs.remove(relationshipKey);
+      debugPrint('🗑️ [GuestConversation] Cleared relationship data for persona: $personaId');
+      
+      // Clear leftChat status
+      final leftChatKey = 'guest_leftChat_${deviceId}_$personaId';
+      await prefs.remove(leftChatKey);
+      await prefs.remove('guest_leftAt_${deviceId}_$personaId');
+      debugPrint('🗑️ [GuestConversation] Cleared leftChat status for persona: $personaId');
+      
+      debugPrint('✨ [GuestConversation] All conversation data cleared for persona: $personaId - Ready for fresh start!');
+    } catch (e) {
+      debugPrint('❌ [GuestConversation] Error clearing conversation data for persona: $e');
+    }
+  }
 }

@@ -481,9 +481,10 @@ class PersonaService extends BaseService {
       final isGuest = currentUser?.isAnonymous ?? false;
       
       if (isGuest) {
-        // Guest mode: Clear leftChat status locally
+        // Guest mode: Clear ALL previous conversation data for fresh start
+        await GuestConversationService.instance.clearGuestConversationForPersona(personaId);
         await GuestConversationService.instance.setLeftChatStatus(personaId, false);
-        debugPrint('🔓 [PersonaService] Guest leftChat status cleared for persona: $personaId');
+        debugPrint('🔓 [PersonaService] Guest conversation data completely cleared for fresh start with persona: $personaId');
       } else {
         // Regular user: Reset in Firebase
         await FirebaseFirestore.instance
@@ -581,9 +582,10 @@ class PersonaService extends BaseService {
       final isGuest = currentUser?.isAnonymous ?? false;
       
       if (isGuest) {
-        // Guest mode: Clear leftChat status locally
+        // Guest mode: Clear ALL previous conversation data for fresh start
+        await GuestConversationService.instance.clearGuestConversationForPersona(personaId);
         await GuestConversationService.instance.setLeftChatStatus(personaId, false);
-        debugPrint('🔓 [PersonaService] Guest leftChat status cleared for persona: $personaId');
+        debugPrint('🔓 [PersonaService] Guest conversation data completely cleared for fresh start with persona: $personaId');
       } else {
         // Regular user: Reset in Firebase
         await FirebaseFirestore.instance

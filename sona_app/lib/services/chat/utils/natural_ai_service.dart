@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import '../../../models/message.dart';
 import '../../../models/persona.dart';
 import '../../relationship/relation_score_service.dart';
@@ -37,11 +38,15 @@ class NaturalAIService {
 
     String response = '';
 
-    // 첫 만남인지 확인
-    final isFirstMessage = chatHistory.where((m) => m.isFromUser).isEmpty;
+    // 첫 만남인지 확인 - 전체 메시지 개수로 판단 (사용자 첫 인사 포함)
+    final totalMessages = chatHistory.length;
+    final isFirstConversation = totalMessages <= 1; // 사용자의 첫 인사만 있는 경우
+    
+    // 디버그 로그
+    debugPrint('🎭 [NaturalAI] First meeting check: totalMessages=$totalMessages, isFirstConversation=$isFirstConversation, likes=$likes');
 
     // 첫 만남
-    if (likes == 0 && isFirstMessage) {
+    if (likes == 0 && isFirstConversation) {
       response = _getFirstMeetingResponse(
         userMessage: userMessage,
         emotion: emotion,

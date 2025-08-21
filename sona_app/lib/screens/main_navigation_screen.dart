@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'chat_list_screen.dart';
 import 'persona_selection_screen.dart';
 import 'profile_screen.dart';
+import '../l10n/app_localizations.dart';
 import '../services/storage/cache_manager.dart';
 import '../services/chat/core/chat_service.dart';
 import '../services/auth/auth_service.dart';
@@ -77,16 +78,16 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('앱 종료'),
-        content: const Text('앱을 종료하시겠습니까?'),
+        title: Text(AppLocalizations.of(context)!.exitApp),
+        content: Text(AppLocalizations.of(context)!.exitConfirmMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('종료'),
+            child: Text(AppLocalizations.of(context)!.exit),
           ),
         ],
       ),
@@ -132,21 +133,21 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.white,
             elevation: 0,
-            items: const [
+            items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.favorite_outline),
                 activeIcon: Icon(Icons.favorite),
-                label: '매칭',
+                label: AppLocalizations.of(context)!.matching,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.chat_bubble_outline),
                 activeIcon: Icon(Icons.chat_bubble),
-                label: '채팅',
+                label: AppLocalizations.of(context)!.chat,
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),
                 activeIcon: Icon(Icons.person),
-                label: '프로필',
+                label: AppLocalizations.of(context)!.profileNav,
               ),
             ],
           ),

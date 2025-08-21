@@ -130,7 +130,7 @@ class _PrivacySettingsScreenState extends State<PrivacySettingsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          localizations.isKorean ? '개인정보 보호 설정' : 'Privacy Settings',
+                          localizations.privacySettingsScreen,
                           style: TextStyle(
                             fontSize: 15,
                             color: theme.textTheme.bodyLarge?.color,

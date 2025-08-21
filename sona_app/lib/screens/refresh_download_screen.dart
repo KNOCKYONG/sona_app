@@ -99,8 +99,8 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
                 const SizedBox(height: 40),
 
                 // 제목
-                const Text(
-                  '새로운 만남 준비 중',
+                Text(
+                  AppLocalizations.of(context)!.preparingNewMeeting,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -112,8 +112,8 @@ class _RefreshDownloadScreenState extends State<RefreshDownloadScreen> {
                 // 설명
                 Text(
                   _totalImages > 0
-                      ? '새로운 페르소나 이미지를 다운로드하고 있어요'
-                      : '페르소나를 준비하고 있어요',
+                      ? AppLocalizations.of(context)!.downloadingPersonaImages
+                      : AppLocalizations.of(context)!.preparingPersonas,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white70,

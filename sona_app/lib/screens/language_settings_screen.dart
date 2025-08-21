@@ -50,8 +50,8 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                 const SizedBox(height: 8),
                 Text(
                   l10n.isKorean
-                      ? '앱 인터페이스 언어를 설정합니다'
-                      : 'Set app interface language',
+                      ? l10n.setAppInterfaceLanguage
+                      : l10n.setAppInterfaceLanguage,
                   style: TextStyle(
                     fontSize: 14,
                     color: Theme.of(context).textTheme.bodySmall?.color,
@@ -63,10 +63,8 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
 
           // 시스템 언어 사용 스위치
           SwitchListTile(
-            title: Text(l10n.isKorean ? '시스템 언어 사용' : 'Use System Language'),
-            subtitle: Text(l10n.isKorean
-                ? '기기의 언어 설정을 따릅니다'
-                : 'Follow device language settings'),
+            title: Text(l10n.useSystemLanguage),
+            subtitle: Text(l10n.followDeviceLanguage),
             value: localeService.useSystemLanguage,
             onChanged: (value) {
               localeService.setUseSystemLanguage(value);
@@ -212,7 +210,7 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  '한국어',
+                                  l10n.koreanLanguage,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,

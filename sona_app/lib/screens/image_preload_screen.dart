@@ -109,8 +109,8 @@ class _ImagePreloadScreenState extends State<ImagePreloadScreen> {
                 const SizedBox(height: 40),
 
                 // 제목
-                const Text(
-                  '프로필 설정 중',
+                Text(
+                  AppLocalizations.of(context)!.profileSetup,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -121,7 +121,7 @@ class _ImagePreloadScreenState extends State<ImagePreloadScreen> {
 
                 // 설명
                 Text(
-                  '페르소나 이미지를 준비하고 있어요',
+                  AppLocalizations.of(context)!.preparingPersonaImages,
                   style: const TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
@@ -255,8 +255,8 @@ class _ImagePreloadScreenState extends State<ImagePreloadScreen> {
                     padding: const EdgeInsets.only(top: 40),
                     child: TextButton(
                       onPressed: _navigateToPersonaSelection,
-                      child: const Text(
-                        '건너뛰기',
+                      child: Text(
+                        AppLocalizations.of(context)!.skip,
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 14,

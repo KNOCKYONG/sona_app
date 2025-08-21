@@ -5,6 +5,7 @@ import '../services/persona/persona_service.dart';
 import '../models/persona.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/auth/auth_service.dart';
+import '../l10n/app_localizations.dart';
 
 class MatchedPersonasScreen extends StatefulWidget {
   const MatchedPersonasScreen({super.key});
@@ -104,7 +105,7 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          '매칭된 소나',
+          AppLocalizations.of(context)!.matchedSona,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -138,7 +139,7 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    '아직 매칭된 소나가 없어요',
+                    AppLocalizations.of(context)!.noMatchedSonas,
                     style: TextStyle(
                       fontSize: 18,
                       color: Theme.of(context).textTheme.bodyLarge?.color,

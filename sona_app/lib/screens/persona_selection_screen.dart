@@ -1179,7 +1179,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                               ? '이전 대화가 그대로 남아있어요. 계속 이어가보세요!'
                               : isSuperLike
                                   ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요'
-                                  : '소나와 친구처럼 대화를 시작해보세요',
+                                  : AppLocalizations.of(context)!.startConversationLikeAFriend,
                           style: const TextStyle(
                             fontSize: 13, // 14 -> 13
                             color: Colors.white70,
@@ -1206,7 +1206,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10), // 버튼 패딩 조정
                                 ),
-                                child: const Text('나중에'),
+                                child: Text(AppLocalizations.of(context)!.laterButton),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -1390,8 +1390,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                           style: TextStyle(
                                               fontSize: 14)), // 16 -> 14
                                     ],
-                                    const Text(
-                                      '채팅 시작',
+                                    Text(
+                                      AppLocalizations.of(context)!.startChatButton,
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 14), // 15 -> 14
@@ -1844,8 +1844,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                     color: Color(0xFFFF6B9D),
                                   ),
                                   const SizedBox(height: 20),
-                                  const Text(
-                                    '선택할 소나가 없습니다',
+                                  Text(
+                                    AppLocalizations.of(context)!.noPersonasToSelect,
                                     style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold,

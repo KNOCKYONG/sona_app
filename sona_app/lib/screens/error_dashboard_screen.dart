@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/chat_error_report.dart';
 import '../helpers/firebase_helper.dart';
 import '../services/chat/utils/error_recovery_service.dart';
+import '../l10n/app_localizations.dart';
 import 'dart:math' as math;
 
 /// 대화 오류 대시보드 화면
@@ -30,7 +31,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('대화 오류 대시보드'),
+        title: Text(AppLocalizations.of(context)!.chatErrorDashboard),
         backgroundColor: const Color(0xFFFF6B9D),
       ),
       body: Column(
@@ -72,7 +73,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             spacing: 8,
             children: [
               ChoiceChip(
-                label: const Text('전체'),
+                label: Text(AppLocalizations.of(context)!.all),
                 selected: _selectedFilter == 'all',
                 onSelected: (selected) {
                   setState(() {
@@ -83,7 +84,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 },
               ),
               ChoiceChip(
-                label: const Text('페르소나별'),
+                label: Text(AppLocalizations.of(context)!.byPersona),
                 selected: _selectedFilter == 'persona',
                 onSelected: (selected) {
                   setState(() {
@@ -92,7 +93,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 },
               ),
               ChoiceChip(
-                label: const Text('에러 타입별'),
+                label: Text(AppLocalizations.of(context)!.byErrorType),
                 selected: _selectedFilter == 'type',
                 onSelected: (selected) {
                   setState(() {
@@ -217,7 +218,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                '에러 통계',
+                AppLocalizations.of(context)!.errorStats,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -228,7 +229,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 children: [
                   Expanded(
                     child: _buildStatCard(
-                      title: '총 에러 수',
+                      title: AppLocalizations.of(context)!.totalErrorCount,
                       value: snapshot.data!.docs.length.toString(),
                       icon: Icons.error_outline,
                       color: Colors.red,
@@ -237,7 +238,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: _buildStatCard(
-                      title: '가장 많은 에러',
+                      title: AppLocalizations.of(context)!.mostFrequentError,
                       value: topPersona?.key ?? 'N/A',
                       subtitle: '${topPersona?.value ?? 0}건',
                       icon: Icons.person,
@@ -247,7 +248,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: _buildStatCard(
-                      title: '주요 에러 타입',
+                      title: AppLocalizations.of(context)!.mainErrorType,
                       value: _getErrorTypeLabel(topErrorType?.key ?? 'unknown'),
                       subtitle: '${topErrorType?.value ?? 0}건',
                       icon: Icons.warning,
@@ -397,7 +398,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: const Text(
-                  '문제 발생',
+                  AppLocalizations.of(context)!.problemOccurred,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -523,15 +524,15 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
       case 'api_key_error':
         return 'API 키 오류';
       case 'timeout':
-        return '타임아웃';
+        return AppLocalizations.of(context)!.timeout;
       case 'rate_limit':
-        return '요청 제한';
+        return AppLocalizations.of(context)!.requestLimit;
       case 'server_error':
-        return '서버 오류';
+        return AppLocalizations.of(context)!.serverErrorDashboard;
       case 'auth_error':
-        return '인증 오류';
+        return AppLocalizations.of(context)!.authError;
       default:
-        return '알 수 없음';
+        return AppLocalizations.of(context)!.unknown;
     }
   }
 

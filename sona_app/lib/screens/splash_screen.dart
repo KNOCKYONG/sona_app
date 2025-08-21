@@ -59,7 +59,7 @@ class _SplashScreenState extends State<SplashScreen>
     // 애니메이션 시작과 동시에 진행률 표시
     setState(() {
       _showProgress = true;
-      _loadingMessage = '앱을 시작하고 있어요';
+      _loadingMessage = AppLocalizations.of(context)!.startingApp;
       _targetProgress = 0.1;
     });
     _animateProgress();
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
       debugPrint(
           '🚀 [SplashScreen] Animation completed, starting auth check...');
 
-      _updateProgress(0.2, '사용자 정보 확인 중');
+      _updateProgress(0.2, AppLocalizations.of(context)!.checkingUserInfo);
 
       final authService = Provider.of<AuthService>(context, listen: false);
       final userService = Provider.of<UserService>(context, listen: false);
@@ -83,7 +83,7 @@ class _SplashScreenState extends State<SplashScreen>
             '🚀 [SplashScreen] Waiting for Firebase Auth initialization...');
         setState(() {
           _targetProgress = 0.3;
-          _loadingMessage = '서버 연결 중';
+          _loadingMessage = AppLocalizations.of(context)!.connectingToServer;
         });
         await Future.delayed(const Duration(seconds: 1));
 
@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen>
               '🚀 [SplashScreen] Auth user is null, waiting for auth state...');
           setState(() {
             _targetProgress = 0.4;
-            _loadingMessage = '인증 확인 중';
+            _loadingMessage = AppLocalizations.of(context)!.verifyingAuth;
           });
           await authService.waitForAuthState();
         }
@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen>
           debugPrint(
               '🔐 [SplashScreen] User is authenticated: ${authService.currentUser!.uid}');
 
-          _updateProgress(0.5, '프로필 불러오는 중');
+          _updateProgress(0.5, AppLocalizations.of(context)!.loadingProfile);
 
           // UserService가 Firebase에서 사용자 정보를 로드할 시간을 줌 (최대 5초)
           int retries = 0;
@@ -382,7 +382,7 @@ class _SplashScreenState extends State<SplashScreen>
     // 진행률 초기화
     setState(() {
       _progress = 0.1;
-      _loadingMessage = '익명 로그인 중';
+      _loadingMessage = AppLocalizations.of(context)!.anonymousLogin;
       _showProgress = true;
     });
 
@@ -426,7 +426,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     setState(() {
       _progress = 0.5;
-      _loadingMessage = '계정 생성 중';
+      _loadingMessage = AppLocalizations.of(context)!.creatingAccount;
     });
 
     final success = await authService.signInAnonymously();

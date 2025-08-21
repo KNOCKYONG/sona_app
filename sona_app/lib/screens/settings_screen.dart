@@ -79,7 +79,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             const SizedBox(height: 20),
 
             // 프로필 설정
-            _buildSectionTitle(localizations.isKorean ? '프로필 설정' : 'Profile Settings'),
+            _buildSectionTitle(localizations.profileSettings),
             _buildMenuItem(
               icon: Icons.person_outline,
               title: localizations.editProfile,
@@ -127,10 +127,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             _buildSwitchItem(
               icon: Icons.vibration_outlined,
-              title: localizations.isKorean ? '햅틱 피드백' : 'Haptic Feedback',
-              subtitle: localizations.isKorean 
-                  ? '터치 시 미세한 진동 효과' 
-                  : 'Subtle vibration on touch',
+              title: localizations.hapticFeedback,
+              subtitle: localizations.subtleVibrationOnTouch,
               value: _hapticEnabled,
               onChanged: (value) async {
                 setState(() {
@@ -183,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.language,
               title: localizations.languageSettings,
-              subtitle: localizations.isKorean ? '한국어' : 'English',
+              subtitle: localizations.isKorean ? localizations.koreanLanguage : 'English',
               onTap: () {
                 Navigator.push(
                   context,
@@ -236,11 +234,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             // 저장소 관리
-            _buildSectionTitle('저장소 관리'),
+            _buildSectionTitle(localizations.storageManagement),
             _buildMenuItem(
               icon: Icons.storage_outlined,
-              title: '이미지 캐시 관리',
-              subtitle: '페르소나 이미지 캐시를 관리합니다',
+              title: localizations.imageCacheManagement,
+              subtitle: localizations.managePersonaImageCache,
               onTap: () {
                 _showCacheManagementDialog();
               },
@@ -500,7 +498,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text('이미지 캐시 관리'),
+        title: Text(AppLocalizations.of(context)!.imageCacheManagement),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,7 +510,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              '현재 캐시 크기',
+              AppLocalizations.of(context)!.currentCacheSize,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -547,7 +545,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -555,7 +553,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               await _clearCache();
             },
             child: Text(
-              '캐시 삭제',
+              AppLocalizations.of(context)!.deleteCache,
               style: TextStyle(color: Colors.red[400]),
             ),
           ),
@@ -603,8 +601,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         // 성공 메시지
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('이미지 캐시가 삭제되었습니다'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.cacheDeleted),
             backgroundColor: Colors.green,
           ),
         );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../l10n/app_localizations.dart';
 
 /// 📊 관리자용 상담 품질 모니터링 대시보드
 ///
@@ -107,7 +108,7 @@ class _AdminQualityDashboardScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('상담 품질 모니터링'),
+        title: Text(AppLocalizations.of(context)!.consultQualityMonitoring),
         backgroundColor: const Color(0xFFFF6B9D),
         foregroundColor: Colors.white,
         actions: [
@@ -166,7 +167,7 @@ class _AdminQualityDashboardScreenState
           children: [
             Expanded(
               child: _buildStatCard(
-                '평균 품질 점수',
+                AppLocalizations.of(context)!.averageQualityScore,
                 '${(overallStats.averageQuality * 100).toStringAsFixed(1)}%',
                 overallStats.averageQuality >= 0.8
                     ? Colors.green
@@ -179,7 +180,7 @@ class _AdminQualityDashboardScreenState
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
-                '총 상담 세션',
+                AppLocalizations.of(context)!.totalConsultSessions,
                 '${overallStats.totalSessions}',
                 Colors.blue,
                 Icons.chat,
@@ -192,7 +193,7 @@ class _AdminQualityDashboardScreenState
           children: [
             Expanded(
               child: _buildStatCard(
-                '낮은 품질 응답',
+                AppLocalizations.of(context)!.lowQualityResponses,
                 '${overallStats.lowQualityCount}',
                 overallStats.lowQualityCount > 10 ? Colors.red : Colors.orange,
                 Icons.warning,
@@ -201,7 +202,7 @@ class _AdminQualityDashboardScreenState
             const SizedBox(width: 12),
             Expanded(
               child: _buildStatCard(
-                '위기 상황 감지',
+                AppLocalizations.of(context)!.crisisDetected,
                 '${overallStats.crisisDetected}',
                 Colors.red,
                 Icons.emergency,
@@ -346,8 +347,8 @@ class _AdminQualityDashboardScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '페르소나별 품질 통계',
+        Text(
+          AppLocalizations.of(context)!.personaQualityStats,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -401,7 +402,7 @@ class _AdminQualityDashboardScreenState
                       children: [
                         Expanded(
                           child: _buildMiniStat(
-                            '평균 품질',
+                            AppLocalizations.of(context)!.averageQuality,
                             '${(stats.averageQuality * 100).toStringAsFixed(1)}%',
                             stats.averageQuality >= 0.8
                                 ? Colors.green
@@ -410,14 +411,14 @@ class _AdminQualityDashboardScreenState
                         ),
                         Expanded(
                           child: _buildMiniStat(
-                            '총 응답',
+                            AppLocalizations.of(context)!.totalResponses,
                             '${stats.totalResponses}',
                             Colors.blue,
                           ),
                         ),
                         Expanded(
                           child: _buildMiniStat(
-                            '전문성 점수',
+                            AppLocalizations.of(context)!.expertiseScore,
                             '${(stats.professionalism * 100).toStringAsFixed(1)}%',
                             stats.professionalism >= 0.8
                                 ? Colors.green
@@ -462,8 +463,8 @@ class _AdminQualityDashboardScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '실시간 품질 로그',
+        Text(
+          AppLocalizations.of(context)!.realtimeQualityLog,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -593,7 +594,7 @@ class _AdminQualityDashboardScreenState
     final difference = now.difference(dateTime);
 
     if (difference.inMinutes < 1) {
-      return '방금 전';
+      return AppLocalizations.of(context)!.justNow;
     } else if (difference.inMinutes < 60) {
       return '${difference.inMinutes}분 전';
     } else if (difference.inHours < 24) {

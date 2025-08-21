@@ -3,7 +3,6 @@ import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
 import '../services/auth/auth_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/auth/user_service.dart';
@@ -93,10 +92,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
-      final scrollThreshold = 100.0; // 임계값 증가하여 민감도 감소
+      final scrollThreshold = 150.0; // 임계값 증가하여 민감도 더욱 감소 (100 -> 150)
       final paginationThreshold = 300.0; // 페이지네이션 임계값
 
-      // 사용자가 맨 아래에 가까운지 확인 (100픽셀 이내)
+      // 사용자가 맨 아래에 가까운지 확인 (150픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
 
       // 사용자가 위로 스크롤했는지 감지 (현재 위치가 맨 아래에서 멀어졌을 때)
@@ -463,8 +462,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (userId == null || userId.isEmpty) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('로그인이 필요한 서비스입니다'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.loginRequired),
             backgroundColor: Colors.red,
           ),
         );
@@ -535,16 +534,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final messageDate = DateTime(date.year, date.month, date.day);
     
     if (messageDate == today) {
-      return '오늘';
+      return AppLocalizations.of(context)!.today;
     } else if (messageDate == yesterday) {
-      return '어제';
+      return AppLocalizations.of(context)!.yesterday;
     } else if (messageDate.isAfter(today.subtract(const Duration(days: 7)))) {
       // 이번 주
-      final weekdays = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+      final weekdays = AppLocalizations.of(context)!.weekdays;
       return weekdays[date.weekday - 1];
     } else {
       // 더 오래된 날짜는 월/일 형식으로
-      return DateFormat('M월 d일').format(date);
+      return AppLocalizations.of(context)!.monthDay(date.month, date.day);
     }
   }
   
@@ -630,8 +629,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (50ms → 100ms로 증가)
-    _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
+    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (100ms → 150ms로 증가하여 안정성 향상)
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 150), () {
       if (!mounted || !_scrollController.hasClients) return;
       
       // 다시 한번 사용자 스크롤 상태 확인
@@ -649,23 +648,24 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         targetScroll = _scrollController.position.maxScrollExtent;
       }
 
-      // iOS에서는 애니메이션 대신 즉시 이동으로 통일 (충돌 방지)
-      if (Platform.isIOS || !smooth) {
-        // iOS 또는 smooth가 false일 때: 즉시 이동
+      // Android에서도 jumpTo()로 통일하여 스크롤 점핑 방지
+      // 애니메이션 스크롤은 Android에서 충돌 문제를 일으킴
+      if (Platform.isIOS || Platform.isAndroid || !smooth) {
+        // 모든 플랫폼에서 즉시 이동 사용
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
         _isNearBottom = true;
         _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
       } else {
-        // Android에서 smooth가 true일 때만: 애니메이션 스크롤
+        // 현재는 사용되지 않음 (모든 플랫폼이 jumpTo 사용)
         _scrollController.animateTo(
           targetScroll,
-          duration: const Duration(milliseconds: 200),  // 애니메이션 시간 단축
-          curve: Curves.easeOutCubic,  // 더 부드러운 커브
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
         ).then((_) {
           _isScrolling = false;
           _isNearBottom = true;
-          _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
+          _isUserScrolling = false;
         });
       }
     });
@@ -760,23 +760,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    // iOS에서는 FocusNode 리스너에서 처리하므로 여기서는 Android만 처리
-    if (Platform.isIOS) return;
-    
-    // Handle keyboard appearance immediately (Android only)
-    if (mounted) {
-      final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-      // 키보드가 올라왔고, 사용자가 맨 아래에 있으며, 사용자가 스크롤 중이 아닐 때만
-      if (bottomInset > 100 && _isNearBottom && !_isUserScrolling && !_isScrolling) {
-        // 짧은 딜레이 후 부드럽게 스크롤 (레이아웃 업데이트 대기)
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted && _scrollController.hasClients && _isNearBottom && !_isUserScrolling) {
-            // 키보드가 올라왔을 때 스크롤 (smooth 옵션으로 부드럽게)
-            _scrollToBottom(force: false, smooth: true);
-          }
-        });
-      }
-    }
+    // Android에서도 키보드 이벤트는 FocusNode 리스너에서만 처리하여 충돌 방지
+    // 이 메서드에서는 키보드 관련 스크롤을 처리하지 않음
+    return;
   }
 
   @override
@@ -906,9 +892,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           return ListView.builder(
                             key: ValueKey('chat_list_${currentPersona.id}'),
                             controller: _scrollController,
-                            physics: Platform.isIOS 
-                                ? const ClampingScrollPhysics() // iOS: bounce 효과 제거
-                                : const BouncingScrollPhysics(), // Android: 기본 동작 유지
+                            physics: const ClampingScrollPhysics(), // 모든 플랫폼에서 ClampingScrollPhysics 사용하여 안정성 향상
                             cacheExtent: 200.0, // 캐시 범위 축소로 메모리 최적화
                             addAutomaticKeepAlives: false, // 불필요한 위젯 유지 방지
                             addRepaintBoundaries: true, // 리페인트 최적화
@@ -1074,8 +1058,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                         if (_unreadAIMessageCount > 0) ...[
                                           Text(
                                             _unreadAIMessageCount == 1
-                                                ? '새 메시지 1개'
-                                                : '새 메시지 $_unreadAIMessageCount개',
+                                                ? AppLocalizations.of(context)!.newMessage
+                                                : AppLocalizations.of(context)!.newMessageCount(_unreadAIMessageCount),
                                             style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 14,
@@ -1211,8 +1195,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       } catch (e) {
         debugPrint('🔥 Error sending chat error report: $e');
         errorMessage = e.toString().contains('permission')
-            ? '권한이 없습니다. 나중에 다시 시도해 주세요.'
-            : '네트워크 오류가 발생했습니다.';
+            ? AppLocalizations.of(context)!.permissionDeniedTryLater
+            : AppLocalizations.of(context)!.networkErrorOccurred;
       }
 
       // Close loading dialog
@@ -1221,15 +1205,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // Show result message
       if (success) {
         scaffoldMessenger.showSnackBar(
-          const SnackBar(
-            content: Text('대화 오류가 성공적으로 전송되었습니다.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.chatErrorSentSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
       } else {
         scaffoldMessenger.showSnackBar(
           SnackBar(
-            content: Text('오류 전송 실패: $errorMessage'),
+            content: Text('${AppLocalizations.of(context)!.errorSendingFailed}: $errorMessage'),
             backgroundColor: Colors.red,
           ),
         );
@@ -1238,8 +1222,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       debugPrint(
           '🔍 Conditions not met - userId: $userId, currentPersona: $currentPersona');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('페르소나를 선택해 주세요.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.selectPersonaPlease),
           backgroundColor: Colors.orange,
         ),
       );
@@ -1312,19 +1296,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final shouldRestart = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('다시 대화하기'),
+        title: Text(AppLocalizations.of(context)!.restartConversation),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${currentPersona.name}와 다시 대화를 시작하시겠어요?'),
+            Text(AppLocalizations.of(context)!.restartConversationQuestion(currentPersona.name)),
             const SizedBox(height: 16),
             Row(
               children: [
                 Icon(Icons.favorite, color: Colors.red[400], size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  '하트 1개가 필요합니다',
+                  AppLocalizations.of(context)!.heartRequired,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     color: currentHearts >= 1 ? null : Colors.red[400],
@@ -1336,7 +1320,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
-                  '하트가 부족합니다. (현재: $currentHearts개)',
+                  AppLocalizations.of(context)!.notEnoughHeartsCount(currentHearts),
                   style: TextStyle(
                     color: Colors.red[400],
                     fontSize: 12,
@@ -1348,7 +1332,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: currentHearts >= 1 
@@ -1360,7 +1344,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 Icon(Icons.favorite, size: 16, color: currentHearts >= 1 ? Colors.red[400] : Colors.grey),
                 const SizedBox(width: 4),
                 Text(
-                  '하트 1개 사용하기',
+                  AppLocalizations.of(context)!.useOneHeart,
                   style: TextStyle(
                     color: currentHearts >= 1 ? Colors.red[400] : Colors.grey,
                     fontWeight: FontWeight.w600,
@@ -1407,7 +1391,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           // 성공 메시지 표시
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${currentPersona.name}와 다시 대화를 시작합니다!'),
+              content: Text(AppLocalizations.of(context)!.restartConversationWithName(currentPersona.name)),
               backgroundColor: Colors.green,
               duration: const Duration(seconds: 2),
             ),
@@ -1418,8 +1402,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           
           // 실패 메시지
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('하트 사용에 실패했습니다.'),
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.heartUsageFailed),
               backgroundColor: Colors.red,
             ),
           );
@@ -1430,8 +1414,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         
         debugPrint('Error restarting chat: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('오류가 발생했습니다. 다시 시도해주세요.'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.errorOccurredTryAgain),
             backgroundColor: Colors.red,
           ),
         );
@@ -1942,7 +1926,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          '대화 오류 전송하기',
+                          AppLocalizations.of(context)!.sendChatError,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontWeight: FontWeight.w500,
@@ -1985,7 +1969,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           ),
                           const SizedBox(width: 12),
                           Text(
-                            '다시 대화하기',
+                            AppLocalizations.of(context)!.restartConversation,
                             style: TextStyle(
                               color: Colors.green[400],
                               fontWeight: FontWeight.w500,

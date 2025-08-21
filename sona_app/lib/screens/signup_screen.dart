@@ -511,7 +511,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            '기본 정보를 입력해주세요',
+            AppLocalizations.of(context)!.enterBasicInformation,
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
@@ -666,7 +666,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: _referralEmailController,
             decoration: InputDecoration(
               labelText: '추천인 이메일 (선택)',
-              hintText: '추천해준 사람의 이메일',
+              hintText: AppLocalizations.of(context)!.referrerEmail,
               prefixIcon: const Icon(Icons.people_outline),
               helperText: '친구의 추천으로 가입하시나요?',
             ),
@@ -675,7 +675,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               // 선택 필드이므로 비어있어도 OK
               if (value != null && value.isNotEmpty) {
                 if (!value.contains('@')) {
-                  return '올바른 이메일 형식이 아닙니다';
+                  return AppLocalizations.of(context)!.invalidEmailFormat;
                 }
               }
               return null;

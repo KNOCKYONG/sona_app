@@ -1476,6 +1476,120 @@ For inquiries, please contact us through the in-app customer center or at suppor
   String get profileEditLoginRequiredMessage => isKorean 
       ? '프로필 편집을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?' 
       : 'Login is required to edit your profile.\nWould you like to go to the login screen?';
+
+  // ===== Screen-specific strings =====
+
+  String get restartConversation => isKorean ? '다시 대화하기' : 'Restart Conversation';
+  String get sendChatError => isKorean ? '대화 오류 전송하기' : 'Send Chat Error';
+  String get newMessage => isKorean ? '새 메시지' : 'New message';
+  String get newMessages => isKorean ? '새 메시지' : 'New messages';
+  String newMessageCount(int count) => isKorean ? '새 메시지 $count개' : '$count new messages';
+  String get chatErrorSentSuccessfully => isKorean ? '대화 오류가 성공적으로 전송되었습니다.' : 'Chat error has been sent successfully.';
+  String get errorSendingFailed => isKorean ? '오류 전송 실패' : 'Failed to send error';
+  String get selectPersonaPlease => isKorean ? '페르소나를 선택해 주세요.' : 'Please select a persona.';
+  String get useOneHeart => isKorean ? '하트 1개 사용하기' : 'Use 1 Heart';
+  String get heartRequired => isKorean ? '하트 1개가 필요합니다' : '1 heart is required';
+  String notEnoughHeartsCount(int count) => isKorean ? '하트가 부족합니다. (현재: $count개)' : 'Not enough hearts. (Current: $count)';
+  String restartConversationWithName(String name) => isKorean ? '$name와 다시 대화를 시작합니다!' : 'Restarting conversation with $name!';
+  String restartConversationQuestion(String name) => isKorean ? '$name와 다시 대화를 시작하시겠어요?' : 'Would you like to restart the conversation with $name?';
+  String get heartUsageFailed => isKorean ? '하트 사용에 실패했습니다.' : 'Failed to use heart.';
+  String get errorOccurredTryAgain => isKorean ? '오류가 발생했습니다. 다시 시도해주세요.' : 'An error occurred. Please try again.';
+  String get permissionDeniedTryLater => isKorean ? '권한이 없습니다. 나중에 다시 시도해 주세요.' : 'Permission denied. Please try again later.';
+  String get networkErrorOccurred => isKorean ? '네트워크 오류가 발생했습니다.' : 'A network error occurred.';
+
+  // Weekdays
+  List<String> get weekdays => isKorean 
+      ? ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일']
+      : ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  String get today => isKorean ? '오늘' : 'Today';
+  String get yesterday => isKorean ? '어제' : 'Yesterday';
+  String monthDay(int month, int day) => isKorean ? '$month월 $day일' : '${_getMonthName(month)} $day';
+  
+  String _getMonthName(int month) {
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month - 1];
+  }
+
+  // Admin Dashboard
+  String get consultQualityMonitoring => isKorean ? '상담 품질 모니터링' : 'Consultation Quality Monitoring';
+  String get averageQualityScore => isKorean ? '평균 품질 점수' : 'Average Quality Score';
+  String get totalConsultSessions => isKorean ? '총 상담 세션' : 'Total Consultation Sessions';
+  String get lowQualityResponses => isKorean ? '낮은 품질 응답' : 'Low Quality Responses';
+  String get crisisDetected => isKorean ? '위기 상황 감지' : 'Crisis Detected';
+  String get personaQualityStats => isKorean ? '페르소나별 품질 통계' : 'Persona Quality Statistics';
+  String get realtimeQualityLog => isKorean ? '실시간 품질 로그' : 'Real-time Quality Log';
+  String get averageQuality => isKorean ? '평균 품질' : 'Average Quality';
+  String get totalResponses => isKorean ? '총 응답' : 'Total Responses';
+  String get expertiseScore => isKorean ? '전문성 점수' : 'Expertise Score';
+
+  // Error Dashboard
+  String get chatErrorDashboard => isKorean ? '대화 오류 대시보드' : 'Chat Error Dashboard';
+  String get errorStats => isKorean ? '에러 통계' : 'Error Statistics';
+  String get totalErrorCount => isKorean ? '총 에러 수' : 'Total Error Count';
+  String get mostFrequentError => isKorean ? '가장 많은 에러' : 'Most Frequent Error';
+  String get mainErrorType => isKorean ? '주요 에러 타입' : 'Main Error Type';
+  String get byPersona => isKorean ? '페르소나별' : 'By Persona';
+  String get byErrorType => isKorean ? '에러 타입별' : 'By Error Type';
+  String get all => isKorean ? '전체' : 'All';
+  String get problemOccurred => isKorean ? '문제 발생' : 'Problem Occurred';
+  String get timeout => isKorean ? '타임아웃' : 'Timeout';
+  String get requestLimit => isKorean ? '요청 제한' : 'Request Limit';
+  String get serverErrorDashboard => isKorean ? '서버 오류' : 'Server Error';
+  String get authError => isKorean ? '인증 오류' : 'Authentication Error';
+  String get unknown => isKorean ? '알 수 없음' : 'Unknown';
+
+  // Navigation
+  String get exitApp => isKorean ? '앱 종료' : 'Exit App';
+  String get exitConfirmMessage => isKorean ? '정말 앱을 종료하시겠습니까?' : 'Are you sure you want to exit the app?';
+  String get exit => isKorean ? '종료' : 'Exit';
+  String get profileNav => isKorean ? '프로필' : 'Profile';
+
+  // Settings
+  String get imageCacheManagement => isKorean ? '이미지 캐시 관리' : 'Image Cache Management';
+  String get managePersonaImageCache => isKorean ? '페르소나 이미지 캐시를 관리합니다' : 'Manage persona image cache';
+  String get currentCacheSize => isKorean ? '현재 캐시 크기' : 'Current Cache Size';
+  String get deleteCache => isKorean ? '캐시 삭제' : 'Delete Cache';
+  String get cacheDeleted => isKorean ? '이미지 캐시가 삭제되었습니다' : 'Image cache has been deleted';
+  String get storageManagement => isKorean ? '저장소 관리' : 'Storage Management';
+  String get hapticFeedback => isKorean ? '햅틱 피드백' : 'Haptic Feedback';
+  String get subtleVibrationOnTouch => isKorean ? '터치 시 미세한 진동 효과' : 'Subtle vibration on touch';
+  String get profileSettings => isKorean ? '프로필 설정' : 'Profile Settings';
+  String get privacySettingsScreen => isKorean ? '개인정보 보호 설정' : 'Privacy Settings';
+  String get useSystemLanguage => isKorean ? '시스템 언어 사용' : 'Use System Language';
+  String get followDeviceLanguage => isKorean ? '기기의 언어 설정을 따릅니다' : 'Follow device language settings';
+  String get setAppInterfaceLanguage => isKorean ? '앱 인터페이스 언어를 설정합니다' : 'Set app interface language';
+  String get koreanLanguage => isKorean ? '한국어' : 'Korean';
+
+  // Persona Selection
+  String get laterButton => isKorean ? '나중에' : 'Later';
+  String get startChatButton => isKorean ? '채팅 시작' : 'Start Chat';
+  String get noPersonasToSelect => isKorean ? '선택할 소나가 없습니다' : 'No personas available';
+  String get matchedSona => isKorean ? '매칭된 소나' : 'Matched Sona';
+  String get noMatchedSonas => isKorean ? '아직 매칭된 소나가 없어요' : 'No matched Sonas yet';
+  String get startConversationLikeAFriend => isKorean ? '소나와 친구처럼 대화를 시작해보세요' : 'Start a conversation with Sona like a friend';
+
+  // Splash Screen
+  String get startingApp => isKorean ? '앱을 시작하고 있어요' : 'Starting app';
+  String get checkingUserInfo => isKorean ? '사용자 정보 확인 중' : 'Checking user info';
+  String get connectingToServer => isKorean ? '서버 연결 중' : 'Connecting to server';
+  String get verifyingAuth => isKorean ? '인증 확인 중' : 'Verifying authentication';
+  String get loadingProfile => isKorean ? '프로필 불러오는 중' : 'Loading profile';
+  String get anonymousLogin => isKorean ? '익명 로그인 중' : 'Anonymous login';
+  String get creatingAccount => isKorean ? '계정 생성 중' : 'Creating account';
+  String get preparingNewMeeting => isKorean ? '새로운 만남 준비 중' : 'Preparing new meeting';
+  String get downloadingPersonaImages => isKorean ? '새로운 페르소나 이미지를 다운로드하고 있어요' : 'Downloading new persona images';
+  String get preparingPersonas => isKorean ? '페르소나를 준비하고 있어요' : 'Preparing personas';
+
+  // Other common strings
+  String get profileSetup => isKorean ? '프로필 설정 중' : 'Setting up profile';
+  String get preparingPersonaImages => isKorean ? '페르소나 이미지를 준비하고 있어요' : 'Preparing persona images';
+
+  // Signup Screen
+  String get enterBasicInformation => isKorean ? '기본 정보를 입력해주세요' : 'Please enter basic information';
+  String get referrerEmail => isKorean ? '추천해준 사람의 이메일' : 'Referrer\'s email';
+  
+  // Bottom Navigation Labels
+  String get matching => isKorean ? '매칭' : 'Matching';
 }
 
 class _AppLocalizationsDelegate

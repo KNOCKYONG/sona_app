@@ -812,9 +812,14 @@ class UserService extends BaseService {
       } catch (e) {
         debugPrint('❌ [UserService] Error checking guest session: $e');
       }
+    } else {
+      // First time guest, initialize count to 0
+      await PreferencesManager.setInt(AppConstants.guestMessageCountKey, 0);
     }
     
-    return await PreferencesManager.getInt(AppConstants.guestMessageCountKey) ?? 0;
+    final count = await PreferencesManager.getInt(AppConstants.guestMessageCountKey) ?? 0;
+    debugPrint('📊 [UserService] Guest message count: $count');
+    return count;
   }
   
   // Increment guest message count
@@ -837,12 +842,17 @@ class UserService extends BaseService {
   
   // Get remaining messages for guest
   int getGuestRemainingMessages() {
-    if (_currentUser == null) return 0;
+    if (_currentUser == null) {
+      // If no user data yet, return the default limit
+      return AppConstants.guestDailyMessageLimit;
+    }
     
-    final limit = AppConstants.guestDailyMessageLimit;
-    final count = _currentUser!.dailyMessageCount;
+    final limit = _currentUser!.dailyMessageLimit ?? AppConstants.guestDailyMessageLimit;
+    final count = _currentUser!.dailyMessageCount ?? 0;
     
-    return limit - count;
+    // Ensure we don't return negative values
+    final remaining = limit - count;
+    return remaining > 0 ? remaining : 0;
   }
   
   // Check if guest has reached message limit

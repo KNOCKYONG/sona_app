@@ -6248,20 +6248,55 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
   bool _isAbruptTopicChange(String userMessage, List<Message> recentMessages) {
     if (recentMessages.isEmpty) return false;
 
-    // 최근 메시지들의 키워드 추출
+    // 최근 메시지들의 키워드와 문맥 추출
     final recentKeywords = <String>{};
-    for (final msg in recentMessages.take(3)) {
+    final recentContext = <String>{};
+    
+    for (final msg in recentMessages.take(5)) { // 더 많은 메시지 참조
       recentKeywords.addAll(_extractKeywords(msg.content));
+      
+      // 문맥 카테고리 추출
+      final lower = msg.content.toLowerCase();
+      if (lower.contains('회사') || lower.contains('일') || lower.contains('상사') || lower.contains('스트레스')) {
+        recentContext.add('work');
+      }
+      if (lower.contains('먹') || lower.contains('밥') || lower.contains('음식') || lower.contains('배고')) {
+        recentContext.add('food');
+      }
+      if (lower.contains('매운') || lower.contains('시원') || lower.contains('떡볶이') || lower.contains('김치')) {
+        recentContext.add('spicy_food');
+      }
     }
 
-    // 현재 메시지의 키워드
+    // 현재 메시지의 키워드와 문맥
     final currentKeywords = _extractKeywords(userMessage);
+    final currentLower = userMessage.toLowerCase();
+    final currentContext = <String>{};
+    
+    if (currentLower.contains('회사') || currentLower.contains('일') || currentLower.contains('스트레스')) {
+      currentContext.add('work');
+    }
+    if (currentLower.contains('먹') || currentLower.contains('밥') || currentLower.contains('음식')) {
+      currentContext.add('food');
+    }
+    if (currentLower.contains('매운') || currentLower.contains('시원')) {
+      currentContext.add('spicy_food');
+    }
+    
+    // 문맥이 연결되어 있으면 주제 변경이 아님
+    if (currentContext.isNotEmpty && recentContext.isNotEmpty) {
+      final commonContext = currentContext.intersection(recentContext);
+      if (commonContext.isNotEmpty) {
+        return false; // 문맥이 이어지고 있음
+      }
+    }
 
-    // 공통 키워드가 전혀 없으면 주제 변경
+    // 공통 키워드가 전혀 없고 문맥도 다르면 주제 변경
     final commonKeywords = currentKeywords.intersection(recentKeywords);
     return commonKeywords.isEmpty &&
         currentKeywords.isNotEmpty &&
-        recentKeywords.isNotEmpty;
+        recentKeywords.isNotEmpty &&
+        currentContext.intersection(recentContext).isEmpty;
   }
   
   /// 주제 일관성 점수 계산 (0-100)

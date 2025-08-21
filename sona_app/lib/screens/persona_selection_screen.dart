@@ -61,6 +61,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   bool _isMatchDialogShowing = false; // 매칭 다이얼로그 표시 상태
   List<dynamic> _originalCardSet = []; // 원본 카드 세트 보관 (재셔플용)
   bool _isLoadingMatchedPersonas = false; // Track loading state for matched personas
+  int _prepareCardItemsRetryCount = 0; // Prevent infinite recursion
 
   @override
   void initState() {
@@ -281,26 +282,50 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
     // 매칭된 페르소나가 아직 로드되지 않았다면 강제 로드
     if (!personaService.matchedPersonasLoaded) {
-      debugPrint('⚠️ Matched personas not loaded yet in _prepareCardItems!');
+      debugPrint('⚠️ Matched personas not loaded yet in _prepareCardItems! Retry count: $_prepareCardItemsRetryCount');
       
-      // Show loading state
-      setState(() {
-        _isLoadingMatchedPersonas = true;
-      });
-      
-      // Wait for matched personas to load
-      await personaService.loadMatchedPersonasIfNeeded();
-      
-      // Hide loading state
-      if (mounted) {
+      // Prevent infinite recursion - max 3 retries
+      if (_prepareCardItemsRetryCount >= 3) {
+        debugPrint('❌ Max retries reached for loading matched personas. Proceeding without them.');
+        _prepareCardItemsRetryCount = 0; // Reset for next time
+        // Continue without matched personas filtering to avoid infinite loading
+      } else {
+        _prepareCardItemsRetryCount++;
+        
+        // Show loading state
         setState(() {
-          _isLoadingMatchedPersonas = false;
+          _isLoadingMatchedPersonas = true;
         });
-        // Retry with loaded data
-        _prepareCardItems(personas);
+        
+        try {
+          // Wait for matched personas to load with timeout
+          await personaService.loadMatchedPersonasIfNeeded().timeout(
+            const Duration(seconds: 5),
+            onTimeout: () {
+              debugPrint('⚠️ Timeout loading matched personas');
+            },
+          );
+        } catch (e) {
+          debugPrint('❌ Error loading matched personas: $e');
+        }
+        
+        // Hide loading state
+        if (mounted) {
+          setState(() {
+            _isLoadingMatchedPersonas = false;
+          });
+          // Only retry if we haven't exceeded max retries
+          if (_prepareCardItemsRetryCount < 3) {
+            _prepareCardItems(personas);
+            return;
+          }
+        }
+        return;
       }
-      return;
     }
+    
+    // Reset retry counter on successful flow
+    _prepareCardItemsRetryCount = 0;
 
     final matchedIds = personaService.matchedPersonas.map((p) => p.id).toSet();
 
@@ -517,6 +542,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     debugPrint('🆔 Checking personas with userId: $currentUserId');
     debugPrint(
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] PersonaSelectionScreen checking personas...');
+    
+    // Set the user ID first to trigger state reset if needed
+    personaService.setCurrentUserId(currentUserId);
 
     // PersonaService가 이미 초기화되었는지 확인
     if (personaService.allPersonas.isNotEmpty && 
@@ -596,10 +624,14 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // PersonaService가 초기화되지 않은 경우에만 초기화
     debugPrint('⚠️ PersonaService not initialized, initializing now...');
     
+    setState(() {
+      _isLoading = true;
+    });
+    
     // 타임아웃 추가로 무한 로딩 방지
     try {
       await personaService.initialize(userId: currentUserId).timeout(
-        const Duration(seconds: 5),
+        const Duration(seconds: 10),
         onTimeout: () {
           debugPrint('⚠️ PersonaService initialization timeout - using cached data');
           // 타임아웃 시 로컬 데이터 사용
@@ -609,6 +641,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     } catch (e) {
       debugPrint('❌ Error initializing PersonaService: $e');
       // 에러 발생 시에도 계속 진행 (기존 데이터 사용)
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
 
     // 🔥 매칭된 페르소나 로드 완료 확인
@@ -622,6 +660,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       debugPrint('🔍 Currently matched persona IDs:');
       for (final persona in personaService.matchedPersonas.take(5)) {
         debugPrint('   - ${persona.id}: ${persona.name}');
+      }
+    }
+    
+    // 초기화 완료 후 카드 준비
+    if (personaService.allPersonas.isNotEmpty) {
+      _prepareCardItems(personaService.availablePersonas);
+    } else {
+      debugPrint('⚠️ No personas available after initialization');
+      // Show error message to user
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.noPersonasAvailable),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
       }
     }
   }

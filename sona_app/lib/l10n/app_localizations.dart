@@ -202,6 +202,7 @@ class AppLocalizations {
       isKorean ? '새로운 페르소나를 만나러 가볼까요?' : 'Want to meet new personas?';
   String get meetPersonas => isKorean ? '페르소나 만나기' : 'Meet Personas';
   String get allPersonasMatched => isKorean ? '모든 페르소나와 매칭되었습니다! 대화를 나눠보세요.' : 'All personas matched! Start chatting with them.';
+  String get noPersonasAvailable => isKorean ? '사용 가능한 페르소나가 없습니다. 다시 시도해주세요.' : 'No personas available. Please try again.';
   String get refreshingChatList =>
       isKorean ? '채팅 목록을 새로고침하는 중...' : 'Refreshing chat list...';
   String refreshComplete(int count) => isKorean
@@ -1433,6 +1434,12 @@ For inquiries, please contact us through the in-app customer center or at suppor
   
   // ===== Guest Mode =====
   String get guestModeTitle => isKorean ? '게스트로 체험하기' : 'Try as Guest';
+  String get guestMessageExhausted => isKorean ? '무료 메시지를 모두 사용했어요' : 'Free messages exhausted';
+  String get guestLoginPromptMessage => isKorean ? '게스트 메시지를 모두 사용하셨네요! 로그인하면 더 많은 대화를 나눌 수 있어요.' : 'You\'ve used all guest messages! Login to continue chatting.';
+  String get memberBenefits => isKorean ? '회원가입 시 100개 이상의 메시지와 하트 10개 지급!' : 'Get 100+ messages and 10 hearts when you sign up!';
+  String get loginTitle => isKorean ? '로그인' : 'Login';
+  String get continueWithGoogle => isKorean ? 'Google로 계속하기' : 'Continue with Google';
+  String get continueWithApple => isKorean ? 'Apple로 계속하기' : 'Continue with Apple';
   String get guestModeDescription => isKorean 
       ? '회원가입 없이 SONA를 체험해보세요\n• 20회 메시지 제한\n• 하트 1개 제공\n• 모든 페르소나 조회 가능' 
       : 'Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas';

@@ -58,6 +58,10 @@ class AuthService extends BaseService {
         // Save guest data before linking accounts
         guestData = await _saveGuestDataForMigration();
         debugPrint('💾 [AuthService] Saved guest data for Google sign-in migration');
+        
+        // Clear matched personas from local storage to prevent loading guest's matches
+        await PreferencesManager.remove('matched_personas');
+        debugPrint('🧹 [AuthService] Cleared guest matched personas before Google sign-in');
       }
       
       // Google 로그인 시작
@@ -318,6 +322,10 @@ class AuthService extends BaseService {
       if (await isGuestUser) {
         await _clearGuestData();
       }
+      
+      // Clear persona-related local storage to prevent stale data
+      await PreferencesManager.remove('matched_personas');
+      debugPrint('🧹 Cleared matched personas from local storage on sign out');
       
       // Google 로그인도 로그아웃
       await _googleSignIn.signOut();

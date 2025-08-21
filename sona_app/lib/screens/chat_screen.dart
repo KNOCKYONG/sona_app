@@ -390,8 +390,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         Provider.of<PurchaseService>(context, listen: false);
     final personaService = Provider.of<PersonaService>(context, listen: false);
 
+    // Check if guest user has exhausted messages
+    final isGuest = await userService.isGuestUser;
+    if (isGuest && userService.isGuestMessageLimitReached()) {
+      // Show login prompt for guest users
+      _showGuestLoginPrompt();
+      return;
+    }
+
     // Check daily message limit first
-    if (userService.isDailyMessageLimitReached()) {
+    if (!isGuest && userService.isDailyMessageLimitReached()) {
       final shouldUseHeart = await HeartUsageDialog.show(
         context: context,
         title: AppLocalizations.of(context)!.dailyLimitTitle,
@@ -1613,6 +1621,217 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  void _showGuestLoginPrompt() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Row(
+            children: [
+              Icon(
+                Icons.message_outlined,
+                color: Theme.of(context).colorScheme.primary,
+                size: 28,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  AppLocalizations.of(context)!.guestMessageExhausted,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppLocalizations.of(context)!.guestLoginPromptMessage,
+                style: const TextStyle(
+                  fontSize: 15,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.favorite,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        AppLocalizations.of(context)!.memberBenefits,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: Text(
+                AppLocalizations.of(context)!.later,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+            ),
+            FilledButton(
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+                
+                // Navigate to login screen or show login options
+                final authService = Provider.of<AuthService>(context, listen: false);
+                
+                // Show login options dialog
+                final result = await showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      title: Text(
+                        AppLocalizations.of(context)!.loginTitle,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Google Sign In
+                          _buildSocialLoginButton(
+                            icon: Icons.g_mobiledata,
+                            label: AppLocalizations.of(context)!.continueWithGoogle,
+                            onPressed: () {
+                              Navigator.of(context).pop('google');
+                            },
+                            backgroundColor: Colors.white,
+                            iconColor: Colors.red,
+                          ),
+                          const SizedBox(height: 12),
+                          // Apple Sign In (iOS only)
+                          if (Platform.isIOS)
+                            _buildSocialLoginButton(
+                              icon: Icons.apple,
+                              label: AppLocalizations.of(context)!.continueWithApple,
+                              onPressed: () {
+                                Navigator.of(context).pop('apple');
+                              },
+                              backgroundColor: Colors.black,
+                              iconColor: Colors.white,
+                              isDark: true,
+                            ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+                
+                if (result != null) {
+                  bool success = false;
+                  if (result == 'google') {
+                    success = await authService.signInWithGoogle();
+                  } else if (result == 'apple') {
+                    success = await authService.signInWithApple();
+                  }
+                  
+                  if (success && mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.loginComplete),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+                }
+              },
+              style: FilledButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(AppLocalizations.of(context)!.login),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildSocialLoginButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onPressed,
+    required Color backgroundColor,
+    required Color iconColor,
+    bool isDark = false,
+  }) {
+    return Material(
+      color: backgroundColor,
+      borderRadius: BorderRadius.circular(12),
+      elevation: 2,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 24,
+                color: iconColor,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -1894,13 +2113,14 @@ class _AppBarTitle extends StatelessWidget {
             
             return Row(
               children: [
-                Expanded(
+                Flexible(
+                  flex: 1,
                   child: _PersonaTitle(persona: persona),
                 ),
                 // Show guest indicator
                 if (isGuest) ...[
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
                       color: Colors.blue.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(12),
@@ -1908,13 +2128,13 @@ class _AppBarTitle extends StatelessWidget {
                     child: Text(
                       AppLocalizations.of(context)!.guestModeTitle.split(' ')[0], // "게스트"
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         color: Colors.blue[700],
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 4),
                 ],
                 // Show message limit indicator (for both guests and regular users when limits are low)
                 if ((isGuest && remainingMessages <= AppConstants.guestWarningThreshold) ||
@@ -2187,7 +2407,9 @@ class _MessageLimitIndicator extends StatelessWidget {
               children: [
                 // Battery fill
                 FractionallySizedBox(
-                  widthFactor: remainingMessages / 10,
+                  widthFactor: isGuest 
+                      ? (remainingMessages / AppConstants.guestDailyMessageLimit).clamp(0.0, 1.0)
+                      : (remainingMessages / 10).clamp(0.0, 1.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: indicatorColor,

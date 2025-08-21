@@ -370,12 +370,17 @@ class PersonaService extends BaseService {
   Future<void> _lazyLoadMatchedPersonas() async {
     if (_matchedPersonasLoaded || _currentUserId == null) return;
 
-    _matchedPersonasLoaded = true;
-
+    // Don't set the flag to true until loading succeeds
     try {
       await _loadMatchedPersonas();
+      _matchedPersonasLoaded = true;
+      debugPrint('✅ Matched personas loaded successfully');
     } catch (e) {
-      debugPrint('Error lazy loading matched personas: $e');
+      debugPrint('❌ Error lazy loading matched personas: $e');
+      // Reset the flag so it can be retried
+      _matchedPersonasLoaded = false;
+      // Clear any partial data
+      _matchedPersonas = [];
     }
   }
 
@@ -1927,7 +1932,31 @@ class PersonaService extends BaseService {
   }
 
   void setCurrentUserId(String userId) {
-    _currentUserId = userId;
+    // Check if user has actually changed
+    if (_currentUserId != userId) {
+      debugPrint('🔄 User ID changed from $_currentUserId to $userId');
+      
+      // Reset state when user changes
+      _currentUserId = userId;
+      
+      // Reset matched personas state to force reload for new user
+      _matchedPersonasLoaded = false;
+      _matchedPersonas = [];
+      
+      // Clear cached data that might be from previous user
+      _relationshipCache.clear();
+      _sessionSwipedPersonas.clear();
+      _shuffledAvailablePersonas = null;
+      _lastShuffleTime = null;
+      
+      // Clear local storage of matched personas to prevent loading wrong user's data
+      PreferencesManager.remove('matched_personas').then((_) {
+        debugPrint('✅ Cleared local matched personas cache for user transition');
+      });
+      
+      debugPrint('✅ PersonaService state reset for new user: $userId');
+    }
+    
     notifyListeners();
   }
   

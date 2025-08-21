@@ -918,6 +918,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       await personaService.loadMatchedPersonasIfNeeded();
       if (!mounted) return;
     }
+    
+    // Check if this is a re-join scenario (user previously left the chat)
+    final isRejoin = await personaService.hasLeftChat(persona.id);
+    debugPrint('🔍 Checking re-join status for ${persona.name}: $isRejoin');
 
     // 🔒 Double-check with Firebase to prevent duplicate matches
     final userId = await DeviceIdService.getCurrentUserId(
@@ -1097,9 +1101,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                               child: Transform.translate(
                                 offset: Offset(0, 20 * (1 - value)),
                                 child: Text(
-                                  isSuperLike
-                                      ? '${persona.name}님이 당신을\n특별히 좋아해요!'
-                                      : '${persona.name}님과 매칭되었어요!',
+                                  isRejoin
+                                      ? '${persona.name}님과\n다시 대화를 시작합니다!'
+                                      : isSuperLike
+                                          ? '${persona.name}님이 당신을\n특별히 좋아해요!'
+                                          : '${persona.name}님과 매칭되었어요!',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
@@ -1114,9 +1120,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                         const SizedBox(height: 6), // 8 -> 6
 
                         Text(
-                          isSuperLike
-                              ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요'
-                              : '소나와 친구처럼 대화를 시작해보세요',
+                          isRejoin
+                              ? '이전 대화가 그대로 남아있어요. 계속 이어가보세요!'
+                              : isSuperLike
+                                  ? '특별한 인연의 시작! 소나가 당신을 기다리고 있어요'
+                                  : '소나와 친구처럼 대화를 시작해보세요',
                           style: const TextStyle(
                             fontSize: 13, // 14 -> 13
                             color: Colors.white70,
@@ -1174,27 +1182,35 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                       final userId = authService.user?.uid ??
                                           await DeviceIdService.getDeviceId();
 
-                                      // 하트 5개 차감
-                                      final hasEnoughHearts =
-                                          await purchaseService.useHearts(5);
-                                      if (!hasEnoughHearts) {
-                                        ScaffoldMessenger.of(screenContext)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text('하트가 부족합니다.')),
-                                        );
-                                        setState(() => _isLoading = false);
-                                        return;
+                                      // Check if this is a re-join scenario
+                                      final isRejoin = await personaService.hasLeftChat(persona.id);
+                                      
+                                      if (!isRejoin) {
+                                        // Only charge hearts for new matches, not re-joins
+                                        // 하트 5개 차감
+                                        final hasEnoughHearts =
+                                            await purchaseService.useHearts(5);
+                                        if (!hasEnoughHearts) {
+                                          ScaffoldMessenger.of(screenContext)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text('하트가 부족합니다.')),
+                                          );
+                                          setState(() => _isLoading = false);
+                                          return;
+                                        }
                                       }
 
-                                      // 매칭 처리
+                                      // 매칭 처리 (재진입도 포함)
                                       final matchSuccess = await personaService
                                           .matchWithPersona(persona.id,
                                               isSuperLike: true);
 
                                       if (matchSuccess) {
                                         debugPrint(
-                                            '✅ Super like matching complete: ${persona.name}');
+                                            isRejoin 
+                                                ? '♻️ Re-joined chat with: ${persona.name}'
+                                                : '✅ Super like matching complete: ${persona.name}');
                                         // 매칭 성공 시 카드에서 즉시 제거
                                         _removeMatchedPersonaFromCards(
                                             persona.id);
@@ -1243,27 +1259,35 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                       final userId = authService.user?.uid ??
                                           await DeviceIdService.getDeviceId();
 
-                                      // 하트 1개 차감
-                                      final hasEnoughHearts =
-                                          await purchaseService.useHearts(1);
-                                      if (!hasEnoughHearts) {
-                                        ScaffoldMessenger.of(screenContext)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text('하트가 부족합니다.')),
-                                        );
-                                        setState(() => _isLoading = false);
-                                        return;
+                                      // Check if this is a re-join scenario
+                                      final isRejoin = await personaService.hasLeftChat(persona.id);
+                                      
+                                      if (!isRejoin) {
+                                        // Only charge hearts for new matches, not re-joins
+                                        // 하트 1개 차감
+                                        final hasEnoughHearts =
+                                            await purchaseService.useHearts(1);
+                                        if (!hasEnoughHearts) {
+                                          ScaffoldMessenger.of(screenContext)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                                content: Text('하트가 부족합니다.')),
+                                          );
+                                          setState(() => _isLoading = false);
+                                          return;
+                                        }
                                       }
 
-                                      // 매칭 처리
+                                      // 매칭 처리 (재진입도 포함)
                                       final matchSuccess = await personaService
                                           .matchWithPersona(persona.id,
                                               isSuperLike: false);
 
                                       if (matchSuccess) {
                                         debugPrint(
-                                            '✅ Normal like matching complete: ${persona.name}');
+                                            isRejoin 
+                                                ? '♻️ Re-joined chat with: ${persona.name}'
+                                                : '✅ Normal like matching complete: ${persona.name}');
                                         // 매칭 성공 시 카드에서 즉시 제거
                                         _removeMatchedPersonaFromCards(
                                             persona.id);

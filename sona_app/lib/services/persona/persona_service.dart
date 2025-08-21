@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/persona.dart';
 import '../../models/app_user.dart';
 import '../auth/device_id_service.dart';
+import '../auth/user_service.dart';
 import '../base/base_service.dart';
 import '../../helpers/firebase_helper.dart';
 import '../../core/constants.dart';
@@ -2147,12 +2148,106 @@ class PersonaService extends BaseService {
     }
   }
 
+  /// Check if user has left the chat with this persona
+  Future<bool> hasLeftChat(String personaId) async {
+    if (_currentUserId == null) return false;
+    
+    try {
+      // Check if user is guest
+      final userService = UserService.instance;
+      final isGuest = await userService.isGuestUser;
+      
+      if (isGuest) {
+        // Check local storage for guest users
+        return await GuestConversationService.instance.getLeftChatStatus(personaId);
+      } else {
+        // Check Firebase for authenticated users
+        final chatDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUserId)
+            .collection('chats')
+            .doc(personaId)
+            .get();
+        
+        if (chatDoc.exists) {
+          final data = chatDoc.data();
+          return data?['leftChat'] == true;
+        }
+      }
+    } catch (e) {
+      debugPrint('❌ Error checking leftChat status: $e');
+    }
+    
+    return false;
+  }
+  
+  /// Reset leftChat status to allow re-joining
+  Future<void> resetLeftChatStatus(String personaId) async {
+    if (_currentUserId == null) return;
+    
+    try {
+      // Check if user is guest
+      final userService = UserService.instance;
+      final isGuest = await userService.isGuestUser;
+      
+      if (isGuest) {
+        // Reset in local storage for guest users
+        await GuestConversationService.instance.setLeftChatStatus(personaId, false);
+        debugPrint('🔓 [PersonaService] Reset guest leftChat status for: $personaId');
+      } else {
+        // Reset in Firebase for authenticated users
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUserId!)
+            .collection('chats')
+            .doc(personaId)
+            .update({
+          'leftChat': false,
+          'rejoinedAt': FieldValue.serverTimestamp(),
+        });
+        debugPrint('🔓 [PersonaService] Reset Firebase leftChat status for: $personaId');
+      }
+    } catch (e) {
+      debugPrint('❌ Error resetting leftChat status: $e');
+      // If document doesn't exist, create it
+      if (e.toString().contains('NOT_FOUND')) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_currentUserId!)
+              .collection('chats')
+              .doc(personaId)
+              .set({
+            'leftChat': false,
+            'rejoinedAt': FieldValue.serverTimestamp(),
+          });
+          debugPrint('✅ Created chat document with leftChat: false');
+        } catch (createError) {
+          debugPrint('❌ Error creating chat document: $createError');
+        }
+      }
+    }
+  }
+
   Future<bool> matchWithPersona(String personaId,
       {bool isSuperLike = false}) async {
     // 🔥 이미 매칭된 페르소나인지 먼저 확인
     if (_matchedPersonas.any((p) => p.id == personaId)) {
       debugPrint(
-          '⚠️ Already matched with persona: $personaId - preventing duplicate match');
+          '⚠️ Already matched with persona: $personaId - checking if re-joining...');
+      
+      // Check if this is a re-join scenario (user left chat before)
+      final hasLeft = await hasLeftChat(personaId);
+      if (hasLeft) {
+        debugPrint('♻️ User is re-joining chat with persona: $personaId');
+        // Reset leftChat status to allow re-entry
+        await resetLeftChatStatus(personaId);
+        // Return true to indicate successful re-join (no heart consumed)
+        return true;
+      }
+      
+      // Not a re-join, it's a duplicate match attempt
+      debugPrint('❌ Duplicate match attempt blocked for: $personaId');
       return false;
     }
 

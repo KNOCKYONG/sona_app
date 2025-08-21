@@ -3896,6 +3896,41 @@ class ChatService extends BaseService {
     }
   }
 
+  /// 채팅방 재진입 - leftChat 상태를 리셋하고 채팅방에 다시 접근 가능하게 함
+  Future<void> rejoinChatRoom(String userId, String personaId) async {
+    try {
+      debugPrint('🔓 Rejoining chat room for persona: $personaId');
+
+      // Check if user is guest
+      final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+      
+      if (isGuest) {
+        // Guest mode: Reset in local storage
+        await GuestConversationService.instance.setLeftChatStatus(personaId, false);
+        debugPrint('💾 [ChatService] Guest rejoined chat room (local)');
+      } else {
+        // Regular user: Reset in Firebase
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .collection('chats')
+            .doc(personaId)
+            .set({
+          'leftChat': false,
+          'rejoinedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+        debugPrint('☁️ [ChatService] User rejoined chat room (Firebase)');
+      }
+
+      // Load existing chat history
+      await loadChatHistory(userId, personaId);
+
+      debugPrint('✅ Successfully rejoined chat room for persona: $personaId');
+    } catch (e) {
+      debugPrint('❌ Error rejoining chat room: $e');
+    }
+  }
+
   /// 🚨 대화 오류 리포트 전송
   Future<void> sendChatErrorReport({
     required String userId,

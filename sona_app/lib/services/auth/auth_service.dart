@@ -464,6 +464,21 @@ class AuthService extends BaseService {
     }
   }
   
+  /// Collect guest data for migration
+  Future<Map<String, dynamic>> _collectGuestData() async {
+    try {
+      // Get guest conversation data from local storage
+      final conversationsJson = await PreferencesManager.getString(AppConstants.guestChatHistoryKey);
+      if (conversationsJson != null && conversationsJson.isNotEmpty) {
+        final conversations = json.decode(conversationsJson) as Map<String, dynamic>;
+        return {'conversations': conversations};
+      }
+    } catch (e) {
+      debugPrint('❌ [AuthService] Error collecting guest data: $e');
+    }
+    return {};
+  }
+  
   /// Migrate guest data to member account
   Future<void> _migrateGuestDataToMember(String userId, Map<String, dynamic> guestData) async {
     try {

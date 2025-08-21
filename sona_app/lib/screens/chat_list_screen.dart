@@ -165,7 +165,6 @@ class _ChatListScreenState extends State<ChatListScreen>
       _leftChatStatus.clear();
       
       // Check if user is guest
-      final userService = Provider.of<UserService>(context, listen: false);
       final isGuest = await userService.isGuestUser;
       
       if (isGuest) {

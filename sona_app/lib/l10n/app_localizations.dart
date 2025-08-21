@@ -1448,6 +1448,11 @@ For inquiries, please contact us through the in-app customer center or at suppor
       : 'Would you like to keep your current chat history when signing up?';
   String get keepGuestData => isKorean ? '대화 기록 유지' : 'Keep Chat History';
   String get discardGuestData => isKorean ? '새로 시작' : 'Start Fresh';
+  String get guestModeWelcome => isKorean ? '게스트 모드로 시작합니다' : 'Starting in Guest Mode';
+  String get guestModeFailedMessage => isKorean ? '게스트 모드 시작에 실패했습니다' : 'Failed to start Guest Mode';
+  String get guestModeLimitation => isKorean 
+      ? '게스트 모드에서는 일부 기능이 제한됩니다' 
+      : 'Some features are limited in Guest Mode';
 }
 
 class _AppLocalizationsDelegate

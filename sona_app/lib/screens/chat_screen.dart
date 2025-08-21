@@ -23,6 +23,7 @@ import '../widgets/common/modern_emotion_picker.dart';
 import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
+import '../core/constants.dart';
 
 /// Optimized ChatScreen with performance improvements:
 /// - Uses ListView.builder for efficient message list

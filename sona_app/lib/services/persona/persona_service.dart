@@ -1680,7 +1680,7 @@ class PersonaService extends BaseService {
 
     // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링) - 게스트는 필터링 없음
     List<Persona> filteredPersonas = personas;
-    final isGuestUser = await _isGuestUser();
+    final isGuestUser = _isGuestUserSync();
     
     if (!isGuestUser && // Guest users see all personas
         !_currentUser!.genderAll && 
@@ -2154,8 +2154,7 @@ class PersonaService extends BaseService {
     
     try {
       // Check if user is guest
-      final userService = UserService.instance;
-      final isGuest = await userService.isGuestUser;
+      final isGuest = await _isGuestUser();
       
       if (isGuest) {
         // Check local storage for guest users
@@ -2187,8 +2186,7 @@ class PersonaService extends BaseService {
     
     try {
       // Check if user is guest
-      final userService = UserService.instance;
-      final isGuest = await userService.isGuestUser;
+      final isGuest = await _isGuestUser();
       
       if (isGuest) {
         // Reset in local storage for guest users

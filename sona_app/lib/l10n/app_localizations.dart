@@ -1453,6 +1453,14 @@ For inquiries, please contact us through the in-app customer center or at suppor
   String get guestModeLimitation => isKorean 
       ? '게스트 모드에서는 일부 기능이 제한됩니다' 
       : 'Some features are limited in Guest Mode';
+  String get loginRequiredTitle => isKorean ? '로그인이 필요합니다' : 'Login Required';
+  String get storeLoginRequiredMessage => isKorean 
+      ? '스토어 이용을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?' 
+      : 'Login is required to use the store.\nWould you like to go to the login screen?';
+  String get loginButton => isKorean ? '로그인' : 'Login';
+  String get profileEditLoginRequiredMessage => isKorean 
+      ? '프로필 편집을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?' 
+      : 'Login is required to edit your profile.\nWould you like to go to the login screen?';
 }
 
 class _AppLocalizationsDelegate

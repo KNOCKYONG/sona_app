@@ -78,6 +78,7 @@ class AppConstants {
   static const String guestSessionStartKey = 'guest_session_start';
   static const String guestMessageCountKey = 'guest_message_count';
   static const String guestChatHistoryKey = 'guest_chat_history';
+  static const String guestHeartsKey = 'guest_hearts';
 
   // Purchase Product IDs
   static const String productIdHearts30 = 'hearts_30';

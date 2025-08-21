@@ -230,6 +230,10 @@ class AuthService extends BaseService {
       // Initialize guest message count
       await PreferencesManager.setInt(AppConstants.guestMessageCountKey, 0);
       
+      // Initialize guest hearts (1 heart for guests)
+      await PreferencesManager.setInt(AppConstants.guestHeartsKey, 1);
+      debugPrint('💝 [AuthService] Guest hearts initialized: 1');
+      
       // Save default settings for guest
       if (credential.additionalUserInfo?.isNewUser == true) {
         await _saveDefaultSettings();

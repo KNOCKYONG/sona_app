@@ -384,21 +384,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   _buildMenuItem(
                     icon: Icons.edit,
                     title: AppLocalizations.of(context)!.editProfile,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ProfileEditScreen(),
-                        ),
-                      );
+                    onTap: () async {
+                      // Check if user is guest
+                      final userService = Provider.of<UserService>(context, listen: false);
+                      final isGuest = await userService.isGuestUser;
+                      
+                      if (isGuest) {
+                        // Show login required dialog for guest users
+                        final shouldNavigate = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.loginRequiredTitle),
+                            content: Text(AppLocalizations.of(context)!.profileEditLoginRequiredMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text(AppLocalizations.of(context)!.loginButton),
+                              ),
+                            ],
+                          ),
+                        );
+                        
+                        // Navigate to login screen if user confirmed
+                        if (shouldNavigate == true && mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (route) => false,
+                          );
+                        }
+                      } else {
+                        // Regular users can edit profile
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ProfileEditScreen(),
+                          ),
+                        );
+                      }
                     },
                   ),
                   _buildMenuItem(
                     icon: Icons.shopping_bag,
                     title: AppLocalizations.of(context)!.store,
                     subtitle: AppLocalizations.of(context)!.purchaseHeartsOnly,
-                    onTap: () {
-                      Navigator.pushNamed(context, '/purchase');
+                    onTap: () async {
+                      // Check if user is guest
+                      final userService = Provider.of<UserService>(context, listen: false);
+                      final isGuest = await userService.isGuestUser;
+                      
+                      if (isGuest) {
+                        // Show login required dialog for guest users
+                        final shouldNavigate = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.loginRequiredTitle),
+                            content: Text(AppLocalizations.of(context)!.storeLoginRequiredMessage),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text(AppLocalizations.of(context)!.loginButton),
+                              ),
+                            ],
+                          ),
+                        );
+                        
+                        // Navigate to login screen if user confirmed
+                        if (shouldNavigate == true && mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (route) => false,
+                          );
+                        }
+                      } else {
+                        // Regular users can access the store
+                        Navigator.pushNamed(context, '/purchase');
+                      }
                     },
                   ),
                   const SizedBox(height: 20),

@@ -1523,8 +1523,43 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
               Icons.shopping_bag_outlined,
               color: Color(0xFFFF6B9D),
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, '/purchase');
+            onPressed: () async {
+              // Check if user is guest
+              final userService = Provider.of<UserService>(context, listen: false);
+              final isGuest = await userService.isGuestUser;
+              
+              if (isGuest) {
+                // Show login required dialog for guest users
+                final shouldNavigate = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text(AppLocalizations.of(context)!.loginRequiredTitle),
+                    content: Text(AppLocalizations.of(context)!.storeLoginRequiredMessage),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, false),
+                        child: Text(AppLocalizations.of(context)!.cancel),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, true),
+                        child: Text(AppLocalizations.of(context)!.loginButton),
+                      ),
+                    ],
+                  ),
+                );
+                
+                // Navigate to login screen if user confirmed
+                if (shouldNavigate == true && mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/login',
+                    (route) => false,
+                  );
+                }
+              } else {
+                // Regular users can access the store
+                Navigator.pushNamed(context, '/purchase');
+              }
             },
           ),
         ],

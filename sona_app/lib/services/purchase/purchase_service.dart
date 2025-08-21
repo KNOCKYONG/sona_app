@@ -6,6 +6,8 @@ import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../base/base_service.dart';
+import '../../core/constants.dart';
+import '../../core/preferences_manager.dart';
 
 /// 인앱 결제 상품 ID
 class ProductIds {
@@ -395,6 +397,17 @@ class PurchaseService extends BaseService {
     debugPrint(
         '💰 [PurchaseService] Loading purchase data for user: ${user.uid}');
 
+    // Check if user is guest
+    if (user.isAnonymous) {
+      final isGuest = await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+      if (isGuest) {
+        _hearts = await PreferencesManager.getInt(AppConstants.guestHeartsKey) ?? 1;
+        debugPrint('💰 [PurchaseService] Guest hearts loaded: $_hearts');
+        notifyListeners();
+        return;
+      }
+    }
+
     try {
       final userDoc = await _firestore.collection('users').doc(user.uid).get();
       debugPrint(
@@ -436,12 +449,24 @@ class PurchaseService extends BaseService {
     }
 
     try {
-      // 먼저 로컬 상태 업데이트
+      // Check if user is guest
+      if (user.isAnonymous) {
+        final isGuest = await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+        if (isGuest) {
+          _hearts -= amount;
+          await PreferencesManager.setInt(AppConstants.guestHeartsKey, _hearts);
+          notifyListeners();
+          debugPrint('✅ Guest used $amount hearts (Remaining: $_hearts)');
+          return true;
+        }
+      }
+
+      // Regular user - update local state first
       final previousHearts = _hearts;
       _hearts -= amount;
       notifyListeners();
 
-      // Firebase 업데이트
+      // Firebase update for regular users
       await _firestore.collection('users').doc(user.uid).update({
         'hearts': FieldValue.increment(-amount),
         'updatedAt': FieldValue.serverTimestamp(),

@@ -2729,6 +2729,7 @@ class ChatService extends BaseService {
             'isLastInSequence': isLastMessage,
             'messageIndex': i,
             'totalMessages': contents.length,
+            'isTranslationPart': translatedContents != null && translatedContents.isNotEmpty,
           },
           timestamp: DateTime.now(),
         );
@@ -2739,8 +2740,16 @@ class ChatService extends BaseService {
         }
 
         // 메시지 병합 로직: 이전 AI 메시지가 불완전하게 끝났으면 병합
+        // 단, 번역 모드에서는 병합하지 않고 각각 별도의 버블로 표시
+        final isTranslationMode = translatedContents != null && translatedContents.isNotEmpty;
         final messages = _messagesByPersona[persona.id]!;
-        if (messages.isNotEmpty) {
+        
+        if (isTranslationMode) {
+          debugPrint('🌐 Translation mode active - skipping message merging for separate bubbles');
+        }
+        
+        // 번역 모드가 아닐 때만 병합 로직 적용
+        if (!isTranslationMode && messages.isNotEmpty) {
           final lastMessage = messages.last;
           if (!lastMessage.isFromUser &&
               _isIncompleteSentence(lastMessage.content)) {

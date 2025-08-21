@@ -1,0 +1,6 @@
+@echo off
+echo Setting up environment...
+set PATH=C:\Program Files\Git\cmd;%PATH%
+echo Starting Flutter development server...
+..\..\flutter\bin\flutter run -d chrome --web-port=8080
+pause

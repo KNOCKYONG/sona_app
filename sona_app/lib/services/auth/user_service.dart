@@ -8,6 +8,7 @@ import '../base/base_service.dart';
 import '../../helpers/firebase_helper.dart';
 import '../storage/local_profile_image_service.dart';
 import '../../core/constants.dart';
+import '../../core/preferences_manager.dart';
 
 class UserService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,8 +29,15 @@ class UserService extends BaseService {
           '👤 [UserService] Auth state changed: ${user != null ? 'User logged in (${user.uid})' : 'User logged out'}');
       _firebaseUser = user;
       if (user != null) {
-        debugPrint('👤 [UserService] Loading user data for: ${user.uid}');
-        await _loadUserData(user.uid);
+        // Check if this is a guest user
+        final isGuest = await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+        if (isGuest && user.isAnonymous) {
+          debugPrint('👤 [UserService] Guest user detected: ${user.uid}');
+          await _loadGuestUser(user.uid);
+        } else {
+          debugPrint('👤 [UserService] Loading user data for: ${user.uid}');
+          await _loadUserData(user.uid);
+        }
       } else {
         debugPrint('👤 [UserService] Clearing user data');
         _currentUser = null;
@@ -616,5 +624,155 @@ class UserService extends BaseService {
     return now.year != lastReset.year ||
         now.month != lastReset.month ||
         now.day != lastReset.day;
+  }
+
+  /// Guest mode support methods
+  
+  // Check if current user is a guest
+  Future<bool> get isGuestUser async {
+    if (_firebaseUser == null) return false;
+    if (!_firebaseUser!.isAnonymous) return false;
+    
+    // Check if user is marked as guest in local storage
+    return await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+  }
+  
+  // Load guest user data from local storage
+  Future<void> _loadGuestUser(String uid) async {
+    debugPrint('🧑‍💼 [UserService] Loading guest user data for: $uid');
+    
+    try {
+      // Create a temporary AppUser for guest
+      _currentUser = AppUser(
+        uid: uid,
+        email: 'guest@sona.app',
+        nickname: '게스트',
+        gender: null, // No gender for guest
+        birth: null, // No birth date for guest  
+        age: null,
+        preferredPersona: PreferredPersona(
+          ageRange: [20, 50], // Wider range for guests
+        ),
+        interests: [],
+        intro: null,
+        profileImageUrl: null,
+        createdAt: DateTime.now(),
+        purpose: null,
+        preferredMbti: null,
+        communicationStyle: null,
+        preferredTopics: null,
+        genderAll: true, // Show all genders to guests
+        dailyMessageCount: await getGuestMessageCount(),
+        dailyMessageLimit: AppConstants.guestDailyMessageLimit,
+        lastMessageCountReset: DateTime.now(),
+        referralEmail: null,
+      );
+      
+      debugPrint('✅ [UserService] Guest user created with ${_currentUser!.dailyMessageLimit} message limit');
+    } catch (e) {
+      debugPrint('❌ [UserService] Failed to create guest user: $e');
+      _currentUser = null;
+    }
+  }
+  
+  // Get guest message count from local storage
+  Future<int> getGuestMessageCount() async {
+    // Check if guest session has expired
+    final sessionStartStr = await PreferencesManager.getString(AppConstants.guestSessionStartKey);
+    if (sessionStartStr != null) {
+      try {
+        final sessionStart = DateTime.parse(sessionStartStr);
+        final now = DateTime.now();
+        final difference = now.difference(sessionStart);
+        
+        if (difference.inHours >= AppConstants.guestSessionDurationHours) {
+          // Session expired, reset count
+          await PreferencesManager.setInt(AppConstants.guestMessageCountKey, 0);
+          return 0;
+        }
+      } catch (e) {
+        debugPrint('❌ [UserService] Error checking guest session: $e');
+      }
+    }
+    
+    return await PreferencesManager.getInt(AppConstants.guestMessageCountKey) ?? 0;
+  }
+  
+  // Increment guest message count
+  Future<void> incrementGuestMessageCount() async {
+    if (!await isGuestUser) return;
+    
+    final currentCount = await getGuestMessageCount();
+    await PreferencesManager.setInt(AppConstants.guestMessageCountKey, currentCount + 1);
+    
+    // Update local state
+    if (_currentUser != null) {
+      _currentUser = _currentUser!.copyWith(
+        dailyMessageCount: currentCount + 1,
+      );
+      notifyListeners();
+    }
+    
+    debugPrint('📝 [UserService] Guest message count incremented to ${currentCount + 1}');
+  }
+  
+  // Get remaining messages for guest
+  int getGuestRemainingMessages() {
+    if (_currentUser == null) return 0;
+    
+    final limit = AppConstants.guestDailyMessageLimit;
+    final count = _currentUser!.dailyMessageCount;
+    
+    return limit - count;
+  }
+  
+  // Check if guest has reached message limit
+  bool isGuestMessageLimitReached() {
+    if (_currentUser == null) return false;
+    
+    return _currentUser!.dailyMessageCount >= AppConstants.guestDailyMessageLimit;
+  }
+  
+  // Convert guest to full member (data migration)
+  Future<bool> convertGuestToMember(AppUser newUserData) async {
+    final result = await executeWithLoading<bool>(() async {
+      if (!await isGuestUser) {
+        debugPrint('⚠️ [UserService] Not a guest user, cannot convert');
+        return false;
+      }
+      
+      try {
+        // Save guest chat history to migrate later
+        final guestChatHistory = await PreferencesManager.getJson(AppConstants.guestChatHistoryKey);
+        
+        // Create new user account in Firestore
+        await FirebaseHelper.user(newUserData.uid).set(
+          FirebaseHelper.withTimestamps({
+            ...newUserData.toFirestore(),
+            'hearts': 10, // New users get 10 hearts
+            'convertedFromGuest': true,
+            'guestConversionDate': FieldValue.serverTimestamp(),
+          }),
+        );
+        
+        // Clear guest data from local storage
+        await PreferencesManager.remove(AppConstants.isGuestUserKey);
+        await PreferencesManager.remove(AppConstants.guestSessionStartKey);
+        await PreferencesManager.remove(AppConstants.guestMessageCountKey);
+        await PreferencesManager.remove(AppConstants.guestChatHistoryKey);
+        
+        // Update current user
+        _currentUser = newUserData;
+        notifyListeners();
+        
+        debugPrint('✅ [UserService] Guest successfully converted to member');
+        return true;
+      } catch (e) {
+        debugPrint('❌ [UserService] Failed to convert guest to member: $e');
+        return false;
+      }
+    }, errorContext: 'convertGuestToMember');
+    
+    return result ?? false;
   }
 }

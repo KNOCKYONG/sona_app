@@ -16,6 +16,7 @@ import '../utils/persona_relationship_cache.dart';
 import '../../persona/persona_service.dart';
 import '../../storage/local_storage_service.dart';
 import '../../storage/cache_manager.dart';
+import '../../storage/guest_conversation_service.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../../auth/user_service.dart';
 import '../../app_info_service.dart';
@@ -308,28 +309,43 @@ class ChatService extends BaseService {
     // _cleanupPersonaTimers(personaId);
 
     await executeWithLoading(() async {
-      // Load messages and preload memory in parallel
-      final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
-      final memoryLoading = _preloadConversationMemory(userId, personaId);
-
-      // Wait for both operations but handle them separately
-      try {
-        final loadedMessages = await messagesLoading;
-        await memoryLoading; // Memory loading doesn't return data, just processes
-
-        // Store messages for this specific persona
-        _messagesByPersona[personaId] = loadedMessages;
-
-        // Update global messages if this is the current persona
-        if (_currentPersonaId == personaId) {
-          _messages = loadedMessages;  // 직접 참조 사용
+      // Check if user is guest
+      final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+      
+      List<Message> loadedMessages;
+      
+      if (isGuest) {
+        // Load from local storage for guest users
+        debugPrint('🧑‍💼 [ChatService] Loading guest conversation for persona: $personaId');
+        loadedMessages = await GuestConversationService.instance.getGuestMessages(personaId);
+        
+        // No need to preload Firebase memory for guests
+        // Instead, generate context from local data
+        final localContext = await GuestConversationService.instance.generateGuestContext(personaId);
+        if (localContext.isNotEmpty) {
+          debugPrint('💭 [ChatService] Generated local context for guest');
         }
-      } catch (e) {
-        debugPrint('⚠️ Error during parallel loading: $e');
-        _messagesByPersona[personaId] = <Message>[];
-        if (_currentPersonaId == personaId) {
-          _messages = <Message>[];
+      } else {
+        // Load from Firebase for authenticated users
+        final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
+        final memoryLoading = _preloadConversationMemory(userId, personaId);
+
+        // Wait for both operations but handle them separately
+        try {
+          loadedMessages = await messagesLoading;
+          await memoryLoading; // Memory loading doesn't return data, just processes
+        } catch (e) {
+          debugPrint('⚠️ Error during parallel loading: $e');
+          loadedMessages = <Message>[];
         }
+      }
+
+      // Store messages for this specific persona
+      _messagesByPersona[personaId] = loadedMessages;
+
+      // Update global messages if this is the current persona
+      if (_currentPersonaId == personaId) {
+        _messages = loadedMessages;  // 직접 참조 사용
       }
     }, errorContext: 'loadChatHistory');
   }
@@ -515,10 +531,23 @@ class ChatService extends BaseService {
     Map<String, dynamic>? metadata,
   }) async {
     try {
-      // Check daily message limit
-      if (_userService != null && _userService!.isDailyMessageLimitReached()) {
-        debugPrint('❌ Daily message limit reached for user: $userId');
-        return false;
+      // Check daily message limit (different for guests and members)
+      if (_userService != null) {
+        final isGuest = await _userService!.isGuestUser;
+        
+        if (isGuest) {
+          // Check guest message limit
+          if (_userService!.isGuestMessageLimitReached()) {
+            debugPrint('❌ Guest message limit reached (${AppConstants.guestDailyMessageLimit} messages)');
+            return false;
+          }
+        } else {
+          // Check regular user message limit
+          if (_userService!.isDailyMessageLimitReached()) {
+            debugPrint('❌ Daily message limit reached for user: $userId');
+            return false;
+          }
+        }
       }
 
       // 말투 모드 전환 체크 제거 (항상 반말 모드 사용)
@@ -792,8 +821,17 @@ class ChatService extends BaseService {
 
       // Increment daily message count after successful response
       if (_userService != null) {
-        await _userService!.incrementMessageCount();
-        debugPrint('✅ Daily message count incremented');
+        final isGuest = await _userService!.isGuestUser;
+        
+        if (isGuest) {
+          // Increment guest message count
+          await _userService!.incrementGuestMessageCount();
+          debugPrint('✅ Guest message count incremented');
+        } else {
+          // Increment regular message count
+          await _userService!.incrementMessageCount();
+          debugPrint('✅ Daily message count incremented');
+        }
       }
     } catch (e, stackTrace) {
       debugPrint('❌ Error generating AI response: $e');
@@ -865,22 +903,35 @@ class ChatService extends BaseService {
     }
   }
 
-  /// Queue message for batch writing to Firebase
+  /// Queue message for batch writing to Firebase or local storage
   void _queueMessageForSaving(
-      String userId, String personaId, Message message) {
-    _pendingMessages.add(_PendingMessage(
-      userId: userId,
-      personaId: personaId,
-      message: message,
-    ));
+      String userId, String personaId, Message message) async {
+    // Check if user is guest
+    final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+    
+    if (isGuest) {
+      // For guest users, save directly to local storage (no batching needed)
+      debugPrint('💾 [ChatService] Saving guest message locally');
+      await GuestConversationService.instance.saveGuestMessage(
+        personaId: personaId,
+        message: message,
+      );
+    } else {
+      // For authenticated users, use existing batch write logic
+      _pendingMessages.add(_PendingMessage(
+        userId: userId,
+        personaId: personaId,
+        message: message,
+      ));
 
-    // Start batch timer if not already running
-    _batchWriteTimer ??=
-        Timer(AppConstants.batchWriteDuration, _processBatchWrite);
+      // Start batch timer if not already running
+      _batchWriteTimer ??=
+          Timer(AppConstants.batchWriteDuration, _processBatchWrite);
 
-    // Process immediately if batch is full
-    if (_pendingMessages.length >= _maxBatchSize) {
-      _processBatchWrite();
+      // Process immediately if batch is full
+      if (_pendingMessages.length >= _maxBatchSize) {
+        _processBatchWrite();
+      }
     }
   }
 
@@ -1038,6 +1089,36 @@ class ChatService extends BaseService {
           );
           _messagesByPersona[personaId] = [startMessage];
           debugPrint('Created tutorial start message for persona $personaId');
+        }
+        notifyListeners();
+        return;
+      }
+
+      // Check if user is guest
+      final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+      
+      if (isGuest) {
+        // Load messages from local storage for guest users
+        debugPrint('🧑‍💼 [ChatService] Loading guest messages for persona: $personaId');
+        final guestMessages = await GuestConversationService.instance.getGuestMessages(personaId);
+        
+        if (guestMessages.isNotEmpty) {
+          _messagesByPersona[personaId] = guestMessages;
+          debugPrint('Loaded ${guestMessages.length} guest messages for persona $personaId');
+        } else {
+          // Create welcome message for guest if no messages exist
+          final welcomeMessage = Message(
+            id: 'guest_welcome_${personaId}_${DateTime.now().millisecondsSinceEpoch}',
+            personaId: personaId,
+            content: await _generatePersonalizedDummyMessage(
+                _personaService?.getPersonaById(personaId)),
+            type: MessageType.text,
+            isFromUser: false,
+            timestamp: DateTime.now()
+                .subtract(Duration(minutes: 1 + (personaId.hashCode % 9))),
+          );
+          _messagesByPersona[personaId] = [welcomeMessage];
+          debugPrint('Created guest welcome message for persona $personaId');
         }
         notifyListeners();
         return;

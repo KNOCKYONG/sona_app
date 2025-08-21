@@ -1414,6 +1414,32 @@ For inquiries, please contact us through the in-app customer center or at suppor
         return english;
     }
   }
+  
+  // ===== Guest Mode =====
+  String get guestModeTitle => isKorean ? '게스트로 체험하기' : 'Try as Guest';
+  String get guestModeDescription => isKorean 
+      ? '회원가입 없이 SONA를 체험해보세요\n• 20회 메시지 제한\n• 하트 1개 제공\n• 모든 페르소나 조회 가능' 
+      : 'Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas';
+  String guestMessageRemaining(int count) => isKorean 
+      ? '게스트 메시지 $count회 남음' 
+      : '$count guest messages remaining';
+  String get guestLimitReached => isKorean 
+      ? '게스트 체험이 끝났습니다.\n회원가입하고 무제한으로 대화하세요!' 
+      : 'Guest trial ended.\nSign up for unlimited conversations!';
+  String get convertToMember => isKorean ? '회원가입 하기' : 'Sign Up';
+  String get continueAsGuest => isKorean ? '게스트로 계속하기' : 'Continue as Guest';
+  String get guestModeWarning => isKorean 
+      ? '게스트 모드는 24시간 동안 유지되며,\n이후 데이터가 삭제됩니다.' 
+      : 'Guest mode lasts for 24 hours,\nafter which data will be deleted.';
+  String get guestModeBanner => isKorean ? '게스트 모드' : 'Guest Mode';
+  String get signUpFromGuest => isKorean 
+      ? '지금 회원가입하고 모든 기능을 이용하세요!' 
+      : 'Sign up now to access all features!';
+  String get guestDataMigration => isKorean 
+      ? '회원가입 시 현재 대화 기록을 보존하시겠습니까?' 
+      : 'Would you like to keep your current chat history when signing up?';
+  String get keepGuestData => isKorean ? '대화 기록 유지' : 'Keep Chat History';
+  String get discardGuestData => isKorean ? '새로 시작' : 'Start Fresh';
 }
 
 class _AppLocalizationsDelegate

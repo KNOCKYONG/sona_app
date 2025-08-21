@@ -33,6 +33,12 @@ class AppConstants {
   static const int recentMessagesLimit = 50;
   static const int dailyMessageLimit = 100;
   static const int dailyMessageWarningThreshold = 10;
+  
+  // Guest Mode Limits
+  static const int guestDailyMessageLimit = 20;
+  static const int guestInitialHearts = 1;
+  static const int guestSessionDurationHours = 24;
+  static const int guestWarningThreshold = 5;
 
   // Token Limits
   static const int maxInputTokens = 3000;
@@ -66,6 +72,12 @@ class AppConstants {
   static const String useSystemLanguageKey = 'use_system_language';
   static const String cachedUserKey = 'cached_user';
   static const String cachedSubscriptionKey = 'cached_subscription';
+  
+  // Guest Mode Storage Keys
+  static const String isGuestUserKey = 'is_guest_user';
+  static const String guestSessionStartKey = 'guest_session_start';
+  static const String guestMessageCountKey = 'guest_message_count';
+  static const String guestChatHistoryKey = 'guest_chat_history';
 
   // Purchase Product IDs
   static const String productIdHearts30 = 'hearts_30';

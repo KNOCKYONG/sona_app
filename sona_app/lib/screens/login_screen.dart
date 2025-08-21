@@ -280,6 +280,67 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
 
+  Future<void> _handleGuestMode() async {
+    debugPrint('🧑‍💼 [LoginScreen] Starting guest mode...');
+    
+    setState(() {
+      _isLoading = true;
+      _currentError = null;
+    });
+
+    try {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final userService = Provider.of<UserService>(context, listen: false);
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      
+      debugPrint('🧑‍💼 [LoginScreen] Signing in as guest...');
+      final success = await authService.signInAsGuest();
+      
+      if (success && mounted) {
+        debugPrint('✅ [LoginScreen] Guest sign-in successful');
+        
+        // Wait for UserService to create guest user
+        await Future.delayed(const Duration(milliseconds: 500));
+        
+        // Initialize PersonaService for guest (no filtering)
+        try {
+          debugPrint('🔄 [LoginScreen] Initializing PersonaService for guest');
+          await personaService.initialize(userId: null); // null for guest
+          debugPrint('✅ [LoginScreen] PersonaService initialized for guest');
+        } catch (e) {
+          debugPrint('⚠️ [LoginScreen] PersonaService initialization error for guest: $e');
+        }
+        
+        // Show guest mode information
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.guestModeWelcome),
+            backgroundColor: Colors.blue,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+        
+        debugPrint('✅ [LoginScreen] Navigating to main screen as guest');
+        Navigator.of(context).pushNamedAndRemoveUntil('/main', (route) => false);
+      } else if (mounted) {
+        setState(() {
+          _currentError = authService.error ?? AppLocalizations.of(context)!.guestModeFailedMessage;
+        });
+      }
+    } catch (e) {
+      debugPrint('❌ [LoginScreen] Guest mode error: $e');
+      if (mounted) {
+        setState(() {
+          _currentError = AppLocalizations.of(context)!.guestModeFailedMessage;
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -658,6 +719,43 @@ class _LoginScreenState extends State<LoginScreen>
               ),
             ),
           ),
+          const SizedBox(height: 12),
+          
+          // Guest mode button
+          SizedBox(
+            height: 48,
+            child: OutlinedButton(
+              onPressed: _isLoading ? null : _handleGuestMode,
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                side: BorderSide(
+                  color: Colors.blue[400]!,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.person_outline,
+                    size: 20,
+                    color: Colors.blue[600],
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppLocalizations.of(context)!.guestModeTitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.blue[600],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -757,6 +855,45 @@ class _LoginScreenState extends State<LoginScreen>
               borderRadius: BorderRadius.circular(12),
             ),
           ),
+        ),
+        const SizedBox(height: 16),
+        
+        // Guest mode button
+        OutlinedButton.icon(
+          onPressed: _isLoading ? null : _handleGuestMode,
+          icon: Icon(
+            Icons.person_outline,
+            size: 20,
+            color: Colors.blue[600],
+          ),
+          label: Text(
+            AppLocalizations.of(context)!.guestModeTitle,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[600],
+            ),
+          ),
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size(double.infinity, 56),
+            side: BorderSide(
+              color: Colors.blue[400]!,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          AppLocalizations.of(context)!.guestModeLimitation,
+          style: TextStyle(
+            fontSize: 12,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.grey[400]
+                : Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
         ),
       ],
     );

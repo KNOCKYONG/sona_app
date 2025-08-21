@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../core/preferences_manager.dart';
+import '../../core/constants.dart';
 import '../base/base_service.dart';
+import '../storage/guest_conversation_service.dart';
+import '../../models/message.dart';
 
 class AuthService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -16,6 +20,15 @@ class AuthService extends BaseService {
   User? get user => _user;
   User? get currentUser => _user; // Firebase 호환성을 위한 별칭
   bool get isAuthenticated => _user != null;
+  
+  // Guest mode support
+  Future<bool> get isGuestUser async {
+    if (_user == null) return false;
+    if (!_user!.isAnonymous) return false;
+    
+    // Check if user is marked as guest in local storage
+    return await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+  }
 
   AuthService() {
     _auth.authStateChanges().listen((User? user) {
@@ -32,6 +45,16 @@ class AuthService extends BaseService {
 
   Future<bool> signInWithGoogle() async {
     final result = await executeWithLoading<bool>(() async {
+      // Check if current user is guest before Google sign-in
+      final wasGuest = await isGuestUser;
+      Map<String, dynamic>? guestData;
+      
+      if (wasGuest) {
+        // Save guest data before linking accounts
+        guestData = await _saveGuestDataForMigration();
+        debugPrint('💾 [AuthService] Saved guest data for Google sign-in migration');
+      }
+      
       // Google 로그인 시작
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
@@ -58,6 +81,13 @@ class AuthService extends BaseService {
       if (userCredential.additionalUserInfo?.isNewUser == true) {
         await _saveDefaultSettings();
         await _saveUserProfile();
+        
+        // Migrate guest data if user was previously a guest
+        if (wasGuest && guestData != null && _user != null) {
+          await _migrateGuestDataToMember(_user!.uid, guestData);
+          await _clearGuestData();
+          debugPrint('✅ [AuthService] Guest data migrated successfully via Google sign-in');
+        }
       }
 
       return true;
@@ -78,6 +108,44 @@ class AuthService extends BaseService {
 
       return true;
     }, errorContext: 'signInAnonymously');
+
+    return result ?? false;
+  }
+
+  /// Sign in as guest user with limited features
+  Future<bool> signInAsGuest() async {
+    final result = await executeWithLoading<bool>(() async {
+      debugPrint('🔵 [AuthService] Starting guest sign-in...');
+      
+      // Sign in anonymously through Firebase
+      final credential = await _auth.signInAnonymously();
+      _user = credential.user;
+      
+      if (_user == null) {
+        debugPrint('❌ [AuthService] Guest sign-in failed: no user');
+        return false;
+      }
+      
+      // Mark as guest user in local storage
+      await PreferencesManager.setBool(AppConstants.isGuestUserKey, true);
+      
+      // Set guest session start time
+      await PreferencesManager.setString(
+        AppConstants.guestSessionStartKey,
+        DateTime.now().toIso8601String(),
+      );
+      
+      // Initialize guest message count
+      await PreferencesManager.setInt(AppConstants.guestMessageCountKey, 0);
+      
+      // Save default settings for guest
+      if (credential.additionalUserInfo?.isNewUser == true) {
+        await _saveDefaultSettings();
+      }
+      
+      debugPrint('✅ [AuthService] Guest sign-in successful: ${_user!.uid}');
+      return true;
+    }, errorContext: 'signInAsGuest');
 
     return result ?? false;
   }
@@ -114,6 +182,16 @@ class AuthService extends BaseService {
 
   Future<bool> signUpWithEmail(String email, String password) async {
     final result = await executeWithLoading<bool>(() async {
+      // Check if current user is guest before signup
+      final wasGuest = await isGuestUser;
+      Map<String, dynamic>? guestData;
+      
+      if (wasGuest) {
+        // Save guest data before linking accounts
+        guestData = await _saveGuestDataForMigration();
+        debugPrint('💾 [AuthService] Saved guest data for migration');
+      }
+      
       final credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
@@ -124,6 +202,13 @@ class AuthService extends BaseService {
       // 첫 회원가입 시 기본 설정 저장
       await _saveDefaultSettings();
       await _saveUserProfile();
+      
+      // Migrate guest data if user was previously a guest
+      if (wasGuest && guestData != null && _user != null) {
+        await _migrateGuestDataToMember(_user!.uid, guestData);
+        await _clearGuestData();
+        debugPrint('✅ [AuthService] Guest data migrated successfully');
+      }
 
       return true;
     }, errorContext: 'signUpWithEmail');
@@ -133,11 +218,44 @@ class AuthService extends BaseService {
 
   Future<void> signOut() async {
     await executeWithLoading(() async {
+      // Clear guest data if signing out from guest mode
+      if (await isGuestUser) {
+        await _clearGuestData();
+      }
+      
       // Google 로그인도 로그아웃
       await _googleSignIn.signOut();
       await _auth.signOut();
       _user = null;
     }, errorContext: 'signOut', showError: false);
+  }
+  
+  /// Clear all guest-related data from local storage
+  Future<void> _clearGuestData() async {
+    await PreferencesManager.remove(AppConstants.isGuestUserKey);
+    await PreferencesManager.remove(AppConstants.guestSessionStartKey);
+    await PreferencesManager.remove(AppConstants.guestMessageCountKey);
+    await PreferencesManager.remove(AppConstants.guestChatHistoryKey);
+    debugPrint('🧹 [AuthService] Guest data cleared');
+  }
+  
+  /// Check if guest session has expired (24 hours)
+  Future<bool> isGuestSessionExpired() async {
+    if (!await isGuestUser) return false;
+    
+    final sessionStartStr = await PreferencesManager.getString(AppConstants.guestSessionStartKey);
+    if (sessionStartStr == null) return true;
+    
+    try {
+      final sessionStart = DateTime.parse(sessionStartStr);
+      final now = DateTime.now();
+      final difference = now.difference(sessionStart);
+      
+      return difference.inHours >= AppConstants.guestSessionDurationHours;
+    } catch (e) {
+      debugPrint('❌ [AuthService] Error checking guest session expiry: $e');
+      return true;
+    }
   }
 
   Future<void> _saveDefaultSettings() async {
@@ -240,5 +358,99 @@ class AuthService extends BaseService {
   bool isValidEmail(String email) {
     return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
         .hasMatch(email);
+  }
+  
+  /// Save guest data before migration
+  Future<Map<String, dynamic>?> _saveGuestDataForMigration() async {
+    try {
+      final guestData = await GuestConversationService.instance.getAllGuestDataForMigration();
+      debugPrint('📦 [AuthService] Collected guest data for migration');
+      return guestData;
+    } catch (e) {
+      debugPrint('❌ [AuthService] Error saving guest data: $e');
+      return null;
+    }
+  }
+  
+  /// Migrate guest data to member account
+  Future<void> _migrateGuestDataToMember(String userId, Map<String, dynamic> guestData) async {
+    try {
+      final conversations = guestData['conversations'] as Map<String, dynamic>?;
+      if (conversations == null || conversations.isEmpty) {
+        debugPrint('ℹ️ [AuthService] No guest conversations to migrate');
+        return;
+      }
+      
+      final batch = FirebaseFirestore.instance.batch();
+      
+      // Migrate each persona's conversation
+      for (final entry in conversations.entries) {
+        final personaId = entry.key;
+        final conversationData = entry.value as Map<String, dynamic>;
+        
+        // Get messages
+        final messages = conversationData['messages'] as List<dynamic>?;
+        if (messages != null && messages.isNotEmpty) {
+          // Save messages to Firebase
+          for (final messageData in messages) {
+            final message = Message.fromJson(messageData);
+            final messageRef = FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('chats')
+                .doc(personaId)
+                .collection('messages')
+                .doc(message.id);
+            
+            batch.set(messageRef, message.toJson());
+          }
+        }
+        
+        // Migrate memories to Firebase (if you have a memories collection)
+        final memories = conversationData['memories'] as List<dynamic>?;
+        if (memories != null && memories.isNotEmpty) {
+          for (final memory in memories) {
+            final memoryRef = FirebaseFirestore.instance
+                .collection('users')
+                .doc(userId)
+                .collection('conversation_memories')
+                .doc();
+            
+            batch.set(memoryRef, {
+              ...memory,
+              'userId': userId,
+              'personaId': personaId,
+            });
+          }
+        }
+        
+        // Migrate relationship data
+        final relationship = conversationData['relationship'] as Map<String, dynamic>?;
+        if (relationship != null) {
+          final relationshipRef = FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('relationships')
+              .doc(personaId);
+          
+          batch.set(relationshipRef, {
+            ...relationship,
+            'migratedFromGuest': true,
+            'migrationDate': FieldValue.serverTimestamp(),
+          });
+        }
+      }
+      
+      // Commit all changes
+      await batch.commit();
+      debugPrint('✅ [AuthService] Guest data migrated to Firebase for ${conversations.length} personas');
+      
+      // Clear local guest data after successful migration
+      await GuestConversationService.instance.clearAllGuestConversations();
+      
+    } catch (e) {
+      debugPrint('❌ [AuthService] Error migrating guest data: $e');
+      // Don't throw - allow signup to continue even if migration fails
+    }
   }
 }

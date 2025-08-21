@@ -3,10 +3,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../models/persona.dart';
 import '../../../models/message.dart';
 import '../../../core/constants.dart';
 import '../../../core/constants/chat_patterns.dart';
+import '../../../core/preferences_manager.dart';
 import '../utils/persona_relationship_cache.dart';
 import '../prompts/persona_prompt_builder.dart';
 import '../security/security_aware_post_processor.dart';
@@ -22,6 +24,7 @@ import '../intelligence/memory_network_service.dart';
 import '../intelligence/realtime_feedback_service.dart';
 import 'openai_service.dart';
 import '../../relationship/negative_behavior_system.dart';
+import '../../storage/guest_conversation_service.dart';
 import '../analysis/user_speech_pattern_analyzer.dart';
 import '../analysis/pattern_analyzer_service.dart';
 import '../analysis/advanced_pattern_analyzer.dart';
@@ -1210,14 +1213,26 @@ class ChatOrchestrator {
     required Persona persona,
   }) async {
     try {
-      final memory = await _memoryService.buildSmartContext(
-        userId: userId,
-        personaId: personaId,
-        recentMessages: recentMessages,
-        persona: persona,
-        maxTokens: 1500, // 500 -> 1500으로 증가하여 더 많은 대화 기억
-      );
-      return memory;
+      // Check if user is a guest
+      final currentUser = FirebaseAuth.instance.currentUser;
+      final isGuest = currentUser?.isAnonymous ?? false;
+      
+      if (isGuest) {
+        // Use local context generation for guest users
+        final localContext = await GuestConversationService.instance.generateGuestContext(personaId);
+        debugPrint('🎭 [ChatOrchestrator] Using local context for guest user');
+        return localContext;
+      } else {
+        // Use Firebase-based memory for registered users
+        final memory = await _memoryService.buildSmartContext(
+          userId: userId,
+          personaId: personaId,
+          recentMessages: recentMessages,
+          persona: persona,
+          maxTokens: 1500, // 500 -> 1500으로 증가하여 더 많은 대화 기억
+        );
+        return memory;
+      }
     } catch (e) {
       debugPrint('⚠️ Failed to build context memory: $e');
       return '';

@@ -211,9 +211,12 @@ class PersonaService extends BaseService {
         _allPersonas.where((persona) => _hasR2Image(persona)).toList();
     debugPrint('  Personas with R2 images: ${totalWithImages.length}');
 
-    // 성별 필터링 적용
+    // 성별 필터링 적용 (게스트는 필터링 없음)
     List<Persona> filteredPersonas = totalWithImages;
+    final isGuestUser = _isGuestUserSync();
+    
     if (_currentUser != null &&
+        !isGuestUser && // Guest users see all personas
         !_currentUser!.genderAll &&
         _currentUser!.gender != null) {
       final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
@@ -224,7 +227,7 @@ class PersonaService extends BaseService {
           '  After gender filter (showing $targetGender only): ${filteredPersonas.length}');
     } else {
       debugPrint(
-          '  No gender filter applied (genderAll: ${_currentUser?.genderAll})');
+          '  No gender filter applied (genderAll: ${_currentUser?.genderAll}, isGuest: $isGuestUser)');
     }
 
     // 매칭된 페르소나 ID 목록
@@ -1651,9 +1654,13 @@ class PersonaService extends BaseService {
       return personas;
     }
 
-    // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링) - 이것만 필터링
+    // 1. 성별 필터링 (Gender All이 아닌 경우 이성만 필터링) - 게스트는 필터링 없음
     List<Persona> filteredPersonas = personas;
-    if (!_currentUser!.genderAll && _currentUser!.gender != null) {
+    final isGuestUser = await _isGuestUser();
+    
+    if (!isGuestUser && // Guest users see all personas
+        !_currentUser!.genderAll && 
+        _currentUser!.gender != null) {
       // 사용자가 남성이면 여성 페르소나만, 여성이면 남성 페르소나만
       final targetGender = _currentUser!.gender == 'male' ? 'female' : 'male';
       filteredPersonas =
@@ -1665,7 +1672,7 @@ class PersonaService extends BaseService {
           '   Filtered from ${personas.length} to ${filteredPersonas.length} personas');
     } else {
       debugPrint(
-          '🌈 Gender All enabled or no gender specified - showing all personas');
+          '🌈 Gender All enabled, no gender specified, or guest user - showing all personas (isGuest: $isGuestUser)');
     }
 
     // 2. 액션한 페르소나 제외는 이미 availablePersonas에서 처리됨
@@ -1898,6 +1905,27 @@ class PersonaService extends BaseService {
   void setCurrentUserId(String userId) {
     _currentUserId = userId;
     notifyListeners();
+  }
+  
+  /// Check if current user is a guest (synchronous version for getters)
+  bool _isGuestUserSync() {
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) return false;
+    if (!auth.currentUser!.isAnonymous) return false;
+    
+    // For sync context, check if currentUser is a guest (email check)
+    return _currentUser?.email == 'guest@sona.app';
+  }
+  
+  /// Check if current user is a guest (async version)
+  Future<bool> _isGuestUser() async {
+    final auth = FirebaseAuth.instance;
+    if (auth.currentUser == null) return false;
+    if (!auth.currentUser!.isAnonymous) return false;
+    
+    // Check if user is marked as guest in local storage
+    final isGuest = await PreferencesManager.getBool(AppConstants.isGuestUserKey) ?? false;
+    return isGuest;
   }
 
   Future<void> selectPersona(Persona persona, {bool clearPrevious = true}) async {

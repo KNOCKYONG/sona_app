@@ -51,9 +51,18 @@ class _SplashScreenState extends State<SplashScreen>
       parent: _animationController,
       curve: const Interval(0.2, 0.8, curve: Curves.elasticOut),
     ));
-
-    _startAnimation();
   }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_animationStarted) {
+      _animationStarted = true;
+      _startAnimation();
+    }
+  }
+
+  bool _animationStarted = false;
 
   void _startAnimation() async {
     // 애니메이션 시작과 동시에 진행률 표시

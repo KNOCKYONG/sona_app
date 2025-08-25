@@ -62,8 +62,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   List<dynamic> _originalCardSet = []; // 원본 카드 세트 보관 (재셔플용)
   bool _isLoadingMatchedPersonas = false; // Track loading state for matched personas
   int _prepareCardItemsRetryCount = 0; // Prevent infinite recursion
-  bool _isHandlingLifecycle = false;  // 생명주기 이벤트 중복 처리 방지
-  bool _isLoadingPersonas = false;  // personas 로딩 중복 방지
 
   @override
   void initState() {
@@ -134,31 +132,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      // 이미 처리 중이면 무시
-      if (_isHandlingLifecycle) {
-        return;
-      }
+      // App resumed from background
+      debugPrint('🔄 App resumed');
       
-      _isHandlingLifecycle = true;
-      debugPrint('🔄 App resumed - checking personas');
-      
+      // 캐시 확인 - 이미 로드된 데이터가 있으면 리로드하지 않음
       final personaService = Provider.of<PersonaService>(context, listen: false);
-      
-      // 데이터가 이미 있으면 재로드하지 않음
-      if (personaService.allPersonas.isNotEmpty && _cardItems.isNotEmpty) {
-        debugPrint('✅ Personas already loaded, skipping');
-        _isHandlingLifecycle = false;
-        return;
-      }
-      
-      // 10분 이상 지났을 때만 리로드
-      if (DateTime.now().difference(_lastLoadTime).inMinutes > 10) {
+      if (personaService.availablePersonas.isEmpty || 
+          DateTime.now().difference(_lastLoadTime).inMinutes > 10) {
+        // 10분 이상 지났거나 데이터가 없을 때만 리로드
         _lastLoadTime = DateTime.now();
-        _loadPersonas().then((_) {
-          _isHandlingLifecycle = false;
-        });
-      } else {
-        _isHandlingLifecycle = false;
+        _loadPersonas();
       }
 
       // 🆕 백그라운드에서 새로운 이미지 체크
@@ -288,20 +271,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
   // 카드 아이템 리스트 준비 (Personas + Tips)
   void _prepareCardItems(List<Persona> personas) async {
-    // 중복 호출 방지
-    if (_isPreparingCards) {
-      debugPrint('⚠️ Already preparing cards, skipping');
-      return;
-    }
-    
-    // personas가 없으면 조용히 리턴 (로그 스팸 방지)
     if (personas.isEmpty) {
-      if (_cardItems.isEmpty) {  // 처음 한 번만 로그
-        debugPrint('⚠️ No personas to prepare');
-      }
       _cardItems = [];
       _cardsKey = '';
-      _isPreparingCards = false;  // 플래그 리셋 중요!
       return;
     }
 
@@ -552,32 +524,13 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     debugPrint('💡 Tip card positions: $tipPositions');
     debugPrint(
         '👥 Persona positions: ${personaPositions.take(5).join(', ')}...');
-    
-    // 플래그 리셋 - 중요!
-    _isPreparingCards = false;
   }
 
   Future<void> _loadPersonas() async {
-    // 이미 로딩 중이면 무시
-    if (_isLoadingPersonas) {
-      debugPrint('⚠️ Already loading personas, skipping');
-      return;
-    }
-    
-    final personaService = Provider.of<PersonaService>(context, listen: false);
-    
-    // 이미 데이터가 있으면 무시
-    if (personaService.allPersonas.isNotEmpty && !_isLoading) {
-      debugPrint('✅ Personas already available: ${personaService.allPersonas.length}');
-      _prepareCardItems(personaService.availablePersonas);
-      return;
-    }
-    
-    _isLoadingPersonas = true;
-    
     // 로드 시간 업데이트
     _lastLoadTime = DateTime.now();
     
+    final personaService = Provider.of<PersonaService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);
 
@@ -726,9 +679,6 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         );
       }
     }
-    
-    // 로딩 플래그 리셋
-    _isLoadingPersonas = false;
   }
 
   void _showTutorialExitDialog() {
@@ -1673,7 +1623,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         builder: (context, personaService, child) {
           // 🔥 Progressive loading - 로딩 중에도 이전 데이터 표시
           final personas = personaService.availablePersonasProgressive;
-          // 디버그 로그 제거 - 무한 루프 방지
+          debugPrint(
+              '📊 [PersonaSelectionScreen] Available personas: ${personas.length}');
 
           // 이미지 프리로드 중일 때 표시
           if (_isPreloadingImages) {
@@ -1766,15 +1717,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
           // 카드 아이템 리스트 준비 (Personas + Tips) - 무한 루프 방지
           if (!_isPreparingCards &&
-              personas.isNotEmpty &&  // 빈 리스트일 때는 무시
               (!listEquals(_lastPersonas, personas) || _cardItems.isEmpty)) {
             _isPreparingCards = true;
             _lastPersonas = List.from(personas); // 새 List 인스턴스로 복사
-            
-            // 한 번만 로그
-            if (personas.length > 0) {
-              debugPrint('🔄 Personas loaded: ${personas.length} personas');
-            }
+            debugPrint(
+                '🔄 Personas changed, preparing ${personas.length} personas...');
 
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted && _isPreparingCards) {

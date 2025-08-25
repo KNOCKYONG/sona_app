@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -45,6 +46,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   String _selectedEmotion = 'neutral';
   bool _isUserScrolling = false;
+  double _lastScrollPosition = 0.0; // 마지막 스크롤 위치 추적
+  static const double _minScrollDelta = 2.0; // 최소 스크롤 감지 임계값 (5.0 -> 2.0으로 완화)
   bool _isNearBottom = true;
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
@@ -86,43 +89,75 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   void _setupScrollListener() {
     _scrollController.addListener(() {
-      // 스크롤 중이거나 로딩 중이면 리스너 무시 (충돌 방지)
-      if (_isScrolling || _isLoadingMore) return;
+      // 로딩 중이면 리스너 무시 (_isScrolling은 체크하지 않음)
+      if (_isLoadingMore) {
+        debugPrint('📌 Scroll listener skipped - loading more messages');
+        return;
+      }
       
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
-      final scrollThreshold = 150.0; // 임계값 증가하여 민감도 더욱 감소 (100 -> 150)
+      final scrollThreshold = 100.0; // 임계값 감소하여 더 빠른 반응 (200 -> 100)
       final paginationThreshold = 300.0; // 페이지네이션 임계값
 
-      // 사용자가 맨 아래에 가까운지 확인 (150픽셀 이내)
+      // 스크롤 방향 감지 (최소 움직임 필터링)
+      final scrollDelta = currentScroll - _lastScrollPosition;
+      final isSignificantScroll = scrollDelta.abs() > _minScrollDelta;
+      
+      // 의미 있는 스크롤만 처리
+      if (!isSignificantScroll) {
+        // 너무 작은 움직임은 무시하지만 로그는 남김
+        return;
+      }
+      
+      final isScrollingUp = scrollDelta < 0;
+      final isScrollingDown = scrollDelta > 0;
+      _lastScrollPosition = currentScroll;
+
+      // 사용자가 맨 아래에 가까운지 확인 (200픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
 
-      // 사용자가 위로 스크롤했는지 감지 (현재 위치가 맨 아래에서 멀어졌을 때)
-      // 단, 로딩 중이 아닐 때만 상태 변경
-      if (!isNearBottom && _isNearBottom && !_isLoadingMore) {
+      // 사용자가 위로 스크롤했는지 감지
+      if (isScrollingUp && !_isLoadingMore) {
         // 사용자가 위로 스크롤함 - 자동 스크롤 차단
-        setState(() {
+        if (!_isUserScrolling) {
           _isUserScrolling = true;
-          _isNearBottom = false;
-        });
-      } else if (isNearBottom && !_isNearBottom) {
-        // 사용자가 다시 맨 아래로 왔음
-        setState(() {
-          _isNearBottom = true;
-          _isUserScrolling = false;  // 맨 아래로 왔으니 자동 스크롤 허용
+          debugPrint('📌 User started scrolling up - auto-scroll disabled');
+        }
+      }
+      
+      // 맨 아래 근처 상태 업데이트 - setState 최소화
+      final wasNearBottom = _isNearBottom;
+      final hadUnreadMessages = _unreadAIMessageCount > 0;
+      
+      if (isNearBottom != _isNearBottom) {
+        _isNearBottom = isNearBottom;
+        
+        if (isNearBottom) {
+          // 맨 아래로 왔음
+          if (isScrollingDown) {
+            // 아래로 스크롤해서 맨 아래 도달 시만 자동 스크롤 허용
+            _isUserScrolling = false;
+            debugPrint('📌 Reached bottom - auto-scroll enabled');
+          }
           // 읽지 않은 메시지 카운트 초기화
           if (_unreadAIMessageCount > 0) {
             _unreadAIMessageCount = 0;
           }
-        });
+        }
+        
+        // 상태가 실제로 변경되었을 때만 setState 호출
+        if (wasNearBottom != _isNearBottom || hadUnreadMessages) {
+          setState(() {});
+        }
       }
 
       // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내)
-      // 스크롤 속도를 체크하여 의도적인 스크롤일 때만 로드
+      // _isScrolling 체크 제거하여 항상 로드 가능하게 함
       if (currentScroll <= minScroll + paginationThreshold && 
-          !_isLoadingMore && 
-          !_isScrolling) {
+          !_isLoadingMore) {
+        debugPrint('📌 Loading more messages at top');
         _loadMoreMessages();
       }
     });
@@ -135,19 +170,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final hasFocus = _focusNode.hasFocus;
       // 포커스가 새로 활성화될 때만 스크롤 (조건 강화)
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
-        // 사용자가 이미 맨 아래에 있고 스크롤 중이 아닐 때만 스크롤
+        // 사용자가 위로 스크롤하지 않았고, 맨 아래에 있을 때만 스크롤
         if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
           // 키보드가 올라올 때 약간의 딜레이로 레이아웃 업데이트 대기
-          Future.delayed(const Duration(milliseconds: 150), () {
+          Future.delayed(const Duration(milliseconds: 100), () {
             if (mounted && _scrollController.hasClients && _focusNode.hasFocus && 
                 _isNearBottom && !_isUserScrolling) {
               final bottomInset = MediaQuery.of(context).viewInsets.bottom;
               if (bottomInset > 0) {
                 // 키보드가 올라왔을 때만 스크롤
+                debugPrint('📌 Keyboard shown - checking auto-scroll conditions');
                 _scrollToBottom(force: false, smooth: true);
               }
             }
           });
+        } else {
+          debugPrint('📌 Focus gained but user is scrolling - skip auto-scroll');
         }
       }
       wasHasFocus = hasFocus;
@@ -181,8 +219,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           final scrollDiff = newMaxScroll - currentMaxScroll;
 
           // Jump to maintain position (add the height of new messages)
+          // 엣지 케이스: 스크롤 위치 보정 시 약간의 여유 추가
           if (scrollDiff > 0) {
-            _scrollController.jumpTo(currentScrollPosition + scrollDiff);
+            final adjustedPosition = math.min(
+              currentScrollPosition + scrollDiff,
+              _scrollController.position.maxScrollExtent
+            );
+            _scrollController.jumpTo(adjustedPosition);
           }
         }
       });
@@ -252,8 +295,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       try {
         // Only load chat history if user is authenticated
         if (_userId!.isNotEmpty) {
-          await chatService.loadChatHistory(
-              _userId!, personaService.currentPersona!.id);
+          // leftChat 상태 체크
+          final hasLeft = await personaService.hasLeftChat(personaService.currentPersona!.id);
+          if (hasLeft) {
+            debugPrint('♻️ User is entering a left chat room, rejoining...');
+            // 자동으로 rejoin 처리
+            await chatService.rejoinChatRoom(_userId!, personaService.currentPersona!.id);
+            await personaService.resetLeftChatStatus(personaService.currentPersona!.id);
+          } else {
+            // 정상적으로 채팅 히스토리 로드
+            await chatService.loadChatHistory(
+                _userId!, personaService.currentPersona!.id);
+          }
 
           // 🔵 채팅방 진입 시 모든 페르소나 메시지를 읽음으로 표시
           await chatService.markAllMessagesAsRead(
@@ -507,9 +560,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         });
       }
       
+      // 사용자가 메시지를 보낼 때는 대화에 참여 중이므로 자동 스크롤 허용
+      _isUserScrolling = false;  // 사용자가 메시지를 보내면 스크롤 상태 재설정
+      
       // 스크롤은 _scrollToBottom 메서드로 통일
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
+          debugPrint('📌 User sent message - scrolling to bottom');
           _scrollToBottom(force: true, smooth: true);
         }
       });
@@ -604,20 +661,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _scrollToBottom({bool force = false, bool smooth = false}) {
-    // 사용자가 위로 스크롤 중이고 강제가 아니면 자동 스크롤 차단
+    // 사용자가 위로 스크롤 중이고 강제가 아니면 자동 스크롤 완전 차단
     if (_isUserScrolling && !force) {
-      debugPrint('📌 User is scrolling up, skip auto-scroll');
+      debugPrint('📌 User is scrolling - auto-scroll blocked');
       return;
     }
     
     // 맨 아래에 있지 않고 강제가 아니면 자동 스크롤 차단  
     if (!_isNearBottom && !force && _hasInitiallyScrolled) {
-      debugPrint('📌 Not near bottom, skip auto-scroll');
+      debugPrint('📌 Not near bottom and not forced - auto-scroll blocked');
       return;
     }
     
     // 이미 스크롤 중이면 무시 (중복 스크롤 방지)
     if (_isScrolling && !force) {
+      debugPrint('📌 Already scrolling - skip duplicate request');
       return;
     }
     
@@ -629,12 +687,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (100ms → 150ms로 증가하여 안정성 향상)
-    _scrollDebounceTimer = Timer(const Duration(milliseconds: 150), () {
+    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (200ms → 100ms로 감소하여 빠른 반응)
+    _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
       if (!mounted || !_scrollController.hasClients) return;
       
-      // 다시 한번 사용자 스크롤 상태 확인
-      if (_isUserScrolling && !force) return;
+      // 다시 한번 사용자 스크롤 상태 확인 - 더 엄격하게
+      if (_isUserScrolling && !force) {
+        debugPrint('📌 User still scrolling after debounce - abort auto-scroll');
+        return;
+      }
       
       _isScrolling = true;
       
@@ -648,25 +709,41 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         targetScroll = _scrollController.position.maxScrollExtent;
       }
 
-      // Android에서도 jumpTo()로 통일하여 스크롤 점핑 방지
-      // 애니메이션 스크롤은 Android에서 충돌 문제를 일으킴
-      if (Platform.isIOS || Platform.isAndroid || !smooth) {
-        // 모든 플랫폼에서 즉시 이동 사용
+      // 플랫폼별 스크롤 처리
+      // 안드로이드는 항상 jumpTo 사용 (안정성)
+      if (Platform.isAndroid || force) {
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
         _isNearBottom = true;
-        _isUserScrolling = false;  // 스크롤 완료 후 사용자 스크롤 상태 초기화
-      } else {
-        // 현재는 사용되지 않음 (모든 플랫폼이 jumpTo 사용)
+        if (force) {
+          _isUserScrolling = false;
+        }
+        debugPrint('📌 Android/Force: jumpTo used');
+      } else if (Platform.isIOS && smooth) {
+        // iOS에서만 부드러운 애니메이션 사용
         _scrollController.animateTo(
           targetScroll,
           duration: const Duration(milliseconds: 200),
-          curve: Curves.easeOutCubic,
+          curve: Curves.easeOutQuart,
         ).then((_) {
           _isScrolling = false;
           _isNearBottom = true;
-          _isUserScrolling = false;
+          debugPrint('📌 iOS: animateTo completed');
+        }).catchError((error) {
+          // 에러 발생 시에도 반드시 _isScrolling을 false로
+          _isScrolling = false;
+          _isNearBottom = true;
+          debugPrint('📌 iOS: animateTo failed, falling back to jumpTo: $error');
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(targetScroll);
+          }
         });
+      } else {
+        // 기타 경우 jumpTo 사용
+        _scrollController.jumpTo(targetScroll);
+        _isScrolling = false;
+        _isNearBottom = true;
+        debugPrint('📌 Default: jumpTo used');
       }
     });
   }
@@ -863,14 +940,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 // 키보드가 올라와 있으면 딜레이를 더 줌
                                 final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
                                 final delay = keyboardHeight > 0 
-                                    ? const Duration(milliseconds: 200)
-                                    : const Duration(milliseconds: 100);
+                                    ? const Duration(milliseconds: 100)
+                                    : const Duration(milliseconds: 50);
                                 
                                 Future.delayed(delay, () {
-                                  if (mounted && _isNearBottom && !_isUserScrolling) {
+                                  // 다시 확인: 사용자가 여전히 위로 스크롤하지 않는 경우만
+                                  if (mounted && _isNearBottom && !_isUserScrolling && !_isScrolling) {
+                                    debugPrint('📌 New message - auto-scrolling to bottom');
                                     _scrollToBottom(force: false, smooth: true);
+                                  } else if (_isUserScrolling) {
+                                    debugPrint('📌 New message - user scrolling, skip auto-scroll');
                                   }
                                 });
+                              } else if (_isUserScrolling) {
+                                // 사용자가 위로 스크롤 중이면 알림만 표시하고 자동 스크롤 안 함
+                                debugPrint('📌 New message received but user is scrolling - no auto-scroll');
                               }
                             }
                           }
@@ -879,10 +963,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           final isTyping =
                               chatService.isPersonaTyping(currentPersona.id);
                           // 실제로 false -> true로 변경될 때만 스크롤
-                          if (isTyping && !_previousIsTyping && _isNearBottom && !_isUserScrolling) {
+                          if (isTyping && !_previousIsTyping) {
                             _previousIsTyping = isTyping;
-                            // 사용자가 맨 아래에 있고 스크롤 중이 아닐 때만 스크롤
-                            _scrollToBottom(force: false, smooth: true);
+                            // 사용자가 맨 아래에 있고 위로 스크롤하지 않을 때만 스크롤
+                            if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+                              debugPrint('📌 Typing started - auto-scrolling');
+                              _scrollToBottom(force: false, smooth: true);
+                            } else if (_isUserScrolling) {
+                              debugPrint('📌 Typing started but user is scrolling - skip auto-scroll');
+                            }
                           } else if (!isTyping && _previousIsTyping) {
                             // 타이핑이 끝났을 때 상태만 업데이트
                             _previousIsTyping = isTyping;
@@ -892,7 +981,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           return ListView.builder(
                             key: ValueKey('chat_list_${currentPersona.id}'),
                             controller: _scrollController,
-                            physics: const ClampingScrollPhysics(), // 모든 플랫폼에서 ClampingScrollPhysics 사용하여 안정성 향상
+                            physics: Platform.isIOS 
+                                ? const BouncingScrollPhysics() // iOS에서 자연스러운 바운스
+                                : const ClampingScrollPhysics(), // Android에서 안정적인 클램핑
                             cacheExtent: 200.0, // 캐시 범위 축소로 메모리 최적화
                             addAutomaticKeepAlives: false, // 불필요한 위젯 유지 방지
                             addRepaintBoundaries: true, // 리페인트 최적화
@@ -1859,12 +1950,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   .length;
               debugPrint(
                   '📊 After marking as read - Unread count: $unreadAfter');
-
-              // 추가 딜레이를 주어 확실히 업데이트되도록 함
-              await Future.delayed(const Duration(milliseconds: 300));
-
+              
               // Wait to ensure update is complete
-              await Future.delayed(const Duration(milliseconds: 100));
+              await Future.delayed(const Duration(milliseconds: 400));
             }
 
             // iOS는 일반 pop, Android는 pushReplacement 사용

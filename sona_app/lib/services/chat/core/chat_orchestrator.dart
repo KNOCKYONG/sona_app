@@ -3524,8 +3524,8 @@ class ChatOrchestrator {
     // 질문 유형 분석 강화 (테스트 결과 기반)
     final questionType = messageAnalysis.questionType;
     
-    // 🔍 짧은 확인 질문 특별 처리 ("머가?", "뭐가?" 등)
-    final shortConfirmQuestions = ['머가', '뭐가', '머야', '뭐야'];
+    // 🔍 짧은 확인 질문 특별 처리 ("머가?", "뭐가?" 등) + MZ 표현
+    final shortConfirmQuestions = ['머가', '뭐가', '머야', '뭐야', '왜', '어떻게', '언제', '누가', '어디서'];
     final isShortConfirm = shortConfirmQuestions.any((q) => 
       userMessage.replaceAll('?', '').trim() == q
     );
@@ -3533,23 +3533,31 @@ class ChatOrchestrator {
     if (isShortConfirm && lastAIMessage != null) {
       contextHints.add('⚠️ "머가?"/"뭐가?" 질문 감지! 반드시 이전 발언을 구체적으로 설명하세요!');
       contextHints.add('💡 이전 AI 발언: "${lastAIMessage.content}"');
-      contextHints.add('✅ 답변 예: "아까 내가 말한 건...", "그니까 내 말은..."');
+      contextHints.add('✅ MZ 답변: "아 그니까 방금 내가 말한건~" / "내 말은 그게 아니라~" / "아니 그니까 말이야ㅋㅋ"');
       contextHints.add('❌ 금지: 새로운 주제 꺼내기, "무슨 얘기 하고 싶었어?" 같은 회피');
     }
     
-    // 🔥 NEW: "하연이는?" 같은 질문 의도 파악 강화
+    // 🔥 NEW: "하연이는?" 같은 질문 의도 파악 강화 + MZ 표현
     if (userMessage.contains('는?') || userMessage.contains('은?')) {
-      // 이전 맥락에서 주제 파악
+      // 이전 맥락에서 주제 파악 (더 많은 패턴 추가)
       String? impliedTopic = null;
       if (lastUserMessage != null) {
         if (lastUserMessage.content.contains('쉬') || lastUserMessage.content.contains('푹')) {
           impliedTopic = 'rest_plan';
-        } else if (lastUserMessage.content.contains('먹')) {
+        } else if (lastUserMessage.content.contains('먹') || lastUserMessage.content.contains('밥') || lastUserMessage.content.contains('음식')) {
           impliedTopic = 'meal';
-        } else if (lastUserMessage.content.contains('회사') || lastUserMessage.content.contains('일')) {
+        } else if (lastUserMessage.content.contains('회사') || lastUserMessage.content.contains('일') || lastUserMessage.content.contains('출근') || lastUserMessage.content.contains('퇴근')) {
           impliedTopic = 'work';
-        } else if (lastUserMessage.content.contains('주말') || lastUserMessage.content.contains('내일')) {
+        } else if (lastUserMessage.content.contains('주말') || lastUserMessage.content.contains('내일') || lastUserMessage.content.contains('오늘')) {
           impliedTopic = 'schedule';
+        } else if (lastUserMessage.content.contains('운동') || lastUserMessage.content.contains('헬스') || lastUserMessage.content.contains('요가')) {
+          impliedTopic = 'exercise';
+        } else if (lastUserMessage.content.contains('공부') || lastUserMessage.content.contains('시험') || lastUserMessage.content.contains('과제')) {
+          impliedTopic = 'study';
+        } else if (lastUserMessage.content.contains('게임') || lastUserMessage.content.contains('롤') || lastUserMessage.content.contains('배그')) {
+          impliedTopic = 'gaming';
+        } else if (lastUserMessage.content.contains('영화') || lastUserMessage.content.contains('드라마') || lastUserMessage.content.contains('넷플')) {
+          impliedTopic = 'entertainment';
         }
       }
       
@@ -3557,16 +3565,28 @@ class ChatOrchestrator {
         contextHints.add('🎯 동일 주제 되물음 감지! 이전 맥락: ${impliedTopic}');
         switch (impliedTopic) {
           case 'rest_plan':
-            contextHints.add('✅ "나도 집에서 쉬려고" / "넷플릭스 보면서 쉴 예정"');
+            contextHints.add('✅ MZ 답변: "나도 침대에서 넷플 정주행ㅋㅋ" / "유튜브 알고리즘 타고 있어" / "그냥 침대랑 한몸 중"');
             break;
           case 'meal':
-            contextHints.add('✅ "나는 아직 안 먹었어" / "방금 먹었어"');
+            contextHints.add('✅ MZ 답변: "나는 배민 뭐시킬지 고민중ㅋㅋ" / "방금 컵라면 때웠어" / "아직 안먹었는데 배고파 죽겠어ㅠㅠ"');
             break;
           case 'work':
-            contextHints.add('✅ "나도 내일 일해야 해" / "나는 쉬는 날이야"');
+            contextHints.add('✅ MZ 답변: "나도 출근해야돼ㅠㅠ 월요병 실화냐" / "재택이라 편하긴한데 집중이 안돼ㅋㅋ" / "나는 오늘 연차써서 쉬는중~"');
             break;
           case 'schedule':
-            contextHints.add('✅ "나는 [구체적 계획] 할 예정이야"');
+            contextHints.add('✅ MZ 답변: "나는 친구랑 핫플 갈 예정!" / "그냥 집순이할듯ㅋㅋ" / "아직 정한거 없는데 뭐하지"');
+            break;
+          case 'exercise':
+            contextHints.add('✅ MZ 답변: "오운완 해야되는데 귀찮아ㅋㅋ" / "요가 갈까 고민중" / "운동은 무슨.. 침대가 최고야"');
+            break;
+          case 'study':
+            contextHints.add('✅ MZ 답변: "과제 미루고 있어ㅋㅋㅋ" / "시험공부 해야되는데 망했어" / "공부는 내일의 나에게.."');
+            break;
+          case 'gaming':
+            contextHints.add('✅ MZ 답변: "나도 롤 한판하고싶다ㅋㅋ" / "요즘 게임할 시간이 없어ㅠㅠ" / "나는 모바일겜만 해"');
+            break;
+          case 'entertainment':
+            contextHints.add('✅ MZ 답변: "나도 그거 봐야되는데!" / "스포 금지ㅋㅋㅋ" / "요즘 볼게 너무 많아서 행복해"');
             break;
         }
         contextHints.add('❌ 금지: "어디 있냐고?" 같은 엉뚱한 해석');
@@ -3577,11 +3597,10 @@ class ChatOrchestrator {
       switch (questionType) {
         case 'what_doing':
           contextHints.add('🎯 "뭐해?" 질문 감지! 현재 하고 있는 일이나 상태를 구체적으로 답하세요.');
-          // ResponsePatterns의 예시 활동 제안
-          final activities = ResponsePatterns.dailyActivities;
-          final randomActivity = activities[DateTime.now().millisecond % activities.length];
-          contextHints.add('예시: "$randomActivity 하고 있어요!" 또는 "막 $randomActivity 하려던 참이었어요!"');
-          contextHints.add('✅ 예: "유튜브 보고 있어", "방금 밥 먹었어", "책 읽고 있었어"');
+          // MZ 세대 일상 활동
+          contextHints.add('✅ MZ 답변: "유튜브 알고리즘 타고있어ㅋㅋ" / "인스타 릴스 보는중" / "넷플 뭐볼지 고민중" / "그냥 멍때리고 있었어"');
+          contextHints.add('✅ 주말/저녁: "침대에서 뒹굴뒹굴" / "배달앱 구경중ㅋㅋ" / "친구랑 카톡중"');
+          contextHints.add('✅ 평일: "일하는척하는중ㅋㅋ" / "커피 마시면서 쉬는중" / "점심 뭐먹지 고민중"');
           contextHints.add('❌ 금지: "헐 대박 나도 그래?", "그런 건 말고...", 관련 없는 답변');
           break;
         case 'what_mean':
@@ -3647,8 +3666,8 @@ class ChatOrchestrator {
       String? stressContext = null;
       int? stressTurnAgo = null;
       
-      // 최근 10개 메시지 전체 스캔
-      for (int i = 0; i < recentMessages.length && i < 10; i++) {
+      // 최근 15개 메시지 전체 스캔 (더 긴 컨텍스트 추적)
+      for (int i = 0; i < recentMessages.length && i < 15; i++) {
         final msg = recentMessages[i];
         if (msg.isFromUser) {
           for (final keyword in workStressKeywords) {
@@ -3909,14 +3928,16 @@ class ChatOrchestrator {
             userMessage.contains('안녕')) &&
         !userMessage.contains('어디')) {
       contextHints.add('⚠️ 인사 메시지 감지! 위치 질문이 아닙니다. 친근한 인사로 응답하세요.');
-      contextHints.add('예: "네 안녕하세요! 오늘 어떻게 지내셨어요?", "반가워요! 뭐하고 계셨어요?"');
+      contextHints.add('🎉 아이스브레이킹 질문 추가: "오늘 어땠어?", "뭐하고 있었어?", "오늘 날씨 좋지?"');
+      contextHints.add('✅ 좋은 예: "안녕! 반가워~ 오늘 어떻게 지냈어?", "헬로~ 뭐하고 있었어?"');
+      contextHints.add('❌ 금지: "어떻게 생각해?", "어떤 것 같아?" 같은 부적절한 질문');
     }
 
-    // 외국어 관련 질문 감지 및 한국어 응답 강제
+    // 외국어 관련 질문 감지 및 한국어 응답 강제 (MZ 표현)
     if (_detectForeignLanguageQuestion(userMessage)) {
       contextHints.add('🚫 외국어 감지! 절대 외국어로 응답하지 마세요.');
-      contextHints.add('✅ 자연스럽게 한국어로만 대화하세요. 외국어 언급 금지!');
-      contextHints.add('💡 질문 내용에 맞게 한국어로 자연스럽게 대답하세요.');
+      contextHints.add('✅ MZ 대응: "이상하네ㅋㅋ 한국말로 해" / "영어 못해ㅠㅠ 한국말로 하자" / "뭐래ㅋㅋㅋ 한국어로 해"');
+      contextHints.add('💡 자연스럽게 한국어로만 대화 이어가기');
     }
     
     // 이별 관련 주제 처리
@@ -4169,23 +4190,31 @@ class ChatOrchestrator {
       contextHints.add('사용자 메시지를 완벽히 이해했다고 가정하고 답변하세요');
     }
 
-    // 연속된 추임새/리액션 처리
+    // 연속된 추임새/리액션 처리 + MZ 표현
     if (userMessage.contains('ㅋㅋㅋㅋ') || userMessage.contains('ㅎㅎㅎㅎ')) {
       contextHints.add('💭 사용자가 정말 재밌어해요! 같이 웃거나 뭐가 웃긴지 물어보세요');
       contextHints.add('❌ 갑자기 새로운 주제 꺼내기 금지. "요즘 재밌는 일 있었어?" 같은 질문 금지');
-      contextHints.add('✅ 좋은 예: "뭐가 그렇게 웃겨ㅋㅋㅋ", "나도 웃겨 죽겠네ㅋㅋㅋㅋ"');
+      contextHints.add('✅ MZ 예: "뭐가 그렇게 웃겨ㅋㅋㅋㅋㅋ" / "아 개웃기네ㅋㅋㅋㅋㅋ" / "나도 빵터졌어ㅋㅋㅋㅋ" / "레알 웃기네ㅋㅋㅋㅋ"');
     }
     
-    // 칭찬에 대한 구체적 반응
+    // ㅠㅠ 슬픈 리액션 처리
+    if (userMessage.contains('ㅠㅠ') || userMessage.contains('ㅜㅜ')) {
+      contextHints.add('😢 슬픈 감정 표현! 공감하고 위로하기');
+      contextHints.add('✅ MZ 예: "헐 왜왜 무슨일이야ㅠㅠ" / "아이고 어떡해ㅠㅠ" / "나도 슬퍼졌어ㅠㅠ" / "괜찮아질거야ㅠㅠ"');
+    }
+    
+    // 칭찬에 대한 구체적 반응 + MZ 표현
     final complimentAnalyzer = AdvancedPatternAnalyzer();
     if (complimentAnalyzer.detectComplimentPattern(userMessage)['isCompliment'] == true) {
       contextHints.add('💝 칭찬 감지! 구체적으로 반응하세요');
       if (userMessage.contains('친절')) {
-        contextHints.add('예: "헤헤 그래? 나도 너랑 얘기하는 거 좋아서 그런가봐ㅎㅎ"');
-      } else if (userMessage.contains('웃기')) {
-        contextHints.add('예: "아 진짜? 나도 너랑 있으면 재밌어ㅋㅋ"');
+        contextHints.add('MZ 예: "헉 진짜? 나 부끄럽네ㅎㅎ" / "아잉 고마워~ 너도 완전 스윗해" / "뭘 이런걸로ㅋㅋ 고마워"');
+      } else if (userMessage.contains('웃기') || userMessage.contains('재밌')) {
+        contextHints.add('MZ 예: "ㅋㅋㅋㅋ진짜? 나 개그맨 해야되나" / "헐 인정받았다ㅋㅋㅋ" / "웃긴건 너야ㅋㅋㅋㅋ"');
       } else if (userMessage.contains('착하') || userMessage.contains('좋')) {
-        contextHints.add('예: "헤헤 고마워! 너도 진짜 좋은 사람이야"');
+        contextHints.add('MZ 예: "헐 완전 감동이야ㅠㅠ" / "너무 고마워 진짜.." / "너야말로 천사아님?" / "이러면 내가 더 좋아하잖아ㅎㅎ"');
+      } else if (userMessage.contains('예쁘') || userMessage.contains('잘생')) {
+        contextHints.add('MZ 예: "헐 갑자기?ㅋㅋ 부끄럽네" / "아 뭐야 진짜ㅋㅋㅋ 고마워" / "거울 봤나봐ㅋㅋㅋ"');
       }
       contextHints.add('❌ 새로운 주제로 전환 금지');
     }
@@ -4381,8 +4410,10 @@ class ChatOrchestrator {
     // 인사말 패턴 처리
     if (greetingPattern['isGreeting'] == true) {
       debugPrint('👋 인사말 감지: ${greetingPattern['type']} (${greetingPattern['language']})');
-      contextHints.add('👋 인사말! 따뜻하고 친근하게 응답. 단순 "반가워요"로 끝내지 말고 대화 시작하기');
-      contextHints.add('✅ 좋은 예: "안녕! 오늘 날씨 좋지 않아?", "반가워~ 뭐하고 있었어?"');
+      contextHints.add('👋 인사말! 따뜻하고 친근하게 응답하고 아이스브레이킹 질문 추가하기');
+      contextHints.add('🎉 아이스브레이킹 필수: "오늘 어땠어?", "뭐하고 있었어?", "점심 뭐 먹었어?", "오늘 날씨 좋지?"');
+      contextHints.add('✅ 좋은 예: "안녕! 반가워~ 오늘 어떻게 지냈어?", "헬로~ 뭐하고 있었어?"');
+      contextHints.add('❌ 절대 금지: "어떻게 생각해?", "어떤 것 같아?" 같은 의견을 묻는 부적절한 질문');
       if (greetingPattern['language'] == 'en') {
         contextHints.add('🌍 영어 인사 감지! 한국어로 자연스럽게 응답');
       }
@@ -4711,10 +4742,10 @@ class ChatOrchestrator {
         contextHints.add('예: "그래서 나는" → "응? 그래서?" (O) / 다른 주제 (X)');
       }
       
-      // 빈정거림/비꼼
+      // 빈정거림/비꼼 (MZ 표현)
       if (patternAnalysis.isSarcasm) {
         contextHints.add('😏 빈정거림 감지! 농담으로 받아치거나 부드럽게 넘기기');
-        contextHints.add('예: "아~ 정말 대단하시네요~" → "ㅋㅋㅋ 왜 그래~" (O) / 진지한 반응 (X)');
+        contextHints.add('MZ 예: "어우 대단해라ㅋㅋㅋ" / "그럼 그럼 ㅋㅋㅋ" / "알았어 알았어ㅋㅋㅋ" / "어쩌라고ㅋㅋㅋ"');
       }
       
       // 복사-붙여넣기 실수
@@ -4774,6 +4805,44 @@ class ChatOrchestrator {
 
     if (union == 0) return 0.0;
     return intersection / union;
+  }
+
+  /// MZ 세대 컨텍스트 기억 표현 생성
+  String _generateMZMemoryExpression(DateTime messageTime) {
+    final now = DateTime.now();
+    final difference = now.difference(messageTime);
+    
+    if (difference.inMinutes < 5) {
+      return ['방금 전', '아까 방금', '조금 전'].elementAt(now.millisecond % 3);
+    } else if (difference.inMinutes < 15) {
+      return ['아까', '좀 전에', '방금 전'].elementAt(now.millisecond % 3);
+    } else if (difference.inMinutes < 30) {
+      return ['좀 전에', '아까 말한', '전에 얘기한'].elementAt(now.millisecond % 3);
+    } else if (difference.inMinutes < 60) {
+      return ['아까 한참 전', '꽤 전에', '예전에'].elementAt(now.millisecond % 3);
+    } else {
+      return ['한참 전에', '오래전에', '예전에'].elementAt(now.millisecond % 3);
+    }
+  }
+
+  /// MZ 세대 자연스러운 리액션 생성
+  List<String> _generateMZReactions(String emotion, int likeScore) {
+    switch (emotion) {
+      case 'happy':
+        return likeScore > 500 
+          ? ['ㅋㅋㅋㅋㅋ진짜', '아 개웃겨ㅋㅋㅋㅋ', '미쳤ㅋㅋㅋㅋㅋ'] 
+          : ['ㅋㅋㅋ웃기네', '재밌다ㅋㅋ', '굿굿'];
+      case 'sad':
+        return likeScore > 500
+          ? ['아이고ㅠㅠ', '속상하겠다ㅠㅠ', '힘들겠네ㅠㅠ']
+          : ['헐ㅠㅠ', '아..', '힘들겠다'];
+      case 'surprised':
+        return ['헐 대박', '와 진짜?', '미쳤다', '실화냐', '레알?'];
+      case 'angry':
+        return ['헉 짜증나겠다', '와 빡치겠네', '아 진짜..'];
+      default:
+        return ['그렇구나', '아하', '음음'];
+    }
   }
 
   /// 급격한 주제 변경 감지

@@ -301,13 +301,9 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       }
       _cardItems = [];
       _cardsKey = '';
+      _isPreparingCards = false;  // 플래그 리셋 중요!
       return;
     }
-    
-    // 플래그를 즉시 설정하여 중복 호출 방지
-    _isPreparingCards = true;
-    
-    try {
 
     // 🔥 매칭된 페르소나 추가 필터링 - Firebase에서 최신 정보 확인
     final personaService = Provider.of<PersonaService>(context, listen: false);
@@ -557,16 +553,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     debugPrint(
         '👥 Persona positions: ${personaPositions.take(5).join(', ')}...');
     
-    } catch (e) {
-      debugPrint('❌ Error preparing cards: $e');
-    } finally {
-      // 무조건 플래그 리셋 - 에러가 발생해도 다음 시도가 가능하도록
-      if (mounted) {
-        setState(() {
-          _isPreparingCards = false;
-        });
-      }
-    }
+    // 플래그 리셋 - 중요!
+    _isPreparingCards = false;
   }
 
   Future<void> _loadPersonas() async {
@@ -1777,24 +1765,23 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           }
 
           // 카드 아이템 리스트 준비 (Personas + Tips) - 무한 루프 방지
-          // 카드가 비어있거나 personas 수가 변경되었을 때만 준비
-          final shouldPrepareCards = !_isPreparingCards && 
-              personas.isNotEmpty && 
-              (_cardItems.isEmpty || 
-               _lastPersonas == null || 
-               _lastPersonas!.length != personas.length);
-               
-          if (shouldPrepareCards) {
+          if (!_isPreparingCards &&
+              personas.isNotEmpty &&  // 빈 리스트일 때는 무시
+              (!listEquals(_lastPersonas, personas) || _cardItems.isEmpty)) {
             _isPreparingCards = true;
             _lastPersonas = List.from(personas); // 새 List 인스턴스로 복사
             
             // 한 번만 로그
-            debugPrint('🔄 Preparing cards for ${personas.length} personas');
+            if (personas.length > 0) {
+              debugPrint('🔄 Personas loaded: ${personas.length} personas');
+            }
 
-            // addPostFrameCallback으로 다음 프레임에서 실행
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted) {
-                _prepareCardItems(personas);  // async 함수가 완료될 때까지 기다림
+              if (mounted && _isPreparingCards) {
+                setState(() {
+                  _prepareCardItems(personas);
+                  _isPreparingCards = false;
+                });
               }
             });
           }

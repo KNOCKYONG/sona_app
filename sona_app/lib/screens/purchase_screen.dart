@@ -233,27 +233,31 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
     String displayName = product.title;
     String? description;
     String? originalPrice;
-    String? discountedPrice;
     String? discountLabel;
     bool hasDiscount = false;
 
     // Google Play Console의 상품 ID와 매칭
+    // 할인율은 원가가 100원 단위로 떨어지도록 조정
     if (product.id == ProductIds.hearts10) {
       displayName = localizations.hearts10;
       description = localizations.heartDescription;
+      // 9% 할인 적용 (₩1,100 → ₩1,200)
+      originalPrice = _calculateOriginalPrice(product.price, 0.0833);
+      discountLabel = _getDiscountLabel(0.08);
+      hasDiscount = true;
     } else if (product.id == ProductIds.hearts30) {
       displayName = localizations.hearts30;
       description = localizations.heartDescription;
-      originalPrice = '₩3,300';
-      discountedPrice = '₩2,900';
-      discountLabel = localizations.hearts30Discount;
+      // 12% 할인 적용 (₩2,900 → ₩3,300)
+      originalPrice = _calculateOriginalPrice(product.price, 0.121);
+      discountLabel = _getDiscountLabel(0.12);
       hasDiscount = true;
     } else if (product.id == ProductIds.hearts50) {
       displayName = localizations.hearts50;
       description = localizations.heartDescription;
-      originalPrice = '₩5,500';
-      discountedPrice = '₩3,900';
-      discountLabel = localizations.hearts50Discount;
+      // 29% 할인 적용 (₩3,900 → ₩5,500)
+      originalPrice = _calculateOriginalPrice(product.price, 0.291);
+      discountLabel = _getDiscountLabel(0.29);
       hasDiscount = true;
     }
 
@@ -286,24 +290,27 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            displayName,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                          Flexible(
+                            child: Text(
+                              displayName,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           if (hasDiscount) ...[
-                            const SizedBox(width: 8),
+                            const SizedBox(width: 6),
                             Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
+                                horizontal: 6,
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
                                 color: Colors.red.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(6),
                                 border: Border.all(
                                   color: Colors.red.withOpacity(0.3),
                                 ),
@@ -311,7 +318,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                               child: Text(
                                 discountLabel ?? '',
                                 style: const TextStyle(
-                                  fontSize: 12,
+                                  fontSize: 11,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red,
                                 ),
@@ -347,7 +354,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        discountedPrice ?? product.price,
+                        product.price,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -427,5 +434,94 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         ),
       );
     }
+  }
+
+  // 원가격 계산 헬퍼 메서드
+  String _calculateOriginalPrice(String currentPrice, double discountPercentage) {
+    // 현재 가격에서 통화 기호와 숫자 분리
+    final priceData = _parsePriceString(currentPrice);
+    if (priceData == null) return currentPrice;
+    
+    final currency = priceData['currency'] as String;
+    final price = priceData['amount'] as double;
+    
+    // 원가격 계산 (할인율 기반)
+    // 예: 30% 할인이면 현재가격 = 원가 * 0.7, 원가 = 현재가격 / 0.7
+    var originalPrice = price / (1 - discountPercentage);
+    
+    // 100원 단위로 반올림 (한국 원화의 경우)
+    if (currency.contains('₩') || currency == 'KRW') {
+      originalPrice = (originalPrice / 100).round() * 100.0;
+    }
+    
+    // 포맷팅
+    return _formatPriceWithCurrency(originalPrice, currency);
+  }
+  
+  // 할인 라벨 생성 헬퍼 메서드
+  String _getDiscountLabel(double discountPercentage) {
+    final percentage = (discountPercentage * 100).round();
+    final locale = Localizations.localeOf(context);
+    final isKorean = locale.languageCode == 'ko';
+    
+    return isKorean ? '$percentage% 할인' : '$percentage% OFF';
+  }
+  
+  // 가격 문자열 파싱 헬퍼 메서드
+  Map<String, dynamic>? _parsePriceString(String priceString) {
+    // 통화 기호 패턴
+    final currencyPattern = RegExp(r'([₩$€£¥]|KRW|USD|EUR|GBP|JPY)');
+    final currencyMatch = currencyPattern.firstMatch(priceString);
+    final currency = currencyMatch?.group(0) ?? '';
+    
+    // 숫자 추출 (소수점과 쉼표 처리)
+    final numberPattern = RegExp(r'[\d,]+\.?\d*');
+    final numberMatch = numberPattern.firstMatch(priceString);
+    if (numberMatch == null) return null;
+    
+    final numberString = numberMatch.group(0)!.replaceAll(',', '');
+    final amount = double.tryParse(numberString);
+    if (amount == null) return null;
+    
+    return {
+      'currency': currency,
+      'amount': amount,
+    };
+  }
+  
+  // 통화와 함께 가격 포맷팅
+  String _formatPriceWithCurrency(double amount, String currency) {
+    final formattedAmount = _formatPrice(amount);
+    
+    // 통화별 포맷
+    if (currency.contains('\$') || currency == 'USD') {
+      return '\$$formattedAmount';
+    } else if (currency.contains('₩') || currency == 'KRW') {
+      return '₩$formattedAmount';
+    } else if (currency.contains('€') || currency == 'EUR') {
+      return '€$formattedAmount';
+    } else if (currency.contains('£') || currency == 'GBP') {
+      return '£$formattedAmount';
+    } else if (currency.contains('¥') || currency == 'JPY') {
+      return '¥$formattedAmount';
+    } else {
+      // 기본값 (통화 기호가 없으면 원화로 가정)
+      return '₩$formattedAmount';
+    }
+  }
+  
+  // 가격 포맷팅 헬퍼 메서드
+  String _formatPrice(double price) {
+    if (price >= 1000) {
+      // 천 단위 구분
+      final thousands = (price / 1000).floor();
+      final remainder = (price % 1000).round();
+      if (remainder == 0) {
+        return '$thousands,000';
+      } else {
+        return '$thousands,${remainder.toString().padLeft(3, '0')}';
+      }
+    }
+    return price.toStringAsFixed(0);
   }
 }

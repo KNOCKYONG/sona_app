@@ -274,8 +274,8 @@ class AppLocalizations {
   String get discountAmount => isKorean ? '할인' : 'Save';
   String discountAmountValue(String amount) => 
       isKorean ? '₩$amount 할인' : 'Save ₩$amount';
-  String get hearts30Discount => isKorean ? '₩400 할인' : 'Save ₩400';
-  String get hearts50Discount => isKorean ? '₩1,600 할인' : 'Save ₩1,600';
+  String get hearts30Discount => isKorean ? '할인' : 'SALE';
+  String get hearts50Discount => isKorean ? '할인' : 'SALE';
 
   // ===== 설정 =====
   String get settings => isKorean ? '설정' : 'Settings';

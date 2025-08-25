@@ -8,7 +8,14 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(git clone:*)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(adb logcat:*)",
+      "Bash(adb shell:*)",
+      "Bash(./gradlew --stop)",
+      "Bash(adb uninstall:*)",
+      "Bash(adb:*)",
+      "Bash(killall:*)",
+      "Bash(./gradlew:*)"
     ],
     "deny": []
   }

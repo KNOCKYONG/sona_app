@@ -75,17 +75,25 @@ class PersonaService extends BaseService {
 
   // Progressive loading for initial fast display
   List<Persona> get availablePersonasProgressive {
-    // getter는 순수해야 함 - 부작용 제거
-    // 정리 작업은 initialize()에서 수행
-    
+    _cleanExpiredSwipes();
+
+    // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
+    if (!_matchedPersonasLoaded) {
+      _lazyLoadMatchedPersonas();
+    }
+
     // Return immediately without R2 check
     return _getImmediateAvailablePersonas();
   }
 
   // Original getter with R2 validation
   List<Persona> get availablePersonas {
-    // getter는 순수해야 함 - 부작용 제거
-    // 정리 작업은 initialize()에서 수행
+    _cleanExpiredSwipes();
+
+    // 매칭된 페르소나가 로드되지 않았다면 먼저 로드
+    if (!_matchedPersonasLoaded) {
+      _lazyLoadMatchedPersonas();
+    }
 
     // Check if we need to reshuffle (every 30 minutes or if list is null)
     final now = DateTime.now();
@@ -285,15 +293,6 @@ class PersonaService extends BaseService {
     );
 
     debugPrint('🚀 PersonaService initializing with userId: $_currentUserId');
-    
-    // 초기화 시점에 만료된 스와이프 정리 (getter에서 제거됨)
-    _cleanExpiredSwipes();
-    
-    // 매칭된 페르소나가 아직 로드되지 않았다면 로드 (getter에서 제거됨)
-    if (!_matchedPersonasLoaded) {
-      // 이 작업은 아래 Future.wait에서 처리됨
-      debugPrint('📋 Matched personas will be loaded during initialization');
-    }
     
     // Ensure Firebase Auth token is refreshed for new users
     final user = FirebaseAuth.instance.currentUser;

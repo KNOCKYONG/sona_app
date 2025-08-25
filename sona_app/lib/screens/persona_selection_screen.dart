@@ -348,12 +348,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           });
           // Only retry if we haven't exceeded max retries
           if (_prepareCardItemsRetryCount < 3) {
-            // 재귀 호출 대신 플래그 리셋하여 Consumer가 다시 시도하도록 함
-            if (mounted) {
-              setState(() {
-                _isPreparingCards = false;
-              });
-            }
+            _prepareCardItems(personas);
             return;
           }
         }
@@ -586,7 +581,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     // 이미 데이터가 있으면 무시
     if (personaService.allPersonas.isNotEmpty && !_isLoading) {
       debugPrint('✅ Personas already available: ${personaService.allPersonas.length}');
-      // Consumer가 자동으로 처리하므로 직접 호출 제거
+      _prepareCardItems(personaService.availablePersonas);
       return;
     }
     
@@ -623,7 +618,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         _isLoading = false;
       });
       
-      // Consumer가 자동으로 처리하므로 직접 호출 제거
+      // 카드 준비
+      _prepareCardItems(personaService.availablePersonas);
       return;
     }
     
@@ -726,8 +722,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       }
     }
     
-    // 초기화 완료 후 Consumer가 자동으로 카드 준비
-    if (personaService.allPersonas.isEmpty) {
+    // 초기화 완료 후 카드 준비
+    if (personaService.allPersonas.isNotEmpty) {
+      _prepareCardItems(personaService.availablePersonas);
+    } else {
       debugPrint('⚠️ No personas available after initialization');
       // Show error message to user
       if (mounted) {

@@ -45,13 +45,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final FocusNode _focusNode = FocusNode();
 
   String _selectedEmotion = 'neutral';
+  bool _isUserScrolling = false;
   double _lastScrollPosition = 0.0; // 마지막 스크롤 위치 추적
+  static const double _minScrollDelta = 2.0; // 최소 스크롤 감지 임계값 (5.0 -> 2.0으로 완화)
   bool _isNearBottom = true;
   int _previousMessageCount = 0;
   int _unreadAIMessageCount = 0;
   bool _previousIsTyping = false;
   // Track welcome messages per persona to prevent repetition
   final Map<String, bool> _hasShownWelcomePerPersona = {};
+  bool _hasInitiallyScrolled = false; // Track if we've done initial scroll for this chat
   // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
   
   // Reply functionality
@@ -98,11 +101,31 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final scrollThreshold = 100.0; // 임계값 감소하여 더 빠른 반응 (200 -> 100)
       final paginationThreshold = 300.0; // 페이지네이션 임계값
 
-      // 스크롤 위치 추적
+      // 스크롤 방향 감지 (최소 움직임 필터링)
+      final scrollDelta = currentScroll - _lastScrollPosition;
+      final isSignificantScroll = scrollDelta.abs() > _minScrollDelta;
+      
+      // 의미 있는 스크롤만 처리
+      if (!isSignificantScroll) {
+        // 너무 작은 움직임은 무시하지만 로그는 남김
+        return;
+      }
+      
+      final isScrollingUp = scrollDelta < 0;
+      final isScrollingDown = scrollDelta > 0;
       _lastScrollPosition = currentScroll;
 
-      // 사용자가 맨 아래에 가까운지 확인
+      // 사용자가 맨 아래에 가까운지 확인 (200픽셀 이내)
       final isNearBottom = maxScroll - currentScroll <= scrollThreshold;
+
+      // 사용자가 위로 스크롤했는지 감지
+      if (isScrollingUp && !_isLoadingMore) {
+        // 사용자가 위로 스크롤함 - 자동 스크롤 차단
+        if (!_isUserScrolling) {
+          _isUserScrolling = true;
+          debugPrint('📌 User started scrolling up - auto-scroll disabled');
+        }
+      }
       
       // 맨 아래 근처 상태 업데이트 - setState 최소화
       final wasNearBottom = _isNearBottom;
@@ -112,6 +135,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _isNearBottom = isNearBottom;
         
         if (isNearBottom) {
+          // 맨 아래로 왔음
+          if (isScrollingDown) {
+            // 아래로 스크롤해서 맨 아래 도달 시만 자동 스크롤 허용
+            _isUserScrolling = false;
+            debugPrint('📌 Reached bottom - auto-scroll enabled');
+          }
           // 읽지 않은 메시지 카운트 초기화
           if (_unreadAIMessageCount > 0) {
             _unreadAIMessageCount = 0;
@@ -139,15 +168,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     bool wasHasFocus = false;
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
-      // 포커스가 새로 활성화될 때 항상 스크롤 (키보드 활성화)
+      // 포커스가 새로 활성화될 때만 스크롤 (조건 강화)
       if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
-        // 키보드가 활성화되면 마지막 대화로 스크롤
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted && _scrollController.hasClients && _focusNode.hasFocus) {
-            debugPrint('📌 Keyboard activated - scrolling to bottom');
-            _scrollToBottom(force: true, smooth: true);
-          }
-        });
+        // 사용자가 위로 스크롤하지 않았고, 맨 아래에 있을 때만 스크롤
+        if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+          // 키보드가 올라올 때 약간의 딜레이로 레이아웃 업데이트 대기
+          Future.delayed(const Duration(milliseconds: 100), () {
+            if (mounted && _scrollController.hasClients && _focusNode.hasFocus && 
+                _isNearBottom && !_isUserScrolling) {
+              final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+              if (bottomInset > 0) {
+                // 키보드가 올라왔을 때만 스크롤
+                debugPrint('📌 Keyboard shown - checking auto-scroll conditions');
+                _scrollToBottom(force: false, smooth: true);
+              }
+            }
+          });
+        } else {
+          debugPrint('📌 Focus gained but user is scrolling - skip auto-scroll');
+        }
       }
       wasHasFocus = hasFocus;
     });
@@ -186,14 +225,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               currentScrollPosition + scrollDiff,
               _scrollController.position.maxScrollExtent
             );
-            
-            // Ensure we're away from the trigger zone (300px from top)
-            // to prevent immediate re-triggering
-            const paginationThreshold = 300.0;
-            final minSafePosition = _scrollController.position.minScrollExtent + paginationThreshold + 10;
-            final finalPosition = math.max(adjustedPosition, minSafePosition);
-            
-            _scrollController.jumpTo(finalPosition);
+            _scrollController.jumpTo(adjustedPosition);
           }
         }
       });
@@ -313,17 +345,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           final savedPosition = _savedScrollPositions[personaService.currentPersona!.id];
           
           if (savedPosition != null && savedPosition > 0) {
-            // 저장된 위치로 복원
+            // 저장된 위치로 복원 (단순화: 중복 애니메이션 제거)
             debugPrint('📍 Restoring scroll position for ${personaService.currentPersona!.name}: $savedPosition');
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (_scrollController.hasClients) {
                 final maxScroll = _scrollController.position.maxScrollExtent;
                 final targetPosition = savedPosition.clamp(0.0, maxScroll);
+                // jumpTo만 사용하여 즉시 위치 복원
                 _scrollController.jumpTo(targetPosition);
               }
             });
+          } else {
+            // 저장된 위치가 없으면 마지막 메시지로 스크롤
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scrollController.hasClients) {
+                // 단순화: 즉시 마지막으로 이동
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+              }
+            });
           }
-          // 저장된 위치가 없으면 자연스럽게 맨 아래부터 시작 (별도 스크롤 불필요)
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -520,7 +560,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         });
       }
       
-      // 사용자가 메시지를 보낸 후 자동 스크롤 (키보드가 활성화되어 있으므로)
+      // 사용자가 메시지를 보낼 때는 대화에 참여 중이므로 자동 스크롤 허용
+      _isUserScrolling = false;  // 사용자가 메시지를 보내면 스크롤 상태 재설정
+      
+      // 스크롤은 _scrollToBottom 메서드로 통일
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           debugPrint('📌 User sent message - scrolling to bottom');
@@ -618,33 +661,66 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _scrollToBottom({bool force = false, bool smooth = false}) {
+    // 사용자가 위로 스크롤 중이고 강제가 아니면 자동 스크롤 완전 차단
+    if (_isUserScrolling && !force) {
+      debugPrint('📌 User is scrolling - auto-scroll blocked');
+      return;
+    }
+    
+    // 맨 아래에 있지 않고 강제가 아니면 자동 스크롤 차단  
+    if (!_isNearBottom && !force && _hasInitiallyScrolled) {
+      debugPrint('📌 Not near bottom and not forced - auto-scroll blocked');
+      return;
+    }
+    
     // 이미 스크롤 중이면 무시 (중복 스크롤 방지)
     if (_isScrolling && !force) {
       debugPrint('📌 Already scrolling - skip duplicate request');
       return;
     }
+    
+    // 초기 스크롤 완료 표시
+    if (!_hasInitiallyScrolled) {
+      _hasInitiallyScrolled = true;
+    }
 
     // 디바운싱: 이전 타이머 취소
     _scrollDebounceTimer?.cancel();
     
-    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행
+    // 디바운싱: 새로운 스크롤 요청을 적절한 딜레이 후 실행 (200ms → 100ms로 감소하여 빠른 반응)
     _scrollDebounceTimer = Timer(const Duration(milliseconds: 100), () {
       if (!mounted || !_scrollController.hasClients) return;
       
+      // 다시 한번 사용자 스크롤 상태 확인 - 더 엄격하게
+      if (_isUserScrolling && !force) {
+        debugPrint('📌 User still scrolling after debounce - abort auto-scroll');
+        return;
+      }
+      
       _isScrolling = true;
       
-      // 스크롤 위치 계산
-      final targetScroll = _scrollController.position.maxScrollExtent;
+      // 키보드 높이를 고려한 스크롤 위치 계산
+      final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+      var targetScroll = _scrollController.position.maxScrollExtent;
+      
+      // 키보드가 올라와 있으면 추가 오프셋 적용
+      if (keyboardHeight > 0) {
+        // 키보드 위에 여백을 두고 마지막 메시지가 보이도록
+        targetScroll = _scrollController.position.maxScrollExtent;
+      }
 
       // 플랫폼별 스크롤 처리
-      if (Platform.isAndroid || force || !smooth) {
-        // Android나 강제 스크롤은 jumpTo 사용
+      // 안드로이드는 항상 jumpTo 사용 (안정성)
+      if (Platform.isAndroid || force) {
         _scrollController.jumpTo(targetScroll);
         _isScrolling = false;
         _isNearBottom = true;
-        debugPrint('📌 Jump scroll to bottom');
+        if (force) {
+          _isUserScrolling = false;
+        }
+        debugPrint('📌 Android/Force: jumpTo used');
       } else if (Platform.isIOS && smooth) {
-        // iOS에서 부드러운 애니메이션
+        // iOS에서만 부드러운 애니메이션 사용
         _scrollController.animateTo(
           targetScroll,
           duration: const Duration(milliseconds: 200),
@@ -652,14 +728,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         ).then((_) {
           _isScrolling = false;
           _isNearBottom = true;
-          debugPrint('📌 Animated scroll completed');
+          debugPrint('📌 iOS: animateTo completed');
         }).catchError((error) {
+          // 에러 발생 시에도 반드시 _isScrolling을 false로
           _isScrolling = false;
           _isNearBottom = true;
+          debugPrint('📌 iOS: animateTo failed, falling back to jumpTo: $error');
           if (_scrollController.hasClients) {
             _scrollController.jumpTo(targetScroll);
           }
         });
+      } else {
+        // 기타 경우 jumpTo 사용
+        _scrollController.jumpTo(targetScroll);
+        _isScrolling = false;
+        _isNearBottom = true;
+        debugPrint('📌 Default: jumpTo used');
       }
     });
   }
@@ -684,7 +768,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();
-        // 페르소나가 변경되면 자연스럽게 최근 메시지부터 표시 (별도 스크롤 불필요)
+        // 페르소나가 변경되면 첫 로드 플래그 설정하고 메시지 로드 후 스크롔
+        _hasInitiallyScrolled = false;
+        Future.delayed(const Duration(milliseconds: 300), () {
+          if (mounted && _scrollController.hasClients) {
+            // 단일 PostFrameCallback으로 단순화
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (_scrollController.hasClients) {
+                _scrollToBottom(force: true, smooth: false);
+              }
+            });
+          }
+        });
       });
     }
   }
@@ -763,9 +858,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     children: [
                       Consumer2<ChatService, PersonaService>(
                         builder: (context, chatService, personaService, child) {
-                          // Only show loading indicator when there are no messages
-                          // This prevents the loading indicator from showing when messages are already loaded
-                          if (chatService.isLoading && chatService.messages.isEmpty) {
+                          // Don't show loading indicator on initial load
+                          // Messages are already preloaded from chat_list_screen
+                          if (chatService.isLoading && chatService.messages.isNotEmpty) {
+                            // Only show loading for additional operations
                             return const Center(
                               child: CircularProgressIndicator(
                                 color: Color(0xFFFF6B9D),
@@ -839,18 +935,26 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 });
                               }
 
-                              // 키보드가 활성화된 상태에서만 자동 스크롤
-                              if (_focusNode.hasFocus && !_isScrolling) {
-                                // 키보드가 올라와 있을 때 자동 스크롤
-                                Future.delayed(const Duration(milliseconds: 50), () {
-                                  if (mounted && _focusNode.hasFocus && !_isScrolling) {
-                                    debugPrint('📌 New AI message with keyboard active - auto-scrolling');
+                              // 사용자가 맨 아래에 있고 스크롤 중이 아닐 때만 자동 스크롤
+                              if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+                                // 키보드가 올라와 있으면 딜레이를 더 줌
+                                final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+                                final delay = keyboardHeight > 0 
+                                    ? const Duration(milliseconds: 100)
+                                    : const Duration(milliseconds: 50);
+                                
+                                Future.delayed(delay, () {
+                                  // 다시 확인: 사용자가 여전히 위로 스크롤하지 않는 경우만
+                                  if (mounted && _isNearBottom && !_isUserScrolling && !_isScrolling) {
+                                    debugPrint('📌 New message - auto-scrolling to bottom');
                                     _scrollToBottom(force: false, smooth: true);
+                                  } else if (_isUserScrolling) {
+                                    debugPrint('📌 New message - user scrolling, skip auto-scroll');
                                   }
                                 });
-                              } else {
-                                // 키보드가 비활성화 상태면 자동 스크롤 하지 않음
-                                debugPrint('📌 New AI message but keyboard inactive - no auto-scroll');
+                              } else if (_isUserScrolling) {
+                                // 사용자가 위로 스크롤 중이면 알림만 표시하고 자동 스크롤 안 함
+                                debugPrint('📌 New message received but user is scrolling - no auto-scroll');
                               }
                             }
                           }
@@ -861,12 +965,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                           // 실제로 false -> true로 변경될 때만 스크롤
                           if (isTyping && !_previousIsTyping) {
                             _previousIsTyping = isTyping;
-                            // 키보드가 활성화된 상태에서만 자동 스크롤
-                            if (_focusNode.hasFocus && !_isScrolling) {
-                              debugPrint('📌 Typing started with keyboard active - auto-scrolling');
+                            // 사용자가 맨 아래에 있고 위로 스크롤하지 않을 때만 스크롤
+                            if (_isNearBottom && !_isUserScrolling && !_isScrolling) {
+                              debugPrint('📌 Typing started - auto-scrolling');
                               _scrollToBottom(force: false, smooth: true);
-                            } else {
-                              debugPrint('📌 Typing started but keyboard inactive - no auto-scroll');
+                            } else if (_isUserScrolling) {
+                              debugPrint('📌 Typing started but user is scrolling - skip auto-scroll');
                             }
                           } else if (!isTyping && _previousIsTyping) {
                             // 타이핑이 끝났을 때 상태만 업데이트
@@ -1137,115 +1241,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         child: scaffold,
       );
     }
-  }
-
-  Future<void> _handleReportAI() async {
-    final chatService = Provider.of<ChatService>(context, listen: false);
-    final authService = Provider.of<AuthService>(context, listen: false);
-    final personaService = Provider.of<PersonaService>(context, listen: false);
-    
-    final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
-    final currentPersona = personaService.currentPersona;
-    
-    if (userId.isEmpty || currentPersona == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.selectPersonaPlease),
-          backgroundColor: Colors.orange,
-        ),
-      );
-      return;
-    }
-    
-    // 텍스트 입력 컨트롤러
-    final TextEditingController reportController = TextEditingController();
-    
-    // 다이얼로그 표시
-    final result = await showDialog<String>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.reportAITitle),
-          content: TextField(
-            controller: reportController,
-            maxLines: 5,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.reportAIDescription,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(null),
-              child: Text(AppLocalizations.of(context)!.cancel),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(dialogContext).pop(reportController.text),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange[600],
-              ),
-              child: Text(AppLocalizations.of(context)!.send),
-            ),
-          ],
-        );
-      },
-    );
-    
-    // 사용자가 텍스트를 입력하고 전송을 눌렀을 경우
-    if (result != null && result.isNotEmpty) {
-      // Store context before async operation
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-      final navigator = Navigator.of(context);
-      
-      // Show loading dialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (dialogContext) => const Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFFFF6B9D),
-          ),
-        ),
-      );
-      
-      bool success = false;
-      String? errorMessage;
-      
-      try {
-        // 기존 sendChatErrorReport 활용, userMessage 파라미터 추가
-        await chatService.sendChatErrorReport(
-          userId: userId,
-          personaId: currentPersona.id,
-          userMessage: result,  // 사용자가 입력한 신고 내용
-        );
-        success = true;
-      } catch (e) {
-        debugPrint('🔥 Error sending report: $e');
-        errorMessage = e.toString();
-      }
-      
-      // Close loading dialog
-      navigator.pop();
-      
-      // Show result message
-      if (success) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.reportSubmittedSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.reportFailed),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-    
-    reportController.dispose();
   }
 
   Future<void> _handleErrorReport() async {
@@ -1992,9 +1987,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               elevation: 8,
               offset: const Offset(0, 8),
               onSelected: (value) async {
-                if (value == 'report_ai') {
-                  await _handleReportAI();
-                } else if (value == 'error_report') {
+                if (value == 'error_report') {
                   await _handleErrorReport();
                 } else if (value == 'translation_error') {
                   await _handleTranslationError();
@@ -2010,28 +2003,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 final isOffline = currentPersona != null && currentPersona.likes <= 0;
                 
                 return [
-                  // 신고 메뉴 (최상단)
-                  PopupMenuItem<String>(
-                    value: 'report_ai',
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.warning_amber_outlined,
-                          color: Colors.orange[600],
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          AppLocalizations.of(context)!.reportAI,
-                          style: TextStyle(
-                            color: Colors.orange[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const PopupMenuDivider(),
                   PopupMenuItem<String>(
                     value: 'error_report',
                     child: Row(

@@ -127,7 +127,7 @@ class AuthService extends BaseService {
         final isAvailable = await SignInWithApple.isAvailable();
         if (!isAvailable) {
           debugPrint('❌ [AuthService] Apple Sign-In is not available on this device');
-          _error = 'Apple 로그인을 사용할 수 없는 기기입니다';
+          setError('Apple 로그인을 사용할 수 없는 기기입니다');
           return false;
         }
 
@@ -190,36 +190,36 @@ class AuthService extends BaseService {
         switch (e.code) {
           case AuthorizationErrorCode.canceled:
             debugPrint('⚠️ [AuthService] User canceled Apple Sign-In');
-            _error = 'Apple 로그인이 취소되었습니다';
+            setError('Apple 로그인이 취소되었습니다');
             break;
           case AuthorizationErrorCode.failed:
             debugPrint('❌ [AuthService] Apple Sign-In failed');
-            _error = 'Apple 로그인에 실패했습니다. 다시 시도해주세요';
+            setError('Apple 로그인에 실패했습니다. 다시 시도해주세요');
             break;
           case AuthorizationErrorCode.invalidResponse:
             debugPrint('❌ [AuthService] Invalid response from Apple');
-            _error = 'Apple 서버 응답 오류. 잠시 후 다시 시도해주세요';
+            setError('Apple 서버 응답 오류. 잠시 후 다시 시도해주세요');
             break;
           case AuthorizationErrorCode.notHandled:
             debugPrint('❌ [AuthService] Apple Sign-In not handled');
-            _error = 'Apple 로그인 처리 오류';
+            setError('Apple 로그인 처리 오류');
             break;
           case AuthorizationErrorCode.unknown:
             debugPrint('❌ [AuthService] Unknown Apple Sign-In error');
-            _error = 'Apple 로그인 오류가 발생했습니다';
+            setError('Apple 로그인 오류가 발생했습니다');
             break;
           default:
             debugPrint('❌ [AuthService] Unexpected Apple Sign-In error');
-            _error = 'Apple 로그인 중 오류가 발생했습니다';
+            setError('Apple 로그인 중 오류가 발생했습니다');
         }
         return false;
       } on FirebaseAuthException catch (e) {
         debugPrint('❌ [AuthService] Firebase Auth error during Apple Sign-In: ${e.code} - ${e.message}');
-        _error = 'Firebase 인증 오류: ${e.message}';
+        setError('Firebase 인증 오류: ${e.message}');
         return false;
       } catch (e) {
         debugPrint('❌ [AuthService] Unexpected error during Apple Sign-In: $e');
-        _error = 'Apple 로그인 중 예기치 않은 오류가 발생했습니다';
+        setError('Apple 로그인 중 예기치 않은 오류가 발생했습니다');
         return false;
       }
     }, errorContext: 'signInWithApple');

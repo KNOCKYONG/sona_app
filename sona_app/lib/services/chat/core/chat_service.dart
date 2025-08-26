@@ -102,6 +102,10 @@ class ChatService extends BaseService {
   // Pagination state
   bool _isLoadingMore = false;
   final Map<String, bool> _hasMoreMessages = {};
+  
+  // 🔥 Loading state for messages to prevent race conditions
+  bool _isLoadingMessages = false;
+  bool get isLoadingMessages => _isLoadingMessages;
 
   void setPersonaService(PersonaService personaService) {
     _personaService = personaService;
@@ -300,6 +304,9 @@ class ChatService extends BaseService {
 
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
+    // 🔥 Set loading flag to prevent race conditions with first greeting
+    _isLoadingMessages = true;
+    
     // 🔥 Progressive loading - don't clear immediately
     // Only clear if switching to a different persona
     if (_currentPersonaId != null && _currentPersonaId != personaId) {
@@ -356,6 +363,12 @@ class ChatService extends BaseService {
         _messages = loadedMessages;  // 직접 참조 사용
       }
     }, errorContext: 'loadChatHistory');
+    
+    // 🔥 Clear loading flag after everything is done
+    _isLoadingMessages = false;
+    
+    // 🔥 Final notification to ensure UI is updated
+    notifyListeners();
   }
 
   /// Clean up timers and queues for a specific persona
@@ -3452,7 +3465,14 @@ class ChatService extends BaseService {
     required Persona persona,
   }) async {
     try {
-      // 이미 메시지가 있는지 확인
+      // 🔥 Double-check to prevent race conditions
+      // Check if loading is still in progress
+      if (_isLoadingMessages) {
+        debugPrint('⏳ Messages still loading, skipping initial greeting to prevent duplicates');
+        return;
+      }
+      
+      // 이미 메시지가 있는지 확인 (다시 한 번 체크)
       final existingMessages = _messagesByPersona[personaId] ?? [];
       if (existingMessages.isNotEmpty) {
         debugPrint(
@@ -3478,6 +3498,16 @@ class ChatService extends BaseService {
 
       // 🔥 1초 대기 (2초 → 1초로 단축)
       await Future.delayed(const Duration(seconds: 1));
+      
+      // 🔥 Final check before actually creating the greeting
+      // This prevents the message from appearing and disappearing
+      final finalCheck = _messagesByPersona[personaId] ?? [];
+      if (finalCheck.isNotEmpty) {
+        debugPrint('⚠️ Messages appeared during delay, aborting greeting creation');
+        _personaIsTyping[personaId] = false;
+        notifyListeners();
+        return;
+      }
 
       // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;

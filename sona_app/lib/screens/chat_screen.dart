@@ -308,14 +308,21 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return;
         }
 
+        // 🔥 Wait a bit to ensure loadChatHistory is fully complete
+        await Future.delayed(const Duration(milliseconds: 100));
+        
         // Check if we need to show initial greeting
         final messages =
             chatService.getMessages(personaService.currentPersona!.id);
         debugPrint(
             '🔍 Checking messages for initial greeting: ${messages.length} messages found');
-        if (messages.isEmpty) {
-          debugPrint('📢 No messages found, showing welcome message');
+        
+        // 🔥 Only show welcome if messages are empty AND not currently loading
+        if (messages.isEmpty && !chatService.isLoadingMessages) {
+          debugPrint('📢 No messages found and not loading, showing welcome message');
           _showWelcomeMessage();
+        } else if (messages.isEmpty && chatService.isLoadingMessages) {
+          debugPrint('⏳ Messages still loading, skipping welcome message for now');
         } else {
           debugPrint('💬 Messages exist, skipping welcome message');
           

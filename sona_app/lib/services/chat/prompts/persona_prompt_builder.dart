@@ -2,12 +2,40 @@ import '../../../models/persona.dart';
 import '../../../models/message.dart';
 import '../../../core/constants/korean_slang_dictionary.dart';
 import '../../../core/constants/mbti_constants.dart';
+import 'unified_prompt_service.dart';
 
 /// 페르소나에 최적화된 프롬프트를 생성하는 빌더
 /// casual/formal 설정과 관계 정보를 프롬프트 핵심에 통합
 class PersonaPromptBuilder {
   /// 통합 프롬프트 생성 (casual 설정이 핵심에 포함됨)
   static String buildComprehensivePrompt({
+    required Persona persona,
+    required List<Message> recentMessages,
+    String? userNickname,
+    String? contextMemory,
+    bool isCasualSpeech = false,
+    int? userAge,
+  }) {
+    // 통합 프롬프트 서비스로 리다이렉트 - 중복 제거
+    return UnifiedPromptService.buildPrompt(
+      persona: persona,
+      relationshipType: _getRelationshipType(persona.likes),
+      recentMessages: recentMessages,
+      userNickname: userNickname,
+      userAge: userAge,
+      isCasualSpeech: isCasualSpeech,
+      contextMemory: contextMemory,
+    );
+  }
+  
+  static String _getRelationshipType(int likes) {
+    if (likes < 30) return '초기';
+    if (likes < 60) return '친근';
+    if (likes < 80) return '친밀';
+    return '매우친밀';
+  }
+  
+  static String _buildComprehensivePromptOld({
     required Persona persona,
     required List<Message> recentMessages,
     String? userNickname,

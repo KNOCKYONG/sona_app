@@ -23,6 +23,7 @@ import '../intelligence/conversation_rhythm_master.dart';
 import '../intelligence/memory_network_service.dart';
 import '../intelligence/realtime_feedback_service.dart';
 import 'openai_service.dart';
+import 'conversations_service.dart';  // 🆕 새로운 Conversations API 서비스
 import '../../relationship/negative_behavior_system.dart';
 import '../../storage/guest_conversation_service.dart';
 import '../analysis/user_speech_pattern_analyzer.dart';
@@ -210,6 +211,7 @@ class ChatOrchestrator {
     String? userNickname,
     int? userAge,
     String? userLanguage,
+    String? conversationId,
   }) async {
     try {
       // 0단계: 외국어 감지 및 언어 식별
@@ -400,6 +402,13 @@ class ChatOrchestrator {
           userNickname: userNickname,
           userId: userId,
         );
+        
+        // 🔍 컨텍스트 힌트 생성 확인 로그
+        if (contextHint != null && contextHint.isNotEmpty) {
+          debugPrint('📌 Context hint generated: ${contextHint.substring(0, math.min(200, contextHint.length))}...');
+        } else {
+          debugPrint('⚠️ No context hint generated for this message');
+        }
       }
       
       // 인사 가이드 추가
@@ -589,17 +598,42 @@ class ChatOrchestrator {
       final cacheKey = '${userId}_${basePersona.id}';
       final recentResponses = _recentResponseCache[cacheKey] ?? [];
       
-      // 인사말 중복 체크
-      final greetingCount = chatHistory.where((msg) => 
+      // 강화된 인사말 중복 체크
+      final greetingKeywords = ['안녕', '반가워', '하이', '안녕하세요', '반가운', '처음뵙겠', '어서와', '하이루'];
+      final hasGreeted = chatHistory.any((msg) => 
         !msg.isFromUser && 
-        (msg.content.contains('반가워') || msg.content.contains('안녕'))
-      ).length;
+        greetingKeywords.any((keyword) => msg.content.contains(keyword))
+      );
       
-      if (greetingCount >= 2) {
-        final greetingWarning = '\n\n❌ 절대 금지: 인사는 이미 했음! "반가워요", "안녕" 등 인사말 사용 금지!';
+      // 대화 시작 10턴 이내인지 체크
+      final isEarlyConversation = chatHistory.length < 20; // 사용자/AI 각 10턴 = 20개 메시지
+      
+      // 최근 24시간 이내 인사한 적이 있는지 체크 (대화 히스토리 기반)
+      final now = DateTime.now();
+      final last24Hours = chatHistory.where((msg) => 
+        msg.timestamp != null && 
+        now.difference(msg.timestamp!).inHours < 24
+      ).toList();
+      
+      final hasGreetedInLast24Hours = last24Hours.any((msg) => 
+        !msg.isFromUser && 
+        greetingKeywords.any((keyword) => msg.content.contains(keyword))
+      );
+      
+      // 인사말 사용 금지 조건
+      if (hasGreeted || (isEarlyConversation && hasGreetedInLast24Hours)) {
+        final greetingWarning = '''
+
+🚫 인사말 완전 금지 [최우선 적용]
+- 이미 인사했으므로 절대 다시 인사하지 마세요
+- "안녕", "반가워", "하이", "처음뵙겠네" 등 모든 인사말 금지
+- 대신 바로 대화 내용으로 진입하세요
+- 사용자가 "안녕"이라고 해도 인사말 없이 자연스럽게 대화 이어가세요''';
         contextHint = contextHint != null
             ? contextHint + greetingWarning
             : greetingWarning;
+        
+        debugPrint('🚫 Greeting already done - blocking greeting messages');
       }
       
       // 최근 응답 포함하여 중복 방지
@@ -697,19 +731,57 @@ class ChatOrchestrator {
         finalContextHint = userPreferences['adjustedPrompt'] as String;
       }
       
-      final rawResponse = await OpenAIService.generateResponse(
-        persona: completePersona,
-        chatHistory: chatHistory,
-        userMessage: userMessage,  // 원본 메시지 그대로 전달
-        relationshipType: _getRelationshipType(completePersona),
-        conversationId: conversationId,  // 대화방 ID 전달
-        userId: userId,                   // 사용자 ID 전달
-        userNickname: userNickname,
-        userAge: userAge,
-        isCasualSpeech: true, // 항상 반말 모드
-        contextHint: finalContextHint,
-        targetLanguage: userLanguage,  // 언어 정보 전달
-      );
+      // 🆕 새로운 Conversations/Responses API 사용
+      // OpenAI 서버에서 대화 상태를 자동 관리
+      ResponseResult? responseResult;
+      String rawResponse;
+      
+      try {
+        // ConversationsService 사용 (새로운 API)
+        responseResult = await ConversationsService.generateResponse(
+          persona: completePersona,
+          userMessage: userMessage,
+          userId: userId,
+          conversationId: conversationId,
+          recentMessages: chatHistory,  // 최근 대화만 전달
+          contextHint: finalContextHint,
+          userNickname: userNickname,
+          userAge: userAge,
+          targetLanguage: userLanguage,
+          storeResponse: true,  // 서버에 응답 저장
+        );
+        
+        rawResponse = responseResult.content;
+        
+        // 대화 ID 업데이트 (서버에서 관리)
+        final newConversationId = responseResult.conversationId;
+        if (conversationId == null && newConversationId.isNotEmpty) {
+          debugPrint('📝 New conversation created: $newConversationId');
+          // TODO: Store newConversationId for future use if needed
+        }
+        
+        // 토큰 사용량 로깅
+        if (responseResult.tokenUsage != null) {
+          debugPrint('💰 Token usage optimized: ${responseResult.tokenUsage}');
+        }
+      } catch (e) {
+        // 폴백: 기존 OpenAI Service 사용
+        debugPrint('⚠️ ConversationsService failed, falling back to OpenAIService: $e');
+        
+        rawResponse = await OpenAIService.generateResponse(
+          persona: completePersona,
+          chatHistory: chatHistory,
+          userMessage: userMessage,
+          relationshipType: _getRelationshipType(completePersona),
+          conversationId: conversationId,
+          userId: userId,
+          userNickname: userNickname,
+          userAge: userAge,
+          isCasualSpeech: true,
+          contextHint: finalContextHint,
+          targetLanguage: userLanguage,
+        );
+      }
 
       // 6단계: 먼저 다국어 응답 파싱 (태그가 있는 원본 응답 파싱)
       String finalResponse = rawResponse;
@@ -3484,8 +3556,11 @@ class ChatOrchestrator {
     
     if (chatHistory.isEmpty) return null;
 
-    // 최근 대화 분석 (최대 10개로 확대하여 더 많은 맥락 파악)
-    final recentMessages = chatHistory.reversed.take(10).toList();
+    // 최근 대화 분석 (최대 15개로 확대하여 진짜 사람처럼 기억)
+    // 올바른 시간 순서로 가져오기 (과거 → 현재)
+    final recentMessages = chatHistory.length > 15 
+        ? chatHistory.sublist(chatHistory.length - 15) // 10->15로 확대
+        : chatHistory.toList();
     final recentTopics = <String>[];
     final List<String> contextHints = [];
     
@@ -3495,16 +3570,38 @@ class ChatOrchestrator {
       recentMessages,
     );
     
-    // 점수가 낮으면 강력한 경고
-    if (topicConsistencyScore < 30) {
-      contextHints.add('⚠️ 주제 일관성 매우 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
+    // 점수가 낮으면 강력한 경고 (임계값 상향: 30 → 60)
+    if (topicConsistencyScore < 60) {
+      contextHints.add('⚠️ 주제 일관성 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
       contextHints.add('💡 자연스러운 전환 표현 사용: "아 그거 말고", "그런데 말이야", "아 맞다"');
+      contextHints.add('📌 이전 메시지와 직접적으로 연관된 응답을 하세요.');
     }
 
-    // 최근 대화의 키워드 수집
+    // 최근 대화의 키워드 및 감정 수집 (강화)
+    final emotionalHistory = <String>[];
+    final userMentionedTopics = <String>[];
+    
     for (final msg in recentMessages) {
       final keywords = _extractKeywords(msg.content.toLowerCase());
       recentTopics.addAll(keywords);
+      
+      // 사용자가 언급한 모든 주제 보존
+      if (msg.isFromUser) {
+        userMentionedTopics.addAll(keywords);
+      }
+      
+      // 감정 변화 추적
+      if (msg.emotion != null) {
+        emotionalHistory.add('${msg.isFromUser ? "User" : "AI"}: ${msg.emotion}');
+      }
+    }
+    
+    // 중요 대화 포인트 하이라이트
+    if (userMentionedTopics.isNotEmpty) {
+      contextHints.add('📢 사용자가 언급한 키워드: ${userMentionedTopics.take(5).join(", ")}');
+    }
+    if (emotionalHistory.isNotEmpty) {
+      contextHints.add('💝 감정 변화: ${emotionalHistory.take(3).join(" → ")}');
     }
 
     // 마지막 AI 메시지가 있는지 확인
@@ -4912,33 +5009,48 @@ class ChatOrchestrator {
 
   /// 회피성 패턴 감지
   bool _isAvoidancePattern(String message) {
-    final avoidanceKeywords = [
-      '모르겠',
-      '그런 건',
+    // 명확한 회피 패턴만 감지 (정상 대화와 구분)
+    final clearAvoidancePatterns = [
+      '그런거 말고',  // 명확한 회피
+      '그런 얘기 말고',
       '다른 이야기',
-      '나중에',
-      '개인적인',
-      '그런 복잡한',
-      '재밌는 얘기',
+      '주제 바꾸자',
       '다른 걸로',
-      '말고',
-      '그만',
-      '그런거 말고',
-      '복잡해',
-      '어려워',
       '패스',
       '스킵',
-      '다음에',
       '그런 것보다',
-      '그런건',
-      '그런걸',
-      '헐 대박 나도 그래',  // 테스트에서 발견된 회피 패턴
-      '그래? 나도',  // 무의미한 동조
-      '어? 진짜?'  // 질문에 대한 회피성 반문
+      '그만하고',
+      '그만 얘기하고',
     ];
-
-    final lower = message.toLowerCase();
-    return avoidanceKeywords.any((keyword) => lower.contains(keyword));
+    
+    // 문맥상 회피로 볼 수 있는 패턴 (짧은 메시지일 때만)
+    final contextualAvoidance = [
+      '모르겠어',  // 단독으로 사용될 때만
+      '나중에',    // 단독으로 사용될 때만
+      '다음에',    // 단독으로 사용될 때만
+    ];
+    
+    final lower = message.toLowerCase().trim();
+    
+    // 명확한 회피 패턴 체크
+    for (final pattern in clearAvoidancePatterns) {
+      if (lower.contains(pattern)) {
+        debugPrint('🚫 Clear avoidance pattern detected: "$pattern"');
+        return true;
+      }
+    }
+    
+    // 짧은 메시지에서만 문맥상 회피 체크 (10자 이하)
+    if (lower.length <= 10) {
+      for (final pattern in contextualAvoidance) {
+        if (lower == pattern || lower == pattern + '.' || lower == pattern + '~') {
+          debugPrint('🚫 Contextual avoidance detected in short message: "$pattern"');
+          return true;
+        }
+      }
+    }
+    
+    return false;
   }
 
   /// 직접적인 질문인지 확인

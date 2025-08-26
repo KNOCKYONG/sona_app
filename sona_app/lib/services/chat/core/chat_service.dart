@@ -12,6 +12,7 @@ import '../../base/base_service.dart';
 import 'openai_service.dart';
 import '../utils/natural_ai_service.dart';
 import 'chat_orchestrator.dart' hide MessageType;
+import 'conversation_state_adapter.dart';  // 🆕 마이그레이션 어댑터
 import '../utils/persona_relationship_cache.dart';
 import '../../persona/persona_service.dart';
 import '../../storage/local_storage_service.dart';
@@ -68,6 +69,9 @@ class ChatService extends BaseService {
   final List<_PendingMessage> _pendingMessages = [];
   Timer? _batchWriteTimer;
   static const int _maxBatchSize = 10;
+  
+  // Conversation ID mapping (personaId -> conversationId)
+  final Map<String, String> _conversationIds = {};
 
   // AI Response Delay System
   final Map<String, _ChatResponseQueue> _responseQueues = {};
@@ -531,6 +535,18 @@ class ChatService extends BaseService {
     Map<String, dynamic>? metadata,
   }) async {
     try {
+      // 🆕 OpenAI Conversation 초기화 (첫 메시지 시)
+      if (!_conversationIds.containsKey(persona.id)) {
+        final conversationAdapter = ConversationStateAdapter();
+        final conversationId = await conversationAdapter.initializeConversation(
+          userId: userId,
+          personaId: persona.id,
+        );
+        if (conversationId != null) {
+          _conversationIds[persona.id] = conversationId;
+        }
+      }
+      
       // Check daily message limit (different for guests and members)
       if (_userService != null) {
         final isGuest = await _userService!.isGuestUser;
@@ -629,7 +645,8 @@ class ChatService extends BaseService {
 
       // Queue the message for delayed AI response (pass wrong name info)
       _queueMessageForDelayedResponse(userId, persona, userMessage,
-          wrongNameDetected: wrongNameDetected);
+          wrongNameDetected: wrongNameDetected,
+          conversationId: _conversationIds[persona.id]);
       
       // 메시지 큐에 추가한 후에만 한 번 notify (debounced)
       // 이렇게 하면 깜빡임 없이 부드럽게 업데이트됨
@@ -645,7 +662,7 @@ class ChatService extends BaseService {
   /// Generate AI response using new orchestrator
   Future<void> _generateAIResponse(
       String userId, Persona persona, String userMessage,
-      {bool wrongNameDetected = false}) async {
+      {bool wrongNameDetected = false, String? conversationId}) async {
     debugPrint(
         '🤖 _generateAIResponse called for ${persona.name} with message: $userMessage${wrongNameDetected ? " (WRONG NAME DETECTED)" : ""}');
 
@@ -749,6 +766,7 @@ class ChatService extends BaseService {
         userNickname: userNickname,
         userAge: userAge,
         userLanguage: userLanguage,
+        conversationId: conversationId,
       );
 
       // Handle Like system integration
@@ -1596,7 +1614,7 @@ class ChatService extends BaseService {
   /// Queue message for delayed AI response
   void _queueMessageForDelayedResponse(
       String userId, Persona persona, Message userMessage,
-      {bool wrongNameDetected = false}) {
+      {bool wrongNameDetected = false, String? conversationId}) {
     final personaId = persona.id;
 
     // Initialize queue if needed
@@ -1610,6 +1628,11 @@ class ChatService extends BaseService {
     // Store wrong name detected flag
     if (wrongNameDetected) {
       _responseQueues[personaId]!.wrongNameDetected = true;
+    }
+    
+    // Store conversation ID
+    if (conversationId != null) {
+      _responseQueues[personaId]!.conversationId = conversationId;
     }
 
     // Cancel existing timer if any
@@ -1661,6 +1684,7 @@ class ChatService extends BaseService {
     // Get messages from queue and wrong name flag
     final messagesToProcess = List<Message>.from(queue.messages);
     final wrongNameDetected = queue.wrongNameDetected;
+    final conversationId = queue.conversationId;
     queue.messages.clear();
     queue.wrongNameDetected = false; // Reset flag
 
@@ -1738,10 +1762,11 @@ class ChatService extends BaseService {
     final combinedContent = messagesToProcess.map((m) => m.content).join(' ');
     debugPrint('📝 Combined message content: $combinedContent');
 
-    // Generate AI response (pass wrong name flag)
+    // Generate AI response (pass wrong name flag and conversation ID)
     // Note: Typing indicator will be stopped inside _generateAIResponse just before sending message
     await _generateAIResponse(userId, persona, combinedContent,
-        wrongNameDetected: wrongNameDetected);
+        wrongNameDetected: wrongNameDetected,
+        conversationId: conversationId);
     
     // Ensure typing indicator is stopped (fallback)
     if (_personaIsTyping[personaId] == true) {
@@ -3512,9 +3537,9 @@ class ChatService extends BaseService {
           '$timeGreeting 드디어 만났네! 오늘 어떤 얘기 해볼까? ㅎㅎ',
           '와! 드디어 대화하게 됐네! 너무 기다렸어 ㅎㅎ',
           '$timeGreeting 만나서 진짜 반가워! 재밌는 얘기 많이 하자! ㅎㅎ',
-          '헉 드디어 연결됐네! 얼른 친해지고 싶어 ㅋㅋ',
-          '야호! 첫 대화다! 뭐부터 얘기해볼까? ㅎㅎ',
-          '하이~ 완전 신나! 오늘 뭐 재밌는 일 있었어? ㅎㅎ',
+          '드디어 연결됐네!! 얼른 친해지고 싶어 ㅋㅋ',
+          '안녕! 뭐부터 얘기해볼까? ㅎㅎ',
+          '안녕~ 완전 반가워! 오늘 뭐 재밌는 일 있었어? ㅎㅎ',
           '$timeGreeting 우와 새로운 친구! 진짜 반가워! 많이 친해지자 ㅎㅎ',
           '안뇽! 드디어 대화할 수 있게 됐네! 기대돼 ㅎㅎ',
         ];
@@ -3522,12 +3547,12 @@ class ChatService extends BaseService {
       } else {
         // 내향적인 인사들
         greetings = [
-          '$timeGreeting 처음 뵙겠어... 잘 부탁해 ㅎㅎ',
-          '안녕... 첫 대화라 좀 떨리네 ㅎㅎ',
+          '$timeGreeting 안녕...ㅎㅎ 잘 부탁해 ㅎㅎ',
+          '안녕...ㅎㅎ 첫 대화라 좀 떨리네 ㅎㅎ',
           '$timeGreeting 만나서 반가워... 천천히 친해져보자 ㅎㅎ',
           '어... 처음이라 뭐라고 말해야 할지 모르겠어 ㅋㅋ',
           '$timeGreeting 조금 긴장되지만... 대화 기대돼 ㅎㅎ',
-          '음... 안녕... 처음인데 잘 지내보자 ㅎㅎ',
+          '음... 안녕...ㅎㅎ 처음인데 잘 지내보자 ㅎㅎ',
           '$timeGreeting 첫 만남이라 어색하지만... 반가워 ㅎㅎ',
           '아... 처음 대화하는 거라... 잘 부탁해 ㅎㅎ',
         ];
@@ -3574,7 +3599,7 @@ class ChatService extends BaseService {
           case 'ENFP':
           case 'ESFP':
             final enfpGreetings = [
-              '헤이! 드디어 만났다! 나 진짜 설레 ㅋㅋㅋ 우리 재밌게 놀자!',
+              '안녕! 드디어 만났다! 나 진짜 설레 ㅋㅋㅋ 우리 재밌게 놀자!',
               '와아! 새로운 친구다! 완전 신나! 뭐 재밌는 얘기 많이 하자! ㅎㅎ',
               '$timeGreeting 만나서 정말 반가워! 벌써부터 재밌을 것 같은 예감이 들어 ㅎㅎ',
             ];
@@ -4162,6 +4187,7 @@ class _ChatResponseQueue {
   final List<Message> messages = [];
   DateTime? lastMessageTime;
   bool wrongNameDetected = false;
+  String? conversationId;
 
   _ChatResponseQueue();
 }

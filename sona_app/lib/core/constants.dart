@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// 앱 전체에서 사용되는 상수값 중앙 관리
@@ -59,6 +60,9 @@ class AppConstants {
   static String get openAIKey => dotenv.env['OPENAI_API_KEY'] ?? '';
   static const double openAITemperature = 0.8;
   static const int openAIMaxRetries = 3;
+  
+  // 🆕 Development Mode
+  static const bool isDevelopment = kDebugMode;
 
   // Storage Paths
   static const String personaPhotosPath = 'personas';

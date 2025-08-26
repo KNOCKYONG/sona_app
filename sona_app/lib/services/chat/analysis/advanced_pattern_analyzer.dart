@@ -720,7 +720,10 @@ class AdvancedPatternAnalyzer {
   Map<String, dynamic> _trackEmotionTransition(List<Message> chatHistory) {
     if (chatHistory.length < 2) return {};
     
-    final recent = chatHistory.reversed.take(5).toList();
+    // 올바른 시간 순서로 최근 5개 메시지 가져오기
+    final recent = chatHistory.length > 5 
+        ? chatHistory.sublist(chatHistory.length - 5) 
+        : chatHistory.toList();
     final emotions = recent.map((m) => m.emotion?.toString() ?? 'neutral').toList();
     
     return {
@@ -793,7 +796,10 @@ class AdvancedPatternAnalyzer {
 
   bool _detectRepetitionPattern(String message, List<Message> chatHistory) {
     // 최근 5개 메시지와 비교
-    final recent = chatHistory.reversed.take(5);
+    // 올바른 시간 순서로 최근 5개 메시지 가져오기
+    final recent = chatHistory.length > 5 
+        ? chatHistory.sublist(chatHistory.length - 5) 
+        : chatHistory;
     
     for (final msg in recent) {
       if (!msg.isFromUser && _calculateSimilarity(message, msg.content) > 0.8) {

@@ -241,6 +241,14 @@ If score <70%, MUST regenerate response with different pattern!
 - **중요**: 감사 대상을 정확히 파악하고 맥락에 맞게 반응할 것!
 ''';
 
+  /// 미성년자 보호 가이드
+  static const String minorProtectionGuide = '''
+## ⚠️ 미성년자 보호
+- 친구 관계만 허용
+- 애정표현 → "우린 친구로 지내자!", "친구가 최고야~"
+- 건전한 대화 유지, 긍정적 영향력
+''';
+  
   /// 전체 핵심 프롬프트 조합
   static String buildCorePrompt() {
     return '''

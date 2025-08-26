@@ -3,6 +3,7 @@ import '../analysis/pattern_analyzer_service.dart';
 import '../../../core/constants/korean_slang_dictionary.dart';
 import '../../../core/constants/mbti_constants.dart';
 import '../../../core/constants/prompt_templates.dart';
+import 'unified_prompt_service.dart';
 
 /// 토큰 최적화를 위한 스마트 프롬프트 조립 시스템
 /// 필요한 부분만 동적으로 조합하여 토큰 사용량을 50% 이상 절약
@@ -592,6 +593,30 @@ class OptimizedPromptService {
   }
   
   static String buildOptimizedPrompt({
+    required Persona persona,
+    required String relationshipType,
+    String? userNickname,
+    int? userAge,
+    bool isCasualSpeech = false,
+    String? contextHint,
+    String? targetLanguage,
+    PatternAnalysis? patternAnalysis,
+    bool hasAskedWellBeingToday = false,
+  }) {
+    // 통합 프롬프트 서비스로 리다이렉트 - 50% 토큰 절약
+    return UnifiedPromptService.buildPrompt(
+      persona: persona,
+      relationshipType: relationshipType,
+      userNickname: userNickname,
+      userAge: userAge,
+      isCasualSpeech: isCasualSpeech,
+      contextHint: contextHint,
+      patternAnalysis: patternAnalysis,
+      hasAskedWellBeingToday: hasAskedWellBeingToday,
+    );
+  }
+  
+  static String _buildOptimizedPromptOld({
     required Persona persona,
     required String relationshipType,
     String? userNickname,

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,9 +27,9 @@ class OpenAIService {
   static String get _apiKey => AppConstants.openAIKey;
   // OpenAI model is defined in AppConstants
 
-  // 🎯 토큰 제한 설정
-  static const int _maxInputTokens = 4200; //
-  static const int _maxOutputTokens = 250; // 200 -> 250 (더 자연스러운 응답)
+  // 🎯 토큰 제한 설정 (최적화된 설정)
+  static const int _maxInputTokens = 4200; // 프롬프트 최적화로 충분
+  static const int _maxOutputTokens = 250; // 간결하고 명확한 응답
   static const int _maxTranslationTokens = 500; // 번역 품질 보장
   static const double _temperature = 0.85; // 창의성과 일관성 균형 (0.7-0.9 권장)
 
@@ -396,11 +396,11 @@ class OpenAIService {
 
     // 컨텍스트 요약 생성 (이전 대화 압축)
     String contextSummary = '';
-    if (chatHistory.length > 40 && userId != null && personaId != null) {
-      // 40개 이상의 메시지가 있으면 요약 추가 (30->40으로 증가)
-      // 최근 25개는 그대로 유지, 그 이전 메시지만 요약
+    if (chatHistory.length > 60 && userId != null && personaId != null) { // 50->60 더 많은 대화 보존
+      // 60개 이상의 메시지가 있을 때만 요약 사용
+      // 최근 40개는 그대로 유지, 그 이전 메시지만 요약
       contextSummary = OptimizedContextManager.generateContextSummary(
-        messages: chatHistory.take(chatHistory.length - 25).toList(),
+        messages: chatHistory.take(chatHistory.length - 40).toList(),
         userId: userId,
         personaId: personaId,
       );
@@ -442,17 +442,24 @@ $contextSummary''';
     debugPrint('  - 전달된 히스토리: ${relevantHistory.length}개 메시지');
     debugPrint('  - 컨텍스트 요약 포함: ${contextSummary.isNotEmpty}');
     debugPrint('  - 총 메시지 수: ${messages.length}개');
+    debugPrint('  - 현재 사용자 메시지: "${userMessage.length > 50 ? userMessage.substring(0, 50) + '...' : userMessage}"');
     
-    // 최근 3개 메시지 내용 확인 (디버그용)
-    if (relevantHistory.length >= 3) {
-      debugPrint('  - 최근 대화 샘플:');
-      for (int i = relevantHistory.length - 3; i < relevantHistory.length; i++) {
+    // 최근 5개 메시지 내용 확인 (디버그용) - 맥락 파악을 위해 3->5개로 증가
+    if (relevantHistory.length >= 5) {
+      debugPrint('  - 최근 대화 흐름:');
+      for (int i = math.max(0, relevantHistory.length - 5); i < relevantHistory.length; i++) {
         final msg = relevantHistory[i];
-        final preview = msg.content.length > 50 
-            ? '${msg.content.substring(0, 50)}...' 
+        final preview = msg.content.length > 80 
+            ? '${msg.content.substring(0, 80)}...' 
             : msg.content;
-        debugPrint('    ${msg.isFromUser ? "User" : "AI"}: $preview');
+        debugPrint('    [${i + 1}] ${msg.isFromUser ? "👤 User" : "🤖 AI"}: $preview');
       }
+    }
+    
+    // 페르소나별 특별 로깅 (소희 페르소나 문제 추적)
+    if (personaId == 'm75bPHXaTys3htRJomws') {
+      debugPrint('⚠️ 소희 페르소나 감지 - 맥락 유지 강화 필요');
+      debugPrint('  - 대화 흐름 특별 모니터링 중...');
     }
 
     return messages;
@@ -464,8 +471,8 @@ $contextSummary''';
     if (history.isEmpty) return [];
 
     // OptimizedContextManager 사용하여 스마트하게 선택
-    // 대화 맥락 유지를 위해 메시지 수 증가
-    const maxHistoryMessages = 25; // 20 -> 25으로 증가 (대화 품질 최우선)
+    // 대화 맥락 완벽 유지를 위해 메시지 수 대폭 증가
+    const maxHistoryMessages = 40; // 35 -> 40으로 추가 증가 (진짜 사람처럼 기억)
     
     final selectedMessages = OptimizedContextManager.selectOptimalMessages(
       fullHistory: history,
@@ -473,13 +480,21 @@ $contextSummary''';
       maxMessages: maxHistoryMessages,
     );
     
-    // 메시지 압축 최소화 - 대화 품질 최우선
+    // 메시지 압축 최소화 - 대화 맥락 유지 최우선
     final compressedMessages = selectedMessages.map((msg) {
-      // 압축 제한을 대폭 완화하여 대화 품질 보장
-      // 사용자 메시지는 거의 압축하지 않음, AI 메시지도 충분히 보존
-      final maxLength = msg.isFromUser ? 300 : 250; // 200->300, 150->250으로 대폭 완화
+      // 최근 20개 메시지는 전혀 압축하지 않음
+      final messageIndex = selectedMessages.indexOf(msg);
+      final isRecent = messageIndex >= selectedMessages.length - 20;
       
-      // 짧은 메시지는 압축하지 않음
+      // 최근 메시지는 압축 안함, 오래된 메시지만 경미한 압축
+      if (isRecent) {
+        return msg; // 최근 20개는 그대로 보존
+      }
+      
+      // 20-40번째 메시지만 아주 약간 압축 (중요 키워드 보존)
+      final maxLength = msg.isFromUser ? 600 : 500; // 압축 기준 더 완화
+      
+      // 대부분의 메시지는 압축하지 않음
       if (msg.content.length <= maxLength) {
         return msg;
       }
@@ -502,12 +517,12 @@ $contextSummary''';
     return compressedMessages;
   }
 
-  /// 🗜️ 프롬프트 압축
+  /// 🗜️ 프롬프트 압축 (중요 가이드라인 보존)
   static String _compressPrompt(String prompt) {
     return prompt
-        .replaceAll(RegExp(r'\n{3,}'), '\n\n')
-        .replaceAll(RegExp(r'\s{2,}'), ' ')
-        .replaceAll(RegExp(r'#.*\n'), '')
+        .replaceAll(RegExp(r'\n{3,}'), '\n\n')  // 과도한 줄바꿈만 제거
+        .replaceAll(RegExp(r'[ \t]{2,}'), ' ')  // 과도한 공백만 제거 (줄바꿈 제외)
+        // .replaceAll(RegExp(r'#.*\n'), '')  // 중요한 가이드라인 보존을 위해 제거
         .trim();
   }
 
@@ -552,13 +567,17 @@ $contextSummary''';
 
   /// 📜 최근 AI 메시지 추출
   static List<String> _extractRecentAIMessages(List<Message> chatHistory) {
-    return chatHistory
+    // 올바른 시간 순서로 최근 5개 AI 메시지 추출
+    final aiMessages = chatHistory
         .where((msg) => !msg.isFromUser)
         .map((msg) => msg.content)
-        .toList()
-        .reversed
-        .take(5)
         .toList();
+    
+    // 최근 5개만 가져오기 (reversed 제거)
+    if (aiMessages.length <= 5) {
+      return aiMessages;
+    }
+    return aiMessages.sublist(aiMessages.length - 5);
   }
 
   /// 🔧 불완전한 문장 완성
@@ -1223,20 +1242,20 @@ class KoreanSpeechValidator {
     // 친밀도 체크 - 100점 이상 (가까운 친구 이상)일 때만 강한 슬랭 사용
     if (persona.likes >= 100) {
       // 존맛 - 매우 조심스럽게 사용 (30% 확률)
-      if (result.contains('맛있') && Random().nextInt(100) < 30) {
+      if (result.contains('맛있') && math.Random().nextInt(100) < 30) {
         // 문맥에 맞게 변환
         result = result.replaceAll('진짜 맛있어', '존맛이야');
         result = result.replaceAll('너무 맛있어', '완전 존맛');
         result = result.replaceAll('맛있어 보여', '존맛일 것 같아');
         result = result.replaceAll('맛있겠다', '존맛이겠다');
         // 단순 '맛있어'는 50% 확률로만 변환
-        if (Random().nextInt(100) < 50) {
+        if (math.Random().nextInt(100) < 50) {
           result = result.replaceAll('맛있어', '존맛이야');
         }
       }
       
       // 다른 강한 슬랭들도 친밀도 높을 때만 (20% 확률)
-      if (Random().nextInt(100) < 20) {
+      if (math.Random().nextInt(100) < 20) {
         result = result.replaceAll('진짜 대박', '개쩐다');
         result = result.replaceAll('정말 좋아', '개좋아');
       }

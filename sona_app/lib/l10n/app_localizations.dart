@@ -457,6 +457,11 @@ class AppLocalizations {
   String get noQualityLogs =>
       isKorean ? '아직 품질 로그가 없습니다.' : 'No quality logs yet.';
   String get report => isKorean ? '신고하기' : 'Report';
+  String get reportAI => isKorean ? '신고' : 'Report';
+  String get reportAIDescription => isKorean 
+      ? 'AI가 당신에게 불쾌감을 주었다면 내용을 적어 신고하세요.' 
+      : 'If the AI made you uncomfortable, please describe the issue.';
+  String get reportAITitle => isKorean ? 'AI 대화 신고' : 'Report AI Conversation';
   String get reportInProgress =>
       isKorean ? '신고를 접수하는 중...' : 'Submitting report...';
   String get reportSubmitted => isKorean

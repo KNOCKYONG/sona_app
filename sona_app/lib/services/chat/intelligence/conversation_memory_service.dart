@@ -38,10 +38,10 @@ class ConversationMemoryService {
   static const String _memoriesCollection = 'conversation_memories';
   static const String _summariesCollection = 'conversation_summaries';
   
-  // 개선된 메모리 윈도우 크기 (81.8% -> 90% 목표)
-  static const int SHORT_TERM_WINDOW = 15;  // 10 -> 15로 확대
-  static const int MEDIUM_TERM_WINDOW = 30; // 20 -> 30으로 확대
-  static const int LONG_TERM_WINDOW = 50;   // 30 -> 50으로 확대
+  // 개선된 메모리 윈도우 크기 (진짜 사람처럼 기억)
+  static const int SHORT_TERM_WINDOW = 20;  // 15 -> 20로 확대 (최근 20턴 완벽 기억)
+  static const int MEDIUM_TERM_WINDOW = 40; // 30 -> 40으로 확대 (중기 기억 강화)
+  static const int LONG_TERM_WINDOW = 60;   // 50 -> 60으로 확대 (장기 기억 확대)
 
   /// 🎯 중요한 대화 추출 및 태깅
   Future<List<ConversationMemory>> extractImportantMemories({
@@ -55,9 +55,9 @@ class ConversationMemoryService {
       final message = messages[i];
       final importance = _calculateImportance(message, messages, i);
 
-      // 중요도 기준 완화 - 더 많은 컨텍스트 보존
-      if (importance >= 0.5) {  // 0.65 -> 0.5로 낮춤
-        // 중요도 50% 이상만 저장 (10턴 이상 기억을 위해 기준 완화)
+      // 중요도 기준 대폭 완화 - 거의 모든 대화 보존
+      if (importance >= 0.4) {  // 0.5 -> 0.4로 추가 완화 (더 많은 대화 저장)
+        // 중요도 40% 이상만 저장 (20턴 이상 기억을 위해 기준 완화)
         final memory = ConversationMemory(
           id: '${userId}_${personaId}_${message.id}',
           userId: userId,

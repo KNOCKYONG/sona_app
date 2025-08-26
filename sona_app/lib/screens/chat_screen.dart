@@ -67,6 +67,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   String? _userId;
   Persona? _currentPersona;
   bool _isInitialized = false;  // 🔥 Add initialization flag
+  bool _isInitialLoad = true;  // 초기 로드 추적을 위한 플래그
   
   // 스크롤 위치 기억용 Map (personaId -> scrollPosition)
   final Map<String, double> _savedScrollPositions = {};
@@ -322,8 +323,16 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 _scrollController.jumpTo(targetPosition);
               }
             });
+          } else if (_isInitialLoad) {
+            // 초기 로드 시 맨 아래로 스크롤
+            debugPrint('📌 Initial load - scrolling to bottom');
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted && _scrollController.hasClients) {
+                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                _isInitialLoad = false;  // 초기 로드 완료
+              }
+            });
           }
-          // 저장된 위치가 없으면 자연스럽게 맨 아래부터 시작 (별도 스크롤 불필요)
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -680,11 +689,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       _currentPersonaId = args.id;
       _currentPersona = args; // Update stored persona reference
       // No need to reset welcome flag - it's now tracked per persona
+      
+      // Reset initial load flag for new persona
+      _isInitialLoad = true;
 
       // Reload chat for new persona
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeChat();
-        // 페르소나가 변경되면 자연스럽게 최근 메시지부터 표시 (별도 스크롤 불필요)
       });
     }
   }
@@ -784,6 +795,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                             return const Center(
                               child: Text('No persona selected'),
                             );
+                          }
+
+                          // 초기 로드 시 맨 아래로 스크롤
+                          if (_isInitialLoad && messages.isNotEmpty) {
+                            _isInitialLoad = false;
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (mounted && _scrollController.hasClients) {
+                                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                                debugPrint('📌 Initial messages loaded - scrolled to bottom');
+                              }
+                            });
                           }
 
                           // 메시지 수 변화 감지 및 AI 메시지 추가 시 처리

@@ -31,11 +31,11 @@ class ConversationsService {
   static const int _maxOutputTokens = 250;
   static const int _maxTranslationTokens = 500;
   
-  // API 파라미터 최적화
-  static const double _temperature = 0.85;
-  static const double _presencePenalty = 0.3;
-  static const double _frequencyPenalty = 0.2;
-  static const double _topP = 0.95;
+  // API 파라미터 최적화 (일관성 향상을 위해 조정)
+  static const double _temperature = 0.75;  // 0.85 -> 0.75 (일관성 향상)
+  static const double _presencePenalty = 0.4;  // 0.3 -> 0.4 (반복 감소)
+  static const double _frequencyPenalty = 0.25;  // 0.2 -> 0.25 (다양성 유지)
+  static const double _topP = 0.92;  // 0.95 -> 0.92 (예측 가능성 향상)
   
   // 연결 풀링
   static final http.Client _httpClient = http.Client();
@@ -284,15 +284,18 @@ class ConversationsService {
     return messages;
   }
   
-  /// 🔧 Logit Bias 생성 (반복 억제)
+  /// 🔧 Logit Bias 생성 (반복 억제 및 회피 방지 강화)
   static Map<String, double> _buildLogitBias(List<Message>? recentMessages) {
     final bias = <String, double>{};
     
-    // 기본 억제 패턴
+    // 기본 억제 패턴 (회피성 답변 강화 억제)
     bias['31481'] = -50;  // "죄송합니다"
     bias['47991'] = -50;  // "모르겠어요"
-    bias['23539'] = -30;  // "네?"
-    bias['39439'] = -30;  // "어?"
+    bias['23539'] = -50;  // "네?" (강화: -30 -> -50)
+    bias['39439'] = -50;  // "어?" (강화: -30 -> -50)
+    bias['35699'] = -40;  // "뭐라고"
+    bias['41823'] = -40;  // "다시 말해"
+    bias['28975'] = -40;  // "무슨 말"
     
     // 선호 패턴
     bias['33599'] = 5;    // "ㅋㅋ"

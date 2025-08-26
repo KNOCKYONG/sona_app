@@ -1465,17 +1465,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       // 🔧 중요: 전문가 페르소나도 실제로 매칭 처리해야 채팅 목록에 나타남
       debugPrint('🩺 Processing persona match: ${persona.name}');
 
-      // 실제 매칭 처리는 이미 버튼 클릭 시 처리되었으므로 여기서는 생략
-      // final matchSuccess = await personaService.matchWithPersona(persona.id, isSuperLike: isSuperLike);
-      // debugPrint('✅ Match result: $matchSuccess for ${persona.name}');
-
-      // Firebase에서 최신 매칭 정보 다시 로드
-      debugPrint('🔄 Refreshing matched personas after successful match...');
-      await personaService.initialize(userId: currentUserId);
-
+      // 🔥 Remove redundant initialization - already done during matching
+      // Only refresh if absolutely necessary
+      
       // 매칭 확인
       final matchedCount = personaService.matchedPersonas.length;
-      debugPrint('✅ Refreshed - $matchedCount matched personas found');
+      debugPrint('✅ Current matched personas: $matchedCount');
 
       // 🔧 FIX: 메인 화면 context로 안전한 네비게이션
       if (mounted && screenContext.mounted) {

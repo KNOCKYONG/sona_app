@@ -3528,6 +3528,47 @@ class ChatOrchestrator {
     String? userNickname,
     required String userId,
   }) async {
+    final allHints = <String>[];
+    
+    // 🎯 맥락 일관성 분석 강화
+    if (chatHistory.isNotEmpty) {
+      // 최근 대화 주제 추출
+      final recentTopics = <String>[];
+      final recentMessages = chatHistory.take(5).toList();
+      
+      for (final msg in recentMessages) {
+        final keywords = _extractKeywords(msg.content);
+        recentTopics.addAll(keywords);
+      }
+      
+      // 현재 메시지의 주제
+      final currentTopics = _extractKeywords(userMessage);
+      
+      // 주제 관련성 점수 계산 (0~100)
+      double relevanceScore = 0;
+      if (recentTopics.isNotEmpty && currentTopics.isNotEmpty) {
+        final matchingTopics = currentTopics.where((topic) => 
+          recentTopics.any((recentTopic) => 
+            topic.toLowerCase() == recentTopic.toLowerCase())).toList();
+        relevanceScore = (matchingTopics.length / currentTopics.length) * 100;
+      }
+      
+      // 낮은 관련성 감지 (30점 미만)
+      if (relevanceScore < 30 && chatHistory.length > 2) {
+        allHints.add('⚠️ 주제 일관성 낮음: 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결해서 답변');
+        allHints.add('🔗 자연스러운 전환: 급격한 주제 변경 피하고 부드럽게 연결');
+        allHints.add('💡 예시: "그 얘기 들으니까 생각난건데..." 같은 연결 표현 사용');
+      } else {
+        allHints.add('✅ 주제 일관성 양호: 자연스럽게 대화 이어가기');
+      }
+      
+      // 질문 회피 패턴 감지
+      if (_isAvoidancePattern(userMessage, chatHistory)) {
+        allHints.add('❌ 질문 회피 금지: 상대방 질문에 먼저 직접 답변하기');
+        allHints.add('✅ 올바른 순서: 질문 답변 → 공감 표현 → 자연스러운 대화 전개');
+      }
+    }
+    
     // 관계 깊이별 감정 표현 추가
     final relationshipHints = _getRelationshipDepthHints(
       persona.likes,
@@ -3542,7 +3583,6 @@ class ChatOrchestrator {
       userNickname,
     );
     
-    final allHints = <String>[];
     if (relationshipHints.isNotEmpty) {
       allHints.addAll(relationshipHints);
     }
@@ -5007,8 +5047,8 @@ class ChatOrchestrator {
     return false;
   }
 
-  /// 회피성 패턴 감지
-  bool _isAvoidancePattern(String message) {
+  /// 회피성 패턴 감지 (chatHistory 매개변수 추가)
+  bool _isAvoidancePattern(String message, [List<Message>? chatHistory]) {
     // 명확한 회피 패턴만 감지 (정상 대화와 구분)
     final clearAvoidancePatterns = [
       '그런거 말고',  // 명확한 회피
@@ -5029,6 +5069,23 @@ class ChatOrchestrator {
       '나중에',    // 단독으로 사용될 때만
       '다음에',    // 단독으로 사용될 때만
     ];
+    
+    // 추가: 이전 메시지가 질문인데 답변하지 않는 패턴 감지
+    if (chatHistory != null && chatHistory.isNotEmpty) {
+      final lastUserMsg = chatHistory.where((m) => m.isFromUser).firstOrNull;
+      if (lastUserMsg != null && lastUserMsg.content.contains('?')) {
+        // 질문에 대한 회피 패턴
+        final questionAvoidance = [
+          '그런 건 모르겠고',
+          '그건 그렇고',
+          '아무튼',
+          '어쨌든',
+        ];
+        for (final pattern in questionAvoidance) {
+          if (message.contains(pattern)) return true;
+        }
+      }
+    }
     
     final lower = message.toLowerCase().trim();
     

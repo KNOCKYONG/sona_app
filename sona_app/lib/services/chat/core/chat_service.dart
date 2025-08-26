@@ -300,10 +300,14 @@ class ChatService extends BaseService {
 
   /// Load chat history with parallel processing
   Future<void> loadChatHistory(String userId, String personaId) async {
-    // Clear previous messages IMMEDIATELY to prevent old chat from showing
+    // 🔥 Progressive loading - don't clear immediately
+    // Only clear if switching to a different persona
     if (_currentPersonaId != null && _currentPersonaId != personaId) {
+      // Store existing messages temporarily for smooth transition
+      final previousMessages = _messages.toList();
       _messages.clear();
-      notifyListeners(); // Notify UI immediately to clear the view
+      // 🔥 Use debounced notify to reduce UI flicker
+      _debouncedNotify(); 
     }
 
     // Set current persona ID
@@ -3468,12 +3472,12 @@ class ChatService extends BaseService {
         return; // Exit without showing typing indicator or sending greeting
       }
 
-      // 2초 동안 타이핑 표시 (더 짧게)
+      // 🔥 1초 동안 타이핑 표시 (더 짧게 - 사용자 경험 개선)
       _personaIsTyping[personaId] = true;
       notifyListeners();
 
-      // 2초 대기
-      await Future.delayed(const Duration(seconds: 2));
+      // 🔥 1초 대기 (2초 → 1초로 단축)
+      await Future.delayed(const Duration(seconds: 1));
 
       // 페르소나의 성격에 맞는 자연스러운 인사 메시지 생성
       String greetingContent;

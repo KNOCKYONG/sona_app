@@ -47,7 +47,7 @@ class SecurityAwarePostProcessor {
     processed = _optimizeEmoticons(processed);
 
     // 4단계: 갑작스러운 주제 변경 감지 및 수정
-    processed = _smoothTopicTransition(processed);
+    processed = _smoothTopicTransition(processed, userMessage, recentMessages);
     
     // 5단계: 이별 관련 부적절한 내용 필터링
     processed = _filterInappropriateBreakupContent(processed);
@@ -630,7 +630,55 @@ class SecurityAwarePostProcessor {
   }
 
   /// 갑작스러운 주제 변경 감지 및 수정 - 강화됨
-  static String _smoothTopicTransition(String text) {
+  static String _smoothTopicTransition(String text, [String? userMessage, List<String>? recentMessages]) {
+    // 이전 대화 주제 추출
+    Set<String> recentTopics = {};
+    if (recentMessages != null && recentMessages.isNotEmpty) {
+      for (final msg in recentMessages.take(5)) {
+        final keywords = _extractKeywords(msg);
+        recentTopics.addAll(keywords);
+      }
+    }
+    
+    // 현재 응답의 주제
+    final currentTopics = _extractKeywords(text);
+    
+    // 주제 일관성 점수 계산
+    double relevanceScore = 100;
+    if (recentTopics.isNotEmpty && currentTopics.isNotEmpty) {
+      final matchingTopics = currentTopics.where((topic) => 
+        recentTopics.any((recentTopic) => 
+          topic.toLowerCase() == recentTopic.toLowerCase())).toList();
+      relevanceScore = (matchingTopics.length / currentTopics.length) * 100;
+    }
+    
+    // 낮은 관련성 시 전환 표현 추가 (30점 미만)
+    if (relevanceScore < 30 && recentMessages != null && recentMessages.length > 2) {
+      // 자연스러운 전환 표현들
+      final transitionPhrases = [
+        '아 그러고보니',
+        '아 맞다',
+        '그 얘기 들으니까',
+        '말 나온 김에',
+        '아 참',
+        '근데 있잖아',
+      ];
+      
+      // 전환 표현이 없으면 추가
+      bool hasTransition = false;
+      for (final phrase in transitionPhrases) {
+        if (text.contains(phrase)) {
+          hasTransition = true;
+          break;
+        }
+      }
+      
+      if (!hasTransition && !text.startsWith('아') && !text.startsWith('근데')) {
+        final randomPhrase = transitionPhrases[DateTime.now().millisecond % transitionPhrases.length];
+        text = '$randomPhrase, $text';
+      }
+    }
+    
     // 주제 전환 표현이 없으면서 특정 패턴으로 시작하는 경우
     final abruptPatterns = [
       // 게임 관련 갑작스러운 시작

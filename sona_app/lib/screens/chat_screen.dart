@@ -66,8 +66,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   ChatService? _chatService;
   String? _userId;
   Persona? _currentPersona;
-  bool _isInitialized = false;  // 🔥 Add initialization flag
+  // 🔥 Removed _isInitialized flag - using progressive loading instead
   bool _isInitialLoad = true;  // 초기 로드 추적을 위한 플래그
+  bool _hasInitializedOnce = false;  // 한 번이라도 초기화 되었는지 추적
   
   // 스크롤 위치 기억용 Map (personaId -> scrollPosition)
   final Map<String, double> _savedScrollPositions = {};
@@ -206,6 +207,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   Future<void> _initializeChat() async {
     if (!mounted) return;
+    
+    // 🔥 Prevent re-initialization if already done
+    if (_hasInitializedOnce && _currentPersona != null) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args is Persona && args.id == _currentPersona!.id) {
+        debugPrint('✅ Already initialized for this persona, skipping re-initialization');
+        return;
+      }
+    }
 
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
@@ -234,10 +244,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args is Persona) {
-      // 🔥 Clear any existing chat state before loading new persona
-      setState(() {
-        _isInitialized = false;
-      });
+      // 🔥 No setState here - progressive loading instead
       
       await personaService.selectPersona(args);
       _currentPersona = args; // Store current persona for dispose method
@@ -248,10 +255,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         await personaService.selectPersona(args);
       }
       
-      // 🔧 FIX: Force refresh relationship data from Firebase for accurate display
-      debugPrint('🔄 Forcing relationship refresh for persona: ${args.name}');
-      await personaService.refreshMatchedPersonasRelationships();
-    }
+      // 🔥 Only refresh if not already done in navigation
+      if (!_hasInitializedOnce) {
+        debugPrint('🔄 Initial relationship refresh for persona: ${args.name}');
+        await personaService.refreshMatchedPersonasRelationships();
+      }
+    } // Close if (args is Persona) block
 
     if (personaService.currentPersona != null) {
       // 🔥 Final verification that we have the correct persona
@@ -342,12 +351,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       debugPrint('⚠️ No current persona available for chat');
     }
     
-    // 🔥 Mark as initialized after all loading is complete
-    if (mounted) {
-      setState(() {
-        _isInitialized = true;
-      });
-    }
+    // 🔥 Mark that initialization has been done at least once
+    _hasInitializedOnce = true;
   }
 
   void _showWelcomeMessage() async {

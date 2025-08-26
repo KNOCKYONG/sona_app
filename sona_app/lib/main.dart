@@ -1,6 +1,4 @@
-import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui';
@@ -174,39 +172,30 @@ class SonaApp extends StatelessWidget {
           },
           initialRoute: '/',
           onGenerateRoute: (settings) {
-            // /chat 라우트에 대해 플랫폼별 처리
+            // /chat 라우트에 대해 슬라이딩 애니메이션 적용
             if (settings.name == '/chat') {
-              // iOS는 CupertinoPageRoute로 네이티브 백 스와이프 지원
-              if (Platform.isIOS) {
-                return CupertinoPageRoute(
-                  builder: (context) => const ChatScreen(),
-                  settings: settings,
-                );
-              } else {
-                // Android는 기존 커스텀 애니메이션 유지
-                return PageRouteBuilder(
-                  settings: settings,
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    // ChatScreen은 arguments를 ModalRoute를 통해 받음
-                    return const ChatScreen();
-                  },
-                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(1.0, 0.0);
-                    const end = Offset.zero;
-                    const curve = Curves.easeInOut;
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  // ChatScreen은 arguments를 ModalRoute를 통해 받음
+                  return const ChatScreen();
+                },
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
 
-                    var tween = Tween(begin: begin, end: end).chain(
-                      CurveTween(curve: curve),
-                    );
+                  var tween = Tween(begin: begin, end: end).chain(
+                    CurveTween(curve: curve),
+                  );
 
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 300),
-                );
-              }
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+                transitionDuration: const Duration(milliseconds: 300),
+              );
             }
             
             // 다른 라우트는 기본 설정 사용

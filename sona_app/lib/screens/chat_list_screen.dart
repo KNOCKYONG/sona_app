@@ -1,4 +1,6 @@
+import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/chat/core/chat_service.dart';
@@ -633,47 +635,55 @@ class _ChatListScreenState extends State<ChatListScreen>
                     onTimeout: () => [],
                   );
                   
-                  // Use custom page route for smooth slide animation
+                  // Use platform-aware navigation for iOS back swipe gesture support
                   Navigator.push(
                     context,
-                    PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return const ChatScreen();
-                      },
-                      settings: RouteSettings(
-                        name: '/chat',
-                        arguments: persona,
-                      ),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        // Smooth slide from right animation
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.easeOutCubic;
-
-                        var tween = Tween(begin: begin, end: end).chain(
-                          CurveTween(curve: curve),
-                        );
-
-                        var offsetAnimation = animation.drive(tween);
-
-                        // Add fade effect for smoother transition
-                        var fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(
-                          CurvedAnimation(
-                            parent: animation,
-                            curve: const Interval(0.0, 0.3),
+                    Platform.isIOS
+                      ? CupertinoPageRoute(
+                          builder: (context) => const ChatScreen(),
+                          settings: RouteSettings(
+                            name: '/chat',
+                            arguments: persona,
                           ),
-                        );
-
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: FadeTransition(
-                            opacity: fadeAnimation,
-                            child: child,
+                        )
+                      : PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return const ChatScreen();
+                          },
+                          settings: RouteSettings(
+                            name: '/chat',
+                            arguments: persona,
                           ),
-                        );
-                      },
-                      transitionDuration: const Duration(milliseconds: 350),
-                    ),
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            // Smooth slide from right animation for Android
+                            const begin = Offset(1.0, 0.0);
+                            const end = Offset.zero;
+                            const curve = Curves.easeOutCubic;
+
+                            var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve),
+                            );
+
+                            var offsetAnimation = animation.drive(tween);
+
+                            // Add fade effect for smoother transition
+                            var fadeAnimation = Tween(begin: 0.0, end: 1.0).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: const Interval(0.0, 0.3),
+                              ),
+                            );
+
+                            return SlideTransition(
+                              position: offsetAnimation,
+                              child: FadeTransition(
+                                opacity: fadeAnimation,
+                                child: child,
+                              ),
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 350),
+                        ),
                   );
                 },
                 onLongPress: () {

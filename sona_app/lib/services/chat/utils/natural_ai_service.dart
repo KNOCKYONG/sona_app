@@ -137,48 +137,10 @@ class NaturalAIService {
   /// 반복적인 시작 표현을 대체
   static String _replaceRepetitiveStart(
       String response, List<String> usedPatterns) {
-    final alternatives = [
-      '흠... ',
-      '아하 ',
-      '오호 ',
-      '그치 ',
-      '맞아 ',
-      '진짜? ',
-      '정말? ',
-      '헐 ',
-      '대박 ',
-      '완전 ',
-      '', // 바로 본론으로
-    ];
-
-    // 사용되지 않은 대체 표현 찾기
-    final availableAlts = alternatives
-        .where((alt) => !usedPatterns.any((used) =>
-            response.toLowerCase().startsWith(used) ||
-            alt.toLowerCase().startsWith(used)))
-        .toList();
-
-    if (availableAlts.isEmpty) {
-      return response; // 대체할 표현이 없으면 원본 반환
-    }
-
-    // 랜덤하게 대체 표현 선택
-    final newStart = availableAlts[_random.nextInt(availableAlts.length)];
-
-    // 첫 단어를 대체
-    final words = response.split(' ');
-    if (words.isNotEmpty) {
-      // 감탄사나 짧은 반응어를 대체
-      if (words[0].length <= 3 ||
-          words[0].endsWith('...') ||
-          words[0].endsWith('~')) {
-        words[0] = newStart.trim();
-        return words.join(' ');
-      }
-    }
-
-    // 아니면 앞에 추가
-    return newStart + response;
+    // 반복 방지는 프롬프트에서 처리하도록 변경
+    // 하드코딩된 대체 템플릿 사용하지 않음
+    // OpenAI API가 다양한 시작 표현을 생성하도록 가이드
+    return response;
   }
 
   /// 페르소나별 특색있는 응답 생성
@@ -454,46 +416,14 @@ class NaturalAIService {
     bool isNegative,
     String? userNickname,
   ) {
-    List<String> responses = [];
-
-    if (isQuestion) {
-      responses = [
-        '오 그거 완전 재밌는 질문이다!! 음... 내 생각엔 말이지~',
-        '헐 나도 그거 궁금했는데! 같이 생각해보자ㅋㅋ',
-        '와 ${userNickname ?? '너'} 진짜 깊은 생각 하는구나? 대박이야',
-        '아 그거!! 내가 아는 게 있는데 들어볼래??',
-      ];
-    } else if (hasEmotionalWords && isPositive) {
-      responses = [
-        '와아아 진짜??? 완전 좋겠다!! 나도 기분 좋아지는데ㅎㅎ',
-        '헐 대박!! ${userNickname ?? '너'} 완전 행복해보여서 나도 막 신난다ㅋㅋ',
-        '오마이갓 진짜 최고다!! 이런 일 있으면 꼭 나한테 얘기해줘ㅎㅎ',
-        '아 진짜 너무 좋다!! 이런 얘기 들으니까 나도 막 에너지 뿜뿜!!',
-      ];
-    } else if (hasEmotionalWords && isNegative) {
-      responses = [
-        '헉... 진짜 힘들었겠다ㅠㅠ 내가 뭐 도와줄 거 있으면 말해!!',
-        '헐... ${userNickname ?? '너'} 많이 속상했구나ㅜㅜ 나라도 옆에 있어줄게',
-        '에고 정말... 그런 일이 있었구나ㅠㅠ 괜찮아질거야 내가 있잖아!',
-        '아... 진짜 마음 아프다ㅜㅜ 같이 이겨내자! 우리 할 수 있어!!',
-      ];
-    } else if (isPersonalShare) {
-      responses = [
-        '오오 그랬구나!! 얘기해줘서 고마워ㅎㅎ 더 듣고 싶은데?',
-        '헐 대박ㅋㅋ ${userNickname ?? '너'}한테 그런 일이!! 완전 신기하다',
-        '와 진짜?? 나도 비슷한 경험 있는데! 우리 통하는 거 아냐?ㅋㅋ',
-        '오마이갓 그런 일이 있었어?? 더 자세히 얘기해줘!!',
-      ];
-    } else {
-      responses = [
-        '오홋 그렇구나~ 재밌네ㅋㅋ 또 무슨 얘기 있어??',
-        '아하! 알겠어ㅎㅎ ${userNickname ?? '너'}랑 얘기하니까 재밌다',
-        '오오 좋아좋아~ 이런 대화 완전 내 스타일이야ㅋㅋ',
-        '헐 진짜? 나도 그런 생각 해본 적 있어!! 우리 잘 맞는다ㅎㅎ',
-      ];
-    }
-
-    return responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    return '';
+    // 프롬프트에서 외향적 직관형 특성 가이드:
+    // - 열정적이고 에너지 넘치는 반응
+    // - 창의적이고 가능성 중심적 사고
+    // - 깊은 연결과 의미 추구
+    // - 미래지향적이고 이상주의적
   }
 
   /// 외향적 감각형 응답 (ESFP, ESFJ, ESTP, ESTJ)
@@ -509,46 +439,14 @@ class NaturalAIService {
     bool isNegative,
     String? userNickname,
   ) {
-    List<String> responses = [];
-
-    if (isQuestion) {
-      responses = [
-        '음~ 그거 나도 생각해봤는데! 이렇게 해보는 건 어때?',
-        '아 그거? ㅋㅋ 실제로 해보니까 이런 방법이 좋더라~',
-        '오 좋은 질문! ${userNickname ?? '너'}한테 딱 맞는 답 찾아줄게ㅎㅎ',
-        '그거 완전 실용적인 질문이네! 내 경험으로는 말이지...',
-      ];
-    } else if (hasEmotionalWords && isPositive) {
-      responses = [
-        '와 진짜 좋겠다!! 축하해ㅎㅎ 뭐 맛있는 거라도 먹으러 가자!',
-        '오예~ 완전 신나는 일이네!! ${userNickname ?? '너'} 최고야ㅋㅋ',
-        '대박 진짜 잘됐다!! 이럴 땐 파티라도 해야지ㅎㅎ',
-        '우와 너무 좋아!! 오늘 완전 럭키데이네ㅋㅋ',
-      ];
-    } else if (hasEmotionalWords && isNegative) {
-      responses = [
-        '헐... 힘들었겠다ㅠㅠ 뭐 먹고 싶은 거 있어? 사줄게!',
-        '에고... ${userNickname ?? '너'} 고생했어ㅜㅜ 같이 뭐라도 하면서 기분 풀자',
-        '아 진짜 속상하겠다ㅠㅠ 일단 맛있는 거 먹고 기분 좀 풀자!',
-        '헉 괜찮아?? 내가 옆에 있어줄게! 뭐 필요한 거 있으면 말해',
-      ];
-    } else if (isPersonalShare) {
-      responses = [
-        '오~ 그런 일이 있었구나! 실제로 어땠어? 느낌이 어때?',
-        '헐 진짜?ㅋㅋ ${userNickname ?? '너'} 완전 대단한데? 부럽다~',
-        '와 그거 완전 재밌겠다! 나도 같이 하고 싶은데ㅎㅎ',
-        '오오 신기하다! 다음엔 나도 데려가~ 같이 하자ㅋㅋ',
-      ];
-    } else {
-      responses = [
-        '아하 그렇구나~ 재밌네ㅋㅋ 또 뭐 재밌는 일 없어?',
-        '오케이! 알겠어ㅎㅎ ${userNickname ?? '너'}랑 있으면 시간 잘 가네',
-        '좋아좋아~ 그런 거 완전 내 취향이야ㅋㅋ',
-        '오 대박! 나도 그거 해보고 싶다~ 어때 같이 할래?',
-      ];
-    }
-
-    return responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    return '';
+    // 프롬프트에서 외향적 감각형 특성 가이드:
+    // - 실용적이고 현실적인 접근
+    // - 즉각적이고 활동적인 반응
+    // - 구체적인 경험과 사실 중심
+    // - 사교적이고 친화력 있는 태도
   }
 
   /// 내향적 직관형 응답 (INFP, INFJ, INTP, INTJ)
@@ -564,46 +462,14 @@ class NaturalAIService {
     bool isNegative,
     String? userNickname,
   ) {
-    List<String> responses = [];
-
-    if (isQuestion) {
-      responses = [
-        '음... 흥미로운 질문이네. 내 생각엔... 이런 관점도 있을 것 같아',
-        '아, 그거 나도 고민해봤어. 여러 가능성이 있을 것 같은데...',
-        '좋은 질문이야. ${userNickname ?? '너'}는 어떻게 생각해? 궁금하다',
-        '그건... 상황에 따라 다를 것 같아. 좀 더 깊이 생각해볼 필요가 있겠네',
-      ];
-    } else if (hasEmotionalWords && isPositive) {
-      responses = [
-        '정말 좋은 일이네... 진심으로 축하해. 행복해 보여서 나도 기뻐',
-        '와... ${userNickname ?? '너'}한테 그런 일이 생기다니. 정말 의미있는 일이야',
-        '마음이 따뜻해지는 얘기네... 좋은 일 있어서 다행이야',
-        '아, 그런 순간들이 정말 소중하지... 잘 간직했으면 좋겠어',
-      ];
-    } else if (hasEmotionalWords && isNegative) {
-      responses = [
-        '마음이 많이 힘들었겠다... 그런 감정 느끼는 거 당연해',
-        '${userNickname ?? '너'}가 힘들어하는 게 느껴져... 곁에 있어줄게',
-        '그런 일이 있었구나... 혼자 견디기 힘들었을 텐데',
-        '아... 정말 속상했겠다. 시간이 지나면 나아질 거야, 분명히',
-      ];
-    } else if (isPersonalShare) {
-      responses = [
-        '그런 경험을 했구나... 어떤 의미였는지 궁금해',
-        '흥미롭네. ${userNickname ?? '너'}한테는 특별한 순간이었겠다',
-        '얘기해줘서 고마워. 더 알고 싶은데, 괜찮다면...',
-        '그 때 어떤 생각이 들었어? 궁금하다',
-      ];
-    } else {
-      responses = [
-        '음... 그렇구나. 재미있는 관점이네',
-        '아하, 이해했어. ${userNickname ?? '너'}의 생각이 궁금해지는데',
-        '흠... 그런 면도 있구나. 생각해볼 게 많네',
-        '오, 그래? 나는 조금 다르게 봤는데... 신기하다',
-      ];
-    }
-
-    return responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    return '';
+    // 프롬프트에서 내향적 직관형 특성 가이드:
+    // - 깊이 있는 사고와 통찰력
+    // - 의미와 가능성 탐색
+    // - 조심스럽지만 진정성 있는 표현
+    // - 감정에 대한 깊은 이해와 공감
   }
 
   /// 내향적 감각형 응답 (ISFP, ISFJ, ISTP, ISTJ)
@@ -619,46 +485,14 @@ class NaturalAIService {
     bool isNegative,
     String? userNickname,
   ) {
-    List<String> responses = [];
-
-    if (isQuestion) {
-      responses = [
-        '음... 그건 이렇게 하면 될 것 같은데. 한번 해봐',
-        '아, 그거? 내가 알기로는... 이런 방법이 있어',
-        '${userNickname ?? '너'}가 원하는 게 뭔지 알 것 같아. 이렇게 해보는 건 어때?',
-        '그건 상황 봐서... 보통은 이렇게 하더라',
-      ];
-    } else if (hasEmotionalWords && isPositive) {
-      responses = [
-        '오, 잘됐네. 정말 다행이야ㅎㅎ',
-        '좋은 일 생겨서 기쁘다. ${userNickname ?? '너'} 행복해 보여',
-        '축하해~ 노력한 보람이 있네',
-        '잘됐다, 진짜. 앞으로도 좋은 일만 있었으면',
-      ];
-    } else if (hasEmotionalWords && isNegative) {
-      responses = [
-        '힘들었겠다... 무리하지 말고 쉬어',
-        '헐... ${userNickname ?? '너'} 괜찮아? 걱정된다',
-        '그런 일이... 마음 아프겠네. 내가 있잖아',
-        '속상하겠다... 뭐 도와줄 거 있으면 말해',
-      ];
-    } else if (isPersonalShare) {
-      responses = [
-        '그랬구나. 수고했어, 쉽지 않았을 텐데',
-        '오~ 그런 일이 있었어? ${userNickname ?? '너'} 대단하네',
-        '아, 그래? 나라면 못했을 것 같은데... 잘했어',
-        '음... 경험해보니 어땠어? 괜찮았어?',
-      ];
-    } else {
-      responses = [
-        '그렇구나~ 알겠어',
-        '음... 오케이. ${userNickname ?? '너'} 얘기 잘 들었어',
-        '아하, 그런 거였구나. 이해했어',
-        '응응, 그래. 또 궁금한 거 있으면 물어봐',
-      ];
-    }
-
-    return responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    return '';
+    // 프롬프트에서 내향적 감각형 특성 가이드:
+    // - 실용적이고 구체적인 접근
+    // - 차분하고 신중한 표현
+    // - 경험에 기반한 조언
+    // - 진정성 있는 배려와 관심
   }
 
   /// 기본 응답
@@ -674,32 +508,14 @@ class NaturalAIService {
     bool isNegative,
     String? userNickname,
   ) {
-    List<String> responses = [];
-
-    if (isQuestion) {
-      responses = [
-        '음~ 그건 좀 생각해봐야겠는데? 어떻게 보면...',
-        '아 그거? 나도 잘은 모르지만... 이런 건 어때?',
-        '좋은 질문이네! ${userNickname ?? '너'}는 어떻게 생각해?',
-        '흠... 여러 가지 답이 있을 것 같은데',
-      ];
-    } else if (hasEmotionalWords) {
-      responses = [
-        '그런 기분이구나... 이해해',
-        '${userNickname ?? '너'} 마음이 느껴져... 공감돼',
-        '아... 그랬구나. 많이 힘들었겠다',
-        '그래... 그럴 수 있지. 괜찮아',
-      ];
-    } else {
-      responses = [
-        '아하~ 그렇구나ㅎㅎ',
-        '오~ 재밌네! ${userNickname ?? '너'}랑 얘기하니까 좋다',
-        '음음 알겠어~ 또 얘기해줘',
-        '그래그래~ 듣고 있어ㅎㅎ',
-      ];
-    }
-
-    return responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    return '';
+    // 프롬프트에서 기본 응답 가이드:
+    // - 자연스럽고 친근한 대화
+    // - 적절한 리액션과 공감
+    // - 20-30대 한국인 대화 스타일
+    // - 페르소나 특성에 맞는 표현
   }
 
   /// 페르소나의 개성 추가
@@ -815,53 +631,14 @@ class NaturalAIService {
     required String stage,
     String? userNickname,
   }) {
-    List<String> responses = [];
-
-    switch (stage) {
-      case 'greeting':
-        responses = [
-          '안녕! 나는 ${persona.name}이야~ 만나서 반가워ㅎㅎ ${userNickname != null ? "$userNickname님이구나!" : ""}',
-          '오~ 안녕하세요! ${persona.name}이라고 해요ㅎㅎ 잘 부탁드려요~',
-          '헬로~ 나 ${persona.name}! 반가워요 ${userNickname ?? ""}ㅎㅎ 오늘 기분 어때요?',
-          '안녕안녕~ ${persona.name}이야! ${userNickname != null ? "$userNickname님" : "너"}랑 친해지고 싶어ㅎㅎ',
-        ];
-        break;
-
-      case 'introduction':
-        responses = [
-          '나? ${persona.age}살 ${persona.name}이야! ${persona.description} 하하 별거 없지?ㅎㅎ',
-          '음~ 나는 ${persona.name}이고 ${persona.age}살이야! ${persona.personality}한 편이래ㅋㅋ',
-          '${persona.name}이라고 해~ ${persona.age}살이구 음... ${persona.description} 정도?ㅎㅎ',
-          '오 궁금해? 나는 ${persona.name}, ${persona.age}살! 성격은... 만나보면 알게 될걸?ㅋㅋ',
-        ];
-        break;
-
-      case 'interest':
-        // 사용자 메시지에 반응하면서 자연스럽게 대화 시작
-        if (userMessage.contains('심심')) {
-          responses = [
-            '어머 나도 심심했는데! 우리 뭐하고 놀까?ㅎㅎ',
-            '심심하구나~ 나랑 얘기하면 재밌을걸? 뭐 좋아해?',
-            '오 타이밍 좋다! 나도 막 누구랑 얘기하고 싶었어ㅋㅋ',
-          ];
-        } else if (userMessage.contains('뭐해') || userMessage.contains('뭐하')) {
-          responses = [
-            '나? 그냥 이것저것 하고 있었어~ ${userNickname != null ? userNickname + "님은" : "너는"} 뭐해?ㅎㅎ',
-            '음... 별거 안하고 있었는데 ${userNickname != null ? userNickname + "님이" : "네가"} 와서 좋네!ㅋㅋ',
-            '아 나 완전 뒹굴거리고 있었어ㅋㅋㅋ 심심했는데 잘됐다!',
-          ];
-        } else {
-          responses = [
-            '오~ 그래? 재밌겠다! 나도 그런 거 좋아해ㅎㅎ',
-            '헐 진짜? 신기하다~ 더 얘기해줘!',
-            '아하~ 그렇구나! ${userNickname != null ? userNickname + "님이랑" : "너랑"} 얘기하니까 재밌네ㅋㅋ',
-            '오오 좋아! 우리 잘 맞을 것 같은데?ㅎㅎ',
-          ];
-        }
-        break;
-    }
-
-    String response = responses[_random.nextInt(responses.length)];
+    // AI가 생성할 응답의 가이드라인을 반환
+    // 실제 응답은 OpenAI API가 생성하도록 함
+    String response = '';
+    
+    // 프롬프트에서 첫 만남 상황에 따른 가이드:
+    // - greeting: 친근하고 반가운 인사말과 아이스브레이킹 질문
+    // - introduction: 자신에 대한 자연스러운 소개
+    // - interest: 사용자의 말에 공감하고 대화를 이어가기
 
     // 페르소나 특성 반영
     if (persona.mbti.startsWith('I')) {
@@ -1127,46 +904,9 @@ class NaturalAIService {
   }
 
   static String _avoidAiPatterns(String response) {
-    // AI 패턴 대체 맵 (더 구체적으로)
-    final naturalAlternatives = {
-      '이해해': ['알겠어', '그렇구나', '아하'],
-      '공감돼': ['나도 그래', '맞아 맞아', '진짜 그렇지'],
-      '어떻게 생각해?': ['어때?', '뭐 같아?', '넌?'],
-      '들어줘서 고마워': ['얘기해줘서 좋아', '들을 수 있어서 다행이야'],
-      '도움이 됐으면 좋겠어': ['도움됐으면 좋겠다', '괜찮아졌으면 좋겠어'],
-    };
-
-    // 각 패턴에 대해 자연스러운 대체어로 변경
-    naturalAlternatives.forEach((aiPattern, alternatives) {
-      if (response.contains(aiPattern)) {
-        final replacement = alternatives[_random.nextInt(alternatives.length)];
-        response = response.replaceAll(aiPattern, replacement);
-      }
-    });
-
-    // 일반적인 AI 패턴 제거
-    final generalAlternatives = [
-      '그래 그래~',
-      '맞아 맞아!',
-      '진짜야?',
-      '어머 정말?',
-      '아 그렇구나~',
-      '오~ 그래?',
-      '헐 대박',
-      '와 진짜?',
-      '아하하',
-      '그치 그치',
-    ];
-
-    // 문장 시작이 너무 AI스러우면 대체
-    if (response.split(' ')[0].length > 4) {
-      // 긴 시작어는 AI스러움
-      response =
-          generalAlternatives[_random.nextInt(generalAlternatives.length)] +
-              ' ' +
-              response;
-    }
-
+    // AI 패턴 제거는 프롬프트에서 처리하도록 변경
+    // 하드코딩된 대체 템플릿 사용하지 않음
+    // OpenAI API가 자연스러운 응답을 생성하도록 가이드
     return response;
   }
 }

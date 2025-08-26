@@ -3864,6 +3864,15 @@ class ChatService extends BaseService {
 
       // 로컬 메시지는 유지 (나중에 다시 대화 시작할 수 있음)
       // 단지 채팅 목록에서만 안 보이게 함
+      
+      // PersonaService를 업데이트하여 UI 즉시 반영
+      if (_personaService != null) {
+        debugPrint('🔄 Refreshing PersonaService matched personas after leaving chat');
+        // 캐시 제거 및 목록에서 즉시 제거
+        _personaService!.clearPersonaCacheForLeftChat(personaId);
+        // 전체 목록 새로고침
+        await _personaService!.refreshMatchedPersonasRelationships();
+      }
 
       debugPrint('✅ Successfully left chat room for persona: $personaId');
     } catch (e) {
@@ -3899,6 +3908,12 @@ class ChatService extends BaseService {
 
       // Load existing chat history
       await loadChatHistory(userId, personaId);
+      
+      // PersonaService를 업데이트하여 UI 즉시 반영
+      if (_personaService != null) {
+        debugPrint('🔄 Refreshing PersonaService matched personas after rejoining chat');
+        await _personaService!.refreshMatchedPersonasRelationships();
+      }
 
       debugPrint('✅ Successfully rejoined chat room for persona: $personaId');
     } catch (e) {

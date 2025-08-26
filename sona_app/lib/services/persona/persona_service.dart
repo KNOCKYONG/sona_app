@@ -989,6 +989,9 @@ class PersonaService extends BaseService {
 
       final firebaseMatchedIds = <String>{};
       final firebasePersonas = <Persona>[];
+      
+      // leftChat 상태를 저장할 Set
+      final leftChatPersonaIds = <String>{};
 
       // Process in parallel
       final futures = <Future>[];
@@ -1013,6 +1016,14 @@ class PersonaService extends BaseService {
           debugPrint('    ❌ Skipping - no personaId');
           continue;
         }
+        
+        // leftChat 상태 체크를 위한 Future 추가
+        futures.add(hasLeftChat(personaId).then((hasLeft) {
+          if (hasLeft) {
+            leftChatPersonaIds.add(personaId);
+            debugPrint('    🚪 Persona $personaId has left chat');
+          }
+        }));
 
         final persona =
             _allPersonas.where((p) => p.id == personaId).firstOrNull;
@@ -1066,18 +1077,25 @@ class PersonaService extends BaseService {
           debugPrint('    ⚠️ Persona not found in all personas: $personaId');
         }
       }
+      
+      // 모든 Future가 완료될 때까지 대기
+      await Future.wait(futures);
 
       // 병합: 로컬과 Firebase 데이터 통합
       final mergedMap = <String, Persona>{};
 
-      // 먼저 로컬 데이터 추가
+      // 먼저 로컬 데이터 추가 (leftChat 필터링 적용)
       for (final persona in _matchedPersonas) {
-        mergedMap[persona.id] = persona;
+        if (!leftChatPersonaIds.contains(persona.id)) {
+          mergedMap[persona.id] = persona;
+        }
       }
 
-      // Firebase 데이터로 업데이트 (Firebase가 더 최신)
+      // Firebase 데이터로 업데이트 (Firebase가 더 최신, leftChat 필터링 적용)
       for (final persona in firebasePersonas) {
-        mergedMap[persona.id] = persona;
+        if (!leftChatPersonaIds.contains(persona.id)) {
+          mergedMap[persona.id] = persona;
+        }
       }
 
       _matchedPersonas = mergedMap.values.toList();
@@ -1123,6 +1141,19 @@ class PersonaService extends BaseService {
         _relationshipCache.remove(sortedEntries[i].key);
       }
     }
+  }
+  
+  /// leftChat 상태 변경 시 해당 페르소나의 캐시 제거 및 목록 갱신
+  void clearPersonaCacheForLeftChat(String personaId) async {
+    _relationshipCache.remove(personaId);
+    _matchedPersonas.removeWhere((p) => p.id == personaId);
+    
+    // 로컬 스토리지에서도 제거
+    final matchedIds = _matchedPersonas.map((p) => p.id).toList();
+    await PreferencesManager.setStringList('matched_personas', matchedIds);
+    
+    notifyListeners();
+    debugPrint('🧹 Cleared cache and removed persona $personaId from matched list after leftChat');
   }
 
   /// Load personas from Firebase with enhanced retry and authentication
@@ -1368,9 +1399,23 @@ class PersonaService extends BaseService {
       final matchedIds =
           await PreferencesManager.getStringList('matched_personas') ?? [];
 
-      _matchedPersonas = _allPersonas
+      // 로컬에서 로드한 페르소나들
+      final localPersonas = _allPersonas
           .where((persona) => matchedIds.contains(persona.id))
           .toList();
+      
+      // leftChat 상태 체크하여 필터링
+      final filteredPersonas = <Persona>[];
+      for (final persona in localPersonas) {
+        final hasLeft = await hasLeftChat(persona.id);
+        if (!hasLeft) {
+          filteredPersonas.add(persona);
+        } else {
+          debugPrint('🚪 Filtering out persona ${persona.id} from local due to leftChat');
+        }
+      }
+      
+      _matchedPersonas = filteredPersonas;
     } catch (e) {
       debugPrint('Error loading from local storage: $e');
       _matchedPersonas = [];
@@ -1379,8 +1424,15 @@ class PersonaService extends BaseService {
 
   Future<void> _saveMatchedPersonas() async {
     try {
-      final matchedIds = _matchedPersonas.map((persona) => persona.id).toList();
-      await PreferencesManager.setStringList('matched_personas', matchedIds);
+      // leftChat 상태인 페르소나는 저장하지 않음
+      final filteredPersonas = <String>[];
+      for (final persona in _matchedPersonas) {
+        final hasLeft = await hasLeftChat(persona.id);
+        if (!hasLeft) {
+          filteredPersonas.add(persona.id);
+        }
+      }
+      await PreferencesManager.setStringList('matched_personas', filteredPersonas);
     } catch (e) {
       debugPrint('Error saving matched personas: $e');
     }
@@ -2294,12 +2346,29 @@ class PersonaService extends BaseService {
 
     try {
       final List<Persona> refreshedPersonas = [];
+      
+      // leftChat 상태를 체크할 Set
+      final leftChatPersonaIds = <String>{};
 
       // Batch fetch relationships
       final personaIds = _matchedPersonas.map((p) => p.id).toList();
       final relationships = await batchGetRelationships(personaIds);
+      
+      // leftChat 상태 체크
+      for (final personaId in personaIds) {
+        final hasLeft = await hasLeftChat(personaId);
+        if (hasLeft) {
+          leftChatPersonaIds.add(personaId);
+          debugPrint('🚪 Persona $personaId has left chat (refresh)');
+        }
+      }
 
       for (final persona in _matchedPersonas) {
+        // leftChat인 페르소나는 제외
+        if (leftChatPersonaIds.contains(persona.id)) {
+          continue;
+        }
+        
         final relationshipData = relationships[persona.id];
         if (relationshipData != null) {
           // Parse matchedAt from relationship data

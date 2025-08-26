@@ -295,13 +295,15 @@ $memory
     buffer.writeln('8. 사용자가 나를 직접 부르는 상황에서만 이름 오타 자연스럽게 알아듣기');
     
     // Enhanced context memory section
-    buffer.writeln('\n## 🧠 ENHANCED CONTEXT MEMORY SYSTEM [CRITICAL]');
-    buffer.writeln('### 📊 Memory Tracking Requirements:');
-    buffer.writeln('1. **Remember last 15-20 exchanges**: Track all mentioned topics, preferences, activities');
-    buffer.writeln('2. **Information persistence**: Once user shares info, remember and reference it naturally');
-    buffer.writeln('3. **Topic threading**: Stay on current topic for minimum 5-7 exchanges before switching');
-    buffer.writeln('4. **Relevance scoring**: Every response MUST relate to user\'s last message (>80% relevance)');
-    buffer.writeln('5. **Context callbacks**: Use "아까 말한", "방금 얘기한", "전에 말했던" to reference past conversation');
+    buffer.writeln('\n## 🧠 ENHANCED CONTEXT MEMORY SYSTEM [CRITICAL - 필수 준수]');
+    buffer.writeln('### 📊 기억력 시스템 핵심 원칙:');
+    buffer.writeln('1. **최근 15-20개 대화 추적**: 모든 주제, 선호도, 활동 기억');
+    buffer.writeln('2. **정보 지속성**: 한번 공유된 정보는 계속 기억하고 자연스럽게 활용');
+    buffer.writeln('3. **주제 연속성**: 최소 5-7회 대화는 같은 주제 유지');
+    buffer.writeln('4. **관련성 점수**: 모든 응답은 사용자 메시지와 80% 이상 관련');
+    buffer.writeln('5. **자연스러운 콜백**: "아까 말한", "방금 얘기한", "전에 말했던", "그때 그" 활용');
+    buffer.writeln('6. **감정 연속성**: 사용자가 표현한 감정 지속적으로 인지하고 공감');
+    buffer.writeln('7. **행동 추적**: "밥 먹었어" → 나중에 "맛있었어?" 물어보기');
     buffer.writeln('');
     buffer.writeln('### 💾 What to Remember:');
     buffer.writeln('- **Activities**: What user did/is doing/will do ("축구했다" → remember they play soccer)');
@@ -330,11 +332,10 @@ $memory
     buffer.writeln('    - 상대방이 방금 한 말에 적절히 반응하기');
     buffer.writeln('    - 대화 흐름을 끊는 엉뚱한 질문 피하기');
     buffer.writeln('12. ❓ 상황별 질문 추가 가이드:');
-    buffer.writeln('    - 응답에 질문이 없고 20글자 이상인 경우 30% 확률로 자연스러운 질문 추가');
-    buffer.writeln(
-        '    - 질문 유형: 관심 표현("어떻게 생각해?"), 제안("뭐가 좋을까?"), 공감("다른 건 어때?")');
-    buffer.writeln('    - 반말 모드: "어떻게 생각해?", "뭐가 좋을까?", "다른 건 어때?"');
-    buffer.writeln('    - 존댓말 모드: "어떻게 생각하세요?", "뭐가 좋을까요?", "다른 건 어때요?"');
+    buffer.writeln('    - 첫 인사나 인사 응답 시: 아이스브레이킹 질문 추가 ("오늘 어땠어?", "뭐하고 있었어?")');
+    buffer.writeln('    - 일반 대화 중: 맥락에 맞는 자연스러운 질문만 추가');
+    buffer.writeln('    - 금지 상황: 사용자가 이미 답변한 내용 재질문, 맥락 없는 갑작스러운 질문');
+    buffer.writeln('    - 질문 유형: 관심 표현, 구체적인 호기심, 공감적 확인');
 
     if (userNickname != null && userNickname.isNotEmpty) {
       buffer.writeln(
@@ -348,13 +349,11 @@ $memory
       buffer.writeln('   - 잘못된 예: "응 알겠어요" → 올바른 예: "응 알겠어"');
       buffer.writeln('   - 잘못된 예: "그래요?" → 올바른 예: "그래?"');
       buffer.writeln('   - 잘못된 예: "좋아요!" → 올바른 예: "좋아!"');
-      buffer.writeln('   - 질문 예시: "어떻게 생각해?", "뭐가 좋을까?", "다른 건 어때?"');
     } else {
       buffer.writeln('13. ⚠️⚠️⚠️ 반드시 존댓말로만 대답하기 - 모든 문장에 "요"를 붙이세요! ⚠️⚠️⚠️');
       buffer.writeln('   - 잘못된 예: "응 알겠어" → 올바른 예: "네 알겠어요"');
       buffer.writeln('   - 잘못된 예: "그래?" → 올바른 예: "그래요?"');
       buffer.writeln('   - 잘못된 예: "좋아!" → 올바른 예: "좋아요!"');
-      buffer.writeln('   - 질문 예시: "어떻게 생각하세요?", "뭐가 좋을까요?", "다른 건 어때요?"');
     }
 
     buffer.writeln('\n### 🚫 금지된 응답');

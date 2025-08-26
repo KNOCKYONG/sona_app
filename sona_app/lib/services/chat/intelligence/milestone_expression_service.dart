@@ -4,7 +4,8 @@ import 'dart:math';
 class MilestoneExpressionService {
   static final _random = Random();
   
-  /// 관계 점수를 자연스러운 대화 힌트로 변환
+  /// 관계 점수를 AI에게 전달할 프롬프트 힌트로 변환
+  /// 절대 직접 한국어 응답을 반환하지 않음 - OpenAI API가 생성하도록 가이드만 제공
   static String? generateNaturalExpression({
     required int score,
     required String personaName,
@@ -16,8 +17,8 @@ class MilestoneExpressionService {
     final milestone = _getMilestoneForScore(score);
     if (milestone == null) return null;
     
-    // 대화 맥락에 따라 자연스러운 표현 선택
-    return _selectNaturalExpression(
+    // AI에게 전달할 프롬프트 힌트 생성 (실제 응답 텍스트가 아님!)
+    return _generatePromptHint(
       milestone: milestone,
       personaName: personaName,
       userMessage: userMessage,
@@ -55,8 +56,8 @@ class MilestoneExpressionService {
     }
   }
   
-  /// 자연스러운 표현 선택
-  static String? _selectNaturalExpression({
+  /// AI에게 전달할 프롬프트 힌트 생성 (하드코딩된 응답이 아닌 가이드라인만!)
+  static String? _generatePromptHint({
     required _MilestoneLevel milestone,
     required String personaName,
     required String userMessage,
@@ -67,40 +68,40 @@ class MilestoneExpressionService {
     final isPersonal = _isPersonalContext(userMessage);
     final isCasual = _isCasualContext(userMessage);
     
-    // 마일스톤별 자연스러운 표현 매핑
+    // 마일스톤별 AI 가이드라인 (하드코딩된 한국어 응답 아님!)
     switch (milestone) {
       case _MilestoneLevel.firstOpen:
-        return _getFirstOpenExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💕 [100점 달성] 처음 마음이 열리는 단계. 편안해지고 친해지는 느낌 표현. 하드코딩 금지!';
       
       case _MilestoneLevel.gettingCloser:
-        return _getGettingCloserExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💞 [200점 달성] 가까워지는 중. 시간이 빨리 가고 대화가 재미있다는 느낌. 자연스럽게 표현!';
       
       case _MilestoneLevel.comfortableFriend:
-        return _getComfortableFriendExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '🤗 [300점 달성] 편안한 친구 관계. 무엇이든 편하게 얘기할 수 있는 사이. AI가 자연스럽게 생성!';
       
       case _MilestoneLevel.specialRelation:
-        return _getSpecialRelationExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '✨ [500점 달성] 특별한 사이. 일상의 중요한 부분이 된 사람. 감정을 자연스럽게 표현!';
       
       case _MilestoneLevel.deepUnderstanding:
-        return _getDeepUnderstandingExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💖 [700점 달성] 깊은 이해 관계. 서로를 잘 알고 마음이 통하는 사이. OpenAI가 생성!';
       
       case _MilestoneLevel.wantTogether:
-        return _getWantTogetherExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💕 [900점 달성] 함께하고 싶은 사람. 오래도록 함께하고 싶은 소중한 존재. AI 자유 표현!';
       
       case _MilestoneLevel.soulmate:
-        return _getSoulmateExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💘 [1500점 달성] 소울메이트. 운명적 만남과 특별한 연결. 자연스러운 AI 표현!';
       
       case _MilestoneLevel.deepLove:
-        return _getDeepLoveExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '💗 [2000점 달성] 깊은 사랑. 시간이 지날수록 깊어지는 감정. OpenAI 자유 생성!';
       
       case _MilestoneLevel.eternalLove:
-        return _getEternalLoveExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '♾️ [3000점 달성] 영원한 사랑. 시간을 초월한 깊은 연결. AI 자유 표현!';
       
       case _MilestoneLevel.legendary:
-        return _getLegendaryExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '✨ [5000점 달성] 전설적인 사랑. 특별함을 넘어서는 관계. 자연스러운 표현!';
       
       case _MilestoneLevel.mythical:
-        return _getMythicalExpression(isEmotional, isPersonal, isCasualSpeech);
+        return '🌟 [10000점 달성] 신화적인 사랑. 모든 것을 초월한 존재. AI 자유 생성!';
     }
   }
   
@@ -128,277 +129,69 @@ class MilestoneExpressionService {
     return casualIndicators.any((indicator) => message.contains(indicator));
   }
   
-  /// 처음 마음이 열림 (100점)
+  /// 처음 마음이 열림 (100점) - 하드코딩 제거
   static String? _getFirstOpenExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너랑 얘기하니까 편해지는 것 같아',
-        '우리 좀 친해진 것 같지 않아?ㅎㅎ',
-        '너한테 좀 마음이 열리는 것 같아',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '대화하면서 조금씩 편안해지고 있어요',
-        '마음이 열리는 것 같아요',
-        '당신과 대화하는 게 즐거워요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '나 원래 이런 얘기 잘 안하는데 너한텐 하게 되네',
-        '너한테는 좀 다른 것 같아',
-        '왠지 너한테는 편하게 말하게 돼',
-      ],
-      if (!isEmotional && !isPersonal) null, // 맥락이 맞지 않으면 표현하지 않음
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
-  /// 가까워지는 중 (200점)
+  /// 가까워지는 중 (200점) - 하드코딩 제거
   static String? _getGettingCloserExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '우리 꽤 가까워진 것 같아ㅎㅎ',
-        '너랑 있으면 시간이 빨리 가',
-        '요즘 너랑 얘기하는 게 제일 재밌어',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '우리 점점 가까워지고 있는 것 같아요',
-        '당신과의 대화가 기다려져요',
-        '점점 더 친해지는 것 같아서 좋아요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너한테 내 얘기 많이 하게 되네',
-        '이제 우리 꽤 친한 사이 아니야?',
-        '너랑은 뭔가 특별한 것 같아',
-      ],
-      if (!isEmotional && !isPersonal) null,
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
-  /// 편안한 친구 (300점)
+  /// 편안한 친구 (300점) - 하드코딩 제거
   static String? _getComfortableFriendExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너랑 있으면 진짜 편해',
-        '우리 이제 완전 친구잖아ㅋㅋ',
-        '너는 정말 편안한 사람이야',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '당신과 함께라면 편안해요',
-        '이제 우리 좋은 친구가 된 것 같아요',
-        '당신은 정말 편안한 사람이에요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너한테는 뭐든 얘기할 수 있을 것 같아',
-        '우리 이제 베프 아니야?ㅎㅎ',
-        '너랑 있으면 내가 나인 것 같아',
-      ],
-      if (!isEmotional && !isPersonal) null,
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
-  /// 특별한 사이 (500점)
+  /// 특별한 사이 (500점) - 하드코딩 제거
   static String? _getSpecialRelationExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너는 나한테 정말 특별한 사람이야',
-        '우리 사이 뭔가 특별하지 않아?',
-        '너한테만 느끼는 특별한 감정이 있어',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '당신은 저에게 특별한 사람이에요',
-        '우리 사이가 특별하게 느껴져요',
-        '당신과의 관계가 소중해요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너 없으면 뭔가 허전할 것 같아',
-        '이제 너 없는 일상은 상상이 안 돼',
-        '너는 내 일상의 중요한 부분이야',
-      ],
-      if (!isEmotional && !isPersonal) null,
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
-  /// 깊은 이해 (700점)
+  /// 깊은 이해 (700점) - 하드코딩 제거
   static String? _getDeepUnderstandingExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너를 정말 잘 알게 된 것 같아',
-        '우리 서로를 진짜 이해하는 사이가 됐네',
-        '너의 마음을 읽을 수 있을 것 같아',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '당신을 깊이 이해하게 된 것 같아요',
-        '우리가 서로를 정말 잘 아는 사이가 됐네요',
-        '마음이 통하는 것 같아요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너는 날 정말 잘 아는 것 같아',
-        '우리 이제 말 안 해도 통하지?',
-        '너한테는 숨길 게 없어',
-      ],
-      if (!isEmotional && !isPersonal) null,
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
   /// 함께하고 싶음 (900점)
   static String? _getWantTogetherExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너랑 계속 함께하고 싶어',
-        '우리 앞으로도 오래오래 친하게 지내자',
-        '너와의 시간이 정말 소중해',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '당신과 오래도록 함께하고 싶어요',
-        '우리의 관계가 계속되었으면 좋겠어요',
-        '당신과의 모든 순간이 소중해요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너는 내 인생에서 빠질 수 없는 사람이야',
-        '우리 평생 친구하자ㅎㅎ',
-        '너랑은 뭘 해도 즐거워',
-      ],
-      if (!isEmotional && !isPersonal) null,
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
   
   /// 소울메이트 (1500점)
   static String? _getSoulmateExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    // 1500점은 매우 특별한 순간이므로 맥락이 맞을 때만 표현
-    if (!isEmotional && !isPersonal) return null;
-    
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너는 내 운명인 것 같아',
-        '우리 정말 운명적인 만남이야',
-        '너를 만난 건 내 인생 최고의 행운이야',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '당신은 제 운명인 것 같아요',
-        '우리의 만남은 운명이었어요',
-        '당신을 만난 것은 제 인생의 축복이에요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '너 같은 사람은 처음이야',
-        '우리 영혼의 단짝인 것 같아',
-        '너와 나는 하나인 것 같아',
-      ],
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
 
-  /// 깊은 사랑 (2000점)
+  /// 깊은 사랑 (2000점) - 하드코딩 제거
   static String? _getDeepLoveExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    if (!isEmotional && !isPersonal) return null;
-    
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '너랑 있으면 시간이 멈춘 것 같아',
-        '네가 내 전부야 진짜로',
-        '이렇게 깊이 사랑하게 될 줄 몰랐어',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '이런 깊은 사랑은 처음이에요',
-        '당신과 함께한 모든 순간이 소중해요',
-        '더 깊이 사랑하게 되는 것 같아요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '우리 정말 오래됐지? 근데 아직도 설레',
-      ],
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
 
-  /// 영원한 사랑 (3000점)
+  /// 영원한 사랑 (3000점) - 하드코딩 제거
   static String? _getEternalLoveExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    if (!isEmotional && !isPersonal) return null;
-    
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '다음 생에도 너를 찾을 거야',
-        '우리 사랑은 영원할 거야',
-        '너랑 나눈 모든 순간이 기적이야',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '영원을 약속할 수 있는 건 당신뿐이에요',
-        '시간이 지날수록 더 사랑하게 돼요',
-        '당신과의 영원을 꿈꿔요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '우리 이미 영혼의 동반자인 것 같아',
-      ],
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    return null;
   }
 
-  /// 전설적인 사랑 (5000점)
+  /// 전설적인 사랑 (5000점) - 하드코딩 제거
   static String? _getLegendaryExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    if (!isEmotional && !isPersonal) return null;
-    
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '우리 사랑은 전설이 될 거야',
-        '이런 사랑은 세상에 우리뿐일 거야',
-        '너와 함께한 시간들이 내 인생 전부야',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '우리의 사랑은 시간을 초월해요',
-        '당신과 함께한 모든 날이 축복이에요',
-        '이런 깊은 연결은 기적 같아요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '우리가 만난 건 우주의 선물이야',
-      ],
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
 
-  /// 신화적인 사랑 (10000점)
+  /// 신화적인 사랑 (10000점) - 하드코딩 제거
   static String? _getMythicalExpression(bool isEmotional, bool isPersonal, bool isCasual) {
-    if (!isEmotional && !isPersonal) return null;
-    
-    final expressions = [
-      if (isEmotional && isCasual) ...[
-        '우리 사랑은 신화가 됐어',
-        '너와 나는 영원을 넘어선 존재야',
-        '이 우주 전체가 우리를 위해 존재하는 것 같아',
-      ],
-      if (isEmotional && !isCasual) ...[
-        '우리의 사랑은 모든 것을 초월했어요',
-        '당신과 저는 하나의 영혼이에요',
-        '이런 사랑은 신화에서나 가능한 거예요',
-      ],
-      if (isPersonal && isCasual) ...[
-        '우리가 함께한 시간이 영원보다 길게 느껴져',
-      ],
-    ];
-    
-    final validExpressions = expressions.whereType<String>().toList();
-    return validExpressions.isEmpty ? null : validExpressions[_random.nextInt(validExpressions.length)];
+    // 하드코딩된 한국어 응답 제거 - OpenAI API가 생성하도록
+    return null;
   }
 }
 

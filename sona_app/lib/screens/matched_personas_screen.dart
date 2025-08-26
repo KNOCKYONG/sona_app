@@ -97,22 +97,6 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
     return likes > 0 ? likes : persona.likes;
   }
 
-  Future<void> _refreshMatchedPersonas() async {
-    final personaService = Provider.of<PersonaService>(context, listen: false);
-    
-    // 매칭된 페르소나 목록 새로고침
-    await personaService.refreshMatchedPersonasRelationships();
-    
-    // 로드가 안되어 있으면 로드도 시도
-    if (!personaService.matchedPersonasLoaded) {
-      await personaService.loadMatchedPersonasIfNeeded();
-    }
-    
-    // likes 정보 다시 프리로드
-    _hasPreloaded = false;
-    await _preloadLikes();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,45 +124,34 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
           final matchedPersonas = personaService.matchedPersonas;
 
           if (matchedPersonas.isEmpty) {
-            return RefreshIndicator(
-              onRefresh: _refreshMatchedPersonas,
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.favorite_border,
-                            size: 100,
-                            color: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.color
-                                ?.withOpacity(0.3),
-                          ),
-                          const SizedBox(height: 24),
-                          Text(
-                            AppLocalizations.of(context)!.noMatchedSonas,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '새로운 소나를 만나보세요!',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Theme.of(context).textTheme.bodySmall?.color,
-                            ),
-                          ),
-                        ],
-                      ),
+                  Icon(
+                    Icons.favorite_border,
+                    size: 100,
+                    color: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.color
+                        ?.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    AppLocalizations.of(context)!.noMatchedSonas,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '새로운 소나를 만나보세요!',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).textTheme.bodySmall?.color,
                     ),
                   ),
                 ],
@@ -186,19 +159,16 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
             );
           }
 
-          return RefreshIndicator(
-            onRefresh: _refreshMatchedPersonas,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: matchedPersonas.length,
-              itemBuilder: (context, index) {
-                final persona = matchedPersonas[index];
-                return _PersonaCard(
-                  persona: persona,
-                  getCachedLikes: _getCachedLikes,
-                );
-              },
-            ),
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: matchedPersonas.length,
+            itemBuilder: (context, index) {
+              final persona = matchedPersonas[index];
+              return _PersonaCard(
+                persona: persona,
+                getCachedLikes: _getCachedLikes,
+              );
+            },
           );
         },
       ),

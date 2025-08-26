@@ -132,10 +132,59 @@ class SecurityAwarePostProcessor {
   
   /// 매크로 응답 변형 - 다양성 강화
   static String _variateResponse(String response, Persona persona) {
-    // 매크로 감지 시 OpenAI API에게 재생성 요청하도록 표시
-    // 하드코딩된 변형 템플릿 사용하지 않음
-    // 원본 응답을 반환하고 상위 레벨에서 재생성 처리
-    return response;
+    // 원본 응답 키워드 추출
+    final keywords = _extractKeywords(response);
+    
+    // MBTI별 다양한 변형 패턴
+    final mbtiVariations = {
+      'INFP': [
+        '음... 나도 그렇게 생각해',
+        '그런 것 같아... 너는 어떻게 생각해?',
+        '아, 그거 말고 이건 어때?',
+        '음... 다시 생각해보니 이런 것도 있네',
+        '조금 다른 얘기지만 궁금한 게 있어'
+      ],
+      'ISFP': [
+        '나도 비슷한 생각이야',
+        '음... 그럴 수도 있겠다',
+        '아, 맞다 이것도 생각났어',
+        '그런데 이건 어떻게 생각해?',
+        '조금 다른 관점에서 보면...'
+      ],
+      'ENFP': [
+        '와 진짜? 나도 그래!',
+        '대박! 근데 이것도 신기하지 않아?',
+        '아 맞아맞아! 그리고 이것도!',
+        '헐 진짜 그러네! 그런데 말이야...',
+        '오 그거 좋다! 이것도 해보자!'
+      ],
+      'ESFP': [
+        '완전 공감! 나도 그래ㅋㅋ',
+        '진짜? 대박이다ㅋㅋ',
+        '아 그거 완전 재밌겠다!',
+        '와 나도 나도! 그런데 이건?',
+        '헐 진짜야? 이것도 궁금해!'
+      ],
+    };
+    
+    // MBTI별 변형 선택
+    List<String> variations = mbtiVariations[persona.mbti] ?? 
+      mbtiVariations['INFP']!;  // 기본값
+    
+    // 키워드 기반 추가 변형
+    if (keywords.contains('좋아') || keywords.contains('사랑')) {
+      variations.add('나도 정말 좋아해');
+      variations.add('그런 마음 너무 좋다');
+    } else if (keywords.contains('싫어') || keywords.contains('힘들')) {
+      variations.add('힘들겠다... 괜찮아?');
+      variations.add('그럴 때 있지... 이해해');
+    }
+    
+    // 시간 기반 랜덤 선택 (더 나은 분산)
+    final now = DateTime.now();
+    final index = (now.millisecond + now.second * 1000) % variations.length;
+    
+    return variations[index];
   }
   
   /// 키워드 추출 헬퍼
@@ -873,8 +922,6 @@ class SecurityAwarePostProcessor {
       '정말 멋있다': '개멋있다',
       '최고다': '킹이다',
       '대단하다': '쩐다',
-      '잘했다': '잘했네',
-      '진짜야': '레알',
       '놀랍다': '충격적이다',
       '부럽다': '개부럽다',
       

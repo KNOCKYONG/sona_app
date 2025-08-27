@@ -3,13 +3,16 @@ import 'language_settings_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'faq_screen.dart';
 import 'profile_edit_screen.dart';
+import 'settings/blocked_personas_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import '../services/auth/auth_service.dart';
+import '../services/auth/device_id_service.dart';
 import '../services/theme/theme_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../services/cache/image_preload_service.dart';
+import '../services/block_service.dart';
 import '../config/custom_cache_manager.dart';
 import '../utils/account_deletion_dialog.dart';
 import '../l10n/app_localizations.dart';
@@ -25,11 +28,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _notificationsEnabled = true;
   bool _soundEnabled = true;
   bool _hapticEnabled = true;
+  final BlockService _blockService = BlockService();
 
   @override
   void initState() {
     super.initState();
     _loadSettings();
+    _initializeBlockService();
+  }
+
+  Future<void> _initializeBlockService() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+    if (userId.isNotEmpty) {
+      await _blockService.initialize(userId);
+    }
+  }
+
+  Future<int> _getBlockedCount() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final userId = authService.user?.uid ?? await DeviceIdService.getDeviceId();
+    if (userId.isNotEmpty) {
+      final blockedPersonas = await _blockService.getBlockedPersonas(userId);
+      return blockedPersonas.length;
+    }
+    return 0;
   }
 
   Future<void> _loadSettings() async {
@@ -171,6 +194,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       .getThemeDisplayName(themeService.currentTheme),
                   onTap: () {
                     Navigator.pushNamed(context, '/theme-settings');
+                  },
+                );
+              },
+            ),
+
+            // 차단 관리
+            _buildSectionTitle(localizations.blockedAIs),
+            FutureBuilder<int>(
+              future: _getBlockedCount(),
+              builder: (context, snapshot) {
+                final blockedCount = snapshot.data ?? 0;
+                return _buildMenuItem(
+                  icon: Icons.block,
+                  title: localizations.manageBlockedAIs,
+                  subtitle: blockedCount > 0 
+                      ? localizations.blockedAICount(blockedCount)
+                      : localizations.noBlockedAIs,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BlockedPersonasScreen(),
+                      ),
+                    );
                   },
                 );
               },

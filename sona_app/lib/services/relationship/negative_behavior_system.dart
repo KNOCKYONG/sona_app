@@ -298,8 +298,8 @@ class NegativeBehaviorSystem {
       // 게임 컨텍스트에서는 추가 감소
       double gameReduction = isGameContext ? 0.7 : 0;
 
-      // 관계 점수에 따른 페널티 조정
-      int basePenalty = _random.nextInt(100) + 50; // 50~150
+      // 관계 점수에 따른 페널티 조정 (완화된 버전)
+      int basePenalty = _random.nextInt(20) + 5; // 5~25 (기존 50~150에서 대폭 감소)
 
       // 관계 점수별 페널티 감소율
       double reductionRate = 0;

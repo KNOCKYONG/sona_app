@@ -13,6 +13,7 @@ import '../services/purchase/purchase_service.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
 import '../services/ui/haptic_service.dart';
+import '../services/block_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
@@ -86,12 +87,22 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   bool _isLoadingMore = false;
+  bool _isKeyboardVisible = false; // 키보드 상태 추적
 
   void _setupScrollListener() {
     _scrollController.addListener(() {
-      // 로딩 중이면 리스너 무시 (_isScrolling은 체크하지 않음)
-      if (_isLoadingMore) {
-        debugPrint('📌 Scroll listener skipped - loading more messages');
+      // 로딩 중이거나 키보드가 보이는 중이면 리스너 무시
+      if (_isLoadingMore || _isKeyboardVisible) {
+        if (_isKeyboardVisible) {
+          debugPrint('📌 Scroll listener skipped - keyboard is visible');
+        } else {
+          debugPrint('📌 Scroll listener skipped - loading more messages');
+        }
+        return;
+      }
+      
+      // ScrollController가 attached 되어있는지 확인
+      if (!_scrollController.hasClients) {
         return;
       }
       
@@ -142,15 +153,33 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     bool wasHasFocus = false;
     _focusNode.addListener(() {
       final hasFocus = _focusNode.hasFocus;
-      // 포커스가 새로 활성화될 때 항상 스크롤 (키보드 활성화)
-      if (hasFocus && !wasHasFocus && _scrollController.hasClients) {
-        // 키보드가 활성화되면 마지막 대화로 스크롤
-        Future.delayed(const Duration(milliseconds: 100), () {
-          if (mounted && _scrollController.hasClients && _focusNode.hasFocus) {
-            debugPrint('📌 Keyboard activated - scrolling to bottom');
-            _scrollToBottom(force: true, smooth: true);
-          }
-        });
+      
+      // 포커스 상태 변경 감지
+      if (hasFocus != wasHasFocus) {
+        if (hasFocus) {
+          // 키보드가 나타나기 시작할 때 - 스크롤 리스너 일시 중단
+          _isKeyboardVisible = true;
+          debugPrint('🎹 Keyboard appearing - disabling scroll listener');
+          
+          // 키보드 애니메이션이 완료되기를 기다림
+          Future.delayed(const Duration(milliseconds: 300), () {
+            if (mounted && _scrollController.hasClients && _focusNode.hasFocus) {
+              debugPrint('📌 Keyboard activated - scrolling to bottom');
+              _scrollToBottom(force: true, smooth: true);
+              
+              // 스크롤 완료 후 리스너 재활성화
+              Future.delayed(const Duration(milliseconds: 200), () {
+                if (mounted) {
+                  _isKeyboardVisible = false;
+                  debugPrint('🎹 Re-enabling scroll listener');
+                }
+              });
+            }
+          });
+        } else {
+          // 키보드가 사라질 때
+          _isKeyboardVisible = false;
+        }
       }
       wasHasFocus = hasFocus;
     });
@@ -158,6 +187,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   Future<void> _loadMoreMessages() async {
     if (_isLoadingMore ||
+        _isKeyboardVisible ||  // 키보드가 보이는 중이면 로드하지 않음
         _currentPersona == null ||
         _userId == null ||
         _userId!.isEmpty) return;
@@ -1218,42 +1248,132 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return;
     }
     
-    // 텍스트 입력 컨트롤러
-    final TextEditingController reportController = TextEditingController();
+    // Import BlockService
+    final BlockService blockService = BlockService();
+    
+    // 신고 사유 목록
+    final localizations = AppLocalizations.of(context)!;
+    final reasons = [
+      localizations.inappropriateContent,
+      localizations.spamAdvertising,
+      localizations.hateSpeech,
+      localizations.sexualContent,
+      localizations.violentContent,
+      localizations.harassmentBullying,
+      localizations.personalInfoExposure,
+      localizations.copyrightInfringement,
+      localizations.other,
+    ];
+    
+    String? selectedReason;
+    String customReason = '';
+    bool shouldBlock = true; // 기본적으로 차단 체크
     
     // 다이얼로그 표시
-    final result = await showDialog<String>(
+    final result = await showDialog<Map<String, dynamic>>(
       context: context,
       builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          title: Text(AppLocalizations.of(context)!.reportAITitle),
-          content: TextField(
-            controller: reportController,
-            maxLines: 5,
-            decoration: InputDecoration(
-              hintText: AppLocalizations.of(context)!.reportAIDescription,
-              border: const OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(null),
-              child: Text(AppLocalizations.of(context)!.cancel),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(dialogContext).pop(reportController.text),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange[600],
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Row(
+                children: [
+                  Icon(Icons.warning_amber_outlined, color: Colors.orange[600], size: 24),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(localizations.reportAndBlock),
+                  ),
+                ],
               ),
-              child: Text(AppLocalizations.of(context)!.send),
-            ),
-          ],
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      localizations.reportAndBlockDescription,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      localizations.selectReportReason,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    ...reasons.map((reason) => RadioListTile<String>(
+                      dense: true,
+                      title: Text(reason, style: const TextStyle(fontSize: 14)),
+                      value: reason,
+                      groupValue: selectedReason,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedReason = value;
+                        });
+                      },
+                    )),
+                    if (selectedReason == localizations.other) ...[
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: localizations.detailedReason,
+                          hintText: localizations.explainReportReason,
+                          border: const OutlineInputBorder(),
+                        ),
+                        maxLines: 3,
+                        onChanged: (value) {
+                          customReason = value;
+                        },
+                      ),
+                    ],
+                    const SizedBox(height: 16),
+                    CheckboxListTile(
+                      dense: true,
+                      title: Text(
+                        localizations.alsoBlockThisAI,
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      subtitle: Text(
+                        localizations.blockConfirm.split('\n')[1], // "차단된 AI는 매칭과 채팅 목록에서 제외됩니다."
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      value: shouldBlock,
+                      onChanged: (value) {
+                        setState(() {
+                          shouldBlock = value ?? true;
+                        });
+                      },
+                      activeColor: Colors.red,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(null),
+                  child: Text(localizations.cancel),
+                ),
+                ElevatedButton(
+                  onPressed: selectedReason == null
+                      ? null
+                      : () => Navigator.of(dialogContext).pop({
+                            'reason': selectedReason,
+                            'customReason': customReason,
+                            'shouldBlock': shouldBlock,
+                          }),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange[600],
+                  ),
+                  child: Text(localizations.send),
+                ),
+              ],
+            );
+          },
         );
       },
     );
     
-    // 사용자가 텍스트를 입력하고 전송을 눌렀을 경우
-    if (result != null && result.isNotEmpty) {
+    // 사용자가 신고를 제출한 경우
+    if (result != null) {
       // Store context before async operation
       final scaffoldMessenger = ScaffoldMessenger.of(context);
       final navigator = Navigator.of(context);
@@ -1269,19 +1389,37 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         ),
       );
       
-      bool success = false;
+      bool reportSuccess = false;
+      bool blockSuccess = false;
       String? errorMessage;
       
       try {
-        // 기존 sendChatErrorReport 활용, userMessage 파라미터 추가
+        // 1. 신고 제출
         await chatService.sendChatErrorReport(
           userId: userId,
           personaId: currentPersona.id,
-          userMessage: result,  // 사용자가 입력한 신고 내용
+          userMessage: result['customReason'].isNotEmpty 
+              ? result['customReason'] 
+              : result['reason'],
         );
-        success = true;
+        reportSuccess = true;
+        
+        // 2. AI 차단 (선택한 경우)
+        if (result['shouldBlock'] == true) {
+          blockSuccess = await blockService.blockPersona(
+            userId: userId,
+            personaId: currentPersona.id,
+            personaName: currentPersona.name,
+            reason: result['reason'],
+          );
+          
+          // 차단 성공 시 PersonaService에서도 즉시 제거
+          if (blockSuccess) {
+            personaService.removeFromMatched(currentPersona.id);
+          }
+        }
       } catch (e) {
-        debugPrint('🔥 Error sending report: $e');
+        debugPrint('🔥 Error in report/block: $e');
         errorMessage = e.toString();
       }
       
@@ -1289,24 +1427,33 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       navigator.pop();
       
       // Show result message
-      if (success) {
+      if (reportSuccess) {
+        String message = localizations.reportSubmittedSuccess;
+        if (result['shouldBlock'] == true && blockSuccess) {
+          message += '\n${localizations.blockedSuccessfully}';
+          
+          // 차단 성공 시 채팅 화면 닫기
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        }
+        
         scaffoldMessenger.showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.reportSubmittedSuccess),
+            content: Text(message),
             backgroundColor: Colors.green,
+            duration: const Duration(seconds: 3),
           ),
         );
       } else {
         scaffoldMessenger.showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.reportFailed),
+            content: Text(localizations.reportFailed),
             backgroundColor: Colors.red,
           ),
         );
       }
     }
-    
-    reportController.dispose();
   }
 
   Future<void> _handleErrorReport() async {
@@ -2071,19 +2218,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 final isOffline = currentPersona != null && currentPersona.likes <= 0;
                 
                 return [
-                  // 신고 메뉴 (최상단)
+                  // 신고 및 차단 메뉴 (최상단) - 통합된 메뉴
                   PopupMenuItem<String>(
                     value: 'report_ai',
                     child: Row(
                       children: [
                         Icon(
-                          Icons.warning_amber_outlined,
+                          Icons.block,
                           color: Colors.orange[600],
                           size: 20,
                         ),
                         const SizedBox(width: 12),
                         Text(
-                          AppLocalizations.of(context)!.reportAI,
+                          AppLocalizations.of(context)!.reportAndBlock,
                           style: TextStyle(
                             color: Colors.orange[600],
                             fontWeight: FontWeight.w500,

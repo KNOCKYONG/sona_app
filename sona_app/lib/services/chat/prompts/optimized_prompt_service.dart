@@ -602,6 +602,7 @@ class OptimizedPromptService {
     String? targetLanguage,
     PatternAnalysis? patternAnalysis,
     bool hasAskedWellBeingToday = false,
+    String? emotionalState,
   }) {
     // 통합 프롬프트 서비스로 리다이렉트 - 50% 토큰 절약
     return UnifiedPromptService.buildPrompt(
@@ -613,6 +614,7 @@ class OptimizedPromptService {
       contextHint: contextHint,
       patternAnalysis: patternAnalysis,
       hasAskedWellBeingToday: hasAskedWellBeingToday,
+      emotionalState: emotionalState,
     );
   }
   

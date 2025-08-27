@@ -10,6 +10,7 @@ import '../services/auth/user_service.dart';
 import '../services/auth/device_id_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../services/storage/guest_conversation_service.dart';
+import '../services/block_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/common/sona_logo.dart';
@@ -37,6 +38,7 @@ class _ChatListScreenState extends State<ChatListScreen>
   final Map<String, bool> _leftChatStatus = {};
   final Map<String, int> _cachedLikes = {}; // Like score 로컬 캐시
   DateTime _lastRefreshTime = DateTime.now(); // 마지막 새로고침 시간
+  final BlockService _blockService = BlockService(); // 차단 서비스
 
   @override
   void initState() {
@@ -77,6 +79,9 @@ class _ChatListScreenState extends State<ChatListScreen>
       // 서비스들에 사용자 ID 설정
       chatService.setCurrentUserId(currentUserId);
       personaService.setCurrentUserId(currentUserId);
+      
+      // BlockService 초기화
+      await _blockService.initialize(currentUserId);
 
       // 2. UserService에서 사용자 정보 설정
       if (userService.currentUser != null && authService.user != null) {
@@ -123,11 +128,18 @@ class _ChatListScreenState extends State<ChatListScreen>
         final loadTime = PerformanceMonitor.endMeasure('message_load');
         debugPrint('📊 Visible messages loaded in ${loadTime}ms');
         
-        // UI 업데이트
-        if (mounted) setState(() {});
+        // UI 업데이트 - 한 번만 호출
+        if (mounted) {
+          setState(() {
+            _isLoading = false;  // 로딩 완료 표시
+          });
+        }
         
         // 나머지 백그라운드에서 로드
         if (invisiblePersonas.isNotEmpty) {
+          // 백그라운드 로딩 중 플래그 설정
+          bool _backgroundLoading = true;
+          
           final invisibleFutures = <Future<void>>[];
           for (final persona in invisiblePersonas) {
             debugPrint(
@@ -136,7 +148,11 @@ class _ChatListScreenState extends State<ChatListScreen>
                 .add(chatService.loadChatHistory(currentUserId, persona.id));
           }
           Future.wait(invisibleFutures).then((_) {
-            if (mounted) setState(() {});
+            // 백그라운드 로딩 완료 후 한 번만 업데이트
+            if (mounted && _backgroundLoading) {
+              _backgroundLoading = false;
+              setState(() {});
+            }
           });
         }
 
@@ -257,15 +273,24 @@ class _ChatListScreenState extends State<ChatListScreen>
   String _getLastMessagePreview(List<Message> messages, String personaName) {
     final localizations = AppLocalizations.of(context)!;
 
-    if (messages.isEmpty) return localizations.waitingForChat(personaName);
-
-    final lastMessage = messages.last;
-
-    // 튜토리얼 시작 메시지인 경우 개인화된 메시지로 변경
-    if (lastMessage.content == localizations.startConversation ||
-        lastMessage.content == localizations.startConversationWithSona) {
+    // 메시지가 비어있거나 로딩 중인 경우
+    if (messages.isEmpty) {
       return localizations.waitingForChat(personaName);
     }
+
+    // 튜토리얼 메시지 필터링 - 실제 대화만 찾기
+    final realMessages = messages.where((m) => 
+      m.content != localizations.startConversation &&
+      m.content != localizations.startConversationWithSona
+    ).toList();
+    
+    // 실제 메시지가 없는 경우에만 "대화를 기다리고 있어요" 표시
+    if (realMessages.isEmpty) {
+      return localizations.waitingForChat(personaName);
+    }
+
+    // 실제 마지막 메시지 사용
+    final lastMessage = realMessages.last;
 
     String preview = '';
     if (lastMessage.isFromUser) {
@@ -285,32 +310,15 @@ class _ChatListScreenState extends State<ChatListScreen>
   }
 
   String _getLastMessageTime(List<Message> messages, {DateTime? matchedAt}) {
-    if (messages.isEmpty) {
-      // If no messages but we have matchedAt, show that time
-      if (matchedAt != null) {
-        final now = DateTime.now();
-        final difference = now.difference(matchedAt);
-        
-        if (difference.inDays > 0) {
-          return AppLocalizations.of(context)!.daysAgo(difference.inDays);
-        } else if (difference.inHours > 0) {
-          return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
-        } else if (difference.inMinutes > 0) {
-          return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
-        } else {
-          return AppLocalizations.of(context)!.justNow;
-        }
-      }
-      return '';
-    }
-
-    final lastMessage = messages.last;
-
-    // 튜토리얼 시작 메시지인 경우 시간 표시하지 않음
+    // 튜토리얼 메시지 필터링 - 실제 대화만 찾기
     final localizations = AppLocalizations.of(context)!;
-    if (lastMessage.content == localizations.startConversation ||
-        lastMessage.content == localizations.startConversationWithSona) {
-      // Use matchedAt as fallback for tutorial messages
+    final realMessages = messages.where((m) => 
+      m.content != localizations.startConversation &&
+      m.content != localizations.startConversationWithSona
+    ).toList();
+    
+    if (realMessages.isEmpty) {
+      // If no real messages but we have matchedAt, show that time
       if (matchedAt != null) {
         final now = DateTime.now();
         final difference = now.difference(matchedAt);
@@ -328,6 +336,8 @@ class _ChatListScreenState extends State<ChatListScreen>
       return '';
     }
 
+    // Use real last message for time
+    final lastMessage = realMessages.last;
     final now = DateTime.now();
     final messageTime = lastMessage.timestamp;
     final difference = now.difference(messageTime);
@@ -619,6 +629,11 @@ class _ChatListScreenState extends State<ChatListScreen>
               itemCount: matchedPersonas.length,
               itemBuilder: (context, index) {
               final persona = matchedPersonas[index];
+              
+              // 차단된 페르소나는 표시하지 않음
+              if (_blockService.isBlocked(persona.id)) {
+                return const SizedBox.shrink();
+              }
               // 매번 최신 메시지를 가져오도록 함
               final messages =
                   List<Message>.from(chatService.getMessages(persona.id));

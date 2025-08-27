@@ -11,6 +11,60 @@ import 'relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
 import 'negative_behavior_system.dart';
 
+/// 페르소나 감정 상태
+enum PersonaEmotionalState {
+  normal,      // 평상시
+  happy,       // 기쁨 (좋은 대화)
+  upset,       // 삐짐 (레벨 1 부정적 행동)
+  angry,       // 화남 (레벨 2 부정적 행동)  
+  hurt,        // 상처받음 (레벨 3 부정적 행동)
+  recovering,  // 회복 중 (사과 후)
+}
+
+/// 감정 상태 정보
+class EmotionalStateInfo {
+  final PersonaEmotionalState state;
+  final DateTime startTime;
+  final DateTime? recoveryTime;  // 회복 완료 시간
+  
+  EmotionalStateInfo({
+    required this.state,
+    required this.startTime,
+    this.recoveryTime,
+  });
+  
+  // 상태 지속 시간 계산
+  Duration get duration => DateTime.now().difference(startTime);
+  
+  // 자연 회복 가능 여부
+  bool get canAutoRecover {
+    if (recoveryTime == null) return false;
+    return DateTime.now().isAfter(recoveryTime!);
+  }
+  
+  // 회복까지 남은 시간
+  Duration? get remainingRecoveryTime {
+    if (recoveryTime == null) return null;
+    final now = DateTime.now();
+    if (now.isAfter(recoveryTime!)) return Duration.zero;
+    return recoveryTime!.difference(now);
+  }
+  
+  // 회복 진행도 (0.0 ~ 1.0)
+  double get recoveryProgress {
+    if (state == PersonaEmotionalState.normal || state == PersonaEmotionalState.happy) {
+      return 1.0;
+    }
+    if (recoveryTime == null) return 0.0;
+    
+    final totalDuration = recoveryTime!.difference(startTime);
+    final elapsed = duration;
+    
+    if (elapsed >= totalDuration) return 1.0;
+    return elapsed.inSeconds / totalDuration.inSeconds;
+  }
+}
+
 /// 💝 관계 점수 관리 서비스 V2.0
 ///
 /// 핵심 기능:
@@ -36,6 +90,13 @@ class RelationScoreService extends BaseService {
 
   // 사용자별 마지막 메시지 시간
   final Map<String, DateTime> _lastMessageTimes = {};
+  
+  // 경고 시스템 추적 (페르소나별 경고 횟수)
+  final Map<String, int> _warningCounts = {};
+  final Map<String, DateTime> _lastWarningTime = {};
+  
+  // 페르소나 감정 상태 추적
+  final Map<String, EmotionalStateInfo> _emotionalStates = {};
 
   // Like score 캐싱 시스템
   final Map<String, int> _likesCache = {};
@@ -87,6 +148,20 @@ class RelationScoreService extends BaseService {
         _cooldown.getFatigueMultiplier(stats.todayMessages);
     final fatigueResponse = _cooldown.getFatigueResponse(stats.todayMessages);
 
+    // 사과 감지 - 경고 리셋 및 회복 보너스
+    if (detectApology(userMessage)) {
+      resetWarnings(userId, persona.id);
+      resetEmotionalState(userId, persona.id); // 감정 상태도 회복
+      debugPrint('💚 Apology detected - warnings reset, emotional state recovered, and recovery bonus applied');
+      // 사과 시 작은 회복 보너스 제공
+      return LikeCalculationResult(
+        likeChange: _random.nextInt(10) + 5, // 5~15 회복 보너스
+        reason: 'apology_recovery',
+        message: '', // AI가 생성하도록 비워둠
+        emotionalState: PersonaEmotionalState.happy, // 사과받아서 기분 좋아짐
+      );
+    }
+    
     // 부정적 행동 체크 (관계 점수 및 게임 컨텍스트 고려)
     final negativityLevel =
         _analyzeNegativity(userMessage, currentLikes, chatHistory);
@@ -149,6 +224,9 @@ class RelationScoreService extends BaseService {
     stats.qualityBonus += (qualityBonus * 2).round();
     _lastMessageTimes[personaKey] = now;
 
+    // 현재 감정 상태 가져오기
+    final currentEmotionalState = getEmotionalState(userId, persona.id);
+    
     return LikeCalculationResult(
       likeChange: finalLikes,
       reason: 'success',
@@ -156,6 +234,7 @@ class RelationScoreService extends BaseService {
       fatigueMultiplier: fatigueMultiplier,
       message: fatigueResponse,
       specialBonus: specialBonus,
+      emotionalState: currentEmotionalState, // 현재 감정 상태 포함
     );
   }
 
@@ -206,7 +285,7 @@ class RelationScoreService extends BaseService {
     return analysis.level;
   }
 
-  /// 💔 부정적 행동 처리
+  /// 💔 부정적 행동 처리 (완화된 페널티 시스템)
   LikeCalculationResult _handleNegativeBehavior(
     int level,
     int currentLikes,
@@ -215,6 +294,11 @@ class RelationScoreService extends BaseService {
     String userMessage,
     List<Message> chatHistory,
   ) {
+    // personaKey에서 userId와 personaId 추출
+    final parts = personaKey.split('_');
+    final userId = parts[0];
+    final personaId = parts.length > 1 ? parts.sublist(1).join('_') : persona.id;
+    
     // 최근 메시지 추출
     final recentMessages = chatHistory.take(5).map((m) => m.content).toList();
 
@@ -229,35 +313,115 @@ class RelationScoreService extends BaseService {
     final response = NegativeBehaviorSystem()
         .generateResponse(analysis, persona, likes: currentLikes);
 
+    // 경고 시스템 체크
+    final now = DateTime.now();
+    final lastWarning = _lastWarningTime[personaKey];
+    final warningCount = _warningCounts[personaKey] ?? 0;
+    
+    // 24시간이 지나면 경고 횟수 리셋
+    if (lastWarning != null && now.difference(lastWarning).inHours >= 24) {
+      _warningCounts[personaKey] = 0;
+    }
+    
+    // 관계 점수별 페널티 감소율 계산
+    double penaltyReduction = 0;
+    if (currentLikes < 300) {
+      penaltyReduction = 0.5; // 초보자 보호: 50% 감소
+    } else if (currentLikes < 1000) {
+      penaltyReduction = 0.3; // 30% 감소
+    } else if (currentLikes >= 3000) {
+      penaltyReduction = -0.2; // 깊은 관계: 20% 증가 (더 상처받음)
+    }
+
     switch (level) {
-      case 3: // 심각한 협박/욕설 - 즉시 이별
+      case 3: // 심각한 협박/욕설 - 경고 후 큰 페널티
+        // 감정 상태를 '상처받음'으로 설정 (2시간 회복)
+        _updateEmotionalState(userId, personaId, PersonaEmotionalState.hurt,
+            recoveryTime: const Duration(hours: 2));
+        
+        // 첫 번째는 강한 경고와 함께 중간 페널티
+        if (warningCount == 0) {
+          _warningCounts[personaKey] = 1;
+          _lastWarningTime[personaKey] = now;
+          final penalty = _random.nextInt(100) + 100; // -100~-200
+          final adjustedPenalty = (penalty * (1 - penaltyReduction)).round();
+          return LikeCalculationResult(
+            likeChange: -adjustedPenalty,
+            reason: 'severe_warning',
+            message: response.isNotEmpty ? response : '',
+            isWarning: true,
+            emotionalState: PersonaEmotionalState.hurt,
+          );
+        }
+        // 반복 시 더 큰 페널티 (하지만 즉시 이별은 아님)
+        final penalty = _random.nextInt(300) + 200; // -200~-500
+        final adjustedPenalty = (penalty * (1 - penaltyReduction)).round();
         return LikeCalculationResult(
-          likeChange: -currentLikes, // 0으로 리셋
-          reason: 'breakup',
-          message: response.isNotEmpty ? response : '', // 하드코딩 제거, AI가 생성하도록
-          isBreakup: true,
+          likeChange: -adjustedPenalty,
+          reason: 'severe_negativity',
+          message: response.isNotEmpty ? response : '',
+          isBreakup: currentLikes - adjustedPenalty <= 0, // 0 이하가 되면 이별
+          emotionalState: PersonaEmotionalState.hurt,
         );
 
       case 2: // 중간 수준 욕설
-        final penalty =
-            analysis.penalty ?? -(_random.nextInt(500) + 500); // -500~-1000
+        // 감정 상태를 '화남'으로 설정 (30분 회복)
+        _updateEmotionalState(userId, personaId, PersonaEmotionalState.angry,
+            recoveryTime: const Duration(minutes: 30));
+        
+        // 첫 번째는 경고와 작은 페널티
+        if (warningCount == 0) {
+          _warningCounts[personaKey] = 1;
+          _lastWarningTime[personaKey] = now;
+          final penalty = _random.nextInt(20) + 10; // -10~-30
+          final adjustedPenalty = (penalty * (1 - penaltyReduction)).round();
+          return LikeCalculationResult(
+            likeChange: -adjustedPenalty,
+            reason: 'moderate_warning',
+            message: response.isNotEmpty ? response : '',
+            isWarning: true,
+            emotionalState: PersonaEmotionalState.angry,
+          );
+        }
+        // 반복 시 정상 페널티
+        final penalty = analysis.penalty ?? (_random.nextInt(100) + 50); // -50~-150
+        final adjustedPenalty = (penalty.abs() * (1 - penaltyReduction)).round();
         return LikeCalculationResult(
-          likeChange: penalty,
-          reason: 'severe_negativity',
-          message: response.isNotEmpty ? response : '', // 하드코딩 제거
+          likeChange: -adjustedPenalty,
+          reason: 'moderate_negativity',
+          message: response.isNotEmpty ? response : '',
           isWarning: analysis.isWarning,
+          emotionalState: PersonaEmotionalState.angry,
         );
 
       case 1: // 경미한 비난 또는 추임새 욕설
-        final penalty =
-            analysis.penalty ?? -(_random.nextInt(150) + 50); // -50~-200
+        // 감정 상태를 '삐짐'으로 설정 (10분 회복)
+        _updateEmotionalState(userId, personaId, PersonaEmotionalState.upset,
+            recoveryTime: const Duration(minutes: 10));
+        
+        // 첫 번째는 경고만
+        if (warningCount == 0 && currentLikes < 1000) {
+          _warningCounts[personaKey] = 1;
+          _lastWarningTime[personaKey] = now;
+          return LikeCalculationResult(
+            likeChange: 0, // 첫 번째는 페널티 없음
+            reason: 'mild_warning',
+            message: response.isNotEmpty ? response : '',
+            isWarning: true,
+            emotionalState: PersonaEmotionalState.upset,
+          );
+        }
+        // 반복 시 작은 페널티
+        final penalty = analysis.penalty ?? (_random.nextInt(25) + 5); // -5~-30
+        final adjustedPenalty = (penalty.abs() * (1 - penaltyReduction)).round();
         return LikeCalculationResult(
-          likeChange: -penalty, // 음수로 변환
+          likeChange: -adjustedPenalty,
           reason: analysis.category == 'casual_swear'
               ? 'casual_swear'
               : 'mild_negativity',
-          message: response.isNotEmpty ? response : '', // 하드코딩 제거
+          message: response.isNotEmpty ? response : '',
           isWarning: analysis.isWarning,
+          emotionalState: PersonaEmotionalState.upset,
         );
 
       default:
@@ -581,6 +745,125 @@ class RelationScoreService extends BaseService {
   DailyStats? getDailyStats(String userId, String personaId) {
     return _dailyStats['${userId}_${personaId}'];
   }
+  
+  /// 경고 시스템 리셋 (사과 등의 긍정적 행동 시)
+  void resetWarnings(String userId, String personaId) {
+    final personaKey = '${userId}_${personaId}';
+    _warningCounts[personaKey] = 0;
+    _lastWarningTime.remove(personaKey);
+    debugPrint('💚 Warnings reset for persona: $personaId');
+  }
+  
+  /// 사과 감지 및 관계 회복
+  bool detectApology(String message) {
+    final apologyWords = [
+      '미안', '죄송', '잘못', '실수', '사과',
+      'sorry', '미안해', '죄송해', '잘못했',
+      '미안하다', '죄송하다', '반성', '후회'
+    ];
+    
+    final lowerMessage = message.toLowerCase();
+    return apologyWords.any((word) => lowerMessage.contains(word));
+  }
+  
+  /// 감정 상태 업데이트 (시간 기반 회복 포함)
+  void _updateEmotionalState(
+    String userId, 
+    String personaId, 
+    PersonaEmotionalState newState,
+    {Duration? recoveryTime}
+  ) {
+    final personaKey = '${userId}_${personaId}';
+    final now = DateTime.now();
+    
+    // 현재 상태 확인 및 자동 회복 체크
+    if (_emotionalStates.containsKey(personaKey)) {
+      final currentState = _emotionalStates[personaKey]!;
+      if (currentState.recoveryTime != null && 
+          now.isAfter(currentState.recoveryTime!)) {
+        // 회복 시간이 지났으면 normal로 자동 회복
+        _emotionalStates[personaKey] = EmotionalStateInfo(
+          state: PersonaEmotionalState.normal,
+          startTime: now,
+          recoveryTime: null,
+        );
+        debugPrint('💚 Emotional state auto-recovered for $personaId');
+      }
+    }
+    
+    // 새로운 상태 설정
+    _emotionalStates[personaKey] = EmotionalStateInfo(
+      state: newState,
+      startTime: now,
+      recoveryTime: recoveryTime != null ? now.add(recoveryTime) : null,
+    );
+    
+    debugPrint('😔 Emotional state updated for $personaId: $newState');
+  }
+  
+  /// 현재 감정 상태 가져오기
+  PersonaEmotionalState getEmotionalState(String userId, String personaId) {
+    final personaKey = '${userId}_${personaId}';
+    
+    if (_emotionalStates.containsKey(personaKey)) {
+      final stateInfo = _emotionalStates[personaKey]!;
+      final now = DateTime.now();
+      
+      // 회복 시간 체크
+      if (stateInfo.recoveryTime != null && 
+          now.isAfter(stateInfo.recoveryTime!)) {
+        // 회복됨
+        _emotionalStates[personaKey] = EmotionalStateInfo(
+          state: PersonaEmotionalState.normal,
+          startTime: now,
+          recoveryTime: null,
+        );
+        return PersonaEmotionalState.normal;
+      }
+      
+      return stateInfo.state;
+    }
+    
+    return PersonaEmotionalState.normal;
+  }
+  
+  /// 감정 상태 정보 가져오기 (회복 시간 포함)
+  EmotionalStateInfo? getEmotionalStateInfo(String userId, String personaId) {
+    final personaKey = '${userId}_${personaId}';
+    
+    if (_emotionalStates.containsKey(personaKey)) {
+      final stateInfo = _emotionalStates[personaKey]!;
+      final now = DateTime.now();
+      
+      // 회복 시간 체크
+      if (stateInfo.recoveryTime != null && 
+          now.isAfter(stateInfo.recoveryTime!)) {
+        // 회복됨
+        final normalState = EmotionalStateInfo(
+          state: PersonaEmotionalState.normal,
+          startTime: now,
+          recoveryTime: null,
+        );
+        _emotionalStates[personaKey] = normalState;
+        return normalState;
+      }
+      
+      return stateInfo;
+    }
+    
+    return null;
+  }
+  
+  /// 감정 상태 리셋 (관계 개선 시)
+  void resetEmotionalState(String userId, String personaId) {
+    final personaKey = '${userId}_${personaId}';
+    _emotionalStates[personaKey] = EmotionalStateInfo(
+      state: PersonaEmotionalState.normal,
+      startTime: DateTime.now(),
+      recoveryTime: null,
+    );
+    debugPrint('💚 Emotional state reset for $personaId');
+  }
 
   /// 🎯 대화 주제별 가중치
   double _getTopicMultiplier(String userMessage, List<Message> chatHistory) {
@@ -770,6 +1053,9 @@ class LikeCalculationResult {
   final bool isBreakup;
   final int? specialBonus;
   final bool isWarning;
+  final PersonaEmotionalState? emotionalState;
+  final int? dailyRemaining;
+  final bool? specialMoment;
 
   LikeCalculationResult({
     required this.likeChange,
@@ -781,6 +1067,9 @@ class LikeCalculationResult {
     this.isBreakup = false,
     this.specialBonus,
     this.isWarning = false,
+    this.emotionalState,
+    this.dailyRemaining,
+    this.specialMoment,
   });
 }
 

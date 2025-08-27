@@ -15,6 +15,7 @@ import '../relationship/relation_score_service.dart';
 import 'r2_validation_cache.dart';
 import '../cache/image_preload_service.dart';
 import '../storage/guest_conversation_service.dart';
+import '../block_service.dart';
 import 'dart:convert';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
@@ -72,6 +73,9 @@ class PersonaService extends BaseService {
 
   // Public getter for matched personas loaded state
   bool get matchedPersonasLoaded => _matchedPersonasLoaded;
+  
+  // Block service instance
+  final BlockService _blockService = BlockService();
 
   // Progressive loading for initial fast display
   List<Persona> get availablePersonasProgressive {
@@ -261,6 +265,11 @@ class PersonaService extends BaseService {
     String? userId,
     Function(double progress, String message)? onProgress,
   }) async {
+    // Initialize block service with user ID
+    if (userId != null && userId.isNotEmpty) {
+      await _blockService.initialize(userId);
+    }
+    
     // Allow reinitialization if data is empty or previous attempt failed
     if (_loadingCompleter != null && !_loadingCompleter!.isCompleted) {
       return _loadingCompleter!.future;
@@ -1459,11 +1468,15 @@ class PersonaService extends BaseService {
 
     if (shouldReshuffle) {
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();
-      // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
+      // 차단된 페르소나 ID 가져오기
+      final blockedIds = _blockService.getBlockedPersonaIds();
+      
+      // 🔥 무한 스와이프 - 매칭된 페르소나와 차단된 페르소나 제외
       final filtered = _allPersonas
           .where((persona) =>
                   !matchedIds.contains(persona.id) &&
-                  !_actionedPersonaIds.contains(persona.id)
+                  !_actionedPersonaIds.contains(persona.id) &&
+                  !blockedIds.contains(persona.id)  // 차단된 AI 제외
               // 최근 스와이프 필터 제거 - 무한 스와이프
               // R2 필터링 제거 - 모든 페르소나 표시
               )
@@ -2132,6 +2145,11 @@ class PersonaService extends BaseService {
 
     // UI 업데이트
     notifyListeners();
+  }
+  
+  // 차단 시 즉시 매칭 목록에서 제거하는 메서드
+  void removeFromMatched(String personaId) {
+    removeFromMatchedPersonas(personaId);
   }
 
   /// 새로운 이미지 체크 및 다운로드

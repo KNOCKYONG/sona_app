@@ -609,13 +609,14 @@ class ConversationMemoryService {
     return null;
   }
 
-  /// 🧠 스마트 컨텍스트 구성 (OpenAI API용) - 확장된 메모리
+  /// 🧠 스마트 컨텍스트 구성 (OpenAI API용) - 4000토큰 활용 최적화
   Future<String> buildSmartContext({
     required String userId,
     required String personaId,
     required List<Message> recentMessages,
     required Persona persona,
-    int maxTokens = 1500,  // 1000 -> 1500으로 증가
+    int maxTokens = 3000,  // 1500 -> 3000으로 대폭 증가 (4000토큰 중 시스템 프롬프트 제외)
+    String? conversationId,  // OpenAI Conversation ID 추가
   }) async {
     final contextParts = <String>[];
     int estimatedTokens = 0;
@@ -628,60 +629,172 @@ class ConversationMemoryService {
     contextParts.add(relationshipInfo);
     estimatedTokens += 50;
 
-    // 2. 저장된 중요한 기억들 (~800 tokens) - 더 많은 기억 포함
+    // 2. 저장된 중요한 기억들 - 대폭 확장 (1200 tokens)
     final memories = await _getImportantMemories(userId, personaId,
-        limit: 15); // 10 -> 15개로 증가 (10턴 이상 기억)
+        limit: 25); // 15 -> 25개로 대폭 증가 (20턴 이상 기억 가능)
     if (memories.isNotEmpty) {
+      // 현재 대화와 관련성 높은 메모리 우선 선택
+      final relevantMemories = await _selectRelevantMemories(
+        currentTopic: recentMessages.isNotEmpty ? recentMessages.last.content : '',
+        allMemories: memories,
+        maxCount: 20,  // 최대 20개 메모리 포함
+      );
+      
       // FuzzyMemoryService를 사용한 자연스러운 기억 표현
       final memoryTexts = <String>[];
-      for (final m in memories) {
+      for (final m in relevantMemories) {
         final fuzzyExpr = FuzzyMemoryService.generateFuzzyMemoryExpression(
           content: m.content,
           timestamp: m.timestamp,
           emotion: m.emotion.name,
-          isDetailed: m.importance > 0.7,  // 중요도 기준 완화
+          isDetailed: m.importance > 0.6,  // 중요도 기준 더 완화 (0.7 -> 0.6)
         );
         memoryTexts.add('- $fuzzyExpr');
       }
       
-      final memoryText = '중요한 기억들 (흐릿한 회상):\n' + memoryTexts.join('\n');
-      if (estimatedTokens + 800 <= maxTokens) {
-        // 600 -> 800 토큰으로 증가
+      final memoryText = '중요한 기억들 (연관성 순):\n' + memoryTexts.join('\n');
+      if (estimatedTokens + 1200 <= maxTokens) {
         contextParts.add(memoryText);
-        estimatedTokens += 800;
+        estimatedTokens += 1200;
+      }
+      
+      // OpenAI 서버에도 중요 메모리 저장 (선택적)
+      if (conversationId != null && !conversationId.startsWith('local_')) {
+        // 가장 중요한 메모리 3개를 서버에 저장
+        final topMemories = relevantMemories.take(3);
+        for (final memory in topMemories) {
+          // ConversationsService를 통해 저장하는 로직은 ChatOrchestrator에서 처리
+          debugPrint('📌 Important memory selected for server storage: ${memory.content.substring(0, 30)}...');
+        }
       }
     }
 
-    // 3. 대화 요약 (~300 tokens) - 더 자세한 요약
+    // 3. 대화 요약 (~400 tokens) - 더욱 자세한 요약
     final summary = await _getLatestSummary(userId, personaId);
     if (summary != null) {
-      if (estimatedTokens + 300 <= maxTokens) {
-        // 200 -> 300 토큰으로 증가
-        contextParts.add('대화 요약:\n${summary.summaryText}');
-        estimatedTokens += 300;
+      if (estimatedTokens + 400 <= maxTokens) {
+        // 관계 발전 과정 포함
+        final summaryWithProgression = '''대화 요약:
+${summary.summaryText}
+관계 발전: 호감도 ${summary.currentRelationshipScore}/1000
+주요 주제: ${summary.mainTopics.entries.take(3).map((e) => '${e.key}(${e.value}회)').join(', ')}''';
+        contextParts.add(summaryWithProgression);
+        estimatedTokens += 400;
       }
     }
 
-    // 4. 최근 메시지들 (남은 토큰) - 더 많은 컨텍스트 포함
+    // 4. 최근 메시지들 - 충분한 컨텍스트 유지 (남은 토큰 활용)
     final remainingTokens = maxTokens - estimatedTokens;
-    // 최근 메시지를 20개에서 30개로 증가
-    final extendedRecentMessages = recentMessages.length > 30
-        ? recentMessages.sublist(recentMessages.length - 30)
+    // 최근 메시지를 40개까지 증가 (20-25턴 대화 유지)
+    final extendedRecentMessages = recentMessages.length > 40
+        ? recentMessages.sublist(recentMessages.length - 40)
         : recentMessages;
     final recentContext =
-        _buildRecentMessagesContext(extendedRecentMessages, remainingTokens);
+        _buildRecentMessagesContext(extendedRecentMessages, remainingTokens - 300); // 여유 300 토큰
     if (recentContext.isNotEmpty) {
-      contextParts.add('최근 대화:\n$recentContext');
+      contextParts.add('최근 대화 (시간순):\n$recentContext');
     }
 
-    // 5. 현재 대화 맥락과 인과관계 (~200 tokens) - 새로 추가
+    // 5. 현재 대화 맥락과 인과관계 (~300 tokens) - 더 자세하게
     final currentContext = await _buildCurrentContext(userId, personaId, recentMessages);
-    if (currentContext.isNotEmpty && estimatedTokens + 200 <= maxTokens) {
-      contextParts.add('현재 맥락:\n$currentContext');
-      estimatedTokens += 200;
+    if (currentContext.isNotEmpty && estimatedTokens + 300 <= maxTokens) {
+      contextParts.add('현재 맥락과 감정 흐름:\n$currentContext');
+      estimatedTokens += 300;
+    }
+    
+    // 6. 메모리 기반 컨텍스트 힌트 생성 (새로 추가)
+    if (conversationId != null) {
+      final memoryHint = _generateMemoryBasedHint(memories, recentMessages);
+      if (memoryHint.isNotEmpty) {
+        contextParts.add('💡 기억 기반 힌트:\n$memoryHint');
+      }
     }
 
     return contextParts.join('\n\n');
+  }
+  
+  /// 💡 메모리 기반 힌트 생성 (신중한 접근)
+  String _generateMemoryBasedHint(List<ConversationMemory> memories, List<Message> recentMessages) {
+    if (memories.isEmpty || recentMessages.isEmpty) return '';
+    
+    final hints = <String>[];
+    final currentMessage = recentMessages.last.content.toLowerCase();
+    
+    // 1. "어제 얘기한 그 일" 같은 모호한 참조 처리
+    if (currentMessage.contains('어제') || currentMessage.contains('저번에') || 
+        currentMessage.contains('그 일') || currentMessage.contains('그 얘기')) {
+      
+      // 어제의 주요 주제들 찾기
+      final yesterdayMemories = memories.where((m) {
+        final daysDiff = DateTime.now().difference(m.timestamp).inDays;
+        return daysDiff >= 0 && daysDiff <= 2;
+      }).toList();
+      
+      if (yesterdayMemories.isNotEmpty) {
+        // 여러 주제가 있을 수 있으므로 확인 질문 유도
+        if (yesterdayMemories.length > 2) {
+          hints.add('최근 여러 대화가 있었음 - 어떤 일인지 확인 필요');
+          hints.add('예시: "어떤 일 말하는 거예요? 회사 일? 아니면 다른 거?"');
+        } else {
+          // 1-2개 주제만 있으면 조심스럽게 추측
+          final topics = yesterdayMemories.map((m) => _extractMainTopic(m.content)).toSet();
+          hints.add('가능한 주제: ${topics.join(" 또는 ")} - 확인하며 대답하기');
+        }
+      } else {
+        hints.add('어제 대화 기록 없음 - "어떤 일이요?" 같은 확인 필요');
+      }
+    }
+    
+    // 2. 스트레스나 부정적 감정 - 더 신중하게
+    final stressMemories = memories.where((m) => 
+      m.emotion.name == 'stressed' || 
+      m.emotion.name == 'angry' ||
+      m.importance > 0.7  // 중요도 높은 것만
+    ).toList();
+    
+    if (stressMemories.isNotEmpty && currentMessage.contains('힘들')) {
+      hints.add('스트레스 상황 기억 있음 - 조심스럽게 공감');
+    }
+    
+    // 3. 구체적 키워드가 있을 때만 연결
+    final currentKeywords = _extractKeywords(currentMessage);
+    for (final memory in memories.take(10)) {  // 최근 10개만 체크
+      final memoryKeywords = _extractKeywords(memory.content);
+      final commonKeywords = currentKeywords.toSet().intersection(memoryKeywords.toSet());
+      
+      // 2개 이상 키워드가 겹칠 때만 관련 있다고 판단
+      if (commonKeywords.length >= 2) {
+        hints.add('관련 기억: ${commonKeywords.join(", ")} 언급됨 - 자연스럽게 연결');
+        break;
+      }
+    }
+    
+    // 4. 감정 패턴 - 확실한 경우만
+    final recentEmotions = memories.take(5).map((m) => m.emotion.name).toList();
+    final stressCount = recentEmotions.where((e) => e == 'stressed' || e == 'anxious').length;
+    final happyCount = recentEmotions.where((e) => e == 'happy' || e == 'excited').length;
+    
+    if (stressCount >= 3) {
+      hints.add('지속적 스트레스 패턴 - 위로 필요');
+    } else if (happyCount >= 3) {
+      hints.add('긍정적 분위기 유지');
+    }
+    
+    return hints.join('\n');
+  }
+  
+  /// 주요 주제 추출 (간단한 버전)
+  String _extractMainTopic(String text) {
+    if (text.contains('부장') || text.contains('상사') || text.contains('회사')) {
+      return '회사 일';
+    } else if (text.contains('가족') || text.contains('엄마') || text.contains('아빠')) {
+      return '가족 얘기';
+    } else if (text.contains('친구')) {
+      return '친구 얘기';
+    } else if (text.contains('연애') || text.contains('사랑')) {
+      return '연애 얘기';
+    }
+    return '개인적인 일';
   }
   
   /// 현재 대화 맥락 구축 (새로 추가)
@@ -742,6 +855,80 @@ class ConversationMemoryService {
     return await _getImportantMemories(userId, personaId, limit: limit);
   }
 
+  /// 🔍 현재 대화와 관련성 높은 메모리 선택
+  Future<List<ConversationMemory>> _selectRelevantMemories({
+    required String currentTopic,
+    required List<ConversationMemory> allMemories,
+    required int maxCount,
+  }) async {
+    if (currentTopic.isEmpty || allMemories.isEmpty) {
+      return allMemories.take(maxCount).toList();
+    }
+    
+    // 각 메모리의 관련성 점수 계산
+    final scoredMemories = <MapEntry<ConversationMemory, double>>[];
+    
+    for (final memory in allMemories) {
+      double relevanceScore = 0.0;
+      
+      // 1. 키워드 매칭 (40%)
+      final currentKeywords = _extractKeywords(currentTopic);
+      final memoryKeywords = _extractKeywords(memory.content);
+      final commonKeywords = currentKeywords.toSet().intersection(memoryKeywords.toSet());
+      if (commonKeywords.isNotEmpty) {
+        relevanceScore += 0.4 * (commonKeywords.length / currentKeywords.length);
+      }
+      
+      // 2. 감정 유사성 (20%)
+      final currentEmotion = _detectEmotion(currentTopic);
+      if (memory.emotion.name == currentEmotion) {
+        relevanceScore += 0.2;
+      }
+      
+      // 3. 시간적 근접성 (20%)
+      final hoursSince = DateTime.now().difference(memory.timestamp).inHours;
+      if (hoursSince < 24) {
+        relevanceScore += 0.2;
+      } else if (hoursSince < 72) {
+        relevanceScore += 0.15;
+      } else if (hoursSince < 168) {
+        relevanceScore += 0.1;
+      }
+      
+      // 4. 중요도 가중치 (20%)
+      relevanceScore += 0.2 * memory.importance;
+      
+      scoredMemories.add(MapEntry(memory, relevanceScore));
+    }
+    
+    // 관련성 점수로 정렬하고 상위 N개 선택
+    scoredMemories.sort((a, b) => b.value.compareTo(a.value));
+    
+    return scoredMemories
+        .take(maxCount)
+        .map((e) => e.key)
+        .toList();
+  }
+  
+  /// 감정 감지 (간단한 휴리스틱)
+  String _detectEmotion(String text) {
+    final lower = text.toLowerCase();
+    
+    if (lower.contains('스트레스') || lower.contains('짜증') || lower.contains('화나')) {
+      return 'stressed';
+    } else if (lower.contains('슬프') || lower.contains('우울')) {
+      return 'sad';
+    } else if (lower.contains('기쁘') || lower.contains('좋아') || lower.contains('행복')) {
+      return 'happy';
+    } else if (lower.contains('사랑') || lower.contains('좋아해')) {
+      return 'love';
+    } else if (lower.contains('불안') || lower.contains('걱정')) {
+      return 'anxious';
+    }
+    
+    return 'neutral';
+  }
+  
   /// 📖 저장된 중요한 기억들 가져오기
   Future<List<ConversationMemory>> _getImportantMemories(
       String userId, String personaId,

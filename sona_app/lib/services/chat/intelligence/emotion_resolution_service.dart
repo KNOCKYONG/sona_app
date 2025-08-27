@@ -469,7 +469,20 @@ class EmotionResolutionService {
     return likelihood.clamp(0, 1);
   }
   
-  /// 감정 회복 전략 생성 (확장된 전략)
+  /// 감정 강도에 따른 회복 턴 계산
+  int _calculateRecoveryTurns(ComplexEmotion emotion) {
+    if (emotion.intensity > 80) {
+      return 7 + Random().nextInt(4); // 7-10턴
+    } else if (emotion.intensity > 60) {
+      return 5 + Random().nextInt(3); // 5-7턴
+    } else if (emotion.intensity > 40) {
+      return 3 + Random().nextInt(3); // 3-5턴
+    } else {
+      return 2 + Random().nextInt(2); // 2-3턴
+    }
+  }
+  
+  /// 감정 회복 전략 생성 (점진적 회복 강화)
   Map<String, dynamic> _generateRecoveryStrategy(
     ComplexEmotion emotion,
     EmotionPrediction prediction,
@@ -477,20 +490,41 @@ class EmotionResolutionService {
   ) {
     final strategies = <String>[];
     
+    // 감정 강도에 따른 회복 시간 계산
+    final recoveryTurns = _calculateRecoveryTurns(emotion);
+    
     if (emotion.primary == 'sadness') {
-      strategies.addAll([
-        '공감과 위로 우선',
-        '긍정적 전환 시도 (단, 서두르지 않기)',
-        '함께 있어주는 느낌 전달',
-        '작은 즉각적 기쁨 제공 (음악, 음식, 웃긴 영상 등)',
-      ]);
+      if (emotion.intensity > 70) {
+        strategies.addAll([
+          '깊은 공감 우선 (${recoveryTurns}턴 지속)',
+          '감정 무효화 절대 금지',
+          '천천히, 매우 천천히 회복',
+          '상처 인정하고 충분한 시간 주기',
+        ]);
+      } else {
+        strategies.addAll([
+          '따뜻한 위로 (${recoveryTurns}턴)',
+          '점진적 긍정 전환 (서두르지 않기)',
+          '함께 있어주는 느낌 지속',
+          '조심스럽게 작은 기쁨 제공',
+        ]);
+      }
     } else if (emotion.primary == 'anger') {
-      strategies.addAll([
-        '감정 인정하고 수용',
-        '차분한 톤 유지',
-        '해결책보다 경청 우선',
-        '감정 표출을 위한 안전한 공간 제공',
-      ]);
+      if (emotion.intensity > 70) {
+        strategies.addAll([
+          '최소 대화 유지 (${recoveryTurns}턴)',
+          '감정 폭발 완전 수용',
+          '변명이나 설득 절대 금지',
+          '충분한 시간과 공간 제공',
+        ]);
+      } else {
+        strategies.addAll([
+          '감정 인정 (${recoveryTurns}턴)',
+          '차분한 톤 꾸준히 유지',
+          '해결책보다 경청 우선',
+          '서서히 대화 재개',
+        ]);
+      }
     } else if (emotion.primary == 'anxiety') {
       strategies.addAll([
         '안심시키는 말투',

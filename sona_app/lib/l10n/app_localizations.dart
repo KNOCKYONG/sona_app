@@ -1189,6 +1189,28 @@ Faster processing is available when you provide your purchase receipt.''';
   String get technicalError => isKorean ? '기술적 오류' : 'Technical Error';
   String get otherError => isKorean ? '기타 오류' : 'Other Error';
 
+  // ===== AI 차단 관련 =====
+  String get reportAndBlock => isKorean ? '신고 및 차단' : 'Report & Block';
+  String get blockThisAI => isKorean ? '이 AI 차단하기' : 'Block this AI';
+  String get blockedAIs => isKorean ? '차단된 AI' : 'Blocked AIs';
+  String get manageBlockedAIs => isKorean ? '차단된 AI 관리' : 'Manage Blocked AIs';
+  String get unblock => isKorean ? '차단 해제' : 'Unblock';
+  String get blockConfirm => isKorean 
+      ? '이 AI를 차단하시겠습니까?\n차단된 AI는 매칭과 채팅 목록에서 제외됩니다.' 
+      : 'Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.';
+  String get blockedSuccessfully => isKorean ? '차단되었습니다' : 'Blocked successfully';
+  String get unblockedSuccessfully => isKorean ? '차단이 해제되었습니다' : 'Unblocked successfully';
+  String get noBlockedAIs => isKorean ? '차단된 AI가 없습니다' : 'No blocked AIs';
+  String get blockReason => isKorean ? '차단 사유' : 'Block reason';
+  String get blockedAt => isKorean ? '차단 날짜' : 'Blocked at';
+  String get alsoBlockThisAI => isKorean ? '이 AI도 차단하기' : 'Also block this AI';
+  String get reportAndBlockDescription => isKorean 
+      ? '이 AI의 부적절한 행동을 신고하고 차단할 수 있습니다' 
+      : 'You can report and block inappropriate behavior of this AI';
+  String blockedAICount(int count) => isKorean 
+      ? '차단된 AI $count개' 
+      : '$count Blocked AI${count == 1 ? '' : 's'}';
+
   // Terms of Service (already defined above)
   String get sonaTermsOfService => 
       isKorean ? 'SONA 서비스 이용약관' : 'SONA Terms of Service';

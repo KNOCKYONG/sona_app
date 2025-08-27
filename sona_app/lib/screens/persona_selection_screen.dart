@@ -15,6 +15,7 @@ import '../services/purchase/purchase_service.dart';
 import '../services/storage/cache_manager.dart';
 import '../services/cache/image_preload_service.dart';
 import '../services/ui/haptic_service.dart';
+import '../services/block_service.dart';
 import '../models/persona.dart';
 import '../models/app_user.dart';
 import '../widgets/persona/persona_card.dart';
@@ -277,8 +278,12 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       return;
     }
 
-    // 🔥 매칭된 페르소나 추가 필터링 - Firebase에서 최신 정보 확인
+    // 🔥 매칭된 페르소나와 차단된 페르소나 추가 필터링
     final personaService = Provider.of<PersonaService>(context, listen: false);
+    final blockService = BlockService();
+    
+    // 차단된 페르소나 ID 가져오기
+    final blockedIds = blockService.getBlockedPersonaIds();
 
     // 매칭된 페르소나가 아직 로드되지 않았다면 강제 로드
     if (!personaService.matchedPersonasLoaded) {
@@ -337,13 +342,19 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
     debugPrint('   - Matched IDs: ${matchedIds.take(5).join(', ')}...');
     debugPrint('   - Input personas: ${personas.length}');
 
-    // 더 강력한 필터링 - 매칭된 페르소나 완전 제외
+    // 더 강력한 필터링 - 매칭된 페르소나와 차단된 페르소나 완전 제외
     final filteredPersonas = personas.where((p) {
       final isMatched = matchedIds.contains(p.id);
+      final isBlocked = blockedIds.contains(p.id);
+      
       if (isMatched) {
         debugPrint('   ❌ Excluding matched persona: ${p.name} (${p.id})');
       }
-      return !isMatched;
+      if (isBlocked) {
+        debugPrint('   🚫 Excluding blocked persona: ${p.name} (${p.id})');
+      }
+      
+      return !isMatched && !isBlocked;
     }).toList();
 
     // 🎯 최소 카드 수 보장 로직 추가

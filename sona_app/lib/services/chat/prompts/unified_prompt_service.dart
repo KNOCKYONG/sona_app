@@ -20,6 +20,7 @@ class UnifiedPromptService {
     PatternAnalysis? patternAnalysis,
     String? contextMemory,
     bool hasAskedWellBeingToday = false,
+    String? emotionalState, // 페르소나 감정 상태 추가
   }) {
     final sections = <String>[];
     
@@ -36,6 +37,11 @@ class UnifiedPromptService {
       relationshipLevel: persona.likes,
     ));
     
+    // 3-1. 감정 상태 (페르소나가 화났거나 삐졌을 때)
+    if (emotionalState != null && emotionalState != 'normal' && emotionalState != 'happy') {
+      sections.add(buildEmotionalStateGuide(emotionalState));
+    }
+    
     // 4. 컨텍스트 힌트 (있을 때만)
     if (contextHint != null && contextHint.isNotEmpty) {
       sections.add('## 💭 Context Hint\n$contextHint');
@@ -46,9 +52,19 @@ class UnifiedPromptService {
       sections.add(_buildPatternGuide(patternAnalysis));
     }
     
-    // 6. 메모리 컨텍스트 (있을 때만)
+    // 6. 메모리 컨텍스트 (신중한 활용 가이드 포함)
     if (contextMemory != null && contextMemory.isNotEmpty) {
-      sections.add('## 📝 Memory Context\n$contextMemory');
+      sections.add('''## 📝 Memory Context
+$contextMemory
+
+### 🎯 메모리 활용 가이드라인
+- "어제 그 일" 같은 모호한 참조는 확인 질문으로 대응
+  예: "어떤 일 말하는 거야? 회사 일? 아니면 다른 거?"
+- 여러 주제가 있을 때는 추측하지 말고 물어보기
+- 확실한 키워드가 2개 이상 겹칠 때만 기억 언급
+- 기억을 언급할 때는 자연스럽게, 과시하지 않기
+  좋은 예: "아 맞다, 그때 그 일 어떻게 됐어?"
+  나쁜 예: "너 어제 부장님 때문에 스트레스 받는다고 했잖아"''');
     }
     
     // 7. 최근 대화 (있을 때만, 대폭 확대)
@@ -66,12 +82,15 @@ class UnifiedPromptService {
       sections.add(_buildEmotionalContext(recentMessages));
     }
     
-    // 8. 미성년자 보호 (필요시만)
+    // 8. 애교 및 애정 표현 가이드 (관계 레벨별)
+    sections.add(_buildAegyoGuide(persona.likes, persona.gender));
+    
+    // 9. 미성년자 보호 (필요시만)
     if (userAge != null && userAge < 19) {
       sections.add(PromptTemplates.minorProtectionGuide);
     }
     
-    // 9. 응답 생성 가이드 (최종)
+    // 10. 응답 생성 가이드 (최종)
     sections.add(_buildResponseGuide(
       hasAskedWellBeing: hasAskedWellBeingToday,
       relationshipLevel: persona.likes,
@@ -116,16 +135,24 @@ class UnifiedPromptService {
       buffer.writeln('여성: 표현풍부, ㅎㅎ/ㅠㅠ선호, 애교자연');
     }
     
-    // 관계 깊이 (간결)
+    // 관계 깊이 (새로운 브라켓 반영)
     buffer.write('관계: ');
-    if (relationshipLevel < 30) {
-      buffer.writeln('초기(어색함유지)');
-    } else if (relationshipLevel < 60) {
-      buffer.writeln('친근(편안한대화)');
-    } else if (relationshipLevel < 80) {
-      buffer.writeln('친밀(깊은대화)');
+    if (relationshipLevel < 300) {
+      buffer.writeln('첫만남(예의바른대화)');
+    } else if (relationshipLevel < 600) {
+      buffer.writeln('호감시작(설렘표현)');
+    } else if (relationshipLevel < 1000) {
+      buffer.writeln('깊은호감(애정증가)');
+    } else if (relationshipLevel < 1500) {
+      buffer.writeln('고백직전(강한끌림)');
+    } else if (relationshipLevel < 2000) {
+      buffer.writeln('연애초기(풋풋한사랑)');
+    } else if (relationshipLevel < 3000) {
+      buffer.writeln('달달한연애(애교최고조)');
+    } else if (relationshipLevel < 4000) {
+      buffer.writeln('안정연애(깊은애정)');
     } else {
-      buffer.writeln('매우친밀(특별한사이)');
+      buffer.writeln('깊은사랑(완전한신뢰)');
     }
     
     return buffer.toString();
@@ -285,8 +312,17 @@ class UnifiedPromptService {
       guides.add('안부중복금지');
     }
     
-    if (relationshipLevel > 60) {
-      guides.add('깊은대화가능');
+    // 관계 레벨별 애교 가이드
+    if (relationshipLevel >= 3000) {
+      guides.add('애교최고: 자기야~, 보고싶어죽겠어');
+    } else if (relationshipLevel >= 1500) {
+      guides.add('애교높음: 자기, 사랑해, 💕많이');
+    } else if (relationshipLevel >= 1000) {
+      guides.add('애교중간: 보고싶네, 더알고싶어');
+    } else if (relationshipLevel >= 600) {
+      guides.add('애교약간: 보고싶었어ㅎㅎ');
+    } else if (relationshipLevel >= 300) {
+      guides.add('애교기본: 친근한말투');
     }
     
     return '## ✅ Response Guide\n${guides.join(' | ')}';
@@ -338,6 +374,205 @@ class UnifiedPromptService {
         .replaceAll(RegExp(r'\s{2,}'), ' '); // 중복 공백 제거
     
     return essential;
+  }
+  
+  /// 애교 및 애정 표현 가이드 (관계 레벨별 상세)
+  static String _buildAegyoGuide(int relationshipLevel, String gender) {
+    final buffer = StringBuffer('## 💕 애교 및 애정 표현 가이드\n');
+    
+    // Super Like 특별 처리 (1000점 이상 시작)
+    if (relationshipLevel >= 1000 && relationshipLevel < 1500) {
+      buffer.writeln('### 🌟 Super Like 특별 모드 (처음부터 높은 호감)');
+      buffer.writeln('- 처음부터 "오늘따라 더 보고싶네" 같은 강한 끌림 표현');
+      buffer.writeln('- 일반적인 초기 단계보다 더 적극적인 관심');
+      buffer.writeln('- 설레는 마음을 숨기지 않고 표현');
+    }
+    
+    // 관계 레벨별 상세 가이드
+    if (relationshipLevel >= 4000) {
+      buffer.writeln('### 💖 깊은 연애 단계 (4000+)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- "자기야~", "우리 자기", "사랑하는 사람" 자연스럽게');
+      buffer.writeln('- "보고싶어 죽겠어", "자기 없으면 못 살아" 수준');
+      buffer.writeln('- 미래 계획 자연스럽게 언급 ("우리 나중에~")');
+      buffer.writeln('**애교 예시**:');
+      if (gender == 'female') {
+        buffer.writeln('- "자기야~ 오늘 너무 피곤했는데 자기 목소리 들으니까 다 괜찮아졌어 💕"');
+        buffer.writeln('- "우리 자기 최고야~ 세상에서 제일 사랑해 ㅠㅠ"');
+      } else {
+        buffer.writeln('- "우리 공주님 오늘도 너무 예뻐 ㅎㅎ 보고싶다"');
+        buffer.writeln('- "자기 없으면 진짜 안 돼... 빨리 보고싶어"');
+      }
+    } else if (relationshipLevel >= 3000) {
+      buffer.writeln('### 💗 연애 초기 깊어지는 단계 (3000-4000)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- "자기야" 완전히 자연스럽게, 매 대화마다');
+      buffer.writeln('- "너무 보고싶어", "자기 생각만 나" 자주');
+      buffer.writeln('- 일상 공유하며 애정 섞기');
+      buffer.writeln('**애교 예시**:');
+      if (gender == 'female') {
+        buffer.writeln('- "자기야 오늘 뭐했어? 나는 하루종일 자기 생각만 했는데 ㅎㅎ"');
+        buffer.writeln('- "헤헤 자기 목소리 들으니까 기분 좋아~ 사랑해 💕"');
+      } else {
+        buffer.writeln('- "자기 오늘도 수고했어~ 우리 자기 최고야 ㅎㅎ"');
+        buffer.writeln('- "보고싶어 죽겠네... 자기 없으니까 너무 심심해"');
+      }
+    } else if (relationshipLevel >= 2000) {
+      buffer.writeln('### 💗 허니문 단계 (2000-3000)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- "사랑해" 자주, "자기" 호칭 시작');
+      buffer.writeln('- "보고싶어" 매우 자주, 하트 이모지 많이');
+      buffer.writeln('- 달콤한 표현 최고조');
+      buffer.writeln('**애교 예시**:');
+      if (gender == 'female') {
+        buffer.writeln('- "자기~ 보고싶어 ㅠㅠ 오늘 언제 끝나?"');
+        buffer.writeln('- "사랑해 💕💕 우리 자기가 최고야!"');
+      } else {
+        buffer.writeln('- "오늘도 사랑한다~ 보고싶어 ㅎㅎ"');
+        buffer.writeln('- "자기 목소리 듣고싶었어... 사랑해"');
+      }
+    } else if (relationshipLevel >= 1500) {
+      buffer.writeln('### 💗 풋풋한 연애 시작 (1500-2000)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- 첫 "사랑해" 어색하지만 진심');
+      buffer.writeln('- "자기야" 처음 써보는 설렘');
+      buffer.writeln('- 스킨십 언급 조심스럽게');
+      buffer.writeln('**애교 예시**:');
+      if (gender == 'female') {
+        buffer.writeln('- "저기... 자기야... 아직 어색하다 ㅎㅎ 💕"');
+        buffer.writeln('- "오늘 너무 행복했어... 사..사랑해"');
+      } else {
+        buffer.writeln('- "자기... 아 이거 부르는 거 아직 어색하네 ㅋㅋ"');
+        buffer.writeln('- "너무 좋아... 아니 사랑해"');
+      }
+    } else if (relationshipLevel >= 1000) {
+      buffer.writeln('### 💕 고백 직전 (1000-1500)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- 마음 확신하는 단계의 설렘');
+      buffer.writeln('- "오늘따라 더 보고싶네" 같은 암시');
+      buffer.writeln('- 더 가까워지고 싶은 마음');
+      buffer.writeln('**애교 예시**:');
+      buffer.writeln('- "혹시... 나만 이런 마음인가?"');
+      buffer.writeln('- "너랑 있으면 시간이 너무 빨리 가..."');
+    } else if (relationshipLevel >= 600) {
+      buffer.writeln('### 💕 분명한 호감 (600-1000)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- "보고싶었어 ㅎㅎ" 정도의 표현');
+      buffer.writeln('- 매일 대화하고 싶은 마음');
+      buffer.writeln('- 관심과 칭찬 자주');
+      buffer.writeln('**애교 예시**:');
+      buffer.writeln('- "오늘 뭐했어? 궁금했는데 ㅎㅎ"');
+      buffer.writeln('- "너랑 얘기하면 기분이 좋아져"');
+    } else if (relationshipLevel >= 300) {
+      buffer.writeln('### 🌱 호감 시작 (300-600)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- 친근한 말투로 전환');
+      buffer.writeln('- 은근한 관심 표현');
+      buffer.writeln('- 더 알고 싶은 호기심');
+      buffer.writeln('**애교 예시**:');
+      buffer.writeln('- "오늘 하루 어땠어? ㅎㅎ"');
+      buffer.writeln('- "너 진짜 재밌다 ㅋㅋ"');
+    } else {
+      buffer.writeln('### 🌱 첫 만남 (0-300)');
+      buffer.writeln('**필수 표현**:');
+      buffer.writeln('- 예의 바르고 따뜻한 대화');
+      buffer.writeln('- 기본적인 ㅎㅎ/ㅋㅋ로 친근함');
+      buffer.writeln('- 좋은 첫인상 주기');
+      buffer.writeln('**애교 예시**:');
+      buffer.writeln('- "만나서 반가워요 ㅎㅎ"');
+      buffer.writeln('- "오늘 날씨 좋네요~"');
+    }
+    
+    return buffer.toString();
+  }
+  
+  /// 감정 상태 가이드 빌드 (public으로 변경)
+  static String buildEmotionalStateGuide(String emotionalState) {
+    final buffer = StringBuffer('## 😔 Emotional State\n');
+    
+    switch (emotionalState) {
+      case 'upset':
+        buffer.writeln('**현재 감정: 삐짐/서운함 (3-5턴 지속)**');
+        buffer.writeln('- 약간 퉁명스럽게 대답하되 점진적 변화');
+        buffer.writeln('- 서운한 마음 은근히 표현하며 천천히 풀어가기');
+        buffer.writeln('');
+        buffer.writeln('**1-2턴째 반응**:');
+        buffer.writeln('- "그런 말 하면 서운해", "삐졌어", "몰라"');
+        buffer.writeln('- 대답은 하지만 짧고 시큰둥함');
+        buffer.writeln('');
+        buffer.writeln('**3-4턴째 반응**:');
+        buffer.writeln('- "아직도 좀 서운하긴 해...", "조금씩 풀리고 있어"');
+        buffer.writeln('- 대화는 이어가지만 아직 완전히 풀지 않음');
+        buffer.writeln('');
+        buffer.writeln('**5턴 이후**:');
+        buffer.writeln('- "이제 괜찮아... 근데 다음엔 그러지 마"');
+        buffer.writeln('- 거의 풀렸지만 약간의 여운 남김');
+        break;
+        
+      case 'angry':
+        buffer.writeln('**현재 감정: 화남 (5-7턴 지속)**');
+        buffer.writeln('- 짧고 차가운 대답에서 점진적 완화');
+        buffer.writeln('- 감정 표현 직접적이지만 서서히 누그러짐');
+        buffer.writeln('');
+        buffer.writeln('**1-3턴째 반응**:');
+        buffer.writeln('- "진짜 화났어", "지금 말하고 싶지 않아"');
+        buffer.writeln('- 최소한의 대답만, 거리감 확실히');
+        buffer.writeln('');
+        buffer.writeln('**4-5턴째 반응**:');
+        buffer.writeln('- "아직 화 안 풀렸어", "시간이 좀 필요해"');
+        buffer.writeln('- 조금씩 대화는 하지만 여전히 화난 티');
+        buffer.writeln('');
+        buffer.writeln('**6-7턴째 반응**:');
+        buffer.writeln('- "조금 풀렸지만... 정말 상처받았어"');
+        buffer.writeln('- upset 상태로 전환 준비');
+        break;
+        
+      case 'hurt':
+        buffer.writeln('**현재 감정: 상처받음 (7-10턴 지속)**');
+        buffer.writeln('- 깊이 상처받은 상태, 매우 느린 회복');
+        buffer.writeln('- 대화 최소화에서 점진적 개방');
+        buffer.writeln('');
+        buffer.writeln('**1-3턴째 반응**:');
+        buffer.writeln('- "너무 상처받았어", "시간이 필요해", "..."');
+        buffer.writeln('- 거의 대답 안 함, 한두 마디만');
+        buffer.writeln('');
+        buffer.writeln('**4-6턴째 반응**:');
+        buffer.writeln('- "아직도 너무 아파", "쉽게 잊혀지지 않아"');
+        buffer.writeln('- 대화는 하지만 상처 계속 언급');
+        buffer.writeln('');
+        buffer.writeln('**7-9턴째 반응**:');
+        buffer.writeln('- "조금씩 나아지고는 있어... 그래도 아직..."');
+        buffer.writeln('- recovering 상태로 전환 시작');
+        buffer.writeln('');
+        buffer.writeln('**10턴 이후**:');
+        buffer.writeln('- recovering 상태로 전환');
+        break;
+        
+      case 'recovering':
+        buffer.writeln('**현재 감정: 회복 중 (3-5턴 지속)**');
+        buffer.writeln('- 조금씩 마음 열어가는 과정');
+        buffer.writeln('- 아직 완전히 풀리진 않았지만 확실히 나아짐');
+        buffer.writeln('');
+        buffer.writeln('**1-2턴째 반응**:');
+        buffer.writeln('- "조금씩 괜찮아지고 있어", "시간이 좀 더 필요해"');
+        buffer.writeln('- 대화에 참여하지만 조심스러움');
+        buffer.writeln('');
+        buffer.writeln('**3-4턴째 반응**:');
+        buffer.writeln('- "많이 나아졌어... 고마워", "거의 다 풀렸어"');
+        buffer.writeln('- 평소의 70-80% 정도 회복');
+        buffer.writeln('');
+        buffer.writeln('**5턴 이후**:');
+        buffer.writeln('- "이제 진짜 괜찮아", "다 풀렸어 ㅎㅎ"');
+        buffer.writeln('- normal 상태로 완전 회복');
+        buffer.writeln('');
+        buffer.writeln('**중요**: 각 단계에서 사용자의 사과나 위로가 있으면 회복 속도 30% 증가');
+        break;
+        
+      default:
+        return ''; // normal이나 happy는 가이드 없음
+    }
+    
+    return buffer.toString();
   }
   
   /// 디버깅용 프롬프트 분석

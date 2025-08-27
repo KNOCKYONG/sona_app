@@ -13,6 +13,7 @@ import 'openai_service.dart';
 import '../utils/natural_ai_service.dart';
 import 'chat_orchestrator.dart' hide MessageType;
 import 'conversation_state_adapter.dart';  // 🆕 마이그레이션 어댑터
+import 'conversations_service.dart';  // 🆕 OpenAI Conversations API
 import '../utils/persona_relationship_cache.dart';
 import '../../persona/persona_service.dart';
 import '../../storage/local_storage_service.dart';
@@ -358,7 +359,8 @@ class ChatService extends BaseService {
         return;  // Don't load, wait for delayed greeting
       } else {
         debugPrint('📦 Using cached messages for persona: $personaId (${cachedMessages.length} messages)');
-        _messages = cachedMessages;
+        // Create defensive copy to prevent modification issues
+        _messages = List<Message>.from(cachedMessages);
         _currentPersonaId = personaId;
         
         // 🔥 Clear loading flag since we're using cache
@@ -427,15 +429,13 @@ class ChatService extends BaseService {
         loadedMessages = [];  // Clear it, let the delayed greeting handle it
       }
       
-      // 🔥 CRITICAL: Only store if we don't already have messages
-      // This prevents overwriting existing cached messages
-      if (_messagesByPersona[personaId] == null || _messagesByPersona[personaId]!.isEmpty) {
-        _messagesByPersona[personaId] = loadedMessages;
-      }
+      // 🔥 CRITICAL: Store the loaded messages for this persona
+      // Use defensive copy to prevent concurrent modification
+      _messagesByPersona[personaId] = List<Message>.from(loadedMessages);
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
-        _messages = loadedMessages;  // 직접 참조 사용
+        _messages = List<Message>.from(loadedMessages);  // Defensive copy
       }
       
       // 🔥 Notify listeners BEFORE clearing loading flag
@@ -644,6 +644,33 @@ class ChatService extends BaseService {
         );
         if (conversationId != null) {
           _conversationIds[persona.id] = conversationId;
+          debugPrint('📝 Initialized conversation for ${persona.name}: $conversationId');
+          
+          // 기존 대화 히스토리가 있으면 Items API로 마이그레이션 (충분한 컨텍스트 유지)
+          final existingMessages = getMessages(persona.id);
+          if (existingMessages.isNotEmpty && !conversationId.startsWith('local_')) {
+            try {
+              // 최근 25개 메시지만 마이그레이션 (4000 토큰 내 충분한 컨텍스트)
+              final messagesToMigrate = existingMessages.length > 25 
+                  ? existingMessages.sublist(existingMessages.length - 25)
+                  : existingMessages;
+              
+              final items = messagesToMigrate.map((msg) => {
+                'type': 'message',
+                'role': msg.isFromUser ? 'user' : 'assistant',
+                'content': msg.content,
+              }).toList();
+              
+              await ConversationsService.addConversationItems(
+                conversationId: conversationId,
+                items: items,
+              );
+              
+              debugPrint('✅ Migrated ${items.length} messages to OpenAI conversation');
+            } catch (e) {
+              debugPrint('⚠️ Failed to migrate messages (non-critical): $e');
+            }
+          }
         }
       }
       

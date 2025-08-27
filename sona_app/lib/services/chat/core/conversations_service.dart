@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,10 +27,15 @@ class ConversationsService {
   static const String _conversationsEndpoint = '/v1/conversations';
   static const String _responsesEndpoint = '/v1/responses';
   
-  // 토큰 제한 설정
-  static const int _maxInputTokens = 4200;
+  // 토큰 제한 설정 (4000 토큰 충분히 활용)
+  static const int _maxInputTokens = 4000;  // 4200 중 4000 활용
   static const int _maxOutputTokens = 250;
   static const int _maxTranslationTokens = 500;
+  
+  // 토큰 할당 전략
+  static const int _systemPromptTokens = 1800;  // 풍부한 페르소나
+  static const int _historyTokens = 2000;       // 20-25턴 대화
+  static const int _userMessageTokens = 200;    // 현재 메시지
   
   // API 파라미터 최적화 (일관성 향상을 위해 조정)
   static const double _temperature = 0.75;  // 0.85 -> 0.75 (일관성 향상)
@@ -45,6 +51,19 @@ class ConversationsService {
   
   // 마지막 응답 ID 캐시 (conversationId -> responseId)
   static final Map<String, String> _lastResponseCache = {};
+  
+  /// 🔧 토큰 추정 함수 (한글/영어 고려)
+  static int _estimateTokens(String text) {
+    if (text.isEmpty) return 0;
+    
+    // 한글: 평균 2-3자 = 1토큰, 영어: 평균 4자 = 1토큰
+    final koreanChars = RegExp(r'[가-힣]').allMatches(text).length;
+    final englishChars = RegExp(r'[a-zA-Z]').allMatches(text).length;
+    final otherChars = text.length - koreanChars - englishChars;
+    
+    // 보수적으로 계산 (약간 여유 둠)
+    return ((koreanChars / 2.3) + (englishChars / 3.8) + (otherChars / 4)).ceil();
+  }
   
   /// 🎯 대화 생성 또는 가져오기
   static Future<String> getOrCreateConversation({
@@ -95,6 +114,159 @@ class ConversationsService {
       final fallbackId = 'local_${DateTime.now().millisecondsSinceEpoch}';
       _conversationCache[cacheKey] = fallbackId;
       return fallbackId;
+    }
+  }
+  
+  /// 📝 대화 아이템 추가 (Items API)
+  static Future<bool> addConversationItems({
+    required String conversationId,
+    required List<Map<String, dynamic>> items,
+  }) async {
+    try {
+      final response = await _httpClient.post(
+        Uri.parse('$_baseUrl$_conversationsEndpoint/$conversationId/items'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $_apiKey',
+        },
+        body: jsonEncode({'items': items}),
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint('✅ Added ${items.length} items to conversation');
+        return true;
+      } else {
+        debugPrint('❌ Failed to add items: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error adding conversation items: $e');
+      return false;
+    }
+  }
+  
+  /// 📖 대화 히스토리 가져오기 (Items API)
+  static Future<List<dynamic>> getConversationHistory({
+    required String conversationId,
+    int limit = 30,
+    String? after,
+  }) async {
+    try {
+      var url = '$_baseUrl$_conversationsEndpoint/$conversationId/items?limit=$limit';
+      if (after != null) url += '&after=$after';
+      
+      final response = await _httpClient.get(
+        Uri.parse(url),
+        headers: {'Authorization': 'Bearer $_apiKey'},
+      );
+      
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        debugPrint('📚 Retrieved ${data['data']?.length ?? 0} conversation items');
+        return data['data'] ?? [];
+      } else {
+        debugPrint('❌ Failed to get history: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      debugPrint('❌ Error getting conversation history: $e');
+      return [];
+    }
+  }
+  
+  /// 🗑️ 대화 아이템 삭제 (Items API)
+  static Future<bool> deleteConversationItem({
+    required String conversationId,
+    required String itemId,
+  }) async {
+    try {
+      final response = await _httpClient.delete(
+        Uri.parse('$_baseUrl$_conversationsEndpoint/$conversationId/items/$itemId'),
+        headers: {'Authorization': 'Bearer $_apiKey'},
+      );
+      
+      if (response.statusCode == 200) {
+        debugPrint('✅ Deleted item: $itemId');
+        return true;
+      } else {
+        debugPrint('❌ Failed to delete item: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error deleting conversation item: $e');
+      return false;
+    }
+  }
+  
+  /// 🔄 대화 메타데이터 업데이트
+  static Future<bool> updateConversationMetadata({
+    required String conversationId,
+    required Map<String, dynamic> metadata,
+  }) async {
+    try {
+      final response = await _httpClient.post(
+        Uri.parse('$_baseUrl$_conversationsEndpoint/$conversationId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $_apiKey',
+        },
+        body: jsonEncode({'metadata': metadata}),
+      );
+      
+      if (response.statusCode == 200) {
+        debugPrint('✅ Updated conversation metadata');
+        return true;
+      } else {
+        debugPrint('❌ Failed to update metadata: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error updating metadata: $e');
+      return false;
+    }
+  }
+  
+  /// 🧠 메모리를 시스템 메시지로 저장 (Items API)
+  static Future<bool> saveMemoryAsSystemMessage({
+    required String conversationId,
+    required String memoryContent,
+    required double importance,
+    String? emotion,
+    List<String>? tags,
+  }) async {
+    try {
+      // 메모리를 시스템 메시지 형식으로 구성
+      final memoryMessage = '''[MEMORY]
+중요도: ${(importance * 100).toStringAsFixed(0)}%
+${emotion != null ? '감정: $emotion' : ''}
+${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
+내용: $memoryContent''';
+      
+      final response = await _httpClient.post(
+        Uri.parse('$_baseUrl$_conversationsEndpoint/$conversationId/items'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $_apiKey',
+        },
+        body: jsonEncode({
+          'items': [{
+            'type': 'message',
+            'role': 'system',
+            'content': memoryMessage,
+          }]
+        }),
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint('🧠 Saved memory to conversation: ${memoryContent.substring(0, math.min(50, memoryContent.length))}...');
+        return true;
+      } else {
+        debugPrint('❌ Failed to save memory: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error saving memory: $e');
+      return false;
     }
   }
   
@@ -246,40 +418,68 @@ class ConversationsService {
     }
   }
   
-  /// 🔧 입력 메시지 구성
+  /// 🔧 입력 메시지 구성 (4000 토큰 충분히 활용)
   static List<Map<String, String>> _buildInputMessages({
     required String systemPrompt,
     required String userMessage,
     List<Message>? recentMessages,
   }) {
     final messages = <Map<String, String>>[];
+    int currentTokens = 0;
     
-    // 시스템 프롬프트
+    // 1. 시스템 프롬프트 (1800 토큰까지 허용)
+    final systemTokens = _estimateTokens(systemPrompt);
+    if (systemTokens > _systemPromptTokens) {
+      debugPrint('⚠️ System prompt exceeds limit: $systemTokens tokens');
+    }
     messages.add({
       'role': 'system',
       'content': systemPrompt,
     });
+    currentTokens += systemTokens;
     
-    // 최근 대화 (있을 경우)
+    // 2. 사용자 메시지 토큰 계산
+    final userTokens = _estimateTokens(userMessage);
+    currentTokens += userTokens;
+    
+    // 3. 대화 히스토리 (2000 토큰 충분히 활용)
     if (recentMessages != null && recentMessages.isNotEmpty) {
-      // 최근 15개만 포함 (최적화)
-      final relevantMessages = recentMessages.length > 15
-          ? recentMessages.sublist(recentMessages.length - 15)
-          : recentMessages;
+      final historyMessages = <Map<String, String>>[];
+      int historyTokens = 0;
+      final maxHistoryTokens = _maxInputTokens - currentTokens - 200; // 여유 200
       
-      for (final msg in relevantMessages) {
-        messages.add({
+      // 최근 메시지부터 역순으로 추가 (최대한 많이 포함)
+      for (final msg in recentMessages.reversed) {
+        final msgTokens = _estimateTokens(msg.content);
+        
+        // 토큰 한계에 도달하면 중지
+        if (historyTokens + msgTokens > maxHistoryTokens && historyMessages.length >= 10) {
+          // 최소 10개는 보장
+          break;
+        }
+        
+        historyMessages.insert(0, {
           'role': msg.isFromUser ? 'user' : 'assistant',
           'content': msg.content,
         });
+        historyTokens += msgTokens;
       }
+      
+      // 대화 히스토리 추가
+      messages.addAll(historyMessages);
+      currentTokens += historyTokens;
+      
+      debugPrint('📊 History: ${historyMessages.length} messages, $historyTokens tokens');
     }
     
-    // 현재 사용자 메시지
+    // 4. 현재 사용자 메시지 추가
     messages.add({
       'role': 'user',
       'content': userMessage,
     });
+    
+    debugPrint('📊 Total input: $currentTokens tokens / $_maxInputTokens');
+    debugPrint('📊 Messages: System(1) + History(${messages.length - 2}) + User(1)');
     
     return messages;
   }
@@ -327,8 +527,8 @@ class ConversationsService {
     return 'intimate';
   }
   
-  /// 📊 대화 히스토리 가져오기
-  static Future<List<Map<String, dynamic>>> getConversationHistory({
+  /// 📊 대화 히스토리 가져오기 (상세 버전)
+  static Future<List<Map<String, dynamic>>> getConversationHistoryDetailed({
     required String conversationId,
     int? limit,
   }) async {

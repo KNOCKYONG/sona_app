@@ -11,6 +11,7 @@ import '../../../core/constants/chat_patterns.dart';
 import '../../../core/preferences_manager.dart';
 import '../utils/persona_relationship_cache.dart';
 import '../prompts/persona_prompt_builder.dart';
+import '../prompts/unified_prompt_service.dart';
 import '../security/security_aware_post_processor.dart';
 import '../intelligence/conversation_memory_service.dart';
 import '../intelligence/conversation_context_manager.dart';
@@ -92,6 +93,58 @@ class MessageAnalysis {
   });
 }
 
+/// 감정 상태 추적 클래스
+class EmotionStateTracker {
+  String currentState;
+  int turnCount;
+  final int maxTurns;
+  DateTime? lastUpdated;
+  bool hasApologized;
+  
+  EmotionStateTracker({
+    required this.currentState,
+    required this.maxTurns,
+    this.turnCount = 0,
+    this.hasApologized = false,
+  }) : lastUpdated = DateTime.now();
+  
+  /// 턴 진행
+  void progressTurn() {
+    turnCount++;
+    lastUpdated = DateTime.now();
+  }
+  
+  /// 상태 전환 가능 여부
+  bool canTransition() {
+    return turnCount >= maxTurns;
+  }
+  
+  /// 회복 가속 (사과 시)
+  void accelerateRecovery() {
+    if (!hasApologized) {
+      hasApologized = true;
+      // 30% 회복 가속
+      turnCount = (turnCount + (maxTurns * 0.3).round()).clamp(0, maxTurns);
+    }
+  }
+  
+  /// 다음 상태 결정
+  String getNextState() {
+    switch (currentState) {
+      case 'hurt':
+        return 'recovering';
+      case 'angry':
+        return 'upset';
+      case 'upset':
+        return 'recovering';
+      case 'recovering':
+        return 'normal';
+      default:
+        return 'normal';
+    }
+  }
+}
+
 /// 감정 교류 품질 클래스
 class EmotionalExchangeQuality {
   final double score;
@@ -149,6 +202,9 @@ class ChatOrchestrator {
   
   // 추억 회상 캐시
   final Map<String, MemoryItem> _memoryToRecall = {};
+  
+  // 감정 상태 추적 시스템
+  final Map<String, EmotionStateTracker> _emotionTrackers = {};
   
   /// 다국어 추가 질문 패턴
   static final Map<String, List<String>> _multilingualQuestions = {
@@ -374,6 +430,7 @@ class ChatOrchestrator {
         personaId: completePersona.id,
         recentMessages: chatHistory,
         persona: completePersona,
+        conversationId: conversationId,
       );
 
       // 4단계: 프롬프트 생성 (말투 적응 가이드 포함)
@@ -648,9 +705,9 @@ class ChatOrchestrator {
       }
 
       // 4.5단계: 통합 대화 시스템 컨텍스트 구성
-      final conversationId = '${userId}_${completePersona.id}';
+      final localConversationId = '${userId}_${completePersona.id}';
       final unifiedContext = await _unifiedSystem.buildUnifiedContext(
-        conversationId: conversationId,
+        conversationId: localConversationId,
         userId: userId,
         personaId: completePersona.id,
         userMessage: userMessage,
@@ -684,6 +741,24 @@ class ChatOrchestrator {
             ? '$contextHint\n\n## 💬 응답 가이드:\n$simpleResponseHint'
             : '## 💬 응답 가이드:\n$simpleResponseHint';
       }
+      
+      // 4.7단계: 감정 상태 추적 및 진행
+      final trackerId = '${userId}_${completePersona.id}';
+      final currentEmotionState = getCurrentEmotionState(userId, completePersona.id);
+      
+      // 감정 상태가 있으면 프롬프트에 추가
+      if (currentEmotionState != 'normal') {
+        final emotionStateGuide = UnifiedPromptService.buildEmotionalStateGuide(currentEmotionState);
+        if (emotionStateGuide.isNotEmpty) {
+          contextHint = contextHint != null
+              ? '$contextHint\n\n$emotionStateGuide'
+              : emotionStateGuide;
+          debugPrint('😔 현재 감정 상태 적용: $currentEmotionState');
+        }
+      }
+      
+      // 감정 상태 턴 진행
+      _progressEmotionState(trackerId);
       
       // 5단계: API 호출
       // 영어 입력은 원본 그대로 전달하고, targetLanguage 파라미터 추가
@@ -755,9 +830,22 @@ class ChatOrchestrator {
         
         // 대화 ID 업데이트 (서버에서 관리)
         final newConversationId = responseResult.conversationId;
-        if (conversationId == null && newConversationId.isNotEmpty) {
+        var currentConversationId = conversationId;
+        if (currentConversationId == null && newConversationId.isNotEmpty) {
           debugPrint('📝 New conversation created: $newConversationId');
-          // TODO: Store newConversationId for future use if needed
+          currentConversationId = newConversationId; // 저장하여 계속 사용
+        }
+        
+        // 사용자 메시지를 Items API로 저장 (서버에 대화 히스토리 유지)
+        if (currentConversationId != null && currentConversationId.isNotEmpty && !currentConversationId.startsWith('local_')) {
+          await ConversationsService.addConversationItems(
+            conversationId: currentConversationId,
+            items: [{
+              'type': 'message',
+              'role': 'user',
+              'content': userMessage,
+            }],
+          );
         }
         
         // 토큰 사용량 로깅
@@ -1245,7 +1333,7 @@ class ChatOrchestrator {
       );
       
       await _unifiedSystem.updateConversationState(
-        conversationId: conversationId,
+        conversationId: conversationId ?? '${userId}_${completePersona.id}',
         userId: userId,
         personaId: completePersona.id,
         userMessage: userMsg,
@@ -1283,6 +1371,7 @@ class ChatOrchestrator {
     required String personaId,
     required List<Message> recentMessages,
     required Persona persona,
+    String? conversationId,
   }) async {
     try {
       // Check if user is a guest
@@ -1301,7 +1390,8 @@ class ChatOrchestrator {
           personaId: personaId,
           recentMessages: recentMessages,
           persona: persona,
-          maxTokens: 1500, // 500 -> 1500으로 증가하여 더 많은 대화 기억
+          maxTokens: 3000, // 1500 -> 3000으로 대폭 증가 (4000토큰 충분히 활용)
+          conversationId: conversationId,  // OpenAI Conversation ID 전달
         );
         return memory;
       }
@@ -1398,8 +1488,14 @@ class ChatOrchestrator {
     final negativeAnalysis =
         negativeSystem.analyze(userMessage, likes: persona.likes);
 
-    // 부정적 행동이 감지되면 페널티 반환
+    // 부정적 행동이 감지되면 페널티 반환 및 감정 상태 업데이트
     if (negativeAnalysis.isNegative) {
+      // 감정 상태 추적 업데이트
+      // userId는 상위 스코프에서 가져옴
+      final currentUserId = FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+      final trackerId = '${currentUserId}_${persona.id}';
+      _updateEmotionState(trackerId, negativeAnalysis.level);
+      
       // 레벨 3 (심각한 위협/욕설)은 즉시 이별
       if (negativeAnalysis.level >= 3) {
         return -persona.likes; // 0으로 리셋
@@ -1420,6 +1516,9 @@ class ChatOrchestrator {
           return -2;
       }
     }
+    
+    // 사과 감지 및 처리
+    _checkForApology(userMessage, persona);
 
     // 긍정적 메시지 분석
     int baseChange = 0;
@@ -6698,5 +6797,120 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
     }
 
     return null;
+  }
+  
+  /// 감정 상태 업데이트
+  void _updateEmotionState(String trackerId, int negativeLevel) {
+    // 기존 트래커가 있으면 상태 업데이트
+    if (_emotionTrackers.containsKey(trackerId)) {
+      final tracker = _emotionTrackers[trackerId]!;
+      
+      // 이미 부정적 상태면 턴 카운트만 리셋
+      if (tracker.currentState != 'normal') {
+        tracker.turnCount = 0;
+        return;
+      }
+    }
+    
+    // 새로운 감정 상태 설정
+    String newState;
+    int maxTurns;
+    
+    switch (negativeLevel) {
+      case 3: // 심각한 수준
+        newState = 'hurt';
+        maxTurns = math.Random().nextInt(4) + 7; // 7-10턴
+        break;
+      case 2: // 중간 수준
+        newState = 'angry';
+        maxTurns = math.Random().nextInt(3) + 5; // 5-7턴
+        break;
+      case 1: // 경미한 수준
+        newState = 'upset';
+        maxTurns = math.Random().nextInt(3) + 3; // 3-5턴
+        break;
+      default:
+        return; // 부정적이 아니면 무시
+    }
+    
+    _emotionTrackers[trackerId] = EmotionStateTracker(
+      currentState: newState,
+      maxTurns: maxTurns,
+    );
+    
+    debugPrint('😔 감정 상태 업데이트: $newState (${maxTurns}턴 지속)');
+  }
+  
+  /// 사과 감지 및 처리
+  void _checkForApology(String userMessage, Persona persona) {
+    final currentUserId = FirebaseAuth.instance.currentUser?.uid ?? 'guest';
+    final trackerId = '${currentUserId}_${persona.id}';
+    if (!_emotionTrackers.containsKey(trackerId)) return;
+    
+    final apologyPatterns = [
+      '미안', '죄송', '잘못', '사과',
+      'sorry', 'apologize', 'my bad',
+      '용서', '반성', '후회'
+    ];
+    
+    final lower = userMessage.toLowerCase();
+    bool hasApology = apologyPatterns.any((pattern) => lower.contains(pattern));
+    
+    if (hasApology) {
+      final tracker = _emotionTrackers[trackerId]!;
+      tracker.accelerateRecovery();
+      debugPrint('🙏 사과 감지 - 회복 가속화');
+    }
+  }
+  
+  /// 감정 상태 진행
+  void _progressEmotionState(String trackerId) {
+    if (!_emotionTrackers.containsKey(trackerId)) return;
+    
+    final tracker = _emotionTrackers[trackerId]!;
+    tracker.progressTurn();
+    
+    // 상태 전환 가능한지 확인
+    if (tracker.canTransition()) {
+      final nextState = tracker.getNextState();
+      
+      if (nextState == 'normal') {
+        // 완전 회복
+        _emotionTrackers.remove(trackerId);
+        debugPrint('😊 감정 상태 완전 회복');
+      } else {
+        // 다음 단계로 전환
+        int newMaxTurns;
+        switch (nextState) {
+          case 'recovering':
+            newMaxTurns = math.Random().nextInt(3) + 3; // 3-5턴
+            break;
+          case 'upset':
+            newMaxTurns = math.Random().nextInt(3) + 3; // 3-5턴
+            break;
+          default:
+            newMaxTurns = 3;
+        }
+        
+        _emotionTrackers[trackerId] = EmotionStateTracker(
+          currentState: nextState,
+          maxTurns: newMaxTurns,
+          hasApologized: tracker.hasApologized,
+        );
+        
+        debugPrint('😐 감정 상태 전환: ${tracker.currentState} → $nextState');
+      }
+    } else {
+      debugPrint('😔 감정 상태 유지: ${tracker.currentState} (${tracker.turnCount}/${tracker.maxTurns}턴)');
+    }
+  }
+  
+  /// 현재 감정 상태 가져오기
+  String getCurrentEmotionState(String userId, String personaId) {
+    final trackerId = '${userId}_$personaId';
+    if (_emotionTrackers.containsKey(trackerId)) {
+      return _emotionTrackers[trackerId]!.currentState;
+    }
+    return 'normal';
   }
 }

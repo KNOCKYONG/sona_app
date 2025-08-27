@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'dart:ui';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -56,6 +57,32 @@ void main() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+    
+    // Firebase Auth 디버그 모드 활성화
+    if (kDebugMode) {
+      debugPrint('🔐 [Main] Firebase Auth Debug Mode Enabled');
+      
+      // Auth 상태 변경 리스너로 디버깅
+      FirebaseAuth.instance.authStateChanges().listen((User? user) {
+        debugPrint('🔐 [Main] Auth State Changed:');
+        debugPrint('  - User UID: ${user?.uid ?? "null"}');
+        debugPrint('  - Is Anonymous: ${user?.isAnonymous ?? false}');
+        debugPrint('  - Provider: ${user?.providerData.map((p) => p.providerId).join(', ') ?? "none"}');
+      });
+      
+      // ID 토큰 변경 리스너
+      FirebaseAuth.instance.idTokenChanges().listen((User? user) {
+        debugPrint('🔑 [Main] ID Token Changed for user: ${user?.uid ?? "null"}');
+      });
+      
+      // User changes listener for more detailed info
+      FirebaseAuth.instance.userChanges().listen((User? user) {
+        debugPrint('👤 [Main] User Changes Detected:');
+        debugPrint('  - Display Name: ${user?.displayName ?? "null"}');
+        debugPrint('  - Email: ${user?.email ?? "null"}');
+        debugPrint('  - Email Verified: ${user?.emailVerified ?? false}');
+      });
+    }
   } catch (e) {
     if (e.toString().contains('duplicate-app')) {
       if (kDebugMode) {

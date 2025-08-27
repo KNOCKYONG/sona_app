@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,7 +7,6 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'dart:math';
 import '../../core/preferences_manager.dart';
 import '../../core/constants.dart';
 import '../base/base_service.dart';
@@ -136,6 +136,8 @@ class AuthService extends BaseService {
         final nonce = _sha256ofString(rawNonce);
 
         debugPrint('🍎 [AuthService] Requesting Apple ID credential...');
+        debugPrint('  - Generated nonce: $rawNonce');
+        debugPrint('  - SHA256 nonce: $nonce');
         
         // Request Apple ID credential
         final appleCredential = await SignInWithApple.getAppleIDCredential(
@@ -146,14 +148,28 @@ class AuthService extends BaseService {
           nonce: nonce,
         );
 
-        debugPrint('🍎 [AuthService] Apple credential received, creating OAuth credential...');
+        // Log received credential details for debugging
+        debugPrint('🍎 [AuthService] Apple credential received:');
+        debugPrint('  - identityToken: ${appleCredential.identityToken?.substring(0, math.min(20, appleCredential.identityToken?.length ?? 0))}...');
+        debugPrint('  - identityToken length: ${appleCredential.identityToken?.length}');
+        debugPrint('  - authorizationCode: ${appleCredential.authorizationCode.substring(0, math.min(20, appleCredential.authorizationCode.length))}...');
+        debugPrint('  - authorizationCode length: ${appleCredential.authorizationCode.length}');
+        debugPrint('  - userIdentifier: ${appleCredential.userIdentifier}');
+        debugPrint('  - email: ${appleCredential.email ?? "null"}');
+        debugPrint('  - familyName: ${appleCredential.familyName ?? "null"}');
+        debugPrint('  - givenName: ${appleCredential.givenName ?? "null"}');
+        debugPrint('  - state: ${appleCredential.state ?? "null"}');
 
-        // Create OAuth credential
+        debugPrint('🍎 [AuthService] Creating OAuth credential...');
+        
+        // Create OAuth credential with additional logging
         final oauthCredential = OAuthProvider("apple.com").credential(
           idToken: appleCredential.identityToken,
           rawNonce: rawNonce,
+          accessToken: appleCredential.authorizationCode,
         );
-
+        
+        debugPrint('🍎 [AuthService] OAuth credential created successfully');
         debugPrint('🍎 [AuthService] Signing in with Firebase...');
 
         // Sign in with Firebase
@@ -214,8 +230,32 @@ class AuthService extends BaseService {
         }
         return false;
       } on FirebaseAuthException catch (e) {
-        debugPrint('❌ [AuthService] Firebase Auth error during Apple Sign-In: ${e.code} - ${e.message}');
-        setError('Firebase 인증 오류: ${e.message}');
+        debugPrint('❌ [AuthService] Firebase Auth error during Apple Sign-In:');
+        debugPrint('  - Error code: ${e.code}');
+        debugPrint('  - Error message: ${e.message}');
+        debugPrint('  - Full error: $e');
+        
+        // More specific error handling for common Firebase Auth errors
+        switch (e.code) {
+          case 'invalid-credential':
+            debugPrint('  ⚠️ This usually means:');
+            debugPrint('    1. Service ID mismatch in Firebase Console');
+            debugPrint('    2. Team ID is incorrect');
+            debugPrint('    3. Key ID or Private Key is wrong');
+            debugPrint('    4. OAuth redirect URL mismatch');
+            setError('Apple 로그인 설정 오류. Firebase Console에서 Apple 프로바이더 설정을 확인해주세요.');
+            break;
+          case 'operation-not-allowed':
+            debugPrint('  ⚠️ Apple Sign-In is not enabled in Firebase Console');
+            setError('Apple 로그인이 비활성화되어 있습니다. 관리자에게 문의해주세요.');
+            break;
+          case 'user-disabled':
+            debugPrint('  ⚠️ User account has been disabled');
+            setError('계정이 비활성화되었습니다.');
+            break;
+          default:
+            setError('Firebase 인증 오류: ${e.message}');
+        }
         return false;
       } catch (e) {
         debugPrint('❌ [AuthService] Unexpected error during Apple Sign-In: $e');
@@ -230,7 +270,7 @@ class AuthService extends BaseService {
   // Generate a cryptographically secure random nonce
   String _generateNonce([int length = 32]) {
     const charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._';
-    final random = Random.secure();
+    final random = math.Random.secure();
     return List.generate(length, (_) => charset[random.nextInt(charset.length)]).join();
   }
 

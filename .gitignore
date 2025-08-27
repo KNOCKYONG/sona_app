@@ -19,6 +19,8 @@ api_keys.json
 secrets.json
 config.secret.js
 *.secret
+keys/
+*.p8
 
 # IDE and editor files
 .vscode/

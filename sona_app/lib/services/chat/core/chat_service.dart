@@ -135,8 +135,21 @@ class ChatService extends BaseService {
 
   /// Get messages with memory optimization
   List<Message> getMessages(String personaId) {
-    // Always return messages for the specific persona
-    final messages = _messagesByPersona[personaId] ?? [];
+    // 🔥 FIX: Return messages from cache or current messages if persona matches
+    // This ensures messages are available immediately after loading
+    if (_messagesByPersona.containsKey(personaId)) {
+      return _messagesByPersona[personaId] ?? [];
+    }
+    
+    // If current persona matches and we have messages, return them
+    if (_currentPersonaId == personaId && _messages.isNotEmpty) {
+      // Store in cache for consistency
+      _messagesByPersona[personaId] = _messages;
+      return _messages;
+    }
+    
+    // Return empty list if no messages found
+    return [];
 
     // Debug: 읽지 않은 메시지 확인 (주석 처리 - 너무 많은 로그 방지)
     // final unreadCount = messages.where((m) => !m.isFromUser && (m.isRead == false || m.isRead == null)).length;
@@ -231,7 +244,8 @@ class ChatService extends BaseService {
 
     final messages = _messagesByPersona[personaId];
     if (messages == null || messages.isEmpty) {
-      debugPrint('⚠️ No messages found for persona: $personaId');
+      // Removed debug print to avoid showing "No messages found" message
+      // This is a normal state for new conversations
       return;
     }
 
@@ -272,8 +286,14 @@ class ChatService extends BaseService {
         debugPrint(
             '✅ Batch updated ${updatedMessages.where((m) => m.isRead == true).length} messages as read');
       } catch (e) {
-        // Ignore NOT_FOUND errors as messages might not exist yet
-        if (!e.toString().contains('NOT_FOUND')) {
+        // 🔥 FIX: Properly handle NOT_FOUND errors for messages that don't exist in Firebase yet
+        // This is normal for new messages that haven't been saved to Firebase
+        final errorString = e.toString().toLowerCase();
+        if (errorString.contains('not-found') || errorString.contains('not_found')) {
+          // Silent ignore - this is expected for new messages
+          debugPrint('ℹ️ Some messages not in Firebase yet, skipping read status update');
+        } else {
+          // Only log real errors
           debugPrint('❌ Error batch updating read status: $e');
         }
       }
@@ -303,12 +323,55 @@ class ChatService extends BaseService {
   }
 
   /// Load chat history with parallel processing
-  Future<void> loadChatHistory(String userId, String personaId) async {
+  Future<void> loadChatHistory(String userId, String personaId, {bool isFirstTimeAfterMatching = false}) async {
     // 🔥 Set loading flag to prevent race conditions with first greeting
     _isLoadingMessages = true;
     
+    // 🔥 CRITICAL: For newly matched personas, don't load any messages
+    // Only the delayed greeting should appear after 1.5 seconds
+    if (isFirstTimeAfterMatching) {
+      debugPrint('🎯 First time entering after matching - keeping empty for delayed greeting');
+      _messagesByPersona[personaId] = [];
+      _messages = [];
+      _currentPersonaId = personaId;
+      _isLoadingMessages = false;
+      notifyListeners();
+      return;  // Don't load anything, wait for delayed greeting
+    }
+    
+    // 🔥 Check if we already have cached messages - if so, just use them
+    // BUT: Don't use cache for newly matched personas (they shouldn't have messages yet)
+    if (_messagesByPersona.containsKey(personaId) && 
+        _messagesByPersona[personaId] != null &&
+        _messagesByPersona[personaId]!.isNotEmpty) {
+      // 🔥 Additional check: Skip cache if this looks like a first greeting scenario
+      // (only 1 message and it's from the persona, not the user)
+      final cachedMessages = _messagesByPersona[personaId]!;
+      if (cachedMessages.length == 1 && !cachedMessages.first.isFromUser) {
+        debugPrint('🔥 Skipping cache - appears to be immediate greeting, clearing for delayed greeting');
+        // Clear the incorrect cached greeting
+        _messagesByPersona[personaId] = [];
+        _messages = [];
+        _currentPersonaId = personaId;
+        _isLoadingMessages = false;
+        notifyListeners();
+        return;  // Don't load, wait for delayed greeting
+      } else {
+        debugPrint('📦 Using cached messages for persona: $personaId (${cachedMessages.length} messages)');
+        _messages = cachedMessages;
+        _currentPersonaId = personaId;
+        
+        // 🔥 Clear loading flag since we're using cache
+        _isLoadingMessages = false;
+        notifyListeners();
+        
+        // 🔥 IMPORTANT: Return early to prevent overwriting cached messages
+        return;
+      }
+    }
+    
     // 🔥 Progressive loading - don't clear immediately
-    // Only clear if switching to a different persona
+    // Only clear if switching to a different persona and no cache
     if (_currentPersonaId != null && _currentPersonaId != personaId) {
       // Store existing messages temporarily for smooth transition
       final previousMessages = _messages.toList();
@@ -324,8 +387,9 @@ class ChatService extends BaseService {
     // _cleanupPersonaTimers(personaId);
 
     await executeWithLoading(() async {
-      // Check if user is guest
-      final isGuest = _userService != null ? await _userService!.isGuestUser : false;
+      // 🔥 FIX: Check if userId is guest (device ID only)
+      // Firebase user IDs can vary in length, so don't check length
+      final isGuest = userId.isEmpty || userId.startsWith('device_');
       
       List<Message> loadedMessages;
       
@@ -342,6 +406,7 @@ class ChatService extends BaseService {
         }
       } else {
         // Load from Firebase for authenticated users
+        debugPrint('🔥 [ChatService] Loading Firebase conversation for persona: $personaId, userId: $userId');
         final messagesLoading = _loadMessagesFromFirebase(userId, personaId);
         final memoryLoading = _preloadConversationMemory(userId, personaId);
 
@@ -355,19 +420,37 @@ class ChatService extends BaseService {
         }
       }
 
-      // Store messages for this specific persona
-      _messagesByPersona[personaId] = loadedMessages;
+      // 🔥 CRITICAL: Check if this looks like a first greeting that shouldn't be shown
+      // If there's only one message from the persona, clear it for delayed greeting
+      if (loadedMessages.length == 1 && !loadedMessages.first.isFromUser) {
+        debugPrint('🔥 Found single greeting in Firebase - clearing for proper delayed greeting');
+        loadedMessages = [];  // Clear it, let the delayed greeting handle it
+      }
+      
+      // 🔥 CRITICAL: Only store if we don't already have messages
+      // This prevents overwriting existing cached messages
+      if (_messagesByPersona[personaId] == null || _messagesByPersona[personaId]!.isEmpty) {
+        _messagesByPersona[personaId] = loadedMessages;
+      }
 
       // Update global messages if this is the current persona
       if (_currentPersonaId == personaId) {
         _messages = loadedMessages;  // 직접 참조 사용
       }
+      
+      // 🔥 Notify listeners BEFORE clearing loading flag
+      // This ensures UI sees the messages before checking loading state
+      notifyListeners();
+      
+      // 🔥 Small delay to ensure UI has processed the message update
+      await Future.delayed(const Duration(milliseconds: 50));
+      
     }, errorContext: 'loadChatHistory');
     
-    // 🔥 Clear loading flag after everything is done
+    // 🔥 Clear loading flag ONLY after messages are stored and UI notified
     _isLoadingMessages = false;
     
-    // 🔥 Final notification to ensure UI is updated
+    // 🔥 Final notification with loading flag cleared
     notifyListeners();
   }
 
@@ -1748,10 +1831,12 @@ class ChatService extends BaseService {
               .doc(msg.id)
               .update({'isRead': true});
         } catch (e) {
-          // Ignore NOT_FOUND errors as messages might not exist yet
-          if (!e.toString().contains('NOT_FOUND')) {
+          // 🔥 FIX: Properly handle NOT_FOUND errors
+          final errorString = e.toString().toLowerCase();
+          if (!errorString.contains('not-found') && !errorString.contains('not_found')) {
             debugPrint('Error updating read status: $e');
           }
+          // Silent ignore for NOT_FOUND - this is expected for new messages
         }
       }
     }
@@ -3465,18 +3550,26 @@ class ChatService extends BaseService {
     required Persona persona,
   }) async {
     try {
-      // 🔥 Double-check to prevent race conditions
-      // Check if loading is still in progress
+      // 🔥 CRITICAL FIX: Comprehensive duplicate prevention
+      // 1. Check if loading is still in progress
       if (_isLoadingMessages) {
         debugPrint('⏳ Messages still loading, skipping initial greeting to prevent duplicates');
         return;
       }
       
-      // 이미 메시지가 있는지 확인 (다시 한 번 체크)
-      final existingMessages = _messagesByPersona[personaId] ?? [];
-      if (existingMessages.isNotEmpty) {
+      // 2. Check both message caches thoroughly
+      final cachedMessages = _messagesByPersona[personaId] ?? [];
+      final currentMessages = (_currentPersonaId == personaId) ? _messages : [];
+      
+      if (cachedMessages.isNotEmpty || currentMessages.isNotEmpty) {
         debugPrint(
-            'Messages already exist for persona $personaId, skipping initial greeting');
+            '📚 Messages already exist for persona $personaId (cached: ${cachedMessages.length}, current: ${currentMessages.length}), skipping initial greeting');
+        return;
+      }
+      
+      // 3. Check if persona is already typing to prevent duplicates
+      if (_personaIsTyping[personaId] == true) {
+        debugPrint('💬 Persona is already typing, skipping initial greeting');
         return;
       }
 

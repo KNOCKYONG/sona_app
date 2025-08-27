@@ -69,9 +69,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   // 🔥 Removed _isInitialized flag - using progressive loading instead
   bool _isInitialLoad = true;  // 초기 로드 추적을 위한 플래그
   bool _hasInitializedOnce = false;  // 한 번이라도 초기화 되었는지 추적
+  late final DateTime _initTime = DateTime.now();  // Track initialization time for loading state
   
   // 스크롤 위치 기억용 Map (personaId -> scrollPosition)
-  final Map<String, double> _savedScrollPositions = {};
+  // Removed: Scroll position saving is not needed
 
   @override
   void initState() {
@@ -216,6 +217,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         return;
       }
     }
+    
+    // 🔥 FIX: Set a flag to prevent welcome message during initialization
+    bool isFirstTimeEntering = !_hasInitializedOnce;
 
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
@@ -281,9 +285,15 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             await chatService.rejoinChatRoom(_userId!, personaService.currentPersona!.id);
             await personaService.resetLeftChatStatus(personaService.currentPersona!.id);
           } else {
+            // 🔥 Check if this is first time entering after matching
+            // If messages are empty and this is the first time, don't load from Firebase
+            final existingMessages = chatService.getMessages(personaService.currentPersona!.id);
+            final isFirstTimeAfterMatching = existingMessages.isEmpty && isFirstTimeEntering;
+            
             // 정상적으로 채팅 히스토리 로드
             await chatService.loadChatHistory(
-                _userId!, personaService.currentPersona!.id);
+                _userId!, personaService.currentPersona!.id,
+                isFirstTimeAfterMatching: isFirstTimeAfterMatching);
           }
 
           // 🔵 채팅방 진입 시 모든 페르소나 메시지를 읽음으로 표시
@@ -308,47 +318,70 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           return;
         }
 
-        // 🔥 Wait a bit to ensure loadChatHistory is fully complete
+        // 🔥 FIX: Enhanced synchronization to prevent flicker
+        // First, wait for loadChatHistory to complete
         await Future.delayed(const Duration(milliseconds: 100));
         
-        // Check if we need to show initial greeting
+        if (!mounted) return;
+        
+        // 🔥 FIX: Wait for loading to complete with proper state check
+        int retryCount = 0;
+        while (chatService.isLoadingMessages && retryCount < 10) {
+          // Removed debug print to avoid showing loading messages
+          await Future.delayed(const Duration(milliseconds: 100));
+          retryCount++;
+          if (!mounted) return;
+        }
+        
+        // 🔥 FIX: Additional safety delay to ensure messages are fully synchronized
+        if (retryCount > 0) {
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (!mounted) return;
+        }
+        
+        // 🔥 REMOVED: Immediate greeting logic that was causing the flash
+        // Now only the delayed greeting in _showWelcomeMessage will run
+        
+        // Get messages for logging only
         final messages =
             chatService.getMessages(personaService.currentPersona!.id);
         debugPrint(
-            '🔍 Checking messages for initial greeting: ${messages.length} messages found');
+            '🔍 Messages check: ${messages.length} messages found, loading: ${chatService.isLoadingMessages}');
         
-        // 🔥 Only show welcome if messages are empty AND not currently loading
-        if (messages.isEmpty && !chatService.isLoadingMessages) {
-          debugPrint('📢 No messages found and not loading, showing welcome message');
-          _showWelcomeMessage();
-        } else if (messages.isEmpty && chatService.isLoadingMessages) {
-          debugPrint('⏳ Messages still loading, skipping welcome message for now');
+        // 🔥 CRITICAL FIX: Prevent any immediate greeting
+        // Only schedule welcome message once, with proper checks
+        final personaId = personaService.currentPersona!.id;
+        
+        if (messages.isEmpty && 
+            !chatService.isLoadingMessages &&
+            _hasShownWelcomePerPersona[personaId] != true &&
+            isFirstTimeEntering) {
+          // 🔥 IMMEDIATELY mark as shown to prevent duplicate calls
+          _hasShownWelcomePerPersona[personaId] = true;
+          
+          debugPrint('📢 Scheduling ONE welcome message with 1.5s delay...');
+          // Schedule welcome message with delay - this is the ONLY place it should be called
+          _showWelcomeMessage();  // This already has 1.5 second delay inside
         } else {
-          debugPrint('💬 Messages exist, skipping welcome message');
-          
-          // 저장된 스크롤 위치가 있는지 확인
-          final savedPosition = _savedScrollPositions[personaService.currentPersona!.id];
-          
-          if (savedPosition != null && savedPosition > 0) {
-            // 저장된 위치로 복원
-            debugPrint('📍 Restoring scroll position for ${personaService.currentPersona!.name}: $savedPosition');
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_scrollController.hasClients) {
-                final maxScroll = _scrollController.position.maxScrollExtent;
-                final targetPosition = savedPosition.clamp(0.0, maxScroll);
-                _scrollController.jumpTo(targetPosition);
-              }
-            });
-          } else if (_isInitialLoad) {
-            // 초기 로드 시 맨 아래로 스크롤
-            debugPrint('📌 Initial load - scrolling to bottom');
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (mounted && _scrollController.hasClients) {
-                _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-                _isInitialLoad = false;  // 초기 로드 완료
-              }
-            });
+          // Log why we're not showing welcome
+          if (messages.isNotEmpty) {
+            debugPrint('💬 Messages exist (${messages.length}), no welcome needed');
+          } else if (_hasShownWelcomePerPersona[personaId] == true) {
+            debugPrint('✅ Welcome already marked as shown for this persona');
+          } else if (chatService.isLoadingMessages) {
+            debugPrint('⏳ Messages still loading, no welcome yet');
           }
+        }
+        
+        // 초기 로드 시 맨 아래로 스크롤 (메시지가 있을 때만)
+        if (_isInitialLoad && messages.isNotEmpty) {
+          debugPrint('📌 Initial load with messages - scrolling to bottom');
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted && _scrollController.hasClients) {
+              _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+              _isInitialLoad = false;  // 초기 로드 완료
+            }
+          });
         }
       } catch (e) {
         debugPrint('❌ Error loading chat history: $e');
@@ -363,51 +396,42 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _showWelcomeMessage() async {
-    debugPrint('🎉 _showWelcomeMessage called');
+    debugPrint('🎉 _showWelcomeMessage called - waiting 1.5 seconds...');
+
+    // 🔥 CRITICAL: Add 1.5 second delay before showing first greeting
+    await Future.delayed(const Duration(milliseconds: 1500));
+    
+    // Check if still mounted after delay
+    if (!mounted) return;
 
     final personaService = Provider.of<PersonaService>(context, listen: false);
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
     final persona = personaService.currentPersona;
 
+    if (persona == null) {
+      debugPrint('❌ No persona found for welcome message');
+      return;
+    }
+
     // Get user ID (either Firebase or device ID)
     final userId = await DeviceIdService.getCurrentUserId(
       firebaseUserId: authService.user?.uid,
     );
-    debugPrint('👤 User ID for welcome message: $userId');
+    debugPrint('👤 User ID for delayed welcome: $userId');
+    debugPrint('🤖 Sending delayed greeting from: ${persona.name}');
 
-    if (persona != null) {
-      debugPrint('🤖 Persona found: ${persona.name}');
-
-      // Check if we've already shown welcome for this persona
-      if (_hasShownWelcomePerPersona[persona.id] == true) {
-        debugPrint(
-            '⚠️ Welcome message already shown for ${persona.name}, skipping');
-        return;
-      }
-
-      // 이전 메시지가 없을 때만 초기 인사 메시지 전송
-      final existingMessages = chatService.getMessages(persona.id);
-      if (existingMessages.isEmpty) {
-        debugPrint('✅ No existing messages, sending initial greeting');
-
-        // Mark that we've shown welcome for this persona
-        _hasShownWelcomePerPersona[persona.id] = true;
-
-        await chatService.sendInitialGreeting(
-          userId: userId,
-          personaId: persona.id,
-          persona: persona,
-        );
-      } else {
-        debugPrint(
-            '📝 Previous messages exist for ${persona.name}, skipping initial greeting');
-        // Also mark as shown since messages already exist
-        _hasShownWelcomePerPersona[persona.id] = true;
-      }
-    } else {
-      debugPrint('❌ No persona available for welcome message');
-    }
+    // 🔥 No need to check _hasShownWelcomePerPersona here - already checked before calling
+    // 🔥 No need to check messages - we already verified they're empty before calling
+    
+    // Just send the greeting after delay
+    await chatService.sendInitialGreeting(
+      userId: userId,
+      personaId: persona.id,
+      persona: persona,
+    );
+    
+    debugPrint('✅ Delayed welcome message sent successfully');
   }
 
   void _sendMessage() async {
@@ -487,7 +511,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     final persona = personaService.currentPersona;
     if (persona == null) {
-      debugPrint('No persona selected');
+      // No persona selected - silent return
       return;
     }
 
@@ -705,10 +729,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       // Reset initial load flag for new persona
       _isInitialLoad = true;
 
-      // Reload chat for new persona
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _initializeChat();
-      });
+      // Only reload if not the initial load from initState
+      if (_hasInitializedOnce) {
+        // Reload chat for new persona
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _initializeChat();
+        });
+      }
+      // If it's the first load, initState will handle it
     }
   }
 
@@ -720,7 +748,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         state == AppLifecycleState.inactive) {
       // 스크롤 위치 저장
       if (_currentPersona != null && _scrollController.hasClients) {
-        _savedScrollPositions[_currentPersona!.id] = _scrollController.position.pixels;
+        // Removed: No need to save scroll position
         debugPrint('📍 Saved scroll position on pause for ${_currentPersona!.name}: ${_scrollController.position.pixels}');
       }
       // Mark messages as read when app goes to background
@@ -740,11 +768,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    // 현재 스크롤 위치 저장
-    if (_currentPersona != null && _scrollController.hasClients) {
-      _savedScrollPositions[_currentPersona!.id] = _scrollController.position.pixels;
-      debugPrint('📍 Saved scroll position for ${_currentPersona!.name}: ${_scrollController.position.pixels}');
-    }
+    // Removed: No need to save scroll position
     
     WidgetsBinding.instance.removeObserver(this);
     // Mark all messages as read when leaving chat
@@ -786,27 +810,30 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     children: [
                       Consumer2<ChatService, PersonaService>(
                         builder: (context, chatService, personaService, child) {
-                          // Only show loading indicator when there are no messages
-                          // This prevents the loading indicator from showing when messages are already loaded
-                          if (chatService.isLoading && chatService.messages.isEmpty) {
-                            return const Center(
-                              child: CircularProgressIndicator(
-                                color: Color(0xFFFF6B9D),
-                              ),
-                            );
-                          }
+                          // 🔥 REMOVED: Don't show loading indicator for first-time chat
+                          // Loading indicator causes flicker between matching and first greeting
+                          // if (chatService.isLoading && chatService.messages.isEmpty) {
+                          //   return const Center(
+                          //     child: CircularProgressIndicator(
+                          //       color: Color(0xFFFF6B9D),
+                          //     ),
+                          //   );
+                          // }
 
                           final messages = chatService.messages;
                           final currentPersona = personaService.currentPersona;
 
+                          // 🔥 FIX: For first-time chat entry, show empty chat immediately
+                          // No loading indicator needed for new conversations after matching
                           if (messages.isEmpty) {
-                            return const _EmptyState();
+                            // Don't show any loading or empty state - just empty chat area
+                            // The welcome message will appear automatically
+                            return const SizedBox.shrink();
                           }
 
                           if (currentPersona == null) {
-                            return const Center(
-                              child: Text('No persona selected'),
-                            );
+                            // Don't show any text, just empty space
+                            return const SizedBox.shrink();
                           }
 
                           // 초기 로드 시 맨 아래로 스크롤

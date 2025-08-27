@@ -438,7 +438,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           insertedTipCount++;
           currentItemIndex++;
           debugPrint(
-              '💡 Inserted tip at position $currentItemIndex: ${selectedTip.title.substring(0, 10)}...');
+              '💡 Inserted tip at position $currentItemIndex: ${selectedTip.title.substring(0, min(10, selectedTip.title.length))}...');
         }
       }
 
@@ -464,7 +464,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
             insertedTipCount++;
             currentItemIndex++;
             debugPrint(
-                '💡 Inserted random tip at position $currentItemIndex: ${selectedTip.title.substring(0, 10)}...');
+                '💡 Inserted random tip at position $currentItemIndex: ${selectedTip.title.substring(0, min(10, selectedTip.title.length))}...');
           }
         }
       }

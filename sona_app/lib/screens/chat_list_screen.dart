@@ -219,6 +219,41 @@ class _ChatListScreenState extends State<ChatListScreen>
     }
   }
 
+  /// Extract only Korean content from message, removing all translations
+  String _extractKoreanContent(String content) {
+    // Check if content has [KO] tag
+    if (content.contains('[KO]')) {
+      final koIndex = content.indexOf('[KO]');
+      final koreanStart = koIndex + 4; // '[KO]'.length = 4
+      
+      // Find where Korean content ends (at the next language tag or end of string)
+      final possibleTags = ['[EN]', '[JA]', '[ZH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]', '[TH]', '[ID]', '[MS]', '[VI]'];
+      
+      int koreanEnd = content.length;
+      for (final tag in possibleTags) {
+        final tagIndex = content.indexOf(tag, koreanStart);
+        if (tagIndex != -1 && tagIndex < koreanEnd) {
+          koreanEnd = tagIndex;
+        }
+      }
+      
+      return content.substring(koreanStart, koreanEnd).trim();
+    }
+    
+    // If no [KO] tag, check if there are other language tags to remove
+    final tagPattern = RegExp(r'\[(EN|JA|ZH|ES|FR|DE|IT|PT|RU|AR|TH|ID|MS|VI)\]');
+    if (tagPattern.hasMatch(content)) {
+      // If other language tags exist, take content before the first tag
+      final firstMatch = tagPattern.firstMatch(content);
+      if (firstMatch != null) {
+        return content.substring(0, firstMatch.start).trim();
+      }
+    }
+    
+    // No tags found, return original content
+    return content.trim();
+  }
+
   String _getLastMessagePreview(List<Message> messages, String personaName) {
     final localizations = AppLocalizations.of(context)!;
 
@@ -242,7 +277,8 @@ class _ChatListScreenState extends State<ChatListScreen>
     } else if (lastMessage.type == MessageType.voice) {
       preview += localizations.voiceMessage;
     } else {
-      preview += lastMessage.content;
+      // Extract only Korean content, removing all translations
+      preview += _extractKoreanContent(lastMessage.content);
     }
 
     return preview;

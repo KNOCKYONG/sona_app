@@ -68,18 +68,14 @@ class PermissionHelper {
       else if (status.isDenied) {
         debugPrint('🚫 Permission denied, showing request dialog');
 
-        // 권한 요청 다이얼로그 표시
-        final shouldRequest = await showDialog<bool>(
+        // 권한 요청 다이얼로그 표시 (취소 버튼 제거)
+        await showDialog<bool>(
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
             title: Text(AppLocalizations.of(context)!.permissionRequired),
             content: Text(permissionDescription),
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: Text(AppLocalizations.of(context)!.cancel),
-              ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text(AppLocalizations.of(context)!.grantPermission),
@@ -87,11 +83,6 @@ class PermissionHelper {
             ],
           ),
         );
-
-        if (shouldRequest != true) {
-          debugPrint('❌ User canceled permission request');
-          return null;
-        }
 
         // 권한 요청
         debugPrint('📲 Requesting permission...');
@@ -186,8 +177,9 @@ class PermissionHelper {
     }
 
     if (status.isDenied) {
-      final shouldRequest = await showDialog<bool>(
+      await showDialog<bool>(
         context: context,
+        barrierDismissible: false,
         builder: (context) => AlertDialog(
           title: Text(
               AppLocalizations.of(context)!.notificationPermissionRequired),
@@ -195,10 +187,6 @@ class PermissionHelper {
             AppLocalizations.of(context)!.notificationPermissionDesc,
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(AppLocalizations.of(context)!.later),
-            ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
               child: Text(AppLocalizations.of(context)!.allowPermission),
@@ -207,10 +195,8 @@ class PermissionHelper {
         ),
       );
 
-      if (shouldRequest == true) {
-        final newStatus = await permission.request();
-        return newStatus.isGranted;
-      }
+      final newStatus = await permission.request();
+      return newStatus.isGranted;
     }
 
     return false;

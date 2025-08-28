@@ -474,7 +474,7 @@ class AppLocalizations {
       isKorean ? '신고하려면 로그인이 필요합니다' : 'Login required to report';
   String get termsOfService => isKorean ? '서비스 이용약관' : 'Terms of Service';
   String get privacyPolicy => isKorean ? '개인정보 처리방침' : 'Privacy Policy';
-  String get grantPermission => isKorean ? '권한 허용' : 'Grant Permission';
+  String get grantPermission => isKorean ? '계속' : 'Continue';
   String get goToSettings => isKorean ? '설정으로 이동' : 'Go to Settings';
   String get notificationPermissionRequired =>
       isKorean ? '알림 권한 필요' : 'Notification Permission Required';
@@ -703,7 +703,7 @@ class AppLocalizations {
       isKorean ? '좌우 탭으로 사진 넘기기' : 'Tap left/right to swipe photos';
 
   // ===== 권한 =====
-  String get allowPermission => isKorean ? '권한 허용' : 'Allow Permission';
+  String get allowPermission => isKorean ? '계속' : 'Continue';
 
   // ===== 날짜/시간 =====
   String formatTime(DateTime time) {

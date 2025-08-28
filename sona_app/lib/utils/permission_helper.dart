@@ -60,36 +60,21 @@ class PermissionHelper {
       final status = await permission.status;
       debugPrint('📸 Current permission status: $status');
 
-      // 권한이 이미 허용된 경우
-      if (status.isGranted) {
+      // 권한이 이미 허용된 경우 - 다시 묻지 않고 바로 진행
+      if (status.isGranted || status.isLimited) {
         debugPrint('✅ Permission already granted');
+        // 바로 이미지 선택으로 진행
       }
       // 권한이 거부된 경우 (처음 요청하거나 이전에 거부한 경우)
       else if (status.isDenied) {
-        debugPrint('🚫 Permission denied, showing request dialog');
+        debugPrint('🚫 Permission denied, requesting permission');
 
-        // 권한 요청 다이얼로그 표시 (취소 버튼 제거)
-        await showDialog<bool>(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: Text(AppLocalizations.of(context)!.permissionRequired),
-            content: Text(permissionDescription),
-            actions: [
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text(AppLocalizations.of(context)!.grantPermission),
-              ),
-            ],
-          ),
-        );
-
-        // 권한 요청
+        // 권한 요청 (시스템 다이얼로그만 표시)
         debugPrint('📲 Requesting permission...');
         final newStatus = await permission.request();
         debugPrint('📸 New permission status: $newStatus');
 
-        if (!newStatus.isGranted) {
+        if (!newStatus.isGranted && !newStatus.isLimited) {
           if (context.mounted) {
             debugPrint('🚫 Permission not granted after request');
             _showPermissionDeniedDialog(

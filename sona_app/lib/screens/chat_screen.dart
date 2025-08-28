@@ -416,7 +416,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           // 🔥 IMMEDIATELY mark as shown to prevent duplicate calls
           _hasShownWelcomePerPersona[personaId] = true;
           
-          debugPrint('📢 Scheduling ONE welcome message with 1.5s delay...');
+          debugPrint('📢 Scheduling ONE welcome message with 1s delay...');
           // Schedule welcome message with delay - this is the ONLY place it should be called
           _showWelcomeMessage();  // This already has 1.5 second delay inside
         } else {
@@ -453,10 +453,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _showWelcomeMessage() async {
-    debugPrint('🎉 _showWelcomeMessage called - waiting 1.5 seconds...');
+    debugPrint('🎉 _showWelcomeMessage called - waiting 1 second...');
 
-    // 🔥 CRITICAL: Add 1.5 second delay before showing first greeting
-    await Future.delayed(const Duration(milliseconds: 1500));
+    // 🔥 CRITICAL: Add 1 second delay before showing first greeting
+    await Future.delayed(const Duration(seconds: 1));
     
     // Check if still mounted after delay
     if (!mounted) return;

@@ -238,8 +238,11 @@ class SecurityAwarePostProcessor {
     text = text.replaceAll(RegExp(r'ㅠ{4,}'), 'ㅠㅠㅠ');
     text = text.replaceAll(RegExp(r'~{3,}'), '~~');
 
-    // 불필요한 공백 정리
-    text = text.replaceAll(RegExp(r'\s+'), ' ');
+    // 불필요한 공백 정리 (강화)
+    text = text.replaceAll(RegExp(r'\s+'), ' ');  // 중복 공백 제거
+    text = text.replaceAll(RegExp(r'^\s+|\s+$'), '');  // 앞뒤 공백 제거
+    text = text.replaceAll(RegExp(r'\n\s*\n'), '\n');  // 빈 줄 제거
+    text = text.replaceAll(RegExp(r'[\u200B\u200C\u200D\uFEFF]'), ''); // 보이지 않는 유니코드 공백 제거
     text = text.trim();
 
     // 부드러운 표현으로 변환

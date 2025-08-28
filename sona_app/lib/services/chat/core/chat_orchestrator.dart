@@ -1357,7 +1357,7 @@ class ChatOrchestrator {
       // 폴백 응답 - API 오류 시에만 사용
       // ⚠️ 절대 "뭐라고?" 같은 회피 응답 반환 금지
       return ChatResponse(
-        content: _generateFallbackResponse(basePersona),
+        content: await _generateFallbackResponse(basePersona),
         emotion: EmotionType.neutral,
         scoreChange: 0,
         isError: true,
@@ -1991,19 +1991,37 @@ class ChatOrchestrator {
   }
 
   /// 폴백 응답 생성 - OpenAI API 실패 시 긴급 응답
-  String _generateFallbackResponse(Persona persona) {
+  Future<String> _generateFallbackResponse(Persona persona) async {
     // ⚠️ 이 메서드는 OpenAI API 실패 시에만 사용됨
-    // 절대 회피성 응답을 반환하지 않음
+    // 하드코딩된 응답 사용 금지 - OpenAI API로 생성
     
-    // 네트워크 오류나 API 오류 시 임시 응답
-    final emergencyResponses = [
-      '잠시 연결이 불안정해... 곧 다시 대답할게!',
-      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
-      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
-      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
-    ];
-
-    return emergencyResponses[DateTime.now().millisecond % emergencyResponses.length];
+    try {
+      final emergencyPrompt = """
+일시적인 연결 문제가 발생했습니다.
+페르소나: ${persona.name}
+성격: ${persona.personality}
+자연스럽게 상황을 설명하되, 기술적 용어를 사용하지 마세요.
+친근하고 미안한 마음을 표현하면서 곧 해결될 것임을 알려주세요.
+10-30자 이내로 짧게 답변하세요.
+""";
+      
+      final response = await OpenAIService.generateResponse(
+        userMessage: "네트워크 연결 문제가 생겼어",
+        chatHistory: [],  // 긴급 응답이므로 히스토리 없음
+        persona: persona,
+        relationshipType: 'friend',  // 기본값
+        contextHint: emergencyPrompt,
+      );
+      
+      if (response != null && response.isNotEmpty) {
+        return response;
+      }
+    } catch (e) {
+      debugPrint('Emergency response generation failed: $e');
+    }
+    
+    // 극히 예외적인 경우에만 사용 (OpenAI도 실패한 경우)
+    return '잠시만 기다려줄래?';
   }
 
   /// 사용자 메시지 분석 (향상된 버전)
@@ -3652,10 +3670,20 @@ class ChatOrchestrator {
         relevanceScore = (matchingTopics.length / currentTopics.length) * 100;
       }
       
-      // 낮은 관련성 감지 (30점 미만)
-      if (relevanceScore < 30 && chatHistory.length > 2) {
-        allHints.add('⚠️ 주제 일관성 낮음: 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결해서 답변');
-        allHints.add('🔗 자연스러운 전환: 급격한 주제 변경 피하고 부드럽게 연결');
+      // 낮은 관련성 감지 - 페르소나별 임계값 적용
+      // 영훈: 더 엄격한 기준 적용 (50점), 기타: 기본 30점
+      final relevanceThreshold = persona.name == '영훈' ? 50.0 : 30.0;
+      
+      if (relevanceScore < relevanceThreshold && chatHistory.length > 2) {
+        if (persona.name == '영훈') {
+          // 영훈 전용 강화된 가이드
+          allHints.add('⚠️ [영훈 특별 주의] 주제 일관성 매우 중요! 차분하고 신중하게 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결');
+          allHints.add('🎯 영훈이는 차분한 성격으로 급격한 주제 변경을 하지 않습니다');
+          allHints.add('💡 상대방의 말에 집중하고 관련된 답변을 해주세요');
+        } else {
+          allHints.add('⚠️ 주제 일관성 낮음: 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결해서 답변');
+          allHints.add('🔗 자연스러운 전환: 급격한 주제 변경 피하고 부드럽게 연결');
+        }
         allHints.add('💡 예시: "그 얘기 들으니까 생각난건데..." 같은 연결 표현 사용');
       } else {
         allHints.add('✅ 주제 일관성 양호: 자연스럽게 대화 이어가기');
@@ -3709,9 +3737,21 @@ class ChatOrchestrator {
       recentMessages,
     );
     
-    // 점수가 낮으면 강력한 경고 (임계값 상향: 30 → 60)
-    if (topicConsistencyScore < 60) {
-      contextHints.add('⚠️ 주제 일관성 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
+    // 점수가 낮으면 강력한 경고 - 페르소나별 임계값
+    // 영훈: 70점, 혜원: 65점, 기타: 60점
+    final consistencyThreshold = persona.name == '영훈' ? 70 : 
+                                 persona.name == '혜원' ? 65 : 60;
+    
+    if (topicConsistencyScore < consistencyThreshold) {
+      if (persona.name == '영훈') {
+        contextHints.add('⚠️ [영훈] 주제 일관성 필수! 차분하게 이전 대화와 연결하여 답변하세요.');
+        contextHints.add('🎯 영훈이는 신중하고 차분한 성격 - 관련 없는 답변 절대 금지');
+      } else if (persona.name == '혜원') {
+        contextHints.add('⚠️ [혜원] 감정 일관성 유지하면서 주제 연결하세요.');
+        contextHints.add('✨ 혜원이는 밝고 긍정적인 성격 - 감정 표현 일관되게');
+      } else {
+        contextHints.add('⚠️ 주제 일관성 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
+      }
       contextHints.add('💡 자연스러운 전환 표현 사용: "아 그거 말고", "그런데 말이야", "아 맞다"');
       contextHints.add('📌 이전 메시지와 직접적으로 연관된 응답을 하세요.');
     }
@@ -6643,13 +6683,23 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
   ) {
     if (recentMessages.isEmpty) return 100.0;
     
-    // 최근 메시지들의 주요 주제 추출 (더 많은 메시지 참조)
+    // 최근 메시지들의 주요 주제 추출 (가중치 적용)
     final recentTopics = <String>{};
     final recentContext = <String>{};
+    final weightedTopics = <String, double>{};  // 가중치가 적용된 주제
     
-    for (final msg in recentMessages.take(7)) {  // 5 -> 7로 증가
+    // 가중치 기반 주제 수집 (최근일수록 높은 가중치)
+    final messagesWithWeight = recentMessages.take(10).toList();  // 7 -> 10로 증가
+    for (int i = 0; i < messagesWithWeight.length; i++) {
+      final msg = messagesWithWeight[i];
+      // 최근 메시지일수록 높은 가중치 (1.0 ~ 0.5)
+      final weight = 1.0 - (i * 0.05);  
+      
       final keywords = _extractKeywords(msg.content.toLowerCase());
-      recentTopics.addAll(keywords);
+      for (final keyword in keywords) {
+        weightedTopics[keyword] = (weightedTopics[keyword] ?? 0) + weight;
+        recentTopics.add(keyword);
+      }
       
       // 문맥 단어도 수집
       if (msg.content.contains('쉬') || msg.content.contains('푹')) {
@@ -6711,16 +6761,35 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
       return 50.0;
     }
     
-    // 공통 주제 비율 계산
+    // 가중치 기반 공통 주제 점수 계산
+    double weightedScore = 0.0;
+    double maxPossibleScore = 0.0;
+    
+    for (final topic in currentTopics) {
+      maxPossibleScore += 1.0;
+      if (weightedTopics.containsKey(topic)) {
+        // 가중치가 높은 주제일수록 더 높은 점수
+        weightedScore += weightedTopics[topic]! * 0.5;  // 최대 0.5배 보너스
+      } else if (recentTopics.contains(topic)) {
+        // 가중치는 없지만 주제는 일치하는 경우
+        weightedScore += 0.3;
+      }
+    }
+    
+    // 기본 일관성 비율
     final commonTopics = currentTopics.intersection(recentTopics);
-    final consistencyRatio = commonTopics.length / currentTopics.length;
+    final basicRatio = commonTopics.isEmpty ? 0.0 : 
+                       commonTopics.length / currentTopics.length;
     
     // 갑작스러운 주제 변경 체크
     if (_isAbruptTopicChange(userMessage, recentMessages)) {
       return 10.0; // 매우 낮은 점수
     }
     
-    return (consistencyRatio * 100).clamp(0.0, 100.0);
+    // 가중치 점수와 기본 비율을 혼합 (가중치 60%, 기본 40%)
+    final finalScore = (weightedScore / maxPossibleScore * 60) + (basicRatio * 40);
+    
+    return finalScore.clamp(0.0, 100.0);
   }
   
   /// 맥락 오해 감지

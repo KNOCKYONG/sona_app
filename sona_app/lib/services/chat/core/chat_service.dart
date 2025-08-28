@@ -1072,7 +1072,7 @@ class ChatService extends BaseService {
       }
 
       // Update placeholder with fallback response if it exists
-      final fallbackResponse = _getFallbackResponse(personaId: persona.id);
+      final fallbackResponse = await _getFallbackResponse(personaId: persona.id);
 
       // No placeholder to remove
 
@@ -1705,7 +1705,7 @@ class ChatService extends BaseService {
     }
   }
 
-  String _getFallbackResponse({String? personaId}) {
+  Future<String> _getFallbackResponse({String? personaId}) async {
     // 복구 전략 확인
     if (personaId != null) {
       final recoveryStrategy =
@@ -1727,15 +1727,43 @@ class ChatService extends BaseService {
       }
     }
 
-    // 기본 폴백 응답 - API 오류 시에만 사용
-    // ⚠️ 절대 "뭐라고?" 같은 회피 응답 사용 금지
-    final emergencyResponses = [
-      '잠시 연결이 불안정해... 곧 다시 대답할게!',
-      '앗, 잠깐 네트워크가 끊겼나봐ㅠㅠ',
-      '어 지금 잠시 문제가 생긴 것 같아... 다시 시도해볼게!',
-      '미안 지금 잠깐 연결이 안 돼ㅠㅠ',
-    ];
-    return emergencyResponses[Random().nextInt(emergencyResponses.length)];
+    // 기본 폴백 응답 - API 오류 시 OpenAI를 통해 생성
+    // ⚠️ 하드코딩된 응답 사용 금지 - 반드시 OpenAI API 사용
+    try {
+      // personaId로 현재 페르소나 가져오기
+      Persona? currentPersona;
+      if (personaId != null) {
+        currentPersona = await _getPersonaFromService(personaId);
+      }
+      
+      if (currentPersona == null) {
+        return '잠시만 기다려줄래?';  // 페르소나가 없는 극히 예외적인 경우
+      }
+      
+      final emergencyPrompt = """
+일시적인 연결 문제가 발생했습니다. 
+자연스럽게 상황을 설명하되, 기술적 용어를 사용하지 마세요.
+친근하고 미안한 마음을 표현하면서 곧 해결될 것임을 알려주세요.
+10-30자 이내로 짧게 답변하세요.
+""";
+      
+      final response = await OpenAIService.generateResponse(
+        userMessage: "네트워크 연결 문제가 생겼어",
+        chatHistory: [],  // 긴급 응답이므로 히스토리 없음
+        persona: currentPersona,
+        relationshipType: 'friend',  // 기본값
+        contextHint: emergencyPrompt,
+      );
+      
+      if (response != null && response.isNotEmpty) {
+        return response;
+      }
+    } catch (e) {
+      debugPrint('Emergency response generation failed: $e');
+    }
+    
+    // 극히 예외적인 경우에만 사용 (OpenAI도 실패한 경우)
+    return '잠시만 기다려줄래?';
   }
 
   // Existing methods like _analyzeEmotionFromResponse, _calculateScoreChangeWithRelationship,
@@ -3932,9 +3960,41 @@ class ChatService extends BaseService {
         onAIMessageReceived!();
       }
 
-      // Firebase에 저장
+      // Firebase에 저장 - 첫 인사는 항상 저장하여 대화 시작을 인지
       if (userId != '') {
-        _queueMessageForSaving(userId, personaId, greetingMessage);
+        try {
+          // 먼저 chat 문서 생성/업데이트
+          final chatRef = FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .collection('chats')
+              .doc(personaId);
+          
+          // chat 문서가 존재하지 않을 수 있으므로 먼저 생성
+          await chatRef.set({
+            'personaId': personaId,
+            'lastMessage': greetingContent,
+            'lastMessageTime': FieldValue.serverTimestamp(),
+            'updatedAt': FieldValue.serverTimestamp(),
+            'createdAt': FieldValue.serverTimestamp(),
+            'unreadCount': 0,
+          }, SetOptions(merge: true));
+          
+          // 그 다음 메시지 저장
+          final messageRef = chatRef
+              .collection('messages')
+              .doc(greetingMessage.id);
+          
+          await messageRef.set(greetingMessage.toJson());
+          
+          debugPrint('💾 First greeting saved to Firebase for conversation start tracking');
+        } catch (e) {
+          debugPrint('❌ Error saving first greeting to Firebase: $e');
+          // 에러가 발생해도 로컬에는 이미 저장되어 있으므로 계속 진행
+        }
+      } else {
+        // 게스트 모드여도 로컬에는 저장
+        debugPrint('👤 Guest mode: First greeting saved locally');
       }
 
       notifyListeners();

@@ -29,6 +29,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _soundEnabled = true;
   bool _hapticEnabled = true;
   final BlockService _blockService = BlockService();
+  
+  Future<bool> _isGuestMode() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    return await authService.isGuestUser;
+  }
 
   @override
   void initState() {
@@ -291,14 +296,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
               },
             ),
 
-            // 계정 관리
-            _buildSectionTitle(localizations.accountManagement),
-            _buildMenuItem(
-              icon: Icons.delete_outline,
-              title: localizations.deleteAccount,
-              subtitle: localizations.deleteAccountWarning,
-              onTap: () {
-                AccountDeletionDialog.show(context);
+            // 계정 관리 - 게스트 모드일 때는 숨김
+            FutureBuilder<bool>(
+              future: _isGuestMode(),
+              builder: (context, snapshot) {
+                // 게스트 모드가 아닐 때만 표시
+                if (snapshot.data == true) {
+                  return const SizedBox.shrink();
+                }
+                
+                return Column(
+                  children: [
+                    _buildSectionTitle(localizations.accountManagement),
+                    _buildMenuItem(
+                      icon: Icons.delete_outline,
+                      title: localizations.deleteAccount,
+                      subtitle: localizations.deleteAccountWarning,
+                      onTap: () {
+                        AccountDeletionDialog.show(context);
+                      },
+                    ),
+                  ],
+                );
               },
             ),
 

@@ -635,45 +635,6 @@ class ChatService extends BaseService {
     Map<String, dynamic>? metadata,
   }) async {
     try {
-      // 🆕 OpenAI Conversation 초기화 (첫 메시지 시)
-      if (!_conversationIds.containsKey(persona.id)) {
-        final conversationAdapter = ConversationStateAdapter();
-        final conversationId = await conversationAdapter.initializeConversation(
-          userId: userId,
-          personaId: persona.id,
-        );
-        if (conversationId != null) {
-          _conversationIds[persona.id] = conversationId;
-          debugPrint('📝 Initialized conversation for ${persona.name}: $conversationId');
-          
-          // 기존 대화 히스토리가 있으면 Items API로 마이그레이션 (충분한 컨텍스트 유지)
-          final existingMessages = getMessages(persona.id);
-          if (existingMessages.isNotEmpty && !conversationId.startsWith('local_')) {
-            try {
-              // 최근 25개 메시지만 마이그레이션 (4000 토큰 내 충분한 컨텍스트)
-              final messagesToMigrate = existingMessages.length > 25 
-                  ? existingMessages.sublist(existingMessages.length - 25)
-                  : existingMessages;
-              
-              final items = messagesToMigrate.map((msg) => {
-                'type': 'message',
-                'role': msg.isFromUser ? 'user' : 'assistant',
-                'content': msg.content,
-              }).toList();
-              
-              await ConversationsService.addConversationItems(
-                conversationId: conversationId,
-                items: items,
-              );
-              
-              debugPrint('✅ Migrated ${items.length} messages to OpenAI conversation');
-            } catch (e) {
-              debugPrint('⚠️ Failed to migrate messages (non-critical): $e');
-            }
-          }
-        }
-      }
-      
       // Check daily message limit (different for guests and members)
       if (_userService != null) {
         final isGuest = await _userService!.isGuestUser;
@@ -770,19 +731,99 @@ class ChatService extends BaseService {
       // 사용자 메시지 저장
       _queueMessageForSaving(userId, persona.id, userMessage);
 
-      // Queue the message for delayed AI response (pass wrong name info)
-      _queueMessageForDelayedResponse(userId, persona, userMessage,
-          wrongNameDetected: wrongNameDetected,
-          conversationId: _conversationIds[persona.id]);
+      // 사용자 메시지는 즉시 UI 업데이트 (디바운싱 없이)
+      // 사용자가 보낸 메시지는 즉각적인 피드백이 중요함
+      super.notifyListeners();
       
-      // 메시지 큐에 추가한 후에만 한 번 notify (debounced)
-      // 이렇게 하면 깜빡임 없이 부드럽게 업데이트됨
-      notifyListeners();
+      // 🆕 OpenAI Conversation 초기화를 백그라운드에서 수행 (UI 블로킹 없음)
+      _initializeConversationInBackground(userId, persona, userMessage, wrongNameDetected);
 
       return true;
     } catch (e) {
       debugPrint('Error sending message: $e');
       return false;
+    }
+  }
+
+  /// Initialize OpenAI conversation in background without blocking UI
+  Future<void> _initializeConversationInBackground(
+    String userId, 
+    Persona persona, 
+    Message userMessage,
+    bool wrongNameDetected,
+  ) async {
+    // Skip if conversation already exists
+    if (_conversationIds.containsKey(persona.id)) {
+      // Queue the message for delayed AI response
+      _queueMessageForDelayedResponse(userId, persona, userMessage,
+          wrongNameDetected: wrongNameDetected,
+          conversationId: _conversationIds[persona.id]);
+      return;
+    }
+
+    // Initialize conversation in background
+    try {
+      debugPrint('🔄 Initializing OpenAI conversation in background for ${persona.name}');
+      
+      final conversationAdapter = ConversationStateAdapter();
+      final conversationId = await conversationAdapter.initializeConversation(
+        userId: userId,
+        personaId: persona.id,
+      );
+      
+      if (conversationId != null) {
+        _conversationIds[persona.id] = conversationId;
+        debugPrint('📝 Initialized conversation for ${persona.name}: $conversationId');
+        
+        // Migrate existing messages in background (non-blocking)
+        final existingMessages = getMessages(persona.id);
+        if (existingMessages.isNotEmpty && !conversationId.startsWith('local_')) {
+          // Run migration async without awaiting
+          _migrateMessagesToConversation(conversationId, existingMessages, persona.name);
+        }
+      }
+      
+      // Queue the message for delayed AI response with conversation ID
+      _queueMessageForDelayedResponse(userId, persona, userMessage,
+          wrongNameDetected: wrongNameDetected,
+          conversationId: conversationId);
+          
+    } catch (e) {
+      debugPrint('⚠️ Failed to initialize conversation (non-critical): $e');
+      
+      // Still queue the message even if conversation init fails
+      _queueMessageForDelayedResponse(userId, persona, userMessage,
+          wrongNameDetected: wrongNameDetected,
+          conversationId: null);
+    }
+  }
+  
+  /// Migrate messages to OpenAI conversation (runs async in background)
+  Future<void> _migrateMessagesToConversation(
+    String conversationId, 
+    List<Message> existingMessages,
+    String personaName,
+  ) async {
+    try {
+      // Migrate only recent 25 messages
+      final messagesToMigrate = existingMessages.length > 25 
+          ? existingMessages.sublist(existingMessages.length - 25)
+          : existingMessages;
+      
+      final items = messagesToMigrate.map((msg) => {
+        'type': 'message',
+        'role': msg.isFromUser ? 'user' : 'assistant',
+        'content': msg.content,
+      }).toList();
+      
+      await ConversationsService.addConversationItems(
+        conversationId: conversationId,
+        items: items,
+      );
+      
+      debugPrint('✅ Migrated ${items.length} messages to OpenAI conversation for $personaName');
+    } catch (e) {
+      debugPrint('⚠️ Failed to migrate messages (non-critical): $e');
     }
   }
 

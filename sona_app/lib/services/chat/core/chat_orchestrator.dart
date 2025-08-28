@@ -2687,7 +2687,7 @@ class ChatOrchestrator {
       // 영어 알파벳과 일반적인 기호만 있고, 최소 3글자 이상인 경우
       if (message.length >= 3 && RegExp(r'^[a-zA-Z0-9\s\?\.\!\,\x27\-]+$').hasMatch(message)) {
         // 명확한 영어 단어나 문장 구조가 있는지 확인 (더 많은 단어 추가)
-        if (RegExp(r'\b(the|is|are|was|were|have|has|had|will|would|can|could|should|may|might|must|shall|do|does|did|been|being|be|and|or|but|if|then|because|so|for|to|from|with|about|into|through|during|before|after|what|where|when|who|why|how|this|that|these|those|my|your|his|her|its|our|their|me|you|him|she|it|we|they)\b', caseSensitive: false).hasMatch(message)) {
+        if (RegExp(r'\b(the|is|are|was|were|have|has|had|will|would|can|could|should|may|might|must|shall|do|does|did|been|being|be|and|or|but|if|then|because|so|for|to|from|with|about|into|through|during|before|after|what|where|when|who|why|how|this|that|these|those|my|your|his|her|its|our|their|me|you|him|she|it|we|they|very|helpful|good|bad|nice|great|awesome|amazing|wonderful|terrible|okay|ok|yes|no|thanks|thank|please|sorry|hello|hi|hey|bye|goodbye)\b', caseSensitive: false).hasMatch(message)) {
           debugPrint('🌍 English detected via common words');
           return 'en';
         }

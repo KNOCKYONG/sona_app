@@ -340,8 +340,7 @@ class _TextMessageState extends State<_TextMessage> {
                         if (!isFromUser &&
                             widget.message.translatedContent != null &&
                             widget.message.translatedContent!.isNotEmpty &&
-                            !widget.message.translatedContent!.startsWith('[') && // [Translation processing...] 같은 메시지 제외
-                            !widget.message.translatedContent!.contains('Translation')) ...[
+                            !widget.message.translatedContent!.contains('[Translation processing...]')) ...[
                           // 전체 메시지를 감싸는 GestureDetector
                           GestureDetector(
                             onTap: () async {
@@ -364,6 +363,8 @@ class _TextMessageState extends State<_TextMessage> {
                                         child: Text(
                                           _extractKoreanContent(widget.message.content),
                                           style: _TextMessage._aiTextStyle,
+                                          softWrap: true,
+                                          textAlign: TextAlign.left,
                                         ),
                                       ),
                                       // 번역 아이콘 표시 (우측 상단) - 시각적 표시용
@@ -413,6 +414,8 @@ class _TextMessageState extends State<_TextMessage> {
                                                 fontSize: 16,
                                                 height: 1.4,
                                               ),
+                                              softWrap: true,
+                                              textAlign: TextAlign.left,
                                             ),
                                           ],
                                         ),

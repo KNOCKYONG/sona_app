@@ -62,6 +62,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   // 스크롤 디바운싱 관련 변수
   Timer? _scrollDebounceTimer;
   bool _isScrolling = false; // 현재 스크롤 중인지 추적
+  Timer? _scrollStateTimer; // 스크롤 상태 변경 디바운싱용
+  Timer? _loadMoreDebounceTimer; // 메시지 로드 디바운싱용
 
   // Service references for dispose method
   ChatService? _chatService;
@@ -93,11 +95,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     _scrollController.addListener(() {
       // 로딩 중이거나 키보드가 보이는 중이면 리스너 무시
       if (_isLoadingMore || _isKeyboardVisible) {
-        if (_isKeyboardVisible) {
-          debugPrint('📌 Scroll listener skipped - keyboard is visible');
-        } else {
-          debugPrint('📌 Scroll listener skipped - loading more messages');
-        }
         return;
       }
       
@@ -106,11 +103,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         return;
       }
       
+      // 스크롤이 안정화되지 않았으면 무시 (bouncing 방지)
+      if (_scrollController.position.isScrollingNotifier.value) {
+        // 실제로 사용자가 스크롤 중일 때만 처리
+        _isScrolling = true;
+      } else {
+        _isScrolling = false;
+      }
+      
       final maxScroll = _scrollController.position.maxScrollExtent;
       final currentScroll = _scrollController.position.pixels;
       final minScroll = _scrollController.position.minScrollExtent;
       final scrollThreshold = 100.0; // 임계값 감소하여 더 빠른 반응 (200 -> 100)
-      final paginationThreshold = 300.0; // 페이지네이션 임계값
+      final paginationThreshold = 200.0; // 페이지네이션 임계값 줄임 (300 -> 200)
 
       // 스크롤 위치 추적
       _lastScrollPosition = currentScroll;
@@ -123,27 +128,46 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       final hadUnreadMessages = _unreadAIMessageCount > 0;
       
       if (isNearBottom != _isNearBottom) {
-        _isNearBottom = isNearBottom;
-        
+        // 맨 아래로 돌아왔을 때는 즉시 업데이트 (버튼 숨기기)
         if (isNearBottom) {
+          _isNearBottom = isNearBottom;
           // 읽지 않은 메시지 카운트 초기화
           if (_unreadAIMessageCount > 0) {
             _unreadAIMessageCount = 0;
           }
-        }
-        
-        // 상태가 실제로 변경되었을 때만 setState 호출
-        if (wasNearBottom != _isNearBottom || hadUnreadMessages) {
-          setState(() {});
+          // 즉시 setState로 버튼 숨기기
+          if (mounted) setState(() {});
+        } else {
+          // 위로 스크롤할 때는 디바운싱 적용 (버튼 표시 지연)
+          _scrollStateTimer?.cancel();
+          _scrollStateTimer = Timer(const Duration(milliseconds: 800), () {
+            if (mounted && !isNearBottom) {
+              setState(() {
+                _isNearBottom = false;
+              });
+            }
+          });
         }
       }
 
-      // 상단 근처에서 추가 메시지 로드 (상단 300픽셀 이내)
-      // _isScrolling 체크 제거하여 항상 로드 가능하게 함
+      // 상단 근처에서 추가 메시지 로드 (상단 200픽셀 이내)
+      // 디바운싱으로 중복 호출 방지
       if (currentScroll <= minScroll + paginationThreshold && 
           !_isLoadingMore) {
-        debugPrint('📌 Loading more messages at top');
-        _loadMoreMessages();
+        // 이전 타이머 취소하고 새로운 타이머 설정
+        _loadMoreDebounceTimer?.cancel();
+        _loadMoreDebounceTimer = Timer(const Duration(milliseconds: 300), () {
+          // 타이머 실행 시점에 다시 조건 확인
+          if (!_isLoadingMore && mounted && _scrollController.hasClients) {
+            final current = _scrollController.position.pixels;
+            final min = _scrollController.position.minScrollExtent;
+            // 여전히 상단 근처에 있을 때만 로드
+            if (current <= min + paginationThreshold) {
+              debugPrint('📌 Loading more messages at top (debounced)');
+              _loadMoreMessages();
+            }
+          }
+        });
       }
     });
   }
@@ -186,6 +210,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   Future<void> _loadMoreMessages() async {
+    // 즉시 플래그 설정하여 중복 호출 방지
     if (_isLoadingMore ||
         _isKeyboardVisible ||  // 키보드가 보이는 중이면 로드하지 않음
         _currentPersona == null ||
@@ -193,6 +218,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         _userId!.isEmpty) return;
 
     _isLoadingMore = true;
+    
+    // 로드 타이머 취소 (중복 방지)
+    _loadMoreDebounceTimer?.cancel();
+    
     if (mounted) setState(() {});
 
     final chatService = Provider.of<ChatService>(context, listen: false);
@@ -213,20 +242,18 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           final scrollDiff = newMaxScroll - currentMaxScroll;
 
           // Jump to maintain position (add the height of new messages)
-          // 엣지 케이스: 스크롤 위치 보정 시 약간의 여유 추가
           if (scrollDiff > 0) {
-            final adjustedPosition = math.min(
-              currentScrollPosition + scrollDiff,
-              _scrollController.position.maxScrollExtent
-            );
+            // Calculate the position to maintain visual continuity
+            final targetPosition = currentScrollPosition + scrollDiff;
             
-            // Ensure we're away from the trigger zone (300px from top)
-            // to prevent immediate re-triggering
-            const paginationThreshold = 300.0;
-            final minSafePosition = _scrollController.position.minScrollExtent + paginationThreshold + 10;
-            final finalPosition = math.max(adjustedPosition, minSafePosition);
+            // Single jump to prevent multiple scroll events
+            _scrollController.jumpTo(targetPosition);
             
-            _scrollController.jumpTo(finalPosition);
+            // Temporarily disable scroll listener to prevent re-triggering
+            _isLoadingMore = true;
+            Future.delayed(const Duration(milliseconds: 100), () {
+              _isLoadingMore = false;
+            });
           }
         }
       });
@@ -800,6 +827,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void dispose() {
     // Removed: No need to save scroll position
     
+    // Cancel timers
+    _scrollDebounceTimer?.cancel();
+    _scrollStateTimer?.cancel();
+    _loadMoreDebounceTimer?.cancel();
+    
     WidgetsBinding.instance.removeObserver(this);
     // Mark all messages as read when leaving chat
     _markMessagesAsReadOnExit();
@@ -979,8 +1011,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                               right: 16,
                               top: 16,
                               bottom: MediaQuery.of(context).viewInsets.bottom > 0
-                                  ? 160 + MediaQuery.of(context).viewInsets.bottom  // 키보드가 올라왔을 때 더 큰 여백
-                                  : 120, // 기본 여백 증가
+                                  ? (Platform.isIOS ? 20 : 30) + MediaQuery.of(context).viewInsets.bottom  // iOS는 더 작은 패딩, Android는 조금 더
+                                  : Platform.isIOS ? 90 : 100, // 기본 패딩도 플랫폼별 최적화
                             ),
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior

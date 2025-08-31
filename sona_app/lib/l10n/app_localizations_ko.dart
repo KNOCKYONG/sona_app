@@ -1563,10 +1563,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String purchaseConfirmMessage(
-    String title,
-    String price,
-    String description,
-  ) {
+      String title, String price, String description) {
     return '$title을(를) $price에 구매하시겠습니까? $description';
   }
 

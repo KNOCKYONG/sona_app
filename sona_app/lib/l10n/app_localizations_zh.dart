@@ -1632,10 +1632,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String purchaseConfirmMessage(
-    String title,
-    String price,
-    String description,
-  ) {
+      String title, String price, String description) {
     return '确认以$price购买$title吗？$description';
   }
 

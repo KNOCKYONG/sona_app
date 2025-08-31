@@ -1580,10 +1580,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String purchaseConfirmMessage(
-    String title,
-    String price,
-    String description,
-  ) {
+      String title, String price, String description) {
     return 'Xác nhận mua $title với giá $price? $description';
   }
 

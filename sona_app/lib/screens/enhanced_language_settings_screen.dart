@@ -115,7 +115,7 @@ class _EnhancedLanguageSettingsScreenState extends State<EnhancedLanguageSetting
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          l10n.getString('currentLanguage'),
+                          l10n.currentLanguage,
                           style: TextStyle(
                             fontSize: 12,
                             color: theme.textTheme.bodySmall?.color,
@@ -160,11 +160,11 @@ class _EnhancedLanguageSettingsScreenState extends State<EnhancedLanguageSetting
               ),
               child: SwitchListTile(
                 title: Text(
-                  l10n.getString('useSystemLanguage'),
+                  l10n.useSystemLanguage,
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
                 subtitle: Text(
-                  l10n.getString('followDeviceLanguage'),
+                  l10n.followDeviceLanguage,
                   style: TextStyle(
                     fontSize: 13,
                     color: theme.textTheme.bodySmall?.color,
@@ -191,7 +191,7 @@ class _EnhancedLanguageSettingsScreenState extends State<EnhancedLanguageSetting
                   });
                 },
                 decoration: InputDecoration(
-                  hintText: l10n.getString('searchLanguage'),
+                  hintText: l10n.searchLanguage,
                   prefixIcon: Icon(
                     Icons.search,
                     color: theme.colorScheme.primary,
@@ -244,7 +244,7 @@ class _EnhancedLanguageSettingsScreenState extends State<EnhancedLanguageSetting
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            l10n.getString('noLanguagesFound'),
+                            l10n.noLanguagesFound,
                             style: TextStyle(
                               color: theme.textTheme.bodySmall?.color,
                             ),

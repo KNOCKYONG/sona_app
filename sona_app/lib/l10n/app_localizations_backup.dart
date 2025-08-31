@@ -1652,17 +1652,10 @@ For inquiries, please contact us through the in-app customer center or at suppor
   // Error Dashboard
   String get noErrorReports => isKorean ? '에러 리포트가 없습니다.' : 'No error reports.';
   
-  // Admin Quality Dashboard
-  String get noQualityIssues => isKorean ? '최근 1시간 동안 품질 문제가 없습니다 ✅' : 'No quality issues in the last hour ✅';
-  String get loadingData => isKorean ? '데이터를 로딩 중입니다...' : 'Loading data...';
-  String get noQualityLogs => isKorean ? '아직 품질 로그가 없습니다.' : 'No quality logs yet.';
-  
   // Persona Selection Messages
   String alreadyChattingWith(String name) => 
       isKorean ? '$name님과는 이미 대화중이에요!' : 'Already chatting with $name!';
   String get insufficientHearts => isKorean ? '하트가 부족합니다.' : 'Insufficient hearts.';
-  String get matchingFailed => isKorean ? '매칭에 실패했습니다.' : 'Matching failed.';
-  String get errorOccurred => isKorean ? '오류가 발생했습니다.' : 'An error occurred.';
   
   // Settings Messages
   String cacheDeleteError(String error) => 
@@ -1674,10 +1667,6 @@ For inquiries, please contact us through the in-app customer center or at suppor
   String get unblockFailed => isKorean ? '차단 해제에 실패했습니다' : 'Failed to unblock';
   String errorWithMessage(String error) => 
       isKorean ? '오류가 발생했습니다: $error' : 'Error occurred: $error';
-  
-  // Network Messages
-  String get checkInternetConnection => 
-      isKorean ? '인터넷 연결을 확인해주세요' : 'Please check your internet connection';
   
   // Image Messages
   String get noImageAvailable => isKorean ? '이미지가 없습니다' : 'No image available';

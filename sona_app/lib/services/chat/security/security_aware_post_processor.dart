@@ -232,6 +232,22 @@ class SecurityAwarePostProcessor {
 
   /// 기본적인 텍스트 정리
   static String _cleanupText(String text) {
+    // 마크다운 형식 제거 (ChatGPT 스타일 방지)
+    text = text.replaceAll(RegExp(r'\*\*\*([^*]+)\*\*\*'), r'$1');  // ***텍스트*** 제거
+    text = text.replaceAll(RegExp(r'\*\*([^*]+)\*\*'), r'$1');      // **텍스트** 제거
+    text = text.replaceAll(RegExp(r'\*([^*]+)\*'), r'$1');          // *텍스트* 제거
+    text = text.replaceAll(RegExp(r'__([^_]+)__'), r'$1');          // __텍스트__ 제거
+    text = text.replaceAll(RegExp(r'_([^_]+)_'), r'$1');            // _텍스트_ 제거
+    text = text.replaceAll(RegExp(r'```[^`]*```'), '');             // 코드 블록 제거
+    text = text.replaceAll(RegExp(r'`([^`]+)`'), r'$1');            // `코드` 제거
+    
+    // ChatGPT 스타일 콜론 형식 제거 (예: "여행지 : 설명" → "여행지는 설명")
+    text = text.replaceAll(RegExp(r'(\S+)\s*:\s*'), r'$1는 ');
+    
+    // 번호 리스트 형식 제거 (1. 2. 3. → 일반 텍스트로)
+    text = text.replaceAll(RegExp(r'^\d+\.\s+', multiLine: true), '');
+    text = text.replaceAll(RegExp(r'^[-•]\s+', multiLine: true), '');
+    
     // 중복된 ㅋㅋ/ㅎㅎ/ㅠㅠ 정리
     text = text.replaceAll(RegExp(r'ㅋ{4,}'), 'ㅋㅋㅋ');
     text = text.replaceAll(RegExp(r'ㅎ{4,}'), 'ㅎㅎㅎ');

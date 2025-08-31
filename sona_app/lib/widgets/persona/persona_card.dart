@@ -543,75 +543,120 @@ class _PersonaInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20,
-      left: 20,
-      right: 20,
+      bottom: 0,  // Changed from 20 to 0 for full bottom coverage
+      left: 0,    // Changed from 20 to 0 for full width
+      right: 0,   // Changed from 20 to 0 for full width
       child: GestureDetector(
         onTap: isEnabled ? () => _showPersonaProfile(context, persona) : null,
         behavior: HitTestBehavior.opaque,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                // 이름
-                Flexible(
-                  child: Text(
-                    persona.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                const SizedBox(width: 8),
-
-                // 나이
-                Text(
-                  '${persona.age}',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-                const SizedBox(width: 6),
-
-                // MBTI
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.3), width: 1),
-                  ),
-                  child: Text(
-                    persona.mbti,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+        child: Container(
+          // Add dark gradient background for better text readability
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Colors.transparent,
+                Colors.black.withValues(alpha: 0.8),
+                Colors.black.withValues(alpha: 0.95),
               ],
+              stops: const [0.0, 0.3, 1.0],
             ),
-            const SizedBox(height: 8),
-            Text(
-              persona.description,
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 16,
-                height: 1.4,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(16),
+              bottomRight: Radius.circular(16),
+            ),
+          ),
+          padding: const EdgeInsets.fromLTRB(20, 30, 20, 20), // Added top padding
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  // 이름
+                  Flexible(
+                    child: Text(
+                      persona.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        shadows: [
+                          Shadow(
+                            offset: const Offset(0, 2),
+                            blurRadius: 8,
+                            color: Colors.black.withValues(alpha: 0.9),
+                          ),
+                          Shadow(
+                            offset: const Offset(0, 1),
+                            blurRadius: 3,
+                            color: Colors.black.withValues(alpha: 0.8),
+                          ),
+                        ],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+
+                  // 나이
+                  Text(
+                    '${persona.age}',
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.9),
+                      fontSize: 24,
+                      fontWeight: FontWeight.w300,
+                      shadows: [
+                        Shadow(
+                          offset: const Offset(0, 1),
+                          blurRadius: 4,
+                          color: Colors.black.withValues(alpha: 0.8),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+
+                  // MBTI
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.5), width: 1),
+                    ),
+                    child: Text(
+                      persona.mbti,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
+              const SizedBox(height: 8),
+              Text(
+                persona.description,
+                style: TextStyle(
+                  color: Colors.white.withValues(alpha: 0.95),
+                  fontSize: 16,
+                  height: 1.4,
+                  shadows: [
+                    Shadow(
+                      offset: const Offset(0, 1),
+                      blurRadius: 4,
+                      color: Colors.black.withValues(alpha: 0.8),
+                    ),
+                  ],
+                ),
+                maxLines: null,  // Changed from 2 to null to show full description
+                overflow: TextOverflow.visible,  // Changed from ellipsis to visible
+              ),
             // 여러 이미지가 있을 때 안내 표시
             Builder(builder: (context) {
               final allImageUrls = persona.getAllImageUrls(size: 'medium');
@@ -641,7 +686,8 @@ class _PersonaInfo extends StatelessWidget {
               }
               return const SizedBox.shrink();
             }),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -899,11 +945,11 @@ class _RelationshipBadge extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.9),
+          color: color.withValues(alpha: 0.9),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.4),
+              color: color.withValues(alpha: 0.4),
               blurRadius: 8,
               spreadRadius: 1,
             ),

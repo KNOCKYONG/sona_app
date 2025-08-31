@@ -3,7 +3,6 @@
 /// 이 파일은 하드코딩된 보안 규칙을 AI가 학습하고 적응할 수 있는
 /// 패턴 기반 시스템으로 변환합니다.
 
-import 'dart:convert';
 
 /// 보안 패턴 타입 정의
 enum PatternType {
@@ -54,7 +53,7 @@ class SecurityPattern {
     this.hitCount = 0,
     DateTime? lastUpdated,
     this.isLearned = false,
-  }) : lastUpdated = lastUpdated ?? const DateTime(2025, 1, 10);
+  }) : lastUpdated = lastUpdated ?? DateTime(2025, 1, 10);
   
   /// AI 학습을 위한 패턴 생성
   factory SecurityPattern.fromAILearning({

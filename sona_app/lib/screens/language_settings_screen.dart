@@ -12,28 +12,31 @@ class LanguageSettingsScreen extends StatefulWidget {
 }
 
 class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
-  // 지원 언어 목록
-  final List<LanguageOption> _languages = [
-    LanguageOption('en', 'English', '🇺🇸', 'English'),
-    LanguageOption('ko', '한국어', '🇰🇷', 'Korean'),
-    LanguageOption('ja', '日本語', '🇯🇵', 'Japanese'),
-    LanguageOption('zh', '中文', '🇨🇳', 'Chinese'),
-    LanguageOption('th', 'ภาษาไทย', '🇹🇭', 'Thai'),
-    LanguageOption('vi', 'Tiếng Việt', '🇻🇳', 'Vietnamese'),
-    LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', 'Indonesian'),
-    LanguageOption('es', 'Español', '🇪🇸', 'Spanish'),
-    LanguageOption('fr', 'Français', '🇫🇷', 'French'),
-    LanguageOption('de', 'Deutsch', '🇩🇪', 'German'),
-    LanguageOption('ru', 'Русский', '🇷🇺', 'Russian'),
-    LanguageOption('pt', 'Português', '🇵🇹', 'Portuguese'),
-    LanguageOption('it', 'Italiano', '🇮🇹', 'Italian'),
-  ];
+  // Get localized language names
+  List<LanguageOption> _getLanguages(AppLocalizations l10n) {
+    return [
+      LanguageOption('en', 'English', '🇺🇸', l10n.english),
+      LanguageOption('ko', '한국어', '🇰🇷', l10n.korean),
+      LanguageOption('ja', '日本語', '🇯🇵', l10n.japanese),
+      LanguageOption('zh', '中文', '🇨🇳', l10n.chinese),
+      LanguageOption('th', 'ภาษาไทย', '🇹🇭', l10n.thai),
+      LanguageOption('vi', 'Tiếng Việt', '🇻🇳', l10n.vietnamese),
+      LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', l10n.indonesian),
+      LanguageOption('es', 'Español', '🇪🇸', l10n.spanish),
+      LanguageOption('fr', 'Français', '🇫🇷', l10n.french),
+      LanguageOption('de', 'Deutsch', '🇩🇪', l10n.german),
+      LanguageOption('ru', 'Русский', '🇷🇺', l10n.russian),
+      LanguageOption('pt', 'Português', '🇵🇹', l10n.portuguese),
+      LanguageOption('it', 'Italiano', '🇮🇹', l10n.italian),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final localeService = Provider.of<LocaleService>(context);
     final theme = Theme.of(context);
+    final languages = _getLanguages(l10n);
 
     // 현재 선택된 언어 찾기
     // 시스템 언어 사용 시 실제 시스템 로케일 사용
@@ -47,9 +50,9 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
       currentLanguageCode = localeService.locale?.languageCode ?? 'en';
     }
     
-    final currentLanguage = _languages.firstWhere(
+    final currentLanguage = languages.firstWhere(
       (lang) => lang.code == currentLanguageCode,
-      orElse: () => _languages.first,
+      orElse: () => languages.first,
     );
 
     return Scaffold(

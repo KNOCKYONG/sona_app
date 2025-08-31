@@ -1686,6 +1686,36 @@ abstract class AppLocalizations {
   /// **'Thai'**
   String get thai;
 
+  /// Localized string for french
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get french;
+
+  /// Localized string for german
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get german;
+
+  /// Localized string for russian
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get russian;
+
+  /// Localized string for portuguese
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get portuguese;
+
+  /// Localized string for italian
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get italian;
+
   /// Localized string for showOriginalText
   ///
   /// In en, this message translates to:

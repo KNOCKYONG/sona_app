@@ -794,6 +794,21 @@ class AppLocalizationsKo extends AppLocalizations {
   String get thai => '태국어';
 
   @override
+  String get french => '프랑스어';
+
+  @override
+  String get german => '독일어';
+
+  @override
+  String get russian => '러시아어';
+
+  @override
+  String get portuguese => '포르투갈어';
+
+  @override
+  String get italian => '이탈리아어';
+
+  @override
   String get showOriginalText => '원문 보기';
 
   @override

@@ -764,43 +764,58 @@ class AppLocalizationsVi extends AppLocalizations {
   String get required => 'Bắt buộc';
 
   @override
-  String get preferredLanguage => 'Preferred Language';
+  String get preferredLanguage => 'Ngôn ngữ ưa thích';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => 'Chọn ngôn ngữ';
 
   @override
   String get korean => 'Korean';
 
   @override
-  String get english => 'English';
+  String get english => 'Tiếng Anh';
 
   @override
-  String get japanese => 'Japanese';
+  String get japanese => 'Tiếng Nhật';
 
   @override
-  String get chinese => 'Chinese';
+  String get chinese => 'Tiếng Trung';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Tiếng Indonesia';
 
   @override
   String get vietnamese => 'Tiếng Việt';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'Tiếng Tây Ban Nha';
 
   @override
-  String get thai => 'Thai';
+  String get thai => 'Tiếng Thái';
 
   @override
-  String get showOriginalText => 'Show Original';
+  String get french => 'Tiếng Pháp';
 
   @override
-  String get hideOriginalText => 'Hide Original';
+  String get german => 'Tiếng Đức';
 
   @override
-  String get errorDetails => 'Error Details';
+  String get russian => 'Tiếng Nga';
+
+  @override
+  String get portuguese => 'Tiếng Bồ Đào Nha';
+
+  @override
+  String get italian => 'Tiếng Ý';
+
+  @override
+  String get showOriginalText => 'Hiển thị gốc';
+
+  @override
+  String get hideOriginalText => 'Ẩn bản gốc';
+
+  @override
+  String get errorDetails => 'Chi tiết lỗi';
 
   @override
   String get submitReport => 'Submit Report';
@@ -809,7 +824,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get multilingualChat => 'Multilingual Chat';
 
   @override
-  String get languageIndicator => 'Language';
+  String get languageIndicator => 'Ngôn ngữ';
 
   @override
   String get translatedFrom => 'Translated';
@@ -1170,16 +1185,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get privacySettingsScreen => 'Privacy Settings';
 
   @override
-  String get useSystemLanguage => 'Use System Language';
+  String get useSystemLanguage => 'Sử dụng ngôn ngữ hệ thống';
 
   @override
-  String get followDeviceLanguage => 'Follow device language settings';
+  String get followDeviceLanguage => 'Theo cài đặt ngôn ngữ thiết bị';
 
   @override
-  String get setAppInterfaceLanguage => 'Set app interface language';
+  String get setAppInterfaceLanguage => 'Đặt ngôn ngữ giao diện ứng dụng';
 
   @override
-  String get koreanLanguage => 'Korean';
+  String get koreanLanguage => 'Tiếng Hàn';
 
   @override
   String get laterButton => 'Later';

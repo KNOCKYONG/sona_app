@@ -1636,7 +1636,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String purchaseConfirmMessage(
-      String title, String price, String description) {
+    String title,
+    String price,
+    String description,
+  ) {
     return 'Kauf von $title für $price bestätigen? $description';
   }
 

@@ -1634,7 +1634,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String purchaseConfirmMessage(
-      String title, String price, String description) {
+    String title,
+    String price,
+    String description,
+  ) {
     return 'ยืนยันการซื้อ $title ในราคา $price? $description';
   }
 

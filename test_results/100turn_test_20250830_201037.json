@@ -1,0 +1,45 @@
+{
+  "timestamp": "20250830_201037",
+  "persona_id": "8VAZ6GQN3ubrI3CkTJWP",
+  "persona_name": "하연",
+  "total_turns": 100,
+  "final_relationship_score": 975,
+  "average_quality": 0.5710000000000001,
+  "hardcoding_count": 0,
+  "repetition_count": 57,
+  "avoidance_count": 0,
+  "context_breaks": 0,
+  "milestone_events": [
+    {
+      "turn": 15,
+      "score": 100,
+      "name": "처음 마음이 열림"
+    },
+    {
+      "turn": 24,
+      "score": 200,
+      "name": "가까워지는 중"
+    },
+    {
+      "turn": 33,
+      "score": 300,
+      "name": "편안한 친구"
+    },
+    {
+      "turn": 54,
+      "score": 500,
+      "name": "특별한 사이"
+    },
+    {
+      "turn": 72,
+      "score": 700,
+      "name": "깊은 이해"
+    },
+    {
+      "turn": 93,
+      "score": 900,
+      "name": "함께하고 싶음"
+    }
+  ],
+  "quality_issues_summary": 57
+}

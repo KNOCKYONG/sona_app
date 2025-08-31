@@ -138,9 +138,9 @@ class _LoginScreenState extends State<LoginScreen>
     setState(() {
       _currentError = errorMessage;
       // 비밀번호 관련 오류이거나 등록되지 않은 이메일일 때 비밀번호 찾기 버튼 표시
-      _showPasswordReset = errorMessage.contains('비밀번호') ||
-          errorMessage.contains('등록되지 않은') ||
-          errorMessage.contains('올바르지 않습니다') ||
+      _showPasswordReset = errorMessage.contains(AppLocalizations.of(context)!.passwordText) ||
+          errorMessage.contains(AppLocalizations.of(context)!.notRegistered) ||
+          errorMessage.contains(AppLocalizations.of(context)!.incorrect) ||
           errorMessage.contains('user-not-found') ||
           errorMessage.contains('wrong-password') ||
           errorMessage.contains('invalid-credential');

@@ -158,12 +158,12 @@ class _SplashScreenState extends State<SplashScreen>
                 _updateProgress(mappedProgress, message);
                 
                 // 페르소나 개수 표시를 위한 특별 처리
-                if (message.contains('페르소나 데이터') && personaService.allPersonas.isNotEmpty) {
+                if (message.contains('Persona data') && personaService.allPersonas.isNotEmpty) {
                   final count = personaService.allPersonas.length;
-                  _updateProgress(mappedProgress, '페르소나 준비 중... ($count명)');
-                } else if (message.contains('매칭된 페르소나') && personaService.matchedPersonas.isNotEmpty) {
+                  _updateProgress(mappedProgress, 'Preparing personas... ($count)');
+                } else if (message.contains(AppLocalizations.of(context)!.matchedPersonas) && personaService.matchedPersonas.isNotEmpty) {
                   final count = personaService.matchedPersonas.length;
-                  _updateProgress(mappedProgress, '대화 상대 확인 중... ($count명)');
+                  _updateProgress(mappedProgress, 'Checking chat partners... ($count)');
                 }
               },
             );
@@ -173,7 +173,7 @@ class _SplashScreenState extends State<SplashScreen>
 
             // 대화 데이터 미리 로드
             if (personaService.matchedPersonas.isNotEmpty) {
-              _updateProgress(0.9, '대화 내용 불러오는 중...');
+              _updateProgress(0.9, 'Loading conversations...');
               
               final chatService = Provider.of<ChatService>(context, listen: false);
               chatService.setCurrentUserId(authService.currentUser!.uid);
@@ -192,10 +192,10 @@ class _SplashScreenState extends State<SplashScreen>
               await Future.wait(chatFutures);
               debugPrint('✅ [SplashScreen] Chat histories preloaded for ${personasToPreload.length} personas');
               
-              _updateProgress(0.95, '대화 준비 완료!');
+              _updateProgress(0.95, 'Ready to chat!');
             }
 
-            _updateProgress(1.0, '완료!');
+            _updateProgress(1.0, 'Complete!');
 
             await Future.delayed(const Duration(milliseconds: 300));
 
@@ -215,7 +215,7 @@ class _SplashScreenState extends State<SplashScreen>
               '🔐 [SplashScreen] User is not authenticated, initializing for guest');
           
           // 게스트 사용자도 PersonaService 초기화 (첫 설치 무한 로딩 방지)
-          _updateProgress(0.5, '페르소나 데이터 준비 중...');
+          _updateProgress(0.5, 'Preparing persona data...');
           
           try {
             debugPrint('🔐 [SplashScreen] Initializing PersonaService for guest user...');
@@ -229,9 +229,9 @@ class _SplashScreenState extends State<SplashScreen>
                 _updateProgress(mappedProgress, message);
                 
                 // 페르소나 개수 표시
-                if (message.contains('페르소나 데이터') && personaService.allPersonas.isNotEmpty) {
+                if (message.contains('Persona data') && personaService.allPersonas.isNotEmpty) {
                   final count = personaService.allPersonas.length;
-                  _updateProgress(mappedProgress, '페르소나 준비 중... ($count명)');
+                  _updateProgress(mappedProgress, 'Preparing personas... ($count)');
                 }
               },
             );
@@ -243,7 +243,7 @@ class _SplashScreenState extends State<SplashScreen>
           }
           
           // 로그인되지 않은 경우
-          _updateProgress(1.0, '환영합니다!');
+          _updateProgress(1.0, 'Welcome!');
           await Future.delayed(const Duration(milliseconds: 500));
           _showWelcomeDialog();
         }
@@ -418,7 +418,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      '로그인 중...',
+                      'Logging in...',
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFFFF6B9D),

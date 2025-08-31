@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../models/message.dart';
 import '../intelligence/conversation_memory_service.dart';
+import '../localization/multilingual_keywords.dart';
 
 /// 사용자가 이미 공유한 정보 추적
 class UserKnowledge {
@@ -136,7 +137,7 @@ class ConversationContextManager {
     }
     
     // 2. 취향/선호도 중복 체크 (압축)
-    if (_isAskingAboutPreference(userMessage)) {
+    if (_isAskingAboutPreference(userMessage, 'ko')) {
       final prefHint = _checkPreferenceDuplicationCompact(userMessage, knowledge);
       if (prefHint != null) compactHints.add(prefHint);
     }
@@ -327,8 +328,11 @@ class ConversationContextManager {
   }
   
   /// 선호도 질문인지 확인
-  bool _isAskingAboutPreference(String message) {
-    final patterns = ['좋아해', '좋아하', '싫어해', '싫어하', '취향', '어때'];
+  bool _isAskingAboutPreference(String message, String languageCode) {
+    final emotionKeywords = MultilingualKeywords.getEmotionKeywords(languageCode);
+    
+    // Check for love, hate, and preference patterns
+    final patterns = [...(emotionKeywords['love'] ?? []), ...(emotionKeywords['angry'] ?? [])];
     return patterns.any((p) => message.contains(p));
   }
   

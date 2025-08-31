@@ -279,13 +279,13 @@ class ConversationMemoryService {
     // 이전 2개 메시지
     for (int i = (index - 2).clamp(0, messages.length); i < index; i++) {
       final msg = messages[i];
-      contextMessages.add('${msg.isFromUser ? "사용자" : "AI"}: ${msg.content}');
+      contextMessages.add('${msg.isFromUser ? "User" : "AI"}: ${msg.content}');
     }
 
     // 다음 2개 메시지
     for (int i = index + 1; i < (index + 3).clamp(0, messages.length); i++) {
       final msg = messages[i];
-      contextMessages.add('${msg.isFromUser ? "사용자" : "AI"}: ${msg.content}');
+      contextMessages.add('${msg.isFromUser ? "User" : "AI"}: ${msg.content}');
     }
 
     return contextMessages.join('\n');

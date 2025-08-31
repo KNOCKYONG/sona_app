@@ -282,11 +282,11 @@ class _AdminQualityDashboardScreenState
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.green.withOpacity(0.3)),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.check_circle, color: Colors.green),
-                SizedBox(width: 12),
-                Text('최근 1시간 동안 품질 문제가 없습니다 ✅'),
+                const Icon(Icons.check_circle, color: Colors.green),
+                const SizedBox(width: 12),
+                Text(AppLocalizations.of(context)!.noQualityIssues),
               ],
             ),
           )
@@ -356,10 +356,10 @@ class _AdminQualityDashboardScreenState
         ),
         const SizedBox(height: 16),
         if (_personaStats.isEmpty)
-          const Center(
+          Center(
             child: Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Text('데이터를 로딩 중입니다...'),
+              padding: const EdgeInsets.all(32.0),
+              child: Text(AppLocalizations.of(context)!.loadingData),
             ),
           )
         else
@@ -479,10 +479,10 @@ class _AdminQualityDashboardScreenState
             }
 
             if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-              return const Center(
+              return Center(
                 child: Padding(
-                  padding: EdgeInsets.all(32.0),
-                  child: Text('아직 품질 로그가 없습니다.'),
+                  padding: const EdgeInsets.all(32.0),
+                  child: Text(AppLocalizations.of(context)!.noQualityLogs),
                 ),
               );
             }

@@ -198,7 +198,7 @@ class ChatOrchestrator {
   // 반복 응답 방지를 위한 캐시 (유저-페르소나 조합별 최근 응답 저장)
   // 키 형식: "userId_personaId"
   final Map<String, List<String>> _recentResponseCache = {};
-  static const int _maxCacheSize = 10; // 최근 10개 응답 저장 (5 -> 10으로 확대)
+  static const int _maxCacheSize = 15; // 최근 15개 응답 저장 (강화된 반복 방지)
   
   // 추억 회상 캐시
   final Map<String, MemoryItem> _memoryToRecall = {};
@@ -974,6 +974,17 @@ class ChatOrchestrator {
       
       // 캐시 업데이트
       _updateResponseCache(filteredResponse, userId, completePersona.id);
+
+      // 6.7단계: 종합 응답 검증 파이프라인 실행
+      filteredResponse = await _validateResponsePipeline(
+        userMessage: userMessage,
+        aiResponse: filteredResponse,
+        persona: completePersona,
+        chatHistory: chatHistory,
+        userId: userId,
+        userNickname: userNickname,
+        contextHint: finalContextHint,
+      );
 
       // 7단계: 긴 응답 분리 처리
       var responseContents =
@@ -3273,6 +3284,299 @@ class ChatOrchestrator {
   }
 
   /// 관계 깊이별 감정 표현 힌트 생성
+  /// 공통 관련성 임계값 (페르소나 무관)
+  double _getUniversalRelevanceThreshold() {
+    // 모든 대화에 동일한 엄격한 기준 적용
+    return 60.0;  // 60% 미만이면 주제 이탈로 간주
+  }
+  
+  /// 질문과 답변의 관련성 계산
+  double _calculateAnswerRelevance(String question, String answer) {
+    final questionKeywords = _extractKeywords(question.toLowerCase());
+    final answerKeywords = _extractKeywords(answer.toLowerCase());
+    
+    if (questionKeywords.isEmpty || answerKeywords.isEmpty) {
+      return 0.5; // 키워드가 없으면 중간 점수
+    }
+    
+    // 질문 키워드가 답변에 얼마나 반영되었는지 체크
+    int matchCount = 0;
+    for (final qKeyword in questionKeywords) {
+      if (answerKeywords.any((aKeyword) => 
+          aKeyword.contains(qKeyword) || qKeyword.contains(aKeyword))) {
+        matchCount++;
+      }
+    }
+    
+    // 질문 타입에 대한 적절한 답변인지 체크
+    final questionType = _analyzeQuestionType(question);
+    bool hasAppropriateResponse = false;
+    
+    switch (questionType) {
+      case 'what_doing':
+        // "뭐해?" 질문에는 활동 관련 답변이 있어야 함
+        hasAppropriateResponse = answer.contains('하고') || answer.contains('있어') || 
+                                 answer.contains('중') || answer.contains('했어');
+        break;
+      case 'why':
+        // "왜?" 질문에는 이유 설명이 있어야 함
+        hasAppropriateResponse = answer.contains('때문') || answer.contains('라서') || 
+                                 answer.contains('니까') || answer.contains('거든');
+        break;
+      case 'about_you':
+        // "너는?" 질문에는 AI 자신에 대한 답변이 있어야 함
+        hasAppropriateResponse = answer.contains('나는') || answer.contains('나도') || 
+                                 answer.contains('내가') || answer.contains('저는');
+        break;
+      default:
+        hasAppropriateResponse = true; // 기본적으로는 통과
+    }
+    
+    // 최종 점수 계산
+    double keywordScore = matchCount / questionKeywords.length;
+    double responseScore = hasAppropriateResponse ? 1.0 : 0.3;
+    
+    return (keywordScore * 0.6 + responseScore * 0.4);
+  }
+  
+  /// 종합 응답 검증 파이프라인
+  Future<String> _validateResponsePipeline({
+    required String userMessage,
+    required String aiResponse,
+    required Persona persona,
+    required List<Message> chatHistory,
+    required String userId,
+    String? userNickname,
+    String? contextHint,
+  }) async {
+    debugPrint('🔍 Starting comprehensive response validation pipeline');
+    
+    // 1단계: 관련성 검증
+    final relevanceScore = _calculateAnswerRelevance(userMessage, aiResponse);
+    debugPrint('  📊 Relevance: ${(relevanceScore * 100).toStringAsFixed(1)}%');
+    
+    // 2단계: 반복 검증
+    final isSimilar = _isResponseTooSimilar(aiResponse, userId, persona.id);
+    debugPrint('  🔄 Repetition check: ${isSimilar ? "FAILED" : "PASSED"}');
+    
+    // 3단계: 질문 타입 매칭 검증
+    final questionType = _analyzeQuestionType(userMessage);
+    final hasAppropriatePattern = _validateQuestionTypeResponse(questionType, aiResponse);
+    debugPrint('  ❓ Question type match: ${hasAppropriatePattern ? "PASSED" : "FAILED"}');
+    
+    // 4단계: 금지 패턴 검증
+    final hasProhibitedPattern = _containsProhibitedPattern(aiResponse);
+    debugPrint('  🚫 Prohibited patterns: ${hasProhibitedPattern ? "FOUND" : "CLEAN"}');
+    
+    // 5단계: 길이 검증
+    final isLengthAppropriate = aiResponse.length >= 10 && aiResponse.length <= 150;
+    debugPrint('  📏 Length check (${aiResponse.length} chars): ${isLengthAppropriate ? "PASSED" : "FAILED"}');
+    
+    // 종합 판정
+    final validationScore = 
+      (relevanceScore * 0.4) + 
+      (isSimilar ? 0 : 0.2) + 
+      (hasAppropriatePattern ? 0.2 : 0) + 
+      (hasProhibitedPattern ? 0 : 0.1) + 
+      (isLengthAppropriate ? 0.1 : 0);
+    
+    debugPrint('🎯 Final validation score: ${(validationScore * 100).toStringAsFixed(1)}%');
+    
+    // 50% 미만이면 재생성 시도 (관련성 검증 메서드 호출)
+    if (validationScore < 0.5) {
+      debugPrint('⚠️ Validation failed. Attempting regeneration...');
+      return await _validateResponseRelevance(
+        userMessage: userMessage,
+        aiResponse: aiResponse,
+        persona: persona,
+        chatHistory: chatHistory,
+        userId: userId,
+        userNickname: userNickname,
+        contextHint: contextHint,
+        maxRetries: 1,
+      );
+    }
+    
+    return aiResponse;
+  }
+  
+  /// 질문 타입에 맞는 응답 패턴 검증
+  bool _validateQuestionTypeResponse(String? questionType, String response) {
+    if (questionType == null) return true;
+    
+    switch (questionType) {
+      case 'what_doing':
+        // 활동 관련 키워드 체크
+        return response.contains('하고') || response.contains('있어') || 
+               response.contains('중') || response.contains('했어') ||
+               response.contains('보고') || response.contains('듣고');
+      
+      case 'why':
+        // 이유 설명 키워드 체크
+        return response.contains('때문') || response.contains('라서') || 
+               response.contains('니까') || response.contains('거든') ||
+               response.contains('왜냐면');
+      
+      case 'how_about':
+        // 의견 표현 키워드 체크
+        return response.contains('좋') || response.contains('싫') || 
+               response.contains('괜찮') || response.contains('별로') ||
+               response.contains('같아');
+      
+      case 'when':
+        // 시간 관련 키워드 체크
+        return response.contains('전') || response.contains('후') || 
+               response.contains('부터') || response.contains('까지') ||
+               response.contains('때') || response.contains('동안');
+      
+      case 'where':
+        // 장소 관련 키워드 체크
+        return response.contains('집') || response.contains('학교') || 
+               response.contains('카페') || response.contains('에서') ||
+               response.contains('에') || response.contains('로');
+      
+      case 'about_you':
+        // AI 자신에 대한 답변 체크
+        return response.contains('나는') || response.contains('나도') || 
+               response.contains('내가') || response.contains('내') ||
+               response.contains('나');
+      
+      default:
+        return true;
+    }
+  }
+  
+  /// 금지 패턴 검사
+  bool _containsProhibitedPattern(String response) {
+    final prohibitedPatterns = [
+      '다른 일은 잘 되고 있어',
+      '혹시 다른 얘기',
+      '그런 복잡한 건 말고',
+      '잠시만 기다려',
+      '나는 AI라서',
+      '메타버스',
+      '알아서 뭐해',
+      '네가 뭔데',
+    ];
+    
+    final lowerResponse = response.toLowerCase();
+    for (final pattern in prohibitedPatterns) {
+      if (lowerResponse.contains(pattern.toLowerCase())) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 응답 관련성 검증 및 재생성
+  Future<String> _validateResponseRelevance({
+    required String userMessage,
+    required String aiResponse,
+    required Persona persona,
+    required List<Message> chatHistory,
+    required String userId,
+    String? userNickname,
+    int? userAge,
+    String? userLanguage,
+    String? contextHint,
+    int maxRetries = 2,
+  }) async {
+    // 관련성 점수 계산
+    final relevanceScore = _calculateAnswerRelevance(userMessage, aiResponse);
+    
+    debugPrint('🎯 Response relevance check: ${(relevanceScore * 100).toStringAsFixed(1)}%');
+    debugPrint('   Question: "$userMessage"');
+    debugPrint('   Response: "$aiResponse"');
+    
+    // 관련성이 50% 미만이면 재생성
+    if (relevanceScore < 0.5 && maxRetries > 0) {
+      debugPrint('⚠️ Low relevance detected (${(relevanceScore * 100).toStringAsFixed(1)}%). Regenerating...');
+      
+      // 강화된 컨텍스트로 재생성 요청
+      final enhancedHint = '''
+🚨🚨🚨 [CRITICAL: PREVIOUS RESPONSE FAILED RELEVANCE CHECK] 🚨🚨🚨
+
+❌ 이전 응답이 질문과 관련 없음!
+❌ 실패한 응답: "$aiResponse"
+
+✅ 반드시 이 질문에 직접 답변하세요: "$userMessage"
+✅ 질문의 핵심 키워드에 집중하세요
+✅ 회피하지 말고 정면으로 답변하세요
+
+${contextHint ?? ''}''';
+      
+      try {
+        // ConversationsService로 재생성 시도
+        final regeneratedResponse = await ConversationsService.generateResponse(
+          persona: persona,
+          userMessage: userMessage,
+          userId: userId,
+          conversationId: '${userId}_${persona.id}',
+          recentMessages: chatHistory,
+          userNickname: userNickname,
+          contextHint: enhancedHint,
+          targetLanguage: userLanguage,
+        );
+        
+        // 재생성된 응답도 검증 (재귀 호출, 횟수 감소)
+        return await _validateResponseRelevance(
+          userMessage: userMessage,
+          aiResponse: regeneratedResponse.content,
+          persona: persona,
+          chatHistory: chatHistory,
+          userId: userId,
+          userNickname: userNickname,
+          userAge: userAge,
+          userLanguage: userLanguage,
+          contextHint: contextHint,
+          maxRetries: maxRetries - 1,
+        );
+      } catch (e) {
+        debugPrint('❌ Failed to regenerate response: $e');
+        // 재생성 실패 시 원본 반환
+        return aiResponse;
+      }
+    }
+    
+    // 관련성이 충분하거나 재시도 횟수 초과
+    return aiResponse;
+  }
+  
+  /// 공통 대화 품질 가이드 (페르소나 무관)
+  List<String> _getUniversalQualityGuide(
+    List<String> recentTopics,
+    double relevanceScore,
+    List<String> unansweredQuestions,
+  ) {
+    final guides = <String>[];
+    final topicString = recentTopics.isEmpty ? '이전 대화' : recentTopics.join(', ');
+    
+    // 🚨 절대 규칙 1: 답변되지 않은 질문 우선 처리
+    if (unansweredQuestions.isNotEmpty) {
+      guides.add('🚨 절대규칙: 먼저 이전 질문에 답변! "${unansweredQuestions.last}"');
+      guides.add('❌ 질문 무시하고 다른 얘기 금지');
+      guides.add('✅ 순서: 1)질문답변 → 2)공감 → 3)추가대화');
+    }
+    
+    // 🚨 절대 규칙 2: 주제 일관성 유지
+    if (relevanceScore < 60) {
+      final warningLevel = relevanceScore < 30 ? '🚨 심각한 주제 이탈!' : 
+                           relevanceScore < 50 ? '⚠️ 주제 벗어남 주의!' : 
+                           '💡 주제 연결 필요';
+      
+      guides.add('$warningLevel 이전 주제($topicString) 유지 필수');
+      guides.add('📌 갑작스런 주제 변경 절대 금지');
+      guides.add('💡 주제 전환시 연결 표현: "아 맞다", "그런데 말이야"');
+    }
+    
+    // 🚨 절대 규칙 3: 회피성 답변 금지
+    guides.add('❌ 금지 표현: "다른 일은?", "혹시?", "잠시만 기다려"');
+    guides.add('✅ 필수: 질문의 핵심에 직접 답변');
+    
+    return guides;
+  }
+
   List<String> _getRelationshipDepthHints(
     int likeScore,
     String userMessage,
@@ -3647,52 +3951,100 @@ class ChatOrchestrator {
   }) async {
     final allHints = <String>[];
     
-    // 🎯 맥락 일관성 분석 강화
+    // 🎯 맥락 일관성 분석 강화 (개선된 버전)
     if (chatHistory.isNotEmpty) {
-      // 최근 대화 주제 추출
+      // 최근 대화 주제 추출 (더 넓은 범위로 확장)
       final recentTopics = <String>[];
-      final recentMessages = chatHistory.take(5).toList();
+      final recentQuestions = <String>[];  // 답변되지 않은 질문 추적
+      final recentMessages = chatHistory.take(7).toList(); // 5 -> 7로 확장
       
+      // 메시지별 주제와 질문 분석
       for (final msg in recentMessages) {
         final keywords = _extractKeywords(msg.content);
         recentTopics.addAll(keywords);
+        
+        // 사용자 질문 추적
+        if (msg.isFromUser) {
+          final questionType = _analyzeQuestionType(msg.content);
+          if (questionType != null) {
+            recentQuestions.add(msg.content);
+          }
+        }
       }
       
       // 현재 메시지의 주제
       final currentTopics = _extractKeywords(userMessage);
       
-      // 주제 관련성 점수 계산 (0~100)
+      // 🔥 개선된 주제 관련성 점수 계산 (0~100)
       double relevanceScore = 0;
-      if (recentTopics.isNotEmpty && currentTopics.isNotEmpty) {
-        final matchingTopics = currentTopics.where((topic) => 
+      if (recentTopics.isNotEmpty) {
+        // 완전 일치 체크
+        final exactMatches = currentTopics.where((topic) => 
           recentTopics.any((recentTopic) => 
             topic.toLowerCase() == recentTopic.toLowerCase())).toList();
-        relevanceScore = (matchingTopics.length / currentTopics.length) * 100;
-      }
-      
-      // 낮은 관련성 감지 - 페르소나별 임계값 적용
-      // 영훈: 더 엄격한 기준 적용 (50점), 기타: 기본 30점
-      final relevanceThreshold = persona.name == '영훈' ? 50.0 : 30.0;
-      
-      if (relevanceScore < relevanceThreshold && chatHistory.length > 2) {
-        if (persona.name == '영훈') {
-          // 영훈 전용 강화된 가이드
-          allHints.add('⚠️ [영훈 특별 주의] 주제 일관성 매우 중요! 차분하고 신중하게 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결');
-          allHints.add('🎯 영훈이는 차분한 성격으로 급격한 주제 변경을 하지 않습니다');
-          allHints.add('💡 상대방의 말에 집중하고 관련된 답변을 해주세요');
+        
+        // 부분 일치 체크 (유사 단어도 인정)
+        final partialMatches = currentTopics.where((topic) => 
+          recentTopics.any((recentTopic) => 
+            topic.toLowerCase().contains(recentTopic.toLowerCase()) ||
+            recentTopic.toLowerCase().contains(topic.toLowerCase()))).toList();
+        
+        // 가중치 적용: 완전 일치 100%, 부분 일치 50%
+        if (currentTopics.isNotEmpty) {
+          relevanceScore = ((exactMatches.length * 100) + (partialMatches.length * 50)) / 
+                          (currentTopics.length * 100) * 100;
         } else {
-          allHints.add('⚠️ 주제 일관성 낮음: 이전 대화 주제(${recentTopics.take(3).join(", ")})와 연결해서 답변');
-          allHints.add('🔗 자연스러운 전환: 급격한 주제 변경 피하고 부드럽게 연결');
+          // 주제가 없는 짧은 메시지는 기본 점수
+          relevanceScore = 60;
         }
-        allHints.add('💡 예시: "그 얘기 들으니까 생각난건데..." 같은 연결 표현 사용');
-      } else {
-        allHints.add('✅ 주제 일관성 양호: 자연스럽게 대화 이어가기');
       }
       
-      // 질문 회피 패턴 감지
+      // 🚨 공통 대화 품질 규칙 적용 (페르소나 무관)
+      final relevanceThreshold = _getUniversalRelevanceThreshold();
+      
+      // 답변되지 않은 질문 추적
+      final unansweredQuestions = <String>[];
+      for (int i = recentMessages.length - 1; i >= 0; i--) {
+        final msg = recentMessages[i];
+        if (msg.isFromUser && _analyzeQuestionType(msg.content) != null) {
+          // 다음 메시지가 AI 응답인지 확인
+          bool wasAnswered = false;
+          if (i < recentMessages.length - 1) {
+            final nextMsg = recentMessages[i + 1];
+            if (!nextMsg.isFromUser) {
+              // AI가 응답했지만 관련 없는 답변인지 체크
+              final answerRelevance = _calculateAnswerRelevance(msg.content, nextMsg.content);
+              if (answerRelevance < 0.5) {
+                unansweredQuestions.add(msg.content);
+              }
+            }
+          } else {
+            // 마지막 메시지가 질문이면 미답변
+            unansweredQuestions.add(msg.content);
+          }
+        }
+      }
+      
+      // 공통 품질 가이드 적용
+      final universalGuide = _getUniversalQualityGuide(
+        recentTopics.take(3).toList(),
+        relevanceScore,
+        unansweredQuestions,
+      );
+      allHints.addAll(universalGuide);
+      
+      // 주제 일관성 체크
+      if (relevanceScore < relevanceThreshold && chatHistory.length > 2) {
+        allHints.add('🔴 주제 일관성 위반! 반드시 이전 대화와 연결');
+      } else if (relevanceScore >= relevanceThreshold && unansweredQuestions.isEmpty) {
+        allHints.add('✅ 대화 품질 양호: 자연스럽게 이어가기');
+      }
+      
+      // 질문 회피 패턴 감지 (강화)
       if (_isAvoidancePattern(userMessage, chatHistory)) {
-        allHints.add('❌ 질문 회피 금지: 상대방 질문에 먼저 직접 답변하기');
-        allHints.add('✅ 올바른 순서: 질문 답변 → 공감 표현 → 자연스러운 대화 전개');
+        allHints.add('❌ 질문 회피 절대 금지!');
+        allHints.add('🎯 올바른 순서: 1) 질문 직접 답변 2) 공감 표현 3) 추가 대화');
+        allHints.add('⚠️ "다른 일은?" "혹시?" 같은 회피성 표현 금지');
       }
     }
     
@@ -3737,21 +4089,13 @@ class ChatOrchestrator {
       recentMessages,
     );
     
-    // 점수가 낮으면 강력한 경고 - 페르소나별 임계값
-    // 영훈: 70점, 혜원: 65점, 기타: 60점
-    final consistencyThreshold = persona.name == '영훈' ? 70 : 
-                                 persona.name == '혜원' ? 65 : 60;
+    // 점수가 낮으면 강력한 경고 - 모든 페르소나 공통 기준
+    final consistencyThreshold = 60;  // 공통 기준
     
     if (topicConsistencyScore < consistencyThreshold) {
-      if (persona.name == '영훈') {
-        contextHints.add('⚠️ [영훈] 주제 일관성 필수! 차분하게 이전 대화와 연결하여 답변하세요.');
-        contextHints.add('🎯 영훈이는 신중하고 차분한 성격 - 관련 없는 답변 절대 금지');
-      } else if (persona.name == '혜원') {
-        contextHints.add('⚠️ [혜원] 감정 일관성 유지하면서 주제 연결하세요.');
-        contextHints.add('✨ 혜원이는 밝고 긍정적인 성격 - 감정 표현 일관되게');
-      } else {
-        contextHints.add('⚠️ 주제 일관성 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
-      }
+      // 모든 페르소나에 동일한 규칙 적용
+      contextHints.add('⚠️ 주제 일관성 낮음! 반드시 이전 대화와 연결하여 답변하세요.');
+      contextHints.add('🎯 관련 없는 답변 절대 금지 - 질문에 직접 답변');
       contextHints.add('💡 자연스러운 전환 표현 사용: "아 그거 말고", "그런데 말이야", "아 맞다"');
       contextHints.add('📌 이전 메시지와 직접적으로 연관된 응답을 하세요.');
     }
@@ -5818,8 +6162,12 @@ class ChatOrchestrator {
     // 정규화
     final normalizedNew = _normalizeForComparison(newResponse);
     
+    // 최근 3개는 더 엄격하게, 나머지는 기본 체크
+    int index = 0;
     for (final cachedResponse in cache) {
       final normalizedCached = _normalizeForComparison(cachedResponse);
+      final isRecent = index < 3;
+      index++;
       
       // 1. 완전 동일 체크
       if (normalizedNew == normalizedCached) {
@@ -5827,9 +6175,10 @@ class ChatOrchestrator {
         return true;
       }
       
-      // 2. 레벤슈타인 거리 체크 (80% 이상 유사)
+      // 2. 레벤슈타인 거리 체크 (최근 3개는 70%, 나머지는 80% 이상 유사)
       final similarity = _calculateSimilarity(normalizedNew, normalizedCached);
-      if (similarity > 0.8) {
+      final threshold = isRecent ? 0.7 : 0.8;
+      if (similarity > threshold) {
         debugPrint('⚠️ High similarity detected: ${(similarity * 100).toStringAsFixed(1)}%');
         return true;
       }
@@ -5837,6 +6186,22 @@ class ChatOrchestrator {
       // 3. 동일 패턴 체크
       if (_hasSamePattern(normalizedNew, normalizedCached)) {
         debugPrint('⚠️ Same pattern detected');
+        return true;
+      }
+      
+      // 4. 의미론적 유사성 체크 (최근 5개만)
+      if (isRecent || index <= 5) {
+        if (_hasSemanticSimilarity(newResponse, cachedResponse)) {
+          debugPrint('⚠️ Semantic similarity detected');
+          return true;
+        }
+      }
+      
+      // 5. 키워드 중복률 체크 (최근 3개는 60%, 나머지는 80%)
+      final keywordOverlap = _calculateKeywordOverlap(newResponse, cachedResponse);
+      final keywordThreshold = isRecent ? 0.6 : 0.8;
+      if (keywordOverlap > keywordThreshold) {
+        debugPrint('⚠️ High keyword overlap: ${(keywordOverlap * 100).toStringAsFixed(1)}%');
         return true;
       }
     }
@@ -5875,6 +6240,69 @@ class ChatOrchestrator {
     final pattern2 = s2.replaceAll(RegExp(r'[가-힣]+'), 'X');
     
     return pattern1 == pattern2 && pattern1.contains('X X');
+  }
+  
+  /// 의미론적 유사성 체크
+  bool _hasSemanticSimilarity(String s1, String s2) {
+    // 공통 감정 표현 패턴
+    final emotionPatterns = [
+      ['좋아', '좋은', '좋네', '좋다'],
+      ['싫어', '싫은', '싫네', '싫다'],
+      ['슬퍼', '슬픈', '슬프네', '슬프다'],
+      ['기뻐', '기쁜', '기쁘네', '기쁘다'],
+      ['화나', '화난', '화나네', '화났다'],
+      ['무서워', '무서운', '무섭네', '무섭다'],
+    ];
+    
+    // 동일한 감정 그룹 사용 체크
+    for (final group in emotionPatterns) {
+      final s1HasEmotion = group.any((word) => s1.contains(word));
+      final s2HasEmotion = group.any((word) => s2.contains(word));
+      if (s1HasEmotion && s2HasEmotion) {
+        // 같은 감정 표현 + 비슷한 길이 = 의미론적 유사
+        if ((s1.length - s2.length).abs() < 20) {
+          return true;
+        }
+      }
+    }
+    
+    // 동일한 의도 패턴 체크
+    final intentPatterns = [
+      ['뭐해', '뭐하고', '뭐하는', '뭐했어'],
+      ['어때', '어떻게', '어떤지', '어떨까'],
+      ['왜', '왜그래', '왜그런', '왜그랬'],
+      ['언제', '언제까지', '언제부터', '언제쯤'],
+      ['어디', '어디서', '어디로', '어디에'],
+    ];
+    
+    for (final group in intentPatterns) {
+      final s1Count = group.where((word) => s1.contains(word)).length;
+      final s2Count = group.where((word) => s2.contains(word)).length;
+      if (s1Count > 0 && s2Count > 0 && s1Count == s2Count) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /// 키워드 중복률 계산
+  double _calculateKeywordOverlap(String s1, String s2) {
+    final keywords1 = _extractKeywords(s1);
+    final keywords2 = _extractKeywords(s2);
+    
+    if (keywords1.isEmpty || keywords2.isEmpty) {
+      return 0.0;
+    }
+    
+    // 공통 키워드 개수
+    final commonKeywords = keywords1.where((k) => keywords2.contains(k)).toSet();
+    final totalUniqueKeywords = {...keywords1, ...keywords2}.length;
+    
+    if (totalUniqueKeywords == 0) return 0.0;
+    
+    // Jaccard 유사도 계산
+    return commonKeywords.length / totalUniqueKeywords;
   }
   
   /// 캐시 업데이트 - 문제 패턴 감지 강화

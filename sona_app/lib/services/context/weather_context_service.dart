@@ -98,14 +98,14 @@ class WeatherContextService {
   /// 날씨 상태 한글 번역
   static String _translateCondition(String condition) {
     final translations = {
-      'Clear': '맑음',
-      'Clouds': '흐림',
-      'Rain': '비',
-      'Drizzle': '이슬비',
-      'Thunderstorm': '뇌우',
-      'Snow': '눈',
-      'Mist': '안개',
-      'Fog': '짙은 안개',
+      'Clear': 'clear',
+      'Clouds': 'cloudy',
+      'Rain': 'rainy',
+      'Drizzle': 'drizzle',
+      'Thunderstorm': 'thunderstorm',
+      'Snow': 'snowy',
+      'Mist': 'fog',
+      'Fog': 'thick_fog',
     };
     return translations[condition] ?? condition;
   }
@@ -123,19 +123,19 @@ class WeatherContextService {
     if (month >= 3 && month <= 5) {
       // 봄
       baseTemp = 15.0 + (hour - 12).abs() * -0.5;
-      condition = hour < 12 ? '맑음' : '구름 조금';
+      condition = hour < 12 ? 'clear' : 'partly_cloudy';
     } else if (month >= 6 && month <= 8) {
       // 여름
       baseTemp = 28.0 + (hour - 14).abs() * -0.3;
-      condition = hour >= 14 && hour <= 17 ? '비' : '맑음';
+      condition = hour >= 14 && hour <= 17 ? 'rainy' : 'clear';
     } else if (month >= 9 && month <= 11) {
       // 가을
       baseTemp = 18.0 + (hour - 13).abs() * -0.4;
-      condition = '맑음';
+      condition = 'clear';
     } else {
       // 겨울
       baseTemp = 2.0 + (hour - 13).abs() * -0.2;
-      condition = DateTime.now().day % 3 == 0 ? '눈' : '흐림';
+      condition = DateTime.now().day % 3 == 0 ? 'snowy' : 'cloudy';
     }
     
     return WeatherInfo(
@@ -169,7 +169,7 @@ class WeatherContextService {
   
   /// 날씨별 활동 제안
   static List<String> _suggestActivities(WeatherInfo weather) {
-    if (weather.condition == '맑음') {
+    if (weather.condition == 'clear') {
       if (weather.temperature > 20) {
         return ['산책', '피크닉', '자전거', '카페 테라스'];
       } else if (weather.temperature > 10) {
@@ -177,9 +177,9 @@ class WeatherContextService {
       } else {
         return ['실내 활동', '따뜻한 카페', '영화관'];
       }
-    } else if (weather.condition == '비' || weather.condition == '이슬비') {
+    } else if (weather.condition == 'rainy' || weather.condition == 'drizzle') {
       return ['실내 카페', '영화', '책 읽기', '집에서 휴식'];
-    } else if (weather.condition == '눈') {
+    } else if (weather.condition == 'snowy') {
       return ['눈사람 만들기', '따뜻한 음료', '실내 활동'];
     } else {
       return ['실내 활동', '쇼핑', '맛집 탐방'];
@@ -205,11 +205,11 @@ class WeatherContextService {
   
   /// 날씨별 기분
   static String _getWeatherMood(WeatherInfo weather) {
-    if (weather.condition == '맑음' && weather.temperature >= 18 && weather.temperature <= 25) {
+    if (weather.condition == 'clear' && weather.temperature >= 18 && weather.temperature <= 25) {
       return 'perfect'; // 완벽한 날씨
-    } else if (weather.condition == '비') {
+    } else if (weather.condition == 'rainy') {
       return 'cozy'; // 아늑한
-    } else if (weather.condition == '눈') {
+    } else if (weather.condition == 'snowy') {
       return 'romantic'; // 로맨틱
     } else if (weather.temperature > 30) {
       return 'hot'; // 더운
@@ -224,12 +224,12 @@ class WeatherContextService {
   static List<String> _getWeatherTopics(WeatherInfo weather) {
     final topics = <String>[];
     
-    if (weather.condition == '맑음') {
+    if (weather.condition == 'clear') {
       topics.addAll(['좋은 날씨', '산책', '외출 계획']);
-    } else if (weather.condition == '비') {
+    } else if (weather.condition == 'rainy') {
       topics.addAll(['비 오는 날', '우산', '빗소리', '실내 활동']);
-    } else if (weather.condition == '눈') {
-      topics.addAll(['눈', '겨울', '따뜻한 음료', '크리스마스']);
+    } else if (weather.condition == 'snowy') {
+      topics.addAll(['snowy', '겨울', '따뜻한 음료', '크리스마스']);
     }
     
     if (weather.temperature > 30) {
@@ -245,7 +245,7 @@ class WeatherContextService {
   static List<String> _getWeatherConcerns(WeatherInfo weather) {
     final concerns = <String>[];
     
-    if (weather.condition == '비') {
+    if (weather.condition == 'rainy') {
       concerns.addAll(['우산 챙기기', '교통 체증', '젖은 옷']);
     } else if (weather.temperature > 30) {
       concerns.addAll(['열사병', '탈수', '자외선']);
@@ -276,18 +276,18 @@ class WeatherContextService {
     buffer.writeln('- 날씨: ${weather.condition}');
     buffer.writeln('- 온도: ${weather.temperature}°C (체감: ${weather.feelsLike}°C)');
     
-    if (weather.condition == '비' || weather.condition == '눈') {
+    if (weather.condition == 'rainy' || weather.condition == 'snowy') {
       buffer.writeln('- ⚠️ ${weather.condition}가 내리고 있어요');
     }
     
     buffer.writeln('\n날씨 기반 대화 가이드:');
     
     // 날씨별 인사말
-    if (weather.condition == '맑음') {
+    if (weather.condition == 'clear') {
       buffer.writeln('- "오늘 날씨 정말 좋네요!"');
-    } else if (weather.condition == '비') {
+    } else if (weather.condition == 'rainy') {
       buffer.writeln('- "비 오는데 우산 챙기셨어요?"');
-    } else if (weather.condition == '눈') {
+    } else if (weather.condition == 'snowy') {
       buffer.writeln('- "눈 오는 거 보셨어요? 예쁘네요"');
     }
     

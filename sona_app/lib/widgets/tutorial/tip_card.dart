@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/tip_data.dart';
+import '../../l10n/app_localizations.dart';
 
 class TipCard extends StatefulWidget {
   final TipData tipData;
@@ -170,7 +171,7 @@ class _TipCardState extends State<TipCard> with SingleTickerProviderStateMixin {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              '아무 방향으로나 스와이프하세요',
+                              AppLocalizations.of(context)!.swipeAnyDirection,
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.6),
                                 fontSize: 14,

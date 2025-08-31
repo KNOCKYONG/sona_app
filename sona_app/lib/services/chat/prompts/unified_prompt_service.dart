@@ -3,6 +3,8 @@ import '../../../models/message.dart';
 import '../../../core/constants/prompt_templates.dart';
 import '../../../core/constants/mbti_constants.dart';
 import '../analysis/pattern_analyzer_service.dart';
+import '../localization/multilingual_keywords.dart';
+import '../localization/localized_prompt_templates.dart';
 
 /// 통합 프롬프트 서비스 - 토큰 최적화 및 중복 제거
 /// 기존 3개 파일의 프롬프트를 통합하여 50% 토큰 절약
@@ -21,6 +23,7 @@ class UnifiedPromptService {
     String? contextMemory,
     bool hasAskedWellBeingToday = false,
     String? emotionalState, // 페르소나 감정 상태 추가
+    String languageCode = 'ko', // 사용자 언어 코드 추가
   }) {
     final sections = <String>[];
     
@@ -74,12 +77,12 @@ $contextMemory
     
     // 7-1. 단기 메모리 추가 (새로 추가)
     if (recentMessages != null && recentMessages.isNotEmpty) {
-      sections.add(_buildShortTermMemory(recentMessages));
+      sections.add(_buildShortTermMemory(recentMessages, languageCode: languageCode));
     }
     
     // 7-2. 핵심 주제 및 감정 컨텍스트 (새로 추가)
     if (recentMessages != null && recentMessages.isNotEmpty) {
-      sections.add(_buildEmotionalContext(recentMessages));
+      sections.add(_buildEmotionalContext(recentMessages, languageCode: languageCode));
     }
     
     // 8. 애교 및 애정 표현 가이드 (관계 레벨별)
@@ -99,7 +102,7 @@ $contextMemory
     return sections.where((s) => s.isNotEmpty).join('\n\n');
   }
   
-  /// 페르소나 섹션 (간결화)
+  /// 페르소나 섹션 (간결화 + 프로필 일관성 강화)
   static String _buildPersonaSection(Persona persona, String? userNickname) {
     final traits = <String>[];
     traits.add('${persona.name}/${persona.age}세/${persona.gender == 'male' ? '남' : '여'}');
@@ -107,14 +110,25 @@ $contextMemory
     if (persona.personality.isNotEmpty) {
       traits.add('성격: ${persona.personality}');
     }
+    if (persona.description.isNotEmpty) {
+      traits.add('직업/특징: ${persona.description}');
+    }
     if (userNickname != null && userNickname.isNotEmpty) {
       traits.add('상대: $userNickname');
     }
     
-    return '## 👤 Persona\n${traits.join(' | ')}';
+    final profileSection = '## 👤 Persona [절대 변경 금지]\n${traits.join(' | ')}';
+    
+    // 프로필 일관성 규칙 추가
+    final consistencyRules = '''\n## 🚨 프로필 일관성 절대 규칙
+- 위 프로필 정보를 절대 부정하거나 변경하지 마세요
+- 직업/특징과 일치하는 지식과 경험을 바탕으로 대화
+- 모르는 것은 솔직하게 "아직 배우는 중"이라고 표현''';
+    
+    return profileSection + consistencyRules;
   }
   
-  /// 스타일 섹션 (통합 및 간결화)
+  /// 스타일 섹션 (통합 및 간결화 + MBTI 특성)
   static String _buildStyleSection({
     required Persona persona,
     required bool isCasualSpeech,
@@ -127,6 +141,9 @@ $contextMemory
     buffer.writeln(isCasualSpeech 
       ? '친구처럼 편하게 (뭐해?, 그래, 맞아)'
       : '정중하게 (뭐 하세요?, 그래요, 맞아요)');
+    
+    // MBTI 특성 강화
+    buffer.writeln(_getMbtiDialogueStyle(persona.mbti));
     
     // 성별 특성 (간결)
     if (persona.gender == 'male') {
@@ -156,6 +173,53 @@ $contextMemory
     }
     
     return buffer.toString();
+  }
+  
+  /// MBTI별 대화 스타일 가이드
+  static String _getMbtiDialogueStyle(String mbti) {
+    final type = mbti.toUpperCase();
+    final isExtroverted = type.startsWith('E');
+    final isThinking = type.contains('T');
+    final isJudging = type.endsWith('J');
+    
+    String style = 'MBTI ${type}: ';
+    
+    // 기본 특성
+    if (isExtroverted) {
+      style += '활발하고 말 많음, ';
+    } else {
+      style += '신중하고 간결함, ';
+    }
+    
+    if (isThinking) {
+      style += '논리적 표현, ';
+    } else {
+      style += '감정적 표현, ';
+    }
+    
+    if (isJudging) {
+      style += '체계적 대화';
+    } else {
+      style += '자유로운 대화';
+    }
+    
+    // 특별 패턴 추가
+    switch (type) {
+      case 'ENFP':
+        style += ' (와대박!! 진짜짱이야!! 미쳤다!!)';
+        break;
+      case 'INTJ':
+        style += ' (계획대로야, 효율적이네, 논리적으로는)';
+        break;
+      case 'ESTP':
+        style += ' (가자! 바로지금! 액션!)';
+        break;
+      case 'ISFJ':
+        style += ' (개찮아? 도와줄게, 고생했어)';
+        break;
+    }
+    
+    return style;
   }
   
   /// 패턴 가이드 (간결화)
@@ -193,7 +257,7 @@ $contextMemory
   }
   
   /// 단기 메모리 요약 (새로 추가)
-  static String _buildShortTermMemory(List<Message> messages) {
+  static String _buildShortTermMemory(List<Message> messages, {String languageCode = 'ko'}) {
     // 최근 20턴 요약
     final last20 = messages.length > 20 ? messages.sublist(messages.length - 20) : messages;
     
@@ -207,13 +271,10 @@ $contextMemory
       final keywords = _extractKeywords(msg.content);
       topics.addAll(keywords);
       
-      // 감정 추출
-      if (msg.content.contains('ㅠㅠ') || msg.content.contains('😭')) {
-        emotions.add('sad');
-      } else if (msg.content.contains('ㅋㅋ') || msg.content.contains('😄')) {
-        emotions.add('happy');
-      } else if (msg.content.contains('!') || msg.content.contains('대박')) {
-        emotions.add('excited');
+      // 감정 추출 (다국어 지원)
+      final detectedEmotion = MultilingualKeywords.detectEmotion(msg.content, languageCode);
+      if (detectedEmotion != null) {
+        emotions.add(detectedEmotion);
       }
       
       if (msg.isFromUser) {
@@ -233,24 +294,16 @@ $contextMemory
   }
   
   /// 감정 컨텍스트 (새로 추가)
-  static String _buildEmotionalContext(List<Message> messages) {
+  static String _buildEmotionalContext(List<Message> messages, {String languageCode = 'ko'}) {
     final emotionalFlow = <String>[];
     
     // 최근 10개 메시지의 감정 흐름
     final recent10 = messages.length > 10 ? messages.sublist(messages.length - 10) : messages;
     
     for (final msg in recent10) {
-      String emotion = 'neutral';
-      if (msg.content.contains('ㅠㅠ') || msg.content.contains('😭') || msg.content.contains('슬퍼')) {
-        emotion = 'sad';
-      } else if (msg.content.contains('ㅋㅋ') || msg.content.contains('😄') || msg.content.contains('좋아')) {
-        emotion = 'happy';
-      } else if (msg.content.contains('화나') || msg.content.contains('짜증')) {
-        emotion = 'angry';
-      } else if (msg.content.contains('!') || msg.content.contains('대박') || msg.content.contains('미쳤')) {
-        emotion = 'excited';
-      }
-      
+      // 다국어 감정 감지 사용
+      final detectedEmotion = MultilingualKeywords.detectEmotion(msg.content, languageCode);
+      final emotion = detectedEmotion ?? 'neutral';
       emotionalFlow.add(emotion);
     }
     
@@ -363,8 +416,10 @@ $contextMemory
     final uniqueLines = lines.toSet().toList();
     
     // 2. 예시 제거
+    // Filter out examples in any language
     final compressed = uniqueLines
-        .where((line) => !line.contains('예:') && !line.contains('Examples:'))
+        .where((line) => !line.contains('예:') && !line.contains('Examples:') && 
+                        !line.contains('例:') && !line.contains('Ejemplo:'))
         .join('\n');
     
     // 3. 부가 설명 제거

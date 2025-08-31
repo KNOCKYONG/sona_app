@@ -15,6 +15,7 @@ import '../services/ui/haptic_service.dart';
 import 'matched_personas_screen.dart';
 import 'profile_edit_screen.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/localization_helper.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -204,6 +205,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       totalLikes += persona.likes;
     }
     final hearts = purchaseService.hearts;
+    final remainingMessages = userService.getRemainingMessages();
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -349,10 +351,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatItem(AppLocalizations.of(context)!.totalLikes,
-                          '$totalLikes'),
-                      _buildStatItem(
-                          AppLocalizations.of(context)!.ownedHearts, '$hearts'),
+                      Flexible(
+                        child: _buildStatItem(AppLocalizations.of(context)!.messagesRemaining(remainingMessages), LocalizationHelper.formatNumber(remainingMessages, Localizations.localeOf(context))),
+                      ),
+                      Flexible(
+                        child: _buildStatItem(AppLocalizations.of(context)!.totalLikes,
+                            LocalizationHelper.formatNumber(totalLikes, Localizations.localeOf(context))),
+                      ),
+                      Flexible(
+                        child: _buildStatItem(
+                            AppLocalizations.of(context)!.ownedHearts, LocalizationHelper.formatNumber(hearts, Localizations.localeOf(context))),
+                      ),
                     ],
                   ),
                 ],
@@ -538,26 +547,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  double _getLabelFontSize(String languageCode) {
+    // 언어별로 최적화된 폰트 크기 반환
+    switch (languageCode) {
+      case 'en':
+      case 'es':
+      case 'fr':
+      case 'de':
+      case 'it':
+      case 'pt':
+        return 11.0; // 라틴 문자 언어들
+      case 'zh':
+      case 'ja':
+        return 12.0; // 한자/일본어
+      case 'th':
+      case 'vi':
+      case 'id':
+        return 11.5; // 동남아 언어들
+      case 'ko':
+      case 'ru':
+      default:
+        return 12.0; // 한국어, 러시아어 등
+    }
+  }
+
   Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Theme.of(context).colorScheme.primary,
+    final localizations = AppLocalizations.of(context)!;
+    final languageCode = Localizations.localeOf(context).languageCode;
+    
+    // 언어별 폰트 크기 조정
+    final labelFontSize = _getLabelFontSize(languageCode);
+    // 텍스트 길이에 따라 자동으로 높이 조정
+    final needsWrap = label.length > 10; // 10자 이상이면 줄바꿈 필요
+    
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Column(
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: Theme.of(context).textTheme.bodySmall?.color,
+          const SizedBox(height: 6),
+          Container(
+            height: needsWrap ? 36 : 20, // 텍스트가 길면 높이를 늘림
+            child: Text(
+              label,
+              style: TextStyle(
+                fontSize: labelFontSize,
+                color: Theme.of(context).textTheme.bodySmall?.color,
+                height: 1.2, // 줄 간격 조정
+              ),
+              overflow: TextOverflow.visible,
+              maxLines: 2, // 최대 2줄까지 표시
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

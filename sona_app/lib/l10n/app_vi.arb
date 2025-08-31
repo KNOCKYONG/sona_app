@@ -1,0 +1,3070 @@
+{
+  "@@locale": "vi",
+  "appName": "SONA",
+  "@appName": {
+    "description": "Localized string for appName"
+  },
+  "loading": "Đang tải...",
+  "@loading": {
+    "description": "Localized string for loading"
+  },
+  "error": "Lỗi",
+  "@error": {
+    "description": "Localized string for error"
+  },
+  "retry": "Thử lại",
+  "@retry": {
+    "description": "Localized string for retry"
+  },
+  "cancel": "Hủy",
+  "@cancel": {
+    "description": "Localized string for cancel"
+  },
+  "confirm": "Xác nhận",
+  "@confirm": {
+    "description": "Localized string for confirm"
+  },
+  "next": "Tiếp theo",
+  "@next": {
+    "description": "Localized string for next"
+  },
+  "skip": "Bỏ qua",
+  "@skip": {
+    "description": "Localized string for skip"
+  },
+  "done": "Hoàn thành",
+  "@done": {
+    "description": "Localized string for done"
+  },
+  "save": "Lưu",
+  "@save": {
+    "description": "Localized string for save"
+  },
+  "delete": "Xóa",
+  "@delete": {
+    "description": "Localized string for delete"
+  },
+  "edit": "Chỉnh sửa",
+  "@edit": {
+    "description": "Localized string for edit"
+  },
+  "close": "Đóng",
+  "@close": {
+    "description": "Localized string for close"
+  },
+  "search": "Tìm kiếm",
+  "@search": {
+    "description": "Localized string for search"
+  },
+  "filter": "Lọc",
+  "@filter": {
+    "description": "Localized string for filter"
+  },
+  "sort": "Sắp xếp",
+  "@sort": {
+    "description": "Localized string for sort"
+  },
+  "refresh": "Làm mới",
+  "@refresh": {
+    "description": "Localized string for refresh"
+  },
+  "yes": "Có",
+  "@yes": {
+    "description": "Localized string for yes"
+  },
+  "no": "Không",
+  "@no": {
+    "description": "Localized string for no"
+  },
+  "you": "Bạn",
+  "@you": {
+    "description": "Localized string for you"
+  },
+  "login": "Đăng nhập",
+  "@login": {
+    "description": "Localized string for login"
+  },
+  "signup": "Đăng ký",
+  "@signup": {
+    "description": "Localized string for signup"
+  },
+  "meetAIPersonas": "Gặp gỡ các nhân vật AI",
+  "@meetAIPersonas": {
+    "description": "Localized string for meetAIPersonas"
+  },
+  "welcomeMessage": "Chào mừng bạn💕",
+  "@welcomeMessage": {
+    "description": "Localized string for welcomeMessage"
+  },
+  "loginSignup": "Đăng nhập/Đăng ký",
+  "@loginSignup": {
+    "description": "Localized string for loginSignup"
+  },
+  "or": "hoặc",
+  "@or": {
+    "description": "Localized string for or"
+  },
+  "startWithEmail": "Bắt đầu với Email",
+  "@startWithEmail": {
+    "description": "Localized string for startWithEmail"
+  },
+  "startWithGoogle": "Bắt đầu với Google",
+  "@startWithGoogle": {
+    "description": "Localized string for startWithGoogle"
+  },
+  "loginError": "Lỗi đăng nhập",
+  "@loginError": {
+    "description": "Localized string for loginError"
+  },
+  "loginCancelled": "Đăng nhập đã hủy",
+  "@loginCancelled": {
+    "description": "Localized string for loginCancelled"
+  },
+  "logout": "Đăng xuất",
+  "@logout": {
+    "description": "Localized string for logout"
+  },
+  "basicInfo": "Thông tin cơ bản",
+  "@basicInfo": {
+    "description": "Localized string for basicInfo"
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Localized string for email"
+  },
+  "password": "Mật khẩu",
+  "@password": {
+    "description": "Localized string for password"
+  },
+  "nickname": "Biệt danh",
+  "@nickname": {
+    "description": "Localized string for nickname"
+  },
+  "nicknameRequired": "Vui lòng nhập biệt danh",
+  "@nicknameRequired": {
+    "description": "Localized string for nicknameRequired"
+  },
+  "emailRequired": "Vui lòng nhập email",
+  "@emailRequired": {
+    "description": "Localized string for emailRequired"
+  },
+  "passwordRequired": "Vui lòng nhập mật khẩu",
+  "@passwordRequired": {
+    "description": "Localized string for passwordRequired"
+  },
+  "emailHint": "example@email.com",
+  "@emailHint": {
+    "description": "Localized string for emailHint"
+  },
+  "passwordHint": "Nhập mật khẩu",
+  "@passwordHint": {
+    "description": "Localized string for passwordHint"
+  },
+  "nicknameHint": "Nhập biệt danh",
+  "@nicknameHint": {
+    "description": "Localized string for nicknameHint"
+  },
+  "enterEmail": "Nhập email",
+  "@enterEmail": {
+    "description": "Localized string for enterEmail"
+  },
+  "profilePhoto": "Ảnh hồ sơ",
+  "@profilePhoto": {
+    "description": "Localized string for profilePhoto"
+  },
+  "gender": "Giới tính",
+  "@gender": {
+    "description": "Localized string for gender"
+  },
+  "genderRequired": "Vui lòng chọn giới tính",
+  "@genderRequired": {
+    "description": "Localized string for genderRequired"
+  },
+  "male": "Nam",
+  "@male": {
+    "description": "Localized string for male"
+  },
+  "female": "Nữ",
+  "@female": {
+    "description": "Localized string for female"
+  },
+  "other": "Khác",
+  "@other": {
+    "description": "Localized string for other"
+  },
+  "birthDate": "Ngày sinh",
+  "@birthDate": {
+    "description": "Localized string for birthDate"
+  },
+  "birthDateRequired": "Vui lòng chọn ngày sinh",
+  "@birthDateRequired": {
+    "description": "Localized string for birthDateRequired"
+  },
+  "selectGender": "Chọn giới tính",
+  "@selectGender": {
+    "description": "Localized string for selectGender"
+  },
+  "genderOptional": "Giới tính (tùy chọn)",
+  "@genderOptional": {
+    "description": "Localized string for genderOptional"
+  },
+  "birthDateOptional": "Ngày sinh (tùy chọn)",
+  "@birthDateOptional": {
+    "description": "Localized string for birthDateOptional"
+  },
+  "setNow": "Thiết lập ngay",
+  "@setNow": {
+    "description": "Localized string for setNow"
+  },
+  "myGenderSection": "Giới tính của tôi",
+  "@myGenderSection": {
+    "description": "Localized string for myGenderSection"
+  },
+  "personaGenderSection": "Giới tính nhân vật",
+  "@personaGenderSection": {
+    "description": "Localized string for personaGenderSection"
+  },
+  "showAllGendersOption": "Hiển thị tất cả giới tính",
+  "@showAllGendersOption": {
+    "description": "Localized string for showAllGendersOption"
+  },
+  "accountAndProfile": "Tài khoản & Hồ sơ",
+  "@accountAndProfile": {
+    "description": "Localized string for accountAndProfile"
+  },
+  "enterBasicInformation": "Nhập thông tin cơ bản",
+  "@enterBasicInformation": {
+    "description": "Localized string for enterBasicInformation"
+  },
+  "optional": "Tùy chọn",
+  "@optional": {
+    "description": "Localized string for optional"
+  },
+  "previous": "Trước",
+  "@previous": {
+    "description": "Localized string for previous"
+  },
+  "completeSignup": "Hoàn tất đăng ký",
+  "@completeSignup": {
+    "description": "Localized string for completeSignup"
+  },
+  "referrerEmailLabel": "Email người giới thiệu",
+  "@referrerEmailLabel": {
+    "description": "Localized string for referrerEmailLabel"
+  },
+  "year": "Năm",
+  "@year": {
+    "description": "Localized string for year"
+  },
+  "month": "Tháng",
+  "@month": {
+    "description": "Localized string for month"
+  },
+  "day": "Ngày",
+  "@day": {
+    "description": "Localized string for day"
+  },
+  "selfIntroduction": "Giới thiệu bản thân",
+  "@selfIntroduction": {
+    "description": "Localized string for selfIntroduction"
+  },
+  "selfIntroductionHint": "Hãy viết vài dòng về bản thân",
+  "@selfIntroductionHint": {
+    "description": "Localized string for selfIntroductionHint"
+  },
+  "usagePurpose": "Mục đích sử dụng",
+  "@usagePurpose": {
+    "description": "Localized string for usagePurpose"
+  },
+  "selectFeeling": "Bạn cảm thấy thế nào?",
+  "@selectFeeling": {
+    "description": "Localized string for selectFeeling"
+  },
+  "happy": "Vui vẻ",
+  "@happy": {
+    "description": "Localized string for happy"
+  },
+  "sad": "Buồn",
+  "@sad": {
+    "description": "Localized string for sad"
+  },
+  "angry": "Tức giận",
+  "@angry": {
+    "description": "Localized string for angry"
+  },
+  "anxious": "Lo lắng",
+  "@anxious": {
+    "description": "Localized string for anxious"
+  },
+  "tired": "Mệt mỏi",
+  "@tired": {
+    "description": "Localized string for tired"
+  },
+  "lonely": "Cô đơn",
+  "@lonely": {
+    "description": "Localized string for lonely"
+  },
+  "stressed": "Căng thẳng",
+  "@stressed": {
+    "description": "Localized string for stressed"
+  },
+  "depressed": "Buồn chán",
+  "@depressed": {
+    "description": "Localized string for depressed"
+  },
+  "excited": "Phấn khích",
+  "@excited": {
+    "description": "Localized string for excited"
+  },
+  "calm": "Bình tĩnh",
+  "@calm": {
+    "description": "Localized string for calm"
+  },
+  "allPersonas": "Tất cả nhân vật",
+  "@allPersonas": {
+    "description": "Localized string for allPersonas"
+  },
+  "chat": "Trò chuyện",
+  "@chat": {
+    "description": "Localized string for chat"
+  },
+  "chats": "Trò chuyện",
+  "@chats": {
+    "description": "Localized string for chats"
+  },
+  "startChat": "Bắt đầu trò chuyện",
+  "@startChat": {
+    "description": "Localized string for startChat"
+  },
+  "endChat": "Kết thúc trò chuyện",
+  "@endChat": {
+    "description": "Localized string for endChat"
+  },
+  "typeMessage": "Nhập tin nhắn...",
+  "@typeMessage": {
+    "description": "Localized string for typeMessage"
+  },
+  "send": "Gửi",
+  "@send": {
+    "description": "Localized string for send"
+  },
+  "noChatsYet": "Chưa có cuộc trò chuyện nào",
+  "@noChatsYet": {
+    "description": "Localized string for noChatsYet"
+  },
+  "todayChats": "Hôm nay",
+  "@todayChats": {
+    "description": "Localized string for todayChats"
+  },
+  "yesterdayChats": "Hôm qua",
+  "@yesterdayChats": {
+    "description": "Localized string for yesterdayChats"
+  },
+  "olderChats": "Cũ hơn",
+  "@olderChats": {
+    "description": "Localized string for olderChats"
+  },
+  "chatEndedMessage": "Cuộc trò chuyện đã kết thúc",
+  "@chatEndedMessage": {
+    "description": "Localized string for chatEndedMessage"
+  },
+  "messageDeleted": "Tin nhắn đã xóa",
+  "@messageDeleted": {
+    "description": "Localized string for messageDeleted"
+  },
+  "unsendMessage": "Thu hồi tin nhắn",
+  "@unsendMessage": {
+    "description": "Localized string for unsendMessage"
+  },
+  "copyMessage": "Sao chép tin nhắn",
+  "@copyMessage": {
+    "description": "Localized string for copyMessage"
+  },
+  "messageCopied": "Đã sao chép tin nhắn",
+  "@messageCopied": {
+    "description": "Localized string for messageCopied"
+  },
+  "voiceMessage": "Tin nhắn thoại",
+  "@voiceMessage": {
+    "description": "Localized string for voiceMessage"
+  },
+  "signUp": "Đăng ký",
+  "@signUp": {
+    "description": "Localized string for signUp"
+  },
+  "meetPersonas": "Gặp gỡ nhân vật",
+  "@meetPersonas": {
+    "description": "Localized string for meetPersonas"
+  },
+  "allPersonasMatched": "Đã ghép đôi với tất cả nhân vật",
+  "@allPersonasMatched": {
+    "description": "Localized string for allPersonasMatched"
+  },
+  "noPersonasAvailable": "Không có nhân vật nào",
+  "@noPersonasAvailable": {
+    "description": "Localized string for noPersonasAvailable"
+  },
+  "heartInsufficient": "Không đủ tim",
+  "@heartInsufficient": {
+    "description": "Localized string for heartInsufficient"
+  },
+  "leaveChatTitle": "Rời khỏi cuộc trò chuyện",
+  "@leaveChatTitle": {
+    "description": "Localized string for leaveChatTitle"
+  },
+  "leave": "Rời đi",
+  "@leave": {
+    "description": "Localized string for leave"
+  },
+  "store": "Cửa hàng",
+  "@store": {
+    "description": "Localized string for store"
+  },
+  "hearts": "Tim",
+  "@hearts": {
+    "description": "Localized string for hearts"
+  },
+  "notSubscribed": "Chưa đăng ký",
+  "@notSubscribed": {
+    "description": "Localized string for notSubscribed"
+  },
+  "expired": "Đã hết hạn",
+  "@expired": {
+    "description": "Localized string for expired"
+  },
+  "purchaseConfirm": "Xác nhận mua",
+  "@purchaseConfirm": {
+    "description": "Localized string for purchaseConfirm"
+  },
+  "purchaseButton": "Mua ngay",
+  "@purchaseButton": {
+    "description": "Localized string for purchaseButton"
+  },
+  "discount20": "Giảm 20%",
+  "@discount20": {
+    "description": "Localized string for discount20"
+  },
+  "discount30": "Giảm 30%",
+  "@discount30": {
+    "description": "Localized string for discount30"
+  },
+  "hearts10": "10 Tim",
+  "@hearts10": {
+    "description": "Localized string for hearts10"
+  },
+  "hearts30": "30 Tim",
+  "@hearts30": {
+    "description": "Localized string for hearts30"
+  },
+  "hearts50": "50 Tim",
+  "@hearts50": {
+    "description": "Localized string for hearts50"
+  },
+  "originalPrice": "Giá gốc",
+  "@originalPrice": {
+    "description": "Localized string for originalPrice"
+  },
+  "discountAmount": "Số tiền giảm",
+  "@discountAmount": {
+    "description": "Localized string for discountAmount"
+  },
+  "hearts30Discount": "30 Tim (Giảm giá)",
+  "@hearts30Discount": {
+    "description": "Localized string for hearts30Discount"
+  },
+  "hearts50Discount": "50 Tim (Giảm giá)",
+  "@hearts50Discount": {
+    "description": "Localized string for hearts50Discount"
+  },
+  "settings": "Cài đặt",
+  "@settings": {
+    "description": "Localized string for settings"
+  },
+  "profile": "Hồ sơ",
+  "@profile": {
+    "description": "Localized string for profile"
+  },
+  "editProfile": "Chỉnh sửa hồ sơ",
+  "@editProfile": {
+    "description": "Localized string for editProfile"
+  },
+  "purchaseHeartsOnly": "Chỉ mua tim",
+  "@purchaseHeartsOnly": {
+    "description": "Localized string for purchaseHeartsOnly"
+  },
+  "tutorialAccount": "Tài khoản hướng dẫn",
+  "@tutorialAccount": {
+    "description": "Localized string for tutorialAccount"
+  },
+  "subscriptionStatus": "Trạng thái đăng ký",
+  "@subscriptionStatus": {
+    "description": "Localized string for subscriptionStatus"
+  },
+  "editInfo": "Chỉnh sửa thông tin",
+  "@editInfo": {
+    "description": "Localized string for editInfo"
+  },
+  "joinDate": "Ngày tham gia",
+  "@joinDate": {
+    "description": "Localized string for joinDate"
+  },
+  "notifications": "Thông báo",
+  "@notifications": {
+    "description": "Localized string for notifications"
+  },
+  "pushNotifications": "Thông báo đẩy",
+  "@pushNotifications": {
+    "description": "Localized string for pushNotifications"
+  },
+  "soundSettings": "Cài đặt âm thanh",
+  "@soundSettings": {
+    "description": "Localized string for soundSettings"
+  },
+  "effectSound": "Hiệu ứng âm thanh",
+  "@effectSound": {
+    "description": "Localized string for effectSound"
+  },
+  "language": "Ngôn ngữ",
+  "@language": {
+    "description": "Localized string for language"
+  },
+  "languageSettings": "Cài đặt ngôn ngữ",
+  "@languageSettings": {
+    "description": "Localized string for languageSettings"
+  },
+  "theme": "Giao diện",
+  "@theme": {
+    "description": "Localized string for theme"
+  },
+  "themeSettings": "Cài đặt giao diện",
+  "@themeSettings": {
+    "description": "Localized string for themeSettings"
+  },
+  "darkMode": "Chế độ tối",
+  "@darkMode": {
+    "description": "Localized string for darkMode"
+  },
+  "privacy": "Quyền riêng tư",
+  "@privacy": {
+    "description": "Localized string for privacy"
+  },
+  "terms": "Điều khoản",
+  "@terms": {
+    "description": "Localized string for terms"
+  },
+  "help": "Trợ giúp",
+  "@help": {
+    "description": "Localized string for help"
+  },
+  "frequentlyAskedQuestions": "Câu hỏi thường gặp",
+  "@frequentlyAskedQuestions": {
+    "description": "Localized string for frequentlyAskedQuestions"
+  },
+  "searchFAQ": "Tìm kiếm FAQ",
+  "@searchFAQ": {
+    "description": "Localized string for searchFAQ"
+  },
+  "searchResults": "Kết quả tìm kiếm",
+  "@searchResults": {
+    "description": "Localized string for searchResults"
+  },
+  "relatedFAQ": "FAQ liên quan",
+  "@relatedFAQ": {
+    "description": "Localized string for relatedFAQ"
+  },
+  "wasHelpful": "Có hữu ích không?",
+  "@wasHelpful": {
+    "description": "Localized string for wasHelpful"
+  },
+  "thanksFeedback": "Cảm ơn phản hồi của bạn",
+  "@thanksFeedback": {
+    "description": "Localized string for thanksFeedback"
+  },
+  "about": "Về chúng tôi",
+  "@about": {
+    "description": "Localized string for about"
+  },
+  "version": "Phiên bản",
+  "@version": {
+    "description": "Localized string for version"
+  },
+  "others": "Khác",
+  "@others": {
+    "description": "Localized string for others"
+  },
+  "accountManagement": "Quản lý tài khoản",
+  "@accountManagement": {
+    "description": "Localized string for accountManagement"
+  },
+  "deleteAccount": "Xóa tài khoản",
+  "@deleteAccount": {
+    "description": "Localized string for deleteAccount"
+  },
+  "howToUse": "Cách sử dụng",
+  "@howToUse": {
+    "description": "Localized string for howToUse"
+  },
+  "inquiries": "Thắc mắc",
+  "@inquiries": {
+    "description": "Localized string for inquiries"
+  },
+  "loginRequired": "Cần đăng nhập",
+  "@loginRequired": {
+    "description": "Localized string for loginRequired"
+  },
+  "sonaFriend": "Bạn SONA",
+  "@sonaFriend": {
+    "description": "Localized string for sonaFriend"
+  },
+  "messagesRemaining": "{count} tin nhắn còn lại",
+  "@messagesRemaining": {
+    "description": "Localized string for messagesRemaining"
+  },
+  "totalLikes": "Tổng số lượt thích",
+  "@totalLikes": {
+    "description": "Localized string for totalLikes"
+  },
+  "ownedHearts": "Trái tim sở hữu",
+  "@ownedHearts": {
+    "description": "Localized string for ownedHearts"
+  },
+  "matchedPersonas": "Personas đã ghép đôi",
+  "@matchedPersonas": {
+    "description": "Localized string for matchedPersonas"
+  },
+  "retryButton": "Thử lại",
+  "@retryButton": {
+    "description": "Localized string for retryButton"
+  },
+  "matchingFailed": "Ghép đôi thất bại",
+  "@matchingFailed": {
+    "description": "Localized string for matchingFailed"
+  },
+  "errorOccurred": "Đã xảy ra lỗi",
+  "@errorOccurred": {
+    "description": "Localized string for errorOccurred"
+  },
+  "signupComplete": "Đăng ký hoàn tất",
+  "@signupComplete": {
+    "description": "Localized string for signupComplete"
+  },
+  "accountDeletionTitle": "Xóa tài khoản",
+  "@accountDeletionTitle": {
+    "description": "Localized string for accountDeletionTitle"
+  },
+  "continueButton": "Tiếp tục",
+  "@continueButton": {
+    "description": "Localized string for continueButton"
+  },
+  "userNotFound": "Không tìm thấy người dùng",
+  "@userNotFound": {
+    "description": "Localized string for userNotFound"
+  },
+  "loadingData": "Đang tải dữ liệu...",
+  "@loadingData": {
+    "description": "Localized string for loadingData"
+  },
+  "report": "Báo cáo",
+  "@report": {
+    "description": "Localized string for report"
+  },
+  "reportAI": "Báo cáo AI",
+  "@reportAI": {
+    "description": "Localized string for reportAI"
+  },
+  "reportAITitle": "Báo cáo cuộc trò chuyện AI",
+  "@reportAITitle": {
+    "description": "Localized string for reportAITitle"
+  },
+  "termsOfService": "Điều khoản dịch vụ",
+  "@termsOfService": {
+    "description": "Localized string for termsOfService"
+  },
+  "privacyPolicy": "Chính sách bảo mật",
+  "@privacyPolicy": {
+    "description": "Localized string for privacyPolicy"
+  },
+  "grantPermission": "Cấp quyền",
+  "@grantPermission": {
+    "description": "Localized string for grantPermission"
+  },
+  "goToSettings": "Đến cài đặt",
+  "@goToSettings": {
+    "description": "Localized string for goToSettings"
+  },
+  "later": "Sau này",
+  "@later": {
+    "description": "Localized string for later"
+  },
+  "sessionExpired": "Phiên đã hết hạn",
+  "@sessionExpired": {
+    "description": "Localized string for sessionExpired"
+  },
+  "notEnoughHearts": "Không đủ trái tim",
+  "@notEnoughHearts": {
+    "description": "Localized string for notEnoughHearts"
+  },
+  "spamAdvertising": "Spam/Quảng cáo",
+  "@spamAdvertising": {
+    "description": "Localized string for spamAdvertising"
+  },
+  "hateSpeech": "Ngôn từ thù ghét",
+  "@hateSpeech": {
+    "description": "Localized string for hateSpeech"
+  },
+  "sexualContent": "Nội dung khiêu dâm",
+  "@sexualContent": {
+    "description": "Localized string for sexualContent"
+  },
+  "violentContent": "Nội dung bạo lực",
+  "@violentContent": {
+    "description": "Localized string for violentContent"
+  },
+  "harassmentBullying": "Quấy rối/Bắt nạt",
+  "@harassmentBullying": {
+    "description": "Localized string for harassmentBullying"
+  },
+  "detailedReason": "Lý do chi tiết",
+  "@detailedReason": {
+    "description": "Localized string for detailedReason"
+  },
+  "permissionRequired": "Yêu cầu quyền truy cập",
+  "@permissionRequired": {
+    "description": "Localized string for permissionRequired"
+  },
+  "cameraPermission": "Quyền truy cập máy ảnh",
+  "@cameraPermission": {
+    "description": "Localized string for cameraPermission"
+  },
+  "galleryPermission": "Quyền truy cập thư viện",
+  "@galleryPermission": {
+    "description": "Localized string for galleryPermission"
+  },
+  "permissionDenied": "Quyền truy cập bị từ chối",
+  "@permissionDenied": {
+    "description": "Localized string for permissionDenied"
+  },
+  "openSettings": "Mở cài đặt",
+  "@openSettings": {
+    "description": "Localized string for openSettings"
+  },
+  "unlimitedMessages": "Không giới hạn",
+  "@unlimitedMessages": {
+    "description": "Localized string for unlimitedMessages"
+  },
+  "profileInfo": "Thông tin hồ sơ",
+  "@profileInfo": {
+    "description": "Localized string for profileInfo"
+  },
+  "generalPersona": "Persona chung",
+  "@generalPersona": {
+    "description": "Localized string for generalPersona"
+  },
+  "expertPersona": "Persona chuyên gia",
+  "@expertPersona": {
+    "description": "Localized string for expertPersona"
+  },
+  "interests": "Sở thích",
+  "@interests": {
+    "description": "Localized string for interests"
+  },
+  "termsAgreement": "Đồng ý điều khoản",
+  "@termsAgreement": {
+    "description": "Localized string for termsAgreement"
+  },
+  "preferenceSettings": "Cài đặt ưu tiên",
+  "@preferenceSettings": {
+    "description": "Localized string for preferenceSettings"
+  },
+  "leaveChatRoom": "Rời khỏi phòng chat",
+  "@leaveChatRoom": {
+    "description": "Localized string for leaveChatRoom"
+  },
+  "backButton": "Quay lại",
+  "@backButton": {
+    "description": "Localized string for backButton"
+  },
+  "moreButton": "Xem thêm",
+  "@moreButton": {
+    "description": "Localized string for moreButton"
+  },
+  "chatListTab": "Danh sách chat",
+  "@chatListTab": {
+    "description": "Localized string for chatListTab"
+  },
+  "loginTab": "Đăng nhập",
+  "@loginTab": {
+    "description": "Localized string for loginTab"
+  },
+  "signupTab": "Đăng ký",
+  "@signupTab": {
+    "description": "Localized string for signupTab"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Localized string for emailLabel"
+  },
+  "passwordLabel": "Mật khẩu",
+  "@passwordLabel": {
+    "description": "Localized string for passwordLabel"
+  },
+  "sendingEmail": "Đang gửi email...",
+  "@sendingEmail": {
+    "description": "Localized string for sendingEmail"
+  },
+  "forgotPassword": "Quên mật khẩu?",
+  "@forgotPassword": {
+    "description": "Localized string for forgotPassword"
+  },
+  "endTutorial": "Kết thúc hướng dẫn",
+  "@endTutorial": {
+    "description": "Localized string for endTutorial"
+  },
+  "profileEdit": "Chỉnh sửa hồ sơ",
+  "@profileEdit": {
+    "description": "Localized string for profileEdit"
+  },
+  "complete": "Hoàn thành",
+  "@complete": {
+    "description": "Localized string for complete"
+  },
+  "me": "Tôi",
+  "@me": {
+    "description": "Localized string for me"
+  },
+  "photo": "Ảnh",
+  "@photo": {
+    "description": "Localized string for photo"
+  },
+  "justNow": "Vừa xong",
+  "@justNow": {
+    "description": "Localized string for justNow"
+  },
+  "storyEvent": "Sự kiện câu chuyện",
+  "@storyEvent": {
+    "description": "Localized string for storyEvent"
+  },
+  "chooseOption": "Chọn một tùy chọn:",
+  "@chooseOption": {
+    "description": "Localized string for chooseOption"
+  },
+  "allowPermission": "Cho phép",
+  "@allowPermission": {
+    "description": "Localized string for allowPermission"
+  },
+  "privacySection6Title": "6. Quyền của người dùng",
+  "@privacySection6Title": {
+    "description": "Localized string for privacySection6Title"
+  },
+  "selectTheme": "Chọn giao diện",
+  "@selectTheme": {
+    "description": "Localized string for selectTheme"
+  },
+  "systemTheme": "Theo hệ thống",
+  "@systemTheme": {
+    "description": "Localized string for systemTheme"
+  },
+  "lightTheme": "Light Mode",
+  "@lightTheme": {
+    "description": "Localized string for lightTheme"
+  },
+  "lightThemeDesc": "Use bright theme",
+  "@lightThemeDesc": {
+    "description": "Localized string for lightThemeDesc"
+  },
+  "darkTheme": "Dark Mode",
+  "@darkTheme": {
+    "description": "Localized string for darkTheme"
+  },
+  "darkThemeDesc": "Use dark theme",
+  "@darkThemeDesc": {
+    "description": "Localized string for darkThemeDesc"
+  },
+  "preview": "Preview",
+  "@preview": {
+    "description": "Localized string for preview"
+  },
+  "helloEmoji": "Hello! 😊",
+  "@helloEmoji": {
+    "description": "Localized string for helloEmoji"
+  },
+  "niceToMeetYou": "Nice to meet you!",
+  "@niceToMeetYou": {
+    "description": "Localized string for niceToMeetYou"
+  },
+  "purchaseSection6Title": "6. Inquiries",
+  "@purchaseSection6Title": {
+    "description": "Localized string for purchaseSection6Title"
+  },
+  "makeFriends": "Make Friends",
+  "@makeFriends": {
+    "description": "Localized string for makeFriends"
+  },
+  "hobbySharing": "Hobby Sharing",
+  "@hobbySharing": {
+    "description": "Localized string for hobbySharing"
+  },
+  "lonelinessRelief": "Loneliness Relief",
+  "@lonelinessRelief": {
+    "description": "Localized string for lonelinessRelief"
+  },
+  "dailyConversation": "Daily Conversation",
+  "@dailyConversation": {
+    "description": "Localized string for dailyConversation"
+  },
+  "entertainmentFun": "Entertainment/Fun",
+  "@entertainmentFun": {
+    "description": "Localized string for entertainmentFun"
+  },
+  "ageUnit": "years old",
+  "@ageUnit": {
+    "description": "Localized string for ageUnit"
+  },
+  "gaming": "Chơi game",
+  "@gaming": {
+    "description": "Localized string for gaming"
+  },
+  "movies": "Phim ảnh",
+  "@movies": {
+    "description": "Localized string for movies"
+  },
+  "music": "Âm nhạc",
+  "@music": {
+    "description": "Localized string for music"
+  },
+  "reading": "Reading",
+  "@reading": {
+    "description": "Localized string for reading"
+  },
+  "sports": "Thể thao",
+  "@sports": {
+    "description": "Localized string for sports"
+  },
+  "travel": "Du lịch",
+  "@travel": {
+    "description": "Localized string for travel"
+  },
+  "cooking": "Nấu ăn",
+  "@cooking": {
+    "description": "Localized string for cooking"
+  },
+  "fashion": "Thời trang",
+  "@fashion": {
+    "description": "Localized string for fashion"
+  },
+  "technology": "Công nghệ",
+  "@technology": {
+    "description": "Localized string for technology"
+  },
+  "art": "Nghệ thuật",
+  "@art": {
+    "description": "Localized string for art"
+  },
+  "pets": "Pets",
+  "@pets": {
+    "description": "Localized string for pets"
+  },
+  "photography": "Nhiếp ảnh",
+  "@photography": {
+    "description": "Localized string for photography"
+  },
+  "dailyChat": "Daily Chat",
+  "@dailyChat": {
+    "description": "Localized string for dailyChat"
+  },
+  "datingAdvice": "Dating Advice",
+  "@datingAdvice": {
+    "description": "Localized string for datingAdvice"
+  },
+  "hobbyTalk": "Hobby Talk",
+  "@hobbyTalk": {
+    "description": "Localized string for hobbyTalk"
+  },
+  "lifeAdvice": "Life Advice",
+  "@lifeAdvice": {
+    "description": "Localized string for lifeAdvice"
+  },
+  "funChat": "Fun Chat",
+  "@funChat": {
+    "description": "Localized string for funChat"
+  },
+  "deepTalk": "Deep Talk",
+  "@deepTalk": {
+    "description": "Localized string for deepTalk"
+  },
+  "lightTalk": "Light Talk",
+  "@lightTalk": {
+    "description": "Localized string for lightTalk"
+  },
+  "allAgree": "Agree to All",
+  "@allAgree": {
+    "description": "Localized string for allAgree"
+  },
+  "required": "Bắt buộc",
+  "@required": {
+    "description": "Localized string for required"
+  },
+  "preferredLanguage": "Preferred Language",
+  "@preferredLanguage": {
+    "description": "Localized string for preferredLanguage"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Localized string for selectLanguage"
+  },
+  "korean": "Korean",
+  "@korean": {
+    "description": "Localized string for korean"
+  },
+  "english": "English",
+  "@english": {
+    "description": "Localized string for english"
+  },
+  "japanese": "Japanese",
+  "@japanese": {
+    "description": "Localized string for japanese"
+  },
+  "chinese": "Chinese",
+  "@chinese": {
+    "description": "Localized string for chinese"
+  },
+  "indonesian": "Indonesian",
+  "@indonesian": {
+    "description": "Localized string for indonesian"
+  },
+  "vietnamese": "Vietnamese",
+  "@vietnamese": {
+    "description": "Localized string for vietnamese"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "description": "Localized string for spanish"
+  },
+  "thai": "Thai",
+  "@thai": {
+    "description": "Localized string for thai"
+  },
+  "showOriginalText": "Show Original",
+  "@showOriginalText": {
+    "description": "Localized string for showOriginalText"
+  },
+  "hideOriginalText": "Hide Original",
+  "@hideOriginalText": {
+    "description": "Localized string for hideOriginalText"
+  },
+  "errorDetails": "Error Details",
+  "@errorDetails": {
+    "description": "Localized string for errorDetails"
+  },
+  "submitReport": "Submit Report",
+  "@submitReport": {
+    "description": "Localized string for submitReport"
+  },
+  "multilingualChat": "Multilingual Chat",
+  "@multilingualChat": {
+    "description": "Localized string for multilingualChat"
+  },
+  "languageIndicator": "Language",
+  "@languageIndicator": {
+    "description": "Localized string for languageIndicator"
+  },
+  "translatedFrom": "Translated",
+  "@translatedFrom": {
+    "description": "Localized string for translatedFrom"
+  },
+  "originalText": "Original",
+  "@originalText": {
+    "description": "Localized string for originalText"
+  },
+  "translatedText": "Translation",
+  "@translatedText": {
+    "description": "Localized string for translatedText"
+  },
+  "autoTranslate": "Auto Translate",
+  "@autoTranslate": {
+    "description": "Localized string for autoTranslate"
+  },
+  "translationSettings": "Translation Settings",
+  "@translationSettings": {
+    "description": "Localized string for translationSettings"
+  },
+  "translationQuality": "Translation Quality",
+  "@translationQuality": {
+    "description": "Localized string for translationQuality"
+  },
+  "selectErrorType": "Select error type",
+  "@selectErrorType": {
+    "description": "Localized string for selectErrorType"
+  },
+  "wrongTranslation": "Wrong Translation",
+  "@wrongTranslation": {
+    "description": "Localized string for wrongTranslation"
+  },
+  "awkwardExpression": "Awkward Expression",
+  "@awkwardExpression": {
+    "description": "Localized string for awkwardExpression"
+  },
+  "missingTranslation": "Missing Translation",
+  "@missingTranslation": {
+    "description": "Localized string for missingTranslation"
+  },
+  "culturalIssue": "Cultural Issue",
+  "@culturalIssue": {
+    "description": "Localized string for culturalIssue"
+  },
+  "technicalError": "Technical Error",
+  "@technicalError": {
+    "description": "Localized string for technicalError"
+  },
+  "otherError": "Other Error",
+  "@otherError": {
+    "description": "Localized string for otherError"
+  },
+  "reportAndBlock": "Report & Block",
+  "@reportAndBlock": {
+    "description": "Localized string for reportAndBlock"
+  },
+  "blockThisAI": "Block this AI",
+  "@blockThisAI": {
+    "description": "Localized string for blockThisAI"
+  },
+  "blockedAIs": "Blocked AIs",
+  "@blockedAIs": {
+    "description": "Localized string for blockedAIs"
+  },
+  "manageBlockedAIs": "Manage Blocked AIs",
+  "@manageBlockedAIs": {
+    "description": "Localized string for manageBlockedAIs"
+  },
+  "unblock": "Unblock",
+  "@unblock": {
+    "description": "Localized string for unblock"
+  },
+  "blockedSuccessfully": "Blocked successfully",
+  "@blockedSuccessfully": {
+    "description": "Localized string for blockedSuccessfully"
+  },
+  "unblockedSuccessfully": "Unblocked successfully",
+  "@unblockedSuccessfully": {
+    "description": "Localized string for unblockedSuccessfully"
+  },
+  "noBlockedAIs": "No blocked AIs",
+  "@noBlockedAIs": {
+    "description": "Localized string for noBlockedAIs"
+  },
+  "blockReason": "Block reason",
+  "@blockReason": {
+    "description": "Localized string for blockReason"
+  },
+  "blockedAt": "Blocked at",
+  "@blockedAt": {
+    "description": "Localized string for blockedAt"
+  },
+  "alsoBlockThisAI": "Also block this AI",
+  "@alsoBlockThisAI": {
+    "description": "Localized string for alsoBlockThisAI"
+  },
+  "termsSection1Title": "Article 1 (Purpose)",
+  "@termsSection1Title": {
+    "description": "Localized string for termsSection1Title"
+  },
+  "termsSection2Title": "Article 2 (Definitions)",
+  "@termsSection2Title": {
+    "description": "Localized string for termsSection2Title"
+  },
+  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "@termsSection3Title": {
+    "description": "Localized string for termsSection3Title"
+  },
+  "termsSection4Title": "Article 4 (Provision of Service)",
+  "@termsSection4Title": {
+    "description": "Localized string for termsSection4Title"
+  },
+  "termsSection5Title": "Article 5 (Membership Registration)",
+  "@termsSection5Title": {
+    "description": "Localized string for termsSection5Title"
+  },
+  "termsSection6Title": "Article 6 (User Obligations)",
+  "@termsSection6Title": {
+    "description": "Localized string for termsSection6Title"
+  },
+  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "@termsSection7Title": {
+    "description": "Localized string for termsSection7Title"
+  },
+  "termsSection8Title": "Article 8 (Service Interruption)",
+  "@termsSection8Title": {
+    "description": "Localized string for termsSection8Title"
+  },
+  "termsSection9Title": "Article 9 (Disclaimer)",
+  "@termsSection9Title": {
+    "description": "Localized string for termsSection9Title"
+  },
+  "termsSection10Title": "Article 10 (Dispute Resolution)",
+  "@termsSection10Title": {
+    "description": "Localized string for termsSection10Title"
+  },
+  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
+  "@termsSection11Title": {
+    "description": "Localized string for termsSection11Title"
+  },
+  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "@termsSection12Title": {
+    "description": "Localized string for termsSection12Title"
+  },
+  "privacySettings": "Cài đặt quyền riêng tư",
+  "@privacySettings": {
+    "description": "Localized string for privacySettings"
+  },
+  "dataCollection": "Data Collection Settings",
+  "@dataCollection": {
+    "description": "Localized string for dataCollection"
+  },
+  "emotionAnalysis": "Emotion Analysis",
+  "@emotionAnalysis": {
+    "description": "Localized string for emotionAnalysis"
+  },
+  "memoryAlbum": "Memory Album",
+  "@memoryAlbum": {
+    "description": "Localized string for memoryAlbum"
+  },
+  "weatherContext": "Weather Context",
+  "@weatherContext": {
+    "description": "Localized string for weatherContext"
+  },
+  "dailyCare": "Daily Care",
+  "@dailyCare": {
+    "description": "Localized string for dailyCare"
+  },
+  "interestSharing": "Interest Sharing",
+  "@interestSharing": {
+    "description": "Localized string for interestSharing"
+  },
+  "conversationContinuity": "Conversation Continuity",
+  "@conversationContinuity": {
+    "description": "Localized string for conversationContinuity"
+  },
+  "guestModeTitle": "Try as Guest",
+  "@guestModeTitle": {
+    "description": "Localized string for guestModeTitle"
+  },
+  "guestMessageExhausted": "Free messages exhausted",
+  "@guestMessageExhausted": {
+    "description": "Localized string for guestMessageExhausted"
+  },
+  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "@memberBenefits": {
+    "description": "Localized string for memberBenefits"
+  },
+  "loginTitle": "Login",
+  "@loginTitle": {
+    "description": "Localized string for loginTitle"
+  },
+  "continueWithGoogle": "Tiếp tục với Google",
+  "@continueWithGoogle": {
+    "description": "Localized string for continueWithGoogle"
+  },
+  "continueWithApple": "Tiếp tục với Apple",
+  "@continueWithApple": {
+    "description": "Localized string for continueWithApple"
+  },
+  "convertToMember": "Sign Up",
+  "@convertToMember": {
+    "description": "Localized string for convertToMember"
+  },
+  "continueAsGuest": "Continue as Guest",
+  "@continueAsGuest": {
+    "description": "Localized string for continueAsGuest"
+  },
+  "guestModeBanner": "Guest Mode",
+  "@guestModeBanner": {
+    "description": "Localized string for guestModeBanner"
+  },
+  "keepGuestData": "Keep Chat History",
+  "@keepGuestData": {
+    "description": "Localized string for keepGuestData"
+  },
+  "discardGuestData": "Start Fresh",
+  "@discardGuestData": {
+    "description": "Localized string for discardGuestData"
+  },
+  "guestModeWelcome": "Starting in Guest Mode",
+  "@guestModeWelcome": {
+    "description": "Localized string for guestModeWelcome"
+  },
+  "guestModeFailedMessage": "Failed to start Guest Mode",
+  "@guestModeFailedMessage": {
+    "description": "Localized string for guestModeFailedMessage"
+  },
+  "loginRequiredTitle": "Login Required",
+  "@loginRequiredTitle": {
+    "description": "Localized string for loginRequiredTitle"
+  },
+  "loginButton": "Login",
+  "@loginButton": {
+    "description": "Localized string for loginButton"
+  },
+  "restartConversation": "Restart Conversation",
+  "@restartConversation": {
+    "description": "Localized string for restartConversation"
+  },
+  "sendChatError": "Send Chat Error",
+  "@sendChatError": {
+    "description": "Localized string for sendChatError"
+  },
+  "newMessage": "Tin nhắn mới",
+  "@newMessage": {
+    "description": "Localized string for newMessage"
+  },
+  "newMessages": "New messages",
+  "@newMessages": {
+    "description": "Localized string for newMessages"
+  },
+  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
+  "@chatErrorSentSuccessfully": {
+    "description": "Localized string for chatErrorSentSuccessfully"
+  },
+  "errorSendingFailed": "Failed to send error",
+  "@errorSendingFailed": {
+    "description": "Localized string for errorSendingFailed"
+  },
+  "selectPersonaPlease": "Please select a persona.",
+  "@selectPersonaPlease": {
+    "description": "Localized string for selectPersonaPlease"
+  },
+  "reportChatError": "Report Chat Error",
+  "@reportChatError": {
+    "description": "Localized string for reportChatError"
+  },
+  "selectProblematicMessage": "Select the problematic message (optional)",
+  "@selectProblematicMessage": {
+    "description": "Localized string for selectProblematicMessage"
+  },
+  "describeError": "What is the problem?",
+  "@describeError": {
+    "description": "Localized string for describeError"
+  },
+  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
+  "@errorDescriptionHint": {
+    "description": "Localized string for errorDescriptionHint"
+  },
+  "sendReport": "Send Report",
+  "@sendReport": {
+    "description": "Localized string for sendReport"
+  },
+  "useOneHeart": "Use 1 Heart",
+  "@useOneHeart": {
+    "description": "Localized string for useOneHeart"
+  },
+  "heartRequired": "1 heart is required",
+  "@heartRequired": {
+    "description": "Localized string for heartRequired"
+  },
+  "heartUsageFailed": "Failed to use heart.",
+  "@heartUsageFailed": {
+    "description": "Localized string for heartUsageFailed"
+  },
+  "errorOccurredTryAgain": "An error occurred. Please try again.",
+  "@errorOccurredTryAgain": {
+    "description": "Localized string for errorOccurredTryAgain"
+  },
+  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "@permissionDeniedTryLater": {
+    "description": "Localized string for permissionDeniedTryLater"
+  },
+  "networkErrorOccurred": "A network error occurred.",
+  "@networkErrorOccurred": {
+    "description": "Localized string for networkErrorOccurred"
+  },
+  "today": "Hôm nay",
+  "@today": {
+    "description": "Localized string for today"
+  },
+  "yesterday": "Hôm qua",
+  "@yesterday": {
+    "description": "Localized string for yesterday"
+  },
+  "consultQualityMonitoring": "Consultation Quality Monitoring",
+  "@consultQualityMonitoring": {
+    "description": "Localized string for consultQualityMonitoring"
+  },
+  "averageQualityScore": "Average Quality Score",
+  "@averageQualityScore": {
+    "description": "Localized string for averageQualityScore"
+  },
+  "totalConsultSessions": "Total Consultation Sessions",
+  "@totalConsultSessions": {
+    "description": "Localized string for totalConsultSessions"
+  },
+  "lowQualityResponses": "Low Quality Responses",
+  "@lowQualityResponses": {
+    "description": "Localized string for lowQualityResponses"
+  },
+  "crisisDetected": "Crisis Detected",
+  "@crisisDetected": {
+    "description": "Localized string for crisisDetected"
+  },
+  "personaQualityStats": "Persona Quality Statistics",
+  "@personaQualityStats": {
+    "description": "Localized string for personaQualityStats"
+  },
+  "realtimeQualityLog": "Real-time Quality Log",
+  "@realtimeQualityLog": {
+    "description": "Localized string for realtimeQualityLog"
+  },
+  "averageQuality": "Average Quality",
+  "@averageQuality": {
+    "description": "Localized string for averageQuality"
+  },
+  "totalResponses": "Total Responses",
+  "@totalResponses": {
+    "description": "Localized string for totalResponses"
+  },
+  "expertiseScore": "Expertise Score",
+  "@expertiseScore": {
+    "description": "Localized string for expertiseScore"
+  },
+  "chatErrorDashboard": "Chat Error Dashboard",
+  "@chatErrorDashboard": {
+    "description": "Localized string for chatErrorDashboard"
+  },
+  "errorStats": "Error Statistics",
+  "@errorStats": {
+    "description": "Localized string for errorStats"
+  },
+  "totalErrorCount": "Total Error Count",
+  "@totalErrorCount": {
+    "description": "Localized string for totalErrorCount"
+  },
+  "mostFrequentError": "Most Frequent Error",
+  "@mostFrequentError": {
+    "description": "Localized string for mostFrequentError"
+  },
+  "mainErrorType": "Main Error Type",
+  "@mainErrorType": {
+    "description": "Localized string for mainErrorType"
+  },
+  "byPersona": "By Persona",
+  "@byPersona": {
+    "description": "Localized string for byPersona"
+  },
+  "byErrorType": "By Error Type",
+  "@byErrorType": {
+    "description": "Localized string for byErrorType"
+  },
+  "all": "Tất cả",
+  "@all": {
+    "description": "Localized string for all"
+  },
+  "problemOccurred": "Problem Occurred",
+  "@problemOccurred": {
+    "description": "Localized string for problemOccurred"
+  },
+  "timeout": "Timeout",
+  "@timeout": {
+    "description": "Localized string for timeout"
+  },
+  "requestLimit": "Request Limit",
+  "@requestLimit": {
+    "description": "Localized string for requestLimit"
+  },
+  "serverErrorDashboard": "Server Error",
+  "@serverErrorDashboard": {
+    "description": "Localized string for serverErrorDashboard"
+  },
+  "authError": "Authentication Error",
+  "@authError": {
+    "description": "Localized string for authError"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Localized string for unknown"
+  },
+  "exitApp": "Exit App",
+  "@exitApp": {
+    "description": "Localized string for exitApp"
+  },
+  "exitConfirmMessage": "Are you sure you want to exit the app?",
+  "@exitConfirmMessage": {
+    "description": "Localized string for exitConfirmMessage"
+  },
+  "exit": "Exit",
+  "@exit": {
+    "description": "Localized string for exit"
+  },
+  "profileNav": "Profile",
+  "@profileNav": {
+    "description": "Localized string for profileNav"
+  },
+  "imageCacheManagement": "Image Cache Management",
+  "@imageCacheManagement": {
+    "description": "Localized string for imageCacheManagement"
+  },
+  "managePersonaImageCache": "Manage persona image cache",
+  "@managePersonaImageCache": {
+    "description": "Localized string for managePersonaImageCache"
+  },
+  "currentCacheSize": "Current Cache Size",
+  "@currentCacheSize": {
+    "description": "Localized string for currentCacheSize"
+  },
+  "deleteCache": "Delete Cache",
+  "@deleteCache": {
+    "description": "Localized string for deleteCache"
+  },
+  "cacheDeleted": "Image cache has been deleted",
+  "@cacheDeleted": {
+    "description": "Localized string for cacheDeleted"
+  },
+  "storageManagement": "Storage Management",
+  "@storageManagement": {
+    "description": "Localized string for storageManagement"
+  },
+  "hapticFeedback": "Phản hồi xúc giác",
+  "@hapticFeedback": {
+    "description": "Localized string for hapticFeedback"
+  },
+  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "@subtleVibrationOnTouch": {
+    "description": "Localized string for subtleVibrationOnTouch"
+  },
+  "profileSettings": "Cài đặt hồ sơ",
+  "@profileSettings": {
+    "description": "Localized string for profileSettings"
+  },
+  "privacySettingsScreen": "Privacy Settings",
+  "@privacySettingsScreen": {
+    "description": "Localized string for privacySettingsScreen"
+  },
+  "useSystemLanguage": "Use System Language",
+  "@useSystemLanguage": {
+    "description": "Localized string for useSystemLanguage"
+  },
+  "followDeviceLanguage": "Follow device language settings",
+  "@followDeviceLanguage": {
+    "description": "Localized string for followDeviceLanguage"
+  },
+  "setAppInterfaceLanguage": "Set app interface language",
+  "@setAppInterfaceLanguage": {
+    "description": "Localized string for setAppInterfaceLanguage"
+  },
+  "koreanLanguage": "Korean",
+  "@koreanLanguage": {
+    "description": "Localized string for koreanLanguage"
+  },
+  "laterButton": "Later",
+  "@laterButton": {
+    "description": "Localized string for laterButton"
+  },
+  "startChatButton": "Start Chat",
+  "@startChatButton": {
+    "description": "Localized string for startChatButton"
+  },
+  "noPersonasToSelect": "No personas available",
+  "@noPersonasToSelect": {
+    "description": "Localized string for noPersonasToSelect"
+  },
+  "matchedSona": "Matched Sona",
+  "@matchedSona": {
+    "description": "Localized string for matchedSona"
+  },
+  "noMatchedSonas": "No matched Sonas yet",
+  "@noMatchedSonas": {
+    "description": "Localized string for noMatchedSonas"
+  },
+  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "@startConversationLikeAFriend": {
+    "description": "Localized string for startConversationLikeAFriend"
+  },
+  "startingApp": "Starting app",
+  "@startingApp": {
+    "description": "Localized string for startingApp"
+  },
+  "checkingUserInfo": "Checking user info",
+  "@checkingUserInfo": {
+    "description": "Localized string for checkingUserInfo"
+  },
+  "connectingToServer": "Connecting to server",
+  "@connectingToServer": {
+    "description": "Localized string for connectingToServer"
+  },
+  "verifyingAuth": "Verifying authentication",
+  "@verifyingAuth": {
+    "description": "Localized string for verifyingAuth"
+  },
+  "loadingProfile": "Loading profile",
+  "@loadingProfile": {
+    "description": "Localized string for loadingProfile"
+  },
+  "anonymousLogin": "Anonymous login",
+  "@anonymousLogin": {
+    "description": "Localized string for anonymousLogin"
+  },
+  "creatingAccount": "Creating account",
+  "@creatingAccount": {
+    "description": "Localized string for creatingAccount"
+  },
+  "preparingNewMeeting": "Preparing new meeting",
+  "@preparingNewMeeting": {
+    "description": "Localized string for preparingNewMeeting"
+  },
+  "downloadingPersonaImages": "Downloading new persona images",
+  "@downloadingPersonaImages": {
+    "description": "Localized string for downloadingPersonaImages"
+  },
+  "preparingPersonas": "Preparing personas",
+  "@preparingPersonas": {
+    "description": "Localized string for preparingPersonas"
+  },
+  "profileSetup": "Đang thiết lập hồ sơ",
+  "@profileSetup": {
+    "description": "Localized string for profileSetup"
+  },
+  "preparingPersonaImages": "Preparing persona images",
+  "@preparingPersonaImages": {
+    "description": "Localized string for preparingPersonaImages"
+  },
+  "matching": "Matching",
+  "@matching": {
+    "description": "Localized string for matching"
+  },
+  "noErrorReports": "No error reports.",
+  "@noErrorReports": {
+    "description": "Localized string for noErrorReports"
+  },
+  "noQualityIssues": "No quality issues in the last hour ✅",
+  "@noQualityIssues": {
+    "description": "Localized string for noQualityIssues"
+  },
+  "noQualityLogs": "No quality logs yet.",
+  "@noQualityLogs": {
+    "description": "Localized string for noQualityLogs"
+  },
+  "insufficientHearts": "Không đủ tim",
+  "@insufficientHearts": {
+    "description": "Localized string for insufficientHearts"
+  },
+  "unblockFailed": "Failed to unblock",
+  "@unblockFailed": {
+    "description": "Localized string for unblockFailed"
+  },
+  "noImageAvailable": "No image available",
+  "@noImageAvailable": {
+    "description": "Localized string for noImageAvailable"
+  },
+  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
+  "@aiDatingQuestion": {
+    "description": "Localized string for aiDatingQuestion"
+  },
+  "googleLoginError": "Error occurred during Google login.",
+  "@googleLoginError": {
+    "description": "Localized string for googleLoginError"
+  },
+  "appleLoginError": "Error occurred during Apple login.",
+  "@appleLoginError": {
+    "description": "Localized string for appleLoginError"
+  },
+  "enterBasicInfo": "Please enter basic information to create an account",
+  "@enterBasicInfo": {
+    "description": "Localized string for enterBasicInfo"
+  },
+  "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự",
+  "@passwordTooShort": {
+    "description": "Localized string for passwordTooShort"
+  },
+  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "@profilePhotoAndInfo": {
+    "description": "Localized string for profilePhotoAndInfo"
+  },
+  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "@showOppositeGenderOnly": {
+    "description": "Localized string for showOppositeGenderOnly"
+  },
+  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
+  "@genderNotSelectedInfo": {
+    "description": "Localized string for genderNotSelectedInfo"
+  },
+  "canChangeInSettings": "You can change this later in settings",
+  "@canChangeInSettings": {
+    "description": "Localized string for canChangeInSettings"
+  },
+  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
+  "@genderSelectionInfo": {
+    "description": "Localized string for genderSelectionInfo"
+  },
+  "genderPreferenceActive": "You can meet personas of all genders",
+  "@genderPreferenceActive": {
+    "description": "Localized string for genderPreferenceActive"
+  },
+  "genderPreferenceInactive": "Only opposite gender personas will be shown",
+  "@genderPreferenceInactive": {
+    "description": "Localized string for genderPreferenceInactive"
+  },
+  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
+  "@genderPreferenceDisabled": {
+    "description": "Localized string for genderPreferenceDisabled"
+  },
+  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "@selectUsagePurpose": {
+    "description": "Localized string for selectUsagePurpose"
+  },
+  "adaptiveConversationDesc": "Adapts conversation style to match yours",
+  "@adaptiveConversationDesc": {
+    "description": "Localized string for adaptiveConversationDesc"
+  },
+  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
+  "@canMeetPreviousPersonas": {
+    "description": "Localized string for canMeetPreviousPersonas"
+  },
+  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
+  "@endTutorialAndLogin": {
+    "description": "Localized string for endTutorialAndLogin"
+  },
+  "messageSendFailed": "Failed to send message. Please try again.",
+  "@messageSendFailed": {
+    "description": "Localized string for messageSendFailed"
+  },
+  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
+  "@leaveChatConfirm": {
+    "description": "Localized string for leaveChatConfirm"
+  },
+  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
+  "@loginRequiredForProfile": {
+    "description": "Localized string for loginRequiredForProfile"
+  },
+  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "@deleteAccountConfirm": {
+    "description": "Localized string for deleteAccountConfirm"
+  },
+  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "@matchPersonaStep": {
+    "description": "Localized string for matchPersonaStep"
+  },
+  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "@startConversationStep": {
+    "description": "Localized string for startConversationStep"
+  },
+  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
+  "@developRelationshipStep": {
+    "description": "Localized string for developRelationshipStep"
+  },
+  "heartInsufficientPleaseCharge": "Không đủ tim. Vui lòng nạp thêm!",
+  "@heartInsufficientPleaseCharge": {
+    "description": "Localized string for heartInsufficientPleaseCharge"
+  },
+  "specialRelationshipDesc": "Xây dựng mối quan hệ đặc biệt",
+  "@specialRelationshipDesc": {
+    "description": "Localized string for specialRelationshipDesc"
+  },
+  "emotionalSupportDesc": "Nhận hỗ trợ tinh thần",
+  "@emotionalSupportDesc": {
+    "description": "Localized string for emotionalSupportDesc"
+  },
+  "entertainmentAndFunDesc": "Giải trí và vui vẻ",
+  "@entertainmentAndFunDesc": {
+    "description": "Localized string for entertainmentAndFunDesc"
+  },
+  "accountDeletionContent": "Tài khoản sẽ bị xóa vĩnh viễn",
+  "@accountDeletionContent": {
+    "description": "Localized string for accountDeletionContent"
+  },
+  "accountDeletionError": "Lỗi khi xóa tài khoản",
+  "@accountDeletionError": {
+    "description": "Localized string for accountDeletionError"
+  },
+  "passwordConfirmationDesc": "Xác nhận mật khẩu để tiếp tục",
+  "@passwordConfirmationDesc": {
+    "description": "Localized string for passwordConfirmationDesc"
+  },
+  "reportAIDescription": "Báo cáo hành vi không phù hợp của AI",
+  "@reportAIDescription": {
+    "description": "Localized string for reportAIDescription"
+  },
+  "reportSubmitted": "Đã gửi báo cáo",
+  "@reportSubmitted": {
+    "description": "Localized string for reportSubmitted"
+  },
+  "notificationPermissionDesc": "Cho phép thông báo để nhận tin nhắn",
+  "@notificationPermissionDesc": {
+    "description": "Localized string for notificationPermissionDesc"
+  },
+  "explainReportReason": "Giải thích lý do báo cáo",
+  "@explainReportReason": {
+    "description": "Localized string for explainReportReason"
+  },
+  "cameraPermissionDesc": "Cần quyền máy ảnh để chụp ảnh",
+  "@cameraPermissionDesc": {
+    "description": "Localized string for cameraPermissionDesc"
+  },
+  "galleryPermissionDesc": "Cần quyền thư viện để chọn ảnh",
+  "@galleryPermissionDesc": {
+    "description": "Localized string for galleryPermissionDesc"
+  },
+  "purchaseMoreHearts": "Mua thêm tim",
+  "@purchaseMoreHearts": {
+    "description": "Localized string for purchaseMoreHearts"
+  },
+  "basicInfoDescription": "Thông tin cơ bản của bạn",
+  "@basicInfoDescription": {
+    "description": "Localized string for basicInfoDescription"
+  },
+  "profileInfoDescription": "Thông tin hồ sơ",
+  "@profileInfoDescription": {
+    "description": "Localized string for profileInfoDescription"
+  },
+  "friendshipDescription": "Tìm kiếm tình bạn",
+  "@friendshipDescription": {
+    "description": "Localized string for friendshipDescription"
+  },
+  "datingDescription": "Tìm kiếm hẹn hò",
+  "@datingDescription": {
+    "description": "Localized string for datingDescription"
+  },
+  "entertainmentDescription": "Giải trí",
+  "@entertainmentDescription": {
+    "description": "Localized string for entertainmentDescription"
+  },
+  "selectInterests": "Chọn sở thích",
+  "@selectInterests": {
+    "description": "Localized string for selectInterests"
+  },
+  "whatTopicsToTalk": "Bạn muốn nói về chủ đề gì?",
+  "@whatTopicsToTalk": {
+    "description": "Localized string for whatTopicsToTalk"
+  },
+  "selectPreferredMbti": "Chọn MBTI ưa thích",
+  "@selectPreferredMbti": {
+    "description": "Localized string for selectPreferredMbti"
+  },
+  "termsAgreementDescription": "Đồng ý với điều khoản",
+  "@termsAgreementDescription": {
+    "description": "Localized string for termsAgreementDescription"
+  },
+  "sonaUsagePurpose": "Mục đích sử dụng SONA",
+  "@sonaUsagePurpose": {
+    "description": "Localized string for sonaUsagePurpose"
+  },
+  "aiPersonaPreferenceDescription": "Sở thích nhân vật AI",
+  "@aiPersonaPreferenceDescription": {
+    "description": "Localized string for aiPersonaPreferenceDescription"
+  },
+  "unexpectedLoginError": "Lỗi đăng nhập không mong đợi",
+  "@unexpectedLoginError": {
+    "description": "Localized string for unexpectedLoginError"
+  },
+  "googleLoginCanceled": "Đăng nhập Google đã hủy",
+  "@googleLoginCanceled": {
+    "description": "Localized string for googleLoginCanceled"
+  },
+  "appleLoginCanceled": "Đăng nhập Apple đã hủy",
+  "@appleLoginCanceled": {
+    "description": "Localized string for appleLoginCanceled"
+  },
+  "passwordResetEmailPrompt": "Nhập email để đặt lại mật khẩu",
+  "@passwordResetEmailPrompt": {
+    "description": "Localized string for passwordResetEmailPrompt"
+  },
+  "passwordResetEmailSent": "Email đặt lại mật khẩu đã gửi",
+  "@passwordResetEmailSent": {
+    "description": "Localized string for passwordResetEmailSent"
+  },
+  "simpleInfoRequired": "Cần thông tin cơ bản",
+  "@simpleInfoRequired": {
+    "description": "Localized string for simpleInfoRequired"
+  },
+  "endTutorialMessage": "Kết thúc hướng dẫn",
+  "@endTutorialMessage": {
+    "description": "Localized string for endTutorialMessage"
+  },
+  "onlyOppositeGenderNote": "Chỉ hiển thị giới tính khác",
+  "@onlyOppositeGenderNote": {
+    "description": "Localized string for onlyOppositeGenderNote"
+  },
+  "startConversationWithSona": "Bắt đầu trò chuyện với SONA",
+  "@startConversationWithSona": {
+    "description": "Localized string for startConversationWithSona"
+  },
+  "privacySection1Title": "Thu thập thông tin",
+  "@privacySection1Title": {
+    "description": "Localized string for privacySection1Title"
+  },
+  "privacySection3Title": "Chia sẻ thông tin",
+  "@privacySection3Title": {
+    "description": "Localized string for privacySection3Title"
+  },
+  "privacySection4Title": "Bảo mật thông tin",
+  "@privacySection4Title": {
+    "description": "Localized string for privacySection4Title"
+  },
+  "privacySection5Title": "Quyền của người dùng",
+  "@privacySection5Title": {
+    "description": "Localized string for privacySection5Title"
+  },
+  "themeDescription": "Chọn giao diện",
+  "@themeDescription": {
+    "description": "Localized string for themeDescription"
+  },
+  "systemThemeDesc": "Theo hệ thống",
+  "@systemThemeDesc": {
+    "description": "Localized string for systemThemeDesc"
+  },
+  "marketingAgree": "Đồng ý nhận marketing",
+  "@marketingAgree": {
+    "description": "Localized string for marketingAgree"
+  },
+  "marketingDescription": "Nhận thông tin khuyến mãi",
+  "@marketingDescription": {
+    "description": "Localized string for marketingDescription"
+  },
+  "ageConfirmation": "Xác nhận độ tuổi",
+  "@ageConfirmation": {
+    "description": "Localized string for ageConfirmation"
+  },
+  "languageDescription": "Chọn ngôn ngữ hiển thị",
+  "@languageDescription": {
+    "description": "Localized string for languageDescription"
+  },
+  "translationErrorDescription": "Báo lỗi dịch thuật",
+  "@translationErrorDescription": {
+    "description": "Localized string for translationErrorDescription"
+  },
+  "errorDetailsHint": "Mô tả chi tiết lỗi",
+  "@errorDetailsHint": {
+    "description": "Localized string for errorDetailsHint"
+  },
+  "reportSubmittedSuccess": "Báo cáo thành công",
+  "@reportSubmittedSuccess": {
+    "description": "Localized string for reportSubmittedSuccess"
+  },
+  "translationNote": "Lưu ý về dịch thuật",
+  "@translationNote": {
+    "description": "Localized string for translationNote"
+  },
+  "selectTranslationError": "Chọn lỗi dịch thuật",
+  "@selectTranslationError": {
+    "description": "Localized string for selectTranslationError"
+  },
+  "translationErrorReported": "Đã báo lỗi dịch thuật",
+  "@translationErrorReported": {
+    "description": "Localized string for translationErrorReported"
+  },
+  "blockConfirm": "Xác nhận chặn",
+  "@blockConfirm": {
+    "description": "Localized string for blockConfirm"
+  },
+  "reportAndBlockDescription": "Báo cáo và chặn",
+  "@reportAndBlockDescription": {
+    "description": "Localized string for reportAndBlockDescription"
+  },
+  "termsSection1Content": "Nội dung điều khoản 1",
+  "@termsSection1Content": {
+    "description": "Localized string for termsSection1Content"
+  },
+  "termsSection7Content": "Nội dung điều khoản 7",
+  "@termsSection7Content": {
+    "description": "Localized string for termsSection7Content"
+  },
+  "emotionAnalysisDesc": "Phân tích cảm xúc",
+  "@emotionAnalysisDesc": {
+    "description": "Localized string for emotionAnalysisDesc"
+  },
+  "memoryAlbumDesc": "Album kỷ niệm",
+  "@memoryAlbumDesc": {
+    "description": "Localized string for memoryAlbumDesc"
+  },
+  "weatherContextDesc": "Ngữ cảnh thời tiết",
+  "@weatherContextDesc": {
+    "description": "Localized string for weatherContextDesc"
+  },
+  "dailyCareDesc": "Chăm sóc hàng ngày",
+  "@dailyCareDesc": {
+    "description": "Localized string for dailyCareDesc"
+  },
+  "interestSharingDesc": "Chia sẻ sở thích",
+  "@interestSharingDesc": {
+    "description": "Localized string for interestSharingDesc"
+  },
+  "conversationContinuityDesc": "Liên tục cuộc trò chuyện",
+  "@conversationContinuityDesc": {
+    "description": "Localized string for conversationContinuityDesc"
+  },
+  "allFeaturesRequired": "Cần tất cả tính năng",
+  "@allFeaturesRequired": {
+    "description": "Localized string for allFeaturesRequired"
+  },
+  "privacySettingsInfo": "Thông tin cài đặt riêng tư",
+  "@privacySettingsInfo": {
+    "description": "Localized string for privacySettingsInfo"
+  },
+  "guestModeDescription": "Chế độ khách",
+  "@guestModeDescription": {
+    "description": "Localized string for guestModeDescription"
+  },
+  "guestLimitReached": "Đã đạt giới hạn khách",
+  "@guestLimitReached": {
+    "description": "Localized string for guestLimitReached"
+  },
+  "guestModeWarning": "Cảnh báo chế độ khách",
+  "@guestModeWarning": {
+    "description": "Localized string for guestModeWarning"
+  },
+  "signUpFromGuest": "Đăng ký từ khách",
+  "@signUpFromGuest": {
+    "description": "Localized string for signUpFromGuest"
+  },
+  "guestDataMigration": "Chuyển dữ liệu khách",
+  "@guestDataMigration": {
+    "description": "Localized string for guestDataMigration"
+  },
+  "guestModeLimitation": "Giới hạn chế độ khách",
+  "@guestModeLimitation": {
+    "description": "Localized string for guestModeLimitation"
+  },
+  "storeLoginRequiredMessage": "Cần đăng nhập để vào cửa hàng",
+  "@storeLoginRequiredMessage": {
+    "description": "Localized string for storeLoginRequiredMessage"
+  },
+  "profileEditLoginRequiredMessage": "Cần đăng nhập để sửa hồ sơ",
+  "@profileEditLoginRequiredMessage": {
+    "description": "Localized string for profileEditLoginRequiredMessage"
+  },
+  "waitingForChat": "Đang chờ trò chuyện",
+  "@waitingForChat": {
+    "description": "Shows that a persona is waiting to chat",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "conversationWith": "{name}",
+  "@conversationWith": {
+    "description": "Conversation with name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "refreshComplete": "Làm mới hoàn tất",
+  "@refreshComplete": {
+    "description": "Refresh complete message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysRemaining": "{days} ngày còn lại",
+  "@daysRemaining": {
+    "description": "Days remaining",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "purchaseConfirmMessage": "Xác nhận mua {title} với giá {price}? {description}",
+  "@purchaseConfirmMessage": {
+    "description": "Purchase confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Premium Package"
+      },
+      "price": {
+        "type": "String",
+        "example": "$9.99"
+      },
+      "description": {
+        "type": "String",
+        "example": "This includes..."
+      }
+    }
+  },
+  "discountAmountValue": "Giảm {amount}",
+  "@discountAmountValue": {
+    "description": "Discount amount",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "chattingWithPersonas": "Đang trò chuyện với {count} nhân vật",
+  "@chattingWithPersonas": {
+    "description": "Number of personas chatting with",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "purchaseConfirmContent": "Bạn sẽ mua {item} với giá {price}",
+  "@purchaseConfirmContent": {
+    "description": "Purchase confirmation content",
+    "placeholders": {
+      "product": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "reportError": "Lỗi báo cáo",
+  "@reportError": {
+    "description": "Report error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDeniedMessage": "Quyền bị từ chối",
+  "@permissionDeniedMessage": {
+    "description": "Permission denied message",
+    "placeholders": {
+      "permissionName": {
+        "type": "String"
+      }
+    }
+  },
+  "daysAgo": "{count} ngày trước",
+  "@daysAgo": {
+    "description": "Days ago",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count} giờ trước",
+  "@hoursAgo": {
+    "description": "Hours ago",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "minutesAgo": "{count} phút trước",
+  "@minutesAgo": {
+    "description": "Minutes ago",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "isTyping": "{name} đang nhập...",
+  "@isTyping": {
+    "description": "Shows someone is typing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "ageRange": "Độ tuổi",
+  "@ageRange": {
+    "description": "Age range",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedAICount": "{count} AI đã chặn",
+  "@blockedAICount": {
+    "description": "Number of blocked AIs",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guestMessageRemaining": "{count} tin nhắn khách còn lại",
+  "@guestMessageRemaining": {
+    "description": "Guest messages remaining",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newMessageCount": "{count} tin nhắn mới",
+  "@newMessageCount": {
+    "description": "Number of new messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notEnoughHeartsCount": "Cần {count} tim",
+  "@notEnoughHeartsCount": {
+    "description": "Not enough hearts message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "restartConversationWithName": "Bắt đầu lại với {name}",
+  "@restartConversationWithName": {
+    "description": "Restarting conversation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "restartConversationQuestion": "Bắt đầu lại cuộc trò chuyện?",
+  "@restartConversationQuestion": {
+    "description": "Restart conversation question",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "monthDay": "{month} ngày {day}",
+  "@monthDay": {
+    "description": "Month and day format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "alreadyChattingWith": "Đã đang trò chuyện với {name}",
+  "@alreadyChattingWith": {
+    "description": "Already chatting with persona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheDeleteError": "Lỗi xóa cache",
+  "@cacheDeleteError": {
+    "description": "Cache delete error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "unblockPersonaConfirm": "Bỏ chặn {name}?",
+  "@unblockPersonaConfirm": {
+    "description": "Unblock persona confirmation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "errorWithMessage": "Lỗi: {message}",
+  "@errorWithMessage": {
+    "description": "Error with message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "accountDeletedSuccess": "Tài khoản đã được xóa thành công",
+  "@accountDeletedSuccess": {
+    "description": "Localized string for accountDeletedSuccess"
+  },
+  "accountDeletionInfo": "Thông tin xóa tài khoản",
+  "@accountDeletionInfo": {
+    "description": "Localized string for accountDeletionInfo"
+  },
+  "accountDeletionWarning1": "Cảnh báo: Hành động này không thể hoàn tác",
+  "@accountDeletionWarning1": {
+    "description": "Localized string for accountDeletionWarning1"
+  },
+  "accountDeletionWarning2": "Tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn",
+  "@accountDeletionWarning2": {
+    "description": "Localized string for accountDeletionWarning2"
+  },
+  "accountDeletionWarning3": "Bạn sẽ mất quyền truy cập vào tất cả các cuộc trò chuyện",
+  "@accountDeletionWarning3": {
+    "description": "Localized string for accountDeletionWarning3"
+  },
+  "accountDeletionWarning4": "Điều này bao gồm tất cả nội dung đã mua",
+  "@accountDeletionWarning4": {
+    "description": "Localized string for accountDeletionWarning4"
+  },
+  "agreeToTerms": "Tôi đồng ý với các điều khoản",
+  "@agreeToTerms": {
+    "description": "Localized string for agreeToTerms"
+  },
+  "appTagline": "Người bạn AI của bạn",
+  "@appTagline": {
+    "description": "Localized string for appTagline"
+  },
+  "changeProfilePhoto": "Đổi ảnh hồ sơ",
+  "@changeProfilePhoto": {
+    "description": "Localized string for changeProfilePhoto"
+  },
+  "checkInternetConnection": "Vui lòng kiểm tra kết nối internet",
+  "@checkInternetConnection": {
+    "description": "Localized string for checkInternetConnection"
+  },
+  "copyrightInfringement": "Vi phạm bản quyền",
+  "@copyrightInfringement": {
+    "description": "Localized string for copyrightInfringement"
+  },
+  "currentLanguage": "Ngôn ngữ hiện tại",
+  "@currentLanguage": {
+    "description": "Localized string for currentLanguage"
+  },
+  "dailyLimitDescription": "Bạn đã đạt giới hạn tin nhắn hàng ngày",
+  "@dailyLimitDescription": {
+    "description": "Localized string for dailyLimitDescription"
+  },
+  "dailyLimitTitle": "Đã đạt giới hạn hàng ngày",
+  "@dailyLimitTitle": {
+    "description": "Localized string for dailyLimitTitle"
+  },
+  "deleteAccountWarning": "Are you sure you want to delete your account?",
+  "@deleteAccountWarning": {
+    "description": "Localized string for deleteAccountWarning"
+  },
+  "deletingAccount": "Deleting account...",
+  "@deletingAccount": {
+    "description": "Localized string for deletingAccount"
+  },
+  "effectSoundDescription": "Play sound effects",
+  "@effectSoundDescription": {
+    "description": "Localized string for effectSoundDescription"
+  },
+  "emotionBasedEncounters": "Meet personas based on your emotions",
+  "@emotionBasedEncounters": {
+    "description": "Localized string for emotionBasedEncounters"
+  },
+  "enterNickname": "Please enter a nickname",
+  "@enterNickname": {
+    "description": "Localized string for enterNickname"
+  },
+  "enterPassword": "Please enter a password",
+  "@enterPassword": {
+    "description": "Localized string for enterPassword"
+  },
+  "errorDescription": "Error description",
+  "@errorDescription": {
+    "description": "Localized string for errorDescription"
+  },
+  "guestLoginPromptMessage": "Login to continue the conversation",
+  "@guestLoginPromptMessage": {
+    "description": "Localized string for guestLoginPromptMessage"
+  },
+  "heartDescription": "Hearts for more messages",
+  "@heartDescription": {
+    "description": "Localized string for heartDescription"
+  },
+  "inappropriateContent": "Inappropriate content",
+  "@inappropriateContent": {
+    "description": "Localized string for inappropriateContent"
+  },
+  "incorrectPassword": "Incorrect password",
+  "@incorrectPassword": {
+    "description": "Localized string for incorrectPassword"
+  },
+  "invalidEmailFormat": "Invalid email format",
+  "@invalidEmailFormat": {
+    "description": "Localized string for invalidEmailFormat"
+  },
+  "invalidEmailFormatError": "Please enter a valid email address",
+  "@invalidEmailFormatError": {
+    "description": "Localized string for invalidEmailFormatError"
+  },
+  "lastUpdated": "Last Updated",
+  "@lastUpdated": {
+    "description": "Localized string for lastUpdated"
+  },
+  "loadingProducts": "Loading products...",
+  "@loadingProducts": {
+    "description": "Localized string for loadingProducts"
+  },
+  "loginComplete": "Login complete",
+  "@loginComplete": {
+    "description": "Localized string for loginComplete"
+  },
+  "loginFailed": "Login failed",
+  "@loginFailed": {
+    "description": "Localized string for loginFailed"
+  },
+  "loginFailedTryAgain": "Login failed. Please try again.",
+  "@loginFailedTryAgain": {
+    "description": "Localized string for loginFailedTryAgain"
+  },
+  "loginRequiredService": "Login required to use this service",
+  "@loginRequiredService": {
+    "description": "Localized string for loginRequiredService"
+  },
+  "loginWithApple": "Login with Apple",
+  "@loginWithApple": {
+    "description": "Localized string for loginWithApple"
+  },
+  "loginWithGoogle": "Login with Google",
+  "@loginWithGoogle": {
+    "description": "Localized string for loginWithGoogle"
+  },
+  "logoutConfirm": "Are you sure you want to logout?",
+  "@logoutConfirm": {
+    "description": "Localized string for logoutConfirm"
+  },
+  "meetNewPersonas": "Meet New Personas",
+  "@meetNewPersonas": {
+    "description": "Localized string for meetNewPersonas"
+  },
+  "messageLimitReset": "Message limit will reset at midnight",
+  "@messageLimitReset": {
+    "description": "Localized string for messageLimitReset"
+  },
+  "newMessageNotification": "Notify me of new messages",
+  "@newMessageNotification": {
+    "description": "Localized string for newMessageNotification"
+  },
+  "nicknameAlreadyUsed": "This nickname is already in use",
+  "@nicknameAlreadyUsed": {
+    "description": "Localized string for nicknameAlreadyUsed"
+  },
+  "nicknameHelperText": "3-10 characters",
+  "@nicknameHelperText": {
+    "description": "Localized string for nicknameHelperText"
+  },
+  "nicknameInUse": "This nickname is already in use",
+  "@nicknameInUse": {
+    "description": "Localized string for nicknameInUse"
+  },
+  "nicknameLabel": "Nickname",
+  "@nicknameLabel": {
+    "description": "Localized string for nicknameLabel"
+  },
+  "nicknameLengthError": "Nickname must be 3-10 characters",
+  "@nicknameLengthError": {
+    "description": "Localized string for nicknameLengthError"
+  },
+  "nicknamePlaceholder": "Enter your nickname",
+  "@nicknamePlaceholder": {
+    "description": "Localized string for nicknamePlaceholder"
+  },
+  "noConversationYet": "No conversation yet",
+  "@noConversationYet": {
+    "description": "Localized string for noConversationYet"
+  },
+  "noMatchedPersonas": "No matched personas yet",
+  "@noMatchedPersonas": {
+    "description": "Localized string for noMatchedPersonas"
+  },
+  "noTranslatedMessages": "No messages to translate",
+  "@noTranslatedMessages": {
+    "description": "Localized string for noTranslatedMessages"
+  },
+  "notificationPermissionRequired": "Notification permission required",
+  "@notificationPermissionRequired": {
+    "description": "Localized string for notificationPermissionRequired"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "description": "Localized string for notificationSettings"
+  },
+  "passwordConfirmation": "Enter password to confirm",
+  "@passwordConfirmation": {
+    "description": "Localized string for passwordConfirmation"
+  },
+  "personalInfoExposure": "Personal information exposure",
+  "@personalInfoExposure": {
+    "description": "Localized string for personalInfoExposure"
+  },
+  "privacyPolicyAgreement": "Please agree to the privacy policy",
+  "@privacyPolicyAgreement": {
+    "description": "Localized string for privacyPolicyAgreement"
+  },
+  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "@privacySection1Content": {
+    "description": "Localized string for privacySection1Content"
+  },
+  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "@privacySection2Content": {
+    "description": "Localized string for privacySection2Content"
+  },
+  "privacySection2Title": "Information We Collect",
+  "@privacySection2Title": {
+    "description": "Localized string for privacySection2Title"
+  },
+  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "@privacySection3Content": {
+    "description": "Localized string for privacySection3Content"
+  },
+  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "@privacySection4Content": {
+    "description": "Localized string for privacySection4Content"
+  },
+  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "@privacySection5Content": {
+    "description": "Localized string for privacySection5Content"
+  },
+  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "@privacySection6Content": {
+    "description": "Localized string for privacySection6Content"
+  },
+  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "@privacySection7Content": {
+    "description": "Localized string for privacySection7Content"
+  },
+  "privacySection7Title": "Your Rights",
+  "@privacySection7Title": {
+    "description": "Localized string for privacySection7Title"
+  },
+  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "@privacySection8Content": {
+    "description": "Localized string for privacySection8Content"
+  },
+  "privacySection8Title": "Contact Us",
+  "@privacySection8Title": {
+    "description": "Localized string for privacySection8Title"
+  },
+  "problemMessage": "Problem",
+  "@problemMessage": {
+    "description": "Localized string for problemMessage"
+  },
+  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "@profilePhotoUpdateFailed": {
+    "description": "Localized string for profilePhotoUpdateFailed"
+  },
+  "profilePhotoUpdated": "Profile photo updated",
+  "@profilePhotoUpdated": {
+    "description": "Localized string for profilePhotoUpdated"
+  },
+  "profileUpdateFailed": "Failed to update profile",
+  "@profileUpdateFailed": {
+    "description": "Localized string for profileUpdateFailed"
+  },
+  "profileUpdated": "Profile updated successfully",
+  "@profileUpdated": {
+    "description": "Localized string for profileUpdated"
+  },
+  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "@purchaseAndRefundPolicy": {
+    "description": "Localized string for purchaseAndRefundPolicy"
+  },
+  "purchaseFailed": "Purchase failed",
+  "@purchaseFailed": {
+    "description": "Localized string for purchaseFailed"
+  },
+  "purchasePending": "Purchase pending...",
+  "@purchasePending": {
+    "description": "Localized string for purchasePending"
+  },
+  "purchasePolicy": "Purchase Policy",
+  "@purchasePolicy": {
+    "description": "Localized string for purchasePolicy"
+  },
+  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "@purchaseSection1Content": {
+    "description": "Localized string for purchaseSection1Content"
+  },
+  "purchaseSection1Title": "Payment Methods",
+  "@purchaseSection1Title": {
+    "description": "Localized string for purchaseSection1Title"
+  },
+  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "@purchaseSection2Content": {
+    "description": "Localized string for purchaseSection2Content"
+  },
+  "purchaseSection2Title": "Refund Policy",
+  "@purchaseSection2Title": {
+    "description": "Localized string for purchaseSection2Title"
+  },
+  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "@purchaseSection3Content": {
+    "description": "Localized string for purchaseSection3Content"
+  },
+  "purchaseSection3Title": "Cancellation",
+  "@purchaseSection3Title": {
+    "description": "Localized string for purchaseSection3Title"
+  },
+  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "@purchaseSection4Content": {
+    "description": "Localized string for purchaseSection4Content"
+  },
+  "purchaseSection4Title": "Terms of Use",
+  "@purchaseSection4Title": {
+    "description": "Localized string for purchaseSection4Title"
+  },
+  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "@purchaseSection5Content": {
+    "description": "Localized string for purchaseSection5Content"
+  },
+  "purchaseSection5Title": "Contact Support",
+  "@purchaseSection5Title": {
+    "description": "Localized string for purchaseSection5Title"
+  },
+  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "@purchaseSection6Content": {
+    "description": "Localized string for purchaseSection6Content"
+  },
+  "recentLoginRequired": "Please login again for security",
+  "@recentLoginRequired": {
+    "description": "Localized string for recentLoginRequired"
+  },
+  "referrerEmail": "Referrer Email",
+  "@referrerEmail": {
+    "description": "Localized string for referrerEmail"
+  },
+  "referrerEmailHelper": "Optional: Email of who referred you",
+  "@referrerEmailHelper": {
+    "description": "Localized string for referrerEmailHelper"
+  },
+  "refreshFailed": "Refresh failed",
+  "@refreshFailed": {
+    "description": "Localized string for refreshFailed"
+  },
+  "refreshingChatList": "Refreshing chat list...",
+  "@refreshingChatList": {
+    "description": "Localized string for refreshingChatList"
+  },
+  "reportFailed": "Report failed",
+  "@reportFailed": {
+    "description": "Localized string for reportFailed"
+  },
+  "requiredTermsAgreement": "Please agree to the terms",
+  "@requiredTermsAgreement": {
+    "description": "Localized string for requiredTermsAgreement"
+  },
+  "selectPersona": "Select a persona",
+  "@selectPersona": {
+    "description": "Localized string for selectPersona"
+  },
+  "selectReportReason": "Select report reason",
+  "@selectReportReason": {
+    "description": "Localized string for selectReportReason"
+  },
+  "sendFirstMessage": "Send your first message",
+  "@sendFirstMessage": {
+    "description": "Localized string for sendFirstMessage"
+  },
+  "serviceTermsAgreement": "Please agree to the terms of service",
+  "@serviceTermsAgreement": {
+    "description": "Localized string for serviceTermsAgreement"
+  },
+  "showAllGenderPersonas": "Hiển thị tất cả giới tính personas",
+  "@showAllGenderPersonas": {
+    "description": "Localized string for showAllGenderPersonas"
+  },
+  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "@sonaPrivacyPolicy": {
+    "description": "Localized string for sonaPrivacyPolicy"
+  },
+  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "@sonaPurchasePolicy": {
+    "description": "Localized string for sonaPurchasePolicy"
+  },
+  "sonaTermsOfService": "SONA Terms of Service",
+  "@sonaTermsOfService": {
+    "description": "Localized string for sonaTermsOfService"
+  },
+  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "@sorryNotHelpful": {
+    "description": "Localized string for sorryNotHelpful"
+  },
+  "startConversation": "Start a conversation",
+  "@startConversation": {
+    "description": "Localized string for startConversation"
+  },
+  "storeConnectionError": "Could not connect to store",
+  "@storeConnectionError": {
+    "description": "Localized string for storeConnectionError"
+  },
+  "storeNotAvailable": "Store is not available",
+  "@storeNotAvailable": {
+    "description": "Localized string for storeNotAvailable"
+  },
+  "tapToSwipePhotos": "Tap to swipe photos",
+  "@tapToSwipePhotos": {
+    "description": "Localized string for tapToSwipePhotos"
+  },
+  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "@termsSection10Content": {
+    "description": "Localized string for termsSection10Content"
+  },
+  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "@termsSection11Content": {
+    "description": "Localized string for termsSection11Content"
+  },
+  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "@termsSection12Content": {
+    "description": "Localized string for termsSection12Content"
+  },
+  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "@termsSection2Content": {
+    "description": "Localized string for termsSection2Content"
+  },
+  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "@termsSection3Content": {
+    "description": "Localized string for termsSection3Content"
+  },
+  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "@termsSection4Content": {
+    "description": "Localized string for termsSection4Content"
+  },
+  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "@termsSection5Content": {
+    "description": "Localized string for termsSection5Content"
+  },
+  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "@termsSection6Content": {
+    "description": "Localized string for termsSection6Content"
+  },
+  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "@termsSection8Content": {
+    "description": "Localized string for termsSection8Content"
+  },
+  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "@termsSection9Content": {
+    "description": "Localized string for termsSection9Content"
+  },
+  "termsSupplementary": "Supplementary Terms",
+  "@termsSupplementary": {
+    "description": "Localized string for termsSupplementary"
+  },
+  "translationError": "Translation error",
+  "@translationError": {
+    "description": "Localized string for translationError"
+  },
+  "weekdays": "CN,T2,T3,T4,T5,T6,T7",
+  "@weekdays": {
+    "description": "Localized string for weekdays"
+  },
+  "emotionHappy": "Happy",
+  "@emotionHappy": {
+    "description": "Localized string for emotionHappy"
+  },
+  "emotionLove": "Love",
+  "@emotionLove": {
+    "description": "Localized string for emotionLove"
+  },
+  "emotionSad": "Sad",
+  "@emotionSad": {
+    "description": "Localized string for emotionSad"
+  },
+  "emotionAngry": "Angry",
+  "@emotionAngry": {
+    "description": "Localized string for emotionAngry"
+  },
+  "emotionCool": "Cool",
+  "@emotionCool": {
+    "description": "Localized string for emotionCool"
+  },
+  "emotionThinking": "Thinking",
+  "@emotionThinking": {
+    "description": "Localized string for emotionThinking"
+  },
+  "selectEmotion": "Select Emotion",
+  "@selectEmotion": {
+    "description": "Localized string for selectEmotion"
+  },
+  "swipeAnyDirection": "Swipe in any direction",
+  "@swipeAnyDirection": {
+    "description": "Localized string for swipeAnyDirection"
+  },
+  "swipeDownToClose": "Swipe down to close",
+  "@swipeDownToClose": {
+    "description": "Localized string for swipeDownToClose"
+  },
+  "tapForDetails": "Tap bottom area for details",
+  "@tapForDetails": {
+    "description": "Localized string for tapForDetails"
+  },
+  "personality": "Personality",
+  "@personality": {
+    "description": "Localized string for personality"
+  },
+  "weatherClear": "Clear",
+  "@weatherClear": {
+    "description": "Localized string for weatherClear"
+  },
+  "weatherCloudy": "Cloudy",
+  "@weatherCloudy": {
+    "description": "Localized string for weatherCloudy"
+  },
+  "weatherRain": "Rain",
+  "@weatherRain": {
+    "description": "Localized string for weatherRain"
+  },
+  "weatherDrizzle": "Drizzle",
+  "@weatherDrizzle": {
+    "description": "Localized string for weatherDrizzle"
+  },
+  "weatherThunderstorm": "Thunderstorm",
+  "@weatherThunderstorm": {
+    "description": "Localized string for weatherThunderstorm"
+  },
+  "weatherSnow": "Snow",
+  "@weatherSnow": {
+    "description": "Localized string for weatherSnow"
+  },
+  "weatherMist": "Mist",
+  "@weatherMist": {
+    "description": "Localized string for weatherMist"
+  },
+  "weatherFog": "Fog",
+  "@weatherFog": {
+    "description": "Localized string for weatherFog"
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Localized string for monday"
+  },
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Localized string for tuesday"
+  },
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Localized string for wednesday"
+  },
+  "thursday": "Thursday",
+  "@thursday": {
+    "description": "Localized string for thursday"
+  },
+  "friday": "Friday",
+  "@friday": {
+    "description": "Localized string for friday"
+  },
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Localized string for saturday"
+  },
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Localized string for sunday"
+  },
+  "morning": "Morning",
+  "@morning": {
+    "description": "Localized string for morning"
+  },
+  "forenoon": "Forenoon",
+  "@forenoon": {
+    "description": "Localized string for forenoon"
+  },
+  "lunchtime": "Lunchtime",
+  "@lunchtime": {
+    "description": "Localized string for lunchtime"
+  },
+  "afternoon": "Afternoon",
+  "@afternoon": {
+    "description": "Localized string for afternoon"
+  },
+  "evening": "Evening",
+  "@evening": {
+    "description": "Localized string for evening"
+  },
+  "night": "Night",
+  "@night": {
+    "description": "Localized string for night"
+  },
+  "dawn": "Dawn",
+  "@dawn": {
+    "description": "Localized string for dawn"
+  },
+  "spring": "Spring",
+  "@spring": {
+    "description": "Localized string for spring"
+  },
+  "summer": "Summer",
+  "@summer": {
+    "description": "Localized string for summer"
+  },
+  "autumn": "Autumn",
+  "@autumn": {
+    "description": "Localized string for autumn"
+  },
+  "winter": "Winter",
+  "@winter": {
+    "description": "Localized string for winter"
+  },
+  "breakfast": "Breakfast",
+  "@breakfast": {
+    "description": "Localized string for breakfast"
+  },
+  "lunch": "Lunch",
+  "@lunch": {
+    "description": "Localized string for lunch"
+  },
+  "dinner": "Dinner",
+  "@dinner": {
+    "description": "Localized string for dinner"
+  },
+  "preparingForSleep": "Preparing for sleep",
+  "@preparingForSleep": {
+    "description": "Localized string for preparingForSleep"
+  },
+  "lateNight": "Late night",
+  "@lateNight": {
+    "description": "Localized string for lateNight"
+  },
+  "afternoonFatigue": "Afternoon fatigue",
+  "@afternoonFatigue": {
+    "description": "Localized string for afternoonFatigue"
+  },
+  "dailyCheck": "Daily check",
+  "@dailyCheck": {
+    "description": "Localized string for dailyCheck"
+  },
+  "unknownError": "An unknown error occurred",
+  "@unknownError": {
+    "description": "Localized string for unknownError"
+  },
+  "guest": "Guest",
+  "@guest": {
+    "description": "Localized string for guest"
+  },
+  "current": "Current",
+  "@current": {
+    "description": "Localized string for current"
+  },
+  "errorMessage": "Error Message:",
+  "@errorMessage": {
+    "description": "Localized string for errorMessage"
+  },
+  "userMessage": "User Message:",
+  "@userMessage": {
+    "description": "Localized string for userMessage"
+  },
+  "recentConversation": "Recent Conversation:",
+  "@recentConversation": {
+    "description": "Localized string for recentConversation"
+  },
+  "user": "User: ",
+  "@user": {
+    "description": "Localized string for user"
+  },
+  "occurrenceInfo": "Occurrence Info:",
+  "@occurrenceInfo": {
+    "description": "Localized string for occurrenceInfo"
+  },
+  "firstOccurred": "First Occurred: ",
+  "@firstOccurred": {
+    "description": "Localized string for firstOccurred"
+  },
+  "lastOccurred": "Last Occurred: ",
+  "@lastOccurred": {
+    "description": "Localized string for lastOccurred"
+  },
+  "totalOccurrences": "Total {count} occurrences",
+  "@totalOccurrences": {
+    "description": "Localized string for totalOccurrences"
+  },
+  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "@errorFrequency24h": {
+    "description": "Localized string for errorFrequency24h"
+  },
+  "hours24Ago": "24 hours ago",
+  "@hours24Ago": {
+    "description": "Localized string for hours24Ago"
+  },
+  "apiKeyError": "API Key Error",
+  "@apiKeyError": {
+    "description": "Localized string for apiKeyError"
+  },
+  "passwordText": "password",
+  "@passwordText": {
+    "description": "Localized string for passwordText"
+  },
+  "notRegistered": "not registered",
+  "@notRegistered": {
+    "description": "Localized string for notRegistered"
+  },
+  "incorrect": "incorrect",
+  "@incorrect": {
+    "description": "Localized string for incorrect"
+  },
+  "todayText": "Today",
+  "@todayText": {
+    "description": "Localized string for todayText"
+  },
+  "tomorrowText": "Tomorrow",
+  "@tomorrowText": {
+    "description": "Localized string for tomorrowText"
+  },
+  "dayAfterTomorrow": "Day after tomorrow",
+  "@dayAfterTomorrow": {
+    "description": "Localized string for dayAfterTomorrow"
+  },
+  "seoul": "Seoul",
+  "@seoul": {
+    "description": "Localized string for seoul"
+  },
+  "walk": "Walk",
+  "@walk": {
+    "description": "Localized string for walk"
+  },
+  "picnic": "Picnic",
+  "@picnic": {
+    "description": "Localized string for picnic"
+  },
+  "cycling": "Cycling",
+  "@cycling": {
+    "description": "Localized string for cycling"
+  },
+  "cafeTerrace": "Cafe terrace",
+  "@cafeTerrace": {
+    "description": "Localized string for cafeTerrace"
+  },
+  "newYear": "New Year",
+  "@newYear": {
+    "description": "Localized string for newYear"
+  },
+  "valentinesDay": "Valentine's Day",
+  "@valentinesDay": {
+    "description": "Localized string for valentinesDay"
+  },
+  "whiteDay": "White Day",
+  "@whiteDay": {
+    "description": "Localized string for whiteDay"
+  },
+  "childrensDay": "Children's Day",
+  "@childrensDay": {
+    "description": "Localized string for childrensDay"
+  },
+  "parentsDay": "Parents' Day",
+  "@parentsDay": {
+    "description": "Localized string for parentsDay"
+  },
+  "teachersDay": "Teachers' Day",
+  "@teachersDay": {
+    "description": "Localized string for teachersDay"
+  },
+  "christmas": "Christmas",
+  "@christmas": {
+    "description": "Localized string for christmas"
+  },
+  "yearEnd": "Year End",
+  "@yearEnd": {
+    "description": "Localized string for yearEnd"
+  },
+  "weatherRainy": "Mưa",
+  "weatherSnowy": "Tuyết",
+  "tapBottomForDetails": "Chạm phía dưới để xem chi tiết",
+  "tutorialWelcomeTitle": "Chào mừng đến với SONA!",
+  "@tutorialWelcomeTitle": {
+    "description": "Tutorial: Welcome title"
+  },
+  "tutorialWelcomeDescription": "Tạo mối quan hệ đặc biệt với AI personas.",
+  "@tutorialWelcomeDescription": {
+    "description": "Tutorial: Welcome description"
+  }
+}

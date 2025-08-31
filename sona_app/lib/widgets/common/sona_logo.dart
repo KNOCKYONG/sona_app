@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 
 class SonaLogoSmall extends StatelessWidget {
   final double size;
@@ -97,7 +98,7 @@ class SonaLogo extends StatelessWidget {
         if (showText) ...[
           SizedBox(width: size * 0.3),
           Text(
-            'SONA',
+            AppLocalizations.of(context)!.appName,
             style: TextStyle(
               fontSize: size * 0.5,
               fontWeight: FontWeight.bold,
@@ -160,9 +161,9 @@ class SonaLogoLarge extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'SONA',
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.appName,
+          style: const TextStyle(
             fontSize: 36,
             fontWeight: FontWeight.bold,
             letterSpacing: 4,

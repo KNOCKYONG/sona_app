@@ -1,0 +1,388 @@
+{
+  "analysis_timestamp": "20250830_192749",
+  "total_reports_analyzed": 54,
+  "average_coherence_score": 72.49888888888889,
+  "critical_issues_count": 1,
+  "high_issues_count": 62,
+  "personas_with_issues": {
+    "혜원": {
+      "total_conversations": 2,
+      "avg_coherence_score": 69.0,
+      "total_issues": 10,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 3,
+        "abrupt_topic_change": 6,
+        "emotion_inconsistency": 1
+      }
+    },
+    "준호": {
+      "total_conversations": 1,
+      "avg_coherence_score": 85.0,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "효진": {
+      "total_conversations": 4,
+      "avg_coherence_score": 97.5,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 2
+      }
+    },
+    "영훈": {
+      "total_conversations": 2,
+      "avg_coherence_score": 62.5,
+      "total_issues": 11,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 7,
+        "irrelevant_answer": 4
+      }
+    },
+    "채연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 70.0,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 2
+      }
+    },
+    "재성": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "지은": {
+      "total_conversations": 2,
+      "avg_coherence_score": 90.0,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 2,
+        "repetitive_pattern": 2
+      }
+    },
+    "동혁": {
+      "total_conversations": 1,
+      "avg_coherence_score": 66.67,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 1
+      }
+    },
+    "예슬": {
+      "total_conversations": 2,
+      "avg_coherence_score": 97.22,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "태준": {
+      "total_conversations": 2,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "소희": {
+      "total_conversations": 4,
+      "avg_coherence_score": 63.75,
+      "total_issues": 20,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 7,
+        "abrupt_topic_change": 11,
+        "greeting_repetition": 2
+      }
+    },
+    "현우": {
+      "total_conversations": 2,
+      "avg_coherence_score": 55.0,
+      "total_issues": 12,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 6,
+        "abrupt_topic_change": 6
+      }
+    },
+    "다은": {
+      "total_conversations": 1,
+      "avg_coherence_score": 90.0,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "수현": {
+      "total_conversations": 2,
+      "avg_coherence_score": 75.0,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 3
+      }
+    },
+    "태호": {
+      "total_conversations": 1,
+      "avg_coherence_score": 70.0,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 1,
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 2
+      }
+    },
+    "테스트_지윤": {
+      "total_conversations": 1,
+      "avg_coherence_score": 62.5,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_미연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 62.5,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_수아": {
+      "total_conversations": 1,
+      "avg_coherence_score": 50.0,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 2,
+        "irrelevant_answer": 1
+      }
+    },
+    "테스트_나연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 25.0,
+      "total_issues": 4,
+      "critical_issues": 1,
+      "common_issue_types": {
+        "macro_response": 1,
+        "irrelevant_answer": 2,
+        "repetitive_pattern": 1
+      }
+    },
+    "테스트_소영": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_혜원": {
+      "total_conversations": 1,
+      "avg_coherence_score": 50.0,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "insufficient_response": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_다영": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_지은": {
+      "total_conversations": 1,
+      "avg_coherence_score": 37.5,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_하연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_윤미": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_소희": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_주은": {
+      "total_conversations": 1,
+      "avg_coherence_score": 41.67,
+      "total_issues": 4,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 3,
+        "repetitive_pattern": 1
+      }
+    },
+    "테스트_효진": {
+      "total_conversations": 1,
+      "avg_coherence_score": 37.5,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_상훈": {
+      "total_conversations": 1,
+      "avg_coherence_score": 33.33,
+      "total_issues": 5,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 1,
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 2
+      }
+    },
+    "테스트_동현": {
+      "total_conversations": 1,
+      "avg_coherence_score": 37.5,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_나나": {
+      "total_conversations": 1,
+      "avg_coherence_score": 37.5,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_수빈": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "테스트_연지": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "테스트_지윤2": {
+      "total_conversations": 1,
+      "avg_coherence_score": 62.5,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "테스트_미연2": {
+      "total_conversations": 1,
+      "avg_coherence_score": 87.5,
+      "total_issues": 1,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "abrupt_topic_change": 1
+      }
+    },
+    "동수": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "미연": {
+      "total_conversations": 1,
+      "avg_coherence_score": 70.0,
+      "total_issues": 2,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 1,
+        "abrupt_topic_change": 1
+      }
+    },
+    "민수": {
+      "total_conversations": 2,
+      "avg_coherence_score": 54.16,
+      "total_issues": 9,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "greeting_repetition": 2,
+        "irrelevant_answer": 4,
+        "abrupt_topic_change": 3
+      }
+    },
+    "민정": {
+      "total_conversations": 1,
+      "avg_coherence_score": 100.0,
+      "total_issues": 0,
+      "critical_issues": 0,
+      "common_issue_types": {}
+    },
+    "건우": {
+      "total_conversations": 1,
+      "avg_coherence_score": 50.0,
+      "total_issues": 3,
+      "critical_issues": 0,
+      "common_issue_types": {
+        "irrelevant_answer": 2,
+        "abrupt_topic_change": 1
+      }
+    }
+  }
+}

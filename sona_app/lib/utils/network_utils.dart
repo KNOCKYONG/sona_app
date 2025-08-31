@@ -1,5 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 class NetworkUtils {
   static final Connectivity _connectivity = Connectivity();
@@ -30,8 +31,8 @@ class NetworkUtils {
     if (!isConnected) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('인터넷 연결을 확인해주세요'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.checkInternetConnection),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
           ),

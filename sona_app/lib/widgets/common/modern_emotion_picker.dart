@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import '../../theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 class ModernEmotionPicker extends StatefulWidget {
   final Function(String) onEmotionSelected;
@@ -21,69 +22,6 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
-
-  final List<EmotionItem> emotions = [
-    EmotionItem(
-      emoji: '😊',
-      label: '행복',
-      color: const Color(0xFFFFD93D),
-      gradient: const LinearGradient(
-        colors: [Color(0xFFFFD93D), Color(0xFFF6B93B)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-    EmotionItem(
-      emoji: '😍',
-      label: '사랑',
-      color: const Color(0xFFFF6B9D),
-      gradient: const LinearGradient(
-        colors: [Color(0xFFFF6B9D), Color(0xFFC06C84)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-    EmotionItem(
-      emoji: '😢',
-      label: '슬픔',
-      color: const Color(0xFF4834D4),
-      gradient: const LinearGradient(
-        colors: [Color(0xFF4834D4), Color(0xFF686DE0)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-    EmotionItem(
-      emoji: '😡',
-      label: '화남',
-      color: const Color(0xFFEE5A6F),
-      gradient: const LinearGradient(
-        colors: [Color(0xFFEE5A6F), Color(0xFFEB3B5A)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-    EmotionItem(
-      emoji: '😎',
-      label: '쿨함',
-      color: const Color(0xFF0FB9B1),
-      gradient: const LinearGradient(
-        colors: [Color(0xFF0FB9B1), Color(0xFF20BF6B)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-    EmotionItem(
-      emoji: '🤔',
-      label: '생각',
-      color: const Color(0xFF778CA3),
-      gradient: const LinearGradient(
-        colors: [Color(0xFF778CA3), Color(0xFF4B6584)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-      ),
-    ),
-  ];
 
   @override
   void initState() {
@@ -118,8 +56,77 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
     super.dispose();
   }
 
+  List<EmotionItem> _buildEmotions(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      EmotionItem(
+        emoji: '😊',
+        label: localizations.emotionHappy,
+        color: const Color(0xFFFFD93D),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFFD93D), Color(0xFFF6B93B)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      EmotionItem(
+        emoji: '😍',
+        label: localizations.emotionLove,
+        color: const Color(0xFFFF6B9D),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFF6B9D), Color(0xFFC06C84)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      EmotionItem(
+        emoji: '😢',
+        label: localizations.emotionSad,
+        color: const Color(0xFF4834D4),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF4834D4), Color(0xFF686DE0)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      EmotionItem(
+        emoji: '😡',
+        label: localizations.emotionAngry,
+        color: const Color(0xFFEE5A6F),
+        gradient: const LinearGradient(
+          colors: [Color(0xFFEE5A6F), Color(0xFFEB3B5A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      EmotionItem(
+        emoji: '😎',
+        label: localizations.emotionCool,
+        color: const Color(0xFF0FB9B1),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0FB9B1), Color(0xFF20BF6B)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      EmotionItem(
+        emoji: '🤔',
+        label: localizations.emotionThinking,
+        color: const Color(0xFF778CA3),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF778CA3), Color(0xFF4B6584)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    final emotions = _buildEmotions(context);
+    
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
@@ -167,9 +174,9 @@ class _ModernEmotionPickerState extends State<ModernEmotionPicker>
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                const Text(
-                                  '감정 선택',
-                                  style: TextStyle(
+                                Text(
+                                  localizations.selectEmotion,
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
                                   ),

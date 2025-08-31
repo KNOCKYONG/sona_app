@@ -1,0 +1,707 @@
+  /// Account deleted successfully
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted successfully'**
+  String get accountDeletedSuccess;
+
+  /// Account deletion info
+  ///
+  /// In en, this message translates to:
+  /// **'Account deletion information'**
+  String get accountDeletionInfo;
+
+  /// Account deletion warning 1
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: This action cannot be undone'**
+  String get accountDeletionWarning1;
+
+  /// Account deletion warning 2
+  ///
+  /// In en, this message translates to:
+  /// **'All your data will be permanently deleted'**
+  String get accountDeletionWarning2;
+
+  /// Account deletion warning 3
+  ///
+  /// In en, this message translates to:
+  /// **'You will lose access to all conversations'**
+  String get accountDeletionWarning3;
+
+  /// Account deletion warning 4
+  ///
+  /// In en, this message translates to:
+  /// **'This includes all purchased content'**
+  String get accountDeletionWarning4;
+
+  /// Agree to terms
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the terms'**
+  String get agreeToTerms;
+
+  /// App tagline
+  ///
+  /// In en, this message translates to:
+  /// **'Your AI companions'**
+  String get appTagline;
+
+  /// Change profile photo
+  ///
+  /// In en, this message translates to:
+  /// **'Change Profile Photo'**
+  String get changeProfilePhoto;
+
+  /// Check internet connection
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your internet connection'**
+  String get checkInternetConnection;
+
+  /// Copyright infringement
+  ///
+  /// In en, this message translates to:
+  /// **'Copyright infringement'**
+  String get copyrightInfringement;
+
+  /// Current language
+  ///
+  /// In en, this message translates to:
+  /// **'Current Language'**
+  String get currentLanguage;
+
+  /// Daily limit description
+  ///
+  /// In en, this message translates to:
+  /// **'You have reached your daily message limit'**
+  String get dailyLimitDescription;
+
+  /// Daily limit title
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Limit Reached'**
+  String get dailyLimitTitle;
+
+  /// Delete account warning
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your account?'**
+  String get deleteAccountWarning;
+
+  /// Deleting account
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting account...'**
+  String get deletingAccount;
+
+  /// Effect sound description
+  ///
+  /// In en, this message translates to:
+  /// **'Play sound effects'**
+  String get effectSoundDescription;
+
+  /// Emotion based encounters
+  ///
+  /// In en, this message translates to:
+  /// **'Meet personas based on your emotions'**
+  String get emotionBasedEncounters;
+
+  /// Enter nickname
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a nickname'**
+  String get enterNickname;
+
+  /// Enter password
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a password'**
+  String get enterPassword;
+
+  /// Error description
+  ///
+  /// In en, this message translates to:
+  /// **'Error description'**
+  String get errorDescription;
+
+  /// Guest login prompt message
+  ///
+  /// In en, this message translates to:
+  /// **'Login to continue the conversation'**
+  String get guestLoginPromptMessage;
+
+  /// Heart description
+  ///
+  /// In en, this message translates to:
+  /// **'Hearts for more messages'**
+  String get heartDescription;
+
+  /// Inappropriate content
+  ///
+  /// In en, this message translates to:
+  /// **'Inappropriate content'**
+  String get inappropriateContent;
+
+  /// Incorrect password
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get incorrectPassword;
+
+  /// Invalid email format
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email format'**
+  String get invalidEmailFormat;
+
+  /// Invalid email format error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get invalidEmailFormatError;
+
+  /// Last updated
+  ///
+  /// In en, this message translates to:
+  /// **'Last Updated'**
+  String get lastUpdated;
+
+  /// Loading products
+  ///
+  /// In en, this message translates to:
+  /// **'Loading products...'**
+  String get loadingProducts;
+
+  /// Current locale
+  ///
+  /// In en, this message translates to:
+  /// **'en'**
+  Locale get locale;
+
+  /// Login complete
+  ///
+  /// In en, this message translates to:
+  /// **'Login complete'**
+  String get loginComplete;
+
+  /// Login failed
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed'**
+  String get loginFailed;
+
+  /// Login failed try again
+  ///
+  /// In en, this message translates to:
+  /// **'Login failed. Please try again.'**
+  String get loginFailedTryAgain;
+
+  /// Login required service
+  ///
+  /// In en, this message translates to:
+  /// **'Login required to use this service'**
+  String get loginRequiredService;
+
+  /// Login with Apple
+  ///
+  /// In en, this message translates to:
+  /// **'Login with Apple'**
+  String get loginWithApple;
+
+  /// Login with Google
+  ///
+  /// In en, this message translates to:
+  /// **'Login with Google'**
+  String get loginWithGoogle;
+
+  /// Logout confirm
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirm;
+
+  /// Meet new personas
+  ///
+  /// In en, this message translates to:
+  /// **'Meet New Personas'**
+  String get meetNewPersonas;
+
+  /// Message limit reset
+  ///
+  /// In en, this message translates to:
+  /// **'Message limit will reset at midnight'**
+  String get messageLimitReset;
+
+  /// New message notification
+  ///
+  /// In en, this message translates to:
+  /// **'Notify me of new messages'**
+  String get newMessageNotification;
+
+  /// Nickname already used
+  ///
+  /// In en, this message translates to:
+  /// **'This nickname is already in use'**
+  String get nicknameAlreadyUsed;
+
+  /// Nickname helper text
+  ///
+  /// In en, this message translates to:
+  /// **'3-10 characters'**
+  String get nicknameHelperText;
+
+  /// Nickname in use
+  ///
+  /// In en, this message translates to:
+  /// **'This nickname is already in use'**
+  String get nicknameInUse;
+
+  /// Nickname label
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname'**
+  String get nicknameLabel;
+
+  /// Nickname length error
+  ///
+  /// In en, this message translates to:
+  /// **'Nickname must be 3-10 characters'**
+  String get nicknameLengthError;
+
+  /// Nickname placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your nickname'**
+  String get nicknamePlaceholder;
+
+  /// No conversation yet
+  ///
+  /// In en, this message translates to:
+  /// **'No conversation yet'**
+  String get noConversationYet;
+
+  /// No matched personas
+  ///
+  /// In en, this message translates to:
+  /// **'No matched personas yet'**
+  String get noMatchedPersonas;
+
+  /// No translated messages
+  ///
+  /// In en, this message translates to:
+  /// **'No messages to translate'**
+  String get noTranslatedMessages;
+
+  /// Notification permission required
+  ///
+  /// In en, this message translates to:
+  /// **'Notification permission required'**
+  String get notificationPermissionRequired;
+
+  /// Notification settings
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettings;
+
+  /// Password confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Enter password to confirm'**
+  String get passwordConfirmation;
+
+  /// Personal info exposure
+  ///
+  /// In en, this message translates to:
+  /// **'Personal information exposure'**
+  String get personalInfoExposure;
+
+  /// Privacy policy agreement
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the privacy policy'**
+  String get privacyPolicyAgreement;
+
+  /// Privacy section 1 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 1'**
+  String get privacySection1Content;
+
+  /// Privacy section 2 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 2'**
+  String get privacySection2Content;
+
+  /// Privacy section 2 title
+  ///
+  /// In en, this message translates to:
+  /// **'Information We Collect'**
+  String get privacySection2Title;
+
+  /// Privacy section 3 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 3'**
+  String get privacySection3Content;
+
+  /// Privacy section 4 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 4'**
+  String get privacySection4Content;
+
+  /// Privacy section 5 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 5'**
+  String get privacySection5Content;
+
+  /// Privacy section 6 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 6'**
+  String get privacySection6Content;
+
+  /// Privacy section 7 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 7'**
+  String get privacySection7Content;
+
+  /// Privacy section 7 title
+  ///
+  /// In en, this message translates to:
+  /// **'Your Rights'**
+  String get privacySection7Title;
+
+  /// Privacy section 8 content
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy content section 8'**
+  String get privacySection8Content;
+
+  /// Privacy section 8 title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Us'**
+  String get privacySection8Title;
+
+  /// Problem message
+  ///
+  /// In en, this message translates to:
+  /// **'Problem'**
+  String get problemMessage;
+
+  /// Profile photo update failed
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile photo'**
+  String get profilePhotoUpdateFailed;
+
+  /// Profile photo updated
+  ///
+  /// In en, this message translates to:
+  /// **'Profile photo updated'**
+  String get profilePhotoUpdated;
+
+  /// Profile update failed
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile'**
+  String get profileUpdateFailed;
+
+  /// Profile updated
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// Purchase and refund policy
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase & Refund Policy'**
+  String get purchaseAndRefundPolicy;
+
+  /// Purchase failed
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase failed'**
+  String get purchaseFailed;
+
+  /// Purchase pending
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase pending...'**
+  String get purchasePending;
+
+  /// Purchase policy
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase Policy'**
+  String get purchasePolicy;
+
+  /// Purchase section 1 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 1 content'**
+  String get purchaseSection1Content;
+
+  /// Purchase section 1 title
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Methods'**
+  String get purchaseSection1Title;
+
+  /// Purchase section 2 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 2 content'**
+  String get purchaseSection2Content;
+
+  /// Purchase section 2 title
+  ///
+  /// In en, this message translates to:
+  /// **'Refund Policy'**
+  String get purchaseSection2Title;
+
+  /// Purchase section 3 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 3 content'**
+  String get purchaseSection3Content;
+
+  /// Purchase section 3 title
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation'**
+  String get purchaseSection3Title;
+
+  /// Purchase section 4 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 4 content'**
+  String get purchaseSection4Content;
+
+  /// Purchase section 4 title
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get purchaseSection4Title;
+
+  /// Purchase section 5 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 5 content'**
+  String get purchaseSection5Content;
+
+  /// Purchase section 5 title
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Support'**
+  String get purchaseSection5Title;
+
+  /// Purchase section 6 content
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase section 6 content'**
+  String get purchaseSection6Content;
+
+  /// Recent login required
+  ///
+  /// In en, this message translates to:
+  /// **'Please login again for security'**
+  String get recentLoginRequired;
+
+  /// Referrer email
+  ///
+  /// In en, this message translates to:
+  /// **'Referrer Email'**
+  String get referrerEmail;
+
+  /// Referrer email helper
+  ///
+  /// In en, this message translates to:
+  /// **'Optional: Email of who referred you'**
+  String get referrerEmailHelper;
+
+  /// Refresh failed
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh failed'**
+  String get refreshFailed;
+
+  /// Refreshing chat list
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing chat list...'**
+  String get refreshingChatList;
+
+  /// Report failed
+  ///
+  /// In en, this message translates to:
+  /// **'Report failed'**
+  String get reportFailed;
+
+  /// Required terms agreement
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the terms'**
+  String get requiredTermsAgreement;
+
+  /// Select persona
+  ///
+  /// In en, this message translates to:
+  /// **'Select a persona'**
+  String get selectPersona;
+
+  /// Select report reason
+  ///
+  /// In en, this message translates to:
+  /// **'Select report reason'**
+  String get selectReportReason;
+
+  /// Send first message
+  ///
+  /// In en, this message translates to:
+  /// **'Send your first message'**
+  String get sendFirstMessage;
+
+  /// Service terms agreement
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the terms of service'**
+  String get serviceTermsAgreement;
+
+  /// Show all gender personas
+  ///
+  /// In en, this message translates to:
+  /// **'Show All Gender Personas'**
+  String get showAllGenderPersonas;
+
+  /// SONA privacy policy
+  ///
+  /// In en, this message translates to:
+  /// **'SONA Privacy Policy'**
+  String get sonaPrivacyPolicy;
+
+  /// SONA purchase policy
+  ///
+  /// In en, this message translates to:
+  /// **'SONA Purchase Policy'**
+  String get sonaPurchasePolicy;
+
+  /// SONA terms of service
+  ///
+  /// In en, this message translates to:
+  /// **'SONA Terms of Service'**
+  String get sonaTermsOfService;
+
+  /// Sorry not helpful
+  ///
+  /// In en, this message translates to:
+  /// **'Sorry this wasn't helpful'**
+  String get sorryNotHelpful;
+
+  /// Start conversation
+  ///
+  /// In en, this message translates to:
+  /// **'Start a conversation'**
+  String get startConversation;
+
+  /// Store connection error
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to store'**
+  String get storeConnectionError;
+
+  /// Store not available
+  ///
+  /// In en, this message translates to:
+  /// **'Store is not available'**
+  String get storeNotAvailable;
+
+  /// Tap to swipe photos
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to swipe photos'**
+  String get tapToSwipePhotos;
+
+  /// Terms section 10 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 10 content'**
+  String get termsSection10Content;
+
+  /// Terms section 11 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 11 content'**
+  String get termsSection11Content;
+
+  /// Terms section 12 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 12 content'**
+  String get termsSection12Content;
+
+  /// Terms section 2 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 2 content'**
+  String get termsSection2Content;
+
+  /// Terms section 3 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 3 content'**
+  String get termsSection3Content;
+
+  /// Terms section 4 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 4 content'**
+  String get termsSection4Content;
+
+  /// Terms section 5 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 5 content'**
+  String get termsSection5Content;
+
+  /// Terms section 6 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 6 content'**
+  String get termsSection6Content;
+
+  /// Terms section 8 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 8 content'**
+  String get termsSection8Content;
+
+  /// Terms section 9 content
+  ///
+  /// In en, this message translates to:
+  /// **'Terms section 9 content'**
+  String get termsSection9Content;
+
+  /// Terms supplementary
+  ///
+  /// In en, this message translates to:
+  /// **'Supplementary Terms'**
+  String get termsSupplementary;
+
+  /// Translation error
+  ///
+  /// In en, this message translates to:
+  /// **'Translation error'**
+  String get translationError;
+
+  /// Weekdays
+  ///
+  /// In en, this message translates to:
+  /// **'["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]'**
+  List<String> get weekdays;

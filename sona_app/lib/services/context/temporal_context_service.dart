@@ -27,8 +27,8 @@ class TemporalContextService {
     if (hour >= 5 && hour < 9) {
       return {
         'period': 'morning',
-        'label': '아침',
-        'activities': ['출근', '등교', '아침식사', '운동', '준비'],
+        'label': 'morning',
+        'activities': ['commute', 'school', 'breakfast', 'exercise', 'preparation'],
         'mood': 'fresh',
         'energy': 'starting',
         'topics': ['오늘 계획', '아침 메뉴', '날씨', '꿈 얘기'],
@@ -54,7 +54,7 @@ class TemporalContextService {
     } else if (hour >= 14 && hour < 18) {
       return {
         'period': 'afternoon',
-        'label': '오후',
+        'label': 'afternoon',
         'activities': ['업무', '수업', '카페', '미팅'],
         'mood': 'steady',
         'energy': 'sustained',
@@ -63,8 +63,8 @@ class TemporalContextService {
     } else if (hour >= 18 && hour < 21) {
       return {
         'period': 'evening',
-        'label': '저녁',
-        'activities': ['퇴근', '저녁식사', '운동', '취미'],
+        'label': 'evening',
+        'activities': ['퇴근', '저녁식사', 'exercise', '취미'],
         'mood': 'unwinding',
         'energy': 'declining',
         'topics': ['저녁 메뉴', '오늘 하루', '퇴근', '저녁 계획'],
@@ -72,7 +72,7 @@ class TemporalContextService {
     } else if (hour >= 21 && hour < 24) {
       return {
         'period': 'night',
-        'label': '밤',
+        'label': 'night',
         'activities': ['휴식', 'TV', '게임', '독서', '대화'],
         'mood': 'relaxed',
         'energy': 'low',
@@ -81,7 +81,7 @@ class TemporalContextService {
     } else {
       return {
         'period': 'late_night',
-        'label': '새벽',
+        'label': 'dawn',
         'activities': ['수면', '야식', '영화', '음악'],
         'mood': 'quiet',
         'energy': 'very_low',
@@ -95,7 +95,7 @@ class TemporalContextService {
     switch (weekday) {
       case DateTime.monday:
         return {
-          'day': '월요일',
+          'day': 'Monday',
           'mood': 'monday_blues',
           'topics': ['월요병', '주말 얘기', '이번 주 계획'],
           'energy': 'low',
@@ -111,21 +111,21 @@ class TemporalContextService {
         };
       case DateTime.friday:
         return {
-          'day': '금요일',
+          'day': 'Friday',
           'mood': 'excited',
           'topics': ['불금', '주말 계획', '신나는 마음'],
           'energy': 'high',
         };
       case DateTime.saturday:
         return {
-          'day': '토요일',
+          'day': 'Saturday',
           'mood': 'relaxed',
           'topics': ['주말', '휴식', '취미', '만남'],
           'energy': 'positive',
         };
       case DateTime.sunday:
         return {
-          'day': '일요일',
+          'day': 'Sunday',
           'mood': 'sunday_night',
           'topics': ['주말 마무리', '내일 준비', '휴식'],
           'energy': 'declining',
@@ -140,7 +140,7 @@ class TemporalContextService {
     if (month >= 3 && month <= 5) {
       return {
         'season': 'spring',
-        'label': '봄',
+        'label': 'spring',
         'weather': ['따뜻한', '포근한', '꽃피는'],
         'activities': ['꽃구경', '소풍', '산책'],
         'topics': ['벚꽃', '봄나들이', '미세먼지', '환절기'],
@@ -148,7 +148,7 @@ class TemporalContextService {
     } else if (month >= 6 && month <= 8) {
       return {
         'season': 'summer',
-        'label': '여름',
+        'label': 'summer',
         'weather': ['더운', '습한', '무더운'],
         'activities': ['휴가', '바다', '에어컨'],
         'topics': ['더위', '휴가 계획', '시원한 음식', '에어컨'],
@@ -156,15 +156,15 @@ class TemporalContextService {
     } else if (month >= 9 && month <= 11) {
       return {
         'season': 'autumn',
-        'label': '가을',
+        'label': 'autumn',
         'weather': ['선선한', '쌀쌀한', '단풍'],
-        'activities': ['단풍구경', '독서', '운동'],
+        'activities': ['단풍구경', '독서', 'exercise'],
         'topics': ['가을 정취', '독서', '단풍', '환절기'],
       };
     } else {
       return {
         'season': 'winter',
-        'label': '겨울',
+        'label': 'winter',
         'weather': ['추운', '차가운', '눈오는'],
         'activities': ['겨울스포츠', '온천', '실내활동'],
         'topics': ['추위', '난방', '따뜻한 음식', '연말'],
@@ -306,7 +306,7 @@ class TemporalContextService {
   
   /// 요일 이름 가져오기
   static String _getDayName(int weekday) {
-    const days = ['월요일', '화요일', '수요일', '목요일', '금요일', '토요일', '일요일'];
+    const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     return days[weekday - 1];
   }
   

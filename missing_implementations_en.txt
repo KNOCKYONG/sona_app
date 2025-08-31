@@ -1,0 +1,353 @@
+  @override
+  String get accountDeletedSuccess => 'Account deleted successfully';
+
+  @override
+  String get accountDeletionInfo => 'Account deletion information';
+
+  @override
+  String get accountDeletionWarning1 => 'Warning: This action cannot be undone';
+
+  @override
+  String get accountDeletionWarning2 => 'All your data will be permanently deleted';
+
+  @override
+  String get accountDeletionWarning3 => 'You will lose access to all conversations';
+
+  @override
+  String get accountDeletionWarning4 => 'This includes all purchased content';
+
+  @override
+  String get agreeToTerms => 'I agree to the terms';
+
+  @override
+  String get appTagline => 'Your AI companions';
+
+  @override
+  String get changeProfilePhoto => 'Change Profile Photo';
+
+  @override
+  String get checkInternetConnection => 'Please check your internet connection';
+
+  @override
+  String get copyrightInfringement => 'Copyright infringement';
+
+  @override
+  String get currentLanguage => 'Current Language';
+
+  @override
+  String get dailyLimitDescription => 'You have reached your daily message limit';
+
+  @override
+  String get dailyLimitTitle => 'Daily Limit Reached';
+
+  @override
+  String get deleteAccountWarning => 'Are you sure you want to delete your account?';
+
+  @override
+  String get deletingAccount => 'Deleting account...';
+
+  @override
+  String get effectSoundDescription => 'Play sound effects';
+
+  @override
+  String get emotionBasedEncounters => 'Meet personas based on your emotions';
+
+  @override
+  String get enterNickname => 'Please enter a nickname';
+
+  @override
+  String get enterPassword => 'Please enter a password';
+
+  @override
+  String get errorDescription => 'Error description';
+
+  @override
+  String get guestLoginPromptMessage => 'Login to continue the conversation';
+
+  @override
+  String get heartDescription => 'Hearts for more messages';
+
+  @override
+  String get inappropriateContent => 'Inappropriate content';
+
+  @override
+  String get incorrectPassword => 'Incorrect password';
+
+  @override
+  String get invalidEmailFormat => 'Invalid email format';
+
+  @override
+  String get invalidEmailFormatError => 'Please enter a valid email address';
+
+  @override
+  String get lastUpdated => 'Last Updated';
+
+  @override
+  String get loadingProducts => 'Loading products...';
+
+  @override
+  Locale get locale => const Locale('en');
+
+  @override
+  String get loginComplete => 'Login complete';
+
+  @override
+  String get loginFailed => 'Login failed';
+
+  @override
+  String get loginFailedTryAgain => 'Login failed. Please try again.';
+
+  @override
+  String get loginRequiredService => 'Login required to use this service';
+
+  @override
+  String get loginWithApple => 'Login with Apple';
+
+  @override
+  String get loginWithGoogle => 'Login with Google';
+
+  @override
+  String get logoutConfirm => 'Are you sure you want to logout?';
+
+  @override
+  String get meetNewPersonas => 'Meet New Personas';
+
+  @override
+  String get messageLimitReset => 'Message limit will reset at midnight';
+
+  @override
+  String get newMessageNotification => 'Notify me of new messages';
+
+  @override
+  String get nicknameAlreadyUsed => 'This nickname is already in use';
+
+  @override
+  String get nicknameHelperText => '3-10 characters';
+
+  @override
+  String get nicknameInUse => 'This nickname is already in use';
+
+  @override
+  String get nicknameLabel => 'Nickname';
+
+  @override
+  String get nicknameLengthError => 'Nickname must be 3-10 characters';
+
+  @override
+  String get nicknamePlaceholder => 'Enter your nickname';
+
+  @override
+  String get noConversationYet => 'No conversation yet';
+
+  @override
+  String get noMatchedPersonas => 'No matched personas yet';
+
+  @override
+  String get noTranslatedMessages => 'No messages to translate';
+
+  @override
+  String get notificationPermissionRequired => 'Notification permission required';
+
+  @override
+  String get notificationSettings => 'Notification Settings';
+
+  @override
+  String get passwordConfirmation => 'Enter password to confirm';
+
+  @override
+  String get personalInfoExposure => 'Personal information exposure';
+
+  @override
+  String get privacyPolicyAgreement => 'Please agree to the privacy policy';
+
+  @override
+  String get privacySection1Content => 'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+
+  @override
+  String get privacySection2Content => 'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+
+  @override
+  String get privacySection2Title => 'Information We Collect';
+
+  @override
+  String get privacySection3Content => 'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+
+  @override
+  String get privacySection4Content => 'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+
+  @override
+  String get privacySection5Content => 'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+
+  @override
+  String get privacySection6Content => 'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+
+  @override
+  String get privacySection7Content => 'You have the right to access, update, or delete your personal information at any time through your account settings.';
+
+  @override
+  String get privacySection7Title => 'Your Rights';
+
+  @override
+  String get privacySection8Content => 'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+
+  @override
+  String get privacySection8Title => 'Contact Us';
+
+  @override
+  String get problemMessage => 'Problem';
+
+  @override
+  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+
+  @override
+  String get profilePhotoUpdated => 'Profile photo updated';
+
+  @override
+  String get profileUpdateFailed => 'Failed to update profile';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully';
+
+  @override
+  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+
+  @override
+  String get purchaseFailed => 'Purchase failed';
+
+  @override
+  String get purchasePending => 'Purchase pending...';
+
+  @override
+  String get purchasePolicy => 'Purchase Policy';
+
+  @override
+  String get purchaseSection1Content => 'We accept various payment methods including credit cards and digital wallets.';
+
+  @override
+  String get purchaseSection1Title => 'Payment Methods';
+
+  @override
+  String get purchaseSection2Content => 'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+
+  @override
+  String get purchaseSection2Title => 'Refund Policy';
+
+  @override
+  String get purchaseSection3Content => 'You can cancel your subscription at any time through your account settings.';
+
+  @override
+  String get purchaseSection3Title => 'Cancellation';
+
+  @override
+  String get purchaseSection4Content => 'By making a purchase, you agree to our terms of use and service agreement.';
+
+  @override
+  String get purchaseSection4Title => 'Terms of Use';
+
+  @override
+  String get purchaseSection5Content => 'For purchase-related issues, please contact our support team.';
+
+  @override
+  String get purchaseSection5Title => 'Contact Support';
+
+  @override
+  String get purchaseSection6Content => 'All purchases are subject to our standard terms and conditions.';
+
+  @override
+  String get recentLoginRequired => 'Please login again for security';
+
+  @override
+  String get referrerEmail => 'Referrer Email';
+
+  @override
+  String get referrerEmailHelper => 'Optional: Email of who referred you';
+
+  @override
+  String get refreshFailed => 'Refresh failed';
+
+  @override
+  String get refreshingChatList => 'Refreshing chat list...';
+
+  @override
+  String get reportFailed => 'Report failed';
+
+  @override
+  String get requiredTermsAgreement => 'Please agree to the terms';
+
+  @override
+  String get selectPersona => 'Select a persona';
+
+  @override
+  String get selectReportReason => 'Select report reason';
+
+  @override
+  String get sendFirstMessage => 'Send your first message';
+
+  @override
+  String get serviceTermsAgreement => 'Please agree to the terms of service';
+
+  @override
+  String get showAllGenderPersonas => 'Show All Gender Personas';
+
+  @override
+  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+
+  @override
+  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+
+  @override
+  String get sonaTermsOfService => 'SONA Terms of Service';
+
+  @override
+  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+
+  @override
+  String get startConversation => 'Start a conversation';
+
+  @override
+  String get storeConnectionError => 'Could not connect to store';
+
+  @override
+  String get storeNotAvailable => 'Store is not available';
+
+  @override
+  String get tapToSwipePhotos => 'Tap to swipe photos';
+
+  @override
+  String get termsSection10Content => 'We reserve the right to modify these terms at any time with notice to users.';
+
+  @override
+  String get termsSection11Content => 'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+
+  @override
+  String get termsSection12Content => 'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+
+  @override
+  String get termsSection2Content => 'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+
+  @override
+  String get termsSection3Content => 'You must be at least 13 years old to use our service.';
+
+  @override
+  String get termsSection4Content => 'You are responsible for maintaining the confidentiality of your account and password.';
+
+  @override
+  String get termsSection5Content => 'You agree not to use our service for any illegal or unauthorized purpose.';
+
+  @override
+  String get termsSection6Content => 'We reserve the right to terminate or suspend your account for violation of these terms.';
+
+  @override
+  String get termsSection8Content => 'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+
+  @override
+  String get termsSection9Content => 'All content and materials available on our service are protected by intellectual property rights.';
+
+  @override
+  String get termsSupplementary => 'Supplementary Terms';
+
+  @override
+  String get translationError => 'Translation error';
+
+  @override
+  List<String> get weekdays => const ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

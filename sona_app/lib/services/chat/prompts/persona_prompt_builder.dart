@@ -25,6 +25,7 @@ class PersonaPromptBuilder {
       userAge: userAge,
       isCasualSpeech: isCasualSpeech,
       contextMemory: contextMemory,
+      languageCode: 'ko', // Default to Korean for backward compatibility
     );
   }
   

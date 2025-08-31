@@ -111,7 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.person_outline,
               title: localizations.editProfile,
-              subtitle: localizations.isKorean 
+              subtitle: Localizations.localeOf(context).languageCode == 'ko' 
                   ? '성별, 생년월일, 자기소개 수정'
                   : 'Edit gender, birthdate, and introduction',
               onTap: () {
@@ -175,7 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.privacy_tip_outlined,
               title: localizations.privacySettings,
-              subtitle: localizations.isKorean 
+              subtitle: Localizations.localeOf(context).languageCode == 'ko' 
                   ? '감정분석, 메모리앨범 등 개인정보 보호 설정'
                   : 'Emotion analysis, memory album, etc.',
               onTap: () {
@@ -233,7 +233,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.language,
               title: localizations.languageSettings,
-              subtitle: localizations.isKorean ? localizations.koreanLanguage : 'English',
+              subtitle: Localizations.localeOf(context).languageCode == 'ko' ? localizations.koreanLanguage : 'English',
               onTap: () {
                 Navigator.push(
                   context,
@@ -479,9 +479,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'SONA',
-              style: TextStyle(
+            Text(
+              localizations.appName,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
@@ -680,7 +680,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         // 에러 메시지
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('캐시 삭제 중 오류가 발생했습니다: $e'),
+            content: Text(AppLocalizations.of(context)!.cacheDeleteError(e.toString())),
             backgroundColor: Colors.red,
           ),
         );

@@ -12,6 +12,7 @@ import '../../services/ui/haptic_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/localization_helper.dart';
 
 /// Optimized MessageBubble with performance improvements:
 /// - Const constructors where possible
@@ -23,8 +24,7 @@ class MessageBubble extends StatelessWidget {
   final Message message;
   final VoidCallback? onScoreChange;
 
-  // Static DateFormat to avoid recreating on each build
-  static final _timeFormat = DateFormat('HH:mm');
+  // Removed static DateFormat - now using LocalizationHelper
 
   // Cached colors to avoid recreating
   static const _userBubbleColor = AppTheme.primaryColor;
@@ -191,7 +191,7 @@ class _TextMessageState extends State<_TextMessage> {
         return 'ไทย';
       case 'ko':
       default:
-        return '한국어';
+        return AppLocalizations.of(context)!.koreanLanguage;
     }
   }
 
@@ -488,22 +488,22 @@ class _TextMessageState extends State<_TextMessage> {
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
-                                  children: const [
-                                    Icon(
+                                  children: [
+                                    const Icon(
                                       Icons.refresh,
                                       size: 14,
                                       color: Colors.white,
                                     ),
-                                    SizedBox(width: 3),
+                                    const SizedBox(width: 3),
                                     Text(
-                                      '재시도',
-                                      style: TextStyle(
+                                      AppLocalizations.of(context)!.retryButton,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    SizedBox(width: 2),
+                                    const SizedBox(width: 2),
                                   ],
                                 ),
                               ),
@@ -551,11 +551,24 @@ class _TimeAndScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Show relative time if message is less than 1 hour old
+    final now = DateTime.now();
+    final difference = now.difference(message.timestamp);
+    final String timeText;
+    
+    if (difference.inMinutes < 60) {
+      final locale = Localizations.localeOf(context);
+      timeText = LocalizationHelper.formatRelativeTime(message.timestamp, locale);
+    } else {
+      final locale = Localizations.localeOf(context);
+      timeText = LocalizationHelper.formatTimeShort(message.timestamp, locale);
+    }
+    
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          MessageBubble._timeFormat.format(message.timestamp),
+          timeText,
           style: TextStyle(
             color: isFromUser ? Colors.white70 : Colors.grey[600],
             fontSize: 12,
@@ -734,7 +747,7 @@ class _StoryEventMessage extends StatelessWidget {
               ],
               const SizedBox(height: 8),
               Text(
-                MessageBubble._timeFormat.format(message.timestamp),
+                LocalizationHelper.formatTimeShort(message.timestamp, Localizations.localeOf(context)),
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 12,

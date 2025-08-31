@@ -128,12 +128,12 @@ class PersonaService extends BaseService {
 
       // Filter stats calculated
 
-      // Get recommended personas for current user
+      // Get recommended personas for current user (includes gender filtering)
       final recommendedPersonas = getRecommendedPersonas(filtered);
       _shuffledAvailablePersonas = recommendedPersonas;
       _lastShuffleTime = now;
 
-      // Sorted ${recommendedPersonas.length} personas by recommendation
+      debugPrint('📊 Personas after gender filter: ${recommendedPersonas.length} from ${filtered.length}');
     } else {
       // Update the existing shuffled list to exclude newly swiped/matched personas
       final matchedIds = _matchedPersonas.map((p) => p.id).toSet();

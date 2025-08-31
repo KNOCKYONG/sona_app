@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/persona.dart';
 import '../../services/relationship/relationship_visual_system.dart';
 import '../../utils/like_formatter.dart';
+import '../../l10n/app_localizations.dart';
 
 class PersonaProfileViewer extends StatefulWidget {
   final Persona persona;
@@ -313,7 +314,7 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(
-                        '아래로 스와이프하여 닫기',
+                        AppLocalizations.of(context)!.swipeDownToClose,
                         style: TextStyle(
                           color: Colors.white.withOpacity(0.7),
                           fontSize: 14,
@@ -401,18 +402,18 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
           ),
-          child: const Row(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
+              const Icon(
                 Icons.touch_app,
                 color: Colors.white70,
                 size: 16,
               ),
-              SizedBox(width: 6),
+              const SizedBox(width: 6),
               Text(
-                '하단 영역을 탭하여 상세 정보 보기',
-                style: TextStyle(
+                AppLocalizations.of(context)!.tapForDetails,
+                style: const TextStyle(
                   color: Colors.white70,
                   fontSize: 13,
                   fontWeight: FontWeight.w500,
@@ -491,9 +492,9 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
 
         // 성격 특성
         if (widget.persona.personality.isNotEmpty) ...[
-          const Text(
-            '성격',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.personality,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.bold,

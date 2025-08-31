@@ -212,28 +212,186 @@ SecurityFilterService (메인 필터)
 
 ---
 
-## 🌍 국제화(i18n) 필수 규칙
+## 🌍 국제화(i18n) 완벽 가이드
 
-### 텍스트 추가 시
-```dart
-// ❌ 절대 금지 - 하드코딩
-Text('안녕하세요')
-showDialog(title: '확인')
+### 🚨 i18n 핵심 원칙
+1. **절대 하드코딩 금지**: 모든 사용자 표시 텍스트는 ARB 파일 관리
+2. **13개 언어 동시 지원**: 새 텍스트 추가 시 모든 언어 파일 업데이트 필수
+3. **ARB 파일 기반**: Flutter의 공식 i18n 시스템 사용 (l10n.yaml 설정)
+4. **자동 코드 생성**: `flutter gen-l10n` 명령으로 Dart 코드 자동 생성
 
-// ✅ 반드시 이렇게
-Text(AppLocalizations.of(context)!.hello)
-showDialog(title: localizations.confirm)
-
-// AppLocalizations.dart에 추가
-String get hello => isKorean ? '안녕하세요' : 'Hello';
-String get confirm => isKorean ? '확인' : 'Confirm';
+### 📁 i18n 파일 구조
+```
+sona_app/
+├── l10n.yaml                     # i18n 설정 파일
+└── lib/l10n/
+    ├── app_en.arb               # 영어 (템플릿 기준)
+    ├── app_ko.arb               # 한국어
+    ├── app_ja.arb               # 일본어
+    ├── app_zh.arb               # 중국어
+    ├── app_th.arb               # 태국어
+    ├── app_vi.arb               # 베트남어
+    ├── app_id.arb               # 인도네시아어
+    ├── app_es.arb               # 스페인어
+    ├── app_fr.arb               # 프랑스어
+    ├── app_de.arb               # 독일어
+    ├── app_ru.arb               # 러시아어
+    ├── app_pt.arb               # 포르투갈어
+    ├── app_it.arb               # 이탈리아어
+    └── app_localizations.dart   # 자동 생성됨 (수정 금지)
 ```
 
-### 체크리스트
-- [ ] 모든 UI 텍스트가 AppLocalizations 사용?
-- [ ] 한글/영어 둘 다 추가?
-- [ ] 에러 메시지도 번역?
-- [ ] 다이얼로그, 스낵바도 번역?
+### 📝 새 텍스트 추가 프로세스
+
+#### 1단계: 영어 ARB 파일에 추가
+```json
+// app_en.arb
+{
+  "welcomeMessage": "Welcome to SONA!",
+  "@welcomeMessage": {
+    "description": "Welcome message shown on app start"
+  }
+}
+```
+
+#### 2단계: 모든 언어 파일에 번역 추가
+```bash
+# 자동 번역 스크립트 실행
+python scripts/translate_new_keys.py
+```
+
+#### 3단계: 코드 생성
+```bash
+cd sona_app && flutter gen-l10n
+```
+
+#### 4단계: 코드에서 사용
+```dart
+// ❌ 절대 금지
+Text('Welcome to SONA!')
+
+// ✅ 올바른 사용
+Text(AppLocalizations.of(context)!.welcomeMessage)
+
+// 짧게 사용하려면
+final localizations = AppLocalizations.of(context)!;
+Text(localizations.welcomeMessage)
+```
+
+### 🔧 파라미터가 있는 텍스트
+
+#### ARB 파일 정의
+```json
+{
+  "greetingWithName": "Hello, {userName}!",
+  "@greetingWithName": {
+    "description": "Greeting message with user's name",
+    "placeholders": {
+      "userName": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  "itemCount": "{count,plural, =0{No items} =1{1 item} other{{count} items}}",
+  "@itemCount": {
+    "description": "Shows item count with plural support",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
+}
+```
+
+#### 코드에서 사용
+```dart
+// 파라미터 전달
+Text(localizations.greetingWithName('김철수'))
+
+// 복수형 처리
+Text(localizations.itemCount(cartItems.length))
+```
+
+### 🤖 자동화 스크립트
+
+#### 1. 새 키 추가 스크립트
+```bash
+# 모든 언어에 새 키 추가
+python scripts/add_i18n_key.py \
+  --key "newFeature" \
+  --en "New Feature" \
+  --ko "새 기능"
+```
+
+#### 2. 누락된 키 동기화
+```bash
+# 영어 파일 기준으로 다른 언어 파일 동기화
+python scripts/sync_arb_files.py
+```
+
+#### 3. 번역 검증
+```bash
+# 모든 언어 파일의 번역 상태 확인
+python scripts/check_translation_status.py
+```
+
+### ✅ 체크리스트
+
+#### 새 기능 개발 시
+- [ ] 모든 사용자 표시 텍스트를 ARB 파일에 추가했는가?
+- [ ] 13개 언어 모두에 번역을 추가했는가?
+- [ ] `flutter gen-l10n` 실행했는가?
+- [ ] 하드코딩된 텍스트가 없는지 확인했는가?
+
+#### 코드 리뷰 시
+```bash
+# 하드코딩 검사
+grep -r "Text(['\"].*[가-힣]" lib/
+grep -r "Text(['\"].*[A-Za-z]" lib/
+grep -r "showDialog.*['\"].*[가-힣]" lib/
+grep -r "SnackBar.*['\"].*[가-힣]" lib/
+```
+
+### 🚨 일반적인 실수와 해결
+
+#### 실수 1: 직접 문자열 사용
+```dart
+// ❌ 잘못됨
+if (error) {
+  return Text('오류가 발생했습니다');
+}
+
+// ✅ 올바름
+if (error) {
+  return Text(localizations.errorOccurred);
+}
+```
+
+#### 실수 2: 동적 메시지 조합
+```dart
+// ❌ 잘못됨
+Text('${user.name}님 환영합니다!')
+
+// ✅ 올바름 - ARB에 파라미터 정의
+Text(localizations.welcomeUser(user.name))
+```
+
+#### 실수 3: 조건부 텍스트
+```dart
+// ❌ 잘못됨
+Text(isKorean ? '확인' : 'Confirm')
+
+// ✅ 올바름 - 자동으로 언어별 처리
+Text(localizations.confirm)
+```
+
+### 📊 현재 상태 (2025-01-31)
+- **지원 언어**: 13개
+- **총 번역 키**: 650개
+- **미번역 키**: 117개 (다른 언어들)
+- **컴파일 에러**: 33개 (파라미터 참조 문제)
 
 ---
 
@@ -420,6 +578,44 @@ claude mcp add context7
 
 ---
 
+## 🌐 다국어 키워드 감지 시스템
+
+### 중요성
+프롬프트 관련 파일들에서 사용자의 감정, 주제, 시간 표현 등을 감지할 때 하드코딩된 한국어 키워드를 사용하면 다른 언어 사용자의 입력을 이해할 수 없습니다.
+
+### 핵심 파일
+- **lib/services/chat/localization/multilingual_keywords.dart**: 13개 언어의 감정/주제/시간 키워드 매핑
+- **lib/services/chat/localization/localized_prompt_templates.dart**: 언어별 프롬프트 템플릿
+
+### 수정이 필요한 파일들 (완료)
+- ✅ unified_prompt_service.dart
+- ✅ conversation_memory_service.dart  
+- ✅ conversation_context_manager.dart
+- ✅ praise_encouragement_system.dart
+
+### 적용 방법
+```dart
+// ❌ 잘못된 방법 (하드코딩)
+if (message.contains('슬퍼') || message.contains('우울')) {
+  // 감정 처리
+}
+
+// ✅ 올바른 방법 (다국어 지원)
+final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
+final sadWords = emotions['sad'] ?? [];
+if (sadWords.any((word) => message.contains(word))) {
+  // 감정 처리
+}
+```
+
+### 체크리스트
+- [ ] contains() 메서드에 하드코딩된 한국어 키워드가 있는가?
+- [ ] MultilingualKeywords 클래스를 import 했는가?
+- [ ] languageCode 파라미터를 메서드에 전달했는가?
+- [ ] 모든 감정/주제/시간 감지가 다국어를 지원하는가?
+
+---
+
 ## 📖 참고 문서
 - **PRD.md**: 제품 요구사항 명세
 - **CRITICAL_ISSUES_AND_SOLUTIONS.md**: 해결된 주요 이슈
@@ -436,9 +632,10 @@ claude mcp add context7
 5. **빠른 롤백**: 문제 발생 시 즉시 되돌리기
 6. **문서화**: 모든 수정사항 기록
 7. **프롬프트 엔지니어링**: 응답 품질은 프롬프트로 제어, 코드로 응답 생성 금지
+8. **다국어 패턴 감지**: 프롬프트 관련 파일의 contains() 패턴 감지 수정 시 반드시 MultilingualKeywords 클래스 사용
 
 ---
 
-**마지막 업데이트**: 2025-01-10
+**마지막 업데이트**: 2025-01-31
 **서비스 준비도**: 85% (출시 가능)
 **남은 작업**: 실제 사용자 피드백 반영

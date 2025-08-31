@@ -73,8 +73,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
       setState(() {
         _searchQuery = query;
         _isSearching = query.isNotEmpty;
-        final isKorean = AppLocalizations.of(context)!.isKorean;
-        _searchResults = FAQData.search(query, isKorean);
+        final locale = Localizations.localeOf(context);
+        _searchResults = FAQData.search(query, locale.languageCode == 'ko');
       });
       
       if (query.isNotEmpty) {
@@ -271,7 +271,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
 
   Widget _buildCategorySection(FAQCategory category, bool isDarkMode) {
     final isExpanded = _expandedCategories[category.id] ?? false;
-    final isKorean = AppLocalizations.of(context)!.isKorean;
+    final locale = Localizations.localeOf(context);
+    final isKorean = locale.languageCode == 'ko';
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -348,7 +349,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildFAQItem(FAQItem item, FAQCategory category, bool isDarkMode, bool categoryExpanded) {
-    final isKorean = AppLocalizations.of(context)!.isKorean;
+    final locale = Localizations.localeOf(context);
+    final isKorean = locale.languageCode == 'ko';
     final isFavorite = _favoriteQuestions.contains(item.questionKo);
 
     return Container(
@@ -390,7 +392,7 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
           
           // 답변
           Text(
-            'A. ${item.getAnswer(isKorean)}',
+            'A.\n${item.getAnswer(isKorean)}',
             style: TextStyle(
               fontSize: 14,
               height: 1.5,
@@ -433,7 +435,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildSearchResultItem(FAQItemWithCategory result, bool isDarkMode) {
-    final isKorean = AppLocalizations.of(context)!.isKorean;
+    final locale = Localizations.localeOf(context);
+    final isKorean = locale.languageCode == 'ko';
     final isFavorite = _favoriteQuestions.contains(result.item.questionKo);
 
     return Container(
@@ -511,8 +514,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
                 
                 // 답변 (미리보기)
                 Text(
-                  'A. ${result.item.getAnswer(isKorean)}',
-                  maxLines: 3,
+                  'A.\n${result.item.getAnswer(isKorean)}',
+                  maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 14,
@@ -556,7 +559,7 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 12,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).textTheme.bodySmall?.color,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -564,8 +567,8 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
                       related.item.getQuestion(isKorean),
                       style: TextStyle(
                         fontSize: 13,
-                        color: Theme.of(context).colorScheme.primary,
-                        decoration: TextDecoration.underline,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),

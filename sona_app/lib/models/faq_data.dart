@@ -206,14 +206,6 @@ class FAQData {
               relatedIds: ['conversation'],
             ),
             FAQItem(
-              questionKo: '메시지 복사는 어떻게 하나요?',
-              questionEn: 'How do I copy messages?',
-              answerKo:
-                  '메시지를 길게 누르면 클립보드에 복사됩니다. 번역된 내용도 복사 가능해요!',
-              answerEn:
-                  'Long press a message to copy to clipboard. You can also copy translated content!',
-            ),
-            FAQItem(
               questionKo: '대화 오류를 발견했어요',
               questionEn: 'I found a conversation error',
               answerKo:

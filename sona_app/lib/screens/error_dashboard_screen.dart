@@ -62,7 +62,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '필터',
+            AppLocalizations.of(context)!.filter,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -334,8 +334,8 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         }
 
         if (snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Text('에러 리포트가 없습니다.'),
+          return Center(
+            child: Text(AppLocalizations.of(context)!.noErrorReports),
           );
         }
 
@@ -431,7 +431,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
               children: [
                 if (errorReport.errorMessage != null) ...[
                   const Text(
-                    '에러 메시지:',
+                    AppLocalizations.of(context)!.errorMessage,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
@@ -450,7 +450,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                   const SizedBox(height: 12),
                 ],
                 const Text(
-                  '최근 대화:',
+                  AppLocalizations.of(context)!.recentConversation,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
@@ -468,7 +468,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                         children: [
                           Text(
                             msg.isFromUser
-                                ? '사용자: '
+                                ? AppLocalizations.of(context)!.user
                                 : '${errorReport.personaName}: ',
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
@@ -481,7 +481,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 if (errorReport.userMessage != null) ...[
                   const SizedBox(height: 12),
                   const Text(
-                    '사용자 메시지:',
+                    AppLocalizations.of(context)!.userMessage,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
@@ -490,7 +490,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                 if (errorReport.occurrenceCount > 1) ...[
                   const SizedBox(height: 12),
                   const Text(
-                    '발생 정보:',
+                    AppLocalizations.of(context)!.occurrenceInfo,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
@@ -503,7 +503,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
                     style: const TextStyle(fontSize: 12),
                   ),
                   Text(
-                    '총 ${errorReport.occurrenceCount}회 발생',
+                    AppLocalizations.of(context)!.totalOccurrences(errorReport.occurrenceCount),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -522,7 +522,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
   String _getErrorTypeLabel(String type) {
     switch (type) {
       case 'api_key_error':
-        return 'API 키 오류';
+        return AppLocalizations.of(context)!.apiKeyError;
       case 'timeout':
         return AppLocalizations.of(context)!.timeout;
       case 'rate_limit':
@@ -577,7 +577,7 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '에러 발생 빈도 (최근 24시간)',
+            AppLocalizations.of(context)!.errorFrequency24h,
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -595,14 +595,14 @@ class _ErrorDashboardScreenState extends State<ErrorDashboardScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '24시간 전',
+                AppLocalizations.of(context)!.hours24Ago,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey.shade600,
                 ),
               ),
               Text(
-                '현재',
+                AppLocalizations.of(context)!.current,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey.shade600,

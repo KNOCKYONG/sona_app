@@ -1008,7 +1008,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
           HapticService.warning();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('${persona.name}님과는 이미 대화중이에요!'),
+              content: Text(AppLocalizations.of(context)!.alreadyChattingWith(persona.name)),
               backgroundColor: Colors.orange,
               duration: const Duration(seconds: 3),
             ),
@@ -1031,7 +1031,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       HapticService.warning();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${persona.name}님과는 이미 대화중이에요!'),
+          content: Text(AppLocalizations.of(context)!.alreadyChattingWith(persona.name)),
           backgroundColor: Colors.orange,
           duration: const Duration(seconds: 3),
         ),
@@ -1259,8 +1259,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                         if (!hasEnoughHearts) {
                                           ScaffoldMessenger.of(screenContext)
                                               .showSnackBar(
-                                            const SnackBar(
-                                                content: Text('하트가 부족합니다.')),
+                                            SnackBar(
+                                                content: Text(AppLocalizations.of(context)!.insufficientHearts)),
                                           );
                                           setState(() => _isLoading = false);
                                           return;
@@ -1287,8 +1287,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                             '❌ Super like matching failed: ${persona.name}');
                                         ScaffoldMessenger.of(screenContext)
                                             .showSnackBar(
-                                          const SnackBar(
-                                              content: Text('매칭에 실패했습니다.')),
+                                          SnackBar(
+                                              content: Text(AppLocalizations.of(context)!.matchingFailed)),
                                         );
                                       }
                                     } catch (e) {
@@ -1296,8 +1296,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                           '❌ Error in super like matching: $e');
                                       ScaffoldMessenger.of(screenContext)
                                           .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('오류가 발생했습니다.')),
+                                        SnackBar(
+                                            content: Text(AppLocalizations.of(context)!.errorOccurred)),
                                       );
                                     } finally {
                                       setState(() => _isLoading = false);
@@ -1336,8 +1336,8 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                         if (!hasEnoughHearts) {
                                           ScaffoldMessenger.of(screenContext)
                                               .showSnackBar(
-                                            const SnackBar(
-                                                content: Text('하트가 부족합니다.')),
+                                            SnackBar(
+                                                content: Text(AppLocalizations.of(context)!.insufficientHearts)),
                                           );
                                           setState(() => _isLoading = false);
                                           return;
@@ -1364,16 +1364,16 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                             '❌ Normal like matching failed: ${persona.name}');
                                         ScaffoldMessenger.of(screenContext)
                                             .showSnackBar(
-                                          const SnackBar(
-                                              content: Text('매칭에 실패했습니다.')),
+                                          SnackBar(
+                                              content: Text(AppLocalizations.of(context)!.matchingFailed)),
                                         );
                                       }
                                     } catch (e) {
                                       debugPrint('❌ Error in normal like: $e');
                                       ScaffoldMessenger.of(screenContext)
                                           .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('오류가 발생했습니다.')),
+                                        SnackBar(
+                                            content: Text(AppLocalizations.of(context)!.errorOccurred)),
                                       );
                                     } finally {
                                       setState(() => _isLoading = false);

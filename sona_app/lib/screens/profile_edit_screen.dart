@@ -333,84 +333,152 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    // 성별
-                    Text(
-                      AppLocalizations.of(context)!.gender,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.bodySmall?.color,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: RadioListTile<String>(
-                            title: Text(AppLocalizations.of(context)!.male),
-                            value: 'male',
-                            groupValue: _selectedGender,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedGender = value;
-                              });
-                            },
-                          ),
-                        ),
-                        Expanded(
-                          child: RadioListTile<String>(
-                            title: Text(AppLocalizations.of(context)!.female),
-                            value: 'female',
-                            groupValue: _selectedGender,
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedGender = value;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    RadioListTile<String>(
-                      title: Text(AppLocalizations.of(context)!.other),
-                      value: 'other',
-                      groupValue: _selectedGender,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedGender = value;
-                        });
-                      },
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Gender All checkbox
+                    // 성별 선택 섹션 (본인 성별 + 페르소나 성별 선호)
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withOpacity(0.1),
+                        color: Theme.of(context).colorScheme.surface,
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: Theme.of(context).dividerColor.withOpacity(0.2),
+                        ),
                       ),
-                      child: CheckboxListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.showAllGenderPersonas,
-                          style: const TextStyle(fontWeight: FontWeight.w500),
-                        ),
-                        subtitle: Text(
-                          AppLocalizations.of(context)!.onlyOppositeGenderNote,
-                          style: const TextStyle(fontSize: 12),
-                        ),
-                        value: _genderAll,
-                        onChanged: (value) {
-                          setState(() {
-                            _genderAll = value ?? false;
-                          });
-                        },
-                        controlAffinity: ListTileControlAffinity.leading,
-                        contentPadding: EdgeInsets.zero,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // 본인 성별
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.person,
+                                size: 20,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context)!.myGenderSection,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          // 성별 미선택 시 안내 메시지
+                          if (_selectedGender == null)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                              margin: const EdgeInsets.only(bottom: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(Icons.info_outline, size: 16, color: Colors.blue),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      AppLocalizations.of(context)!.genderSelectionInfo,
+                                      style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text(AppLocalizations.of(context)!.male),
+                                  value: 'male',
+                                  groupValue: _selectedGender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedGender = value;
+                                    });
+                                  },
+                                  contentPadding: EdgeInsets.zero,
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                              ),
+                              Expanded(
+                                child: RadioListTile<String>(
+                                  title: Text(AppLocalizations.of(context)!.female),
+                                  value: 'female',
+                                  groupValue: _selectedGender,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _selectedGender = value;
+                                    });
+                                  },
+                                  contentPadding: EdgeInsets.zero,
+                                  visualDensity: VisualDensity.compact,
+                                ),
+                              ),
+                            ],
+                          ),
+                          RadioListTile<String>(
+                            title: Text(AppLocalizations.of(context)!.other),
+                            value: 'other',
+                            groupValue: _selectedGender,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedGender = value;
+                              });
+                            },
+                            contentPadding: EdgeInsets.zero,
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          
+                          const Divider(height: 24),
+                          
+                          // 페르소나 성별 선호
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.favorite,
+                                size: 20,
+                                color: Colors.pink,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                AppLocalizations.of(context)!.personaGenderSection,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          CheckboxListTile(
+                            title: Text(AppLocalizations.of(context)!.showAllGenderPersonas),
+                            subtitle: Text(
+                              _selectedGender == null 
+                                ? AppLocalizations.of(context)!.genderPreferenceDisabled
+                                : _genderAll 
+                                  ? AppLocalizations.of(context)!.genderPreferenceActive 
+                                  : AppLocalizations.of(context)!.genderPreferenceInactive,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).textTheme.bodySmall?.color,
+                              ),
+                            ),
+                            value: _genderAll,
+                            onChanged: _selectedGender == null ? null : (value) {
+                              setState(() {
+                                _genderAll = value ?? false;
+                              });
+                            },
+                            controlAffinity: ListTileControlAffinity.leading,
+                            contentPadding: EdgeInsets.zero,
+                            visualDensity: VisualDensity.compact,
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 24),

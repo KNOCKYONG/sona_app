@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/persona.dart';
 import '../../services/persona/image_optimization_service.dart';
 import '../../services/persona/cloudflare_r2_service.dart';
+import '../../l10n/app_localizations.dart';
 
 /// 최적화된 페르소나 이미지 위젯
 /// 크기에 따라 적절한 이미지를 로드하고 캐싱
@@ -249,8 +250,8 @@ class _OptimizedPersonaGalleryState extends State<OptimizedPersonaGallery> {
     final imageUrls = widget.persona.getAllImageUrls(size: 'large');
 
     if (imageUrls.isEmpty) {
-      return const Center(
-        child: Text('이미지가 없습니다'),
+      return Center(
+        child: Text(AppLocalizations.of(context)!.noImageAvailable),
       );
     }
 

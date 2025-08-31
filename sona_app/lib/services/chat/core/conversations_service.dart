@@ -320,6 +320,7 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
         isCasualSpeech: true,
         contextHint: enhancedContextHint,
         patternAnalysis: advancedAnalysis.basicAnalysis,
+        languageCode: targetLanguage ?? 'ko',
       );
       
       // 5. 입력 메시지 구성

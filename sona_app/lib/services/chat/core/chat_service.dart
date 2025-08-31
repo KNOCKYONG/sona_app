@@ -26,6 +26,7 @@ import '../../app_info_service.dart';
 import '../../relationship/relation_score_service.dart';
 import '../../relationship/negative_behavior_system.dart';
 import '../../relationship/like_cooldown_system.dart';
+import '../../locale_service.dart';
 import '../../../models/chat_error_report.dart';
 import '../utils/error_recovery_service.dart';
 import '../utils/error_aggregation_service.dart';
@@ -83,6 +84,7 @@ class ChatService extends BaseService {
   // Service references
   PersonaService? _personaService;
   UserService? _userService;
+  LocaleService? _localeService;
   String? _currentUserId;
 
   // Haptic feedback callback
@@ -115,9 +117,31 @@ class ChatService extends BaseService {
   void setUserService(UserService userService) {
     _userService = userService;
   }
+  
+  void setLocaleService(LocaleService localeService) {
+    _localeService = localeService;
+  }
 
   void setCurrentUserId(String userId) {
     _currentUserId = userId;
+  }
+  
+  /// Get the current user's language code
+  String getUserLanguage() {
+    if (_localeService == null) {
+      debugPrint('⚠️ LocaleService not set, defaulting to Korean');
+      return 'ko';
+    }
+    
+    // If using system language, get from platform
+    if (_localeService!.useSystemLanguage) {
+      // Get system locale from WidgetsBinding
+      final systemLocale = WidgetsBinding.instance.platformDispatcher.locale;
+      return systemLocale.languageCode;
+    }
+    
+    // Otherwise use the saved locale
+    return _localeService!.locale?.languageCode ?? 'ko';
   }
 
   /// Debounced notifyListeners to reduce UI updates
@@ -915,7 +939,7 @@ class ChatService extends BaseService {
       // Get user nickname and age (language는 메시지별로 감지)
       String? userNickname;
       int? userAge;
-      String? userLanguage = null; // 언어는 ChatOrchestrator에서 메시지별로 감지
+      String? userLanguage = getUserLanguage(); // Get current user language from settings
       if (_userService?.currentUser != null) {
         userNickname = _userService!.currentUser!.nickname;
         userAge = _userService!.currentUser!.age;

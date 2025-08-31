@@ -37,7 +37,7 @@ class ConflictResolutionService extends BaseService {
     // 사과 키워드
     final apologyKeywords = [
       '미안', '죄송', '잘못', '사과', '용서',
-      '화해', '풀어', '화 풀어', '화났니', '삐졌',
+      'reconciliation', '풀어', '화 풀어', '화났니', '삐졌',
     ];
     
     // 갈등 강도 계산

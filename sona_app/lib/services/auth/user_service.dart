@@ -765,7 +765,7 @@ class UserService extends BaseService {
       _currentUser = AppUser(
         uid: uid,
         email: 'guest@sona.app',
-        nickname: '게스트',
+        nickname: 'Guest', // Default guest name
         gender: null, // No gender for guest
         birth: null, // No birth date for guest  
         age: null,

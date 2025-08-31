@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../models/message.dart';
 import '../learning/user_preference_learning.dart';
 import 'base_quality_system.dart';
+import '../localization/multilingual_keywords.dart';
 
 /// 💝 칭찬과 격려 강화 시스템
 /// 사용자를 적극적으로 칭찬하고 격려하는 시스템
@@ -27,6 +28,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     required String userMessage,
     required List<Message> chatHistory,
     String? personaType,
+    String languageCode = 'ko',
   }) {
     // 칭찬 가이드와 격려 가이드를 함께 생성
     final praiseGuide = generatePraiseGuide(
@@ -34,6 +36,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
       userMessage: userMessage,
       chatHistory: chatHistory,
       personaType: personaType,
+      languageCode: languageCode,
     );
     
     final encouragementGuide = generateEncouragementGuide(
@@ -41,6 +44,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
       userMessage: userMessage,
       chatHistory: chatHistory,
       personaType: personaType,
+      languageCode: languageCode,
     );
     
     return {
@@ -57,9 +61,10 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     required String userMessage,
     required List<Message> chatHistory,
     String? personaType,
+    String languageCode = 'ko',
   }) {
     // 칭찬 가능한 요소 감지
-    final praiseableElements = _detectPraiseableElements(userMessage);
+    final praiseableElements = _detectPraiseableElements(userMessage, languageCode);
     
     if (praiseableElements.isEmpty) {
       return {'shouldPraise': false};
@@ -114,11 +119,11 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
   }
 
   /// 칭찬 가능한 요소 감지
-  List<Map<String, dynamic>> _detectPraiseableElements(String message) {
+  List<Map<String, dynamic>> _detectPraiseableElements(String message, String languageCode) {
     final elements = <Map<String, dynamic>>[];
     
     // 1. 성취/완료 표현
-    if (_detectAchievement(message)) {
+    if (_detectAchievement(message, languageCode)) {
       elements.add({
         'type': 'achievement',
         'description': '무언가를 완료하거나 달성함',
@@ -127,7 +132,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 2. 노력 표현
-    if (_detectEffort(message)) {
+    if (_detectEffort(message, languageCode)) {
       elements.add({
         'type': 'effort',
         'description': '노력하고 시도하는 모습',
@@ -136,7 +141,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 3. 긍정적 태도
-    if (_detectPositiveAttitude(message)) {
+    if (_detectPositiveAttitude(message, languageCode)) {
       elements.add({
         'type': 'positive_attitude',
         'description': '긍정적이고 밝은 태도',
@@ -145,7 +150,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 4. 자기 개선
-    if (_detectSelfImprovement(message)) {
+    if (_detectSelfImprovement(message, languageCode)) {
       elements.add({
         'type': 'self_improvement',
         'description': '자기 발전과 성장',
@@ -154,7 +159,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 5. 배려/친절
-    if (_detectKindness(message)) {
+    if (_detectKindness(message, languageCode)) {
       elements.add({
         'type': 'kindness',
         'description': '타인을 배려하는 마음',
@@ -163,7 +168,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 6. 창의성
-    if (_detectCreativity(message)) {
+    if (_detectCreativity(message, languageCode)) {
       elements.add({
         'type': 'creativity',
         'description': '창의적이고 독특한 생각',
@@ -172,7 +177,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 7. 일상 관리
-    if (_detectDailyManagement(message)) {
+    if (_detectDailyManagement(message, languageCode)) {
       elements.add({
         'type': 'daily_management',
         'description': '일상을 잘 관리하는 모습',
@@ -184,65 +189,106 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
   }
 
   /// 성취 감지
-  bool _detectAchievement(String message) {
+  bool _detectAchievement(String message, String languageCode) {
+    final topics = MultilingualKeywords.getTopicKeywords(languageCode);
     final achievementWords = [
-      '했어', '했다', '완료', '끝냈', '성공', '달성', '해냈',
-      '마쳤', '끝났', '통과', '합격', '이뤘', '완성'
+      ...(topics['work'] ?? []),
+      ...(topics['study'] ?? []),
     ];
+    
+    // Add common achievement patterns
+    if (languageCode == 'ko') {
+      achievementWords.addAll(['했어', '했다', '완료', '끝냈', '성공', '달성', '해냈',
+        '마쳤', '끝났', '통과', '합격', '이뤘', '완성']);
+    }
+    
     return achievementWords.any((word) => message.contains(word));
   }
 
   /// 노력 감지
-  bool _detectEffort(String message) {
-    final effortWords = [
-      '노력', '열심히', '최선', '시도', '도전', '해보',
-      '해볼게', '해볼래', '할거야', '하고있', '하는중'
-    ];
+  bool _detectEffort(String message, String languageCode) {
+    final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
+    final effortWords = emotions['determined'] ?? [];
+    
+    if (languageCode == 'ko') {
+      effortWords.addAll(['노력', '열심히', '최선', '시도', '도전', '해보',
+        '해볼게', '해볼래', '할거야', '하고있', '하는중']);
+    }
+    
     return effortWords.any((word) => message.contains(word));
   }
 
   /// 긍정적 태도 감지
-  bool _detectPositiveAttitude(String message) {
+  bool _detectPositiveAttitude(String message, String languageCode) {
+    final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
     final positiveWords = [
-      '좋아', '좋은', '괜찮', '긍정', '행복', '기뻐', '신나',
-      '즐거', '재밌', '최고', '만족', '감사'
+      ...(emotions['happy'] ?? []),
+      ...(emotions['excited'] ?? []),
+      ...(emotions['grateful'] ?? []),
     ];
+    
     return positiveWords.any((word) => message.contains(word));
   }
 
   /// 자기 개선 감지
-  bool _detectSelfImprovement(String message) {
+  bool _detectSelfImprovement(String message, String languageCode) {
+    final topics = MultilingualKeywords.getTopicKeywords(languageCode);
     final improvementWords = [
-      '배우', '공부', '연습', '개선', '발전', '성장', '더 나은',
-      '바꾸', '고치', '향상', '늘었', '실력'
+      ...(topics['study'] ?? []),
+      ...(topics['exercise'] ?? []),
     ];
+    
+    if (languageCode == 'ko') {
+      improvementWords.addAll(['배우', '공부', '연습', '개선', '발전', '성장', '더 나은',
+        '바꾸', '고치', '향상', '늘었', '실력']);
+    }
+    
     return improvementWords.any((word) => message.contains(word));
   }
 
   /// 배려/친절 감지
-  bool _detectKindness(String message) {
+  bool _detectKindness(String message, String languageCode) {
+    final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
     final kindnessWords = [
-      '도와', '돕고', '배려', '생각해', '신경', '챙겨', '위해',
-      '고마워', '감사', '미안', '걱정'
+      ...(emotions['grateful'] ?? []),
+      ...(emotions['sorry'] ?? []),
     ];
+    
+    if (languageCode == 'ko') {
+      kindnessWords.addAll(['도와', '돕고', '배려', '생각해', '신경', '챙겨', '위해',
+        '고마워', '감사', '미안', '걱정']);
+    }
+    
     return kindnessWords.any((word) => message.contains(word));
   }
 
   /// 창의성 감지
-  bool _detectCreativity(String message) {
-    final creativityWords = [
-      '아이디어', '생각해냈', '만들', '창작', '새로운', '독특',
-      '창의', '발상', '기발'
-    ];
-    return creativityWords.any((word) => message.contains(word));
+  bool _detectCreativity(String message, String languageCode) {
+    final creativityWords = <String>[];
+    
+    if (languageCode == 'ko') {
+      creativityWords.addAll(['아이디어', '생각해냈', '만들', '창작', '새로운', '독특',
+        '창의', '발상', '기발']);
+    } else if (languageCode == 'en') {
+      creativityWords.addAll(['idea', 'create', 'creative', 'unique', 'new', 'innovative']);
+    }
+    
+    return creativityWords.any((word) => message.toLowerCase().contains(word));
   }
 
   /// 일상 관리 감지
-  bool _detectDailyManagement(String message) {
+  bool _detectDailyManagement(String message, String languageCode) {
+    final topics = MultilingualKeywords.getTopicKeywords(languageCode);
     final dailyWords = [
-      '운동', '식사', '일찍', '정리', '청소', '계획', '일정',
-      '루틴', '습관', '건강', '규칙'
+      ...(topics['health'] ?? []),
+      ...(topics['exercise'] ?? []),
+      ...(topics['food'] ?? []),
     ];
+    
+    if (languageCode == 'ko') {
+      dailyWords.addAll(['일찍', '정리', '청소', '계획', '일정', '루틴', '습관', '규칙']);
+    }
+    
     return dailyWords.any((word) => message.contains(word));
   }
 
@@ -469,19 +515,20 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     required String userMessage,
     required List<Message> chatHistory,
     String? personaType,
+    String languageCode = 'ko',
   }) {
     // 격려가 필요한 상황 감지
-    final needsEncouragement = _detectNeedForEncouragement(userMessage);
+    final needsEncouragement = _detectNeedForEncouragement(userMessage, languageCode);
     
     if (!needsEncouragement) {
       return {'shouldEncourage': false};
     }
     
     // 격려 타입 결정
-    final encouragementType = _determineEncouragementType(userMessage);
+    final encouragementType = _determineEncouragementType(userMessage, languageCode);
     
     // 격려 강도
-    final intensity = _calculateEncouragementIntensity(userMessage);
+    final intensity = _calculateEncouragementIntensity(userMessage, languageCode);
     
     return {
       'shouldEncourage': true,
@@ -496,34 +543,65 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
   }
 
   /// 격려 필요성 감지
-  bool _detectNeedForEncouragement(String message) {
+  bool _detectNeedForEncouragement(String message, String languageCode) {
+    final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
     final needWords = [
-      '힘들', '어려', '못하', '실패', '안돼', '포기',
-      '우울', '슬프', '지치', '피곤', '스트레스', '걱정'
+      ...(emotions['sad'] ?? []),
+      ...(emotions['stressed'] ?? []),
+      ...(emotions['tired'] ?? []),
+      ...(emotions['anxious'] ?? []),
+      ...(emotions['frustrated'] ?? []),
     ];
+    
+    if (languageCode == 'ko') {
+      needWords.addAll(['힘들', '어려', '못하', '실패', '안돼', '포기']);
+    }
+    
     return needWords.any((word) => message.contains(word));
   }
 
   /// 격려 타입 결정
-  String _determineEncouragementType(String message) {
-    if (message.contains('실패') || message.contains('못')) {
+  String _determineEncouragementType(String message, String languageCode) {
+    final emotions = MultilingualKeywords.getEmotionKeywords(languageCode);
+    
+    // Check for failure/inability
+    if (languageCode == 'ko' && (message.contains('실패') || message.contains('못'))) {
       return 'failure_support';
-    } else if (message.contains('힘들') || message.contains('지치')) {
+    }
+    
+    // Check for exhaustion
+    final tiredWords = emotions['tired'] ?? [];
+    if (tiredWords.any((word) => message.contains(word))) {
       return 'exhaustion_comfort';
-    } else if (message.contains('걱정') || message.contains('불안')) {
+    }
+    
+    // Check for anxiety
+    final anxiousWords = emotions['anxious'] ?? [];
+    if (anxiousWords.any((word) => message.contains(word))) {
       return 'anxiety_relief';
-    } else if (message.contains('우울') || message.contains('슬프')) {
+    }
+    
+    // Check for sadness
+    final sadWords = emotions['sad'] ?? [];
+    if (sadWords.any((word) => message.contains(word))) {
       return 'emotional_support';
     }
+    
     return 'general_encouragement';
   }
 
   /// 격려 강도 계산
-  double _calculateEncouragementIntensity(String message) {
+  double _calculateEncouragementIntensity(String message, String languageCode) {
     double intensity = 0.5;
     
     // 부정적 단어가 많을수록 강도 증가
-    final negativeWords = ['너무', '정말', '진짜', '완전', '엄청'];
+    final negativeWords = <String>[];
+    if (languageCode == 'ko') {
+      negativeWords.addAll(['너무', '정말', '진짜', '완전', '엄청']);
+    } else if (languageCode == 'en') {
+      negativeWords.addAll(['very', 'really', 'totally', 'completely', 'extremely']);
+    }
+    
     for (final word in negativeWords) {
       if (message.contains(word)) {
         intensity += 0.1;
@@ -531,7 +609,11 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
     }
     
     // 감정 표현
-    if (RegExp(r'[ㅠㅜ]').hasMatch(message)) intensity += 0.2;
+    if (languageCode == 'ko' && RegExp(r'[ㅠㅜ]').hasMatch(message)) {
+      intensity += 0.2;
+    } else if (message.contains('😢') || message.contains('😭')) {
+      intensity += 0.2;
+    }
     
     return intensity.clamp(0.3, 1.0);
   }
@@ -603,7 +685,7 @@ class PraiseAndEncouragementSystem extends BaseQualitySystem {
         .firstOrNull;
     
     if (lastUserMessage != null) {
-      if (_detectAchievement(lastUserMessage.content)) {
+      if (_detectAchievement(lastUserMessage.content, 'ko')) {
         return 'immediate'; // 즉시 칭찬
       }
     }

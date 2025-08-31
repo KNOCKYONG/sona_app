@@ -80,7 +80,7 @@ class _BlockedPersonasScreenState extends State<BlockedPersonasScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text(localizations.unblock),
-        content: Text('${persona.personaName}의 차단을 해제하시겠습니까?'),
+        content: Text(localizations.unblockPersonaConfirm(persona.personaName)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
@@ -134,7 +134,7 @@ class _BlockedPersonasScreenState extends State<BlockedPersonasScreen> {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('차단 해제에 실패했습니다'),
+                content: Text(localizations.unblockFailed),
                 backgroundColor: Colors.red,
               ),
             );
@@ -148,7 +148,7 @@ class _BlockedPersonasScreenState extends State<BlockedPersonasScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('오류가 발생했습니다: $e'),
+              content: Text(localizations.errorWithMessage('Error', e.toString())),
               backgroundColor: Colors.red,
             ),
           );
@@ -159,7 +159,7 @@ class _BlockedPersonasScreenState extends State<BlockedPersonasScreen> {
 
   String _formatDate(DateTime date) {
     final localizations = AppLocalizations.of(context)!;
-    if (localizations.isKorean) {
+    if (Localizations.localeOf(context).languageCode == 'ko') {
       return DateFormat('yyyy년 MM월 dd일').format(date);
     } else {
       return DateFormat('MMM dd, yyyy').format(date);

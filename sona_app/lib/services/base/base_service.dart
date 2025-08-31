@@ -157,7 +157,7 @@ abstract class BaseService extends ChangeNotifier {
 
       return errorString.replaceAll('Exception: ', '');
     }
-    return '알 수 없는 오류가 발생했습니다';
+    return 'unknownError'; // To be localized in UI layer
   }
 
   /// 로딩 상태 수동 설정

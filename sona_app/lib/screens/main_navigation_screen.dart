@@ -161,8 +161,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         screenKey: 'main_navigation_intro',
         tutorialSteps: [
           TutorialStep(
-            title: 'SONA에 오신 것을 환영합니다!',
-            description: 'AI 페르소나와 특별한 관계를 만들어보세요.',
+            title: AppLocalizations.of(context)!.tutorialWelcomeTitle,
+            description: AppLocalizations.of(context)!.tutorialWelcomeDescription,
             messagePosition: Offset(
               MediaQuery.of(context).size.width / 2 - 150,
               100,

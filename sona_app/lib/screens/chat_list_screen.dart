@@ -18,6 +18,7 @@ import '../widgets/persona/optimized_persona_image.dart';
 import '../services/relationship/relation_score_service.dart';
 import '../widgets/skeleton/skeleton_widgets.dart';
 import '../l10n/app_localizations.dart';
+import '../utils/localization_helper.dart';
 import 'chat_screen.dart';
 import '../utils/performance_monitor.dart';
 
@@ -324,11 +325,11 @@ class _ChatListScreenState extends State<ChatListScreen>
         final difference = now.difference(matchedAt);
         
         if (difference.inDays > 0) {
-          return AppLocalizations.of(context)!.daysAgo(difference.inDays);
+          return AppLocalizations.of(context)!.daysAgo(difference.inDays, 'days ago');
         } else if (difference.inHours > 0) {
-          return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
+          return AppLocalizations.of(context)!.hoursAgo(difference.inHours, 'hours ago');
         } else if (difference.inMinutes > 0) {
-          return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
+          return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes, 'minutes ago');
         } else {
           return AppLocalizations.of(context)!.justNow;
         }
@@ -338,19 +339,8 @@ class _ChatListScreenState extends State<ChatListScreen>
 
     // Use real last message for time
     final lastMessage = realMessages.last;
-    final now = DateTime.now();
-    final messageTime = lastMessage.timestamp;
-    final difference = now.difference(messageTime);
-
-    if (difference.inDays > 0) {
-      return AppLocalizations.of(context)!.daysAgo(difference.inDays);
-    } else if (difference.inHours > 0) {
-      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
-    } else if (difference.inMinutes > 0) {
-      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
-    } else {
-      return AppLocalizations.of(context)!.justNow;
-    }
+    final locale = Localizations.localeOf(context);
+    return LocalizationHelper.formatRelativeTime(lastMessage.timestamp, locale);
   }
 
   // 예측 프리로드를 위한 메서드

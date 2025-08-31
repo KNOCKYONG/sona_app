@@ -404,7 +404,7 @@ class _PurchaseScreenState extends State<PurchaseScreen> {
         ),
         title: Text(AppLocalizations.of(context)!.purchaseConfirm),
         content: Text(AppLocalizations.of(context)!
-            .purchaseConfirmMessage(product.title, product.price)),
+            .purchaseConfirmMessage(product.title, product.price, product.description ?? '')),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

@@ -120,8 +120,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     // If gender is not selected, automatically set genderAll to true
+    // This ensures users see all personas when no gender is specified
     if (_selectedGender == null) {
       _genderAll = true;
+      debugPrint('📝 [SignUpScreen] Gender not selected, setting genderAll to true');
+    } else {
+      debugPrint('📝 [SignUpScreen] Gender: $_selectedGender, genderAll: $_genderAll');
     }
 
     if (!_agreedToTerms || !_agreedToPrivacy) {
@@ -162,6 +166,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         await Future.delayed(const Duration(milliseconds: 500));
         debugPrint('🔄 [SignupScreen] Initializing PersonaService for new user: ${user.uid}');
         
+        // 회원가입 후 userService에서 사용자 정보 가져오기
+        final currentUser = userService.currentUser;
+        if (currentUser != null) {
+          debugPrint('🔐 [SignupScreen] Setting current user for PersonaService: gender=${currentUser.gender}, genderAll=${currentUser.genderAll}');
+          personaService.setCurrentUser(currentUser);
+        }
+        
         try {
           await personaService.initialize(userId: user.uid);
           debugPrint('✅ [SignupScreen] PersonaService initialized successfully');
@@ -198,6 +209,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Firebase Auth 토큰 전파를 위한 짧은 딜레이
         await Future.delayed(const Duration(milliseconds: 500));
         debugPrint('🔄 [SignupScreen] Initializing PersonaService for new Apple user: ${user.uid}');
+        
+        // 회원가입 후 userService에서 사용자 정보 가져오기
+        final currentUser = userService.currentUser;
+        if (currentUser != null) {
+          debugPrint('🔐 [SignupScreen] Setting current user for PersonaService: gender=${currentUser.gender}, genderAll=${currentUser.genderAll}');
+          personaService.setCurrentUser(currentUser);
+        }
         
         try {
           await personaService.initialize(userId: user.uid);
@@ -237,6 +255,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // Firebase Auth 토큰 전파를 위한 짧은 딜레이
         await Future.delayed(const Duration(milliseconds: 500));
         debugPrint('🔄 [SignupScreen] Initializing PersonaService for new user: ${user.uid}');
+        
+        // 회원가입 후 userService에서 사용자 정보 가져오기
+        final currentUser = userService.currentUser;
+        if (currentUser != null) {
+          debugPrint('🔐 [SignupScreen] Setting current user for PersonaService: gender=${currentUser.gender}, genderAll=${currentUser.genderAll}');
+          personaService.setCurrentUser(currentUser);
+        }
         
         try {
           await personaService.initialize(userId: user.uid);
@@ -503,7 +528,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '계정 & 프로필 정보',
+            localizations.accountAndProfile,
             style: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -511,7 +536,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 8),
           Text(
-            AppLocalizations.of(context)!.enterBasicInformation,
+            localizations.enterBasicInformation,
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 24),
@@ -597,7 +622,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
             controller: _nicknameController,
             decoration: InputDecoration(
               labelText: localizations.nicknameLabel,
-              hintText: '3~10자 한글/영문/숫자',
+              hintText: localizations.nicknamePlaceholder,
+              helperText: localizations.nicknameHelperText,
               prefixIcon: const Icon(Icons.person_outline),
               suffixIcon: _isCheckingNickname
                   ? const SizedBox(
@@ -651,7 +677,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 return localizations.enterNickname;
               }
               if (value.length < 3 || value.length > 10) {
-                return '닉네임은 3~10자로 입력해주세요';
+                return localizations.nicknameLengthError;
               }
               if (!_isNicknameAvailable && value.length >= 3) {
                 return localizations.nicknameAlreadyUsed;
@@ -665,10 +691,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           TextFormField(
             controller: _referralEmailController,
             decoration: InputDecoration(
-              labelText: '추천인 이메일 (선택)',
-              hintText: AppLocalizations.of(context)!.referrerEmail,
+              labelText: localizations.referrerEmailLabel,
+              hintText: localizations.referrerEmail,
               prefixIcon: const Icon(Icons.people_outline),
-              helperText: '친구의 추천으로 가입하시나요?',
+              helperText: localizations.referrerEmailHelper,
             ),
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
@@ -683,71 +709,137 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Gender (선택)
-          Text(localizations.genderOptional,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          // 성별 미선택 시 안내 메시지
+          // 성별 선택 섹션 (본인 성별 + 페르소나 성별 선호)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
+              color: Colors.grey.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey.withOpacity(0.2)),
             ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline, size: 16, color: Colors.blue),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    localizations.genderNotSelectedInfo,
-                    style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+                // 본인 성별
+                Row(
+                  children: [
+                    Icon(Icons.person, size: 20, color: AppTheme.primaryColor),
+                    const SizedBox(width: 8),
+                    Text(
+                      localizations.myGenderSection,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                // 성별 미선택 시 안내 메시지
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  margin: const EdgeInsets.only(bottom: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 16, color: Colors.blue),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          localizations.genderSelectionInfo,
+                          style: TextStyle(fontSize: 12, color: Colors.blue[700]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RadioListTile<String>(
+                        title: Text(localizations.male),
+                        value: 'male',
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                        },
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile<String>(
+                        title: Text(localizations.female),
+                        value: 'female',
+                        groupValue: _selectedGender,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGender = value;
+                          });
+                        },
+                        contentPadding: EdgeInsets.zero,
+                        visualDensity: VisualDensity.compact,
+                      ),
+                    ),
+                  ],
+                ),
+                RadioListTile<String>(
+                  title: Text(localizations.other),
+                  value: 'other',
+                  groupValue: _selectedGender,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedGender = value;
+                    });
+                  },
+                  contentPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                ),
+                
+                const Divider(height: 24),
+                
+                // 페르소나 성별 선호
+                Row(
+                  children: [
+                    Icon(Icons.favorite, size: 20, color: Colors.pink),
+                    const SizedBox(width: 8),
+                    Text(
+                      localizations.personaGenderSection,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                CheckboxListTile(
+                  title: Text(localizations.showAllGendersOption),
+                  subtitle: Text(
+                    _selectedGender == null 
+                      ? localizations.genderPreferenceDisabled
+                      : _genderAll 
+                        ? localizations.genderPreferenceActive 
+                        : localizations.genderPreferenceInactive,
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                  ),
+                  value: _genderAll,
+                  onChanged: _selectedGender == null ? null : (value) {
+                    setState(() {
+                      _genderAll = value ?? false;
+                    });
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                  contentPadding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
                 ),
               ],
             ),
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: RadioListTile<String>(
-                  title: Text(localizations.male),
-                  value: 'male',
-                  groupValue: _selectedGender,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedGender = value;
-                    });
-                  },
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-              Expanded(
-                child: RadioListTile<String>(
-                  title: Text(localizations.female),
-                  value: 'female',
-                  groupValue: _selectedGender,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedGender = value;
-                    });
-                  },
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-            ],
-          ),
-          RadioListTile<String>(
-            title: Text(localizations.other),
-            value: 'other',
-            groupValue: _selectedGender,
-            onChanged: (value) {
-              setState(() {
-                _selectedGender = value;
-              });
-            },
-            contentPadding: EdgeInsets.zero,
           ),
           const SizedBox(height: 16),
 
@@ -876,26 +968,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             maxLines: 3,
             maxLength: 100,
-          ),
-          const SizedBox(height: 16),
-
-          // Gender preference (선택)
-          Text(
-            localizations.personaGenderPreference,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          CheckboxListTile(
-            title: Text(localizations.showAllGenders),
-            subtitle: Text(localizations.showOppositeGenderOnly),
-            value: _genderAll,
-            onChanged: (value) {
-              setState(() {
-                _genderAll = value ?? false;
-              });
-            },
-            controlAffinity: ListTileControlAffinity.leading,
-            contentPadding: EdgeInsets.zero,
           ),
           const SizedBox(height: 16),
 

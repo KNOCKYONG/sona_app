@@ -655,11 +655,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       return AppLocalizations.of(context)!.yesterday;
     } else if (messageDate.isAfter(today.subtract(const Duration(days: 7)))) {
       // 이번 주
-      final weekdays = AppLocalizations.of(context)!.weekdays;
+      final weekdays = AppLocalizations.of(context)!.weekdays.split(',');
       return weekdays[date.weekday - 1];
     } else {
       // 더 오래된 날짜는 월/일 형식으로
-      return AppLocalizations.of(context)!.monthDay(date.month, date.day);
+      final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return AppLocalizations.of(context)!.monthDay(months[date.month - 1], date.day);
     }
   }
   
@@ -1502,57 +1503,195 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         '🔍 currentPersona: ${currentPersona?.id} - ${currentPersona?.name}');
 
     if (userId.isNotEmpty && currentPersona != null) {
-      debugPrint('🔍 Conditions met, showing loading dialog');
-
-      // Store context before async operation
-      final scaffoldMessenger = ScaffoldMessenger.of(context);
-      final navigator = Navigator.of(context);
-
-      // Show loading dialog
-      showDialog(
+      // Show error description dialog
+      final messages = chatService.getMessages(currentPersona.id);
+      final recentMessages = messages.length > 3
+          ? messages.sublist(messages.length - 3)
+          : messages;
+      
+      String? errorDescription;
+      String? problemMessage;
+      
+      final result = await showDialog<Map<String, String>>(
         context: context,
-        barrierDismissible: false,
-        builder: (dialogContext) => const Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFFFF6B9D),
-          ),
-        ),
+        builder: (context) {
+          String selectedMessage = '';
+          String description = '';
+          
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return AlertDialog(
+                title: Text(AppLocalizations.of(context)!.reportChatError),
+                content: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.selectProblematicMessage,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: recentMessages.map((msg) {
+                            final isSelected = selectedMessage == msg.content;
+                            return InkWell(
+                              onTap: () {
+                                setState(() {
+                                  selectedMessage = msg.content;
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 4),
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: isSelected 
+                                    ? Theme.of(context).primaryColor.withOpacity(0.2)
+                                    : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected 
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.withOpacity(0.3),
+                                  ),
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      msg.isFromUser ? Icons.person : Icons.smart_toy,
+                                      size: 16,
+                                      color: msg.isFromUser ? Colors.blue : Colors.purple,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        msg.content.length > 100 
+                                          ? '${msg.content.substring(0, 100)}...'
+                                          : msg.content,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context).textTheme.bodyLarge?.color,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        AppLocalizations.of(context)!.describeError,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!.errorDescriptionHint,
+                          border: const OutlineInputBorder(),
+                        ),
+                        maxLines: 3,
+                        onChanged: (value) {
+                          description = value;
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, null),
+                    child: Text(AppLocalizations.of(context)!.cancel),
+                  ),
+                  ElevatedButton(
+                    onPressed: description.isNotEmpty ? () {
+                      Navigator.pop(context, {
+                        'message': selectedMessage,
+                        'description': description,
+                      });
+                    } : null,
+                    child: Text(AppLocalizations.of(context)!.sendReport),
+                  ),
+                ],
+              );
+            },
+          );
+        },
       );
+      
+      if (result != null) {
+        errorDescription = result['description'];
+        problemMessage = result['message'];
+        
+        debugPrint('🔍 Conditions met, showing loading dialog');
+        debugPrint('🔍 Error description: $errorDescription');
+        debugPrint('🔍 Problem message: $problemMessage');
 
-      bool success = false;
-      String? errorMessage;
+        // Store context before async operation
+        final scaffoldMessenger = ScaffoldMessenger.of(context);
+        final navigator = Navigator.of(context);
 
-      try {
-        await chatService.sendChatErrorReport(
-          userId: userId,
-          personaId: currentPersona.id,
-        );
-        success = true;
-      } catch (e) {
-        debugPrint('🔥 Error sending chat error report: $e');
-        errorMessage = e.toString().contains('permission')
-            ? AppLocalizations.of(context)!.permissionDeniedTryLater
-            : AppLocalizations.of(context)!.networkErrorOccurred;
-      }
-
-      // Close loading dialog
-      navigator.pop();
-
-      // Show result message
-      if (success) {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context)!.chatErrorSentSuccessfully),
-            backgroundColor: Colors.green,
+        // Show loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (dialogContext) => const Center(
+            child: CircularProgressIndicator(
+              color: Color(0xFFFF6B9D),
+            ),
           ),
         );
-      } else {
-        scaffoldMessenger.showSnackBar(
-          SnackBar(
-            content: Text('${AppLocalizations.of(context)!.errorSendingFailed}: $errorMessage'),
-            backgroundColor: Colors.red,
-          ),
-        );
+
+        bool success = false;
+        String? errorMessage;
+
+        try {
+          // Combine problem message and description for userMessage
+          final fullErrorDescription = problemMessage != null && problemMessage.isNotEmpty
+              ? '${AppLocalizations.of(context)!.problemMessage}: "$problemMessage"\n\n${AppLocalizations.of(context)!.errorDescription}: $errorDescription'
+              : '${AppLocalizations.of(context)!.errorDescription}: $errorDescription';
+          
+          await chatService.sendChatErrorReport(
+            userId: userId,
+            personaId: currentPersona.id,
+            userMessage: fullErrorDescription,
+          );
+          success = true;
+        } catch (e) {
+          debugPrint('🔥 Error sending chat error report: $e');
+          errorMessage = e.toString().contains('permission')
+              ? AppLocalizations.of(context)!.permissionDeniedTryLater
+              : AppLocalizations.of(context)!.networkErrorOccurred;
+        }
+
+        // Close loading dialog
+        navigator.pop();
+
+        // Show result message
+        if (success) {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text(AppLocalizations.of(context)!.chatErrorSentSuccessfully),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else {
+          scaffoldMessenger.showSnackBar(
+            SnackBar(
+              content: Text('${AppLocalizations.of(context)!.errorSendingFailed}: $errorMessage'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     } else {
       debugPrint(

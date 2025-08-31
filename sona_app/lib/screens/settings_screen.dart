@@ -175,9 +175,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.privacy_tip_outlined,
               title: localizations.privacySettings,
-              subtitle: Localizations.localeOf(context).languageCode == 'ko' 
-                  ? '감정분석, 메모리앨범 등 개인정보 보호 설정'
-                  : 'Emotion analysis, memory album, etc.',
+              subtitle: localizations.privacySettingsInfo,
               onTap: () {
                 Navigator.push(
                   context,
@@ -233,7 +231,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.language,
               title: localizations.languageSettings,
-              subtitle: Localizations.localeOf(context).languageCode == 'ko' ? localizations.koreanLanguage : 'English',
+              subtitle: _getCurrentLanguageName(context, localizations),
               onTap: () {
                 Navigator.push(
                   context,
@@ -401,6 +399,39 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  String _getCurrentLanguageName(BuildContext context, AppLocalizations localizations) {
+    final languageCode = Localizations.localeOf(context).languageCode;
+    switch (languageCode) {
+      case 'ko':
+        return localizations.koreanLanguage;
+      case 'en':
+        return localizations.englishLanguage;
+      case 'ja':
+        return localizations.japaneseLanguage;
+      case 'zh':
+        return localizations.chineseLanguage;
+      case 'vi':
+        return localizations.vietnamese;
+      case 'es':
+        return localizations.spanish;
+      case 'fr':
+        return localizations.french;
+      case 'de':
+        return localizations.german;
+      case 'pt':
+        return localizations.portuguese;
+      case 'ru':
+        return localizations.russian;
+      case 'it':
+        return localizations.italian;
+      case 'id':
+        return localizations.indonesian;
+      case 'th':
+        return localizations.thai;
+      default:
+        return 'English'; // Fallback
+    }
+  }
 
   Widget _buildMenuItem({
     required IconData icon,

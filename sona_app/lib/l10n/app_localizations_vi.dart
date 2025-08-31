@@ -785,7 +785,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get indonesian => 'Indonesian';
 
   @override
-  String get vietnamese => 'Vietnamese';
+  String get vietnamese => 'Tiếng Việt';
 
   @override
   String get spanish => 'Spanish';

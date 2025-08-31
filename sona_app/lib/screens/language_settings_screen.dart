@@ -23,11 +23,12 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
       LanguageOption('vi', 'Tiếng Việt', '🇻🇳', l10n.vietnamese),
       LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', l10n.indonesian),
       LanguageOption('es', 'Español', '🇪🇸', l10n.spanish),
-      LanguageOption('fr', 'Français', '🇫🇷', l10n.french),
-      LanguageOption('de', 'Deutsch', '🇩🇪', l10n.german),
-      LanguageOption('ru', 'Русский', '🇷🇺', l10n.russian),
-      LanguageOption('pt', 'Português', '🇵🇹', l10n.portuguese),
-      LanguageOption('it', 'Italiano', '🇮🇹', l10n.italian),
+      // These languages are not officially supported yet
+      // LanguageOption('fr', 'Français', '🇫🇷', 'Français'),
+      // LanguageOption('de', 'Deutsch', '🇩🇪', 'Deutsch'),
+      // LanguageOption('ru', 'Русский', '🇷🇺', 'Русский'),
+      // LanguageOption('pt', 'Português', '🇵🇹', 'Português'),
+      // LanguageOption('it', 'Italiano', '🇮🇹', 'Italiano'),
     ];
   }
 

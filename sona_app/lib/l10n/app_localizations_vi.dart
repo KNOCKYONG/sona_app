@@ -659,19 +659,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get systemTheme => 'Theo hệ thống';
 
   @override
-  String get lightTheme => 'Chế độ sáng';
+  String get lightTheme => 'Light Mode';
 
   @override
-  String get lightThemeDesc => 'Sử dụng giao diện sáng';
+  String get lightThemeDesc => 'Use bright theme';
 
   @override
-  String get darkTheme => 'Chế độ tối';
+  String get darkTheme => 'Dark Mode';
 
   @override
-  String get darkThemeDesc => 'Sử dụng giao diện tối';
+  String get darkThemeDesc => 'Use dark theme';
 
   @override
-  String get preview => 'Xem trước';
+  String get preview => 'Preview';
 
   @override
   String get helloEmoji => 'Hello! 😊';
@@ -683,16 +683,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get purchaseSection6Title => '6. Inquiries';
 
   @override
-  String get makeFriends => 'Kết bạn';
+  String get makeFriends => 'Make Friends';
 
   @override
-  String get hobbySharing => 'Chia sẻ sở thích';
+  String get hobbySharing => 'Hobby Sharing';
 
   @override
-  String get lonelinessRelief => 'Giảm cô đơn';
+  String get lonelinessRelief => 'Loneliness Relief';
 
   @override
-  String get dailyConversation => 'Trò chuyện hàng ngày';
+  String get dailyConversation => 'Daily Conversation';
 
   @override
   String get entertainmentFun => 'Entertainment/Fun';
@@ -710,7 +710,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get music => 'Âm nhạc';
 
   @override
-  String get reading => 'Đọc sách';
+  String get reading => 'Reading';
 
   @override
   String get sports => 'Thể thao';
@@ -731,106 +731,91 @@ class AppLocalizationsVi extends AppLocalizations {
   String get art => 'Nghệ thuật';
 
   @override
-  String get pets => 'Thú cưng';
+  String get pets => 'Pets';
 
   @override
   String get photography => 'Nhiếp ảnh';
 
   @override
-  String get dailyChat => 'Trò chuyện hàng ngày';
+  String get dailyChat => 'Daily Chat';
 
   @override
-  String get datingAdvice => 'Lời khuyên hẹn hò';
+  String get datingAdvice => 'Dating Advice';
 
   @override
-  String get hobbyTalk => 'Nói về sở thích';
+  String get hobbyTalk => 'Hobby Talk';
 
   @override
-  String get lifeAdvice => 'Lời khuyên cuộc sống';
+  String get lifeAdvice => 'Life Advice';
 
   @override
-  String get funChat => 'Trò chuyện vui vẻ';
+  String get funChat => 'Fun Chat';
 
   @override
-  String get deepTalk => 'Trò chuyện sâu sắc';
+  String get deepTalk => 'Deep Talk';
 
   @override
-  String get lightTalk => 'Trò chuyện nhẹ nhàng';
+  String get lightTalk => 'Light Talk';
 
   @override
-  String get allAgree => 'Đồng ý tất cả';
+  String get allAgree => 'Agree to All';
 
   @override
   String get required => 'Bắt buộc';
 
   @override
-  String get preferredLanguage => 'Ngôn ngữ ưa thích';
+  String get preferredLanguage => 'Preferred Language';
 
   @override
-  String get selectLanguage => 'Chọn ngôn ngữ';
+  String get selectLanguage => 'Select Language';
 
   @override
-  String get korean => 'Tiếng Hàn';
+  String get korean => 'Korean';
 
   @override
-  String get english => 'Tiếng Anh';
+  String get english => 'English';
 
   @override
-  String get japanese => 'Tiếng Nhật';
+  String get japanese => 'Japanese';
 
   @override
-  String get chinese => 'Tiếng Trung';
+  String get chinese => 'Chinese';
 
   @override
-  String get indonesian => 'Tiếng Indonesia';
+  String get indonesian => 'Indonesian';
 
   @override
-  String get vietnamese => 'Tiếng Việt';
+  String get vietnamese => 'Vietnamese';
 
   @override
-  String get spanish => 'Tiếng Tây Ban Nha';
+  String get spanish => 'Spanish';
 
   @override
-  String get thai => 'Tiếng Thái';
+  String get thai => 'Thai';
 
   @override
-  String get french => 'Tiếng Pháp';
+  String get showOriginalText => 'Show Original';
 
   @override
-  String get german => 'Tiếng Đức';
+  String get hideOriginalText => 'Hide Original';
 
   @override
-  String get russian => 'Tiếng Nga';
+  String get errorDetails => 'Error Details';
 
   @override
-  String get portuguese => 'Tiếng Bồ Đào Nha';
+  String get submitReport => 'Submit Report';
 
   @override
-  String get italian => 'Tiếng Ý';
+  String get multilingualChat => 'Multilingual Chat';
 
   @override
-  String get showOriginalText => 'Hiển thị gốc';
+  String get languageIndicator => 'Language';
 
   @override
-  String get hideOriginalText => 'Ẩn bản gốc';
+  String get translatedFrom => 'Translated';
 
   @override
-  String get errorDetails => 'Chi tiết lỗi';
-
-  @override
-  String get submitReport => 'Gửi báo cáo';
-
-  @override
-  String get multilingualChat => 'Trò chuyện đa ngôn ngữ';
-
-  @override
-  String get languageIndicator => 'Ngôn ngữ';
-
-  @override
-  String get translatedFrom => 'Đã dịch';
-
-  @override
-  String get originalText => 'Bản gốc';
+  String get originalText => 'Original';
 
   @override
   String get translatedText => 'Translation';
@@ -1185,16 +1170,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get privacySettingsScreen => 'Privacy Settings';
 
   @override
-  String get useSystemLanguage => 'Sử dụng ngôn ngữ hệ thống';
+  String get useSystemLanguage => 'Use System Language';
 
   @override
-  String get followDeviceLanguage => 'Theo cài đặt ngôn ngữ thiết bị';
+  String get followDeviceLanguage => 'Follow device language settings';
 
   @override
-  String get setAppInterfaceLanguage => 'Đặt ngôn ngữ giao diện ứng dụng';
+  String get setAppInterfaceLanguage => 'Set app interface language';
 
   @override
-  String get koreanLanguage => 'Tiếng Hàn';
+  String get koreanLanguage => 'Korean';
 
   @override
   String get laterButton => 'Later';

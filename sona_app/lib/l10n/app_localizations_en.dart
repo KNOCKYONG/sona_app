@@ -796,21 +796,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get thai => 'Thai';
 
   @override
-  String get french => 'French';
-
-  @override
-  String get german => 'German';
-
-  @override
-  String get russian => 'Russian';
-
-  @override
-  String get portuguese => 'Portuguese';
-
-  @override
-  String get italian => 'Italian';
-
-  @override
   String get showOriginalText => 'Show Original';
 
   @override

@@ -403,27 +403,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final languageCode = Localizations.localeOf(context).languageCode;
     switch (languageCode) {
       case 'ko':
-        return localizations.koreanLanguage;
+        return localizations.korean;
       case 'en':
-        return localizations.englishLanguage;
+        return localizations.english;
       case 'ja':
-        return localizations.japaneseLanguage;
+        return localizations.japanese;
       case 'zh':
-        return localizations.chineseLanguage;
+        return localizations.chinese;
       case 'vi':
         return localizations.vietnamese;
       case 'es':
         return localizations.spanish;
       case 'fr':
-        return localizations.french;
+        return 'Français';
       case 'de':
-        return localizations.german;
+        return 'Deutsch';
       case 'pt':
-        return localizations.portuguese;
+        return 'Português';
       case 'ru':
-        return localizations.russian;
+        return 'Русский';
       case 'it':
-        return localizations.italian;
+        return 'Italiano';
       case 'id':
         return localizations.indonesian;
       case 'th':

@@ -196,7 +196,7 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                               localeService.setLocale(newValue);
                             }
                           },
-                          items: _languages.map<DropdownMenuItem<String>>(
+                          items: languages.map<DropdownMenuItem<String>>(
                             (LanguageOption language) {
                               return DropdownMenuItem<String>(
                                 value: language.code,

@@ -55,9 +55,10 @@ class _EnhancedLanguageSettingsScreenState extends State<EnhancedLanguageSetting
     final localeService = Provider.of<LocaleService>(context);
     final theme = Theme.of(context);
 
-    // Find current language
+    // Find current language - use the actual app locale
+    final currentAppLocale = Localizations.localeOf(context);
     final currentLanguage = _languages.firstWhere(
-      (lang) => lang.code == (localeService.locale?.languageCode ?? 'en'),
+      (lang) => lang.code == currentAppLocale.languageCode,
       orElse: () => _languages.first,
     );
 

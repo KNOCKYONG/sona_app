@@ -7,6 +7,48 @@ class LanguageDetectionService {
   factory LanguageDetectionService() => _instance;
   LanguageDetectionService._internal();
 
+  /// 텍스트의 언어를 감지 (우선순위 기반)
+  /// systemLanguage: 시스템 언어 코드 (우선순위 1)
+  /// appLanguage: 앱 설정 언어 코드 (우선순위 2)
+  String detectLanguageWithPriority(String text, {String? systemLanguage, String? appLanguage}) {
+    if (text.isEmpty) {
+      // 빈 텍스트인 경우 우선순위에 따라 결정
+      if (systemLanguage != null && getSupportedLanguages().contains(systemLanguage)) {
+        return systemLanguage;
+      }
+      if (appLanguage != null && getSupportedLanguages().contains(appLanguage)) {
+        return appLanguage;
+      }
+      return 'en'; // 최종 기본값
+    }
+    
+    // 1. 한국어가 포함되어 있으면 한국어 우선
+    if (RegExp(r'[\u{AC00}-\u{D7AF}]', unicode: true).hasMatch(text)) {
+      return 'ko';
+    }
+    
+    // 2. 일반 언어 감지
+    final detectedLang = detectLanguage(text);
+    
+    // 3. 감지 실패 시 우선순위 적용
+    if (detectedLang == 'en') {
+      // 영어로 감지되었지만, 실제로는 다른 언어일 수 있음
+      // 시스템 언어나 앱 언어로 폴백
+      if (systemLanguage != null && systemLanguage != 'en' && 
+          getSupportedLanguages().contains(systemLanguage)) {
+        // 시스템 언어가 영어가 아니고 지원되는 언어라면 우선 사용
+        return systemLanguage;
+      }
+      if (appLanguage != null && appLanguage != 'en' && 
+          getSupportedLanguages().contains(appLanguage)) {
+        // 앱 언어가 영어가 아니고 지원되는 언어라면 사용
+        return appLanguage;
+      }
+    }
+    
+    return detectedLang;
+  }
+  
   /// 텍스트의 언어를 감지
   String detectLanguage(String text) {
     if (text.isEmpty) return 'en'; // 기본값은 영어
@@ -68,6 +110,64 @@ class LanguageDetectionService {
       return 'pt';
     }
     
+    // 베트남어 감지 (성조 표시)
+    if (RegExp(r'[àảãáạăằẳẵắặâầẩẫấậèẻẽéẹêềểễếệìỉĩíịòỏõóọôồổỗốộơờởỡớợùủũúụưừửữứựỳỷỹýỵđĐ]').hasMatch(text)) {
+      return 'vi';
+    }
+    
+    // 베트남어 키워드 감지
+    if (_containsVietnameseKeywords(lower)) {
+      return 'vi';
+    }
+    
+    // 태국어 감지 (태국 문자: 0E00-0E7F)
+    if (RegExp(r'[\u{0E00}-\u{0E7F}]', unicode: true).hasMatch(text)) {
+      return 'th';
+    }
+    
+    // 인도네시아어 키워드 감지
+    if (_containsIndonesianKeywords(lower)) {
+      return 'id';
+    }
+    
+    // 힌디어 감지 (데바나가리 문자: 0900-097F)
+    if (RegExp(r'[\u{0900}-\u{097F}]', unicode: true).hasMatch(text)) {
+      return 'hi';
+    }
+    
+    // 네덜란드어 키워드 감지
+    if (_containsDutchKeywords(lower)) {
+      return 'nl';
+    }
+    
+    // 폴란드어 특수 문자 감지
+    if (lower.contains('ą') || lower.contains('ć') || lower.contains('ę') || 
+        lower.contains('ł') || lower.contains('ń') || lower.contains('ś') || 
+        lower.contains('ź') || lower.contains('ż')) {
+      return 'pl';
+    }
+    
+    // 스웨덴어 키워드 감지
+    if (_containsSwedishKeywords(lower)) {
+      return 'sv';
+    }
+    
+    // 타갈로그어 키워드 감지
+    if (_containsTagalogKeywords(lower)) {
+      return 'tl';
+    }
+    
+    // 터키어 특수 문자 감지
+    if (lower.contains('ğ') || lower.contains('ı') || lower.contains('ş')) {
+      return 'tr';
+    }
+    
+    // 우르두어 감지 (아랍 문자 + 우르두 특수)
+    if (RegExp(r'[\u{0600}-\u{06FF}]', unicode: true).hasMatch(text) &&
+        (text.contains('ہ') || text.contains('ے') || text.contains('ں'))) {
+      return 'ur';
+    }
+    
     // 말레이시아어 키워드 감지
     if (_containsMalayKeywords(lower)) {
       return 'ms';
@@ -94,7 +194,7 @@ class LanguageDetectionService {
   
   /// 지원되는 언어 목록
   List<String> getSupportedLanguages() {
-    return ['en', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ru', 'ar', 'ms'];
+    return ['en', 'ko', 'es', 'fr', 'de', 'it', 'pt', 'ja', 'zh', 'ru', 'ar', 'ms', 'vi', 'th', 'id', 'hi', 'nl', 'pl', 'sv', 'tl', 'tr', 'ur'];
   }
   
   /// 언어 코드를 언어 이름으로 변환
@@ -112,6 +212,16 @@ class LanguageDetectionService {
       case 'ru': return 'Русский';
       case 'ar': return 'العربية';
       case 'ms': return 'Bahasa Melayu';
+      case 'vi': return 'Tiếng Việt';
+      case 'th': return 'ภาษาไทย';
+      case 'id': return 'Bahasa Indonesia';
+      case 'hi': return 'हिन्दी';
+      case 'nl': return 'Nederlands';
+      case 'pl': return 'Polski';
+      case 'sv': return 'Svenska';
+      case 'tl': return 'Tagalog';
+      case 'tr': return 'Türkçe';
+      case 'ur': return 'اردو';
       default: return 'Unknown';
     }
   }
@@ -143,6 +253,48 @@ class LanguageDetectionService {
                      'saya', 'kamu', 'anda', 'boleh', 'tidak', 'ya',
                      'bagaimana', 'bila', 'siapa', 'kenapa', 'mana',
                      'sudah', 'akan', 'ini', 'itu', 'dengan', 'untuk'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsVietnameseKeywords(String text) {
+    final keywords = ['xin chào', 'cảm ơn', 'tạm biệt', 'chào', 'bạn',
+                     'tôi', 'anh', 'chị', 'em', 'có', 'không', 'được',
+                     'rất', 'và', 'hoặc', 'nhưng', 'vì', 'nếu', 'thì',
+                     'này', 'đó', 'ở', 'với', 'của', 'cho', 'về',
+                     'khỏe', 'vui', 'buồn', 'thế nào', 'bao giờ'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsIndonesianKeywords(String text) {
+    final keywords = ['halo', 'terima kasih', 'selamat', 'pagi', 'siang',
+                     'malam', 'saya', 'kamu', 'anda', 'apa', 'bagaimana',
+                     'di mana', 'kapan', 'siapa', 'mengapa', 'baik',
+                     'tidak', 'ya', 'bisa', 'mau', 'ada', 'adalah',
+                     'ini', 'itu', 'dengan', 'untuk', 'dari', 'ke'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsDutchKeywords(String text) {
+    final keywords = ['hallo', 'hoi', 'dag', 'dank je', 'bedankt', 'alsjeblieft',
+                     'ja', 'nee', 'ik', 'jij', 'je', 'u', 'wij', 'zij',
+                     'wat', 'waar', 'wanneer', 'wie', 'waarom', 'hoe',
+                     'met', 'van', 'voor', 'naar', 'bij', 'op', 'in'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsSwedishKeywords(String text) {
+    final keywords = ['hej', 'hallo', 'tack', 'varsågod', 'ja', 'nej',
+                     'jag', 'du', 'vi', 'de', 'han', 'hon', 'vad',
+                     'var', 'när', 'vem', 'varför', 'hur', 'med',
+                     'från', 'till', 'på', 'i', 'för', 'och', 'eller'];
+    return keywords.any((word) => text.contains(word));
+  }
+  
+  bool _containsTagalogKeywords(String text) {
+    final keywords = ['kumusta', 'salamat', 'paalam', 'oo', 'hindi',
+                     'ako', 'ikaw', 'ka', 'siya', 'kami', 'tayo',
+                     'ano', 'saan', 'kailan', 'sino', 'bakit', 'paano',
+                     'sa', 'ng', 'ang', 'mga', 'para', 'at', 'o'];
     return keywords.any((word) => text.contains(word));
   }
   

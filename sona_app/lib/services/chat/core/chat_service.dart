@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
@@ -950,6 +951,32 @@ class ChatService extends BaseService {
       final chatHistory =
           _messages.where((m) => m.personaId == persona.id).toList();
 
+      // Get system and app languages for priority-based detection
+      String? systemLanguage;
+      String? appLanguage;
+      
+      try {
+        // Get system language from device
+        final widgetsBinding = WidgetsBinding.instance;
+        if (widgetsBinding != null) {
+          final platformDispatcher = widgetsBinding.platformDispatcher;
+          systemLanguage = platformDispatcher.locale.languageCode;
+        }
+        
+        // Get app language from LocaleService
+        if (_localeService != null) {
+          if (_localeService!.useSystemLanguage) {
+            // If using system language, app language is same as system
+            appLanguage = systemLanguage;
+          } else {
+            // Use manually selected language
+            appLanguage = _localeService!.locale?.languageCode;
+          }
+        }
+      } catch (e) {
+        debugPrint('⚠️ Could not get system/app language: $e');
+      }
+      
       final response = await ChatOrchestrator.instance.generateResponse(
         userId: userId,
         basePersona: persona,
@@ -959,6 +986,8 @@ class ChatService extends BaseService {
         userAge: userAge,
         userLanguage: userLanguage,
         conversationId: conversationId,
+        systemLanguage: systemLanguage,
+        appLanguage: appLanguage,
       );
 
       // Handle Like system integration

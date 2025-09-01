@@ -56,11 +56,11 @@
   "@search": {
     "description": "Localized string for search"
   },
-  "filter": "Filter",
+  "filter": "Фильтр",
   "@filter": {
     "description": "Localized string for filter"
   },
-  "sort": "Sort",
+  "sort": "Сортировка",
   "@sort": {
     "description": "Localized string for sort"
   },
@@ -120,7 +120,7 @@
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
-  "logout": "Выйти",
+  "logout": "Выход",
   "@logout": {
     "description": "Localized string for logout"
   },
@@ -128,11 +128,11 @@
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "email": "Email",
+  "email": "Электронная почта",
   "@email": {
     "description": "Localized string for email"
   },
-  "password": "Password",
+  "password": "Пароль",
   "@password": {
     "description": "Localized string for password"
   },
@@ -172,7 +172,7 @@
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "gender": "Gender",
+  "gender": "Пол",
   "@gender": {
     "description": "Localized string for gender"
   },
@@ -180,15 +180,15 @@
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "male": "Male",
+  "male": "Мужской",
   "@male": {
     "description": "Localized string for male"
   },
-  "female": "Female",
+  "female": "Женский",
   "@female": {
     "description": "Localized string for female"
   },
-  "other": "Other",
+  "other": "Другой",
   "@other": {
     "description": "Localized string for other"
   },
@@ -240,7 +240,7 @@
   "@optional": {
     "description": "Localized string for optional"
   },
-  "previous": "Previous",
+  "previous": "Назад",
   "@previous": {
     "description": "Localized string for previous"
   },
@@ -324,7 +324,7 @@
   "@allPersonas": {
     "description": "Localized string for allPersonas"
   },
-  "chat": "Chat",
+  "chat": "Чат",
   "@chat": {
     "description": "Localized string for chat"
   },
@@ -344,7 +344,7 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "send": "Send",
+  "send": "Отправить",
   "@send": {
     "description": "Localized string for send"
   },
@@ -388,7 +388,7 @@
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "Регистрация",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -508,11 +508,11 @@
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "notifications": "Notifications",
+  "notifications": "Уведомления",
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Push-уведомления",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
@@ -532,7 +532,7 @@
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "theme": "Theme",
+  "theme": "Тема",
   "@theme": {
     "description": "Localized string for theme"
   },
@@ -540,11 +540,11 @@
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "darkMode": "Dark Mode",
+  "darkMode": "Темный режим",
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "Конфиденциальность",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "Помощь",
   "@help": {
     "description": "Localized string for help"
   },
@@ -580,11 +580,11 @@
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
-  "about": "About",
+  "about": "О приложении",
   "@about": {
     "description": "Localized string for about"
   },
-  "version": "Version",
+  "version": "Версия",
   "@version": {
     "description": "Localized string for version"
   },
@@ -596,7 +596,7 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "deleteAccount": "Delete Account",
+  "deleteAccount": "Удалить аккаунт",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -664,7 +664,7 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "report": "Report",
+  "report": "Пожаловаться",
   "@report": {
     "description": "Localized string for report"
   },
@@ -676,19 +676,19 @@
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "termsOfService": "Terms of Service",
+  "termsOfService": "Условия использования",
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "privacyPolicy": "Privacy Policy",
+  "privacyPolicy": "Политика конфиденциальности",
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "Продолжить",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "Перейти в настройки",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,19 +728,19 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "Требуется разрешение",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "Разрешение камеры",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "Разрешение галереи",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
-  "permissionDenied": "Permission denied",
+  "permissionDenied": "В разрешении отказано",
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
@@ -812,7 +812,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "Забыли пароль?",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
@@ -832,11 +832,11 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "photo": "Photo",
+  "photo": "Фото",
   "@photo": {
     "description": "Localized string for photo"
   },
-  "justNow": "Just now",
+  "justNow": "Только что",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "Продолжить",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1136,7 +1136,7 @@
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "unblock": "Unblock",
+  "unblock": "Разблокировать",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -1312,7 +1312,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "newMessage": "New message",
+  "newMessage": "Новое сообщение",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1376,11 +1376,11 @@
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
-  "today": "Today",
+  "today": "Сегодня",
   "@today": {
     "description": "Localized string for today"
   },
-  "yesterday": "Yesterday",
+  "yesterday": "Вчера",
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "Разрешение на уведомления необходимо для получения новых сообщений.",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "Доступ к камере необходим для съемки фотографий профиля.",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "Доступ к галерее необходим для выбора фотографий профиля.",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
@@ -2918,7 +2918,7 @@
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "Неизвестная ошибка",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },

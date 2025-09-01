@@ -4,7 +4,7 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "loading": "Lädt...",
+  "loading": "Wird geladen...",
   "@loading": {
     "description": "Localized string for loading"
   },
@@ -56,11 +56,11 @@
   "@search": {
     "description": "Localized string for search"
   },
-  "filter": "Filter",
+  "filter": "Filtern",
   "@filter": {
     "description": "Localized string for filter"
   },
-  "sort": "Sort",
+  "sort": "Sortieren",
   "@sort": {
     "description": "Localized string for sort"
   },
@@ -128,11 +128,11 @@
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "email": "Email",
+  "email": "E-Mail",
   "@email": {
     "description": "Localized string for email"
   },
-  "password": "Password",
+  "password": "Passwort",
   "@password": {
     "description": "Localized string for password"
   },
@@ -172,7 +172,7 @@
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "gender": "Gender",
+  "gender": "Geschlecht",
   "@gender": {
     "description": "Localized string for gender"
   },
@@ -180,15 +180,15 @@
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "male": "Male",
+  "male": "Männlich",
   "@male": {
     "description": "Localized string for male"
   },
-  "female": "Female",
+  "female": "Weiblich",
   "@female": {
     "description": "Localized string for female"
   },
-  "other": "Other",
+  "other": "Andere",
   "@other": {
     "description": "Localized string for other"
   },
@@ -240,7 +240,7 @@
   "@optional": {
     "description": "Localized string for optional"
   },
-  "previous": "Previous",
+  "previous": "Zurück",
   "@previous": {
     "description": "Localized string for previous"
   },
@@ -344,7 +344,7 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "send": "Send",
+  "send": "Senden",
   "@send": {
     "description": "Localized string for send"
   },
@@ -388,7 +388,7 @@
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "Registrieren",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -508,11 +508,11 @@
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "notifications": "Notifications",
+  "notifications": "Benachrichtigungen",
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Push-Benachrichtigungen",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
@@ -532,7 +532,7 @@
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "theme": "Theme",
+  "theme": "Design",
   "@theme": {
     "description": "Localized string for theme"
   },
@@ -540,11 +540,11 @@
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "darkMode": "Dark Mode",
+  "darkMode": "Dunkler Modus",
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "Datenschutz",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "Hilfe",
   "@help": {
     "description": "Localized string for help"
   },
@@ -580,7 +580,7 @@
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
-  "about": "About",
+  "about": "Über",
   "@about": {
     "description": "Localized string for about"
   },
@@ -596,7 +596,7 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "deleteAccount": "Delete Account",
+  "deleteAccount": "Konto löschen",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -664,7 +664,7 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "report": "Report",
+  "report": "Melden",
   "@report": {
     "description": "Localized string for report"
   },
@@ -676,19 +676,19 @@
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "termsOfService": "Terms of Service",
+  "termsOfService": "Nutzungsbedingungen",
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "privacyPolicy": "Privacy Policy",
+  "privacyPolicy": "Datenschutzrichtlinie",
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "Weiter",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "Zu den Einstellungen",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,19 +728,19 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "Berechtigung erforderlich",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "Kamera-Berechtigung",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "Galerie-Berechtigung",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
-  "permissionDenied": "Permission denied",
+  "permissionDenied": "Berechtigung verweigert",
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
@@ -812,7 +812,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "Passwort vergessen?",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
@@ -832,11 +832,11 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "photo": "Photo",
+  "photo": "Foto",
   "@photo": {
     "description": "Localized string for photo"
   },
-  "justNow": "Just now",
+  "justNow": "Gerade eben",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "Weiter",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1136,7 +1136,7 @@
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "unblock": "Unblock",
+  "unblock": "Blockierung aufheben",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -1312,7 +1312,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "newMessage": "New message",
+  "newMessage": "Neue Nachricht",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1376,11 +1376,11 @@
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
-  "today": "Today",
+  "today": "Heute",
   "@today": {
     "description": "Localized string for today"
   },
-  "yesterday": "Yesterday",
+  "yesterday": "Gestern",
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
@@ -1452,7 +1452,7 @@
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "all": "All",
+  "all": "Alle",
   "@all": {
     "description": "Localized string for all"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "Benachrichtigungsberechtigung wird benötigt, um neue Nachrichten zu erhalten.",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "Kamerazugriff wird benötigt, um Profilfotos aufzunehmen.",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "Galeriezugriff wird benötigt, um Profilfotos auszuwählen.",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
@@ -2918,7 +2918,7 @@
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "Unbekannter Fehler",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },

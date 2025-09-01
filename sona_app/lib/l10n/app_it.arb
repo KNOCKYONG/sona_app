@@ -172,7 +172,7 @@
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "gender": "Gender",
+  "gender": "Genere",
   "@gender": {
     "description": "Localized string for gender"
   },
@@ -180,15 +180,15 @@
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "male": "Male",
+  "male": "Maschio",
   "@male": {
     "description": "Localized string for male"
   },
-  "female": "Female",
+  "female": "Femmina",
   "@female": {
     "description": "Localized string for female"
   },
-  "other": "Other",
+  "other": "Altro",
   "@other": {
     "description": "Localized string for other"
   },
@@ -240,7 +240,7 @@
   "@optional": {
     "description": "Localized string for optional"
   },
-  "previous": "Previous",
+  "previous": "Indietro",
   "@previous": {
     "description": "Localized string for previous"
   },
@@ -344,7 +344,7 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "send": "Send",
+  "send": "Invia",
   "@send": {
     "description": "Localized string for send"
   },
@@ -388,7 +388,7 @@
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "Registrati",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -508,11 +508,11 @@
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "notifications": "Notifications",
+  "notifications": "Notifiche",
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Notifiche push",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
@@ -532,7 +532,7 @@
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "theme": "Theme",
+  "theme": "Tema",
   "@theme": {
     "description": "Localized string for theme"
   },
@@ -540,11 +540,11 @@
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "darkMode": "Dark Mode",
+  "darkMode": "Modalità scura",
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "Privacy",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "Aiuto",
   "@help": {
     "description": "Localized string for help"
   },
@@ -580,11 +580,11 @@
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
-  "about": "About",
+  "about": "Informazioni",
   "@about": {
     "description": "Localized string for about"
   },
-  "version": "Version",
+  "version": "Versione",
   "@version": {
     "description": "Localized string for version"
   },
@@ -596,7 +596,7 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "deleteAccount": "Delete Account",
+  "deleteAccount": "Elimina account",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -676,19 +676,19 @@
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "termsOfService": "Terms of Service",
+  "termsOfService": "Termini di servizio",
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "privacyPolicy": "Privacy Policy",
+  "privacyPolicy": "Politica sulla privacy",
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "Continua",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "Vai alle impostazioni",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,19 +728,19 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "Permesso richiesto",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "Permesso fotocamera",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "Permesso galleria",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
-  "permissionDenied": "Permission denied",
+  "permissionDenied": "Permesso negato",
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
@@ -812,7 +812,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "Password dimenticata?",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
@@ -836,7 +836,7 @@
   "@photo": {
     "description": "Localized string for photo"
   },
-  "justNow": "Just now",
+  "justNow": "Proprio ora",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "Continua",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1312,7 +1312,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "newMessage": "New message",
+  "newMessage": "Nuovo messaggio",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1376,11 +1376,11 @@
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
-  "today": "Today",
+  "today": "Oggi",
   "@today": {
     "description": "Localized string for today"
   },
-  "yesterday": "Yesterday",
+  "yesterday": "Ieri",
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "Il permesso di notifica è necessario per ricevere nuovi messaggi.",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "L'accesso alla fotocamera è necessario per scattare foto del profilo.",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "L'accesso alla galleria è necessario per selezionare foto del profilo.",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },

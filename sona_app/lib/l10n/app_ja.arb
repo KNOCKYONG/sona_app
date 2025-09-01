@@ -1,1768 +1,16 @@
 {
   "@@locale": "ja",
-  "appName": "SONA",
-  "@appName": {
-    "description": "Localized string for appName"
-  },
-  "loading": "読み込み中...",
-  "@loading": {
-    "description": "Localized string for loading"
-  },
-  "error": "エラー",
-  "@error": {
-    "description": "Localized string for error"
-  },
-  "retry": "リトライ",
-  "@retry": {
-    "description": "Localized string for retry"
-  },
-  "cancel": "キャンセル",
-  "@cancel": {
-    "description": "Localized string for cancel"
-  },
-  "confirm": "確認",
-  "@confirm": {
-    "description": "Localized string for confirm"
-  },
-  "next": "次へ",
-  "@next": {
-    "description": "Localized string for next"
-  },
-  "skip": "スキップ",
-  "@skip": {
-    "description": "Localized string for skip"
-  },
-  "done": "完了",
-  "@done": {
-    "description": "Localized string for done"
-  },
-  "save": "保存",
-  "@save": {
-    "description": "Localized string for save"
-  },
-  "delete": "削除",
-  "@delete": {
-    "description": "Localized string for delete"
-  },
-  "edit": "編集",
-  "@edit": {
-    "description": "Localized string for edit"
-  },
-  "close": "閉じる",
-  "@close": {
-    "description": "Localized string for close"
-  },
-  "search": "検索",
-  "@search": {
-    "description": "Localized string for search"
-  },
-  "filter": "フィルター",
-  "@filter": {
-    "description": "Localized string for filter"
-  },
-  "sort": "並び替え",
-  "@sort": {
-    "description": "Localized string for sort"
-  },
-  "refresh": "更新",
-  "@refresh": {
-    "description": "Localized string for refresh"
-  },
-  "yes": "はい",
-  "@yes": {
-    "description": "Localized string for yes"
-  },
-  "no": "いいえ",
-  "@no": {
-    "description": "Localized string for no"
-  },
-  "you": "あなた",
-  "@you": {
-    "description": "Localized string for you"
-  },
-  "login": "ログイン",
-  "@login": {
-    "description": "Localized string for login"
-  },
-  "signup": "新規登録",
-  "@signup": {
-    "description": "Localized string for signup"
-  },
-  "meetAIPersonas": "AIペルソナと出会う",
-  "@meetAIPersonas": {
-    "description": "Localized string for meetAIPersonas"
-  },
-  "welcomeMessage": "ようこそ💕",
-  "@welcomeMessage": {
-    "description": "Localized string for welcomeMessage"
-  },
-  "loginSignup": "ログイン/新規登録",
-  "@loginSignup": {
-    "description": "Localized string for loginSignup"
-  },
-  "or": "または",
-  "@or": {
-    "description": "Localized string for or"
-  },
-  "startWithEmail": "メールで始める",
-  "@startWithEmail": {
-    "description": "Localized string for startWithEmail"
-  },
-  "startWithGoogle": "Googleで始める",
-  "@startWithGoogle": {
-    "description": "Localized string for startWithGoogle"
-  },
-  "loginError": "ログインに失敗しました",
-  "@loginError": {
-    "description": "Localized string for loginError"
-  },
-  "loginCancelled": "ログインがキャンセルされました",
-  "@loginCancelled": {
-    "description": "Localized string for loginCancelled"
-  },
-  "logout": "ログアウト",
-  "@logout": {
-    "description": "Localized string for logout"
-  },
-  "basicInfo": "基本情報",
-  "@basicInfo": {
-    "description": "Localized string for basicInfo"
-  },
-  "email": "メールアドレス",
-  "@email": {
-    "description": "Localized string for email"
-  },
-  "password": "パスワード",
-  "@password": {
-    "description": "Localized string for password"
-  },
-  "nickname": "ニックネーム",
-  "@nickname": {
-    "description": "Localized string for nickname"
-  },
-  "nicknameRequired": "ニックネーム *",
-  "@nicknameRequired": {
-    "description": "Localized string for nicknameRequired"
-  },
-  "emailRequired": "メールアドレス *",
-  "@emailRequired": {
-    "description": "Localized string for emailRequired"
-  },
-  "passwordRequired": "パスワード *",
-  "@passwordRequired": {
-    "description": "Localized string for passwordRequired"
-  },
-  "emailHint": "example@email.com",
-  "@emailHint": {
-    "description": "Localized string for emailHint"
-  },
-  "passwordHint": "6文字以上",
-  "@passwordHint": {
-    "description": "Localized string for passwordHint"
-  },
-  "nicknameHint": "3〜10文字",
-  "@nicknameHint": {
-    "description": "Localized string for nicknameHint"
-  },
-  "enterEmail": "メールアドレスを入力してください",
-  "@enterEmail": {
-    "description": "Localized string for enterEmail"
-  },
-  "profilePhoto": "プロフィール写真",
-  "@profilePhoto": {
-    "description": "Localized string for profilePhoto"
-  },
-  "gender": "性別",
-  "@gender": {
-    "description": "Localized string for gender"
-  },
-  "genderRequired": "性別 *",
-  "@genderRequired": {
-    "description": "Localized string for genderRequired"
-  },
-  "male": "男性",
-  "@male": {
-    "description": "Localized string for male"
-  },
-  "female": "女性",
-  "@female": {
-    "description": "Localized string for female"
-  },
-  "other": "その他",
-  "@other": {
-    "description": "Localized string for other"
-  },
-  "birthDate": "生年月日",
-  "@birthDate": {
-    "description": "Localized string for birthDate"
-  },
-  "birthDateRequired": "生年月日 *",
-  "@birthDateRequired": {
-    "description": "Localized string for birthDateRequired"
-  },
-  "selectGender": "性別を選択してください",
-  "@selectGender": {
-    "description": "Localized string for selectGender"
-  },
-  "genderOptional": "性別（任意）",
-  "@genderOptional": {
-    "description": "Localized string for genderOptional"
-  },
-  "birthDateOptional": "生年月日（任意）",
-  "@birthDateOptional": {
-    "description": "Localized string for birthDateOptional"
-  },
-  "setNow": "今すぐ設定",
-  "@setNow": {
-    "description": "Localized string for setNow"
-  },
-  "myGenderSection": "私の性別（任意）",
-  "@myGenderSection": {
-    "description": "Localized string for myGenderSection"
-  },
-  "personaGenderSection": "ペルソナの性別設定",
-  "@personaGenderSection": {
-    "description": "Localized string for personaGenderSection"
-  },
-  "showAllGendersOption": "すべての性別を表示",
-  "@showAllGendersOption": {
-    "description": "Localized string for showAllGendersOption"
+  "about": "アプリについて",
+  "@about": {
+    "description": "Localized string for about"
   },
   "accountAndProfile": "アカウント＆プロフィール情報",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "enterBasicInformation": "基本情報を入力してください",
-  "@enterBasicInformation": {
-    "description": "Localized string for enterBasicInformation"
-  },
-  "optional": "任意",
-  "@optional": {
-    "description": "Localized string for optional"
-  },
-  "previous": "戻る",
-  "@previous": {
-    "description": "Localized string for previous"
-  },
-  "completeSignup": "登録を完了",
-  "@completeSignup": {
-    "description": "Localized string for completeSignup"
-  },
-  "referrerEmailLabel": "紹介者のメール（任意）",
-  "@referrerEmailLabel": {
-    "description": "Localized string for referrerEmailLabel"
-  },
-  "year": "年",
-  "@year": {
-    "description": "Localized string for year"
-  },
-  "month": "月",
-  "@month": {
-    "description": "Localized string for month"
-  },
-  "day": "日",
-  "@day": {
-    "description": "Localized string for day"
-  },
-  "selfIntroduction": "自己紹介（任意）",
-  "@selfIntroduction": {
-    "description": "Localized string for selfIntroduction"
-  },
-  "selfIntroductionHint": "簡単な自己紹介を書いてください",
-  "@selfIntroductionHint": {
-    "description": "Localized string for selfIntroductionHint"
-  },
-  "usagePurpose": "利用目的",
-  "@usagePurpose": {
-    "description": "Localized string for usagePurpose"
-  },
-  "selectFeeling": "気分を選択",
-  "@selectFeeling": {
-    "description": "Localized string for selectFeeling"
-  },
-  "happy": "幸せ",
-  "@happy": {
-    "description": "Localized string for happy"
-  },
-  "sad": "悲しい",
-  "@sad": {
-    "description": "Localized string for sad"
-  },
-  "angry": "怒っている",
-  "@angry": {
-    "description": "Localized string for angry"
-  },
-  "anxious": "不安",
-  "@anxious": {
-    "description": "Localized string for anxious"
-  },
-  "tired": "疲れた",
-  "@tired": {
-    "description": "Localized string for tired"
-  },
-  "lonely": "寂しい",
-  "@lonely": {
-    "description": "Localized string for lonely"
-  },
-  "stressed": "ストレス",
-  "@stressed": {
-    "description": "Localized string for stressed"
-  },
-  "depressed": "憂鬱",
-  "@depressed": {
-    "description": "Localized string for depressed"
-  },
-  "excited": "興奮",
-  "@excited": {
-    "description": "Localized string for excited"
-  },
-  "calm": "穏やか",
-  "@calm": {
-    "description": "Localized string for calm"
-  },
-  "allPersonas": "すべてのペルソナ",
-  "@allPersonas": {
-    "description": "Localized string for allPersonas"
-  },
-  "chat": "チャット",
-  "@chat": {
-    "description": "Localized string for chat"
-  },
-  "chats": "チャット",
-  "@chats": {
-    "description": "Localized string for chats"
-  },
-  "startChat": "チャット開始",
-  "@startChat": {
-    "description": "Localized string for startChat"
-  },
-  "endChat": "チャット終了",
-  "@endChat": {
-    "description": "Localized string for endChat"
-  },
-  "typeMessage": "メッセージを入力...",
-  "@typeMessage": {
-    "description": "Localized string for typeMessage"
-  },
-  "send": "送信",
-  "@send": {
-    "description": "Localized string for send"
-  },
-  "noChatsYet": "まだチャットはありません",
-  "@noChatsYet": {
-    "description": "Localized string for noChatsYet"
-  },
-  "todayChats": "今日",
-  "@todayChats": {
-    "description": "Localized string for todayChats"
-  },
-  "yesterdayChats": "昨日",
-  "@yesterdayChats": {
-    "description": "Localized string for yesterdayChats"
-  },
-  "olderChats": "それ以前",
-  "@olderChats": {
-    "description": "Localized string for olderChats"
-  },
-  "chatEndedMessage": "チャットが終了しました",
-  "@chatEndedMessage": {
-    "description": "Localized string for chatEndedMessage"
-  },
-  "messageDeleted": "メッセージが削除されました",
-  "@messageDeleted": {
-    "description": "Localized string for messageDeleted"
-  },
-  "unsendMessage": "メッセージを取り消す",
-  "@unsendMessage": {
-    "description": "Localized string for unsendMessage"
-  },
-  "copyMessage": "メッセージをコピー",
-  "@copyMessage": {
-    "description": "Localized string for copyMessage"
-  },
-  "messageCopied": "メッセージがコピーされました",
-  "@messageCopied": {
-    "description": "Localized string for messageCopied"
-  },
-  "voiceMessage": "🎤 ボイスメッセージ",
-  "@voiceMessage": {
-    "description": "Localized string for voiceMessage"
-  },
-  "signUp": "新規登録",
-  "@signUp": {
-    "description": "Localized string for signUp"
-  },
-  "meetPersonas": "ペルソナと出会う",
-  "@meetPersonas": {
-    "description": "Localized string for meetPersonas"
-  },
-  "allPersonasMatched": "すべてのペルソナとマッチしました！チャットを始めましょう。",
-  "@allPersonasMatched": {
-    "description": "Localized string for allPersonasMatched"
-  },
-  "noPersonasAvailable": "ペルソナがありません。もう一度お試しください。",
-  "@noPersonasAvailable": {
-    "description": "Localized string for noPersonasAvailable"
-  },
-  "heartInsufficient": "ハートが足りません",
-  "@heartInsufficient": {
-    "description": "Localized string for heartInsufficient"
-  },
-  "leaveChatTitle": "チャットを退室",
-  "@leaveChatTitle": {
-    "description": "Localized string for leaveChatTitle"
-  },
-  "leave": "退室",
-  "@leave": {
-    "description": "Localized string for leave"
-  },
-  "store": "ストア",
-  "@store": {
-    "description": "Localized string for store"
-  },
-  "hearts": "ハート",
-  "@hearts": {
-    "description": "Localized string for hearts"
-  },
-  "notSubscribed": "未登録",
-  "@notSubscribed": {
-    "description": "Localized string for notSubscribed"
-  },
-  "expired": "期限切れ",
-  "@expired": {
-    "description": "Localized string for expired"
-  },
-  "purchaseConfirm": "購入確認",
-  "@purchaseConfirm": {
-    "description": "Localized string for purchaseConfirm"
-  },
-  "purchaseButton": "購入",
-  "@purchaseButton": {
-    "description": "Localized string for purchaseButton"
-  },
-  "discount20": "20%オフ",
-  "@discount20": {
-    "description": "Localized string for discount20"
-  },
-  "discount30": "30%オフ",
-  "@discount30": {
-    "description": "Localized string for discount30"
-  },
-  "hearts10": "10ハート",
-  "@hearts10": {
-    "description": "Localized string for hearts10"
-  },
-  "hearts30": "30ハート",
-  "@hearts30": {
-    "description": "Localized string for hearts30"
-  },
-  "hearts50": "50ハート",
-  "@hearts50": {
-    "description": "Localized string for hearts50"
-  },
-  "originalPrice": "通常価格",
-  "@originalPrice": {
-    "description": "Localized string for originalPrice"
-  },
-  "discountAmount": "割引",
-  "@discountAmount": {
-    "description": "Localized string for discountAmount"
-  },
-  "hearts30Discount": "セール",
-  "@hearts30Discount": {
-    "description": "Localized string for hearts30Discount"
-  },
-  "hearts50Discount": "セール",
-  "@hearts50Discount": {
-    "description": "Localized string for hearts50Discount"
-  },
-  "settings": "設定",
-  "@settings": {
-    "description": "Localized string for settings"
-  },
-  "profile": "プロフィール",
-  "@profile": {
-    "description": "Localized string for profile"
-  },
-  "editProfile": "プロフィール編集",
-  "@editProfile": {
-    "description": "Localized string for editProfile"
-  },
-  "purchaseHeartsOnly": "ハートを購入",
-  "@purchaseHeartsOnly": {
-    "description": "Localized string for purchaseHeartsOnly"
-  },
-  "tutorialAccount": "チュートリアルアカウント",
-  "@tutorialAccount": {
-    "description": "Localized string for tutorialAccount"
-  },
-  "subscriptionStatus": "サブスクリプション状況",
-  "@subscriptionStatus": {
-    "description": "Localized string for subscriptionStatus"
-  },
-  "editInfo": "情報を編集",
-  "@editInfo": {
-    "description": "Localized string for editInfo"
-  },
-  "joinDate": "登録日",
-  "@joinDate": {
-    "description": "Localized string for joinDate"
-  },
-  "notifications": "通知",
-  "@notifications": {
-    "description": "Localized string for notifications"
-  },
-  "pushNotifications": "プッシュ通知",
-  "@pushNotifications": {
-    "description": "Localized string for pushNotifications"
-  },
-  "soundSettings": "サウンド設定",
-  "@soundSettings": {
-    "description": "Localized string for soundSettings"
-  },
-  "effectSound": "効果音",
-  "@effectSound": {
-    "description": "Localized string for effectSound"
-  },
-  "language": "言語",
-  "@language": {
-    "description": "Localized string for language"
-  },
-  "languageSettings": "言語設定",
-  "@languageSettings": {
-    "description": "Localized string for languageSettings"
-  },
-  "theme": "テーマ",
-  "@theme": {
-    "description": "Localized string for theme"
-  },
-  "themeSettings": "テーマ設定",
-  "@themeSettings": {
-    "description": "Localized string for themeSettings"
-  },
-  "darkMode": "ダークモード",
-  "@darkMode": {
-    "description": "Localized string for darkMode"
-  },
-  "privacy": "プライバシーポリシー",
-  "@privacy": {
-    "description": "Localized string for privacy"
-  },
-  "terms": "利用規約",
-  "@terms": {
-    "description": "Localized string for terms"
-  },
-  "help": "ヘルプ",
-  "@help": {
-    "description": "Localized string for help"
-  },
-  "frequentlyAskedQuestions": "よくある質問",
-  "@frequentlyAskedQuestions": {
-    "description": "Localized string for frequentlyAskedQuestions"
-  },
-  "searchFAQ": "FAQを検索...",
-  "@searchFAQ": {
-    "description": "Localized string for searchFAQ"
-  },
-  "searchResults": "検索結果",
-  "@searchResults": {
-    "description": "Localized string for searchResults"
-  },
-  "relatedFAQ": "関連FAQ",
-  "@relatedFAQ": {
-    "description": "Localized string for relatedFAQ"
-  },
-  "wasHelpful": "役に立ちましたか？",
-  "@wasHelpful": {
-    "description": "Localized string for wasHelpful"
-  },
-  "thanksFeedback": "フィードバックありがとうございます！",
-  "@thanksFeedback": {
-    "description": "Localized string for thanksFeedback"
-  },
-  "about": "アプリについて",
-  "@about": {
-    "description": "Localized string for about"
-  },
-  "version": "バージョン",
-  "@version": {
-    "description": "Localized string for version"
-  },
-  "others": "その他",
-  "@others": {
-    "description": "Localized string for others"
-  },
-  "accountManagement": "アカウント管理",
-  "@accountManagement": {
-    "description": "Localized string for accountManagement"
-  },
-  "deleteAccount": "アカウント削除",
-  "@deleteAccount": {
-    "description": "Localized string for deleteAccount"
-  },
-  "howToUse": "SONAの使い方",
-  "@howToUse": {
-    "description": "Localized string for howToUse"
-  },
-  "inquiries": "お問い合わせ",
-  "@inquiries": {
-    "description": "Localized string for inquiries"
-  },
-  "loginRequired": "ログインが必要です",
-  "@loginRequired": {
-    "description": "Localized string for loginRequired"
-  },
-  "sonaFriend": "SONAフレンド",
-  "@sonaFriend": {
-    "description": "Localized string for sonaFriend"
-  },
-  "messagesRemaining": "残りメッセージ",
-  "@messagesRemaining": {
-    "description": "Localized string for messagesRemaining"
-  },
-  "totalLikes": "合計いいね",
-  "@totalLikes": {
-    "description": "Localized string for totalLikes"
-  },
-  "ownedHearts": "所有ハート",
-  "@ownedHearts": {
-    "description": "Localized string for ownedHearts"
-  },
-  "matchedPersonas": "マッチしたペルソナ",
-  "@matchedPersonas": {
-    "description": "Localized string for matchedPersonas"
-  },
-  "retryButton": "リトライ",
-  "@retryButton": {
-    "description": "Localized string for retryButton"
-  },
-  "matchingFailed": "マッチングに失敗しました。",
-  "@matchingFailed": {
-    "description": "Localized string for matchingFailed"
-  },
-  "errorOccurred": "エラーが発生しました。",
-  "@errorOccurred": {
-    "description": "Localized string for errorOccurred"
-  },
-  "signupComplete": "登録完了",
-  "@signupComplete": {
-    "description": "Localized string for signupComplete"
-  },
-  "accountDeletionTitle": "アカウント削除",
-  "@accountDeletionTitle": {
-    "description": "Localized string for accountDeletionTitle"
-  },
-  "continueButton": "続ける",
-  "@continueButton": {
-    "description": "Localized string for continueButton"
-  },
-  "userNotFound": "ユーザーが見つかりません",
-  "@userNotFound": {
-    "description": "Localized string for userNotFound"
-  },
-  "loadingData": "データを読み込み中...",
-  "@loadingData": {
-    "description": "Localized string for loadingData"
-  },
-  "report": "報告",
-  "@report": {
-    "description": "Localized string for report"
-  },
-  "reportAI": "報告",
-  "@reportAI": {
-    "description": "Localized string for reportAI"
-  },
-  "reportAITitle": "AI会話を報告",
-  "@reportAITitle": {
-    "description": "Localized string for reportAITitle"
-  },
-  "termsOfService": "利用規約",
-  "@termsOfService": {
-    "description": "Localized string for termsOfService"
-  },
-  "privacyPolicy": "プライバシーポリシー",
-  "@privacyPolicy": {
-    "description": "Localized string for privacyPolicy"
-  },
-  "grantPermission": "続ける",
-  "@grantPermission": {
-    "description": "Localized string for grantPermission"
-  },
-  "goToSettings": "設定へ移動",
-  "@goToSettings": {
-    "description": "Localized string for goToSettings"
-  },
-  "later": "後で",
-  "@later": {
-    "description": "Localized string for later"
-  },
-  "sessionExpired": "セッションの有効期限が切れました",
-  "@sessionExpired": {
-    "description": "Localized string for sessionExpired"
-  },
-  "notEnoughHearts": "ハートが不足しています",
-  "@notEnoughHearts": {
-    "description": "Localized string for notEnoughHearts"
-  },
-  "spamAdvertising": "スパム/広告",
-  "@spamAdvertising": {
-    "description": "Localized string for spamAdvertising"
-  },
-  "hateSpeech": "ヘイトスピーチ",
-  "@hateSpeech": {
-    "description": "Localized string for hateSpeech"
-  },
-  "sexualContent": "性的なコンテンツ",
-  "@sexualContent": {
-    "description": "Localized string for sexualContent"
-  },
-  "violentContent": "暴力的なコンテンツ",
-  "@violentContent": {
-    "description": "Localized string for violentContent"
-  },
-  "harassmentBullying": "ハラスメント/いじめ",
-  "@harassmentBullying": {
-    "description": "Localized string for harassmentBullying"
-  },
-  "detailedReason": "詳細な理由",
-  "@detailedReason": {
-    "description": "Localized string for detailedReason"
-  },
-  "permissionRequired": "許可が必要です",
-  "@permissionRequired": {
-    "description": "Localized string for permissionRequired"
-  },
-  "cameraPermission": "カメラの許可",
-  "@cameraPermission": {
-    "description": "Localized string for cameraPermission"
-  },
-  "galleryPermission": "ギャラリーの許可",
-  "@galleryPermission": {
-    "description": "Localized string for galleryPermission"
-  },
-  "permissionDenied": "許可が拒否されました",
-  "@permissionDenied": {
-    "description": "Localized string for permissionDenied"
-  },
-  "openSettings": "設定を開く",
-  "@openSettings": {
-    "description": "Localized string for openSettings"
-  },
-  "unlimitedMessages": "無制限",
-  "@unlimitedMessages": {
-    "description": "Localized string for unlimitedMessages"
-  },
-  "profileInfo": "プロフィール情報",
-  "@profileInfo": {
-    "description": "Localized string for profileInfo"
-  },
-  "generalPersona": "一般ペルソナ",
-  "@generalPersona": {
-    "description": "Localized string for generalPersona"
-  },
-  "expertPersona": "エキスパートペルソナ",
-  "@expertPersona": {
-    "description": "Localized string for expertPersona"
-  },
-  "interests": "興味",
-  "@interests": {
-    "description": "Localized string for interests"
-  },
-  "termsAgreement": "利用規約への同意",
-  "@termsAgreement": {
-    "description": "Localized string for termsAgreement"
-  },
-  "preferenceSettings": "設定",
-  "@preferenceSettings": {
-    "description": "Localized string for preferenceSettings"
-  },
-  "leaveChatRoom": "チャットルームを退室",
-  "@leaveChatRoom": {
-    "description": "Localized string for leaveChatRoom"
-  },
-  "backButton": "戻る",
-  "@backButton": {
-    "description": "Localized string for backButton"
-  },
-  "moreButton": "もっと見る",
-  "@moreButton": {
-    "description": "Localized string for moreButton"
-  },
-  "chatListTab": "チャットリストタブ",
-  "@chatListTab": {
-    "description": "Localized string for chatListTab"
-  },
-  "loginTab": "ログイン",
-  "@loginTab": {
-    "description": "Localized string for loginTab"
-  },
-  "signupTab": "新規登録",
-  "@signupTab": {
-    "description": "Localized string for signupTab"
-  },
-  "emailLabel": "メールアドレス",
-  "@emailLabel": {
-    "description": "Localized string for emailLabel"
-  },
-  "passwordLabel": "パスワード",
-  "@passwordLabel": {
-    "description": "Localized string for passwordLabel"
-  },
-  "sendingEmail": "メール送信中...",
-  "@sendingEmail": {
-    "description": "Localized string for sendingEmail"
-  },
-  "forgotPassword": "パスワードをお忘れですか？",
-  "@forgotPassword": {
-    "description": "Localized string for forgotPassword"
-  },
-  "endTutorial": "チュートリアル終了",
-  "@endTutorial": {
-    "description": "Localized string for endTutorial"
-  },
-  "profileEdit": "プロフィール編集",
-  "@profileEdit": {
-    "description": "Localized string for profileEdit"
-  },
-  "complete": "完了",
-  "@complete": {
-    "description": "Localized string for complete"
-  },
-  "me": "自分",
-  "@me": {
-    "description": "Localized string for me"
-  },
-  "photo": "写真",
-  "@photo": {
-    "description": "Localized string for photo"
-  },
-  "justNow": "たった今",
-  "@justNow": {
-    "description": "Localized string for justNow"
-  },
-  "storyEvent": "ストーリーイベント",
-  "@storyEvent": {
-    "description": "Localized string for storyEvent"
-  },
-  "chooseOption": "選択してください：",
-  "@chooseOption": {
-    "description": "Localized string for chooseOption"
-  },
-  "allowPermission": "続ける",
-  "@allowPermission": {
-    "description": "Localized string for allowPermission"
-  },
-  "privacySection6Title": "6. ユーザーの権利",
-  "@privacySection6Title": {
-    "description": "Localized string for privacySection6Title"
-  },
-  "selectTheme": "テーマを選択",
-  "@selectTheme": {
-    "description": "Localized string for selectTheme"
-  },
-  "systemTheme": "システム設定に従う",
-  "@systemTheme": {
-    "description": "Localized string for systemTheme"
-  },
-  "lightTheme": "ライトモード",
-  "@lightTheme": {
-    "description": "Localized string for lightTheme"
-  },
-  "lightThemeDesc": "明るいテーマを使用",
-  "@lightThemeDesc": {
-    "description": "Localized string for lightThemeDesc"
-  },
-  "darkTheme": "ダークモード",
-  "@darkTheme": {
-    "description": "Localized string for darkTheme"
-  },
-  "darkThemeDesc": "暗いテーマを使用",
-  "@darkThemeDesc": {
-    "description": "Localized string for darkThemeDesc"
-  },
-  "preview": "プレビュー",
-  "@preview": {
-    "description": "Localized string for preview"
-  },
-  "helloEmoji": "こんにちは！ 😊",
-  "@helloEmoji": {
-    "description": "Localized string for helloEmoji"
-  },
-  "niceToMeetYou": "はじめまして！",
-  "@niceToMeetYou": {
-    "description": "Localized string for niceToMeetYou"
-  },
-  "purchaseSection6Title": "6. お問い合わせ",
-  "@purchaseSection6Title": {
-    "description": "Localized string for purchaseSection6Title"
-  },
-  "makeFriends": "友達を作る",
-  "@makeFriends": {
-    "description": "Localized string for makeFriends"
-  },
-  "hobbySharing": "趣味の共有",
-  "@hobbySharing": {
-    "description": "Localized string for hobbySharing"
-  },
-  "lonelinessRelief": "孤独感の解消",
-  "@lonelinessRelief": {
-    "description": "Localized string for lonelinessRelief"
-  },
-  "dailyConversation": "日常会話",
-  "@dailyConversation": {
-    "description": "Localized string for dailyConversation"
-  },
-  "entertainmentFun": "エンターテインメント/楽しみ",
-  "@entertainmentFun": {
-    "description": "Localized string for entertainmentFun"
-  },
-  "ageUnit": "歳",
-  "@ageUnit": {
-    "description": "Localized string for ageUnit"
-  },
-  "gaming": "ゲーム",
-  "@gaming": {
-    "description": "Localized string for gaming"
-  },
-  "movies": "映画",
-  "@movies": {
-    "description": "Localized string for movies"
-  },
-  "music": "音楽",
-  "@music": {
-    "description": "Localized string for music"
-  },
-  "reading": "読書",
-  "@reading": {
-    "description": "Localized string for reading"
-  },
-  "sports": "スポーツ",
-  "@sports": {
-    "description": "Localized string for sports"
-  },
-  "travel": "旅行",
-  "@travel": {
-    "description": "Localized string for travel"
-  },
-  "cooking": "料理",
-  "@cooking": {
-    "description": "Localized string for cooking"
-  },
-  "fashion": "ファッション",
-  "@fashion": {
-    "description": "Localized string for fashion"
-  },
-  "technology": "テクノロジー",
-  "@technology": {
-    "description": "Localized string for technology"
-  },
-  "art": "アート",
-  "@art": {
-    "description": "Localized string for art"
-  },
-  "pets": "ペット",
-  "@pets": {
-    "description": "Localized string for pets"
-  },
-  "photography": "写真",
-  "@photography": {
-    "description": "Localized string for photography"
-  },
-  "dailyChat": "日常会話",
-  "@dailyChat": {
-    "description": "Localized string for dailyChat"
-  },
-  "datingAdvice": "恋愛アドバイス",
-  "@datingAdvice": {
-    "description": "Localized string for datingAdvice"
-  },
-  "hobbyTalk": "趣味の話",
-  "@hobbyTalk": {
-    "description": "Localized string for hobbyTalk"
-  },
-  "lifeAdvice": "人生相談",
-  "@lifeAdvice": {
-    "description": "Localized string for lifeAdvice"
-  },
-  "funChat": "楽しい会話",
-  "@funChat": {
-    "description": "Localized string for funChat"
-  },
-  "deepTalk": "深い話",
-  "@deepTalk": {
-    "description": "Localized string for deepTalk"
-  },
-  "lightTalk": "軽い話",
-  "@lightTalk": {
-    "description": "Localized string for lightTalk"
-  },
-  "allAgree": "すべてに同意",
-  "@allAgree": {
-    "description": "Localized string for allAgree"
-  },
-  "required": "[必須]",
-  "@required": {
-    "description": "Localized string for required"
-  },
-  "preferredLanguage": "優先言語",
-  "@preferredLanguage": {
-    "description": "Localized string for preferredLanguage"
-  },
-  "selectLanguage": "言語を選択",
-  "@selectLanguage": {
-    "description": "Localized string for selectLanguage"
-  },
-  "korean": "韓国語",
-  "@korean": {
-    "description": "Localized string for korean"
-  },
-  "english": "英語",
-  "@english": {
-    "description": "Localized string for english"
-  },
-  "japanese": "日本語",
-  "@japanese": {
-    "description": "Localized string for japanese"
-  },
-  "chinese": "中国語",
-  "@chinese": {
-    "description": "Localized string for chinese"
-  },
-  "indonesian": "インドネシア語",
-  "@indonesian": {
-    "description": "Localized string for indonesian"
-  },
-  "vietnamese": "ベトナム語",
-  "@vietnamese": {
-    "description": "Localized string for vietnamese"
-  },
-  "spanish": "スペイン語",
-  "@spanish": {
-    "description": "Localized string for spanish"
-  },
-  "thai": "タイ語",
-  "@thai": {
-    "description": "Localized string for thai"
-  },
-  "showOriginalText": "原文を表示",
-  "@showOriginalText": {
-    "description": "Localized string for showOriginalText"
-  },
-  "hideOriginalText": "原文を隠す",
-  "@hideOriginalText": {
-    "description": "Localized string for hideOriginalText"
-  },
-  "errorDetails": "エラー詳細",
-  "@errorDetails": {
-    "description": "Localized string for errorDetails"
-  },
-  "submitReport": "報告を送信",
-  "@submitReport": {
-    "description": "Localized string for submitReport"
-  },
-  "multilingualChat": "多言語チャット",
-  "@multilingualChat": {
-    "description": "Localized string for multilingualChat"
-  },
-  "languageIndicator": "言語",
-  "@languageIndicator": {
-    "description": "Localized string for languageIndicator"
-  },
-  "translatedFrom": "翻訳済み",
-  "@translatedFrom": {
-    "description": "Localized string for translatedFrom"
-  },
-  "originalText": "原文",
-  "@originalText": {
-    "description": "Localized string for originalText"
-  },
-  "translatedText": "翻訳",
-  "@translatedText": {
-    "description": "Localized string for translatedText"
-  },
-  "autoTranslate": "自動翻訳",
-  "@autoTranslate": {
-    "description": "Localized string for autoTranslate"
-  },
-  "translationSettings": "翻訳設定",
-  "@translationSettings": {
-    "description": "Localized string for translationSettings"
-  },
-  "translationQuality": "翻訳品質",
-  "@translationQuality": {
-    "description": "Localized string for translationQuality"
-  },
-  "selectErrorType": "エラータイプを選択",
-  "@selectErrorType": {
-    "description": "Localized string for selectErrorType"
-  },
-  "wrongTranslation": "誤訳",
-  "@wrongTranslation": {
-    "description": "Localized string for wrongTranslation"
-  },
-  "awkwardExpression": "不自然な表現",
-  "@awkwardExpression": {
-    "description": "Localized string for awkwardExpression"
-  },
-  "missingTranslation": "翻訳漏れ",
-  "@missingTranslation": {
-    "description": "Localized string for missingTranslation"
-  },
-  "culturalIssue": "文化的な問題",
-  "@culturalIssue": {
-    "description": "Localized string for culturalIssue"
-  },
-  "technicalError": "技術的エラー",
-  "@technicalError": {
-    "description": "Localized string for technicalError"
-  },
-  "otherError": "その他のエラー",
-  "@otherError": {
-    "description": "Localized string for otherError"
-  },
-  "reportAndBlock": "報告＆ブロック",
-  "@reportAndBlock": {
-    "description": "Localized string for reportAndBlock"
-  },
-  "blockThisAI": "このAIをブロック",
-  "@blockThisAI": {
-    "description": "Localized string for blockThisAI"
-  },
-  "blockedAIs": "ブロックしたAI",
-  "@blockedAIs": {
-    "description": "Localized string for blockedAIs"
-  },
-  "manageBlockedAIs": "ブロックしたAIを管理",
-  "@manageBlockedAIs": {
-    "description": "Localized string for manageBlockedAIs"
-  },
-  "unblock": "ブロック解除",
-  "@unblock": {
-    "description": "Localized string for unblock"
-  },
-  "blockedSuccessfully": "ブロックしました",
-  "@blockedSuccessfully": {
-    "description": "Localized string for blockedSuccessfully"
-  },
-  "unblockedSuccessfully": "ブロック解除しました",
-  "@unblockedSuccessfully": {
-    "description": "Localized string for unblockedSuccessfully"
-  },
-  "noBlockedAIs": "ブロックしたAIはありません",
-  "@noBlockedAIs": {
-    "description": "Localized string for noBlockedAIs"
-  },
-  "blockReason": "ブロック理由",
-  "@blockReason": {
-    "description": "Localized string for blockReason"
-  },
-  "blockedAt": "ブロック日時",
-  "@blockedAt": {
-    "description": "Localized string for blockedAt"
-  },
-  "alsoBlockThisAI": "このAIもブロックする",
-  "@alsoBlockThisAI": {
-    "description": "Localized string for alsoBlockThisAI"
-  },
-  "termsSection1Title": "第1条（目的）",
-  "@termsSection1Title": {
-    "description": "Localized string for termsSection1Title"
-  },
-  "termsSection2Title": "第2条（定義）",
-  "@termsSection2Title": {
-    "description": "Localized string for termsSection2Title"
-  },
-  "termsSection3Title": "第3条（規約の効力と変更）",
-  "@termsSection3Title": {
-    "description": "Localized string for termsSection3Title"
-  },
-  "termsSection4Title": "第4条（サービスの提供）",
-  "@termsSection4Title": {
-    "description": "Localized string for termsSection4Title"
-  },
-  "termsSection5Title": "第5条（会員登録）",
-  "@termsSection5Title": {
-    "description": "Localized string for termsSection5Title"
-  },
-  "termsSection6Title": "第6条（ユーザーの義務）",
-  "@termsSection6Title": {
-    "description": "Localized string for termsSection6Title"
-  },
-  "termsSection7Title": "第7条（サービス利用制限）",
-  "@termsSection7Title": {
-    "description": "Localized string for termsSection7Title"
-  },
-  "termsSection8Title": "第8条（サービスの中断）",
-  "@termsSection8Title": {
-    "description": "Localized string for termsSection8Title"
-  },
-  "termsSection9Title": "第9条（免責事項）",
-  "@termsSection9Title": {
-    "description": "Localized string for termsSection9Title"
-  },
-  "termsSection10Title": "第10条（紛争解決）",
-  "@termsSection10Title": {
-    "description": "Localized string for termsSection10Title"
-  },
-  "termsSection11Title": "第11条（AIサービス特約）",
-  "@termsSection11Title": {
-    "description": "Localized string for termsSection11Title"
-  },
-  "termsSection12Title": "第12条（データ収集と利用）",
-  "@termsSection12Title": {
-    "description": "Localized string for termsSection12Title"
-  },
-  "privacySettings": "プライバシー設定",
-  "@privacySettings": {
-    "description": "Localized string for privacySettings"
-  },
-  "dataCollection": "データ収集設定",
-  "@dataCollection": {
-    "description": "Localized string for dataCollection"
-  },
-  "emotionAnalysis": "感情分析",
-  "@emotionAnalysis": {
-    "description": "Localized string for emotionAnalysis"
-  },
-  "memoryAlbum": "思い出アルバム",
-  "@memoryAlbum": {
-    "description": "Localized string for memoryAlbum"
-  },
-  "weatherContext": "天気コンテキスト",
-  "@weatherContext": {
-    "description": "Localized string for weatherContext"
-  },
-  "dailyCare": "日常ケア",
-  "@dailyCare": {
-    "description": "Localized string for dailyCare"
-  },
-  "interestSharing": "興味の共有",
-  "@interestSharing": {
-    "description": "Localized string for interestSharing"
-  },
-  "conversationContinuity": "会話の継続性",
-  "@conversationContinuity": {
-    "description": "Localized string for conversationContinuity"
-  },
-  "guestModeTitle": "ゲストとして試す",
-  "@guestModeTitle": {
-    "description": "Localized string for guestModeTitle"
-  },
-  "guestMessageExhausted": "無料メッセージを使い切りました",
-  "@guestMessageExhausted": {
-    "description": "Localized string for guestMessageExhausted"
-  },
-  "memberBenefits": "登録すると100以上のメッセージと10ハートをゲット！",
-  "@memberBenefits": {
-    "description": "Localized string for memberBenefits"
-  },
-  "loginTitle": "ログイン",
-  "@loginTitle": {
-    "description": "Localized string for loginTitle"
-  },
-  "continueWithGoogle": "Googleで続ける",
-  "@continueWithGoogle": {
-    "description": "Localized string for continueWithGoogle"
-  },
-  "continueWithApple": "Appleで続ける",
-  "@continueWithApple": {
-    "description": "Localized string for continueWithApple"
-  },
-  "convertToMember": "新規登録",
-  "@convertToMember": {
-    "description": "Localized string for convertToMember"
-  },
-  "continueAsGuest": "ゲストとして続ける",
-  "@continueAsGuest": {
-    "description": "Localized string for continueAsGuest"
-  },
-  "guestModeBanner": "ゲストモード",
-  "@guestModeBanner": {
-    "description": "Localized string for guestModeBanner"
-  },
-  "keepGuestData": "チャット履歴を保持",
-  "@keepGuestData": {
-    "description": "Localized string for keepGuestData"
-  },
-  "discardGuestData": "新しく始める",
-  "@discardGuestData": {
-    "description": "Localized string for discardGuestData"
-  },
-  "guestModeWelcome": "ゲストモードで開始",
-  "@guestModeWelcome": {
-    "description": "Localized string for guestModeWelcome"
-  },
-  "guestModeFailedMessage": "ゲストモードの開始に失敗しました",
-  "@guestModeFailedMessage": {
-    "description": "Localized string for guestModeFailedMessage"
-  },
-  "loginRequiredTitle": "ログインが必要です",
-  "@loginRequiredTitle": {
-    "description": "Localized string for loginRequiredTitle"
-  },
-  "loginButton": "ログイン",
-  "@loginButton": {
-    "description": "Localized string for loginButton"
-  },
-  "restartConversation": "会話を再開",
-  "@restartConversation": {
-    "description": "Localized string for restartConversation"
-  },
-  "sendChatError": "チャットエラーを送信",
-  "@sendChatError": {
-    "description": "Localized string for sendChatError"
-  },
-  "newMessage": "新しいメッセージ",
-  "@newMessage": {
-    "description": "Localized string for newMessage"
-  },
-  "newMessages": "新しいメッセージ",
-  "@newMessages": {
-    "description": "Localized string for newMessages"
-  },
-  "chatErrorSentSuccessfully": "チャットエラーが正常に送信されました。",
-  "@chatErrorSentSuccessfully": {
-    "description": "Localized string for chatErrorSentSuccessfully"
-  },
-  "errorSendingFailed": "エラーの送信に失敗しました",
-  "@errorSendingFailed": {
-    "description": "Localized string for errorSendingFailed"
-  },
-  "selectPersonaPlease": "ペルソナを選択してください。",
-  "@selectPersonaPlease": {
-    "description": "Localized string for selectPersonaPlease"
-  },
-  "reportChatError": "チャットエラーを報告",
-  "@reportChatError": {
-    "description": "Localized string for reportChatError"
-  },
-  "selectProblematicMessage": "問題のあるメッセージを選択（任意）",
-  "@selectProblematicMessage": {
-    "description": "Localized string for selectProblematicMessage"
-  },
-  "describeError": "何が問題ですか？",
-  "@describeError": {
-    "description": "Localized string for describeError"
-  },
-  "errorDescriptionHint": "例：おかしな返答をした、同じことを繰り返す、文脈に合わない返答をする...",
-  "@errorDescriptionHint": {
-    "description": "Localized string for errorDescriptionHint"
-  },
-  "sendReport": "報告を送信",
-  "@sendReport": {
-    "description": "Localized string for sendReport"
-  },
-  "useOneHeart": "1ハート使用",
-  "@useOneHeart": {
-    "description": "Localized string for useOneHeart"
-  },
-  "heartRequired": "1ハートが必要です",
-  "@heartRequired": {
-    "description": "Localized string for heartRequired"
-  },
-  "heartUsageFailed": "ハートの使用に失敗しました。",
-  "@heartUsageFailed": {
-    "description": "Localized string for heartUsageFailed"
-  },
-  "errorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。",
-  "@errorOccurredTryAgain": {
-    "description": "Localized string for errorOccurredTryAgain"
-  },
-  "permissionDeniedTryLater": "許可が拒否されました。後でもう一度お試しください。",
-  "@permissionDeniedTryLater": {
-    "description": "Localized string for permissionDeniedTryLater"
-  },
-  "networkErrorOccurred": "ネットワークエラーが発生しました。",
-  "@networkErrorOccurred": {
-    "description": "Localized string for networkErrorOccurred"
-  },
-  "today": "今日",
-  "@today": {
-    "description": "Localized string for today"
-  },
-  "yesterday": "昨日",
-  "@yesterday": {
-    "description": "Localized string for yesterday"
-  },
-  "consultQualityMonitoring": "相談品質モニタリング",
-  "@consultQualityMonitoring": {
-    "description": "Localized string for consultQualityMonitoring"
-  },
-  "averageQualityScore": "平均品質スコア",
-  "@averageQualityScore": {
-    "description": "Localized string for averageQualityScore"
-  },
-  "totalConsultSessions": "総相談セッション",
-  "@totalConsultSessions": {
-    "description": "Localized string for totalConsultSessions"
-  },
-  "lowQualityResponses": "低品質レスポンス",
-  "@lowQualityResponses": {
-    "description": "Localized string for lowQualityResponses"
-  },
-  "crisisDetected": "危機検出",
-  "@crisisDetected": {
-    "description": "Localized string for crisisDetected"
-  },
-  "personaQualityStats": "ペルソナ品質統計",
-  "@personaQualityStats": {
-    "description": "Localized string for personaQualityStats"
-  },
-  "realtimeQualityLog": "リアルタイム品質ログ",
-  "@realtimeQualityLog": {
-    "description": "Localized string for realtimeQualityLog"
-  },
-  "averageQuality": "平均品質",
-  "@averageQuality": {
-    "description": "Localized string for averageQuality"
-  },
-  "totalResponses": "総レスポンス",
-  "@totalResponses": {
-    "description": "Localized string for totalResponses"
-  },
-  "expertiseScore": "専門性スコア",
-  "@expertiseScore": {
-    "description": "Localized string for expertiseScore"
-  },
-  "chatErrorDashboard": "チャットエラーダッシュボード",
-  "@chatErrorDashboard": {
-    "description": "Localized string for chatErrorDashboard"
-  },
-  "errorStats": "エラー統計",
-  "@errorStats": {
-    "description": "Localized string for errorStats"
-  },
-  "totalErrorCount": "総エラー数",
-  "@totalErrorCount": {
-    "description": "Localized string for totalErrorCount"
-  },
-  "mostFrequentError": "最も頻繁なエラー",
-  "@mostFrequentError": {
-    "description": "Localized string for mostFrequentError"
-  },
-  "mainErrorType": "主なエラータイプ",
-  "@mainErrorType": {
-    "description": "Localized string for mainErrorType"
-  },
-  "byPersona": "ペルソナ別",
-  "@byPersona": {
-    "description": "Localized string for byPersona"
-  },
-  "byErrorType": "エラータイプ別",
-  "@byErrorType": {
-    "description": "Localized string for byErrorType"
-  },
-  "all": "すべて",
-  "@all": {
-    "description": "Localized string for all"
-  },
-  "problemOccurred": "問題が発生しました",
-  "@problemOccurred": {
-    "description": "Localized string for problemOccurred"
-  },
-  "timeout": "タイムアウト",
-  "@timeout": {
-    "description": "Localized string for timeout"
-  },
-  "requestLimit": "リクエスト制限",
-  "@requestLimit": {
-    "description": "Localized string for requestLimit"
-  },
-  "serverErrorDashboard": "サーバーエラー",
-  "@serverErrorDashboard": {
-    "description": "Localized string for serverErrorDashboard"
-  },
-  "authError": "認証エラー",
-  "@authError": {
-    "description": "Localized string for authError"
-  },
-  "unknown": "不明",
-  "@unknown": {
-    "description": "Localized string for unknown"
-  },
-  "exitApp": "アプリを終了",
-  "@exitApp": {
-    "description": "Localized string for exitApp"
-  },
-  "exitConfirmMessage": "本当にアプリを終了しますか？",
-  "@exitConfirmMessage": {
-    "description": "Localized string for exitConfirmMessage"
-  },
-  "exit": "終了",
-  "@exit": {
-    "description": "Localized string for exit"
-  },
-  "profileNav": "プロフィール",
-  "@profileNav": {
-    "description": "Localized string for profileNav"
-  },
-  "imageCacheManagement": "画像キャッシュ管理",
-  "@imageCacheManagement": {
-    "description": "Localized string for imageCacheManagement"
-  },
-  "managePersonaImageCache": "ペルソナ画像のキャッシュを管理",
-  "@managePersonaImageCache": {
-    "description": "Localized string for managePersonaImageCache"
-  },
-  "currentCacheSize": "現在のキャッシュサイズ",
-  "@currentCacheSize": {
-    "description": "Localized string for currentCacheSize"
-  },
-  "deleteCache": "キャッシュを削除",
-  "@deleteCache": {
-    "description": "Localized string for deleteCache"
-  },
-  "cacheDeleted": "画像キャッシュが削除されました",
-  "@cacheDeleted": {
-    "description": "Localized string for cacheDeleted"
-  },
-  "storageManagement": "ストレージ管理",
-  "@storageManagement": {
-    "description": "Localized string for storageManagement"
-  },
-  "hapticFeedback": "触覚フィードバック",
-  "@hapticFeedback": {
-    "description": "Localized string for hapticFeedback"
-  },
-  "subtleVibrationOnTouch": "タッチ時の微細な振動",
-  "@subtleVibrationOnTouch": {
-    "description": "Localized string for subtleVibrationOnTouch"
-  },
-  "profileSettings": "プロフィール設定",
-  "@profileSettings": {
-    "description": "Localized string for profileSettings"
-  },
-  "privacySettingsScreen": "プライバシー設定",
-  "@privacySettingsScreen": {
-    "description": "Localized string for privacySettingsScreen"
-  },
-  "useSystemLanguage": "システム言語を使用",
-  "@useSystemLanguage": {
-    "description": "Localized string for useSystemLanguage"
-  },
-  "followDeviceLanguage": "デバイスの言語設定に従う",
-  "@followDeviceLanguage": {
-    "description": "Localized string for followDeviceLanguage"
-  },
-  "setAppInterfaceLanguage": "アプリのインターフェース言語を設定",
-  "@setAppInterfaceLanguage": {
-    "description": "Localized string for setAppInterfaceLanguage"
-  },
-  "koreanLanguage": "韓国語",
-  "@koreanLanguage": {
-    "description": "Localized string for koreanLanguage"
-  },
-  "laterButton": "後で",
-  "@laterButton": {
-    "description": "Localized string for laterButton"
-  },
-  "startChatButton": "チャットを開始",
-  "@startChatButton": {
-    "description": "Localized string for startChatButton"
-  },
-  "noPersonasToSelect": "選択可能なペルソナがありません",
-  "@noPersonasToSelect": {
-    "description": "Localized string for noPersonasToSelect"
-  },
-  "matchedSona": "マッチしたSona",
-  "@matchedSona": {
-    "description": "Localized string for matchedSona"
-  },
-  "noMatchedSonas": "まだマッチしたSonaはありません",
-  "@noMatchedSonas": {
-    "description": "Localized string for noMatchedSonas"
-  },
-  "startConversationLikeAFriend": "Sonaと友達のように会話を始めよう",
-  "@startConversationLikeAFriend": {
-    "description": "Localized string for startConversationLikeAFriend"
-  },
-  "startingApp": "アプリを起動中",
-  "@startingApp": {
-    "description": "Localized string for startingApp"
-  },
-  "checkingUserInfo": "ユーザー情報を確認中",
-  "@checkingUserInfo": {
-    "description": "Localized string for checkingUserInfo"
-  },
-  "connectingToServer": "サーバーに接続中",
-  "@connectingToServer": {
-    "description": "Localized string for connectingToServer"
-  },
-  "verifyingAuth": "認証を確認中",
-  "@verifyingAuth": {
-    "description": "Localized string for verifyingAuth"
-  },
-  "loadingProfile": "プロフィールを読み込み中",
-  "@loadingProfile": {
-    "description": "Localized string for loadingProfile"
-  },
-  "anonymousLogin": "匿名ログイン",
-  "@anonymousLogin": {
-    "description": "Localized string for anonymousLogin"
-  },
-  "creatingAccount": "アカウント作成中",
-  "@creatingAccount": {
-    "description": "Localized string for creatingAccount"
-  },
-  "preparingNewMeeting": "新しい出会いを準備中",
-  "@preparingNewMeeting": {
-    "description": "Localized string for preparingNewMeeting"
-  },
-  "downloadingPersonaImages": "新しいペルソナ画像をダウンロード中",
-  "@downloadingPersonaImages": {
-    "description": "Localized string for downloadingPersonaImages"
-  },
-  "preparingPersonas": "ペルソナを準備中",
-  "@preparingPersonas": {
-    "description": "Localized string for preparingPersonas"
-  },
-  "profileSetup": "プロフィールをセットアップ中",
-  "@profileSetup": {
-    "description": "Localized string for profileSetup"
-  },
-  "preparingPersonaImages": "ペルソナ画像を準備中",
-  "@preparingPersonaImages": {
-    "description": "Localized string for preparingPersonaImages"
-  },
-  "matching": "マッチング中",
-  "@matching": {
-    "description": "Localized string for matching"
-  },
-  "noErrorReports": "エラーレポートはありません。",
-  "@noErrorReports": {
-    "description": "Localized string for noErrorReports"
-  },
-  "noQualityIssues": "過去1時間に品質問題はありません ✅",
-  "@noQualityIssues": {
-    "description": "Localized string for noQualityIssues"
-  },
-  "noQualityLogs": "まだ品質ログはありません。",
-  "@noQualityLogs": {
-    "description": "Localized string for noQualityLogs"
-  },
-  "insufficientHearts": "ハートが不足しています。",
-  "@insufficientHearts": {
-    "description": "Localized string for insufficientHearts"
-  },
-  "unblockFailed": "ブロック解除に失敗しました",
-  "@unblockFailed": {
-    "description": "Localized string for unblockFailed"
-  },
-  "noImageAvailable": "画像がありません",
-  "@noImageAvailable": {
-    "description": "Localized string for noImageAvailable"
-  },
-  "aiDatingQuestion": "AIとの特別な日常を\n自分だけのペルソナに出会いましょう。",
-  "@aiDatingQuestion": {
-    "description": "Localized string for aiDatingQuestion"
-  },
-  "googleLoginError": "Googleログイン中にエラーが発生しました。",
-  "@googleLoginError": {
-    "description": "Localized string for googleLoginError"
-  },
-  "appleLoginError": "Appleログイン中にエラーが発生しました。",
-  "@appleLoginError": {
-    "description": "Localized string for appleLoginError"
-  },
-  "enterBasicInfo": "アカウント作成のため基本情報を入力してください",
-  "@enterBasicInfo": {
-    "description": "Localized string for enterBasicInfo"
-  },
-  "passwordTooShort": "パスワードは6文字以上である必要があります",
-  "@passwordTooShort": {
-    "description": "Localized string for passwordTooShort"
-  },
-  "profilePhotoAndInfo": "プロフィール写真と基本情報を入力してください",
-  "@profilePhotoAndInfo": {
-    "description": "Localized string for profilePhotoAndInfo"
-  },
-  "showOppositeGenderOnly": "チェックを外すと、異性のペルソナのみが表示されます",
-  "@showOppositeGenderOnly": {
-    "description": "Localized string for showOppositeGenderOnly"
-  },
-  "genderNotSelectedInfo": "性別を選択しない場合、すべての性別のペルソナが表示されます",
-  "@genderNotSelectedInfo": {
-    "description": "Localized string for genderNotSelectedInfo"
-  },
-  "canChangeInSettings": "後で設定で変更できます",
-  "@canChangeInSettings": {
-    "description": "Localized string for canChangeInSettings"
-  },
-  "genderSelectionInfo": "選択しない場合、すべての性別のペルソナに出会えます",
-  "@genderSelectionInfo": {
-    "description": "Localized string for genderSelectionInfo"
-  },
-  "genderPreferenceActive": "すべての性別のペルソナに出会えます",
-  "@genderPreferenceActive": {
-    "description": "Localized string for genderPreferenceActive"
-  },
-  "genderPreferenceInactive": "異性のペルソナのみが表示されます",
-  "@genderPreferenceInactive": {
-    "description": "Localized string for genderPreferenceInactive"
-  },
-  "genderPreferenceDisabled": "異性のみオプションを有効にするには性別を選択してください",
-  "@genderPreferenceDisabled": {
-    "description": "Localized string for genderPreferenceDisabled"
-  },
-  "selectUsagePurpose": "SONAの利用目的を選択してください",
-  "@selectUsagePurpose": {
-    "description": "Localized string for selectUsagePurpose"
-  },
-  "adaptiveConversationDesc": "あなたの会話スタイルに合わせて適応します",
-  "@adaptiveConversationDesc": {
-    "description": "Localized string for adaptiveConversationDesc"
-  },
-  "canMeetPreviousPersonas": "以前スワイプしたペルソナに\nまた出会えます！",
-  "@canMeetPreviousPersonas": {
-    "description": "Localized string for canMeetPreviousPersonas"
-  },
-  "endTutorialAndLogin": "チュートリアルを終了してログインしますか？\nログインするとデータが保存され、すべての機能が使えます。",
-  "@endTutorialAndLogin": {
-    "description": "Localized string for endTutorialAndLogin"
-  },
-  "messageSendFailed": "メッセージの送信に失敗しました。もう一度お試しください。",
-  "@messageSendFailed": {
-    "description": "Localized string for messageSendFailed"
-  },
-  "leaveChatConfirm": "このチャットを退室しますか？\nチャットリストから消えます。",
-  "@leaveChatConfirm": {
-    "description": "Localized string for leaveChatConfirm"
-  },
-  "loginRequiredForProfile": "プロフィールを表示し、\nSONAとの記録を確認するにはログインが必要です",
-  "@loginRequiredForProfile": {
-    "description": "Localized string for loginRequiredForProfile"
-  },
-  "deleteAccountConfirm": "本当にアカウントを削除しますか？この操作は取り消せません。",
-  "@deleteAccountConfirm": {
-    "description": "Localized string for deleteAccountConfirm"
-  },
-  "matchPersonaStep": "1. ペルソナとマッチ：左右にスワイプしてお気に入りのAIペルソナを選択。",
-  "@matchPersonaStep": {
-    "description": "Localized string for matchPersonaStep"
-  },
-  "startConversationStep": "2. 会話を開始：マッチしたペルソナと自由にチャット。",
-  "@startConversationStep": {
-    "description": "Localized string for startConversationStep"
-  },
-  "developRelationshipStep": "3. 関係を深める：会話を通じて親密度を築き、特別な関係を発展させる。",
-  "@developRelationshipStep": {
-    "description": "Localized string for developRelationshipStep"
-  },
-  "heartInsufficientPleaseCharge": "ハートが不足しています。ハートをチャージしてください。",
-  "@heartInsufficientPleaseCharge": {
-    "description": "Localized string for heartInsufficientPleaseCharge"
-  },
-  "specialRelationshipDesc": "お互いを理解し、深い絆を築く",
-  "@specialRelationshipDesc": {
-    "description": "Localized string for specialRelationshipDesc"
-  },
-  "emotionalSupportDesc": "悩みを共有し、温かい慰めを受ける",
-  "@emotionalSupportDesc": {
-    "description": "Localized string for emotionalSupportDesc"
-  },
-  "entertainmentAndFunDesc": "楽しいゲームと楽しい会話を楽しむ",
-  "@entertainmentAndFunDesc": {
-    "description": "Localized string for entertainmentAndFunDesc"
+  "accountDeletedSuccess": "アカウントが正常に削除されました",
+  "@accountDeletedSuccess": {
+    "description": "Localized string for accountDeletedSuccess"
   },
   "accountDeletionContent": "本当にアカウントを削除しますか？\nこの操作は取り消せません。",
   "@accountDeletionContent": {
@@ -1772,515 +20,13 @@
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "passwordConfirmationDesc": "アカウントを削除するにはパスワードを再入力してください。",
-  "@passwordConfirmationDesc": {
-    "description": "Localized string for passwordConfirmationDesc"
-  },
-  "reportAIDescription": "AIがあなたを不快にさせた場合、問題を説明してください。",
-  "@reportAIDescription": {
-    "description": "Localized string for reportAIDescription"
-  },
-  "reportSubmitted": "報告が送信されました。レビューして対処します。",
-  "@reportSubmitted": {
-    "description": "Localized string for reportSubmitted"
-  },
-  "notificationPermissionDesc": "新しいメッセージを受信するには通知許可が必要です。",
-  "@notificationPermissionDesc": {
-    "description": "Localized string for notificationPermissionDesc"
-  },
-  "explainReportReason": "報告理由を詳しく説明してください",
-  "@explainReportReason": {
-    "description": "Localized string for explainReportReason"
-  },
-  "cameraPermissionDesc": "プロフィール写真を撮影するにはカメラアクセスが必要です。",
-  "@cameraPermissionDesc": {
-    "description": "Localized string for cameraPermissionDesc"
-  },
-  "galleryPermissionDesc": "プロフィール写真を選択するにはギャラリーアクセスが必要です。",
-  "@galleryPermissionDesc": {
-    "description": "Localized string for galleryPermissionDesc"
-  },
-  "purchaseMoreHearts": "会話を続けるためにハートを購入",
-  "@purchaseMoreHearts": {
-    "description": "Localized string for purchaseMoreHearts"
-  },
-  "basicInfoDescription": "アカウント作成のため基本情報を入力してください",
-  "@basicInfoDescription": {
-    "description": "Localized string for basicInfoDescription"
-  },
-  "profileInfoDescription": "プロフィール写真と基本情報を入力してください",
-  "@profileInfoDescription": {
-    "description": "Localized string for profileInfoDescription"
-  },
-  "friendshipDescription": "新しい友達に出会い、会話をしたい",
-  "@friendshipDescription": {
-    "description": "Localized string for friendshipDescription"
-  },
-  "datingDescription": "深い思いを共有し、誠実な会話をしたい",
-  "@datingDescription": {
-    "description": "Localized string for datingDescription"
-  },
-  "entertainmentDescription": "楽しい会話をして時間を楽しみたい",
-  "@entertainmentDescription": {
-    "description": "Localized string for entertainmentDescription"
-  },
-  "selectInterests": "興味を選択してください（最低1つ）",
-  "@selectInterests": {
-    "description": "Localized string for selectInterests"
-  },
-  "whatTopicsToTalk": "どんな話題について話したいですか？（任意）",
-  "@whatTopicsToTalk": {
-    "description": "Localized string for whatTopicsToTalk"
-  },
-  "selectPreferredMbti": "特定のMBTIタイプのペルソナを希望する場合は選択してください",
-  "@selectPreferredMbti": {
-    "description": "Localized string for selectPreferredMbti"
-  },
-  "termsAgreementDescription": "サービス利用のため規約に同意してください",
-  "@termsAgreementDescription": {
-    "description": "Localized string for termsAgreementDescription"
-  },
-  "sonaUsagePurpose": "SONAの利用目的を選択してください",
-  "@sonaUsagePurpose": {
-    "description": "Localized string for sonaUsagePurpose"
-  },
-  "aiPersonaPreferenceDescription": "AIペルソナマッチングの設定をしてください",
-  "@aiPersonaPreferenceDescription": {
-    "description": "Localized string for aiPersonaPreferenceDescription"
-  },
-  "unexpectedLoginError": "ログイン中に予期しないエラーが発生しました",
-  "@unexpectedLoginError": {
-    "description": "Localized string for unexpectedLoginError"
-  },
-  "googleLoginCanceled": "Googleログインがキャンセルされました。\nもう一度お試しください。",
-  "@googleLoginCanceled": {
-    "description": "Localized string for googleLoginCanceled"
-  },
-  "appleLoginCanceled": "Appleログインがキャンセルされました。\nもう一度お試しください。",
-  "@appleLoginCanceled": {
-    "description": "Localized string for appleLoginCanceled"
-  },
-  "passwordResetEmailPrompt": "パスワードをリセットするためメールアドレスを入力してください",
-  "@passwordResetEmailPrompt": {
-    "description": "Localized string for passwordResetEmailPrompt"
-  },
-  "passwordResetEmailSent": "パスワードリセットメールが送信されました。メールをご確認ください。",
-  "@passwordResetEmailSent": {
-    "description": "Localized string for passwordResetEmailSent"
-  },
-  "simpleInfoRequired": "AIペルソナとのマッチングには\n簡単な情報が必要です",
-  "@simpleInfoRequired": {
-    "description": "Localized string for simpleInfoRequired"
-  },
-  "endTutorialMessage": "チュートリアルを終了してログインしますか？\nログインすることでデータが保存され、すべての機能を使用できます。",
-  "@endTutorialMessage": {
-    "description": "Localized string for endTutorialMessage"
-  },
-  "onlyOppositeGenderNote": "チェックを外すと、異性のペルソナのみが表示されます",
-  "@onlyOppositeGenderNote": {
-    "description": "Localized string for onlyOppositeGenderNote"
-  },
-  "startConversationWithSona": "Sonaと友達のようにチャットを始めよう！",
-  "@startConversationWithSona": {
-    "description": "Localized string for startConversationWithSona"
-  },
-  "privacySection1Title": "1. 個人情報の収集および利用目的",
-  "@privacySection1Title": {
-    "description": "Localized string for privacySection1Title"
-  },
-  "privacySection3Title": "3. 個人情報の保有および利用期間",
-  "@privacySection3Title": {
-    "description": "Localized string for privacySection3Title"
-  },
-  "privacySection4Title": "4. 第三者への個人情報の提供",
-  "@privacySection4Title": {
-    "description": "Localized string for privacySection4Title"
-  },
-  "privacySection5Title": "5. 個人情報の技術的保護措置",
-  "@privacySection5Title": {
-    "description": "Localized string for privacySection5Title"
-  },
-  "themeDescription": "お好みに合わせてアプリの外観をカスタマイズできます",
-  "@themeDescription": {
-    "description": "Localized string for themeDescription"
-  },
-  "systemThemeDesc": "デバイスのダークモード設定に基づいて自動的に変更されます",
-  "@systemThemeDesc": {
-    "description": "Localized string for systemThemeDesc"
-  },
-  "marketingAgree": "マーケティング情報に同意（任意）",
-  "@marketingAgree": {
-    "description": "Localized string for marketingAgree"
-  },
-  "marketingDescription": "イベントや特典情報を受け取ることができます",
-  "@marketingDescription": {
-    "description": "Localized string for marketingDescription"
-  },
-  "ageConfirmation": "私は14歳以上であり、上記を確認しました。",
-  "@ageConfirmation": {
-    "description": "Localized string for ageConfirmation"
-  },
-  "languageDescription": "AIは選択した言語で応答します",
-  "@languageDescription": {
-    "description": "Localized string for languageDescription"
-  },
-  "translationErrorDescription": "間違った翻訳や不自然な表現を報告してください",
-  "@translationErrorDescription": {
-    "description": "Localized string for translationErrorDescription"
-  },
-  "errorDetailsHint": "何が問題なのか詳しく説明してください",
-  "@errorDetailsHint": {
-    "description": "Localized string for errorDetailsHint"
-  },
-  "reportSubmittedSuccess": "報告が送信されました。ありがとうございます！",
-  "@reportSubmittedSuccess": {
-    "description": "Localized string for reportSubmittedSuccess"
-  },
-  "translationNote": "※ AI翻訳は完璧ではない可能性があります",
-  "@translationNote": {
-    "description": "Localized string for translationNote"
-  },
-  "selectTranslationError": "翻訳エラーのあるメッセージを選択してください",
-  "@selectTranslationError": {
-    "description": "Localized string for selectTranslationError"
-  },
-  "translationErrorReported": "翻訳エラーが報告されました。ありがとうございます！",
-  "@translationErrorReported": {
-    "description": "Localized string for translationErrorReported"
-  },
-  "blockConfirm": "このAIをブロックしますか？\nブロックされたAIはマッチングとチャットリストから除外されます。",
-  "@blockConfirm": {
-    "description": "Localized string for blockConfirm"
-  },
-  "reportAndBlockDescription": "このAIの不適切な行動を報告してブロックできます",
-  "@reportAndBlockDescription": {
-    "description": "Localized string for reportAndBlockDescription"
-  },
-  "termsSection1Content": "これらの利用規約は、SONA（以下「会社」）が提供するAIペルソナ会話マッチングサービス（以下「サービス」）の利用に関して、会社とユーザー間の権利、義務、責任を定義することを目的とします。",
-  "@termsSection1Content": {
-    "description": "Localized string for termsSection1Content"
-  },
-  "termsSection7Content": "ユーザーがこれらの規約の義務に違反したり、通常のサービス運営を妨害した場合、会社は警告、一時停止、または永久停止を通じてサービス利用を段階的に制限することができます。",
-  "@termsSection7Content": {
-    "description": "Localized string for termsSection7Content"
-  },
-  "emotionAnalysisDesc": "共感的な応答のために感情を分析",
-  "@emotionAnalysisDesc": {
-    "description": "Localized string for emotionAnalysisDesc"
-  },
-  "memoryAlbumDesc": "特別な瞬間を自動的に保存して思い出す",
-  "@memoryAlbumDesc": {
-    "description": "Localized string for memoryAlbumDesc"
-  },
-  "weatherContextDesc": "天気に基づいた会話コンテキストを提供",
-  "@weatherContextDesc": {
-    "description": "Localized string for weatherContextDesc"
-  },
-  "dailyCareDesc": "食事、睡眠、健康のための日常ケアメッセージ",
-  "@dailyCareDesc": {
-    "description": "Localized string for dailyCareDesc"
-  },
-  "interestSharingDesc": "共通の興味を発見して推薦",
-  "@interestSharingDesc": {
-    "description": "Localized string for interestSharingDesc"
-  },
-  "conversationContinuityDesc": "以前の会話を記憶してトピックを繋げる",
-  "@conversationContinuityDesc": {
-    "description": "Localized string for conversationContinuityDesc"
-  },
-  "allFeaturesRequired": "※ すべての機能はサービス提供に必要です",
-  "@allFeaturesRequired": {
-    "description": "Localized string for allFeaturesRequired"
-  },
-  "privacySettingsInfo": "個別の機能を無効にすると、それらのサービスは利用できなくなります",
-  "@privacySettingsInfo": {
-    "description": "Localized string for privacySettingsInfo"
-  },
-  "guestModeDescription": "登録せずにSONAを試す\n• 20メッセージ制限\n• 1ハート提供\n• すべてのペルソナを表示",
-  "@guestModeDescription": {
-    "description": "Localized string for guestModeDescription"
-  },
-  "guestLimitReached": "ゲスト体験が終了しました。\n無制限の会話のために登録してください！",
-  "@guestLimitReached": {
-    "description": "Localized string for guestLimitReached"
-  },
-  "guestModeWarning": "ゲストモードは24時間続き、\nその後データは削除されます。",
-  "@guestModeWarning": {
-    "description": "Localized string for guestModeWarning"
-  },
-  "signUpFromGuest": "すべての機能にアクセスするために今すぐ登録！",
-  "@signUpFromGuest": {
-    "description": "Localized string for signUpFromGuest"
-  },
-  "guestDataMigration": "登録時に現在のチャット履歴を保持しますか？",
-  "@guestDataMigration": {
-    "description": "Localized string for guestDataMigration"
-  },
-  "guestModeLimitation": "ゲストモードでは一部の機能が制限されます",
-  "@guestModeLimitation": {
-    "description": "Localized string for guestModeLimitation"
-  },
-  "storeLoginRequiredMessage": "ストアを利用するにはログインが必要です。\nログイン画面に移動しますか？",
-  "@storeLoginRequiredMessage": {
-    "description": "Localized string for storeLoginRequiredMessage"
-  },
-  "profileEditLoginRequiredMessage": "プロフィールを編集するにはログインが必要です。\nログイン画面に移動しますか？",
-  "@profileEditLoginRequiredMessage": {
-    "description": "Localized string for profileEditLoginRequiredMessage"
-  },
-  "waitingForChat": "{name}がチャットを待っています。",
-  "@waitingForChat": {
-    "description": "Shows that a persona is waiting to chat",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "conversationWith": "{name}",
-  "@conversationWith": {
-    "description": "Conversation with name",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "refreshComplete": "更新完了！{count}人のペルソナとマッチ",
-  "@refreshComplete": {
-    "description": "Refresh complete message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "daysRemaining": "残り{days}日",
-  "@daysRemaining": {
-    "description": "Days remaining",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmMessage": "{title}を{price}で購入しますか？{description}",
-  "@purchaseConfirmMessage": {
-    "description": "Purchase confirmation message",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "discountAmountValue": "¥{amount}割引",
-  "@discountAmountValue": {
-    "description": "Discount amount",
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "chattingWithPersonas": "{count}人のペルソナとチャット中",
-  "@chattingWithPersonas": {
-    "description": "Number of personas chatting with",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmContent": "{product}を{price}で購入しますか？",
-  "@purchaseConfirmContent": {
-    "description": "Purchase confirmation content",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "reportError": "報告中にエラーが発生しました：{error}",
-  "@reportError": {
-    "description": "Report error message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "permissionDeniedMessage": "{permissionName}の許可が拒否されました。\\n設定で許可を与えてください。",
-  "@permissionDeniedMessage": {
-    "description": "Permission denied message",
-    "placeholders": {
-      "permissionName": {
-        "type": "String"
-      }
-    }
-  },
-  "daysAgo": "{count}日前",
-  "@daysAgo": {
-    "description": "Days ago",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "hoursAgo": "{count}時間前",
-  "@hoursAgo": {
-    "description": "Hours ago",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "minutesAgo": "{count}分前",
-  "@minutesAgo": {
-    "description": "Minutes ago",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "isTyping": "{name}が入力中...",
-  "@isTyping": {
-    "description": "Shows someone is typing",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "ageRange": "{min}〜{max}歳",
-  "@ageRange": {
-    "description": "Age range",
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "blockedAICount": "{count}個のブロックしたAI",
-  "@blockedAICount": {
-    "description": "Number of blocked AIs",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "guestMessageRemaining": "ゲストメッセージ残り{count}",
-  "@guestMessageRemaining": {
-    "description": "Guest messages remaining",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "newMessageCount": "{count}件の新しいメッセージ",
-  "@newMessageCount": {
-    "description": "Number of new messages",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notEnoughHeartsCount": "ハートが不足しています。（現在：{count}）",
-  "@notEnoughHeartsCount": {
-    "description": "Not enough hearts message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "restartConversationWithName": "{name}との会話を再開します！",
-  "@restartConversationWithName": {
-    "description": "Restarting conversation message",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "restartConversationQuestion": "{name}との会話を再開しますか？",
-  "@restartConversationQuestion": {
-    "description": "Restart conversation question",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "monthDay": "{month} {day}日",
-  "@monthDay": {
-    "description": "Month and day format",
-    "placeholders": {
-      "month": {
-        "type": "String"
-      },
-      "day": {
-        "type": "int"
-      }
-    }
-  },
-  "alreadyChattingWith": "すでに{name}とチャット中です！",
-  "@alreadyChattingWith": {
-    "description": "Already chatting with persona",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "cacheDeleteError": "キャッシュ削除エラー：{error}",
-  "@cacheDeleteError": {
-    "description": "Cache delete error",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "unblockPersonaConfirm": "{name}のブロックを解除しますか？",
-  "@unblockPersonaConfirm": {
-    "description": "Unblock persona confirmation",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "errorWithMessage": "エラーが発生しました：{error}",
-  "@errorWithMessage": {
-    "description": "Error with message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "accountDeletedSuccess": "アカウントが正常に削除されました",
-  "@accountDeletedSuccess": {
-    "description": "Localized string for accountDeletedSuccess"
-  },
   "accountDeletionInfo": "アカウント削除のご案内",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
+  },
+  "accountDeletionTitle": "アカウント削除",
+  "@accountDeletionTitle": {
+    "description": "Localized string for accountDeletionTitle"
   },
   "accountDeletionWarning1": "警告：この操作は元に戻せません",
   "@accountDeletionWarning1": {
@@ -2298,29 +44,442 @@
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
+  "accountManagement": "アカウント管理",
+  "@accountManagement": {
+    "description": "Localized string for accountManagement"
+  },
+  "adaptiveConversationDesc": "あなたの会話スタイルに合わせて適応します",
+  "@adaptiveConversationDesc": {
+    "description": "Localized string for adaptiveConversationDesc"
+  },
+  "afternoon": "Afternoon",
+  "@afternoon": {
+    "description": "Localized string for afternoon"
+  },
+  "afternoonFatigue": "Afternoon fatigue",
+  "@afternoonFatigue": {
+    "description": "Localized string for afternoonFatigue"
+  },
+  "ageConfirmation": "私は14歳以上であり、上記を確認しました。",
+  "@ageConfirmation": {
+    "description": "Localized string for ageConfirmation"
+  },
+  "ageRange": "{min}〜{max}歳",
+  "@ageRange": {
+    "description": "Age range",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "ageUnit": "歳",
+  "@ageUnit": {
+    "description": "Localized string for ageUnit"
+  },
   "agreeToTerms": "利用規約に同意します",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
+  },
+  "aiDatingQuestion": "AIとの特別な日常を\n自分だけのペルソナに出会いましょう。",
+  "@aiDatingQuestion": {
+    "description": "Localized string for aiDatingQuestion"
+  },
+  "aiPersonaPreferenceDescription": "AIペルソナマッチングの設定をしてください",
+  "@aiPersonaPreferenceDescription": {
+    "description": "Localized string for aiPersonaPreferenceDescription"
+  },
+  "all": "すべて",
+  "@all": {
+    "description": "Localized string for all"
+  },
+  "allAgree": "すべてに同意",
+  "@allAgree": {
+    "description": "Localized string for allAgree"
+  },
+  "allFeaturesRequired": "※ すべての機能はサービス提供に必要です",
+  "@allFeaturesRequired": {
+    "description": "Localized string for allFeaturesRequired"
+  },
+  "allPersonas": "すべてのペルソナ",
+  "@allPersonas": {
+    "description": "Localized string for allPersonas"
+  },
+  "allPersonasMatched": "すべてのペルソナとマッチしました！チャットを始めましょう。",
+  "@allPersonasMatched": {
+    "description": "Localized string for allPersonasMatched"
+  },
+  "allowPermission": "続ける",
+  "@allowPermission": {
+    "description": "Localized string for allowPermission"
+  },
+  "alreadyChattingWith": "すでに{name}とチャット中です！",
+  "@alreadyChattingWith": {
+    "description": "Already chatting with persona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alsoBlockThisAI": "このAIもブロックする",
+  "@alsoBlockThisAI": {
+    "description": "Localized string for alsoBlockThisAI"
+  },
+  "angry": "怒っている",
+  "@angry": {
+    "description": "Localized string for angry"
+  },
+  "anonymousLogin": "匿名ログイン",
+  "@anonymousLogin": {
+    "description": "Localized string for anonymousLogin"
+  },
+  "anxious": "不安",
+  "@anxious": {
+    "description": "Localized string for anxious"
+  },
+  "apiKeyError": "API Key Error",
+  "@apiKeyError": {
+    "description": "Localized string for apiKeyError"
+  },
+  "appName": "SONA",
+  "@appName": {
+    "description": "Localized string for appName"
   },
   "appTagline": "あなたのAIコンパニオン",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
+  "appleLoginCanceled": "Appleログインがキャンセルされました。\nもう一度お試しください。",
+  "@appleLoginCanceled": {
+    "description": "Localized string for appleLoginCanceled"
+  },
+  "appleLoginError": "Appleログイン中にエラーが発生しました。",
+  "@appleLoginError": {
+    "description": "Localized string for appleLoginError"
+  },
+  "art": "アート",
+  "@art": {
+    "description": "Localized string for art"
+  },
+  "authError": "認証エラー",
+  "@authError": {
+    "description": "Localized string for authError"
+  },
+  "autoTranslate": "自動翻訳",
+  "@autoTranslate": {
+    "description": "Localized string for autoTranslate"
+  },
+  "autumn": "Autumn",
+  "@autumn": {
+    "description": "Localized string for autumn"
+  },
+  "averageQuality": "平均品質",
+  "@averageQuality": {
+    "description": "Localized string for averageQuality"
+  },
+  "averageQualityScore": "平均品質スコア",
+  "@averageQualityScore": {
+    "description": "Localized string for averageQualityScore"
+  },
+  "awkwardExpression": "不自然な表現",
+  "@awkwardExpression": {
+    "description": "Localized string for awkwardExpression"
+  },
+  "backButton": "戻る",
+  "@backButton": {
+    "description": "Localized string for backButton"
+  },
+  "basicInfo": "基本情報",
+  "@basicInfo": {
+    "description": "Localized string for basicInfo"
+  },
+  "basicInfoDescription": "アカウント作成のため基本情報を入力してください",
+  "@basicInfoDescription": {
+    "description": "Localized string for basicInfoDescription"
+  },
+  "birthDate": "生年月日",
+  "@birthDate": {
+    "description": "Localized string for birthDate"
+  },
+  "birthDateOptional": "生年月日（任意）",
+  "@birthDateOptional": {
+    "description": "Localized string for birthDateOptional"
+  },
+  "birthDateRequired": "生年月日 *",
+  "@birthDateRequired": {
+    "description": "Localized string for birthDateRequired"
+  },
+  "blockConfirm": "このAIをブロックしますか？\nブロックされたAIはマッチングとチャットリストから除外されます。",
+  "@blockConfirm": {
+    "description": "Localized string for blockConfirm"
+  },
+  "blockReason": "ブロック理由",
+  "@blockReason": {
+    "description": "Localized string for blockReason"
+  },
+  "blockThisAI": "このAIをブロック",
+  "@blockThisAI": {
+    "description": "Localized string for blockThisAI"
+  },
+  "blockedAICount": "{count}個のブロックしたAI",
+  "@blockedAICount": {
+    "description": "Number of blocked AIs",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedAIs": "ブロックしたAI",
+  "@blockedAIs": {
+    "description": "Localized string for blockedAIs"
+  },
+  "blockedAt": "ブロック日時",
+  "@blockedAt": {
+    "description": "Localized string for blockedAt"
+  },
+  "blockedSuccessfully": "ブロックしました",
+  "@blockedSuccessfully": {
+    "description": "Localized string for blockedSuccessfully"
+  },
+  "breakfast": "Breakfast",
+  "@breakfast": {
+    "description": "Localized string for breakfast"
+  },
+  "byErrorType": "エラータイプ別",
+  "@byErrorType": {
+    "description": "Localized string for byErrorType"
+  },
+  "byPersona": "ペルソナ別",
+  "@byPersona": {
+    "description": "Localized string for byPersona"
+  },
+  "cacheDeleteError": "キャッシュ削除エラー：{error}",
+  "@cacheDeleteError": {
+    "description": "Cache delete error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheDeleted": "画像キャッシュが削除されました",
+  "@cacheDeleted": {
+    "description": "Localized string for cacheDeleted"
+  },
+  "cafeTerrace": "Cafe terrace",
+  "@cafeTerrace": {
+    "description": "Localized string for cafeTerrace"
+  },
+  "calm": "穏やか",
+  "@calm": {
+    "description": "Localized string for calm"
+  },
+  "cameraPermission": "カメラの許可",
+  "@cameraPermission": {
+    "description": "Localized string for cameraPermission"
+  },
+  "cameraPermissionDesc": "プロフィール写真を撮影するにはカメラアクセスが必要です。",
+  "@cameraPermissionDesc": {
+    "description": "Localized string for cameraPermissionDesc"
+  },
+  "canChangeInSettings": "後で設定で変更できます",
+  "@canChangeInSettings": {
+    "description": "Localized string for canChangeInSettings"
+  },
+  "canMeetPreviousPersonas": "以前スワイプしたペルソナに\nまた出会えます！",
+  "@canMeetPreviousPersonas": {
+    "description": "Localized string for canMeetPreviousPersonas"
+  },
+  "cancel": "キャンセル",
+  "@cancel": {
+    "description": "Localized string for cancel"
+  },
   "changeProfilePhoto": "プロフィール写真を変更",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
+  },
+  "chat": "チャット",
+  "@chat": {
+    "description": "Localized string for chat"
+  },
+  "chatEndedMessage": "チャットが終了しました",
+  "@chatEndedMessage": {
+    "description": "Localized string for chatEndedMessage"
+  },
+  "chatErrorDashboard": "チャットエラーダッシュボード",
+  "@chatErrorDashboard": {
+    "description": "Localized string for chatErrorDashboard"
+  },
+  "chatErrorSentSuccessfully": "チャットエラーが正常に送信されました。",
+  "@chatErrorSentSuccessfully": {
+    "description": "Localized string for chatErrorSentSuccessfully"
+  },
+  "chatListTab": "チャットリストタブ",
+  "@chatListTab": {
+    "description": "Localized string for chatListTab"
+  },
+  "chats": "チャット",
+  "@chats": {
+    "description": "Localized string for chats"
+  },
+  "chattingWithPersonas": "{count}人のペルソナとチャット中",
+  "@chattingWithPersonas": {
+    "description": "Number of personas chatting with",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "checkInternetConnection": "インターネット接続を確認してください",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
+  "checkingUserInfo": "ユーザー情報を確認中",
+  "@checkingUserInfo": {
+    "description": "Localized string for checkingUserInfo"
+  },
+  "childrensDay": "Children's Day",
+  "@childrensDay": {
+    "description": "Localized string for childrensDay"
+  },
+  "chinese": "中国語",
+  "@chinese": {
+    "description": "Localized string for chinese"
+  },
+  "chooseOption": "選択してください：",
+  "@chooseOption": {
+    "description": "Localized string for chooseOption"
+  },
+  "christmas": "Christmas",
+  "@christmas": {
+    "description": "Localized string for christmas"
+  },
+  "close": "閉じる",
+  "@close": {
+    "description": "Localized string for close"
+  },
+  "complete": "完了",
+  "@complete": {
+    "description": "Localized string for complete"
+  },
+  "completeSignup": "登録を完了",
+  "@completeSignup": {
+    "description": "Localized string for completeSignup"
+  },
+  "confirm": "確認",
+  "@confirm": {
+    "description": "Localized string for confirm"
+  },
+  "connectingToServer": "サーバーに接続中",
+  "@connectingToServer": {
+    "description": "Localized string for connectingToServer"
+  },
+  "consultQualityMonitoring": "相談品質モニタリング",
+  "@consultQualityMonitoring": {
+    "description": "Localized string for consultQualityMonitoring"
+  },
+  "continueAsGuest": "ゲストとして続ける",
+  "@continueAsGuest": {
+    "description": "Localized string for continueAsGuest"
+  },
+  "continueButton": "続ける",
+  "@continueButton": {
+    "description": "Localized string for continueButton"
+  },
+  "continueWithApple": "Appleで続ける",
+  "@continueWithApple": {
+    "description": "Localized string for continueWithApple"
+  },
+  "continueWithGoogle": "Googleで続ける",
+  "@continueWithGoogle": {
+    "description": "Localized string for continueWithGoogle"
+  },
+  "conversationContinuity": "会話の継続性",
+  "@conversationContinuity": {
+    "description": "Localized string for conversationContinuity"
+  },
+  "conversationContinuityDesc": "以前の会話を記憶してトピックを繋げる",
+  "@conversationContinuityDesc": {
+    "description": "Localized string for conversationContinuityDesc"
+  },
+  "conversationWith": "{name}",
+  "@conversationWith": {
+    "description": "Conversation with name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "convertToMember": "新規登録",
+  "@convertToMember": {
+    "description": "Localized string for convertToMember"
+  },
+  "cooking": "料理",
+  "@cooking": {
+    "description": "Localized string for cooking"
+  },
+  "copyMessage": "メッセージをコピー",
+  "@copyMessage": {
+    "description": "Localized string for copyMessage"
+  },
   "copyrightInfringement": "著作権侵害",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
+  "creatingAccount": "アカウント作成中",
+  "@creatingAccount": {
+    "description": "Localized string for creatingAccount"
+  },
+  "crisisDetected": "危機検出",
+  "@crisisDetected": {
+    "description": "Localized string for crisisDetected"
+  },
+  "culturalIssue": "文化的な問題",
+  "@culturalIssue": {
+    "description": "Localized string for culturalIssue"
+  },
+  "current": "Current",
+  "@current": {
+    "description": "Localized string for current"
+  },
+  "currentCacheSize": "現在のキャッシュサイズ",
+  "@currentCacheSize": {
+    "description": "Localized string for currentCacheSize"
+  },
   "currentLanguage": "現在の言語",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
+  },
+  "cycling": "Cycling",
+  "@cycling": {
+    "description": "Localized string for cycling"
+  },
+  "dailyCare": "日常ケア",
+  "@dailyCare": {
+    "description": "Localized string for dailyCare"
+  },
+  "dailyCareDesc": "食事、睡眠、健康のための日常ケアメッセージ",
+  "@dailyCareDesc": {
+    "description": "Localized string for dailyCareDesc"
+  },
+  "dailyChat": "日常会話",
+  "@dailyChat": {
+    "description": "Localized string for dailyChat"
+  },
+  "dailyCheck": "Daily check",
+  "@dailyCheck": {
+    "description": "Localized string for dailyCheck"
+  },
+  "dailyConversation": "日常会話",
+  "@dailyConversation": {
+    "description": "Localized string for dailyConversation"
   },
   "dailyLimitDescription": "1日のメッセージ制限に達しました",
   "@dailyLimitDescription": {
@@ -2330,21 +489,253 @@
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
+  "darkMode": "ダークモード",
+  "@darkMode": {
+    "description": "Localized string for darkMode"
+  },
+  "darkTheme": "ダークモード",
+  "@darkTheme": {
+    "description": "Localized string for darkTheme"
+  },
+  "darkThemeDesc": "暗いテーマを使用",
+  "@darkThemeDesc": {
+    "description": "Localized string for darkThemeDesc"
+  },
+  "dataCollection": "データ収集設定",
+  "@dataCollection": {
+    "description": "Localized string for dataCollection"
+  },
+  "datingAdvice": "恋愛アドバイス",
+  "@datingAdvice": {
+    "description": "Localized string for datingAdvice"
+  },
+  "datingDescription": "深い思いを共有し、誠実な会話をしたい",
+  "@datingDescription": {
+    "description": "Localized string for datingDescription"
+  },
+  "dawn": "Dawn",
+  "@dawn": {
+    "description": "Localized string for dawn"
+  },
+  "day": "日",
+  "@day": {
+    "description": "Localized string for day"
+  },
+  "dayAfterTomorrow": "Day after tomorrow",
+  "@dayAfterTomorrow": {
+    "description": "Localized string for dayAfterTomorrow"
+  },
+  "daysAgo": "{count}日前",
+  "@daysAgo": {
+    "description": "Days ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "days ago"
+      }
+    }
+  },
+  "daysRemaining": "残り{days}日",
+  "@daysRemaining": {
+    "description": "Days remaining",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "deepTalk": "深い話",
+  "@deepTalk": {
+    "description": "Localized string for deepTalk"
+  },
+  "delete": "削除",
+  "@delete": {
+    "description": "Localized string for delete"
+  },
+  "deleteAccount": "アカウント削除",
+  "@deleteAccount": {
+    "description": "Localized string for deleteAccount"
+  },
+  "deleteAccountConfirm": "本当にアカウントを削除しますか？この操作は取り消せません。",
+  "@deleteAccountConfirm": {
+    "description": "Localized string for deleteAccountConfirm"
+  },
   "deleteAccountWarning": "本当にアカウントを削除しますか？",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
+  },
+  "deleteCache": "キャッシュを削除",
+  "@deleteCache": {
+    "description": "Localized string for deleteCache"
   },
   "deletingAccount": "アカウントを削除中...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
+  "depressed": "憂鬱",
+  "@depressed": {
+    "description": "Localized string for depressed"
+  },
+  "describeError": "何が問題ですか？",
+  "@describeError": {
+    "description": "Localized string for describeError"
+  },
+  "detailedReason": "詳細な理由",
+  "@detailedReason": {
+    "description": "Localized string for detailedReason"
+  },
+  "developRelationshipStep": "3. 関係を深める：会話を通じて親密度を築き、特別な関係を発展させる。",
+  "@developRelationshipStep": {
+    "description": "Localized string for developRelationshipStep"
+  },
+  "dinner": "Dinner",
+  "@dinner": {
+    "description": "Localized string for dinner"
+  },
+  "discardGuestData": "新しく始める",
+  "@discardGuestData": {
+    "description": "Localized string for discardGuestData"
+  },
+  "discount20": "20%オフ",
+  "@discount20": {
+    "description": "Localized string for discount20"
+  },
+  "discount30": "30%オフ",
+  "@discount30": {
+    "description": "Localized string for discount30"
+  },
+  "discountAmount": "割引",
+  "@discountAmount": {
+    "description": "Localized string for discountAmount"
+  },
+  "discountAmountValue": "¥{amount}割引",
+  "@discountAmountValue": {
+    "description": "Discount amount",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "done": "完了",
+  "@done": {
+    "description": "Localized string for done"
+  },
+  "downloadingPersonaImages": "新しいペルソナ画像をダウンロード中",
+  "@downloadingPersonaImages": {
+    "description": "Localized string for downloadingPersonaImages"
+  },
+  "edit": "編集",
+  "@edit": {
+    "description": "Localized string for edit"
+  },
+  "editInfo": "情報を編集",
+  "@editInfo": {
+    "description": "Localized string for editInfo"
+  },
+  "editProfile": "プロフィール編集",
+  "@editProfile": {
+    "description": "Localized string for editProfile"
+  },
+  "effectSound": "効果音",
+  "@effectSound": {
+    "description": "Localized string for effectSound"
+  },
   "effectSoundDescription": "効果音を再生",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
+  "email": "メールアドレス",
+  "@email": {
+    "description": "Localized string for email"
+  },
+  "emailHint": "example@email.com",
+  "@emailHint": {
+    "description": "Localized string for emailHint"
+  },
+  "emailLabel": "メールアドレス",
+  "@emailLabel": {
+    "description": "Localized string for emailLabel"
+  },
+  "emailRequired": "メールアドレス *",
+  "@emailRequired": {
+    "description": "Localized string for emailRequired"
+  },
+  "emotionAnalysis": "感情分析",
+  "@emotionAnalysis": {
+    "description": "Localized string for emotionAnalysis"
+  },
+  "emotionAnalysisDesc": "共感的な応答のために感情を分析",
+  "@emotionAnalysisDesc": {
+    "description": "Localized string for emotionAnalysisDesc"
+  },
+  "emotionAngry": "Angry",
+  "@emotionAngry": {
+    "description": "Localized string for emotionAngry"
+  },
   "emotionBasedEncounters": "感情に基づく出会い",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
+  },
+  "emotionCool": "Cool",
+  "@emotionCool": {
+    "description": "Localized string for emotionCool"
+  },
+  "emotionHappy": "Happy",
+  "@emotionHappy": {
+    "description": "Localized string for emotionHappy"
+  },
+  "emotionLove": "Love",
+  "@emotionLove": {
+    "description": "Localized string for emotionLove"
+  },
+  "emotionSad": "Sad",
+  "@emotionSad": {
+    "description": "Localized string for emotionSad"
+  },
+  "emotionThinking": "Thinking",
+  "@emotionThinking": {
+    "description": "Localized string for emotionThinking"
+  },
+  "emotionalSupportDesc": "悩みを共有し、温かい慰めを受ける",
+  "@emotionalSupportDesc": {
+    "description": "Localized string for emotionalSupportDesc"
+  },
+  "endChat": "チャット終了",
+  "@endChat": {
+    "description": "Localized string for endChat"
+  },
+  "endTutorial": "チュートリアル終了",
+  "@endTutorial": {
+    "description": "Localized string for endTutorial"
+  },
+  "endTutorialAndLogin": "チュートリアルを終了してログインしますか？\nログインするとデータが保存され、すべての機能が使えます。",
+  "@endTutorialAndLogin": {
+    "description": "Localized string for endTutorialAndLogin"
+  },
+  "endTutorialMessage": "チュートリアルを終了してログインしますか？\nログインすることでデータが保存され、すべての機能を使用できます。",
+  "@endTutorialMessage": {
+    "description": "Localized string for endTutorialMessage"
+  },
+  "english": "英語",
+  "@english": {
+    "description": "Localized string for english"
+  },
+  "enterBasicInfo": "アカウント作成のため基本情報を入力してください",
+  "@enterBasicInfo": {
+    "description": "Localized string for enterBasicInfo"
+  },
+  "enterBasicInformation": "基本情報を入力してください",
+  "@enterBasicInformation": {
+    "description": "Localized string for enterBasicInformation"
+  },
+  "enterEmail": "メールアドレスを入力してください",
+  "@enterEmail": {
+    "description": "Localized string for enterEmail"
   },
   "enterNickname": "ニックネームを入力してください",
   "@enterNickname": {
@@ -2354,25 +745,413 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
+  "entertainmentAndFunDesc": "楽しいゲームと楽しい会話を楽しむ",
+  "@entertainmentAndFunDesc": {
+    "description": "Localized string for entertainmentAndFunDesc"
+  },
+  "entertainmentDescription": "楽しい会話をして時間を楽しみたい",
+  "@entertainmentDescription": {
+    "description": "Localized string for entertainmentDescription"
+  },
+  "entertainmentFun": "エンターテインメント/楽しみ",
+  "@entertainmentFun": {
+    "description": "Localized string for entertainmentFun"
+  },
+  "error": "エラー",
+  "@error": {
+    "description": "Localized string for error"
+  },
   "errorDescription": "エラーの説明",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
+  },
+  "errorDescriptionHint": "例：おかしな返答をした、同じことを繰り返す、文脈に合わない返答をする...",
+  "@errorDescriptionHint": {
+    "description": "Localized string for errorDescriptionHint"
+  },
+  "errorDetails": "エラー詳細",
+  "@errorDetails": {
+    "description": "Localized string for errorDetails"
+  },
+  "errorDetailsHint": "何が問題なのか詳しく説明してください",
+  "@errorDetailsHint": {
+    "description": "Localized string for errorDetailsHint"
+  },
+  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "@errorFrequency24h": {
+    "description": "Localized string for errorFrequency24h"
+  },
+  "errorMessage": "Error Message:",
+  "@errorMessage": {
+    "description": "Localized string for errorMessage"
+  },
+  "errorOccurred": "エラーが発生しました。",
+  "@errorOccurred": {
+    "description": "Localized string for errorOccurred"
+  },
+  "errorOccurredTryAgain": "エラーが発生しました。もう一度お試しください。",
+  "@errorOccurredTryAgain": {
+    "description": "Localized string for errorOccurredTryAgain"
+  },
+  "errorSendingFailed": "エラーの送信に失敗しました",
+  "@errorSendingFailed": {
+    "description": "Localized string for errorSendingFailed"
+  },
+  "errorStats": "エラー統計",
+  "@errorStats": {
+    "description": "Localized string for errorStats"
+  },
+  "errorWithMessage": "エラーが発生しました：{error}",
+  "@errorWithMessage": {
+    "description": "Error with message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "evening": "Evening",
+  "@evening": {
+    "description": "Localized string for evening"
+  },
+  "excited": "興奮",
+  "@excited": {
+    "description": "Localized string for excited"
+  },
+  "exit": "終了",
+  "@exit": {
+    "description": "Localized string for exit"
+  },
+  "exitApp": "アプリを終了",
+  "@exitApp": {
+    "description": "Localized string for exitApp"
+  },
+  "exitConfirmMessage": "本当にアプリを終了しますか？",
+  "@exitConfirmMessage": {
+    "description": "Localized string for exitConfirmMessage"
+  },
+  "expertPersona": "エキスパートペルソナ",
+  "@expertPersona": {
+    "description": "Localized string for expertPersona"
+  },
+  "expertiseScore": "専門性スコア",
+  "@expertiseScore": {
+    "description": "Localized string for expertiseScore"
+  },
+  "expired": "期限切れ",
+  "@expired": {
+    "description": "Localized string for expired"
+  },
+  "explainReportReason": "報告理由を詳しく説明してください",
+  "@explainReportReason": {
+    "description": "Localized string for explainReportReason"
+  },
+  "fashion": "ファッション",
+  "@fashion": {
+    "description": "Localized string for fashion"
+  },
+  "female": "女性",
+  "@female": {
+    "description": "Localized string for female"
+  },
+  "filter": "フィルター",
+  "@filter": {
+    "description": "Localized string for filter"
+  },
+  "firstOccurred": "First Occurred: ",
+  "@firstOccurred": {
+    "description": "Localized string for firstOccurred"
+  },
+  "followDeviceLanguage": "デバイスの言語設定に従う",
+  "@followDeviceLanguage": {
+    "description": "Localized string for followDeviceLanguage"
+  },
+  "forenoon": "Forenoon",
+  "@forenoon": {
+    "description": "Localized string for forenoon"
+  },
+  "forgotPassword": "パスワードをお忘れですか？",
+  "@forgotPassword": {
+    "description": "Localized string for forgotPassword"
+  },
+  "frequentlyAskedQuestions": "よくある質問",
+  "@frequentlyAskedQuestions": {
+    "description": "Localized string for frequentlyAskedQuestions"
+  },
+  "friday": "Friday",
+  "@friday": {
+    "description": "Localized string for friday"
+  },
+  "friendshipDescription": "新しい友達に出会い、会話をしたい",
+  "@friendshipDescription": {
+    "description": "Localized string for friendshipDescription"
+  },
+  "funChat": "楽しい会話",
+  "@funChat": {
+    "description": "Localized string for funChat"
+  },
+  "galleryPermission": "ギャラリーの許可",
+  "@galleryPermission": {
+    "description": "Localized string for galleryPermission"
+  },
+  "galleryPermissionDesc": "プロフィール写真を選択するにはギャラリーアクセスが必要です。",
+  "@galleryPermissionDesc": {
+    "description": "Localized string for galleryPermissionDesc"
+  },
+  "gaming": "ゲーム",
+  "@gaming": {
+    "description": "Localized string for gaming"
+  },
+  "gender": "性別",
+  "@gender": {
+    "description": "Localized string for gender"
+  },
+  "genderNotSelectedInfo": "性別を選択しない場合、すべての性別のペルソナが表示されます",
+  "@genderNotSelectedInfo": {
+    "description": "Localized string for genderNotSelectedInfo"
+  },
+  "genderOptional": "性別（任意）",
+  "@genderOptional": {
+    "description": "Localized string for genderOptional"
+  },
+  "genderPreferenceActive": "すべての性別のペルソナに出会えます",
+  "@genderPreferenceActive": {
+    "description": "Localized string for genderPreferenceActive"
+  },
+  "genderPreferenceDisabled": "異性のみオプションを有効にするには性別を選択してください",
+  "@genderPreferenceDisabled": {
+    "description": "Localized string for genderPreferenceDisabled"
+  },
+  "genderPreferenceInactive": "異性のペルソナのみが表示されます",
+  "@genderPreferenceInactive": {
+    "description": "Localized string for genderPreferenceInactive"
+  },
+  "genderRequired": "性別 *",
+  "@genderRequired": {
+    "description": "Localized string for genderRequired"
+  },
+  "genderSelectionInfo": "選択しない場合、すべての性別のペルソナに出会えます",
+  "@genderSelectionInfo": {
+    "description": "Localized string for genderSelectionInfo"
+  },
+  "generalPersona": "一般ペルソナ",
+  "@generalPersona": {
+    "description": "Localized string for generalPersona"
+  },
+  "goToSettings": "設定へ移動",
+  "@goToSettings": {
+    "description": "Localized string for goToSettings"
+  },
+  "googleLoginCanceled": "Googleログインがキャンセルされました。\nもう一度お試しください。",
+  "@googleLoginCanceled": {
+    "description": "Localized string for googleLoginCanceled"
+  },
+  "googleLoginError": "Googleログイン中にエラーが発生しました。",
+  "@googleLoginError": {
+    "description": "Localized string for googleLoginError"
+  },
+  "grantPermission": "続ける",
+  "@grantPermission": {
+    "description": "Localized string for grantPermission"
+  },
+  "guest": "Guest",
+  "@guest": {
+    "description": "Localized string for guest"
+  },
+  "guestDataMigration": "登録時に現在のチャット履歴を保持しますか？",
+  "@guestDataMigration": {
+    "description": "Localized string for guestDataMigration"
+  },
+  "guestLimitReached": "ゲスト体験が終了しました。\n無制限の会話のために登録してください！",
+  "@guestLimitReached": {
+    "description": "Localized string for guestLimitReached"
   },
   "guestLoginPromptMessage": "会話を続けるにはログインしてください",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
+  "guestMessageExhausted": "無料メッセージを使い切りました",
+  "@guestMessageExhausted": {
+    "description": "Localized string for guestMessageExhausted"
+  },
+  "guestMessageRemaining": "ゲストメッセージ残り{count}",
+  "@guestMessageRemaining": {
+    "description": "Guest messages remaining",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guestModeBanner": "ゲストモード",
+  "@guestModeBanner": {
+    "description": "Localized string for guestModeBanner"
+  },
+  "guestModeDescription": "登録せずにSONAを試す\n• 20メッセージ制限\n• 1ハート提供\n• すべてのペルソナを表示",
+  "@guestModeDescription": {
+    "description": "Localized string for guestModeDescription"
+  },
+  "guestModeFailedMessage": "ゲストモードの開始に失敗しました",
+  "@guestModeFailedMessage": {
+    "description": "Localized string for guestModeFailedMessage"
+  },
+  "guestModeLimitation": "ゲストモードでは一部の機能が制限されます",
+  "@guestModeLimitation": {
+    "description": "Localized string for guestModeLimitation"
+  },
+  "guestModeTitle": "ゲストとして試す",
+  "@guestModeTitle": {
+    "description": "Localized string for guestModeTitle"
+  },
+  "guestModeWarning": "ゲストモードは24時間続き、\nその後データは削除されます。",
+  "@guestModeWarning": {
+    "description": "Localized string for guestModeWarning"
+  },
+  "guestModeWelcome": "ゲストモードで開始",
+  "@guestModeWelcome": {
+    "description": "Localized string for guestModeWelcome"
+  },
+  "happy": "幸せ",
+  "@happy": {
+    "description": "Localized string for happy"
+  },
+  "hapticFeedback": "触覚フィードバック",
+  "@hapticFeedback": {
+    "description": "Localized string for hapticFeedback"
+  },
+  "harassmentBullying": "ハラスメント/いじめ",
+  "@harassmentBullying": {
+    "description": "Localized string for harassmentBullying"
+  },
+  "hateSpeech": "ヘイトスピーチ",
+  "@hateSpeech": {
+    "description": "Localized string for hateSpeech"
+  },
   "heartDescription": "メッセージのためのハート",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
+  },
+  "heartInsufficient": "ハートが足りません",
+  "@heartInsufficient": {
+    "description": "Localized string for heartInsufficient"
+  },
+  "heartInsufficientPleaseCharge": "ハートが不足しています。ハートをチャージしてください。",
+  "@heartInsufficientPleaseCharge": {
+    "description": "Localized string for heartInsufficientPleaseCharge"
+  },
+  "heartRequired": "1ハートが必要です",
+  "@heartRequired": {
+    "description": "Localized string for heartRequired"
+  },
+  "heartUsageFailed": "ハートの使用に失敗しました。",
+  "@heartUsageFailed": {
+    "description": "Localized string for heartUsageFailed"
+  },
+  "hearts": "ハート",
+  "@hearts": {
+    "description": "Localized string for hearts"
+  },
+  "hearts10": "10ハート",
+  "@hearts10": {
+    "description": "Localized string for hearts10"
+  },
+  "hearts30": "30ハート",
+  "@hearts30": {
+    "description": "Localized string for hearts30"
+  },
+  "hearts30Discount": "セール",
+  "@hearts30Discount": {
+    "description": "Localized string for hearts30Discount"
+  },
+  "hearts50": "50ハート",
+  "@hearts50": {
+    "description": "Localized string for hearts50"
+  },
+  "hearts50Discount": "セール",
+  "@hearts50Discount": {
+    "description": "Localized string for hearts50Discount"
+  },
+  "helloEmoji": "こんにちは！ 😊",
+  "@helloEmoji": {
+    "description": "Localized string for helloEmoji"
+  },
+  "help": "ヘルプ",
+  "@help": {
+    "description": "Localized string for help"
+  },
+  "hideOriginalText": "原文を隠す",
+  "@hideOriginalText": {
+    "description": "Localized string for hideOriginalText"
+  },
+  "hobbySharing": "趣味の共有",
+  "@hobbySharing": {
+    "description": "Localized string for hobbySharing"
+  },
+  "hobbyTalk": "趣味の話",
+  "@hobbyTalk": {
+    "description": "Localized string for hobbyTalk"
+  },
+  "hours24Ago": "24 hours ago",
+  "@hours24Ago": {
+    "description": "Localized string for hours24Ago"
+  },
+  "hoursAgo": "{count}時間前",
+  "@hoursAgo": {
+    "description": "Hours ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "hours ago"
+      }
+    }
+  },
+  "howToUse": "SONAの使い方",
+  "@howToUse": {
+    "description": "Localized string for howToUse"
+  },
+  "imageCacheManagement": "画像キャッシュ管理",
+  "@imageCacheManagement": {
+    "description": "Localized string for imageCacheManagement"
   },
   "inappropriateContent": "不適切なコンテンツ",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
+  "incorrect": "incorrect",
+  "@incorrect": {
+    "description": "Localized string for incorrect"
+  },
   "incorrectPassword": "パスワードが正しくありません",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
+  },
+  "indonesian": "インドネシア語",
+  "@indonesian": {
+    "description": "Localized string for indonesian"
+  },
+  "inquiries": "お問い合わせ",
+  "@inquiries": {
+    "description": "Localized string for inquiries"
+  },
+  "insufficientHearts": "ハートが不足しています。",
+  "@insufficientHearts": {
+    "description": "Localized string for insufficientHearts"
+  },
+  "interestSharing": "興味の共有",
+  "@interestSharing": {
+    "description": "Localized string for interestSharing"
+  },
+  "interestSharingDesc": "共通の興味を発見して推薦",
+  "@interestSharingDesc": {
+    "description": "Localized string for interestSharingDesc"
+  },
+  "interests": "興味",
+  "@interests": {
+    "description": "Localized string for interests"
   },
   "invalidEmailFormat": "無効なメールフォーマット",
   "@invalidEmailFormat": {
@@ -2382,17 +1161,142 @@
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
+  "isTyping": "{name}が入力中...",
+  "@isTyping": {
+    "description": "Shows someone is typing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "japanese": "日本語",
+  "@japanese": {
+    "description": "Localized string for japanese"
+  },
+  "joinDate": "登録日",
+  "@joinDate": {
+    "description": "Localized string for joinDate"
+  },
+  "justNow": "たった今",
+  "@justNow": {
+    "description": "Localized string for justNow"
+  },
+  "keepGuestData": "チャット履歴を保持",
+  "@keepGuestData": {
+    "description": "Localized string for keepGuestData"
+  },
+  "korean": "韓国語",
+  "@korean": {
+    "description": "Localized string for korean"
+  },
+  "koreanLanguage": "韓国語",
+  "@koreanLanguage": {
+    "description": "Localized string for koreanLanguage"
+  },
+  "language": "言語",
+  "@language": {
+    "description": "Localized string for language"
+  },
+  "languageDescription": "AIは選択した言語で応答します",
+  "@languageDescription": {
+    "description": "Localized string for languageDescription"
+  },
+  "languageIndicator": "言語",
+  "@languageIndicator": {
+    "description": "Localized string for languageIndicator"
+  },
+  "languageSettings": "言語設定",
+  "@languageSettings": {
+    "description": "Localized string for languageSettings"
+  },
+  "lastOccurred": "Last Occurred: ",
+  "@lastOccurred": {
+    "description": "Localized string for lastOccurred"
+  },
   "lastUpdated": "最終更新",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
+  },
+  "lateNight": "Late night",
+  "@lateNight": {
+    "description": "Localized string for lateNight"
+  },
+  "later": "後で",
+  "@later": {
+    "description": "Localized string for later"
+  },
+  "laterButton": "後で",
+  "@laterButton": {
+    "description": "Localized string for laterButton"
+  },
+  "leave": "退室",
+  "@leave": {
+    "description": "Localized string for leave"
+  },
+  "leaveChatConfirm": "このチャットを退室しますか？\nチャットリストから消えます。",
+  "@leaveChatConfirm": {
+    "description": "Localized string for leaveChatConfirm"
+  },
+  "leaveChatRoom": "チャットルームを退室",
+  "@leaveChatRoom": {
+    "description": "Localized string for leaveChatRoom"
+  },
+  "leaveChatTitle": "チャットを退室",
+  "@leaveChatTitle": {
+    "description": "Localized string for leaveChatTitle"
+  },
+  "lifeAdvice": "人生相談",
+  "@lifeAdvice": {
+    "description": "Localized string for lifeAdvice"
+  },
+  "lightTalk": "軽い話",
+  "@lightTalk": {
+    "description": "Localized string for lightTalk"
+  },
+  "lightTheme": "ライトモード",
+  "@lightTheme": {
+    "description": "Localized string for lightTheme"
+  },
+  "lightThemeDesc": "明るいテーマを使用",
+  "@lightThemeDesc": {
+    "description": "Localized string for lightThemeDesc"
+  },
+  "loading": "読み込み中...",
+  "@loading": {
+    "description": "Localized string for loading"
+  },
+  "loadingData": "データを読み込み中...",
+  "@loadingData": {
+    "description": "Localized string for loadingData"
   },
   "loadingProducts": "製品を読み込み中...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
+  "loadingProfile": "プロフィールを読み込み中",
+  "@loadingProfile": {
+    "description": "Localized string for loadingProfile"
+  },
+  "login": "ログイン",
+  "@login": {
+    "description": "Localized string for login"
+  },
+  "loginButton": "ログイン",
+  "@loginButton": {
+    "description": "Localized string for loginButton"
+  },
+  "loginCancelled": "ログインがキャンセルされました",
+  "@loginCancelled": {
+    "description": "Localized string for loginCancelled"
+  },
   "loginComplete": "ログイン完了",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
+  },
+  "loginError": "ログインに失敗しました",
+  "@loginError": {
+    "description": "Localized string for loginError"
   },
   "loginFailed": "ログイン失敗",
   "@loginFailed": {
@@ -2402,9 +1306,33 @@
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
+  "loginRequired": "ログインが必要です",
+  "@loginRequired": {
+    "description": "Localized string for loginRequired"
+  },
+  "loginRequiredForProfile": "プロフィールを表示し、\nSONAとの記録を確認するにはログインが必要です",
+  "@loginRequiredForProfile": {
+    "description": "Localized string for loginRequiredForProfile"
+  },
   "loginRequiredService": "このサービスを利用するにはログインが必要です",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
+  },
+  "loginRequiredTitle": "ログインが必要です",
+  "@loginRequiredTitle": {
+    "description": "Localized string for loginRequiredTitle"
+  },
+  "loginSignup": "ログイン/新規登録",
+  "@loginSignup": {
+    "description": "Localized string for loginSignup"
+  },
+  "loginTab": "ログイン",
+  "@loginTab": {
+    "description": "Localized string for loginTab"
+  },
+  "loginTitle": "ログイン",
+  "@loginTitle": {
+    "description": "Localized string for loginTitle"
   },
   "loginWithApple": "Appleでログイン",
   "@loginWithApple": {
@@ -2414,21 +1342,236 @@
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
+  "logout": "ログアウト",
+  "@logout": {
+    "description": "Localized string for logout"
+  },
   "logoutConfirm": "本当にログアウトしますか？",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
+  },
+  "lonelinessRelief": "孤独感の解消",
+  "@lonelinessRelief": {
+    "description": "Localized string for lonelinessRelief"
+  },
+  "lonely": "寂しい",
+  "@lonely": {
+    "description": "Localized string for lonely"
+  },
+  "lowQualityResponses": "低品質レスポンス",
+  "@lowQualityResponses": {
+    "description": "Localized string for lowQualityResponses"
+  },
+  "lunch": "Lunch",
+  "@lunch": {
+    "description": "Localized string for lunch"
+  },
+  "lunchtime": "Lunchtime",
+  "@lunchtime": {
+    "description": "Localized string for lunchtime"
+  },
+  "mainErrorType": "主なエラータイプ",
+  "@mainErrorType": {
+    "description": "Localized string for mainErrorType"
+  },
+  "makeFriends": "友達を作る",
+  "@makeFriends": {
+    "description": "Localized string for makeFriends"
+  },
+  "male": "男性",
+  "@male": {
+    "description": "Localized string for male"
+  },
+  "manageBlockedAIs": "ブロックしたAIを管理",
+  "@manageBlockedAIs": {
+    "description": "Localized string for manageBlockedAIs"
+  },
+  "managePersonaImageCache": "ペルソナ画像のキャッシュを管理",
+  "@managePersonaImageCache": {
+    "description": "Localized string for managePersonaImageCache"
+  },
+  "marketingAgree": "マーケティング情報に同意（任意）",
+  "@marketingAgree": {
+    "description": "Localized string for marketingAgree"
+  },
+  "marketingDescription": "イベントや特典情報を受け取ることができます",
+  "@marketingDescription": {
+    "description": "Localized string for marketingDescription"
+  },
+  "matchPersonaStep": "1. ペルソナとマッチ：左右にスワイプしてお気に入りのAIペルソナを選択。",
+  "@matchPersonaStep": {
+    "description": "Localized string for matchPersonaStep"
+  },
+  "matchedPersonas": "マッチしたペルソナ",
+  "@matchedPersonas": {
+    "description": "Localized string for matchedPersonas"
+  },
+  "matchedSona": "マッチしたSona",
+  "@matchedSona": {
+    "description": "Localized string for matchedSona"
+  },
+  "matching": "マッチング中",
+  "@matching": {
+    "description": "Localized string for matching"
+  },
+  "matchingFailed": "マッチングに失敗しました。",
+  "@matchingFailed": {
+    "description": "Localized string for matchingFailed"
+  },
+  "me": "自分",
+  "@me": {
+    "description": "Localized string for me"
+  },
+  "meetAIPersonas": "AIペルソナと出会う",
+  "@meetAIPersonas": {
+    "description": "Localized string for meetAIPersonas"
   },
   "meetNewPersonas": "新しいペルソナに出会う",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
+  "meetPersonas": "ペルソナと出会う",
+  "@meetPersonas": {
+    "description": "Localized string for meetPersonas"
+  },
+  "memberBenefits": "登録すると100以上のメッセージと10ハートをゲット！",
+  "@memberBenefits": {
+    "description": "Localized string for memberBenefits"
+  },
+  "memoryAlbum": "思い出アルバム",
+  "@memoryAlbum": {
+    "description": "Localized string for memoryAlbum"
+  },
+  "memoryAlbumDesc": "特別な瞬間を自動的に保存して思い出す",
+  "@memoryAlbumDesc": {
+    "description": "Localized string for memoryAlbumDesc"
+  },
+  "messageCopied": "メッセージがコピーされました",
+  "@messageCopied": {
+    "description": "Localized string for messageCopied"
+  },
+  "messageDeleted": "メッセージが削除されました",
+  "@messageDeleted": {
+    "description": "Localized string for messageDeleted"
+  },
   "messageLimitReset": "メッセージ制限は午前0時にリセットされます",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
+  "messageSendFailed": "メッセージの送信に失敗しました。もう一度お試しください。",
+  "@messageSendFailed": {
+    "description": "Localized string for messageSendFailed"
+  },
+  "messagesRemaining": "残りメッセージ",
+  "@messagesRemaining": {
+    "description": "Label for messages remaining"
+  },
+  "minutesAgo": "{count}分前",
+  "@minutesAgo": {
+    "description": "Minutes ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "minutes ago"
+      }
+    }
+  },
+  "missingTranslation": "翻訳漏れ",
+  "@missingTranslation": {
+    "description": "Localized string for missingTranslation"
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Localized string for monday"
+  },
+  "month": "月",
+  "@month": {
+    "description": "Localized string for month"
+  },
+  "monthDay": "{month} {day}日",
+  "@monthDay": {
+    "description": "Month and day format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "moreButton": "もっと見る",
+  "@moreButton": {
+    "description": "Localized string for moreButton"
+  },
+  "morning": "Morning",
+  "@morning": {
+    "description": "Localized string for morning"
+  },
+  "mostFrequentError": "最も頻繁なエラー",
+  "@mostFrequentError": {
+    "description": "Localized string for mostFrequentError"
+  },
+  "movies": "映画",
+  "@movies": {
+    "description": "Localized string for movies"
+  },
+  "multilingualChat": "多言語チャット",
+  "@multilingualChat": {
+    "description": "Localized string for multilingualChat"
+  },
+  "music": "音楽",
+  "@music": {
+    "description": "Localized string for music"
+  },
+  "myGenderSection": "私の性別（任意）",
+  "@myGenderSection": {
+    "description": "Localized string for myGenderSection"
+  },
+  "networkErrorOccurred": "ネットワークエラーが発生しました。",
+  "@networkErrorOccurred": {
+    "description": "Localized string for networkErrorOccurred"
+  },
+  "newMessage": "新しいメッセージ",
+  "@newMessage": {
+    "description": "Localized string for newMessage"
+  },
+  "newMessageCount": "{count}件の新しいメッセージ",
+  "@newMessageCount": {
+    "description": "Number of new messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "newMessageNotification": "新着メッセージ通知",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
+  },
+  "newMessages": "新しいメッセージ",
+  "@newMessages": {
+    "description": "Localized string for newMessages"
+  },
+  "newYear": "New Year",
+  "@newYear": {
+    "description": "Localized string for newYear"
+  },
+  "next": "次へ",
+  "@next": {
+    "description": "Localized string for next"
+  },
+  "niceToMeetYou": "はじめまして！",
+  "@niceToMeetYou": {
+    "description": "Localized string for niceToMeetYou"
+  },
+  "nickname": "ニックネーム",
+  "@nickname": {
+    "description": "Localized string for nickname"
   },
   "nicknameAlreadyUsed": "このニックネームは既に使用されています",
   "@nicknameAlreadyUsed": {
@@ -2437,6 +1580,10 @@
   "nicknameHelperText": "3〜10文字",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
+  },
+  "nicknameHint": "3〜10文字",
+  "@nicknameHint": {
+    "description": "Localized string for nicknameHint"
   },
   "nicknameInUse": "このニックネームは既に使用されています",
   "@nicknameInUse": {
@@ -2454,17 +1601,90 @@
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
+  "nicknameRequired": "ニックネーム *",
+  "@nicknameRequired": {
+    "description": "Localized string for nicknameRequired"
+  },
+  "night": "Night",
+  "@night": {
+    "description": "Localized string for night"
+  },
+  "no": "いいえ",
+  "@no": {
+    "description": "Localized string for no"
+  },
+  "noBlockedAIs": "ブロックしたAIはありません",
+  "@noBlockedAIs": {
+    "description": "Localized string for noBlockedAIs"
+  },
+  "noChatsYet": "まだチャットはありません",
+  "@noChatsYet": {
+    "description": "Localized string for noChatsYet"
+  },
   "noConversationYet": "まだ会話がありません",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
+  },
+  "noErrorReports": "エラーレポートはありません。",
+  "@noErrorReports": {
+    "description": "Localized string for noErrorReports"
+  },
+  "noImageAvailable": "画像がありません",
+  "@noImageAvailable": {
+    "description": "Localized string for noImageAvailable"
   },
   "noMatchedPersonas": "まだマッチしたペルソナがありません",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
+  "noMatchedSonas": "まだマッチしたSonaはありません",
+  "@noMatchedSonas": {
+    "description": "Localized string for noMatchedSonas"
+  },
+  "noPersonasAvailable": "ペルソナがありません。もう一度お試しください。",
+  "@noPersonasAvailable": {
+    "description": "Localized string for noPersonasAvailable"
+  },
+  "noPersonasToSelect": "選択可能なペルソナがありません",
+  "@noPersonasToSelect": {
+    "description": "Localized string for noPersonasToSelect"
+  },
+  "noQualityIssues": "過去1時間に品質問題はありません ✅",
+  "@noQualityIssues": {
+    "description": "Localized string for noQualityIssues"
+  },
+  "noQualityLogs": "まだ品質ログはありません。",
+  "@noQualityLogs": {
+    "description": "Localized string for noQualityLogs"
+  },
   "noTranslatedMessages": "翻訳するメッセージがありません",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
+  },
+  "notEnoughHearts": "ハートが不足しています",
+  "@notEnoughHearts": {
+    "description": "Localized string for notEnoughHearts"
+  },
+  "notEnoughHeartsCount": "ハートが不足しています。（現在：{count}）",
+  "@notEnoughHeartsCount": {
+    "description": "Not enough hearts message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notRegistered": "not registered",
+  "@notRegistered": {
+    "description": "Localized string for notRegistered"
+  },
+  "notSubscribed": "未登録",
+  "@notSubscribed": {
+    "description": "Localized string for notSubscribed"
+  },
+  "notificationPermissionDesc": "新しいメッセージを受信するには通知許可が必要です。",
+  "@notificationPermissionDesc": {
+    "description": "Localized string for notificationPermissionDesc"
   },
   "notificationPermissionRequired": "通知の許可が必要です",
   "@notificationPermissionRequired": {
@@ -2474,13 +1694,194 @@
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
+  "notifications": "通知",
+  "@notifications": {
+    "description": "Localized string for notifications"
+  },
+  "occurrenceInfo": "Occurrence Info:",
+  "@occurrenceInfo": {
+    "description": "Localized string for occurrenceInfo"
+  },
+  "olderChats": "それ以前",
+  "@olderChats": {
+    "description": "Localized string for olderChats"
+  },
+  "onlyOppositeGenderNote": "チェックを外すと、異性のペルソナのみが表示されます",
+  "@onlyOppositeGenderNote": {
+    "description": "Localized string for onlyOppositeGenderNote"
+  },
+  "openSettings": "設定を開く",
+  "@openSettings": {
+    "description": "Localized string for openSettings"
+  },
+  "optional": "任意",
+  "@optional": {
+    "description": "Localized string for optional"
+  },
+  "or": "または",
+  "@or": {
+    "description": "Localized string for or"
+  },
+  "originalPrice": "通常価格",
+  "@originalPrice": {
+    "description": "Localized string for originalPrice"
+  },
+  "originalText": "原文",
+  "@originalText": {
+    "description": "Localized string for originalText"
+  },
+  "other": "その他",
+  "@other": {
+    "description": "Localized string for other"
+  },
+  "otherError": "その他のエラー",
+  "@otherError": {
+    "description": "Localized string for otherError"
+  },
+  "others": "その他",
+  "@others": {
+    "description": "Localized string for others"
+  },
+  "ownedHearts": "所有ハート",
+  "@ownedHearts": {
+    "description": "Localized string for ownedHearts"
+  },
+  "parentsDay": "Parents' Day",
+  "@parentsDay": {
+    "description": "Localized string for parentsDay"
+  },
+  "password": "パスワード",
+  "@password": {
+    "description": "Localized string for password"
+  },
   "passwordConfirmation": "確認のためパスワードを入力",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
+  "passwordConfirmationDesc": "アカウントを削除するにはパスワードを再入力してください。",
+  "@passwordConfirmationDesc": {
+    "description": "Localized string for passwordConfirmationDesc"
+  },
+  "passwordHint": "6文字以上",
+  "@passwordHint": {
+    "description": "Localized string for passwordHint"
+  },
+  "passwordLabel": "パスワード",
+  "@passwordLabel": {
+    "description": "Localized string for passwordLabel"
+  },
+  "passwordRequired": "パスワード *",
+  "@passwordRequired": {
+    "description": "Localized string for passwordRequired"
+  },
+  "passwordResetEmailPrompt": "パスワードをリセットするためメールアドレスを入力してください",
+  "@passwordResetEmailPrompt": {
+    "description": "Localized string for passwordResetEmailPrompt"
+  },
+  "passwordResetEmailSent": "パスワードリセットメールが送信されました。メールをご確認ください。",
+  "@passwordResetEmailSent": {
+    "description": "Localized string for passwordResetEmailSent"
+  },
+  "passwordText": "password",
+  "@passwordText": {
+    "description": "Localized string for passwordText"
+  },
+  "passwordTooShort": "パスワードは6文字以上である必要があります",
+  "@passwordTooShort": {
+    "description": "Localized string for passwordTooShort"
+  },
+  "permissionDenied": "許可が拒否されました",
+  "@permissionDenied": {
+    "description": "Localized string for permissionDenied"
+  },
+  "permissionDeniedMessage": "{permissionName}の許可が拒否されました。\\n設定で許可を与えてください。",
+  "@permissionDeniedMessage": {
+    "description": "Permission denied message",
+    "placeholders": {
+      "permissionName": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDeniedTryLater": "許可が拒否されました。後でもう一度お試しください。",
+  "@permissionDeniedTryLater": {
+    "description": "Localized string for permissionDeniedTryLater"
+  },
+  "permissionRequired": "許可が必要です",
+  "@permissionRequired": {
+    "description": "Localized string for permissionRequired"
+  },
+  "personaGenderSection": "ペルソナの性別設定",
+  "@personaGenderSection": {
+    "description": "Localized string for personaGenderSection"
+  },
+  "personaQualityStats": "ペルソナ品質統計",
+  "@personaQualityStats": {
+    "description": "Localized string for personaQualityStats"
+  },
   "personalInfoExposure": "個人情報の露出",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
+  },
+  "personality": "Personality",
+  "@personality": {
+    "description": "Localized string for personality"
+  },
+  "pets": "ペット",
+  "@pets": {
+    "description": "Localized string for pets"
+  },
+  "photo": "写真",
+  "@photo": {
+    "description": "Localized string for photo"
+  },
+  "photography": "写真",
+  "@photography": {
+    "description": "Localized string for photography"
+  },
+  "picnic": "Picnic",
+  "@picnic": {
+    "description": "Localized string for picnic"
+  },
+  "preferenceSettings": "設定",
+  "@preferenceSettings": {
+    "description": "Localized string for preferenceSettings"
+  },
+  "preferredLanguage": "優先言語",
+  "@preferredLanguage": {
+    "description": "Localized string for preferredLanguage"
+  },
+  "preparingForSleep": "Preparing for sleep",
+  "@preparingForSleep": {
+    "description": "Localized string for preparingForSleep"
+  },
+  "preparingNewMeeting": "新しい出会いを準備中",
+  "@preparingNewMeeting": {
+    "description": "Localized string for preparingNewMeeting"
+  },
+  "preparingPersonaImages": "ペルソナ画像を準備中",
+  "@preparingPersonaImages": {
+    "description": "Localized string for preparingPersonaImages"
+  },
+  "preparingPersonas": "ペルソナを準備中",
+  "@preparingPersonas": {
+    "description": "Localized string for preparingPersonas"
+  },
+  "preview": "プレビュー",
+  "@preview": {
+    "description": "Localized string for preview"
+  },
+  "previous": "戻る",
+  "@previous": {
+    "description": "Localized string for previous"
+  },
+  "privacy": "プライバシーポリシー",
+  "@privacy": {
+    "description": "Localized string for privacy"
+  },
+  "privacyPolicy": "プライバシーポリシー",
+  "@privacyPolicy": {
+    "description": "Localized string for privacyPolicy"
   },
   "privacyPolicyAgreement": "プライバシーポリシーに同意してください",
   "@privacyPolicyAgreement": {
@@ -2489,6 +1890,10 @@
   "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
+  },
+  "privacySection1Title": "1. 個人情報の収集および利用目的",
+  "@privacySection1Title": {
+    "description": "Localized string for privacySection1Title"
   },
   "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
   "@privacySection2Content": {
@@ -2502,17 +1907,33 @@
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
+  "privacySection3Title": "3. 個人情報の保有および利用期間",
+  "@privacySection3Title": {
+    "description": "Localized string for privacySection3Title"
+  },
   "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
+  },
+  "privacySection4Title": "4. 第三者への個人情報の提供",
+  "@privacySection4Title": {
+    "description": "Localized string for privacySection4Title"
   },
   "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
+  "privacySection5Title": "5. 個人情報の技術的保護措置",
+  "@privacySection5Title": {
+    "description": "Localized string for privacySection5Title"
+  },
   "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
+  },
+  "privacySection6Title": "6. ユーザーの権利",
+  "@privacySection6Title": {
+    "description": "Localized string for privacySection6Title"
   },
   "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
   "@privacySection7Content": {
@@ -2530,9 +1951,57 @@
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
+  "privacySettings": "プライバシー設定",
+  "@privacySettings": {
+    "description": "Localized string for privacySettings"
+  },
+  "privacySettingsInfo": "個別の機能を無効にすると、それらのサービスは利用できなくなります",
+  "@privacySettingsInfo": {
+    "description": "Localized string for privacySettingsInfo"
+  },
+  "privacySettingsScreen": "プライバシー設定",
+  "@privacySettingsScreen": {
+    "description": "Localized string for privacySettingsScreen"
+  },
   "problemMessage": "Problem",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
+  },
+  "problemOccurred": "問題が発生しました",
+  "@problemOccurred": {
+    "description": "Localized string for problemOccurred"
+  },
+  "profile": "プロフィール",
+  "@profile": {
+    "description": "Localized string for profile"
+  },
+  "profileEdit": "プロフィール編集",
+  "@profileEdit": {
+    "description": "Localized string for profileEdit"
+  },
+  "profileEditLoginRequiredMessage": "プロフィールを編集するにはログインが必要です。\nログイン画面に移動しますか？",
+  "@profileEditLoginRequiredMessage": {
+    "description": "Localized string for profileEditLoginRequiredMessage"
+  },
+  "profileInfo": "プロフィール情報",
+  "@profileInfo": {
+    "description": "Localized string for profileInfo"
+  },
+  "profileInfoDescription": "プロフィール写真と基本情報を入力してください",
+  "@profileInfoDescription": {
+    "description": "Localized string for profileInfoDescription"
+  },
+  "profileNav": "プロフィール",
+  "@profileNav": {
+    "description": "Localized string for profileNav"
+  },
+  "profilePhoto": "プロフィール写真",
+  "@profilePhoto": {
+    "description": "Localized string for profilePhoto"
+  },
+  "profilePhotoAndInfo": "プロフィール写真と基本情報を入力してください",
+  "@profilePhotoAndInfo": {
+    "description": "Localized string for profilePhotoAndInfo"
   },
   "profilePhotoUpdateFailed": "Failed to update profile photo",
   "@profilePhotoUpdateFailed": {
@@ -2541,6 +2010,14 @@
   "profilePhotoUpdated": "Profile photo updated",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
+  },
+  "profileSettings": "プロフィール設定",
+  "@profileSettings": {
+    "description": "Localized string for profileSettings"
+  },
+  "profileSetup": "プロフィールをセットアップ中",
+  "@profileSetup": {
+    "description": "Localized string for profileSetup"
   },
   "profileUpdateFailed": "Failed to update profile",
   "@profileUpdateFailed": {
@@ -2554,9 +2031,55 @@
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
+  "purchaseButton": "購入",
+  "@purchaseButton": {
+    "description": "Localized string for purchaseButton"
+  },
+  "purchaseConfirm": "購入確認",
+  "@purchaseConfirm": {
+    "description": "Localized string for purchaseConfirm"
+  },
+  "purchaseConfirmContent": "{product}を{price}で購入しますか？",
+  "@purchaseConfirmContent": {
+    "description": "Purchase confirmation content",
+    "placeholders": {
+      "product": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseConfirmMessage": "{title}を{price}で購入しますか？{description}",
+  "@purchaseConfirmMessage": {
+    "description": "Purchase confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Premium Package"
+      },
+      "price": {
+        "type": "String",
+        "example": "$9.99"
+      },
+      "description": {
+        "type": "String",
+        "example": "This includes..."
+      }
+    }
+  },
   "purchaseFailed": "Purchase failed",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
+  },
+  "purchaseHeartsOnly": "ハートを購入",
+  "@purchaseHeartsOnly": {
+    "description": "Localized string for purchaseHeartsOnly"
+  },
+  "purchaseMoreHearts": "会話を続けるためにハートを購入",
+  "@purchaseMoreHearts": {
+    "description": "Localized string for purchaseMoreHearts"
   },
   "purchasePending": "Purchase pending...",
   "@purchasePending": {
@@ -2610,6 +2133,26 @@
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
+  "purchaseSection6Title": "6. お問い合わせ",
+  "@purchaseSection6Title": {
+    "description": "Localized string for purchaseSection6Title"
+  },
+  "pushNotifications": "プッシュ通知",
+  "@pushNotifications": {
+    "description": "Localized string for pushNotifications"
+  },
+  "reading": "読書",
+  "@reading": {
+    "description": "Localized string for reading"
+  },
+  "realtimeQualityLog": "リアルタイム品質ログ",
+  "@realtimeQualityLog": {
+    "description": "Localized string for realtimeQualityLog"
+  },
+  "recentConversation": "Recent Conversation:",
+  "@recentConversation": {
+    "description": "Localized string for recentConversation"
+  },
   "recentLoginRequired": "Please login again for security",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
@@ -2622,6 +2165,23 @@
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
+  "referrerEmailLabel": "紹介者のメール（任意）",
+  "@referrerEmailLabel": {
+    "description": "Localized string for referrerEmailLabel"
+  },
+  "refresh": "更新",
+  "@refresh": {
+    "description": "Localized string for refresh"
+  },
+  "refreshComplete": "更新完了！{count}人のペルソナとマッチ",
+  "@refreshComplete": {
+    "description": "Refresh complete message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "refreshFailed": "Refresh failed",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
@@ -2630,33 +2190,288 @@
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
+  "relatedFAQ": "関連FAQ",
+  "@relatedFAQ": {
+    "description": "Localized string for relatedFAQ"
+  },
+  "report": "報告",
+  "@report": {
+    "description": "Localized string for report"
+  },
+  "reportAI": "報告",
+  "@reportAI": {
+    "description": "Localized string for reportAI"
+  },
+  "reportAIDescription": "AIがあなたを不快にさせた場合、問題を説明してください。",
+  "@reportAIDescription": {
+    "description": "Localized string for reportAIDescription"
+  },
+  "reportAITitle": "AI会話を報告",
+  "@reportAITitle": {
+    "description": "Localized string for reportAITitle"
+  },
+  "reportAndBlock": "報告＆ブロック",
+  "@reportAndBlock": {
+    "description": "Localized string for reportAndBlock"
+  },
+  "reportAndBlockDescription": "このAIの不適切な行動を報告してブロックできます",
+  "@reportAndBlockDescription": {
+    "description": "Localized string for reportAndBlockDescription"
+  },
+  "reportChatError": "チャットエラーを報告",
+  "@reportChatError": {
+    "description": "Localized string for reportChatError"
+  },
+  "reportError": "報告中にエラーが発生しました：{error}",
+  "@reportError": {
+    "description": "Report error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "reportFailed": "Report failed",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
+  },
+  "reportSubmitted": "報告が送信されました。レビューして対処します。",
+  "@reportSubmitted": {
+    "description": "Localized string for reportSubmitted"
+  },
+  "reportSubmittedSuccess": "報告が送信されました。ありがとうございます！",
+  "@reportSubmittedSuccess": {
+    "description": "Localized string for reportSubmittedSuccess"
+  },
+  "requestLimit": "リクエスト制限",
+  "@requestLimit": {
+    "description": "Localized string for requestLimit"
+  },
+  "required": "[必須]",
+  "@required": {
+    "description": "Localized string for required"
   },
   "requiredTermsAgreement": "Please agree to the terms",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
+  "restartConversation": "会話を再開",
+  "@restartConversation": {
+    "description": "Localized string for restartConversation"
+  },
+  "restartConversationQuestion": "{name}との会話を再開しますか？",
+  "@restartConversationQuestion": {
+    "description": "Restart conversation question",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "restartConversationWithName": "{name}との会話を再開します！",
+  "@restartConversationWithName": {
+    "description": "Restarting conversation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "リトライ",
+  "@retry": {
+    "description": "Localized string for retry"
+  },
+  "retryButton": "リトライ",
+  "@retryButton": {
+    "description": "Localized string for retryButton"
+  },
+  "sad": "悲しい",
+  "@sad": {
+    "description": "Localized string for sad"
+  },
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Localized string for saturday"
+  },
+  "save": "保存",
+  "@save": {
+    "description": "Localized string for save"
+  },
+  "search": "検索",
+  "@search": {
+    "description": "Localized string for search"
+  },
+  "searchFAQ": "FAQを検索...",
+  "@searchFAQ": {
+    "description": "Localized string for searchFAQ"
+  },
+  "searchResults": "検索結果",
+  "@searchResults": {
+    "description": "Localized string for searchResults"
+  },
+  "selectEmotion": "Select Emotion",
+  "@selectEmotion": {
+    "description": "Localized string for selectEmotion"
+  },
+  "selectErrorType": "エラータイプを選択",
+  "@selectErrorType": {
+    "description": "Localized string for selectErrorType"
+  },
+  "selectFeeling": "気分を選択",
+  "@selectFeeling": {
+    "description": "Localized string for selectFeeling"
+  },
+  "selectGender": "性別を選択してください",
+  "@selectGender": {
+    "description": "Localized string for selectGender"
+  },
+  "selectInterests": "興味を選択してください（最低1つ）",
+  "@selectInterests": {
+    "description": "Localized string for selectInterests"
+  },
+  "selectLanguage": "言語を選択",
+  "@selectLanguage": {
+    "description": "Localized string for selectLanguage"
+  },
   "selectPersona": "Select a persona",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
+  },
+  "selectPersonaPlease": "ペルソナを選択してください。",
+  "@selectPersonaPlease": {
+    "description": "Localized string for selectPersonaPlease"
+  },
+  "selectPreferredMbti": "特定のMBTIタイプのペルソナを希望する場合は選択してください",
+  "@selectPreferredMbti": {
+    "description": "Localized string for selectPreferredMbti"
+  },
+  "selectProblematicMessage": "問題のあるメッセージを選択（任意）",
+  "@selectProblematicMessage": {
+    "description": "Localized string for selectProblematicMessage"
   },
   "selectReportReason": "Select report reason",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
+  "selectTheme": "テーマを選択",
+  "@selectTheme": {
+    "description": "Localized string for selectTheme"
+  },
+  "selectTranslationError": "翻訳エラーのあるメッセージを選択してください",
+  "@selectTranslationError": {
+    "description": "Localized string for selectTranslationError"
+  },
+  "selectUsagePurpose": "SONAの利用目的を選択してください",
+  "@selectUsagePurpose": {
+    "description": "Localized string for selectUsagePurpose"
+  },
+  "selfIntroduction": "自己紹介（任意）",
+  "@selfIntroduction": {
+    "description": "Localized string for selfIntroduction"
+  },
+  "selfIntroductionHint": "簡単な自己紹介を書いてください",
+  "@selfIntroductionHint": {
+    "description": "Localized string for selfIntroductionHint"
+  },
+  "send": "送信",
+  "@send": {
+    "description": "Localized string for send"
+  },
+  "sendChatError": "チャットエラーを送信",
+  "@sendChatError": {
+    "description": "Localized string for sendChatError"
+  },
   "sendFirstMessage": "Send your first message",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
+  },
+  "sendReport": "報告を送信",
+  "@sendReport": {
+    "description": "Localized string for sendReport"
+  },
+  "sendingEmail": "メール送信中...",
+  "@sendingEmail": {
+    "description": "Localized string for sendingEmail"
+  },
+  "seoul": "Seoul",
+  "@seoul": {
+    "description": "Localized string for seoul"
+  },
+  "serverErrorDashboard": "サーバーエラー",
+  "@serverErrorDashboard": {
+    "description": "Localized string for serverErrorDashboard"
   },
   "serviceTermsAgreement": "Please agree to the terms of service",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
+  "sessionExpired": "セッションの有効期限が切れました",
+  "@sessionExpired": {
+    "description": "Localized string for sessionExpired"
+  },
+  "setAppInterfaceLanguage": "アプリのインターフェース言語を設定",
+  "@setAppInterfaceLanguage": {
+    "description": "Localized string for setAppInterfaceLanguage"
+  },
+  "setNow": "今すぐ設定",
+  "@setNow": {
+    "description": "Localized string for setNow"
+  },
+  "settings": "設定",
+  "@settings": {
+    "description": "Localized string for settings"
+  },
+  "sexualContent": "性的なコンテンツ",
+  "@sexualContent": {
+    "description": "Localized string for sexualContent"
+  },
   "showAllGenderPersonas": "すべての性別のペルソナを表示",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
+  },
+  "showAllGendersOption": "すべての性別を表示",
+  "@showAllGendersOption": {
+    "description": "Localized string for showAllGendersOption"
+  },
+  "showOppositeGenderOnly": "チェックを外すと、異性のペルソナのみが表示されます",
+  "@showOppositeGenderOnly": {
+    "description": "Localized string for showOppositeGenderOnly"
+  },
+  "showOriginalText": "原文を表示",
+  "@showOriginalText": {
+    "description": "Localized string for showOriginalText"
+  },
+  "signUp": "新規登録",
+  "@signUp": {
+    "description": "Localized string for signUp"
+  },
+  "signUpFromGuest": "すべての機能にアクセスするために今すぐ登録！",
+  "@signUpFromGuest": {
+    "description": "Localized string for signUpFromGuest"
+  },
+  "signup": "新規登録",
+  "@signup": {
+    "description": "Localized string for signup"
+  },
+  "signupComplete": "登録完了",
+  "@signupComplete": {
+    "description": "Localized string for signupComplete"
+  },
+  "signupTab": "新規登録",
+  "@signupTab": {
+    "description": "Localized string for signupTab"
+  },
+  "simpleInfoRequired": "AIペルソナとのマッチングには\n簡単な情報が必要です",
+  "@simpleInfoRequired": {
+    "description": "Localized string for simpleInfoRequired"
+  },
+  "skip": "スキップ",
+  "@skip": {
+    "description": "Localized string for skip"
+  },
+  "sonaFriend": "SONAフレンド",
+  "@sonaFriend": {
+    "description": "Localized string for sonaFriend"
   },
   "sonaPrivacyPolicy": "SONA Privacy Policy",
   "@sonaPrivacyPolicy": {
@@ -2670,105 +2485,125 @@
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
+  "sonaUsagePurpose": "SONAの利用目的を選択してください",
+  "@sonaUsagePurpose": {
+    "description": "Localized string for sonaUsagePurpose"
+  },
   "sorryNotHelpful": "Sorry this wasn't helpful",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
+  },
+  "sort": "並び替え",
+  "@sort": {
+    "description": "Localized string for sort"
+  },
+  "soundSettings": "サウンド設定",
+  "@soundSettings": {
+    "description": "Localized string for soundSettings"
+  },
+  "spamAdvertising": "スパム/広告",
+  "@spamAdvertising": {
+    "description": "Localized string for spamAdvertising"
+  },
+  "spanish": "スペイン語",
+  "@spanish": {
+    "description": "Localized string for spanish"
+  },
+  "specialRelationshipDesc": "お互いを理解し、深い絆を築く",
+  "@specialRelationshipDesc": {
+    "description": "Localized string for specialRelationshipDesc"
+  },
+  "sports": "スポーツ",
+  "@sports": {
+    "description": "Localized string for sports"
+  },
+  "spring": "Spring",
+  "@spring": {
+    "description": "Localized string for spring"
+  },
+  "startChat": "チャット開始",
+  "@startChat": {
+    "description": "Localized string for startChat"
+  },
+  "startChatButton": "チャットを開始",
+  "@startChatButton": {
+    "description": "Localized string for startChatButton"
   },
   "startConversation": "Start a conversation",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
+  "startConversationLikeAFriend": "Sonaと友達のように会話を始めよう",
+  "@startConversationLikeAFriend": {
+    "description": "Localized string for startConversationLikeAFriend"
+  },
+  "startConversationStep": "2. 会話を開始：マッチしたペルソナと自由にチャット。",
+  "@startConversationStep": {
+    "description": "Localized string for startConversationStep"
+  },
+  "startConversationWithSona": "Sonaと友達のようにチャットを始めよう！",
+  "@startConversationWithSona": {
+    "description": "Localized string for startConversationWithSona"
+  },
+  "startWithEmail": "メールで始める",
+  "@startWithEmail": {
+    "description": "Localized string for startWithEmail"
+  },
+  "startWithGoogle": "Googleで始める",
+  "@startWithGoogle": {
+    "description": "Localized string for startWithGoogle"
+  },
+  "startingApp": "アプリを起動中",
+  "@startingApp": {
+    "description": "Localized string for startingApp"
+  },
+  "storageManagement": "ストレージ管理",
+  "@storageManagement": {
+    "description": "Localized string for storageManagement"
+  },
+  "store": "ストア",
+  "@store": {
+    "description": "Localized string for store"
+  },
   "storeConnectionError": "Could not connect to store",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
+  },
+  "storeLoginRequiredMessage": "ストアを利用するにはログインが必要です。\nログイン画面に移動しますか？",
+  "@storeLoginRequiredMessage": {
+    "description": "Localized string for storeLoginRequiredMessage"
   },
   "storeNotAvailable": "Store is not available",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
-  "@tapToSwipePhotos": {
-    "description": "Localized string for tapToSwipePhotos"
+  "storyEvent": "ストーリーイベント",
+  "@storyEvent": {
+    "description": "Localized string for storyEvent"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
-  "@termsSection10Content": {
-    "description": "Localized string for termsSection10Content"
+  "stressed": "ストレス",
+  "@stressed": {
+    "description": "Localized string for stressed"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
-  "@termsSection11Content": {
-    "description": "Localized string for termsSection11Content"
+  "submitReport": "報告を送信",
+  "@submitReport": {
+    "description": "Localized string for submitReport"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
-  "@termsSection12Content": {
-    "description": "Localized string for termsSection12Content"
+  "subscriptionStatus": "サブスクリプション状況",
+  "@subscriptionStatus": {
+    "description": "Localized string for subscriptionStatus"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
-  "@termsSection2Content": {
-    "description": "Localized string for termsSection2Content"
+  "subtleVibrationOnTouch": "タッチ時の微細な振動",
+  "@subtleVibrationOnTouch": {
+    "description": "Localized string for subtleVibrationOnTouch"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
-  "@termsSection3Content": {
-    "description": "Localized string for termsSection3Content"
+  "summer": "Summer",
+  "@summer": {
+    "description": "Localized string for summer"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
-  "@termsSection4Content": {
-    "description": "Localized string for termsSection4Content"
-  },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
-  "@termsSection5Content": {
-    "description": "Localized string for termsSection5Content"
-  },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
-  "@termsSection6Content": {
-    "description": "Localized string for termsSection6Content"
-  },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
-  "@termsSection8Content": {
-    "description": "Localized string for termsSection8Content"
-  },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
-  "@termsSection9Content": {
-    "description": "Localized string for termsSection9Content"
-  },
-  "termsSupplementary": "Supplementary Terms",
-  "@termsSupplementary": {
-    "description": "Localized string for termsSupplementary"
-  },
-  "translationError": "Translation error",
-  "@translationError": {
-    "description": "Localized string for translationError"
-  },
-  "weekdays": "日,月,火,水,木,金,土",
-  "@weekdays": {
-    "description": "Localized string for weekdays"
-  },
-  "emotionHappy": "Happy",
-  "@emotionHappy": {
-    "description": "Localized string for emotionHappy"
-  },
-  "emotionLove": "Love",
-  "@emotionLove": {
-    "description": "Localized string for emotionLove"
-  },
-  "emotionSad": "Sad",
-  "@emotionSad": {
-    "description": "Localized string for emotionSad"
-  },
-  "emotionAngry": "Angry",
-  "@emotionAngry": {
-    "description": "Localized string for emotionAngry"
-  },
-  "emotionCool": "Cool",
-  "@emotionCool": {
-    "description": "Localized string for emotionCool"
-  },
-  "emotionThinking": "Thinking",
-  "@emotionThinking": {
-    "description": "Localized string for emotionThinking"
-  },
-  "selectEmotion": "Select Emotion",
-  "@selectEmotion": {
-    "description": "Localized string for selectEmotion"
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Localized string for sunday"
   },
   "swipeAnyDirection": "Swipe in any direction",
   "@swipeAnyDirection": {
@@ -2778,213 +2613,193 @@
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
+  "systemTheme": "システム設定に従う",
+  "@systemTheme": {
+    "description": "Localized string for systemTheme"
+  },
+  "systemThemeDesc": "デバイスのダークモード設定に基づいて自動的に変更されます",
+  "@systemThemeDesc": {
+    "description": "Localized string for systemThemeDesc"
+  },
+  "tapBottomForDetails": "詳細を見るには下部をタップ",
+  "@tapBottomForDetails": {
+    "description": "Localized string for tapBottomForDetails"
+  },
   "tapForDetails": "Tap bottom area for details",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "personality": "Personality",
-  "@personality": {
-    "description": "Localized string for personality"
+  "tapToSwipePhotos": "Tap to swipe photos",
+  "@tapToSwipePhotos": {
+    "description": "Localized string for tapToSwipePhotos"
   },
-  "weatherClear": "Clear",
-  "@weatherClear": {
-    "description": "Localized string for weatherClear"
+  "teachersDay": "Teachers' Day",
+  "@teachersDay": {
+    "description": "Localized string for teachersDay"
   },
-  "weatherCloudy": "Cloudy",
-  "@weatherCloudy": {
-    "description": "Localized string for weatherCloudy"
+  "technicalError": "技術的エラー",
+  "@technicalError": {
+    "description": "Localized string for technicalError"
   },
-  "weatherRain": "Rain",
-  "@weatherRain": {
-    "description": "Localized string for weatherRain"
+  "technology": "テクノロジー",
+  "@technology": {
+    "description": "Localized string for technology"
   },
-  "weatherDrizzle": "Drizzle",
-  "@weatherDrizzle": {
-    "description": "Localized string for weatherDrizzle"
+  "terms": "利用規約",
+  "@terms": {
+    "description": "Localized string for terms"
   },
-  "weatherThunderstorm": "Thunderstorm",
-  "@weatherThunderstorm": {
-    "description": "Localized string for weatherThunderstorm"
+  "termsAgreement": "利用規約への同意",
+  "@termsAgreement": {
+    "description": "Localized string for termsAgreement"
   },
-  "weatherSnow": "Snow",
-  "@weatherSnow": {
-    "description": "Localized string for weatherSnow"
+  "termsAgreementDescription": "サービス利用のため規約に同意してください",
+  "@termsAgreementDescription": {
+    "description": "Localized string for termsAgreementDescription"
   },
-  "weatherMist": "Mist",
-  "@weatherMist": {
-    "description": "Localized string for weatherMist"
+  "termsOfService": "利用規約",
+  "@termsOfService": {
+    "description": "Localized string for termsOfService"
   },
-  "weatherFog": "Fog",
-  "@weatherFog": {
-    "description": "Localized string for weatherFog"
+  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "@termsSection10Content": {
+    "description": "Localized string for termsSection10Content"
   },
-  "monday": "Monday",
-  "@monday": {
-    "description": "Localized string for monday"
+  "termsSection10Title": "第10条（紛争解決）",
+  "@termsSection10Title": {
+    "description": "Localized string for termsSection10Title"
   },
-  "tuesday": "Tuesday",
-  "@tuesday": {
-    "description": "Localized string for tuesday"
+  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "@termsSection11Content": {
+    "description": "Localized string for termsSection11Content"
   },
-  "wednesday": "Wednesday",
-  "@wednesday": {
-    "description": "Localized string for wednesday"
+  "termsSection11Title": "第11条（AIサービス特約）",
+  "@termsSection11Title": {
+    "description": "Localized string for termsSection11Title"
+  },
+  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "@termsSection12Content": {
+    "description": "Localized string for termsSection12Content"
+  },
+  "termsSection12Title": "第12条（データ収集と利用）",
+  "@termsSection12Title": {
+    "description": "Localized string for termsSection12Title"
+  },
+  "termsSection1Content": "これらの利用規約は、SONA（以下「会社」）が提供するAIペルソナ会話マッチングサービス（以下「サービス」）の利用に関して、会社とユーザー間の権利、義務、責任を定義することを目的とします。",
+  "@termsSection1Content": {
+    "description": "Localized string for termsSection1Content"
+  },
+  "termsSection1Title": "第1条（目的）",
+  "@termsSection1Title": {
+    "description": "Localized string for termsSection1Title"
+  },
+  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "@termsSection2Content": {
+    "description": "Localized string for termsSection2Content"
+  },
+  "termsSection2Title": "第2条（定義）",
+  "@termsSection2Title": {
+    "description": "Localized string for termsSection2Title"
+  },
+  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "@termsSection3Content": {
+    "description": "Localized string for termsSection3Content"
+  },
+  "termsSection3Title": "第3条（規約の効力と変更）",
+  "@termsSection3Title": {
+    "description": "Localized string for termsSection3Title"
+  },
+  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "@termsSection4Content": {
+    "description": "Localized string for termsSection4Content"
+  },
+  "termsSection4Title": "第4条（サービスの提供）",
+  "@termsSection4Title": {
+    "description": "Localized string for termsSection4Title"
+  },
+  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "@termsSection5Content": {
+    "description": "Localized string for termsSection5Content"
+  },
+  "termsSection5Title": "第5条（会員登録）",
+  "@termsSection5Title": {
+    "description": "Localized string for termsSection5Title"
+  },
+  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "@termsSection6Content": {
+    "description": "Localized string for termsSection6Content"
+  },
+  "termsSection6Title": "第6条（ユーザーの義務）",
+  "@termsSection6Title": {
+    "description": "Localized string for termsSection6Title"
+  },
+  "termsSection7Content": "ユーザーがこれらの規約の義務に違反したり、通常のサービス運営を妨害した場合、会社は警告、一時停止、または永久停止を通じてサービス利用を段階的に制限することができます。",
+  "@termsSection7Content": {
+    "description": "Localized string for termsSection7Content"
+  },
+  "termsSection7Title": "第7条（サービス利用制限）",
+  "@termsSection7Title": {
+    "description": "Localized string for termsSection7Title"
+  },
+  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "@termsSection8Content": {
+    "description": "Localized string for termsSection8Content"
+  },
+  "termsSection8Title": "第8条（サービスの中断）",
+  "@termsSection8Title": {
+    "description": "Localized string for termsSection8Title"
+  },
+  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "@termsSection9Content": {
+    "description": "Localized string for termsSection9Content"
+  },
+  "termsSection9Title": "第9条（免責事項）",
+  "@termsSection9Title": {
+    "description": "Localized string for termsSection9Title"
+  },
+  "termsSupplementary": "Supplementary Terms",
+  "@termsSupplementary": {
+    "description": "Localized string for termsSupplementary"
+  },
+  "thai": "タイ語",
+  "@thai": {
+    "description": "Localized string for thai"
+  },
+  "thanksFeedback": "フィードバックありがとうございます！",
+  "@thanksFeedback": {
+    "description": "Localized string for thanksFeedback"
+  },
+  "theme": "テーマ",
+  "@theme": {
+    "description": "Localized string for theme"
+  },
+  "themeDescription": "お好みに合わせてアプリの外観をカスタマイズできます",
+  "@themeDescription": {
+    "description": "Localized string for themeDescription"
+  },
+  "themeSettings": "テーマ設定",
+  "@themeSettings": {
+    "description": "Localized string for themeSettings"
   },
   "thursday": "Thursday",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "friday": "Friday",
-  "@friday": {
-    "description": "Localized string for friday"
+  "timeout": "タイムアウト",
+  "@timeout": {
+    "description": "Localized string for timeout"
   },
-  "saturday": "Saturday",
-  "@saturday": {
-    "description": "Localized string for saturday"
+  "tired": "疲れた",
+  "@tired": {
+    "description": "Localized string for tired"
   },
-  "sunday": "Sunday",
-  "@sunday": {
-    "description": "Localized string for sunday"
+  "today": "今日",
+  "@today": {
+    "description": "Localized string for today"
   },
-  "morning": "Morning",
-  "@morning": {
-    "description": "Localized string for morning"
-  },
-  "forenoon": "Forenoon",
-  "@forenoon": {
-    "description": "Localized string for forenoon"
-  },
-  "lunchtime": "Lunchtime",
-  "@lunchtime": {
-    "description": "Localized string for lunchtime"
-  },
-  "afternoon": "Afternoon",
-  "@afternoon": {
-    "description": "Localized string for afternoon"
-  },
-  "evening": "Evening",
-  "@evening": {
-    "description": "Localized string for evening"
-  },
-  "night": "Night",
-  "@night": {
-    "description": "Localized string for night"
-  },
-  "dawn": "Dawn",
-  "@dawn": {
-    "description": "Localized string for dawn"
-  },
-  "spring": "Spring",
-  "@spring": {
-    "description": "Localized string for spring"
-  },
-  "summer": "Summer",
-  "@summer": {
-    "description": "Localized string for summer"
-  },
-  "autumn": "Autumn",
-  "@autumn": {
-    "description": "Localized string for autumn"
-  },
-  "winter": "Winter",
-  "@winter": {
-    "description": "Localized string for winter"
-  },
-  "breakfast": "Breakfast",
-  "@breakfast": {
-    "description": "Localized string for breakfast"
-  },
-  "lunch": "Lunch",
-  "@lunch": {
-    "description": "Localized string for lunch"
-  },
-  "dinner": "Dinner",
-  "@dinner": {
-    "description": "Localized string for dinner"
-  },
-  "preparingForSleep": "Preparing for sleep",
-  "@preparingForSleep": {
-    "description": "Localized string for preparingForSleep"
-  },
-  "lateNight": "Late night",
-  "@lateNight": {
-    "description": "Localized string for lateNight"
-  },
-  "afternoonFatigue": "Afternoon fatigue",
-  "@afternoonFatigue": {
-    "description": "Localized string for afternoonFatigue"
-  },
-  "dailyCheck": "Daily check",
-  "@dailyCheck": {
-    "description": "Localized string for dailyCheck"
-  },
-  "unknownError": "An unknown error occurred",
-  "@unknownError": {
-    "description": "Localized string for unknownError"
-  },
-  "guest": "Guest",
-  "@guest": {
-    "description": "Localized string for guest"
-  },
-  "current": "Current",
-  "@current": {
-    "description": "Localized string for current"
-  },
-  "errorMessage": "Error Message:",
-  "@errorMessage": {
-    "description": "Localized string for errorMessage"
-  },
-  "userMessage": "User Message:",
-  "@userMessage": {
-    "description": "Localized string for userMessage"
-  },
-  "recentConversation": "Recent Conversation:",
-  "@recentConversation": {
-    "description": "Localized string for recentConversation"
-  },
-  "user": "User: ",
-  "@user": {
-    "description": "Localized string for user"
-  },
-  "occurrenceInfo": "Occurrence Info:",
-  "@occurrenceInfo": {
-    "description": "Localized string for occurrenceInfo"
-  },
-  "firstOccurred": "First Occurred: ",
-  "@firstOccurred": {
-    "description": "Localized string for firstOccurred"
-  },
-  "lastOccurred": "Last Occurred: ",
-  "@lastOccurred": {
-    "description": "Localized string for lastOccurred"
-  },
-  "totalOccurrences": "Total {count} occurrences",
-  "@totalOccurrences": {
-    "description": "Localized string for totalOccurrences"
-  },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
-  "@errorFrequency24h": {
-    "description": "Localized string for errorFrequency24h"
-  },
-  "hours24Ago": "24 hours ago",
-  "@hours24Ago": {
-    "description": "Localized string for hours24Ago"
-  },
-  "apiKeyError": "API Key Error",
-  "@apiKeyError": {
-    "description": "Localized string for apiKeyError"
-  },
-  "passwordText": "password",
-  "@passwordText": {
-    "description": "Localized string for passwordText"
-  },
-  "notRegistered": "not registered",
-  "@notRegistered": {
-    "description": "Localized string for notRegistered"
-  },
-  "incorrect": "incorrect",
-  "@incorrect": {
-    "description": "Localized string for incorrect"
+  "todayChats": "今日",
+  "@todayChats": {
+    "description": "Localized string for todayChats"
   },
   "todayText": "Today",
   "@todayText": {
@@ -2994,71 +2809,286 @@
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
-  "@dayAfterTomorrow": {
-    "description": "Localized string for dayAfterTomorrow"
+  "totalConsultSessions": "総相談セッション",
+  "@totalConsultSessions": {
+    "description": "Localized string for totalConsultSessions"
   },
-  "seoul": "Seoul",
-  "@seoul": {
-    "description": "Localized string for seoul"
+  "totalErrorCount": "総エラー数",
+  "@totalErrorCount": {
+    "description": "Localized string for totalErrorCount"
   },
-  "walk": "Walk",
-  "@walk": {
-    "description": "Localized string for walk"
+  "totalLikes": "合計いいね",
+  "@totalLikes": {
+    "description": "Localized string for totalLikes"
   },
-  "picnic": "Picnic",
-  "@picnic": {
-    "description": "Localized string for picnic"
+  "totalOccurrences": "Total {count} occurrences",
+  "@totalOccurrences": {
+    "description": "Localized string for totalOccurrences"
   },
-  "cycling": "Cycling",
-  "@cycling": {
-    "description": "Localized string for cycling"
+  "totalResponses": "総レスポンス",
+  "@totalResponses": {
+    "description": "Localized string for totalResponses"
   },
-  "cafeTerrace": "Cafe terrace",
-  "@cafeTerrace": {
-    "description": "Localized string for cafeTerrace"
+  "translatedFrom": "翻訳済み",
+  "@translatedFrom": {
+    "description": "Localized string for translatedFrom"
   },
-  "newYear": "New Year",
-  "@newYear": {
-    "description": "Localized string for newYear"
+  "translatedText": "翻訳",
+  "@translatedText": {
+    "description": "Localized string for translatedText"
+  },
+  "translationError": "Translation error",
+  "@translationError": {
+    "description": "Localized string for translationError"
+  },
+  "translationErrorDescription": "間違った翻訳や不自然な表現を報告してください",
+  "@translationErrorDescription": {
+    "description": "Localized string for translationErrorDescription"
+  },
+  "translationErrorReported": "翻訳エラーが報告されました。ありがとうございます！",
+  "@translationErrorReported": {
+    "description": "Localized string for translationErrorReported"
+  },
+  "translationNote": "※ AI翻訳は完璧ではない可能性があります",
+  "@translationNote": {
+    "description": "Localized string for translationNote"
+  },
+  "translationQuality": "翻訳品質",
+  "@translationQuality": {
+    "description": "Localized string for translationQuality"
+  },
+  "translationSettings": "翻訳設定",
+  "@translationSettings": {
+    "description": "Localized string for translationSettings"
+  },
+  "travel": "旅行",
+  "@travel": {
+    "description": "Localized string for travel"
+  },
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Localized string for tuesday"
+  },
+  "tutorialAccount": "チュートリアルアカウント",
+  "@tutorialAccount": {
+    "description": "Localized string for tutorialAccount"
+  },
+  "tutorialWelcomeDescription": "AIペルソナと特別な関係を築きましょう。",
+  "@tutorialWelcomeDescription": {
+    "description": "Tutorial: Welcome description"
+  },
+  "tutorialWelcomeTitle": "SONAへようこそ！",
+  "@tutorialWelcomeTitle": {
+    "description": "Tutorial: Welcome title"
+  },
+  "typeMessage": "メッセージを入力...",
+  "@typeMessage": {
+    "description": "Localized string for typeMessage"
+  },
+  "unblock": "ブロック解除",
+  "@unblock": {
+    "description": "Localized string for unblock"
+  },
+  "unblockFailed": "ブロック解除に失敗しました",
+  "@unblockFailed": {
+    "description": "Localized string for unblockFailed"
+  },
+  "unblockPersonaConfirm": "{name}のブロックを解除しますか？",
+  "@unblockPersonaConfirm": {
+    "description": "Unblock persona confirmation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unblockedSuccessfully": "ブロック解除しました",
+  "@unblockedSuccessfully": {
+    "description": "Localized string for unblockedSuccessfully"
+  },
+  "unexpectedLoginError": "ログイン中に予期しないエラーが発生しました",
+  "@unexpectedLoginError": {
+    "description": "Localized string for unexpectedLoginError"
+  },
+  "unknown": "不明",
+  "@unknown": {
+    "description": "Localized string for unknown"
+  },
+  "unknownError": "An unknown error occurred",
+  "@unknownError": {
+    "description": "Localized string for unknownError"
+  },
+  "unlimitedMessages": "無制限",
+  "@unlimitedMessages": {
+    "description": "Localized string for unlimitedMessages"
+  },
+  "unsendMessage": "メッセージを取り消す",
+  "@unsendMessage": {
+    "description": "Localized string for unsendMessage"
+  },
+  "usagePurpose": "利用目的",
+  "@usagePurpose": {
+    "description": "Localized string for usagePurpose"
+  },
+  "useOneHeart": "1ハート使用",
+  "@useOneHeart": {
+    "description": "Localized string for useOneHeart"
+  },
+  "useSystemLanguage": "システム言語を使用",
+  "@useSystemLanguage": {
+    "description": "Localized string for useSystemLanguage"
+  },
+  "user": "User: ",
+  "@user": {
+    "description": "Localized string for user"
+  },
+  "userMessage": "User Message:",
+  "@userMessage": {
+    "description": "Localized string for userMessage"
+  },
+  "userNotFound": "ユーザーが見つかりません",
+  "@userNotFound": {
+    "description": "Localized string for userNotFound"
   },
   "valentinesDay": "Valentine's Day",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
+  "verifyingAuth": "認証を確認中",
+  "@verifyingAuth": {
+    "description": "Localized string for verifyingAuth"
+  },
+  "version": "バージョン",
+  "@version": {
+    "description": "Localized string for version"
+  },
+  "vietnamese": "ベトナム語",
+  "@vietnamese": {
+    "description": "Localized string for vietnamese"
+  },
+  "violentContent": "暴力的なコンテンツ",
+  "@violentContent": {
+    "description": "Localized string for violentContent"
+  },
+  "voiceMessage": "🎤 ボイスメッセージ",
+  "@voiceMessage": {
+    "description": "Localized string for voiceMessage"
+  },
+  "waitingForChat": "{name}がチャットを待っています。",
+  "@waitingForChat": {
+    "description": "Shows that a persona is waiting to chat",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "walk": "Walk",
+  "@walk": {
+    "description": "Localized string for walk"
+  },
+  "wasHelpful": "役に立ちましたか？",
+  "@wasHelpful": {
+    "description": "Localized string for wasHelpful"
+  },
+  "weatherClear": "Clear",
+  "@weatherClear": {
+    "description": "Localized string for weatherClear"
+  },
+  "weatherCloudy": "Cloudy",
+  "@weatherCloudy": {
+    "description": "Localized string for weatherCloudy"
+  },
+  "weatherContext": "天気コンテキスト",
+  "@weatherContext": {
+    "description": "Localized string for weatherContext"
+  },
+  "weatherContextDesc": "天気に基づいた会話コンテキストを提供",
+  "@weatherContextDesc": {
+    "description": "Localized string for weatherContextDesc"
+  },
+  "weatherDrizzle": "Drizzle",
+  "@weatherDrizzle": {
+    "description": "Localized string for weatherDrizzle"
+  },
+  "weatherFog": "Fog",
+  "@weatherFog": {
+    "description": "Localized string for weatherFog"
+  },
+  "weatherMist": "Mist",
+  "@weatherMist": {
+    "description": "Localized string for weatherMist"
+  },
+  "weatherRain": "Rain",
+  "@weatherRain": {
+    "description": "Localized string for weatherRain"
+  },
+  "weatherRainy": "雨",
+  "@weatherRainy": {
+    "description": "Localized string for weatherRainy"
+  },
+  "weatherSnow": "Snow",
+  "@weatherSnow": {
+    "description": "Localized string for weatherSnow"
+  },
+  "weatherSnowy": "雪",
+  "@weatherSnowy": {
+    "description": "Localized string for weatherSnowy"
+  },
+  "weatherThunderstorm": "Thunderstorm",
+  "@weatherThunderstorm": {
+    "description": "Localized string for weatherThunderstorm"
+  },
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Localized string for wednesday"
+  },
+  "weekdays": "日,月,火,水,木,金,土",
+  "@weekdays": {
+    "description": "Localized string for weekdays"
+  },
+  "welcomeMessage": "ようこそ💕",
+  "@welcomeMessage": {
+    "description": "Localized string for welcomeMessage"
+  },
+  "whatTopicsToTalk": "どんな話題について話したいですか？（任意）",
+  "@whatTopicsToTalk": {
+    "description": "Localized string for whatTopicsToTalk"
+  },
   "whiteDay": "White Day",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "childrensDay": "Children's Day",
-  "@childrensDay": {
-    "description": "Localized string for childrensDay"
+  "winter": "Winter",
+  "@winter": {
+    "description": "Localized string for winter"
   },
-  "parentsDay": "Parents' Day",
-  "@parentsDay": {
-    "description": "Localized string for parentsDay"
+  "wrongTranslation": "誤訳",
+  "@wrongTranslation": {
+    "description": "Localized string for wrongTranslation"
   },
-  "teachersDay": "Teachers' Day",
-  "@teachersDay": {
-    "description": "Localized string for teachersDay"
-  },
-  "christmas": "Christmas",
-  "@christmas": {
-    "description": "Localized string for christmas"
+  "year": "年",
+  "@year": {
+    "description": "Localized string for year"
   },
   "yearEnd": "Year End",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
-  "weatherRainy": "雨",
-  "weatherSnowy": "雪",
-  "tapBottomForDetails": "詳細を見るには下部をタップ",
-  "tutorialWelcomeTitle": "SONAへようこそ！",
-  "@tutorialWelcomeTitle": {
-    "description": "Tutorial: Welcome title"
+  "yes": "はい",
+  "@yes": {
+    "description": "Localized string for yes"
   },
-  "tutorialWelcomeDescription": "AIペルソナと特別な関係を築きましょう。",
-  "@tutorialWelcomeDescription": {
-    "description": "Tutorial: Welcome description"
+  "yesterday": "昨日",
+  "@yesterday": {
+    "description": "Localized string for yesterday"
+  },
+  "yesterdayChats": "昨日",
+  "@yesterdayChats": {
+    "description": "Localized string for yesterdayChats"
+  },
+  "you": "あなた",
+  "@you": {
+    "description": "Localized string for you"
   }
 }

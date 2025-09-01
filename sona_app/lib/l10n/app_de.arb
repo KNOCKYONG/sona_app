@@ -1,1768 +1,16 @@
 {
   "@@locale": "de",
-  "appName": "SONA",
-  "@appName": {
-    "description": "Localized string for appName"
-  },
-  "loading": "Wird geladen...",
-  "@loading": {
-    "description": "Localized string for loading"
-  },
-  "error": "Fehler",
-  "@error": {
-    "description": "Localized string for error"
-  },
-  "retry": "Wiederholen",
-  "@retry": {
-    "description": "Localized string for retry"
-  },
-  "cancel": "Abbrechen",
-  "@cancel": {
-    "description": "Localized string for cancel"
-  },
-  "confirm": "Bestätigen",
-  "@confirm": {
-    "description": "Localized string for confirm"
-  },
-  "next": "Weiter",
-  "@next": {
-    "description": "Localized string for next"
-  },
-  "skip": "Überspringen",
-  "@skip": {
-    "description": "Localized string for skip"
-  },
-  "done": "Fertig",
-  "@done": {
-    "description": "Localized string for done"
-  },
-  "save": "Speichern",
-  "@save": {
-    "description": "Localized string for save"
-  },
-  "delete": "Löschen",
-  "@delete": {
-    "description": "Localized string for delete"
-  },
-  "edit": "Bearbeiten",
-  "@edit": {
-    "description": "Localized string for edit"
-  },
-  "close": "Schließen",
-  "@close": {
-    "description": "Localized string for close"
-  },
-  "search": "Suchen",
-  "@search": {
-    "description": "Localized string for search"
-  },
-  "filter": "Filtern",
-  "@filter": {
-    "description": "Localized string for filter"
-  },
-  "sort": "Sortieren",
-  "@sort": {
-    "description": "Localized string for sort"
-  },
-  "refresh": "Refresh",
-  "@refresh": {
-    "description": "Localized string for refresh"
-  },
-  "yes": "Ja",
-  "@yes": {
-    "description": "Localized string for yes"
-  },
-  "no": "Nein",
-  "@no": {
-    "description": "Localized string for no"
-  },
-  "you": "You",
-  "@you": {
-    "description": "Localized string for you"
-  },
-  "login": "Anmelden",
-  "@login": {
-    "description": "Localized string for login"
-  },
-  "signup": "Registrieren",
-  "@signup": {
-    "description": "Localized string for signup"
-  },
-  "meetAIPersonas": "Meet AI Personas",
-  "@meetAIPersonas": {
-    "description": "Localized string for meetAIPersonas"
-  },
-  "welcomeMessage": "Welcome💕",
-  "@welcomeMessage": {
-    "description": "Localized string for welcomeMessage"
-  },
-  "loginSignup": "Login/Sign Up",
-  "@loginSignup": {
-    "description": "Localized string for loginSignup"
-  },
-  "or": "or",
-  "@or": {
-    "description": "Localized string for or"
-  },
-  "startWithEmail": "Start with Email",
-  "@startWithEmail": {
-    "description": "Localized string for startWithEmail"
-  },
-  "startWithGoogle": "Start with Google",
-  "@startWithGoogle": {
-    "description": "Localized string for startWithGoogle"
-  },
-  "loginError": "Login failed",
-  "@loginError": {
-    "description": "Localized string for loginError"
-  },
-  "loginCancelled": "Login cancelled",
-  "@loginCancelled": {
-    "description": "Localized string for loginCancelled"
-  },
-  "logout": "Abmelden",
-  "@logout": {
-    "description": "Localized string for logout"
-  },
-  "basicInfo": "Basic Information",
-  "@basicInfo": {
-    "description": "Localized string for basicInfo"
-  },
-  "email": "E-Mail",
-  "@email": {
-    "description": "Localized string for email"
-  },
-  "password": "Passwort",
-  "@password": {
-    "description": "Localized string for password"
-  },
-  "nickname": "Nickname",
-  "@nickname": {
-    "description": "Localized string for nickname"
-  },
-  "nicknameRequired": "Nickname *",
-  "@nicknameRequired": {
-    "description": "Localized string for nicknameRequired"
-  },
-  "emailRequired": "Email *",
-  "@emailRequired": {
-    "description": "Localized string for emailRequired"
-  },
-  "passwordRequired": "Password *",
-  "@passwordRequired": {
-    "description": "Localized string for passwordRequired"
-  },
-  "emailHint": "example@email.com",
-  "@emailHint": {
-    "description": "Localized string for emailHint"
-  },
-  "passwordHint": "6 characters or more",
-  "@passwordHint": {
-    "description": "Localized string for passwordHint"
-  },
-  "nicknameHint": "3-10 characters",
-  "@nicknameHint": {
-    "description": "Localized string for nicknameHint"
-  },
-  "enterEmail": "Please enter email",
-  "@enterEmail": {
-    "description": "Localized string for enterEmail"
-  },
-  "profilePhoto": "Profile Photo",
-  "@profilePhoto": {
-    "description": "Localized string for profilePhoto"
-  },
-  "gender": "Geschlecht",
-  "@gender": {
-    "description": "Localized string for gender"
-  },
-  "genderRequired": "Gender *",
-  "@genderRequired": {
-    "description": "Localized string for genderRequired"
-  },
-  "male": "Männlich",
-  "@male": {
-    "description": "Localized string for male"
-  },
-  "female": "Weiblich",
-  "@female": {
-    "description": "Localized string for female"
-  },
-  "other": "Andere",
-  "@other": {
-    "description": "Localized string for other"
-  },
-  "birthDate": "Birth Date",
-  "@birthDate": {
-    "description": "Localized string for birthDate"
-  },
-  "birthDateRequired": "Birth Date *",
-  "@birthDateRequired": {
-    "description": "Localized string for birthDateRequired"
-  },
-  "selectGender": "Please select gender",
-  "@selectGender": {
-    "description": "Localized string for selectGender"
-  },
-  "genderOptional": "Gender (Optional)",
-  "@genderOptional": {
-    "description": "Localized string for genderOptional"
-  },
-  "birthDateOptional": "Birth Date (Optional)",
-  "@birthDateOptional": {
-    "description": "Localized string for birthDateOptional"
-  },
-  "setNow": "Set Now",
-  "@setNow": {
-    "description": "Localized string for setNow"
-  },
-  "myGenderSection": "My Gender (Optional)",
-  "@myGenderSection": {
-    "description": "Localized string for myGenderSection"
-  },
-  "personaGenderSection": "Persona Gender Preference",
-  "@personaGenderSection": {
-    "description": "Localized string for personaGenderSection"
-  },
-  "showAllGendersOption": "Show All Genders",
-  "@showAllGendersOption": {
-    "description": "Localized string for showAllGendersOption"
+  "about": "Über",
+  "@about": {
+    "description": "Localized string for about"
   },
   "accountAndProfile": "Account & Profile Information",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "enterBasicInformation": "Please enter basic information",
-  "@enterBasicInformation": {
-    "description": "Localized string for enterBasicInformation"
-  },
-  "optional": "Optional",
-  "@optional": {
-    "description": "Localized string for optional"
-  },
-  "previous": "Zurück",
-  "@previous": {
-    "description": "Localized string for previous"
-  },
-  "completeSignup": "Complete Sign Up",
-  "@completeSignup": {
-    "description": "Localized string for completeSignup"
-  },
-  "referrerEmailLabel": "Referrer Email (Optional)",
-  "@referrerEmailLabel": {
-    "description": "Localized string for referrerEmailLabel"
-  },
-  "year": "Year",
-  "@year": {
-    "description": "Localized string for year"
-  },
-  "month": "Month",
-  "@month": {
-    "description": "Localized string for month"
-  },
-  "day": "Day",
-  "@day": {
-    "description": "Localized string for day"
-  },
-  "selfIntroduction": "Introduction (Optional)",
-  "@selfIntroduction": {
-    "description": "Localized string for selfIntroduction"
-  },
-  "selfIntroductionHint": "Write a brief introduction about yourself",
-  "@selfIntroductionHint": {
-    "description": "Localized string for selfIntroductionHint"
-  },
-  "usagePurpose": "Usage Purpose",
-  "@usagePurpose": {
-    "description": "Localized string for usagePurpose"
-  },
-  "selectFeeling": "Select Feeling",
-  "@selectFeeling": {
-    "description": "Localized string for selectFeeling"
-  },
-  "happy": "Happy",
-  "@happy": {
-    "description": "Localized string for happy"
-  },
-  "sad": "Sad",
-  "@sad": {
-    "description": "Localized string for sad"
-  },
-  "angry": "Angry",
-  "@angry": {
-    "description": "Localized string for angry"
-  },
-  "anxious": "Anxious",
-  "@anxious": {
-    "description": "Localized string for anxious"
-  },
-  "tired": "Tired",
-  "@tired": {
-    "description": "Localized string for tired"
-  },
-  "lonely": "Lonely",
-  "@lonely": {
-    "description": "Localized string for lonely"
-  },
-  "stressed": "Stressed",
-  "@stressed": {
-    "description": "Localized string for stressed"
-  },
-  "depressed": "Depressed",
-  "@depressed": {
-    "description": "Localized string for depressed"
-  },
-  "excited": "Excited",
-  "@excited": {
-    "description": "Localized string for excited"
-  },
-  "calm": "Calm",
-  "@calm": {
-    "description": "Localized string for calm"
-  },
-  "allPersonas": "All Personas",
-  "@allPersonas": {
-    "description": "Localized string for allPersonas"
-  },
-  "chat": "Chat",
-  "@chat": {
-    "description": "Localized string for chat"
-  },
-  "chats": "Chats",
-  "@chats": {
-    "description": "Localized string for chats"
-  },
-  "startChat": "Start Chat",
-  "@startChat": {
-    "description": "Localized string for startChat"
-  },
-  "endChat": "End Chat",
-  "@endChat": {
-    "description": "Localized string for endChat"
-  },
-  "typeMessage": "Type a message...",
-  "@typeMessage": {
-    "description": "Localized string for typeMessage"
-  },
-  "send": "Senden",
-  "@send": {
-    "description": "Localized string for send"
-  },
-  "noChatsYet": "No chats yet",
-  "@noChatsYet": {
-    "description": "Localized string for noChatsYet"
-  },
-  "todayChats": "Today",
-  "@todayChats": {
-    "description": "Localized string for todayChats"
-  },
-  "yesterdayChats": "Yesterday",
-  "@yesterdayChats": {
-    "description": "Localized string for yesterdayChats"
-  },
-  "olderChats": "Older",
-  "@olderChats": {
-    "description": "Localized string for olderChats"
-  },
-  "chatEndedMessage": "Chat has ended",
-  "@chatEndedMessage": {
-    "description": "Localized string for chatEndedMessage"
-  },
-  "messageDeleted": "Message deleted",
-  "@messageDeleted": {
-    "description": "Localized string for messageDeleted"
-  },
-  "unsendMessage": "Unsend message",
-  "@unsendMessage": {
-    "description": "Localized string for unsendMessage"
-  },
-  "copyMessage": "Copy message",
-  "@copyMessage": {
-    "description": "Localized string for copyMessage"
-  },
-  "messageCopied": "Message copied",
-  "@messageCopied": {
-    "description": "Localized string for messageCopied"
-  },
-  "voiceMessage": "🎤 Voice message",
-  "@voiceMessage": {
-    "description": "Localized string for voiceMessage"
-  },
-  "signUp": "Registrieren",
-  "@signUp": {
-    "description": "Localized string for signUp"
-  },
-  "meetPersonas": "Meet Personas",
-  "@meetPersonas": {
-    "description": "Localized string for meetPersonas"
-  },
-  "allPersonasMatched": "All personas matched! Start chatting with them.",
-  "@allPersonasMatched": {
-    "description": "Localized string for allPersonasMatched"
-  },
-  "noPersonasAvailable": "No personas available. Please try again.",
-  "@noPersonasAvailable": {
-    "description": "Localized string for noPersonasAvailable"
-  },
-  "heartInsufficient": "Not enough hearts",
-  "@heartInsufficient": {
-    "description": "Localized string for heartInsufficient"
-  },
-  "leaveChatTitle": "Leave Chat",
-  "@leaveChatTitle": {
-    "description": "Localized string for leaveChatTitle"
-  },
-  "leave": "Leave",
-  "@leave": {
-    "description": "Localized string for leave"
-  },
-  "store": "Store",
-  "@store": {
-    "description": "Localized string for store"
-  },
-  "hearts": "Hearts",
-  "@hearts": {
-    "description": "Localized string for hearts"
-  },
-  "notSubscribed": "Not subscribed",
-  "@notSubscribed": {
-    "description": "Localized string for notSubscribed"
-  },
-  "expired": "Expired",
-  "@expired": {
-    "description": "Localized string for expired"
-  },
-  "purchaseConfirm": "Purchase Confirmation",
-  "@purchaseConfirm": {
-    "description": "Localized string for purchaseConfirm"
-  },
-  "purchaseButton": "Purchase",
-  "@purchaseButton": {
-    "description": "Localized string for purchaseButton"
-  },
-  "discount20": "20% off",
-  "@discount20": {
-    "description": "Localized string for discount20"
-  },
-  "discount30": "30% off",
-  "@discount30": {
-    "description": "Localized string for discount30"
-  },
-  "hearts10": "10 Hearts",
-  "@hearts10": {
-    "description": "Localized string for hearts10"
-  },
-  "hearts30": "30 Hearts",
-  "@hearts30": {
-    "description": "Localized string for hearts30"
-  },
-  "hearts50": "50 Hearts",
-  "@hearts50": {
-    "description": "Localized string for hearts50"
-  },
-  "originalPrice": "Original",
-  "@originalPrice": {
-    "description": "Localized string for originalPrice"
-  },
-  "discountAmount": "Save",
-  "@discountAmount": {
-    "description": "Localized string for discountAmount"
-  },
-  "hearts30Discount": "SALE",
-  "@hearts30Discount": {
-    "description": "Localized string for hearts30Discount"
-  },
-  "hearts50Discount": "SALE",
-  "@hearts50Discount": {
-    "description": "Localized string for hearts50Discount"
-  },
-  "settings": "Einstellungen",
-  "@settings": {
-    "description": "Localized string for settings"
-  },
-  "profile": "Profil",
-  "@profile": {
-    "description": "Localized string for profile"
-  },
-  "editProfile": "Edit Profile",
-  "@editProfile": {
-    "description": "Localized string for editProfile"
-  },
-  "purchaseHeartsOnly": "Buy hearts",
-  "@purchaseHeartsOnly": {
-    "description": "Localized string for purchaseHeartsOnly"
-  },
-  "tutorialAccount": "Tutorial Account",
-  "@tutorialAccount": {
-    "description": "Localized string for tutorialAccount"
-  },
-  "subscriptionStatus": "Subscription Status",
-  "@subscriptionStatus": {
-    "description": "Localized string for subscriptionStatus"
-  },
-  "editInfo": "Edit Info",
-  "@editInfo": {
-    "description": "Localized string for editInfo"
-  },
-  "joinDate": "Join Date",
-  "@joinDate": {
-    "description": "Localized string for joinDate"
-  },
-  "notifications": "Benachrichtigungen",
-  "@notifications": {
-    "description": "Localized string for notifications"
-  },
-  "pushNotifications": "Push-Benachrichtigungen",
-  "@pushNotifications": {
-    "description": "Localized string for pushNotifications"
-  },
-  "soundSettings": "Sound Settings",
-  "@soundSettings": {
-    "description": "Localized string for soundSettings"
-  },
-  "effectSound": "Sound Effects",
-  "@effectSound": {
-    "description": "Localized string for effectSound"
-  },
-  "language": "Sprache",
-  "@language": {
-    "description": "Localized string for language"
-  },
-  "languageSettings": "Language Settings",
-  "@languageSettings": {
-    "description": "Localized string for languageSettings"
-  },
-  "theme": "Design",
-  "@theme": {
-    "description": "Localized string for theme"
-  },
-  "themeSettings": "Theme Settings",
-  "@themeSettings": {
-    "description": "Localized string for themeSettings"
-  },
-  "darkMode": "Dunkler Modus",
-  "@darkMode": {
-    "description": "Localized string for darkMode"
-  },
-  "privacy": "Datenschutz",
-  "@privacy": {
-    "description": "Localized string for privacy"
-  },
-  "terms": "Terms of Service",
-  "@terms": {
-    "description": "Localized string for terms"
-  },
-  "help": "Hilfe",
-  "@help": {
-    "description": "Localized string for help"
-  },
-  "frequentlyAskedQuestions": "Frequently Asked Questions",
-  "@frequentlyAskedQuestions": {
-    "description": "Localized string for frequentlyAskedQuestions"
-  },
-  "searchFAQ": "Search FAQ...",
-  "@searchFAQ": {
-    "description": "Localized string for searchFAQ"
-  },
-  "searchResults": "Search Results",
-  "@searchResults": {
-    "description": "Localized string for searchResults"
-  },
-  "relatedFAQ": "Related FAQ",
-  "@relatedFAQ": {
-    "description": "Localized string for relatedFAQ"
-  },
-  "wasHelpful": "Was this helpful?",
-  "@wasHelpful": {
-    "description": "Localized string for wasHelpful"
-  },
-  "thanksFeedback": "Thanks for your feedback!",
-  "@thanksFeedback": {
-    "description": "Localized string for thanksFeedback"
-  },
-  "about": "Über",
-  "@about": {
-    "description": "Localized string for about"
-  },
-  "version": "Version",
-  "@version": {
-    "description": "Localized string for version"
-  },
-  "others": "Others",
-  "@others": {
-    "description": "Localized string for others"
-  },
-  "accountManagement": "Account Management",
-  "@accountManagement": {
-    "description": "Localized string for accountManagement"
-  },
-  "deleteAccount": "Konto löschen",
-  "@deleteAccount": {
-    "description": "Localized string for deleteAccount"
-  },
-  "howToUse": "How to use SONA",
-  "@howToUse": {
-    "description": "Localized string for howToUse"
-  },
-  "inquiries": "Inquiries",
-  "@inquiries": {
-    "description": "Localized string for inquiries"
-  },
-  "loginRequired": "Login required",
-  "@loginRequired": {
-    "description": "Localized string for loginRequired"
-  },
-  "sonaFriend": "SONA Friend",
-  "@sonaFriend": {
-    "description": "Localized string for sonaFriend"
-  },
-  "messagesRemaining": "Messages Remaining",
-  "@messagesRemaining": {
-    "description": "Localized string for messagesRemaining"
-  },
-  "totalLikes": "Total Likes",
-  "@totalLikes": {
-    "description": "Localized string for totalLikes"
-  },
-  "ownedHearts": "Owned Hearts",
-  "@ownedHearts": {
-    "description": "Localized string for ownedHearts"
-  },
-  "matchedPersonas": "Matched Personas",
-  "@matchedPersonas": {
-    "description": "Localized string for matchedPersonas"
-  },
-  "retryButton": "Retry",
-  "@retryButton": {
-    "description": "Localized string for retryButton"
-  },
-  "matchingFailed": "Matching failed.",
-  "@matchingFailed": {
-    "description": "Localized string for matchingFailed"
-  },
-  "errorOccurred": "An error occurred.",
-  "@errorOccurred": {
-    "description": "Localized string for errorOccurred"
-  },
-  "signupComplete": "Sign Up Complete",
-  "@signupComplete": {
-    "description": "Localized string for signupComplete"
-  },
-  "accountDeletionTitle": "Delete Account",
-  "@accountDeletionTitle": {
-    "description": "Localized string for accountDeletionTitle"
-  },
-  "continueButton": "Continue",
-  "@continueButton": {
-    "description": "Localized string for continueButton"
-  },
-  "userNotFound": "User not found",
-  "@userNotFound": {
-    "description": "Localized string for userNotFound"
-  },
-  "loadingData": "Loading data...",
-  "@loadingData": {
-    "description": "Localized string for loadingData"
-  },
-  "report": "Melden",
-  "@report": {
-    "description": "Localized string for report"
-  },
-  "reportAI": "Report",
-  "@reportAI": {
-    "description": "Localized string for reportAI"
-  },
-  "reportAITitle": "Report AI Conversation",
-  "@reportAITitle": {
-    "description": "Localized string for reportAITitle"
-  },
-  "termsOfService": "Nutzungsbedingungen",
-  "@termsOfService": {
-    "description": "Localized string for termsOfService"
-  },
-  "privacyPolicy": "Datenschutzrichtlinie",
-  "@privacyPolicy": {
-    "description": "Localized string for privacyPolicy"
-  },
-  "grantPermission": "Weiter",
-  "@grantPermission": {
-    "description": "Localized string for grantPermission"
-  },
-  "goToSettings": "Zu den Einstellungen",
-  "@goToSettings": {
-    "description": "Localized string for goToSettings"
-  },
-  "later": "Later",
-  "@later": {
-    "description": "Localized string for later"
-  },
-  "sessionExpired": "Session expired",
-  "@sessionExpired": {
-    "description": "Localized string for sessionExpired"
-  },
-  "notEnoughHearts": "Not enough hearts",
-  "@notEnoughHearts": {
-    "description": "Localized string for notEnoughHearts"
-  },
-  "spamAdvertising": "Spam/Advertising",
-  "@spamAdvertising": {
-    "description": "Localized string for spamAdvertising"
-  },
-  "hateSpeech": "Hate speech",
-  "@hateSpeech": {
-    "description": "Localized string for hateSpeech"
-  },
-  "sexualContent": "Sexual content",
-  "@sexualContent": {
-    "description": "Localized string for sexualContent"
-  },
-  "violentContent": "Violent content",
-  "@violentContent": {
-    "description": "Localized string for violentContent"
-  },
-  "harassmentBullying": "Harassment/Bullying",
-  "@harassmentBullying": {
-    "description": "Localized string for harassmentBullying"
-  },
-  "detailedReason": "Detailed reason",
-  "@detailedReason": {
-    "description": "Localized string for detailedReason"
-  },
-  "permissionRequired": "Berechtigung erforderlich",
-  "@permissionRequired": {
-    "description": "Localized string for permissionRequired"
-  },
-  "cameraPermission": "Kamera-Berechtigung",
-  "@cameraPermission": {
-    "description": "Localized string for cameraPermission"
-  },
-  "galleryPermission": "Galerie-Berechtigung",
-  "@galleryPermission": {
-    "description": "Localized string for galleryPermission"
-  },
-  "permissionDenied": "Berechtigung verweigert",
-  "@permissionDenied": {
-    "description": "Localized string for permissionDenied"
-  },
-  "openSettings": "Open Settings",
-  "@openSettings": {
-    "description": "Localized string for openSettings"
-  },
-  "unlimitedMessages": "Unlimited",
-  "@unlimitedMessages": {
-    "description": "Localized string for unlimitedMessages"
-  },
-  "profileInfo": "Profile Information",
-  "@profileInfo": {
-    "description": "Localized string for profileInfo"
-  },
-  "generalPersona": "General Persona",
-  "@generalPersona": {
-    "description": "Localized string for generalPersona"
-  },
-  "expertPersona": "Expert Persona",
-  "@expertPersona": {
-    "description": "Localized string for expertPersona"
-  },
-  "interests": "Interests",
-  "@interests": {
-    "description": "Localized string for interests"
-  },
-  "termsAgreement": "Terms Agreement",
-  "@termsAgreement": {
-    "description": "Localized string for termsAgreement"
-  },
-  "preferenceSettings": "Preference Settings",
-  "@preferenceSettings": {
-    "description": "Localized string for preferenceSettings"
-  },
-  "leaveChatRoom": "Leave Chat Room",
-  "@leaveChatRoom": {
-    "description": "Localized string for leaveChatRoom"
-  },
-  "backButton": "Back",
-  "@backButton": {
-    "description": "Localized string for backButton"
-  },
-  "moreButton": "More",
-  "@moreButton": {
-    "description": "Localized string for moreButton"
-  },
-  "chatListTab": "Chat List Tab",
-  "@chatListTab": {
-    "description": "Localized string for chatListTab"
-  },
-  "loginTab": "Login",
-  "@loginTab": {
-    "description": "Localized string for loginTab"
-  },
-  "signupTab": "Sign Up",
-  "@signupTab": {
-    "description": "Localized string for signupTab"
-  },
-  "emailLabel": "Email",
-  "@emailLabel": {
-    "description": "Localized string for emailLabel"
-  },
-  "passwordLabel": "Password",
-  "@passwordLabel": {
-    "description": "Localized string for passwordLabel"
-  },
-  "sendingEmail": "Sending email...",
-  "@sendingEmail": {
-    "description": "Localized string for sendingEmail"
-  },
-  "forgotPassword": "Passwort vergessen?",
-  "@forgotPassword": {
-    "description": "Localized string for forgotPassword"
-  },
-  "endTutorial": "End Tutorial",
-  "@endTutorial": {
-    "description": "Localized string for endTutorial"
-  },
-  "profileEdit": "Edit Profile",
-  "@profileEdit": {
-    "description": "Localized string for profileEdit"
-  },
-  "complete": "Done",
-  "@complete": {
-    "description": "Localized string for complete"
-  },
-  "me": "Me",
-  "@me": {
-    "description": "Localized string for me"
-  },
-  "photo": "Foto",
-  "@photo": {
-    "description": "Localized string for photo"
-  },
-  "justNow": "Gerade eben",
-  "@justNow": {
-    "description": "Localized string for justNow"
-  },
-  "storyEvent": "Story Event",
-  "@storyEvent": {
-    "description": "Localized string for storyEvent"
-  },
-  "chooseOption": "Please choose:",
-  "@chooseOption": {
-    "description": "Localized string for chooseOption"
-  },
-  "allowPermission": "Weiter",
-  "@allowPermission": {
-    "description": "Localized string for allowPermission"
-  },
-  "privacySection6Title": "6. User Rights",
-  "@privacySection6Title": {
-    "description": "Localized string for privacySection6Title"
-  },
-  "selectTheme": "Select Theme",
-  "@selectTheme": {
-    "description": "Localized string for selectTheme"
-  },
-  "systemTheme": "Follow System",
-  "@systemTheme": {
-    "description": "Localized string for systemTheme"
-  },
-  "lightTheme": "Light Mode",
-  "@lightTheme": {
-    "description": "Localized string for lightTheme"
-  },
-  "lightThemeDesc": "Use bright theme",
-  "@lightThemeDesc": {
-    "description": "Localized string for lightThemeDesc"
-  },
-  "darkTheme": "Dark Mode",
-  "@darkTheme": {
-    "description": "Localized string for darkTheme"
-  },
-  "darkThemeDesc": "Use dark theme",
-  "@darkThemeDesc": {
-    "description": "Localized string for darkThemeDesc"
-  },
-  "preview": "Preview",
-  "@preview": {
-    "description": "Localized string for preview"
-  },
-  "helloEmoji": "Hello! 😊",
-  "@helloEmoji": {
-    "description": "Localized string for helloEmoji"
-  },
-  "niceToMeetYou": "Nice to meet you!",
-  "@niceToMeetYou": {
-    "description": "Localized string for niceToMeetYou"
-  },
-  "purchaseSection6Title": "6. Inquiries",
-  "@purchaseSection6Title": {
-    "description": "Localized string for purchaseSection6Title"
-  },
-  "makeFriends": "Make Friends",
-  "@makeFriends": {
-    "description": "Localized string for makeFriends"
-  },
-  "hobbySharing": "Hobby Sharing",
-  "@hobbySharing": {
-    "description": "Localized string for hobbySharing"
-  },
-  "lonelinessRelief": "Loneliness Relief",
-  "@lonelinessRelief": {
-    "description": "Localized string for lonelinessRelief"
-  },
-  "dailyConversation": "Daily Conversation",
-  "@dailyConversation": {
-    "description": "Localized string for dailyConversation"
-  },
-  "entertainmentFun": "Entertainment/Fun",
-  "@entertainmentFun": {
-    "description": "Localized string for entertainmentFun"
-  },
-  "ageUnit": "years old",
-  "@ageUnit": {
-    "description": "Localized string for ageUnit"
-  },
-  "gaming": "Gaming",
-  "@gaming": {
-    "description": "Localized string for gaming"
-  },
-  "movies": "Movies",
-  "@movies": {
-    "description": "Localized string for movies"
-  },
-  "music": "Music",
-  "@music": {
-    "description": "Localized string for music"
-  },
-  "reading": "Reading",
-  "@reading": {
-    "description": "Localized string for reading"
-  },
-  "sports": "Sports",
-  "@sports": {
-    "description": "Localized string for sports"
-  },
-  "travel": "Travel",
-  "@travel": {
-    "description": "Localized string for travel"
-  },
-  "cooking": "Cooking",
-  "@cooking": {
-    "description": "Localized string for cooking"
-  },
-  "fashion": "Fashion",
-  "@fashion": {
-    "description": "Localized string for fashion"
-  },
-  "technology": "Technology",
-  "@technology": {
-    "description": "Localized string for technology"
-  },
-  "art": "Art",
-  "@art": {
-    "description": "Localized string for art"
-  },
-  "pets": "Pets",
-  "@pets": {
-    "description": "Localized string for pets"
-  },
-  "photography": "Photography",
-  "@photography": {
-    "description": "Localized string for photography"
-  },
-  "dailyChat": "Daily Chat",
-  "@dailyChat": {
-    "description": "Localized string for dailyChat"
-  },
-  "datingAdvice": "Dating Advice",
-  "@datingAdvice": {
-    "description": "Localized string for datingAdvice"
-  },
-  "hobbyTalk": "Hobby Talk",
-  "@hobbyTalk": {
-    "description": "Localized string for hobbyTalk"
-  },
-  "lifeAdvice": "Life Advice",
-  "@lifeAdvice": {
-    "description": "Localized string for lifeAdvice"
-  },
-  "funChat": "Fun Chat",
-  "@funChat": {
-    "description": "Localized string for funChat"
-  },
-  "deepTalk": "Deep Talk",
-  "@deepTalk": {
-    "description": "Localized string for deepTalk"
-  },
-  "lightTalk": "Light Talk",
-  "@lightTalk": {
-    "description": "Localized string for lightTalk"
-  },
-  "allAgree": "Agree to All",
-  "@allAgree": {
-    "description": "Localized string for allAgree"
-  },
-  "required": "[Required]",
-  "@required": {
-    "description": "Localized string for required"
-  },
-  "preferredLanguage": "Preferred Language",
-  "@preferredLanguage": {
-    "description": "Localized string for preferredLanguage"
-  },
-  "selectLanguage": "Select Language",
-  "@selectLanguage": {
-    "description": "Localized string for selectLanguage"
-  },
-  "korean": "Korean",
-  "@korean": {
-    "description": "Localized string for korean"
-  },
-  "english": "English",
-  "@english": {
-    "description": "Localized string for english"
-  },
-  "japanese": "Japanese",
-  "@japanese": {
-    "description": "Localized string for japanese"
-  },
-  "chinese": "Chinese",
-  "@chinese": {
-    "description": "Localized string for chinese"
-  },
-  "indonesian": "Indonesian",
-  "@indonesian": {
-    "description": "Localized string for indonesian"
-  },
-  "vietnamese": "Vietnamese",
-  "@vietnamese": {
-    "description": "Localized string for vietnamese"
-  },
-  "spanish": "Spanish",
-  "@spanish": {
-    "description": "Localized string for spanish"
-  },
-  "thai": "Thai",
-  "@thai": {
-    "description": "Localized string for thai"
-  },
-  "showOriginalText": "Show Original",
-  "@showOriginalText": {
-    "description": "Localized string for showOriginalText"
-  },
-  "hideOriginalText": "Hide Original",
-  "@hideOriginalText": {
-    "description": "Localized string for hideOriginalText"
-  },
-  "errorDetails": "Error Details",
-  "@errorDetails": {
-    "description": "Localized string for errorDetails"
-  },
-  "submitReport": "Submit Report",
-  "@submitReport": {
-    "description": "Localized string for submitReport"
-  },
-  "multilingualChat": "Multilingual Chat",
-  "@multilingualChat": {
-    "description": "Localized string for multilingualChat"
-  },
-  "languageIndicator": "Language",
-  "@languageIndicator": {
-    "description": "Localized string for languageIndicator"
-  },
-  "translatedFrom": "Translated",
-  "@translatedFrom": {
-    "description": "Localized string for translatedFrom"
-  },
-  "originalText": "Original",
-  "@originalText": {
-    "description": "Localized string for originalText"
-  },
-  "translatedText": "Translation",
-  "@translatedText": {
-    "description": "Localized string for translatedText"
-  },
-  "autoTranslate": "Auto Translate",
-  "@autoTranslate": {
-    "description": "Localized string for autoTranslate"
-  },
-  "translationSettings": "Translation Settings",
-  "@translationSettings": {
-    "description": "Localized string for translationSettings"
-  },
-  "translationQuality": "Translation Quality",
-  "@translationQuality": {
-    "description": "Localized string for translationQuality"
-  },
-  "selectErrorType": "Select error type",
-  "@selectErrorType": {
-    "description": "Localized string for selectErrorType"
-  },
-  "wrongTranslation": "Wrong Translation",
-  "@wrongTranslation": {
-    "description": "Localized string for wrongTranslation"
-  },
-  "awkwardExpression": "Awkward Expression",
-  "@awkwardExpression": {
-    "description": "Localized string for awkwardExpression"
-  },
-  "missingTranslation": "Missing Translation",
-  "@missingTranslation": {
-    "description": "Localized string for missingTranslation"
-  },
-  "culturalIssue": "Cultural Issue",
-  "@culturalIssue": {
-    "description": "Localized string for culturalIssue"
-  },
-  "technicalError": "Technical Error",
-  "@technicalError": {
-    "description": "Localized string for technicalError"
-  },
-  "otherError": "Other Error",
-  "@otherError": {
-    "description": "Localized string for otherError"
-  },
-  "reportAndBlock": "Report & Block",
-  "@reportAndBlock": {
-    "description": "Localized string for reportAndBlock"
-  },
-  "blockThisAI": "Block this AI",
-  "@blockThisAI": {
-    "description": "Localized string for blockThisAI"
-  },
-  "blockedAIs": "Blocked AIs",
-  "@blockedAIs": {
-    "description": "Localized string for blockedAIs"
-  },
-  "manageBlockedAIs": "Manage Blocked AIs",
-  "@manageBlockedAIs": {
-    "description": "Localized string for manageBlockedAIs"
-  },
-  "unblock": "Blockierung aufheben",
-  "@unblock": {
-    "description": "Localized string for unblock"
-  },
-  "blockedSuccessfully": "Blocked successfully",
-  "@blockedSuccessfully": {
-    "description": "Localized string for blockedSuccessfully"
-  },
-  "unblockedSuccessfully": "Unblocked successfully",
-  "@unblockedSuccessfully": {
-    "description": "Localized string for unblockedSuccessfully"
-  },
-  "noBlockedAIs": "No blocked AIs",
-  "@noBlockedAIs": {
-    "description": "Localized string for noBlockedAIs"
-  },
-  "blockReason": "Block reason",
-  "@blockReason": {
-    "description": "Localized string for blockReason"
-  },
-  "blockedAt": "Blocked at",
-  "@blockedAt": {
-    "description": "Localized string for blockedAt"
-  },
-  "alsoBlockThisAI": "Also block this AI",
-  "@alsoBlockThisAI": {
-    "description": "Localized string for alsoBlockThisAI"
-  },
-  "termsSection1Title": "Article 1 (Purpose)",
-  "@termsSection1Title": {
-    "description": "Localized string for termsSection1Title"
-  },
-  "termsSection2Title": "Article 2 (Definitions)",
-  "@termsSection2Title": {
-    "description": "Localized string for termsSection2Title"
-  },
-  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
-  "@termsSection3Title": {
-    "description": "Localized string for termsSection3Title"
-  },
-  "termsSection4Title": "Article 4 (Provision of Service)",
-  "@termsSection4Title": {
-    "description": "Localized string for termsSection4Title"
-  },
-  "termsSection5Title": "Article 5 (Membership Registration)",
-  "@termsSection5Title": {
-    "description": "Localized string for termsSection5Title"
-  },
-  "termsSection6Title": "Article 6 (User Obligations)",
-  "@termsSection6Title": {
-    "description": "Localized string for termsSection6Title"
-  },
-  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
-  "@termsSection7Title": {
-    "description": "Localized string for termsSection7Title"
-  },
-  "termsSection8Title": "Article 8 (Service Interruption)",
-  "@termsSection8Title": {
-    "description": "Localized string for termsSection8Title"
-  },
-  "termsSection9Title": "Article 9 (Disclaimer)",
-  "@termsSection9Title": {
-    "description": "Localized string for termsSection9Title"
-  },
-  "termsSection10Title": "Article 10 (Dispute Resolution)",
-  "@termsSection10Title": {
-    "description": "Localized string for termsSection10Title"
-  },
-  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
-  "@termsSection11Title": {
-    "description": "Localized string for termsSection11Title"
-  },
-  "termsSection12Title": "Article 12 (Data Collection and Usage)",
-  "@termsSection12Title": {
-    "description": "Localized string for termsSection12Title"
-  },
-  "privacySettings": "Privacy Settings",
-  "@privacySettings": {
-    "description": "Localized string for privacySettings"
-  },
-  "dataCollection": "Data Collection Settings",
-  "@dataCollection": {
-    "description": "Localized string for dataCollection"
-  },
-  "emotionAnalysis": "Emotion Analysis",
-  "@emotionAnalysis": {
-    "description": "Localized string for emotionAnalysis"
-  },
-  "memoryAlbum": "Memory Album",
-  "@memoryAlbum": {
-    "description": "Localized string for memoryAlbum"
-  },
-  "weatherContext": "Weather Context",
-  "@weatherContext": {
-    "description": "Localized string for weatherContext"
-  },
-  "dailyCare": "Daily Care",
-  "@dailyCare": {
-    "description": "Localized string for dailyCare"
-  },
-  "interestSharing": "Interest Sharing",
-  "@interestSharing": {
-    "description": "Localized string for interestSharing"
-  },
-  "conversationContinuity": "Conversation Continuity",
-  "@conversationContinuity": {
-    "description": "Localized string for conversationContinuity"
-  },
-  "guestModeTitle": "Try as Guest",
-  "@guestModeTitle": {
-    "description": "Localized string for guestModeTitle"
-  },
-  "guestMessageExhausted": "Free messages exhausted",
-  "@guestMessageExhausted": {
-    "description": "Localized string for guestMessageExhausted"
-  },
-  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
-  "@memberBenefits": {
-    "description": "Localized string for memberBenefits"
-  },
-  "loginTitle": "Login",
-  "@loginTitle": {
-    "description": "Localized string for loginTitle"
-  },
-  "continueWithGoogle": "Continue with Google",
-  "@continueWithGoogle": {
-    "description": "Localized string for continueWithGoogle"
-  },
-  "continueWithApple": "Continue with Apple",
-  "@continueWithApple": {
-    "description": "Localized string for continueWithApple"
-  },
-  "convertToMember": "Sign Up",
-  "@convertToMember": {
-    "description": "Localized string for convertToMember"
-  },
-  "continueAsGuest": "Continue as Guest",
-  "@continueAsGuest": {
-    "description": "Localized string for continueAsGuest"
-  },
-  "guestModeBanner": "Guest Mode",
-  "@guestModeBanner": {
-    "description": "Localized string for guestModeBanner"
-  },
-  "keepGuestData": "Keep Chat History",
-  "@keepGuestData": {
-    "description": "Localized string for keepGuestData"
-  },
-  "discardGuestData": "Start Fresh",
-  "@discardGuestData": {
-    "description": "Localized string for discardGuestData"
-  },
-  "guestModeWelcome": "Starting in Guest Mode",
-  "@guestModeWelcome": {
-    "description": "Localized string for guestModeWelcome"
-  },
-  "guestModeFailedMessage": "Failed to start Guest Mode",
-  "@guestModeFailedMessage": {
-    "description": "Localized string for guestModeFailedMessage"
-  },
-  "loginRequiredTitle": "Login Required",
-  "@loginRequiredTitle": {
-    "description": "Localized string for loginRequiredTitle"
-  },
-  "loginButton": "Login",
-  "@loginButton": {
-    "description": "Localized string for loginButton"
-  },
-  "restartConversation": "Restart Conversation",
-  "@restartConversation": {
-    "description": "Localized string for restartConversation"
-  },
-  "sendChatError": "Send Chat Error",
-  "@sendChatError": {
-    "description": "Localized string for sendChatError"
-  },
-  "newMessage": "Neue Nachricht",
-  "@newMessage": {
-    "description": "Localized string for newMessage"
-  },
-  "newMessages": "New messages",
-  "@newMessages": {
-    "description": "Localized string for newMessages"
-  },
-  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
-  "@chatErrorSentSuccessfully": {
-    "description": "Localized string for chatErrorSentSuccessfully"
-  },
-  "errorSendingFailed": "Failed to send error",
-  "@errorSendingFailed": {
-    "description": "Localized string for errorSendingFailed"
-  },
-  "selectPersonaPlease": "Please select a persona.",
-  "@selectPersonaPlease": {
-    "description": "Localized string for selectPersonaPlease"
-  },
-  "reportChatError": "Report Chat Error",
-  "@reportChatError": {
-    "description": "Localized string for reportChatError"
-  },
-  "selectProblematicMessage": "Select the problematic message (optional)",
-  "@selectProblematicMessage": {
-    "description": "Localized string for selectProblematicMessage"
-  },
-  "describeError": "What is the problem?",
-  "@describeError": {
-    "description": "Localized string for describeError"
-  },
-  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
-  "@errorDescriptionHint": {
-    "description": "Localized string for errorDescriptionHint"
-  },
-  "sendReport": "Send Report",
-  "@sendReport": {
-    "description": "Localized string for sendReport"
-  },
-  "useOneHeart": "Use 1 Heart",
-  "@useOneHeart": {
-    "description": "Localized string for useOneHeart"
-  },
-  "heartRequired": "1 heart is required",
-  "@heartRequired": {
-    "description": "Localized string for heartRequired"
-  },
-  "heartUsageFailed": "Failed to use heart.",
-  "@heartUsageFailed": {
-    "description": "Localized string for heartUsageFailed"
-  },
-  "errorOccurredTryAgain": "An error occurred. Please try again.",
-  "@errorOccurredTryAgain": {
-    "description": "Localized string for errorOccurredTryAgain"
-  },
-  "permissionDeniedTryLater": "Permission denied. Please try again later.",
-  "@permissionDeniedTryLater": {
-    "description": "Localized string for permissionDeniedTryLater"
-  },
-  "networkErrorOccurred": "A network error occurred.",
-  "@networkErrorOccurred": {
-    "description": "Localized string for networkErrorOccurred"
-  },
-  "today": "Heute",
-  "@today": {
-    "description": "Localized string for today"
-  },
-  "yesterday": "Gestern",
-  "@yesterday": {
-    "description": "Localized string for yesterday"
-  },
-  "consultQualityMonitoring": "Consultation Quality Monitoring",
-  "@consultQualityMonitoring": {
-    "description": "Localized string for consultQualityMonitoring"
-  },
-  "averageQualityScore": "Average Quality Score",
-  "@averageQualityScore": {
-    "description": "Localized string for averageQualityScore"
-  },
-  "totalConsultSessions": "Total Consultation Sessions",
-  "@totalConsultSessions": {
-    "description": "Localized string for totalConsultSessions"
-  },
-  "lowQualityResponses": "Low Quality Responses",
-  "@lowQualityResponses": {
-    "description": "Localized string for lowQualityResponses"
-  },
-  "crisisDetected": "Crisis Detected",
-  "@crisisDetected": {
-    "description": "Localized string for crisisDetected"
-  },
-  "personaQualityStats": "Persona Quality Statistics",
-  "@personaQualityStats": {
-    "description": "Localized string for personaQualityStats"
-  },
-  "realtimeQualityLog": "Real-time Quality Log",
-  "@realtimeQualityLog": {
-    "description": "Localized string for realtimeQualityLog"
-  },
-  "averageQuality": "Average Quality",
-  "@averageQuality": {
-    "description": "Localized string for averageQuality"
-  },
-  "totalResponses": "Total Responses",
-  "@totalResponses": {
-    "description": "Localized string for totalResponses"
-  },
-  "expertiseScore": "Expertise Score",
-  "@expertiseScore": {
-    "description": "Localized string for expertiseScore"
-  },
-  "chatErrorDashboard": "Chat Error Dashboard",
-  "@chatErrorDashboard": {
-    "description": "Localized string for chatErrorDashboard"
-  },
-  "errorStats": "Error Statistics",
-  "@errorStats": {
-    "description": "Localized string for errorStats"
-  },
-  "totalErrorCount": "Total Error Count",
-  "@totalErrorCount": {
-    "description": "Localized string for totalErrorCount"
-  },
-  "mostFrequentError": "Most Frequent Error",
-  "@mostFrequentError": {
-    "description": "Localized string for mostFrequentError"
-  },
-  "mainErrorType": "Main Error Type",
-  "@mainErrorType": {
-    "description": "Localized string for mainErrorType"
-  },
-  "byPersona": "By Persona",
-  "@byPersona": {
-    "description": "Localized string for byPersona"
-  },
-  "byErrorType": "By Error Type",
-  "@byErrorType": {
-    "description": "Localized string for byErrorType"
-  },
-  "all": "Alle",
-  "@all": {
-    "description": "Localized string for all"
-  },
-  "problemOccurred": "Problem Occurred",
-  "@problemOccurred": {
-    "description": "Localized string for problemOccurred"
-  },
-  "timeout": "Timeout",
-  "@timeout": {
-    "description": "Localized string for timeout"
-  },
-  "requestLimit": "Request Limit",
-  "@requestLimit": {
-    "description": "Localized string for requestLimit"
-  },
-  "serverErrorDashboard": "Server Error",
-  "@serverErrorDashboard": {
-    "description": "Localized string for serverErrorDashboard"
-  },
-  "authError": "Authentication Error",
-  "@authError": {
-    "description": "Localized string for authError"
-  },
-  "unknown": "Unknown",
-  "@unknown": {
-    "description": "Localized string for unknown"
-  },
-  "exitApp": "Exit App",
-  "@exitApp": {
-    "description": "Localized string for exitApp"
-  },
-  "exitConfirmMessage": "Are you sure you want to exit the app?",
-  "@exitConfirmMessage": {
-    "description": "Localized string for exitConfirmMessage"
-  },
-  "exit": "Exit",
-  "@exit": {
-    "description": "Localized string for exit"
-  },
-  "profileNav": "Profile",
-  "@profileNav": {
-    "description": "Localized string for profileNav"
-  },
-  "imageCacheManagement": "Image Cache Management",
-  "@imageCacheManagement": {
-    "description": "Localized string for imageCacheManagement"
-  },
-  "managePersonaImageCache": "Manage persona image cache",
-  "@managePersonaImageCache": {
-    "description": "Localized string for managePersonaImageCache"
-  },
-  "currentCacheSize": "Current Cache Size",
-  "@currentCacheSize": {
-    "description": "Localized string for currentCacheSize"
-  },
-  "deleteCache": "Delete Cache",
-  "@deleteCache": {
-    "description": "Localized string for deleteCache"
-  },
-  "cacheDeleted": "Image cache has been deleted",
-  "@cacheDeleted": {
-    "description": "Localized string for cacheDeleted"
-  },
-  "storageManagement": "Storage Management",
-  "@storageManagement": {
-    "description": "Localized string for storageManagement"
-  },
-  "hapticFeedback": "Haptic Feedback",
-  "@hapticFeedback": {
-    "description": "Localized string for hapticFeedback"
-  },
-  "subtleVibrationOnTouch": "Subtle vibration on touch",
-  "@subtleVibrationOnTouch": {
-    "description": "Localized string for subtleVibrationOnTouch"
-  },
-  "profileSettings": "Profile Settings",
-  "@profileSettings": {
-    "description": "Localized string for profileSettings"
-  },
-  "privacySettingsScreen": "Privacy Settings",
-  "@privacySettingsScreen": {
-    "description": "Localized string for privacySettingsScreen"
-  },
-  "useSystemLanguage": "Use System Language",
-  "@useSystemLanguage": {
-    "description": "Localized string for useSystemLanguage"
-  },
-  "followDeviceLanguage": "Follow device language settings",
-  "@followDeviceLanguage": {
-    "description": "Localized string for followDeviceLanguage"
-  },
-  "setAppInterfaceLanguage": "Set app interface language",
-  "@setAppInterfaceLanguage": {
-    "description": "Localized string for setAppInterfaceLanguage"
-  },
-  "koreanLanguage": "Korean",
-  "@koreanLanguage": {
-    "description": "Localized string for koreanLanguage"
-  },
-  "laterButton": "Later",
-  "@laterButton": {
-    "description": "Localized string for laterButton"
-  },
-  "startChatButton": "Start Chat",
-  "@startChatButton": {
-    "description": "Localized string for startChatButton"
-  },
-  "noPersonasToSelect": "No personas available",
-  "@noPersonasToSelect": {
-    "description": "Localized string for noPersonasToSelect"
-  },
-  "matchedSona": "Matched Sona",
-  "@matchedSona": {
-    "description": "Localized string for matchedSona"
-  },
-  "noMatchedSonas": "No matched Sonas yet",
-  "@noMatchedSonas": {
-    "description": "Localized string for noMatchedSonas"
-  },
-  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
-  "@startConversationLikeAFriend": {
-    "description": "Localized string for startConversationLikeAFriend"
-  },
-  "startingApp": "Starting app",
-  "@startingApp": {
-    "description": "Localized string for startingApp"
-  },
-  "checkingUserInfo": "Checking user info",
-  "@checkingUserInfo": {
-    "description": "Localized string for checkingUserInfo"
-  },
-  "connectingToServer": "Connecting to server",
-  "@connectingToServer": {
-    "description": "Localized string for connectingToServer"
-  },
-  "verifyingAuth": "Verifying authentication",
-  "@verifyingAuth": {
-    "description": "Localized string for verifyingAuth"
-  },
-  "loadingProfile": "Loading profile",
-  "@loadingProfile": {
-    "description": "Localized string for loadingProfile"
-  },
-  "anonymousLogin": "Anonymous login",
-  "@anonymousLogin": {
-    "description": "Localized string for anonymousLogin"
-  },
-  "creatingAccount": "Creating account",
-  "@creatingAccount": {
-    "description": "Localized string for creatingAccount"
-  },
-  "preparingNewMeeting": "Preparing new meeting",
-  "@preparingNewMeeting": {
-    "description": "Localized string for preparingNewMeeting"
-  },
-  "downloadingPersonaImages": "Downloading new persona images",
-  "@downloadingPersonaImages": {
-    "description": "Localized string for downloadingPersonaImages"
-  },
-  "preparingPersonas": "Preparing personas",
-  "@preparingPersonas": {
-    "description": "Localized string for preparingPersonas"
-  },
-  "profileSetup": "Setting up profile",
-  "@profileSetup": {
-    "description": "Localized string for profileSetup"
-  },
-  "preparingPersonaImages": "Preparing persona images",
-  "@preparingPersonaImages": {
-    "description": "Localized string for preparingPersonaImages"
-  },
-  "matching": "Matching",
-  "@matching": {
-    "description": "Localized string for matching"
-  },
-  "noErrorReports": "No error reports.",
-  "@noErrorReports": {
-    "description": "Localized string for noErrorReports"
-  },
-  "noQualityIssues": "No quality issues in the last hour ✅",
-  "@noQualityIssues": {
-    "description": "Localized string for noQualityIssues"
-  },
-  "noQualityLogs": "No quality logs yet.",
-  "@noQualityLogs": {
-    "description": "Localized string for noQualityLogs"
-  },
-  "insufficientHearts": "Insufficient hearts.",
-  "@insufficientHearts": {
-    "description": "Localized string for insufficientHearts"
-  },
-  "unblockFailed": "Failed to unblock",
-  "@unblockFailed": {
-    "description": "Localized string for unblockFailed"
-  },
-  "noImageAvailable": "No image available",
-  "@noImageAvailable": {
-    "description": "Localized string for noImageAvailable"
-  },
-  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
-  "@aiDatingQuestion": {
-    "description": "Localized string for aiDatingQuestion"
-  },
-  "googleLoginError": "Error occurred during Google login.",
-  "@googleLoginError": {
-    "description": "Localized string for googleLoginError"
-  },
-  "appleLoginError": "Error occurred during Apple login.",
-  "@appleLoginError": {
-    "description": "Localized string for appleLoginError"
-  },
-  "enterBasicInfo": "Please enter basic information to create an account",
-  "@enterBasicInfo": {
-    "description": "Localized string for enterBasicInfo"
-  },
-  "passwordTooShort": "Password must be at least 6 characters",
-  "@passwordTooShort": {
-    "description": "Localized string for passwordTooShort"
-  },
-  "profilePhotoAndInfo": "Please enter profile photo and basic information",
-  "@profilePhotoAndInfo": {
-    "description": "Localized string for profilePhotoAndInfo"
-  },
-  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
-  "@showOppositeGenderOnly": {
-    "description": "Localized string for showOppositeGenderOnly"
-  },
-  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
-  "@genderNotSelectedInfo": {
-    "description": "Localized string for genderNotSelectedInfo"
-  },
-  "canChangeInSettings": "You can change this later in settings",
-  "@canChangeInSettings": {
-    "description": "Localized string for canChangeInSettings"
-  },
-  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
-  "@genderSelectionInfo": {
-    "description": "Localized string for genderSelectionInfo"
-  },
-  "genderPreferenceActive": "You can meet personas of all genders",
-  "@genderPreferenceActive": {
-    "description": "Localized string for genderPreferenceActive"
-  },
-  "genderPreferenceInactive": "Only opposite gender personas will be shown",
-  "@genderPreferenceInactive": {
-    "description": "Localized string for genderPreferenceInactive"
-  },
-  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
-  "@genderPreferenceDisabled": {
-    "description": "Localized string for genderPreferenceDisabled"
-  },
-  "selectUsagePurpose": "Please select your purpose for using SONA",
-  "@selectUsagePurpose": {
-    "description": "Localized string for selectUsagePurpose"
-  },
-  "adaptiveConversationDesc": "Adapts conversation style to match yours",
-  "@adaptiveConversationDesc": {
-    "description": "Localized string for adaptiveConversationDesc"
-  },
-  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
-  "@canMeetPreviousPersonas": {
-    "description": "Localized string for canMeetPreviousPersonas"
-  },
-  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
-  "@endTutorialAndLogin": {
-    "description": "Localized string for endTutorialAndLogin"
-  },
-  "messageSendFailed": "Failed to send message. Please try again.",
-  "@messageSendFailed": {
-    "description": "Localized string for messageSendFailed"
-  },
-  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
-  "@leaveChatConfirm": {
-    "description": "Localized string for leaveChatConfirm"
-  },
-  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
-  "@loginRequiredForProfile": {
-    "description": "Localized string for loginRequiredForProfile"
-  },
-  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
-  "@deleteAccountConfirm": {
-    "description": "Localized string for deleteAccountConfirm"
-  },
-  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
-  "@matchPersonaStep": {
-    "description": "Localized string for matchPersonaStep"
-  },
-  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
-  "@startConversationStep": {
-    "description": "Localized string for startConversationStep"
-  },
-  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
-  "@developRelationshipStep": {
-    "description": "Localized string for developRelationshipStep"
-  },
-  "heartInsufficientPleaseCharge": "Not enough hearts. Please recharge hearts.",
-  "@heartInsufficientPleaseCharge": {
-    "description": "Localized string for heartInsufficientPleaseCharge"
-  },
-  "specialRelationshipDesc": "Understand each other and build deep bonds",
-  "@specialRelationshipDesc": {
-    "description": "Localized string for specialRelationshipDesc"
-  },
-  "emotionalSupportDesc": "Share your concerns and receive warm comfort",
-  "@emotionalSupportDesc": {
-    "description": "Localized string for emotionalSupportDesc"
-  },
-  "entertainmentAndFunDesc": "Enjoy fun games and pleasant conversations",
-  "@entertainmentAndFunDesc": {
-    "description": "Localized string for entertainmentAndFunDesc"
+  "accountDeletedSuccess": "Konto erfolgreich gelöscht",
+  "@accountDeletedSuccess": {
+    "description": "Localized string for accountDeletedSuccess"
   },
   "accountDeletionContent": "Are you sure you want to delete your account?\nThis action cannot be undone.",
   "@accountDeletionContent": {
@@ -1772,515 +20,13 @@
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "passwordConfirmationDesc": "Please re-enter your password to delete account.",
-  "@passwordConfirmationDesc": {
-    "description": "Localized string for passwordConfirmationDesc"
-  },
-  "reportAIDescription": "If the AI made you uncomfortable, please describe the issue.",
-  "@reportAIDescription": {
-    "description": "Localized string for reportAIDescription"
-  },
-  "reportSubmitted": "Report submitted. We will review and take action.",
-  "@reportSubmitted": {
-    "description": "Localized string for reportSubmitted"
-  },
-  "notificationPermissionDesc": "Benachrichtigungsberechtigung wird benötigt, um neue Nachrichten zu erhalten.",
-  "@notificationPermissionDesc": {
-    "description": "Localized string for notificationPermissionDesc"
-  },
-  "explainReportReason": "Please explain the report reason in detail",
-  "@explainReportReason": {
-    "description": "Localized string for explainReportReason"
-  },
-  "cameraPermissionDesc": "Kamerazugriff wird benötigt, um Profilfotos aufzunehmen.",
-  "@cameraPermissionDesc": {
-    "description": "Localized string for cameraPermissionDesc"
-  },
-  "galleryPermissionDesc": "Galeriezugriff wird benötigt, um Profilfotos auszuwählen.",
-  "@galleryPermissionDesc": {
-    "description": "Localized string for galleryPermissionDesc"
-  },
-  "purchaseMoreHearts": "Purchase hearts to continue conversations",
-  "@purchaseMoreHearts": {
-    "description": "Localized string for purchaseMoreHearts"
-  },
-  "basicInfoDescription": "Please enter basic information to create an account",
-  "@basicInfoDescription": {
-    "description": "Localized string for basicInfoDescription"
-  },
-  "profileInfoDescription": "Please enter your profile photo and basic information",
-  "@profileInfoDescription": {
-    "description": "Localized string for profileInfoDescription"
-  },
-  "friendshipDescription": "I want to meet new friends and have conversations",
-  "@friendshipDescription": {
-    "description": "Localized string for friendshipDescription"
-  },
-  "datingDescription": "I want to share deep thoughts and have sincere conversations",
-  "@datingDescription": {
-    "description": "Localized string for datingDescription"
-  },
-  "entertainmentDescription": "I want to have fun conversations and enjoy my time",
-  "@entertainmentDescription": {
-    "description": "Localized string for entertainmentDescription"
-  },
-  "selectInterests": "Please select your interests (at least 1)",
-  "@selectInterests": {
-    "description": "Localized string for selectInterests"
-  },
-  "whatTopicsToTalk": "What topics would you like to talk about? (Optional)",
-  "@whatTopicsToTalk": {
-    "description": "Localized string for whatTopicsToTalk"
-  },
-  "selectPreferredMbti": "If you prefer personas with specific MBTI types, please select",
-  "@selectPreferredMbti": {
-    "description": "Localized string for selectPreferredMbti"
-  },
-  "termsAgreementDescription": "Please agree to the terms for using the service",
-  "@termsAgreementDescription": {
-    "description": "Localized string for termsAgreementDescription"
-  },
-  "sonaUsagePurpose": "Please select your purpose for using SONA",
-  "@sonaUsagePurpose": {
-    "description": "Localized string for sonaUsagePurpose"
-  },
-  "aiPersonaPreferenceDescription": "Please set your preferences for AI persona matching",
-  "@aiPersonaPreferenceDescription": {
-    "description": "Localized string for aiPersonaPreferenceDescription"
-  },
-  "unexpectedLoginError": "An unexpected error occurred during login",
-  "@unexpectedLoginError": {
-    "description": "Localized string for unexpectedLoginError"
-  },
-  "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
-  "@googleLoginCanceled": {
-    "description": "Localized string for googleLoginCanceled"
-  },
-  "appleLoginCanceled": "Apple login was canceled.\nPlease try again.",
-  "@appleLoginCanceled": {
-    "description": "Localized string for appleLoginCanceled"
-  },
-  "passwordResetEmailPrompt": "Please enter your email to reset password",
-  "@passwordResetEmailPrompt": {
-    "description": "Localized string for passwordResetEmailPrompt"
-  },
-  "passwordResetEmailSent": "Password reset email has been sent. Please check your email.",
-  "@passwordResetEmailSent": {
-    "description": "Localized string for passwordResetEmailSent"
-  },
-  "simpleInfoRequired": "Simple information is required\nfor matching with AI personas",
-  "@simpleInfoRequired": {
-    "description": "Localized string for simpleInfoRequired"
-  },
-  "endTutorialMessage": "Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.",
-  "@endTutorialMessage": {
-    "description": "Localized string for endTutorialMessage"
-  },
-  "onlyOppositeGenderNote": "If unchecked, only opposite gender personas will be shown",
-  "@onlyOppositeGenderNote": {
-    "description": "Localized string for onlyOppositeGenderNote"
-  },
-  "startConversationWithSona": "Start chatting with Sona like a friend!",
-  "@startConversationWithSona": {
-    "description": "Localized string for startConversationWithSona"
-  },
-  "privacySection1Title": "1. Purpose of Collection and Use of Personal Information",
-  "@privacySection1Title": {
-    "description": "Localized string for privacySection1Title"
-  },
-  "privacySection3Title": "3. Retention and Use Period of Personal Information",
-  "@privacySection3Title": {
-    "description": "Localized string for privacySection3Title"
-  },
-  "privacySection4Title": "4. Provision of Personal Information to Third Parties",
-  "@privacySection4Title": {
-    "description": "Localized string for privacySection4Title"
-  },
-  "privacySection5Title": "5. Technical Protection Measures for Personal Information",
-  "@privacySection5Title": {
-    "description": "Localized string for privacySection5Title"
-  },
-  "themeDescription": "You can customize the app appearance as you like",
-  "@themeDescription": {
-    "description": "Localized string for themeDescription"
-  },
-  "systemThemeDesc": "Automatically changes based on device dark mode settings",
-  "@systemThemeDesc": {
-    "description": "Localized string for systemThemeDesc"
-  },
-  "marketingAgree": "Agree to Marketing Information (Optional)",
-  "@marketingAgree": {
-    "description": "Localized string for marketingAgree"
-  },
-  "marketingDescription": "You can receive event and benefit information",
-  "@marketingDescription": {
-    "description": "Localized string for marketingDescription"
-  },
-  "ageConfirmation": "I am 14 years or older and have confirmed the above.",
-  "@ageConfirmation": {
-    "description": "Localized string for ageConfirmation"
-  },
-  "languageDescription": "AI will respond in your selected language",
-  "@languageDescription": {
-    "description": "Localized string for languageDescription"
-  },
-  "translationErrorDescription": "Please report incorrect translations or awkward expressions",
-  "@translationErrorDescription": {
-    "description": "Localized string for translationErrorDescription"
-  },
-  "errorDetailsHint": "Please explain in detail what is wrong",
-  "@errorDetailsHint": {
-    "description": "Localized string for errorDetailsHint"
-  },
-  "reportSubmittedSuccess": "Your report has been submitted. Thank you!",
-  "@reportSubmittedSuccess": {
-    "description": "Localized string for reportSubmittedSuccess"
-  },
-  "translationNote": "※ AI translation may not be perfect",
-  "@translationNote": {
-    "description": "Localized string for translationNote"
-  },
-  "selectTranslationError": "Please select a message with translation error",
-  "@selectTranslationError": {
-    "description": "Localized string for selectTranslationError"
-  },
-  "translationErrorReported": "Translation error reported. Thank you!",
-  "@translationErrorReported": {
-    "description": "Localized string for translationErrorReported"
-  },
-  "blockConfirm": "Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.",
-  "@blockConfirm": {
-    "description": "Localized string for blockConfirm"
-  },
-  "reportAndBlockDescription": "You can report and block inappropriate behavior of this AI",
-  "@reportAndBlockDescription": {
-    "description": "Localized string for reportAndBlockDescription"
-  },
-  "termsSection1Content": "These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.",
-  "@termsSection1Content": {
-    "description": "Localized string for termsSection1Content"
-  },
-  "termsSection7Content": "The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.",
-  "@termsSection7Content": {
-    "description": "Localized string for termsSection7Content"
-  },
-  "emotionAnalysisDesc": "Analyze emotions for empathetic responses",
-  "@emotionAnalysisDesc": {
-    "description": "Localized string for emotionAnalysisDesc"
-  },
-  "memoryAlbumDesc": "Automatically save and recall special moments",
-  "@memoryAlbumDesc": {
-    "description": "Localized string for memoryAlbumDesc"
-  },
-  "weatherContextDesc": "Provide conversation context based on weather",
-  "@weatherContextDesc": {
-    "description": "Localized string for weatherContextDesc"
-  },
-  "dailyCareDesc": "Daily care messages for meals, sleep, health",
-  "@dailyCareDesc": {
-    "description": "Localized string for dailyCareDesc"
-  },
-  "interestSharingDesc": "Discover and recommend shared interests",
-  "@interestSharingDesc": {
-    "description": "Localized string for interestSharingDesc"
-  },
-  "conversationContinuityDesc": "Remember previous conversations and connect topics",
-  "@conversationContinuityDesc": {
-    "description": "Localized string for conversationContinuityDesc"
-  },
-  "allFeaturesRequired": "※ All features are required for service provision",
-  "@allFeaturesRequired": {
-    "description": "Localized string for allFeaturesRequired"
-  },
-  "privacySettingsInfo": "Disabling individual features will make those services unavailable",
-  "@privacySettingsInfo": {
-    "description": "Localized string for privacySettingsInfo"
-  },
-  "guestModeDescription": "Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas",
-  "@guestModeDescription": {
-    "description": "Localized string for guestModeDescription"
-  },
-  "guestLimitReached": "Guest trial ended.\nSign up for unlimited conversations!",
-  "@guestLimitReached": {
-    "description": "Localized string for guestLimitReached"
-  },
-  "guestModeWarning": "Guest mode lasts for 24 hours,\nafter which data will be deleted.",
-  "@guestModeWarning": {
-    "description": "Localized string for guestModeWarning"
-  },
-  "signUpFromGuest": "Sign up now to access all features!",
-  "@signUpFromGuest": {
-    "description": "Localized string for signUpFromGuest"
-  },
-  "guestDataMigration": "Would you like to keep your current chat history when signing up?",
-  "@guestDataMigration": {
-    "description": "Localized string for guestDataMigration"
-  },
-  "guestModeLimitation": "Some features are limited in Guest Mode",
-  "@guestModeLimitation": {
-    "description": "Localized string for guestModeLimitation"
-  },
-  "storeLoginRequiredMessage": "Login is required to use the store.\nWould you like to go to the login screen?",
-  "@storeLoginRequiredMessage": {
-    "description": "Localized string for storeLoginRequiredMessage"
-  },
-  "profileEditLoginRequiredMessage": "Login is required to edit your profile.\nWould you like to go to the login screen?",
-  "@profileEditLoginRequiredMessage": {
-    "description": "Localized string for profileEditLoginRequiredMessage"
-  },
-  "waitingForChat": "{name} is waiting to chat.",
-  "@waitingForChat": {
-    "description": "Shows that a persona is waiting to chat",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "conversationWith": "{name}",
-  "@conversationWith": {
-    "description": "Conversation with name",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "refreshComplete": "Refresh complete! {count} matched personas",
-  "@refreshComplete": {
-    "description": "Refresh complete message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "daysRemaining": "{days} days remaining",
-  "@daysRemaining": {
-    "description": "Days remaining",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmMessage": "Kauf von {title} für {price} bestätigen? {description}",
-  "@purchaseConfirmMessage": {
-    "description": "Purchase confirmation message",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "discountAmountValue": "Save ₩{amount}",
-  "@discountAmountValue": {
-    "description": "Discount amount",
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "chattingWithPersonas": "Chatting with {count} personas",
-  "@chattingWithPersonas": {
-    "description": "Number of personas chatting with",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmContent": "{product} für {price} kaufen?",
-  "@purchaseConfirmContent": {
-    "description": "Purchase confirmation content",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "reportError": "Error occurred while reporting: {error}",
-  "@reportError": {
-    "description": "Report error message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "permissionDeniedMessage": "{permissionName} permission was denied.\\nPlease allow the permission in settings.",
-  "@permissionDeniedMessage": {
-    "description": "Permission denied message",
-    "placeholders": {
-      "permissionName": {
-        "type": "String"
-      }
-    }
-  },
-  "daysAgo": "vor {count} Tagen",
-  "@daysAgo": {
-    "description": "Days ago",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "hoursAgo": "vor {count} Stunden",
-  "@hoursAgo": {
-    "description": "Hours ago",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "minutesAgo": "vor {count} Minuten",
-  "@minutesAgo": {
-    "description": "Minutes ago",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "isTyping": "{name} is typing...",
-  "@isTyping": {
-    "description": "Shows someone is typing",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "ageRange": "{min}-{max} years old",
-  "@ageRange": {
-    "description": "Age range",
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "blockedAICount": "{count} blocked AIs",
-  "@blockedAICount": {
-    "description": "Number of blocked AIs",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "guestMessageRemaining": "{count} guest messages remaining",
-  "@guestMessageRemaining": {
-    "description": "Guest messages remaining",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "newMessageCount": "{count} new messages",
-  "@newMessageCount": {
-    "description": "Number of new messages",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notEnoughHeartsCount": "Not enough hearts. (Current: {count})",
-  "@notEnoughHeartsCount": {
-    "description": "Not enough hearts message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "restartConversationWithName": "Restarting conversation with {name}!",
-  "@restartConversationWithName": {
-    "description": "Restarting conversation message",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "restartConversationQuestion": "Would you like to restart the conversation with {name}?",
-  "@restartConversationQuestion": {
-    "description": "Restart conversation question",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "monthDay": "{month} {day}",
-  "@monthDay": {
-    "description": "Month and day format",
-    "placeholders": {
-      "month": {
-        "type": "String"
-      },
-      "day": {
-        "type": "int"
-      }
-    }
-  },
-  "alreadyChattingWith": "Already chatting with {name}!",
-  "@alreadyChattingWith": {
-    "description": "Already chatting with persona",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "cacheDeleteError": "Error deleting cache: {error}",
-  "@cacheDeleteError": {
-    "description": "Cache delete error",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "unblockPersonaConfirm": "Unblock {name}?",
-  "@unblockPersonaConfirm": {
-    "description": "Unblock persona confirmation",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "errorWithMessage": "Error occurred: {error}",
-  "@errorWithMessage": {
-    "description": "Error with message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "accountDeletedSuccess": "Konto erfolgreich gelöscht",
-  "@accountDeletedSuccess": {
-    "description": "Localized string for accountDeletedSuccess"
-  },
   "accountDeletionInfo": "Informationen zur Kontolöschung",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
+  },
+  "accountDeletionTitle": "Delete Account",
+  "@accountDeletionTitle": {
+    "description": "Localized string for accountDeletionTitle"
   },
   "accountDeletionWarning1": "Warnung: Diese Aktion kann nicht rückgängig gemacht werden",
   "@accountDeletionWarning1": {
@@ -2298,29 +44,442 @@
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
+  "accountManagement": "Account Management",
+  "@accountManagement": {
+    "description": "Localized string for accountManagement"
+  },
+  "adaptiveConversationDesc": "Adapts conversation style to match yours",
+  "@adaptiveConversationDesc": {
+    "description": "Localized string for adaptiveConversationDesc"
+  },
+  "afternoon": "Afternoon",
+  "@afternoon": {
+    "description": "Localized string for afternoon"
+  },
+  "afternoonFatigue": "Afternoon fatigue",
+  "@afternoonFatigue": {
+    "description": "Localized string for afternoonFatigue"
+  },
+  "ageConfirmation": "I am 14 years or older and have confirmed the above.",
+  "@ageConfirmation": {
+    "description": "Localized string for ageConfirmation"
+  },
+  "ageRange": "{min}-{max} years old",
+  "@ageRange": {
+    "description": "Age range",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "ageUnit": "years old",
+  "@ageUnit": {
+    "description": "Localized string for ageUnit"
+  },
   "agreeToTerms": "Ich stimme den Bedingungen zu",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
+  },
+  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
+  "@aiDatingQuestion": {
+    "description": "Localized string for aiDatingQuestion"
+  },
+  "aiPersonaPreferenceDescription": "Please set your preferences for AI persona matching",
+  "@aiPersonaPreferenceDescription": {
+    "description": "Localized string for aiPersonaPreferenceDescription"
+  },
+  "all": "Alle",
+  "@all": {
+    "description": "Localized string for all"
+  },
+  "allAgree": "Agree to All",
+  "@allAgree": {
+    "description": "Localized string for allAgree"
+  },
+  "allFeaturesRequired": "※ All features are required for service provision",
+  "@allFeaturesRequired": {
+    "description": "Localized string for allFeaturesRequired"
+  },
+  "allPersonas": "All Personas",
+  "@allPersonas": {
+    "description": "Localized string for allPersonas"
+  },
+  "allPersonasMatched": "All personas matched! Start chatting with them.",
+  "@allPersonasMatched": {
+    "description": "Localized string for allPersonasMatched"
+  },
+  "allowPermission": "Weiter",
+  "@allowPermission": {
+    "description": "Localized string for allowPermission"
+  },
+  "alreadyChattingWith": "Already chatting with {name}!",
+  "@alreadyChattingWith": {
+    "description": "Already chatting with persona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alsoBlockThisAI": "Also block this AI",
+  "@alsoBlockThisAI": {
+    "description": "Localized string for alsoBlockThisAI"
+  },
+  "angry": "Angry",
+  "@angry": {
+    "description": "Localized string for angry"
+  },
+  "anonymousLogin": "Anonymous login",
+  "@anonymousLogin": {
+    "description": "Localized string for anonymousLogin"
+  },
+  "anxious": "Anxious",
+  "@anxious": {
+    "description": "Localized string for anxious"
+  },
+  "apiKeyError": "API Key Error",
+  "@apiKeyError": {
+    "description": "Localized string for apiKeyError"
+  },
+  "appName": "SONA",
+  "@appName": {
+    "description": "Localized string for appName"
   },
   "appTagline": "Ihre AI-Begleiter",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
+  "appleLoginCanceled": "Apple login was canceled.\nPlease try again.",
+  "@appleLoginCanceled": {
+    "description": "Localized string for appleLoginCanceled"
+  },
+  "appleLoginError": "Error occurred during Apple login.",
+  "@appleLoginError": {
+    "description": "Localized string for appleLoginError"
+  },
+  "art": "Art",
+  "@art": {
+    "description": "Localized string for art"
+  },
+  "authError": "Authentication Error",
+  "@authError": {
+    "description": "Localized string for authError"
+  },
+  "autoTranslate": "Auto Translate",
+  "@autoTranslate": {
+    "description": "Localized string for autoTranslate"
+  },
+  "autumn": "Autumn",
+  "@autumn": {
+    "description": "Localized string for autumn"
+  },
+  "averageQuality": "Average Quality",
+  "@averageQuality": {
+    "description": "Localized string for averageQuality"
+  },
+  "averageQualityScore": "Average Quality Score",
+  "@averageQualityScore": {
+    "description": "Localized string for averageQualityScore"
+  },
+  "awkwardExpression": "Awkward Expression",
+  "@awkwardExpression": {
+    "description": "Localized string for awkwardExpression"
+  },
+  "backButton": "Back",
+  "@backButton": {
+    "description": "Localized string for backButton"
+  },
+  "basicInfo": "Basic Information",
+  "@basicInfo": {
+    "description": "Localized string for basicInfo"
+  },
+  "basicInfoDescription": "Please enter basic information to create an account",
+  "@basicInfoDescription": {
+    "description": "Localized string for basicInfoDescription"
+  },
+  "birthDate": "Birth Date",
+  "@birthDate": {
+    "description": "Localized string for birthDate"
+  },
+  "birthDateOptional": "Birth Date (Optional)",
+  "@birthDateOptional": {
+    "description": "Localized string for birthDateOptional"
+  },
+  "birthDateRequired": "Birth Date *",
+  "@birthDateRequired": {
+    "description": "Localized string for birthDateRequired"
+  },
+  "blockConfirm": "Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.",
+  "@blockConfirm": {
+    "description": "Localized string for blockConfirm"
+  },
+  "blockReason": "Block reason",
+  "@blockReason": {
+    "description": "Localized string for blockReason"
+  },
+  "blockThisAI": "Block this AI",
+  "@blockThisAI": {
+    "description": "Localized string for blockThisAI"
+  },
+  "blockedAICount": "{count} blocked AIs",
+  "@blockedAICount": {
+    "description": "Number of blocked AIs",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedAIs": "Blocked AIs",
+  "@blockedAIs": {
+    "description": "Localized string for blockedAIs"
+  },
+  "blockedAt": "Blocked at",
+  "@blockedAt": {
+    "description": "Localized string for blockedAt"
+  },
+  "blockedSuccessfully": "Blocked successfully",
+  "@blockedSuccessfully": {
+    "description": "Localized string for blockedSuccessfully"
+  },
+  "breakfast": "Breakfast",
+  "@breakfast": {
+    "description": "Localized string for breakfast"
+  },
+  "byErrorType": "By Error Type",
+  "@byErrorType": {
+    "description": "Localized string for byErrorType"
+  },
+  "byPersona": "By Persona",
+  "@byPersona": {
+    "description": "Localized string for byPersona"
+  },
+  "cacheDeleteError": "Error deleting cache: {error}",
+  "@cacheDeleteError": {
+    "description": "Cache delete error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheDeleted": "Image cache has been deleted",
+  "@cacheDeleted": {
+    "description": "Localized string for cacheDeleted"
+  },
+  "cafeTerrace": "Cafe terrace",
+  "@cafeTerrace": {
+    "description": "Localized string for cafeTerrace"
+  },
+  "calm": "Calm",
+  "@calm": {
+    "description": "Localized string for calm"
+  },
+  "cameraPermission": "Kamera-Berechtigung",
+  "@cameraPermission": {
+    "description": "Localized string for cameraPermission"
+  },
+  "cameraPermissionDesc": "Kamerazugriff wird benötigt, um Profilfotos aufzunehmen.",
+  "@cameraPermissionDesc": {
+    "description": "Localized string for cameraPermissionDesc"
+  },
+  "canChangeInSettings": "You can change this later in settings",
+  "@canChangeInSettings": {
+    "description": "Localized string for canChangeInSettings"
+  },
+  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
+  "@canMeetPreviousPersonas": {
+    "description": "Localized string for canMeetPreviousPersonas"
+  },
+  "cancel": "Abbrechen",
+  "@cancel": {
+    "description": "Localized string for cancel"
+  },
   "changeProfilePhoto": "Profilbild ändern",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
+  },
+  "chat": "Chat",
+  "@chat": {
+    "description": "Localized string for chat"
+  },
+  "chatEndedMessage": "Chat has ended",
+  "@chatEndedMessage": {
+    "description": "Localized string for chatEndedMessage"
+  },
+  "chatErrorDashboard": "Chat Error Dashboard",
+  "@chatErrorDashboard": {
+    "description": "Localized string for chatErrorDashboard"
+  },
+  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
+  "@chatErrorSentSuccessfully": {
+    "description": "Localized string for chatErrorSentSuccessfully"
+  },
+  "chatListTab": "Chat List Tab",
+  "@chatListTab": {
+    "description": "Localized string for chatListTab"
+  },
+  "chats": "Chats",
+  "@chats": {
+    "description": "Localized string for chats"
+  },
+  "chattingWithPersonas": "Chatting with {count} personas",
+  "@chattingWithPersonas": {
+    "description": "Number of personas chatting with",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "checkInternetConnection": "Bitte überprüfen Sie Ihre Internetverbindung",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
+  "checkingUserInfo": "Checking user info",
+  "@checkingUserInfo": {
+    "description": "Localized string for checkingUserInfo"
+  },
+  "childrensDay": "Children's Day",
+  "@childrensDay": {
+    "description": "Localized string for childrensDay"
+  },
+  "chinese": "Chinese",
+  "@chinese": {
+    "description": "Localized string for chinese"
+  },
+  "chooseOption": "Please choose:",
+  "@chooseOption": {
+    "description": "Localized string for chooseOption"
+  },
+  "christmas": "Christmas",
+  "@christmas": {
+    "description": "Localized string for christmas"
+  },
+  "close": "Schließen",
+  "@close": {
+    "description": "Localized string for close"
+  },
+  "complete": "Done",
+  "@complete": {
+    "description": "Localized string for complete"
+  },
+  "completeSignup": "Complete Sign Up",
+  "@completeSignup": {
+    "description": "Localized string for completeSignup"
+  },
+  "confirm": "Bestätigen",
+  "@confirm": {
+    "description": "Localized string for confirm"
+  },
+  "connectingToServer": "Connecting to server",
+  "@connectingToServer": {
+    "description": "Localized string for connectingToServer"
+  },
+  "consultQualityMonitoring": "Consultation Quality Monitoring",
+  "@consultQualityMonitoring": {
+    "description": "Localized string for consultQualityMonitoring"
+  },
+  "continueAsGuest": "Continue as Guest",
+  "@continueAsGuest": {
+    "description": "Localized string for continueAsGuest"
+  },
+  "continueButton": "Continue",
+  "@continueButton": {
+    "description": "Localized string for continueButton"
+  },
+  "continueWithApple": "Continue with Apple",
+  "@continueWithApple": {
+    "description": "Localized string for continueWithApple"
+  },
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "Localized string for continueWithGoogle"
+  },
+  "conversationContinuity": "Conversation Continuity",
+  "@conversationContinuity": {
+    "description": "Localized string for conversationContinuity"
+  },
+  "conversationContinuityDesc": "Remember previous conversations and connect topics",
+  "@conversationContinuityDesc": {
+    "description": "Localized string for conversationContinuityDesc"
+  },
+  "conversationWith": "{name}",
+  "@conversationWith": {
+    "description": "Conversation with name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "convertToMember": "Sign Up",
+  "@convertToMember": {
+    "description": "Localized string for convertToMember"
+  },
+  "cooking": "Cooking",
+  "@cooking": {
+    "description": "Localized string for cooking"
+  },
+  "copyMessage": "Copy message",
+  "@copyMessage": {
+    "description": "Localized string for copyMessage"
+  },
   "copyrightInfringement": "Urheberrechtsverletzung",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
+  "creatingAccount": "Creating account",
+  "@creatingAccount": {
+    "description": "Localized string for creatingAccount"
+  },
+  "crisisDetected": "Crisis Detected",
+  "@crisisDetected": {
+    "description": "Localized string for crisisDetected"
+  },
+  "culturalIssue": "Cultural Issue",
+  "@culturalIssue": {
+    "description": "Localized string for culturalIssue"
+  },
+  "current": "Current",
+  "@current": {
+    "description": "Localized string for current"
+  },
+  "currentCacheSize": "Current Cache Size",
+  "@currentCacheSize": {
+    "description": "Localized string for currentCacheSize"
+  },
   "currentLanguage": "Aktuelle Sprache",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
+  },
+  "cycling": "Cycling",
+  "@cycling": {
+    "description": "Localized string for cycling"
+  },
+  "dailyCare": "Daily Care",
+  "@dailyCare": {
+    "description": "Localized string for dailyCare"
+  },
+  "dailyCareDesc": "Daily care messages for meals, sleep, health",
+  "@dailyCareDesc": {
+    "description": "Localized string for dailyCareDesc"
+  },
+  "dailyChat": "Daily Chat",
+  "@dailyChat": {
+    "description": "Localized string for dailyChat"
+  },
+  "dailyCheck": "Daily check",
+  "@dailyCheck": {
+    "description": "Localized string for dailyCheck"
+  },
+  "dailyConversation": "Daily Conversation",
+  "@dailyConversation": {
+    "description": "Localized string for dailyConversation"
   },
   "dailyLimitDescription": "Sie haben Ihr tägliches Nachrichtenlimit erreicht",
   "@dailyLimitDescription": {
@@ -2330,21 +489,253 @@
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
+  "darkMode": "Dunkler Modus",
+  "@darkMode": {
+    "description": "Localized string for darkMode"
+  },
+  "darkTheme": "Dark Mode",
+  "@darkTheme": {
+    "description": "Localized string for darkTheme"
+  },
+  "darkThemeDesc": "Use dark theme",
+  "@darkThemeDesc": {
+    "description": "Localized string for darkThemeDesc"
+  },
+  "dataCollection": "Data Collection Settings",
+  "@dataCollection": {
+    "description": "Localized string for dataCollection"
+  },
+  "datingAdvice": "Dating Advice",
+  "@datingAdvice": {
+    "description": "Localized string for datingAdvice"
+  },
+  "datingDescription": "I want to share deep thoughts and have sincere conversations",
+  "@datingDescription": {
+    "description": "Localized string for datingDescription"
+  },
+  "dawn": "Dawn",
+  "@dawn": {
+    "description": "Localized string for dawn"
+  },
+  "day": "Day",
+  "@day": {
+    "description": "Localized string for day"
+  },
+  "dayAfterTomorrow": "Day after tomorrow",
+  "@dayAfterTomorrow": {
+    "description": "Localized string for dayAfterTomorrow"
+  },
+  "daysAgo": "vor {count} Tagen",
+  "@daysAgo": {
+    "description": "Days ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "days ago"
+      }
+    }
+  },
+  "daysRemaining": "{days} days remaining",
+  "@daysRemaining": {
+    "description": "Days remaining",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "deepTalk": "Deep Talk",
+  "@deepTalk": {
+    "description": "Localized string for deepTalk"
+  },
+  "delete": "Löschen",
+  "@delete": {
+    "description": "Localized string for delete"
+  },
+  "deleteAccount": "Konto löschen",
+  "@deleteAccount": {
+    "description": "Localized string for deleteAccount"
+  },
+  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "@deleteAccountConfirm": {
+    "description": "Localized string for deleteAccountConfirm"
+  },
   "deleteAccountWarning": "Möchten Sie Ihr Konto wirklich löschen?",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
+  },
+  "deleteCache": "Delete Cache",
+  "@deleteCache": {
+    "description": "Localized string for deleteCache"
   },
   "deletingAccount": "Konto wird gelöscht...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
+  "depressed": "Depressed",
+  "@depressed": {
+    "description": "Localized string for depressed"
+  },
+  "describeError": "What is the problem?",
+  "@describeError": {
+    "description": "Localized string for describeError"
+  },
+  "detailedReason": "Detailed reason",
+  "@detailedReason": {
+    "description": "Localized string for detailedReason"
+  },
+  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
+  "@developRelationshipStep": {
+    "description": "Localized string for developRelationshipStep"
+  },
+  "dinner": "Dinner",
+  "@dinner": {
+    "description": "Localized string for dinner"
+  },
+  "discardGuestData": "Start Fresh",
+  "@discardGuestData": {
+    "description": "Localized string for discardGuestData"
+  },
+  "discount20": "20% off",
+  "@discount20": {
+    "description": "Localized string for discount20"
+  },
+  "discount30": "30% off",
+  "@discount30": {
+    "description": "Localized string for discount30"
+  },
+  "discountAmount": "Save",
+  "@discountAmount": {
+    "description": "Localized string for discountAmount"
+  },
+  "discountAmountValue": "Save ₩{amount}",
+  "@discountAmountValue": {
+    "description": "Discount amount",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "done": "Fertig",
+  "@done": {
+    "description": "Localized string for done"
+  },
+  "downloadingPersonaImages": "Downloading new persona images",
+  "@downloadingPersonaImages": {
+    "description": "Localized string for downloadingPersonaImages"
+  },
+  "edit": "Bearbeiten",
+  "@edit": {
+    "description": "Localized string for edit"
+  },
+  "editInfo": "Edit Info",
+  "@editInfo": {
+    "description": "Localized string for editInfo"
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Localized string for editProfile"
+  },
+  "effectSound": "Sound Effects",
+  "@effectSound": {
+    "description": "Localized string for effectSound"
+  },
   "effectSoundDescription": "Soundeffekte abspielen",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
+  "email": "E-Mail",
+  "@email": {
+    "description": "Localized string for email"
+  },
+  "emailHint": "example@email.com",
+  "@emailHint": {
+    "description": "Localized string for emailHint"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Localized string for emailLabel"
+  },
+  "emailRequired": "Email *",
+  "@emailRequired": {
+    "description": "Localized string for emailRequired"
+  },
+  "emotionAnalysis": "Emotion Analysis",
+  "@emotionAnalysis": {
+    "description": "Localized string for emotionAnalysis"
+  },
+  "emotionAnalysisDesc": "Analyze emotions for empathetic responses",
+  "@emotionAnalysisDesc": {
+    "description": "Localized string for emotionAnalysisDesc"
+  },
+  "emotionAngry": "Angry",
+  "@emotionAngry": {
+    "description": "Localized string for emotionAngry"
+  },
   "emotionBasedEncounters": "Emotionsbasierte Begegnungen",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
+  },
+  "emotionCool": "Cool",
+  "@emotionCool": {
+    "description": "Localized string for emotionCool"
+  },
+  "emotionHappy": "Happy",
+  "@emotionHappy": {
+    "description": "Localized string for emotionHappy"
+  },
+  "emotionLove": "Love",
+  "@emotionLove": {
+    "description": "Localized string for emotionLove"
+  },
+  "emotionSad": "Sad",
+  "@emotionSad": {
+    "description": "Localized string for emotionSad"
+  },
+  "emotionThinking": "Thinking",
+  "@emotionThinking": {
+    "description": "Localized string for emotionThinking"
+  },
+  "emotionalSupportDesc": "Share your concerns and receive warm comfort",
+  "@emotionalSupportDesc": {
+    "description": "Localized string for emotionalSupportDesc"
+  },
+  "endChat": "End Chat",
+  "@endChat": {
+    "description": "Localized string for endChat"
+  },
+  "endTutorial": "End Tutorial",
+  "@endTutorial": {
+    "description": "Localized string for endTutorial"
+  },
+  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
+  "@endTutorialAndLogin": {
+    "description": "Localized string for endTutorialAndLogin"
+  },
+  "endTutorialMessage": "Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.",
+  "@endTutorialMessage": {
+    "description": "Localized string for endTutorialMessage"
+  },
+  "english": "English",
+  "@english": {
+    "description": "Localized string for english"
+  },
+  "enterBasicInfo": "Please enter basic information to create an account",
+  "@enterBasicInfo": {
+    "description": "Localized string for enterBasicInfo"
+  },
+  "enterBasicInformation": "Please enter basic information",
+  "@enterBasicInformation": {
+    "description": "Localized string for enterBasicInformation"
+  },
+  "enterEmail": "Please enter email",
+  "@enterEmail": {
+    "description": "Localized string for enterEmail"
   },
   "enterNickname": "Bitte geben Sie einen Spitznamen ein",
   "@enterNickname": {
@@ -2354,25 +745,413 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
+  "entertainmentAndFunDesc": "Enjoy fun games and pleasant conversations",
+  "@entertainmentAndFunDesc": {
+    "description": "Localized string for entertainmentAndFunDesc"
+  },
+  "entertainmentDescription": "I want to have fun conversations and enjoy my time",
+  "@entertainmentDescription": {
+    "description": "Localized string for entertainmentDescription"
+  },
+  "entertainmentFun": "Entertainment/Fun",
+  "@entertainmentFun": {
+    "description": "Localized string for entertainmentFun"
+  },
+  "error": "Fehler",
+  "@error": {
+    "description": "Localized string for error"
+  },
   "errorDescription": "Fehlerbeschreibung",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
+  },
+  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
+  "@errorDescriptionHint": {
+    "description": "Localized string for errorDescriptionHint"
+  },
+  "errorDetails": "Error Details",
+  "@errorDetails": {
+    "description": "Localized string for errorDetails"
+  },
+  "errorDetailsHint": "Please explain in detail what is wrong",
+  "@errorDetailsHint": {
+    "description": "Localized string for errorDetailsHint"
+  },
+  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "@errorFrequency24h": {
+    "description": "Localized string for errorFrequency24h"
+  },
+  "errorMessage": "Error Message:",
+  "@errorMessage": {
+    "description": "Localized string for errorMessage"
+  },
+  "errorOccurred": "An error occurred.",
+  "@errorOccurred": {
+    "description": "Localized string for errorOccurred"
+  },
+  "errorOccurredTryAgain": "An error occurred. Please try again.",
+  "@errorOccurredTryAgain": {
+    "description": "Localized string for errorOccurredTryAgain"
+  },
+  "errorSendingFailed": "Failed to send error",
+  "@errorSendingFailed": {
+    "description": "Localized string for errorSendingFailed"
+  },
+  "errorStats": "Error Statistics",
+  "@errorStats": {
+    "description": "Localized string for errorStats"
+  },
+  "errorWithMessage": "Error occurred: {error}",
+  "@errorWithMessage": {
+    "description": "Error with message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "evening": "Evening",
+  "@evening": {
+    "description": "Localized string for evening"
+  },
+  "excited": "Excited",
+  "@excited": {
+    "description": "Localized string for excited"
+  },
+  "exit": "Exit",
+  "@exit": {
+    "description": "Localized string for exit"
+  },
+  "exitApp": "Exit App",
+  "@exitApp": {
+    "description": "Localized string for exitApp"
+  },
+  "exitConfirmMessage": "Are you sure you want to exit the app?",
+  "@exitConfirmMessage": {
+    "description": "Localized string for exitConfirmMessage"
+  },
+  "expertPersona": "Expert Persona",
+  "@expertPersona": {
+    "description": "Localized string for expertPersona"
+  },
+  "expertiseScore": "Expertise Score",
+  "@expertiseScore": {
+    "description": "Localized string for expertiseScore"
+  },
+  "expired": "Expired",
+  "@expired": {
+    "description": "Localized string for expired"
+  },
+  "explainReportReason": "Please explain the report reason in detail",
+  "@explainReportReason": {
+    "description": "Localized string for explainReportReason"
+  },
+  "fashion": "Fashion",
+  "@fashion": {
+    "description": "Localized string for fashion"
+  },
+  "female": "Weiblich",
+  "@female": {
+    "description": "Localized string for female"
+  },
+  "filter": "Filtern",
+  "@filter": {
+    "description": "Localized string for filter"
+  },
+  "firstOccurred": "First Occurred: ",
+  "@firstOccurred": {
+    "description": "Localized string for firstOccurred"
+  },
+  "followDeviceLanguage": "Follow device language settings",
+  "@followDeviceLanguage": {
+    "description": "Localized string for followDeviceLanguage"
+  },
+  "forenoon": "Forenoon",
+  "@forenoon": {
+    "description": "Localized string for forenoon"
+  },
+  "forgotPassword": "Passwort vergessen?",
+  "@forgotPassword": {
+    "description": "Localized string for forgotPassword"
+  },
+  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "@frequentlyAskedQuestions": {
+    "description": "Localized string for frequentlyAskedQuestions"
+  },
+  "friday": "Friday",
+  "@friday": {
+    "description": "Localized string for friday"
+  },
+  "friendshipDescription": "I want to meet new friends and have conversations",
+  "@friendshipDescription": {
+    "description": "Localized string for friendshipDescription"
+  },
+  "funChat": "Fun Chat",
+  "@funChat": {
+    "description": "Localized string for funChat"
+  },
+  "galleryPermission": "Galerie-Berechtigung",
+  "@galleryPermission": {
+    "description": "Localized string for galleryPermission"
+  },
+  "galleryPermissionDesc": "Galeriezugriff wird benötigt, um Profilfotos auszuwählen.",
+  "@galleryPermissionDesc": {
+    "description": "Localized string for galleryPermissionDesc"
+  },
+  "gaming": "Gaming",
+  "@gaming": {
+    "description": "Localized string for gaming"
+  },
+  "gender": "Geschlecht",
+  "@gender": {
+    "description": "Localized string for gender"
+  },
+  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
+  "@genderNotSelectedInfo": {
+    "description": "Localized string for genderNotSelectedInfo"
+  },
+  "genderOptional": "Gender (Optional)",
+  "@genderOptional": {
+    "description": "Localized string for genderOptional"
+  },
+  "genderPreferenceActive": "You can meet personas of all genders",
+  "@genderPreferenceActive": {
+    "description": "Localized string for genderPreferenceActive"
+  },
+  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
+  "@genderPreferenceDisabled": {
+    "description": "Localized string for genderPreferenceDisabled"
+  },
+  "genderPreferenceInactive": "Only opposite gender personas will be shown",
+  "@genderPreferenceInactive": {
+    "description": "Localized string for genderPreferenceInactive"
+  },
+  "genderRequired": "Gender *",
+  "@genderRequired": {
+    "description": "Localized string for genderRequired"
+  },
+  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
+  "@genderSelectionInfo": {
+    "description": "Localized string for genderSelectionInfo"
+  },
+  "generalPersona": "General Persona",
+  "@generalPersona": {
+    "description": "Localized string for generalPersona"
+  },
+  "goToSettings": "Zu den Einstellungen",
+  "@goToSettings": {
+    "description": "Localized string for goToSettings"
+  },
+  "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
+  "@googleLoginCanceled": {
+    "description": "Localized string for googleLoginCanceled"
+  },
+  "googleLoginError": "Error occurred during Google login.",
+  "@googleLoginError": {
+    "description": "Localized string for googleLoginError"
+  },
+  "grantPermission": "Weiter",
+  "@grantPermission": {
+    "description": "Localized string for grantPermission"
+  },
+  "guest": "Guest",
+  "@guest": {
+    "description": "Localized string for guest"
+  },
+  "guestDataMigration": "Would you like to keep your current chat history when signing up?",
+  "@guestDataMigration": {
+    "description": "Localized string for guestDataMigration"
+  },
+  "guestLimitReached": "Guest trial ended.\nSign up for unlimited conversations!",
+  "@guestLimitReached": {
+    "description": "Localized string for guestLimitReached"
   },
   "guestLoginPromptMessage": "Melden Sie sich an, um das Gespräch fortzusetzen",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
+  "guestMessageExhausted": "Free messages exhausted",
+  "@guestMessageExhausted": {
+    "description": "Localized string for guestMessageExhausted"
+  },
+  "guestMessageRemaining": "{count} guest messages remaining",
+  "@guestMessageRemaining": {
+    "description": "Guest messages remaining",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guestModeBanner": "Guest Mode",
+  "@guestModeBanner": {
+    "description": "Localized string for guestModeBanner"
+  },
+  "guestModeDescription": "Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas",
+  "@guestModeDescription": {
+    "description": "Localized string for guestModeDescription"
+  },
+  "guestModeFailedMessage": "Failed to start Guest Mode",
+  "@guestModeFailedMessage": {
+    "description": "Localized string for guestModeFailedMessage"
+  },
+  "guestModeLimitation": "Some features are limited in Guest Mode",
+  "@guestModeLimitation": {
+    "description": "Localized string for guestModeLimitation"
+  },
+  "guestModeTitle": "Try as Guest",
+  "@guestModeTitle": {
+    "description": "Localized string for guestModeTitle"
+  },
+  "guestModeWarning": "Guest mode lasts for 24 hours,\nafter which data will be deleted.",
+  "@guestModeWarning": {
+    "description": "Localized string for guestModeWarning"
+  },
+  "guestModeWelcome": "Starting in Guest Mode",
+  "@guestModeWelcome": {
+    "description": "Localized string for guestModeWelcome"
+  },
+  "happy": "Happy",
+  "@happy": {
+    "description": "Localized string for happy"
+  },
+  "hapticFeedback": "Haptic Feedback",
+  "@hapticFeedback": {
+    "description": "Localized string for hapticFeedback"
+  },
+  "harassmentBullying": "Harassment/Bullying",
+  "@harassmentBullying": {
+    "description": "Localized string for harassmentBullying"
+  },
+  "hateSpeech": "Hate speech",
+  "@hateSpeech": {
+    "description": "Localized string for hateSpeech"
+  },
   "heartDescription": "Herzen für mehr Nachrichten",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
+  },
+  "heartInsufficient": "Not enough hearts",
+  "@heartInsufficient": {
+    "description": "Localized string for heartInsufficient"
+  },
+  "heartInsufficientPleaseCharge": "Not enough hearts. Please recharge hearts.",
+  "@heartInsufficientPleaseCharge": {
+    "description": "Localized string for heartInsufficientPleaseCharge"
+  },
+  "heartRequired": "1 heart is required",
+  "@heartRequired": {
+    "description": "Localized string for heartRequired"
+  },
+  "heartUsageFailed": "Failed to use heart.",
+  "@heartUsageFailed": {
+    "description": "Localized string for heartUsageFailed"
+  },
+  "hearts": "Hearts",
+  "@hearts": {
+    "description": "Localized string for hearts"
+  },
+  "hearts10": "10 Hearts",
+  "@hearts10": {
+    "description": "Localized string for hearts10"
+  },
+  "hearts30": "30 Hearts",
+  "@hearts30": {
+    "description": "Localized string for hearts30"
+  },
+  "hearts30Discount": "SALE",
+  "@hearts30Discount": {
+    "description": "Localized string for hearts30Discount"
+  },
+  "hearts50": "50 Hearts",
+  "@hearts50": {
+    "description": "Localized string for hearts50"
+  },
+  "hearts50Discount": "SALE",
+  "@hearts50Discount": {
+    "description": "Localized string for hearts50Discount"
+  },
+  "helloEmoji": "Hello! 😊",
+  "@helloEmoji": {
+    "description": "Localized string for helloEmoji"
+  },
+  "help": "Hilfe",
+  "@help": {
+    "description": "Localized string for help"
+  },
+  "hideOriginalText": "Hide Original",
+  "@hideOriginalText": {
+    "description": "Localized string for hideOriginalText"
+  },
+  "hobbySharing": "Hobby Sharing",
+  "@hobbySharing": {
+    "description": "Localized string for hobbySharing"
+  },
+  "hobbyTalk": "Hobby Talk",
+  "@hobbyTalk": {
+    "description": "Localized string for hobbyTalk"
+  },
+  "hours24Ago": "24 hours ago",
+  "@hours24Ago": {
+    "description": "Localized string for hours24Ago"
+  },
+  "hoursAgo": "vor {count} Stunden",
+  "@hoursAgo": {
+    "description": "Hours ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "hours ago"
+      }
+    }
+  },
+  "howToUse": "How to use SONA",
+  "@howToUse": {
+    "description": "Localized string for howToUse"
+  },
+  "imageCacheManagement": "Image Cache Management",
+  "@imageCacheManagement": {
+    "description": "Localized string for imageCacheManagement"
   },
   "inappropriateContent": "Unangemessener Inhalt",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
+  "incorrect": "incorrect",
+  "@incorrect": {
+    "description": "Localized string for incorrect"
+  },
   "incorrectPassword": "Falsches Passwort",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
+  },
+  "indonesian": "Indonesian",
+  "@indonesian": {
+    "description": "Localized string for indonesian"
+  },
+  "inquiries": "Inquiries",
+  "@inquiries": {
+    "description": "Localized string for inquiries"
+  },
+  "insufficientHearts": "Insufficient hearts.",
+  "@insufficientHearts": {
+    "description": "Localized string for insufficientHearts"
+  },
+  "interestSharing": "Interest Sharing",
+  "@interestSharing": {
+    "description": "Localized string for interestSharing"
+  },
+  "interestSharingDesc": "Discover and recommend shared interests",
+  "@interestSharingDesc": {
+    "description": "Localized string for interestSharingDesc"
+  },
+  "interests": "Interests",
+  "@interests": {
+    "description": "Localized string for interests"
   },
   "invalidEmailFormat": "Ungültiges E-Mail-Format",
   "@invalidEmailFormat": {
@@ -2382,17 +1161,142 @@
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
+  "isTyping": "{name} is typing...",
+  "@isTyping": {
+    "description": "Shows someone is typing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "japanese": "Japanese",
+  "@japanese": {
+    "description": "Localized string for japanese"
+  },
+  "joinDate": "Join Date",
+  "@joinDate": {
+    "description": "Localized string for joinDate"
+  },
+  "justNow": "Gerade eben",
+  "@justNow": {
+    "description": "Localized string for justNow"
+  },
+  "keepGuestData": "Keep Chat History",
+  "@keepGuestData": {
+    "description": "Localized string for keepGuestData"
+  },
+  "korean": "Korean",
+  "@korean": {
+    "description": "Localized string for korean"
+  },
+  "koreanLanguage": "Korean",
+  "@koreanLanguage": {
+    "description": "Localized string for koreanLanguage"
+  },
+  "language": "Sprache",
+  "@language": {
+    "description": "Localized string for language"
+  },
+  "languageDescription": "AI will respond in your selected language",
+  "@languageDescription": {
+    "description": "Localized string for languageDescription"
+  },
+  "languageIndicator": "Language",
+  "@languageIndicator": {
+    "description": "Localized string for languageIndicator"
+  },
+  "languageSettings": "Language Settings",
+  "@languageSettings": {
+    "description": "Localized string for languageSettings"
+  },
+  "lastOccurred": "Last Occurred: ",
+  "@lastOccurred": {
+    "description": "Localized string for lastOccurred"
+  },
   "lastUpdated": "Zuletzt aktualisiert",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
+  },
+  "lateNight": "Late night",
+  "@lateNight": {
+    "description": "Localized string for lateNight"
+  },
+  "later": "Later",
+  "@later": {
+    "description": "Localized string for later"
+  },
+  "laterButton": "Later",
+  "@laterButton": {
+    "description": "Localized string for laterButton"
+  },
+  "leave": "Leave",
+  "@leave": {
+    "description": "Localized string for leave"
+  },
+  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
+  "@leaveChatConfirm": {
+    "description": "Localized string for leaveChatConfirm"
+  },
+  "leaveChatRoom": "Leave Chat Room",
+  "@leaveChatRoom": {
+    "description": "Localized string for leaveChatRoom"
+  },
+  "leaveChatTitle": "Leave Chat",
+  "@leaveChatTitle": {
+    "description": "Localized string for leaveChatTitle"
+  },
+  "lifeAdvice": "Life Advice",
+  "@lifeAdvice": {
+    "description": "Localized string for lifeAdvice"
+  },
+  "lightTalk": "Light Talk",
+  "@lightTalk": {
+    "description": "Localized string for lightTalk"
+  },
+  "lightTheme": "Light Mode",
+  "@lightTheme": {
+    "description": "Localized string for lightTheme"
+  },
+  "lightThemeDesc": "Use bright theme",
+  "@lightThemeDesc": {
+    "description": "Localized string for lightThemeDesc"
+  },
+  "loading": "Wird geladen...",
+  "@loading": {
+    "description": "Localized string for loading"
+  },
+  "loadingData": "Loading data...",
+  "@loadingData": {
+    "description": "Localized string for loadingData"
   },
   "loadingProducts": "Produkte werden geladen...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
+  "loadingProfile": "Loading profile",
+  "@loadingProfile": {
+    "description": "Localized string for loadingProfile"
+  },
+  "login": "Anmelden",
+  "@login": {
+    "description": "Localized string for login"
+  },
+  "loginButton": "Login",
+  "@loginButton": {
+    "description": "Localized string for loginButton"
+  },
+  "loginCancelled": "Login cancelled",
+  "@loginCancelled": {
+    "description": "Localized string for loginCancelled"
+  },
   "loginComplete": "Anmeldung abgeschlossen",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
+  },
+  "loginError": "Login failed",
+  "@loginError": {
+    "description": "Localized string for loginError"
   },
   "loginFailed": "Anmeldung fehlgeschlagen",
   "@loginFailed": {
@@ -2402,9 +1306,33 @@
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
+  "loginRequired": "Login required",
+  "@loginRequired": {
+    "description": "Localized string for loginRequired"
+  },
+  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
+  "@loginRequiredForProfile": {
+    "description": "Localized string for loginRequiredForProfile"
+  },
   "loginRequiredService": "Anmeldung erforderlich, um diesen Dienst zu nutzen",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
+  },
+  "loginRequiredTitle": "Login Required",
+  "@loginRequiredTitle": {
+    "description": "Localized string for loginRequiredTitle"
+  },
+  "loginSignup": "Login/Sign Up",
+  "@loginSignup": {
+    "description": "Localized string for loginSignup"
+  },
+  "loginTab": "Login",
+  "@loginTab": {
+    "description": "Localized string for loginTab"
+  },
+  "loginTitle": "Login",
+  "@loginTitle": {
+    "description": "Localized string for loginTitle"
   },
   "loginWithApple": "Mit Apple anmelden",
   "@loginWithApple": {
@@ -2414,21 +1342,236 @@
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
+  "logout": "Abmelden",
+  "@logout": {
+    "description": "Localized string for logout"
+  },
   "logoutConfirm": "Möchten Sie sich wirklich abmelden?",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
+  },
+  "lonelinessRelief": "Loneliness Relief",
+  "@lonelinessRelief": {
+    "description": "Localized string for lonelinessRelief"
+  },
+  "lonely": "Lonely",
+  "@lonely": {
+    "description": "Localized string for lonely"
+  },
+  "lowQualityResponses": "Low Quality Responses",
+  "@lowQualityResponses": {
+    "description": "Localized string for lowQualityResponses"
+  },
+  "lunch": "Lunch",
+  "@lunch": {
+    "description": "Localized string for lunch"
+  },
+  "lunchtime": "Lunchtime",
+  "@lunchtime": {
+    "description": "Localized string for lunchtime"
+  },
+  "mainErrorType": "Main Error Type",
+  "@mainErrorType": {
+    "description": "Localized string for mainErrorType"
+  },
+  "makeFriends": "Make Friends",
+  "@makeFriends": {
+    "description": "Localized string for makeFriends"
+  },
+  "male": "Männlich",
+  "@male": {
+    "description": "Localized string for male"
+  },
+  "manageBlockedAIs": "Manage Blocked AIs",
+  "@manageBlockedAIs": {
+    "description": "Localized string for manageBlockedAIs"
+  },
+  "managePersonaImageCache": "Manage persona image cache",
+  "@managePersonaImageCache": {
+    "description": "Localized string for managePersonaImageCache"
+  },
+  "marketingAgree": "Agree to Marketing Information (Optional)",
+  "@marketingAgree": {
+    "description": "Localized string for marketingAgree"
+  },
+  "marketingDescription": "You can receive event and benefit information",
+  "@marketingDescription": {
+    "description": "Localized string for marketingDescription"
+  },
+  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "@matchPersonaStep": {
+    "description": "Localized string for matchPersonaStep"
+  },
+  "matchedPersonas": "Matched Personas",
+  "@matchedPersonas": {
+    "description": "Localized string for matchedPersonas"
+  },
+  "matchedSona": "Matched Sona",
+  "@matchedSona": {
+    "description": "Localized string for matchedSona"
+  },
+  "matching": "Matching",
+  "@matching": {
+    "description": "Localized string for matching"
+  },
+  "matchingFailed": "Matching failed.",
+  "@matchingFailed": {
+    "description": "Localized string for matchingFailed"
+  },
+  "me": "Me",
+  "@me": {
+    "description": "Localized string for me"
+  },
+  "meetAIPersonas": "Meet AI Personas",
+  "@meetAIPersonas": {
+    "description": "Localized string for meetAIPersonas"
   },
   "meetNewPersonas": "Neue Personas treffen",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
+  "meetPersonas": "Meet Personas",
+  "@meetPersonas": {
+    "description": "Localized string for meetPersonas"
+  },
+  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "@memberBenefits": {
+    "description": "Localized string for memberBenefits"
+  },
+  "memoryAlbum": "Memory Album",
+  "@memoryAlbum": {
+    "description": "Localized string for memoryAlbum"
+  },
+  "memoryAlbumDesc": "Automatically save and recall special moments",
+  "@memoryAlbumDesc": {
+    "description": "Localized string for memoryAlbumDesc"
+  },
+  "messageCopied": "Message copied",
+  "@messageCopied": {
+    "description": "Localized string for messageCopied"
+  },
+  "messageDeleted": "Message deleted",
+  "@messageDeleted": {
+    "description": "Localized string for messageDeleted"
+  },
   "messageLimitReset": "Nachrichtenlimit wird um Mitternacht zurückgesetzt",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
+  "messageSendFailed": "Failed to send message. Please try again.",
+  "@messageSendFailed": {
+    "description": "Localized string for messageSendFailed"
+  },
+  "messagesRemaining": "Messages Remaining",
+  "@messagesRemaining": {
+    "description": "Label for messages remaining"
+  },
+  "minutesAgo": "vor {count} Minuten",
+  "@minutesAgo": {
+    "description": "Minutes ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "minutes ago"
+      }
+    }
+  },
+  "missingTranslation": "Missing Translation",
+  "@missingTranslation": {
+    "description": "Localized string for missingTranslation"
+  },
+  "monday": "Monday",
+  "@monday": {
+    "description": "Localized string for monday"
+  },
+  "month": "Month",
+  "@month": {
+    "description": "Localized string for month"
+  },
+  "monthDay": "{month} {day}",
+  "@monthDay": {
+    "description": "Month and day format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "moreButton": "More",
+  "@moreButton": {
+    "description": "Localized string for moreButton"
+  },
+  "morning": "Morning",
+  "@morning": {
+    "description": "Localized string for morning"
+  },
+  "mostFrequentError": "Most Frequent Error",
+  "@mostFrequentError": {
+    "description": "Localized string for mostFrequentError"
+  },
+  "movies": "Movies",
+  "@movies": {
+    "description": "Localized string for movies"
+  },
+  "multilingualChat": "Multilingual Chat",
+  "@multilingualChat": {
+    "description": "Localized string for multilingualChat"
+  },
+  "music": "Music",
+  "@music": {
+    "description": "Localized string for music"
+  },
+  "myGenderSection": "My Gender (Optional)",
+  "@myGenderSection": {
+    "description": "Localized string for myGenderSection"
+  },
+  "networkErrorOccurred": "A network error occurred.",
+  "@networkErrorOccurred": {
+    "description": "Localized string for networkErrorOccurred"
+  },
+  "newMessage": "Neue Nachricht",
+  "@newMessage": {
+    "description": "Localized string for newMessage"
+  },
+  "newMessageCount": "{count} new messages",
+  "@newMessageCount": {
+    "description": "Number of new messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "newMessageNotification": "Neue Nachricht Benachrichtigung",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
+  },
+  "newMessages": "New messages",
+  "@newMessages": {
+    "description": "Localized string for newMessages"
+  },
+  "newYear": "New Year",
+  "@newYear": {
+    "description": "Localized string for newYear"
+  },
+  "next": "Weiter",
+  "@next": {
+    "description": "Localized string for next"
+  },
+  "niceToMeetYou": "Nice to meet you!",
+  "@niceToMeetYou": {
+    "description": "Localized string for niceToMeetYou"
+  },
+  "nickname": "Nickname",
+  "@nickname": {
+    "description": "Localized string for nickname"
   },
   "nicknameAlreadyUsed": "Dieser Spitzname wird bereits verwendet",
   "@nicknameAlreadyUsed": {
@@ -2437,6 +1580,10 @@
   "nicknameHelperText": "3-10 Zeichen",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
+  },
+  "nicknameHint": "3-10 characters",
+  "@nicknameHint": {
+    "description": "Localized string for nicknameHint"
   },
   "nicknameInUse": "Dieser Spitzname wird bereits verwendet",
   "@nicknameInUse": {
@@ -2454,17 +1601,90 @@
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
+  "nicknameRequired": "Nickname *",
+  "@nicknameRequired": {
+    "description": "Localized string for nicknameRequired"
+  },
+  "night": "Night",
+  "@night": {
+    "description": "Localized string for night"
+  },
+  "no": "Nein",
+  "@no": {
+    "description": "Localized string for no"
+  },
+  "noBlockedAIs": "No blocked AIs",
+  "@noBlockedAIs": {
+    "description": "Localized string for noBlockedAIs"
+  },
+  "noChatsYet": "No chats yet",
+  "@noChatsYet": {
+    "description": "Localized string for noChatsYet"
+  },
   "noConversationYet": "Noch keine Unterhaltung",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
+  },
+  "noErrorReports": "No error reports.",
+  "@noErrorReports": {
+    "description": "Localized string for noErrorReports"
+  },
+  "noImageAvailable": "No image available",
+  "@noImageAvailable": {
+    "description": "Localized string for noImageAvailable"
   },
   "noMatchedPersonas": "Noch keine übereinstimmenden Personas",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
+  "noMatchedSonas": "No matched Sonas yet",
+  "@noMatchedSonas": {
+    "description": "Localized string for noMatchedSonas"
+  },
+  "noPersonasAvailable": "No personas available. Please try again.",
+  "@noPersonasAvailable": {
+    "description": "Localized string for noPersonasAvailable"
+  },
+  "noPersonasToSelect": "No personas available",
+  "@noPersonasToSelect": {
+    "description": "Localized string for noPersonasToSelect"
+  },
+  "noQualityIssues": "No quality issues in the last hour ✅",
+  "@noQualityIssues": {
+    "description": "Localized string for noQualityIssues"
+  },
+  "noQualityLogs": "No quality logs yet.",
+  "@noQualityLogs": {
+    "description": "Localized string for noQualityLogs"
+  },
   "noTranslatedMessages": "Keine zu übersetzenden Nachrichten",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
+  },
+  "notEnoughHearts": "Not enough hearts",
+  "@notEnoughHearts": {
+    "description": "Localized string for notEnoughHearts"
+  },
+  "notEnoughHeartsCount": "Not enough hearts. (Current: {count})",
+  "@notEnoughHeartsCount": {
+    "description": "Not enough hearts message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notRegistered": "not registered",
+  "@notRegistered": {
+    "description": "Localized string for notRegistered"
+  },
+  "notSubscribed": "Not subscribed",
+  "@notSubscribed": {
+    "description": "Localized string for notSubscribed"
+  },
+  "notificationPermissionDesc": "Benachrichtigungsberechtigung wird benötigt, um neue Nachrichten zu erhalten.",
+  "@notificationPermissionDesc": {
+    "description": "Localized string for notificationPermissionDesc"
   },
   "notificationPermissionRequired": "Benachrichtigungsberechtigung erforderlich",
   "@notificationPermissionRequired": {
@@ -2474,13 +1694,194 @@
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
+  "notifications": "Benachrichtigungen",
+  "@notifications": {
+    "description": "Localized string for notifications"
+  },
+  "occurrenceInfo": "Occurrence Info:",
+  "@occurrenceInfo": {
+    "description": "Localized string for occurrenceInfo"
+  },
+  "olderChats": "Older",
+  "@olderChats": {
+    "description": "Localized string for olderChats"
+  },
+  "onlyOppositeGenderNote": "If unchecked, only opposite gender personas will be shown",
+  "@onlyOppositeGenderNote": {
+    "description": "Localized string for onlyOppositeGenderNote"
+  },
+  "openSettings": "Open Settings",
+  "@openSettings": {
+    "description": "Localized string for openSettings"
+  },
+  "optional": "Optional",
+  "@optional": {
+    "description": "Localized string for optional"
+  },
+  "or": "or",
+  "@or": {
+    "description": "Localized string for or"
+  },
+  "originalPrice": "Original",
+  "@originalPrice": {
+    "description": "Localized string for originalPrice"
+  },
+  "originalText": "Original",
+  "@originalText": {
+    "description": "Localized string for originalText"
+  },
+  "other": "Andere",
+  "@other": {
+    "description": "Localized string for other"
+  },
+  "otherError": "Other Error",
+  "@otherError": {
+    "description": "Localized string for otherError"
+  },
+  "others": "Others",
+  "@others": {
+    "description": "Localized string for others"
+  },
+  "ownedHearts": "Owned Hearts",
+  "@ownedHearts": {
+    "description": "Localized string for ownedHearts"
+  },
+  "parentsDay": "Parents' Day",
+  "@parentsDay": {
+    "description": "Localized string for parentsDay"
+  },
+  "password": "Passwort",
+  "@password": {
+    "description": "Localized string for password"
+  },
   "passwordConfirmation": "Passwort zur Bestätigung eingeben",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
+  "passwordConfirmationDesc": "Please re-enter your password to delete account.",
+  "@passwordConfirmationDesc": {
+    "description": "Localized string for passwordConfirmationDesc"
+  },
+  "passwordHint": "6 characters or more",
+  "@passwordHint": {
+    "description": "Localized string for passwordHint"
+  },
+  "passwordLabel": "Password",
+  "@passwordLabel": {
+    "description": "Localized string for passwordLabel"
+  },
+  "passwordRequired": "Password *",
+  "@passwordRequired": {
+    "description": "Localized string for passwordRequired"
+  },
+  "passwordResetEmailPrompt": "Please enter your email to reset password",
+  "@passwordResetEmailPrompt": {
+    "description": "Localized string for passwordResetEmailPrompt"
+  },
+  "passwordResetEmailSent": "Password reset email has been sent. Please check your email.",
+  "@passwordResetEmailSent": {
+    "description": "Localized string for passwordResetEmailSent"
+  },
+  "passwordText": "password",
+  "@passwordText": {
+    "description": "Localized string for passwordText"
+  },
+  "passwordTooShort": "Password must be at least 6 characters",
+  "@passwordTooShort": {
+    "description": "Localized string for passwordTooShort"
+  },
+  "permissionDenied": "Berechtigung verweigert",
+  "@permissionDenied": {
+    "description": "Localized string for permissionDenied"
+  },
+  "permissionDeniedMessage": "{permissionName} permission was denied.\\nPlease allow the permission in settings.",
+  "@permissionDeniedMessage": {
+    "description": "Permission denied message",
+    "placeholders": {
+      "permissionName": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "@permissionDeniedTryLater": {
+    "description": "Localized string for permissionDeniedTryLater"
+  },
+  "permissionRequired": "Berechtigung erforderlich",
+  "@permissionRequired": {
+    "description": "Localized string for permissionRequired"
+  },
+  "personaGenderSection": "Persona Gender Preference",
+  "@personaGenderSection": {
+    "description": "Localized string for personaGenderSection"
+  },
+  "personaQualityStats": "Persona Quality Statistics",
+  "@personaQualityStats": {
+    "description": "Localized string for personaQualityStats"
+  },
   "personalInfoExposure": "Persönliche Informationen Exposition",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
+  },
+  "personality": "Personality",
+  "@personality": {
+    "description": "Localized string for personality"
+  },
+  "pets": "Pets",
+  "@pets": {
+    "description": "Localized string for pets"
+  },
+  "photo": "Foto",
+  "@photo": {
+    "description": "Localized string for photo"
+  },
+  "photography": "Photography",
+  "@photography": {
+    "description": "Localized string for photography"
+  },
+  "picnic": "Picnic",
+  "@picnic": {
+    "description": "Localized string for picnic"
+  },
+  "preferenceSettings": "Preference Settings",
+  "@preferenceSettings": {
+    "description": "Localized string for preferenceSettings"
+  },
+  "preferredLanguage": "Preferred Language",
+  "@preferredLanguage": {
+    "description": "Localized string for preferredLanguage"
+  },
+  "preparingForSleep": "Preparing for sleep",
+  "@preparingForSleep": {
+    "description": "Localized string for preparingForSleep"
+  },
+  "preparingNewMeeting": "Preparing new meeting",
+  "@preparingNewMeeting": {
+    "description": "Localized string for preparingNewMeeting"
+  },
+  "preparingPersonaImages": "Preparing persona images",
+  "@preparingPersonaImages": {
+    "description": "Localized string for preparingPersonaImages"
+  },
+  "preparingPersonas": "Preparing personas",
+  "@preparingPersonas": {
+    "description": "Localized string for preparingPersonas"
+  },
+  "preview": "Preview",
+  "@preview": {
+    "description": "Localized string for preview"
+  },
+  "previous": "Zurück",
+  "@previous": {
+    "description": "Localized string for previous"
+  },
+  "privacy": "Datenschutz",
+  "@privacy": {
+    "description": "Localized string for privacy"
+  },
+  "privacyPolicy": "Datenschutzrichtlinie",
+  "@privacyPolicy": {
+    "description": "Localized string for privacyPolicy"
   },
   "privacyPolicyAgreement": "Bitte stimmen Sie der Datenschutzrichtlinie zu",
   "@privacyPolicyAgreement": {
@@ -2489,6 +1890,10 @@
   "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
+  },
+  "privacySection1Title": "1. Purpose of Collection and Use of Personal Information",
+  "@privacySection1Title": {
+    "description": "Localized string for privacySection1Title"
   },
   "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
   "@privacySection2Content": {
@@ -2502,17 +1907,33 @@
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
+  "privacySection3Title": "3. Retention and Use Period of Personal Information",
+  "@privacySection3Title": {
+    "description": "Localized string for privacySection3Title"
+  },
   "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
+  },
+  "privacySection4Title": "4. Provision of Personal Information to Third Parties",
+  "@privacySection4Title": {
+    "description": "Localized string for privacySection4Title"
   },
   "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
+  "privacySection5Title": "5. Technical Protection Measures for Personal Information",
+  "@privacySection5Title": {
+    "description": "Localized string for privacySection5Title"
+  },
   "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
+  },
+  "privacySection6Title": "6. User Rights",
+  "@privacySection6Title": {
+    "description": "Localized string for privacySection6Title"
   },
   "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
   "@privacySection7Content": {
@@ -2530,9 +1951,57 @@
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
+  "privacySettings": "Privacy Settings",
+  "@privacySettings": {
+    "description": "Localized string for privacySettings"
+  },
+  "privacySettingsInfo": "Disabling individual features will make those services unavailable",
+  "@privacySettingsInfo": {
+    "description": "Localized string for privacySettingsInfo"
+  },
+  "privacySettingsScreen": "Privacy Settings",
+  "@privacySettingsScreen": {
+    "description": "Localized string for privacySettingsScreen"
+  },
   "problemMessage": "Problem",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
+  },
+  "problemOccurred": "Problem Occurred",
+  "@problemOccurred": {
+    "description": "Localized string for problemOccurred"
+  },
+  "profile": "Profil",
+  "@profile": {
+    "description": "Localized string for profile"
+  },
+  "profileEdit": "Edit Profile",
+  "@profileEdit": {
+    "description": "Localized string for profileEdit"
+  },
+  "profileEditLoginRequiredMessage": "Login is required to edit your profile.\nWould you like to go to the login screen?",
+  "@profileEditLoginRequiredMessage": {
+    "description": "Localized string for profileEditLoginRequiredMessage"
+  },
+  "profileInfo": "Profile Information",
+  "@profileInfo": {
+    "description": "Localized string for profileInfo"
+  },
+  "profileInfoDescription": "Please enter your profile photo and basic information",
+  "@profileInfoDescription": {
+    "description": "Localized string for profileInfoDescription"
+  },
+  "profileNav": "Profile",
+  "@profileNav": {
+    "description": "Localized string for profileNav"
+  },
+  "profilePhoto": "Profile Photo",
+  "@profilePhoto": {
+    "description": "Localized string for profilePhoto"
+  },
+  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "@profilePhotoAndInfo": {
+    "description": "Localized string for profilePhotoAndInfo"
   },
   "profilePhotoUpdateFailed": "Failed to update profile photo",
   "@profilePhotoUpdateFailed": {
@@ -2541,6 +2010,14 @@
   "profilePhotoUpdated": "Profile photo updated",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
+  },
+  "profileSettings": "Profile Settings",
+  "@profileSettings": {
+    "description": "Localized string for profileSettings"
+  },
+  "profileSetup": "Setting up profile",
+  "@profileSetup": {
+    "description": "Localized string for profileSetup"
   },
   "profileUpdateFailed": "Failed to update profile",
   "@profileUpdateFailed": {
@@ -2554,9 +2031,55 @@
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
+  "purchaseButton": "Purchase",
+  "@purchaseButton": {
+    "description": "Localized string for purchaseButton"
+  },
+  "purchaseConfirm": "Purchase Confirmation",
+  "@purchaseConfirm": {
+    "description": "Localized string for purchaseConfirm"
+  },
+  "purchaseConfirmContent": "{product} für {price} kaufen?",
+  "@purchaseConfirmContent": {
+    "description": "Purchase confirmation content",
+    "placeholders": {
+      "product": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseConfirmMessage": "Kauf von {title} für {price} bestätigen? {description}",
+  "@purchaseConfirmMessage": {
+    "description": "Purchase confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Premium Package"
+      },
+      "price": {
+        "type": "String",
+        "example": "$9.99"
+      },
+      "description": {
+        "type": "String",
+        "example": "This includes..."
+      }
+    }
+  },
   "purchaseFailed": "Purchase failed",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
+  },
+  "purchaseHeartsOnly": "Buy hearts",
+  "@purchaseHeartsOnly": {
+    "description": "Localized string for purchaseHeartsOnly"
+  },
+  "purchaseMoreHearts": "Purchase hearts to continue conversations",
+  "@purchaseMoreHearts": {
+    "description": "Localized string for purchaseMoreHearts"
   },
   "purchasePending": "Purchase pending...",
   "@purchasePending": {
@@ -2610,6 +2133,26 @@
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
+  "purchaseSection6Title": "6. Inquiries",
+  "@purchaseSection6Title": {
+    "description": "Localized string for purchaseSection6Title"
+  },
+  "pushNotifications": "Push-Benachrichtigungen",
+  "@pushNotifications": {
+    "description": "Localized string for pushNotifications"
+  },
+  "reading": "Reading",
+  "@reading": {
+    "description": "Localized string for reading"
+  },
+  "realtimeQualityLog": "Real-time Quality Log",
+  "@realtimeQualityLog": {
+    "description": "Localized string for realtimeQualityLog"
+  },
+  "recentConversation": "Recent Conversation:",
+  "@recentConversation": {
+    "description": "Localized string for recentConversation"
+  },
   "recentLoginRequired": "Please login again for security",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
@@ -2622,6 +2165,23 @@
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
+  "referrerEmailLabel": "Referrer Email (Optional)",
+  "@referrerEmailLabel": {
+    "description": "Localized string for referrerEmailLabel"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Localized string for refresh"
+  },
+  "refreshComplete": "Refresh complete! {count} matched personas",
+  "@refreshComplete": {
+    "description": "Refresh complete message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "refreshFailed": "Refresh failed",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
@@ -2630,33 +2190,288 @@
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
+  "relatedFAQ": "Related FAQ",
+  "@relatedFAQ": {
+    "description": "Localized string for relatedFAQ"
+  },
+  "report": "Melden",
+  "@report": {
+    "description": "Localized string for report"
+  },
+  "reportAI": "Report",
+  "@reportAI": {
+    "description": "Localized string for reportAI"
+  },
+  "reportAIDescription": "If the AI made you uncomfortable, please describe the issue.",
+  "@reportAIDescription": {
+    "description": "Localized string for reportAIDescription"
+  },
+  "reportAITitle": "Report AI Conversation",
+  "@reportAITitle": {
+    "description": "Localized string for reportAITitle"
+  },
+  "reportAndBlock": "Report & Block",
+  "@reportAndBlock": {
+    "description": "Localized string for reportAndBlock"
+  },
+  "reportAndBlockDescription": "You can report and block inappropriate behavior of this AI",
+  "@reportAndBlockDescription": {
+    "description": "Localized string for reportAndBlockDescription"
+  },
+  "reportChatError": "Report Chat Error",
+  "@reportChatError": {
+    "description": "Localized string for reportChatError"
+  },
+  "reportError": "Error occurred while reporting: {error}",
+  "@reportError": {
+    "description": "Report error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "reportFailed": "Report failed",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
+  },
+  "reportSubmitted": "Report submitted. We will review and take action.",
+  "@reportSubmitted": {
+    "description": "Localized string for reportSubmitted"
+  },
+  "reportSubmittedSuccess": "Your report has been submitted. Thank you!",
+  "@reportSubmittedSuccess": {
+    "description": "Localized string for reportSubmittedSuccess"
+  },
+  "requestLimit": "Request Limit",
+  "@requestLimit": {
+    "description": "Localized string for requestLimit"
+  },
+  "required": "[Required]",
+  "@required": {
+    "description": "Localized string for required"
   },
   "requiredTermsAgreement": "Please agree to the terms",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
+  "restartConversation": "Restart Conversation",
+  "@restartConversation": {
+    "description": "Localized string for restartConversation"
+  },
+  "restartConversationQuestion": "Would you like to restart the conversation with {name}?",
+  "@restartConversationQuestion": {
+    "description": "Restart conversation question",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "restartConversationWithName": "Restarting conversation with {name}!",
+  "@restartConversationWithName": {
+    "description": "Restarting conversation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "Wiederholen",
+  "@retry": {
+    "description": "Localized string for retry"
+  },
+  "retryButton": "Retry",
+  "@retryButton": {
+    "description": "Localized string for retryButton"
+  },
+  "sad": "Sad",
+  "@sad": {
+    "description": "Localized string for sad"
+  },
+  "saturday": "Saturday",
+  "@saturday": {
+    "description": "Localized string for saturday"
+  },
+  "save": "Speichern",
+  "@save": {
+    "description": "Localized string for save"
+  },
+  "search": "Suchen",
+  "@search": {
+    "description": "Localized string for search"
+  },
+  "searchFAQ": "Search FAQ...",
+  "@searchFAQ": {
+    "description": "Localized string for searchFAQ"
+  },
+  "searchResults": "Search Results",
+  "@searchResults": {
+    "description": "Localized string for searchResults"
+  },
+  "selectEmotion": "Select Emotion",
+  "@selectEmotion": {
+    "description": "Localized string for selectEmotion"
+  },
+  "selectErrorType": "Select error type",
+  "@selectErrorType": {
+    "description": "Localized string for selectErrorType"
+  },
+  "selectFeeling": "Select Feeling",
+  "@selectFeeling": {
+    "description": "Localized string for selectFeeling"
+  },
+  "selectGender": "Please select gender",
+  "@selectGender": {
+    "description": "Localized string for selectGender"
+  },
+  "selectInterests": "Please select your interests (at least 1)",
+  "@selectInterests": {
+    "description": "Localized string for selectInterests"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "description": "Localized string for selectLanguage"
+  },
   "selectPersona": "Select a persona",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
+  },
+  "selectPersonaPlease": "Please select a persona.",
+  "@selectPersonaPlease": {
+    "description": "Localized string for selectPersonaPlease"
+  },
+  "selectPreferredMbti": "If you prefer personas with specific MBTI types, please select",
+  "@selectPreferredMbti": {
+    "description": "Localized string for selectPreferredMbti"
+  },
+  "selectProblematicMessage": "Select the problematic message (optional)",
+  "@selectProblematicMessage": {
+    "description": "Localized string for selectProblematicMessage"
   },
   "selectReportReason": "Select report reason",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
+  "selectTheme": "Select Theme",
+  "@selectTheme": {
+    "description": "Localized string for selectTheme"
+  },
+  "selectTranslationError": "Please select a message with translation error",
+  "@selectTranslationError": {
+    "description": "Localized string for selectTranslationError"
+  },
+  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "@selectUsagePurpose": {
+    "description": "Localized string for selectUsagePurpose"
+  },
+  "selfIntroduction": "Introduction (Optional)",
+  "@selfIntroduction": {
+    "description": "Localized string for selfIntroduction"
+  },
+  "selfIntroductionHint": "Write a brief introduction about yourself",
+  "@selfIntroductionHint": {
+    "description": "Localized string for selfIntroductionHint"
+  },
+  "send": "Senden",
+  "@send": {
+    "description": "Localized string for send"
+  },
+  "sendChatError": "Send Chat Error",
+  "@sendChatError": {
+    "description": "Localized string for sendChatError"
+  },
   "sendFirstMessage": "Send your first message",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
+  },
+  "sendReport": "Send Report",
+  "@sendReport": {
+    "description": "Localized string for sendReport"
+  },
+  "sendingEmail": "Sending email...",
+  "@sendingEmail": {
+    "description": "Localized string for sendingEmail"
+  },
+  "seoul": "Seoul",
+  "@seoul": {
+    "description": "Localized string for seoul"
+  },
+  "serverErrorDashboard": "Server Error",
+  "@serverErrorDashboard": {
+    "description": "Localized string for serverErrorDashboard"
   },
   "serviceTermsAgreement": "Please agree to the terms of service",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
+  "sessionExpired": "Session expired",
+  "@sessionExpired": {
+    "description": "Localized string for sessionExpired"
+  },
+  "setAppInterfaceLanguage": "Set app interface language",
+  "@setAppInterfaceLanguage": {
+    "description": "Localized string for setAppInterfaceLanguage"
+  },
+  "setNow": "Set Now",
+  "@setNow": {
+    "description": "Localized string for setNow"
+  },
+  "settings": "Einstellungen",
+  "@settings": {
+    "description": "Localized string for settings"
+  },
+  "sexualContent": "Sexual content",
+  "@sexualContent": {
+    "description": "Localized string for sexualContent"
+  },
   "showAllGenderPersonas": "Alle Geschlechter-Personas anzeigen",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
+  },
+  "showAllGendersOption": "Show All Genders",
+  "@showAllGendersOption": {
+    "description": "Localized string for showAllGendersOption"
+  },
+  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "@showOppositeGenderOnly": {
+    "description": "Localized string for showOppositeGenderOnly"
+  },
+  "showOriginalText": "Show Original",
+  "@showOriginalText": {
+    "description": "Localized string for showOriginalText"
+  },
+  "signUp": "Registrieren",
+  "@signUp": {
+    "description": "Localized string for signUp"
+  },
+  "signUpFromGuest": "Sign up now to access all features!",
+  "@signUpFromGuest": {
+    "description": "Localized string for signUpFromGuest"
+  },
+  "signup": "Registrieren",
+  "@signup": {
+    "description": "Localized string for signup"
+  },
+  "signupComplete": "Sign Up Complete",
+  "@signupComplete": {
+    "description": "Localized string for signupComplete"
+  },
+  "signupTab": "Sign Up",
+  "@signupTab": {
+    "description": "Localized string for signupTab"
+  },
+  "simpleInfoRequired": "Simple information is required\nfor matching with AI personas",
+  "@simpleInfoRequired": {
+    "description": "Localized string for simpleInfoRequired"
+  },
+  "skip": "Überspringen",
+  "@skip": {
+    "description": "Localized string for skip"
+  },
+  "sonaFriend": "SONA Friend",
+  "@sonaFriend": {
+    "description": "Localized string for sonaFriend"
   },
   "sonaPrivacyPolicy": "SONA Privacy Policy",
   "@sonaPrivacyPolicy": {
@@ -2670,105 +2485,125 @@
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
+  "sonaUsagePurpose": "Please select your purpose for using SONA",
+  "@sonaUsagePurpose": {
+    "description": "Localized string for sonaUsagePurpose"
+  },
   "sorryNotHelpful": "Sorry this wasn't helpful",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
+  },
+  "sort": "Sortieren",
+  "@sort": {
+    "description": "Localized string for sort"
+  },
+  "soundSettings": "Sound Settings",
+  "@soundSettings": {
+    "description": "Localized string for soundSettings"
+  },
+  "spamAdvertising": "Spam/Advertising",
+  "@spamAdvertising": {
+    "description": "Localized string for spamAdvertising"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "description": "Localized string for spanish"
+  },
+  "specialRelationshipDesc": "Understand each other and build deep bonds",
+  "@specialRelationshipDesc": {
+    "description": "Localized string for specialRelationshipDesc"
+  },
+  "sports": "Sports",
+  "@sports": {
+    "description": "Localized string for sports"
+  },
+  "spring": "Spring",
+  "@spring": {
+    "description": "Localized string for spring"
+  },
+  "startChat": "Start Chat",
+  "@startChat": {
+    "description": "Localized string for startChat"
+  },
+  "startChatButton": "Start Chat",
+  "@startChatButton": {
+    "description": "Localized string for startChatButton"
   },
   "startConversation": "Start a conversation",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
+  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "@startConversationLikeAFriend": {
+    "description": "Localized string for startConversationLikeAFriend"
+  },
+  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "@startConversationStep": {
+    "description": "Localized string for startConversationStep"
+  },
+  "startConversationWithSona": "Start chatting with Sona like a friend!",
+  "@startConversationWithSona": {
+    "description": "Localized string for startConversationWithSona"
+  },
+  "startWithEmail": "Start with Email",
+  "@startWithEmail": {
+    "description": "Localized string for startWithEmail"
+  },
+  "startWithGoogle": "Start with Google",
+  "@startWithGoogle": {
+    "description": "Localized string for startWithGoogle"
+  },
+  "startingApp": "Starting app",
+  "@startingApp": {
+    "description": "Localized string for startingApp"
+  },
+  "storageManagement": "Storage Management",
+  "@storageManagement": {
+    "description": "Localized string for storageManagement"
+  },
+  "store": "Store",
+  "@store": {
+    "description": "Localized string for store"
+  },
   "storeConnectionError": "Could not connect to store",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
+  },
+  "storeLoginRequiredMessage": "Login is required to use the store.\nWould you like to go to the login screen?",
+  "@storeLoginRequiredMessage": {
+    "description": "Localized string for storeLoginRequiredMessage"
   },
   "storeNotAvailable": "Store is not available",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
-  "@tapToSwipePhotos": {
-    "description": "Localized string for tapToSwipePhotos"
+  "storyEvent": "Story Event",
+  "@storyEvent": {
+    "description": "Localized string for storyEvent"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
-  "@termsSection10Content": {
-    "description": "Localized string for termsSection10Content"
+  "stressed": "Stressed",
+  "@stressed": {
+    "description": "Localized string for stressed"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
-  "@termsSection11Content": {
-    "description": "Localized string for termsSection11Content"
+  "submitReport": "Submit Report",
+  "@submitReport": {
+    "description": "Localized string for submitReport"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
-  "@termsSection12Content": {
-    "description": "Localized string for termsSection12Content"
+  "subscriptionStatus": "Subscription Status",
+  "@subscriptionStatus": {
+    "description": "Localized string for subscriptionStatus"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
-  "@termsSection2Content": {
-    "description": "Localized string for termsSection2Content"
+  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "@subtleVibrationOnTouch": {
+    "description": "Localized string for subtleVibrationOnTouch"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
-  "@termsSection3Content": {
-    "description": "Localized string for termsSection3Content"
+  "summer": "Summer",
+  "@summer": {
+    "description": "Localized string for summer"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
-  "@termsSection4Content": {
-    "description": "Localized string for termsSection4Content"
-  },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
-  "@termsSection5Content": {
-    "description": "Localized string for termsSection5Content"
-  },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
-  "@termsSection6Content": {
-    "description": "Localized string for termsSection6Content"
-  },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
-  "@termsSection8Content": {
-    "description": "Localized string for termsSection8Content"
-  },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
-  "@termsSection9Content": {
-    "description": "Localized string for termsSection9Content"
-  },
-  "termsSupplementary": "Supplementary Terms",
-  "@termsSupplementary": {
-    "description": "Localized string for termsSupplementary"
-  },
-  "translationError": "Translation error",
-  "@translationError": {
-    "description": "Localized string for translationError"
-  },
-  "weekdays": "So,Mo,Di,Mi,Do,Fr,Sa",
-  "@weekdays": {
-    "description": "Localized string for weekdays"
-  },
-  "emotionHappy": "Happy",
-  "@emotionHappy": {
-    "description": "Localized string for emotionHappy"
-  },
-  "emotionLove": "Love",
-  "@emotionLove": {
-    "description": "Localized string for emotionLove"
-  },
-  "emotionSad": "Sad",
-  "@emotionSad": {
-    "description": "Localized string for emotionSad"
-  },
-  "emotionAngry": "Angry",
-  "@emotionAngry": {
-    "description": "Localized string for emotionAngry"
-  },
-  "emotionCool": "Cool",
-  "@emotionCool": {
-    "description": "Localized string for emotionCool"
-  },
-  "emotionThinking": "Thinking",
-  "@emotionThinking": {
-    "description": "Localized string for emotionThinking"
-  },
-  "selectEmotion": "Select Emotion",
-  "@selectEmotion": {
-    "description": "Localized string for selectEmotion"
+  "sunday": "Sunday",
+  "@sunday": {
+    "description": "Localized string for sunday"
   },
   "swipeAnyDirection": "Swipe in any direction",
   "@swipeAnyDirection": {
@@ -2778,213 +2613,193 @@
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
+  "systemTheme": "Follow System",
+  "@systemTheme": {
+    "description": "Localized string for systemTheme"
+  },
+  "systemThemeDesc": "Automatically changes based on device dark mode settings",
+  "@systemThemeDesc": {
+    "description": "Localized string for systemThemeDesc"
+  },
+  "tapBottomForDetails": "Unten tippen für Details",
+  "@tapBottomForDetails": {
+    "description": "Localized string for tapBottomForDetails"
+  },
   "tapForDetails": "Tap bottom area for details",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "personality": "Personality",
-  "@personality": {
-    "description": "Localized string for personality"
+  "tapToSwipePhotos": "Tap to swipe photos",
+  "@tapToSwipePhotos": {
+    "description": "Localized string for tapToSwipePhotos"
   },
-  "weatherClear": "Clear",
-  "@weatherClear": {
-    "description": "Localized string for weatherClear"
+  "teachersDay": "Teachers' Day",
+  "@teachersDay": {
+    "description": "Localized string for teachersDay"
   },
-  "weatherCloudy": "Cloudy",
-  "@weatherCloudy": {
-    "description": "Localized string for weatherCloudy"
+  "technicalError": "Technical Error",
+  "@technicalError": {
+    "description": "Localized string for technicalError"
   },
-  "weatherRain": "Rain",
-  "@weatherRain": {
-    "description": "Localized string for weatherRain"
+  "technology": "Technology",
+  "@technology": {
+    "description": "Localized string for technology"
   },
-  "weatherDrizzle": "Drizzle",
-  "@weatherDrizzle": {
-    "description": "Localized string for weatherDrizzle"
+  "terms": "Terms of Service",
+  "@terms": {
+    "description": "Localized string for terms"
   },
-  "weatherThunderstorm": "Thunderstorm",
-  "@weatherThunderstorm": {
-    "description": "Localized string for weatherThunderstorm"
+  "termsAgreement": "Terms Agreement",
+  "@termsAgreement": {
+    "description": "Localized string for termsAgreement"
   },
-  "weatherSnow": "Snow",
-  "@weatherSnow": {
-    "description": "Localized string for weatherSnow"
+  "termsAgreementDescription": "Please agree to the terms for using the service",
+  "@termsAgreementDescription": {
+    "description": "Localized string for termsAgreementDescription"
   },
-  "weatherMist": "Mist",
-  "@weatherMist": {
-    "description": "Localized string for weatherMist"
+  "termsOfService": "Nutzungsbedingungen",
+  "@termsOfService": {
+    "description": "Localized string for termsOfService"
   },
-  "weatherFog": "Fog",
-  "@weatherFog": {
-    "description": "Localized string for weatherFog"
+  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "@termsSection10Content": {
+    "description": "Localized string for termsSection10Content"
   },
-  "monday": "Monday",
-  "@monday": {
-    "description": "Localized string for monday"
+  "termsSection10Title": "Article 10 (Dispute Resolution)",
+  "@termsSection10Title": {
+    "description": "Localized string for termsSection10Title"
   },
-  "tuesday": "Tuesday",
-  "@tuesday": {
-    "description": "Localized string for tuesday"
+  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "@termsSection11Content": {
+    "description": "Localized string for termsSection11Content"
   },
-  "wednesday": "Wednesday",
-  "@wednesday": {
-    "description": "Localized string for wednesday"
+  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
+  "@termsSection11Title": {
+    "description": "Localized string for termsSection11Title"
+  },
+  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "@termsSection12Content": {
+    "description": "Localized string for termsSection12Content"
+  },
+  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "@termsSection12Title": {
+    "description": "Localized string for termsSection12Title"
+  },
+  "termsSection1Content": "These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.",
+  "@termsSection1Content": {
+    "description": "Localized string for termsSection1Content"
+  },
+  "termsSection1Title": "Article 1 (Purpose)",
+  "@termsSection1Title": {
+    "description": "Localized string for termsSection1Title"
+  },
+  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "@termsSection2Content": {
+    "description": "Localized string for termsSection2Content"
+  },
+  "termsSection2Title": "Article 2 (Definitions)",
+  "@termsSection2Title": {
+    "description": "Localized string for termsSection2Title"
+  },
+  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "@termsSection3Content": {
+    "description": "Localized string for termsSection3Content"
+  },
+  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "@termsSection3Title": {
+    "description": "Localized string for termsSection3Title"
+  },
+  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "@termsSection4Content": {
+    "description": "Localized string for termsSection4Content"
+  },
+  "termsSection4Title": "Article 4 (Provision of Service)",
+  "@termsSection4Title": {
+    "description": "Localized string for termsSection4Title"
+  },
+  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "@termsSection5Content": {
+    "description": "Localized string for termsSection5Content"
+  },
+  "termsSection5Title": "Article 5 (Membership Registration)",
+  "@termsSection5Title": {
+    "description": "Localized string for termsSection5Title"
+  },
+  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "@termsSection6Content": {
+    "description": "Localized string for termsSection6Content"
+  },
+  "termsSection6Title": "Article 6 (User Obligations)",
+  "@termsSection6Title": {
+    "description": "Localized string for termsSection6Title"
+  },
+  "termsSection7Content": "The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.",
+  "@termsSection7Content": {
+    "description": "Localized string for termsSection7Content"
+  },
+  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "@termsSection7Title": {
+    "description": "Localized string for termsSection7Title"
+  },
+  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "@termsSection8Content": {
+    "description": "Localized string for termsSection8Content"
+  },
+  "termsSection8Title": "Article 8 (Service Interruption)",
+  "@termsSection8Title": {
+    "description": "Localized string for termsSection8Title"
+  },
+  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "@termsSection9Content": {
+    "description": "Localized string for termsSection9Content"
+  },
+  "termsSection9Title": "Article 9 (Disclaimer)",
+  "@termsSection9Title": {
+    "description": "Localized string for termsSection9Title"
+  },
+  "termsSupplementary": "Supplementary Terms",
+  "@termsSupplementary": {
+    "description": "Localized string for termsSupplementary"
+  },
+  "thai": "Thai",
+  "@thai": {
+    "description": "Localized string for thai"
+  },
+  "thanksFeedback": "Thanks for your feedback!",
+  "@thanksFeedback": {
+    "description": "Localized string for thanksFeedback"
+  },
+  "theme": "Design",
+  "@theme": {
+    "description": "Localized string for theme"
+  },
+  "themeDescription": "You can customize the app appearance as you like",
+  "@themeDescription": {
+    "description": "Localized string for themeDescription"
+  },
+  "themeSettings": "Theme Settings",
+  "@themeSettings": {
+    "description": "Localized string for themeSettings"
   },
   "thursday": "Thursday",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "friday": "Friday",
-  "@friday": {
-    "description": "Localized string for friday"
+  "timeout": "Timeout",
+  "@timeout": {
+    "description": "Localized string for timeout"
   },
-  "saturday": "Saturday",
-  "@saturday": {
-    "description": "Localized string for saturday"
+  "tired": "Tired",
+  "@tired": {
+    "description": "Localized string for tired"
   },
-  "sunday": "Sunday",
-  "@sunday": {
-    "description": "Localized string for sunday"
+  "today": "Heute",
+  "@today": {
+    "description": "Localized string for today"
   },
-  "morning": "Morning",
-  "@morning": {
-    "description": "Localized string for morning"
-  },
-  "forenoon": "Forenoon",
-  "@forenoon": {
-    "description": "Localized string for forenoon"
-  },
-  "lunchtime": "Lunchtime",
-  "@lunchtime": {
-    "description": "Localized string for lunchtime"
-  },
-  "afternoon": "Afternoon",
-  "@afternoon": {
-    "description": "Localized string for afternoon"
-  },
-  "evening": "Evening",
-  "@evening": {
-    "description": "Localized string for evening"
-  },
-  "night": "Night",
-  "@night": {
-    "description": "Localized string for night"
-  },
-  "dawn": "Dawn",
-  "@dawn": {
-    "description": "Localized string for dawn"
-  },
-  "spring": "Spring",
-  "@spring": {
-    "description": "Localized string for spring"
-  },
-  "summer": "Summer",
-  "@summer": {
-    "description": "Localized string for summer"
-  },
-  "autumn": "Autumn",
-  "@autumn": {
-    "description": "Localized string for autumn"
-  },
-  "winter": "Winter",
-  "@winter": {
-    "description": "Localized string for winter"
-  },
-  "breakfast": "Breakfast",
-  "@breakfast": {
-    "description": "Localized string for breakfast"
-  },
-  "lunch": "Lunch",
-  "@lunch": {
-    "description": "Localized string for lunch"
-  },
-  "dinner": "Dinner",
-  "@dinner": {
-    "description": "Localized string for dinner"
-  },
-  "preparingForSleep": "Preparing for sleep",
-  "@preparingForSleep": {
-    "description": "Localized string for preparingForSleep"
-  },
-  "lateNight": "Late night",
-  "@lateNight": {
-    "description": "Localized string for lateNight"
-  },
-  "afternoonFatigue": "Afternoon fatigue",
-  "@afternoonFatigue": {
-    "description": "Localized string for afternoonFatigue"
-  },
-  "dailyCheck": "Daily check",
-  "@dailyCheck": {
-    "description": "Localized string for dailyCheck"
-  },
-  "unknownError": "Unbekannter Fehler",
-  "@unknownError": {
-    "description": "Localized string for unknownError"
-  },
-  "guest": "Guest",
-  "@guest": {
-    "description": "Localized string for guest"
-  },
-  "current": "Current",
-  "@current": {
-    "description": "Localized string for current"
-  },
-  "errorMessage": "Error Message:",
-  "@errorMessage": {
-    "description": "Localized string for errorMessage"
-  },
-  "userMessage": "User Message:",
-  "@userMessage": {
-    "description": "Localized string for userMessage"
-  },
-  "recentConversation": "Recent Conversation:",
-  "@recentConversation": {
-    "description": "Localized string for recentConversation"
-  },
-  "user": "User: ",
-  "@user": {
-    "description": "Localized string for user"
-  },
-  "occurrenceInfo": "Occurrence Info:",
-  "@occurrenceInfo": {
-    "description": "Localized string for occurrenceInfo"
-  },
-  "firstOccurred": "First Occurred: ",
-  "@firstOccurred": {
-    "description": "Localized string for firstOccurred"
-  },
-  "lastOccurred": "Last Occurred: ",
-  "@lastOccurred": {
-    "description": "Localized string for lastOccurred"
-  },
-  "totalOccurrences": "Total {count} occurrences",
-  "@totalOccurrences": {
-    "description": "Localized string for totalOccurrences"
-  },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
-  "@errorFrequency24h": {
-    "description": "Localized string for errorFrequency24h"
-  },
-  "hours24Ago": "24 hours ago",
-  "@hours24Ago": {
-    "description": "Localized string for hours24Ago"
-  },
-  "apiKeyError": "API Key Error",
-  "@apiKeyError": {
-    "description": "Localized string for apiKeyError"
-  },
-  "passwordText": "password",
-  "@passwordText": {
-    "description": "Localized string for passwordText"
-  },
-  "notRegistered": "not registered",
-  "@notRegistered": {
-    "description": "Localized string for notRegistered"
-  },
-  "incorrect": "incorrect",
-  "@incorrect": {
-    "description": "Localized string for incorrect"
+  "todayChats": "Today",
+  "@todayChats": {
+    "description": "Localized string for todayChats"
   },
   "todayText": "Today",
   "@todayText": {
@@ -2994,71 +2809,286 @@
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
-  "@dayAfterTomorrow": {
-    "description": "Localized string for dayAfterTomorrow"
+  "totalConsultSessions": "Total Consultation Sessions",
+  "@totalConsultSessions": {
+    "description": "Localized string for totalConsultSessions"
   },
-  "seoul": "Seoul",
-  "@seoul": {
-    "description": "Localized string for seoul"
+  "totalErrorCount": "Total Error Count",
+  "@totalErrorCount": {
+    "description": "Localized string for totalErrorCount"
   },
-  "walk": "Walk",
-  "@walk": {
-    "description": "Localized string for walk"
+  "totalLikes": "Total Likes",
+  "@totalLikes": {
+    "description": "Localized string for totalLikes"
   },
-  "picnic": "Picnic",
-  "@picnic": {
-    "description": "Localized string for picnic"
+  "totalOccurrences": "Total {count} occurrences",
+  "@totalOccurrences": {
+    "description": "Localized string for totalOccurrences"
   },
-  "cycling": "Cycling",
-  "@cycling": {
-    "description": "Localized string for cycling"
+  "totalResponses": "Total Responses",
+  "@totalResponses": {
+    "description": "Localized string for totalResponses"
   },
-  "cafeTerrace": "Cafe terrace",
-  "@cafeTerrace": {
-    "description": "Localized string for cafeTerrace"
+  "translatedFrom": "Translated",
+  "@translatedFrom": {
+    "description": "Localized string for translatedFrom"
   },
-  "newYear": "New Year",
-  "@newYear": {
-    "description": "Localized string for newYear"
+  "translatedText": "Translation",
+  "@translatedText": {
+    "description": "Localized string for translatedText"
+  },
+  "translationError": "Translation error",
+  "@translationError": {
+    "description": "Localized string for translationError"
+  },
+  "translationErrorDescription": "Please report incorrect translations or awkward expressions",
+  "@translationErrorDescription": {
+    "description": "Localized string for translationErrorDescription"
+  },
+  "translationErrorReported": "Translation error reported. Thank you!",
+  "@translationErrorReported": {
+    "description": "Localized string for translationErrorReported"
+  },
+  "translationNote": "※ AI translation may not be perfect",
+  "@translationNote": {
+    "description": "Localized string for translationNote"
+  },
+  "translationQuality": "Translation Quality",
+  "@translationQuality": {
+    "description": "Localized string for translationQuality"
+  },
+  "translationSettings": "Translation Settings",
+  "@translationSettings": {
+    "description": "Localized string for translationSettings"
+  },
+  "travel": "Travel",
+  "@travel": {
+    "description": "Localized string for travel"
+  },
+  "tuesday": "Tuesday",
+  "@tuesday": {
+    "description": "Localized string for tuesday"
+  },
+  "tutorialAccount": "Tutorial Account",
+  "@tutorialAccount": {
+    "description": "Localized string for tutorialAccount"
+  },
+  "tutorialWelcomeDescription": "Schaffen Sie besondere Beziehungen mit KI-Personas.",
+  "@tutorialWelcomeDescription": {
+    "description": "Tutorial: Welcome description"
+  },
+  "tutorialWelcomeTitle": "Willkommen bei SONA!",
+  "@tutorialWelcomeTitle": {
+    "description": "Tutorial: Welcome title"
+  },
+  "typeMessage": "Type a message...",
+  "@typeMessage": {
+    "description": "Localized string for typeMessage"
+  },
+  "unblock": "Blockierung aufheben",
+  "@unblock": {
+    "description": "Localized string for unblock"
+  },
+  "unblockFailed": "Failed to unblock",
+  "@unblockFailed": {
+    "description": "Localized string for unblockFailed"
+  },
+  "unblockPersonaConfirm": "Unblock {name}?",
+  "@unblockPersonaConfirm": {
+    "description": "Unblock persona confirmation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unblockedSuccessfully": "Unblocked successfully",
+  "@unblockedSuccessfully": {
+    "description": "Localized string for unblockedSuccessfully"
+  },
+  "unexpectedLoginError": "An unexpected error occurred during login",
+  "@unexpectedLoginError": {
+    "description": "Localized string for unexpectedLoginError"
+  },
+  "unknown": "Unknown",
+  "@unknown": {
+    "description": "Localized string for unknown"
+  },
+  "unknownError": "Unbekannter Fehler",
+  "@unknownError": {
+    "description": "Localized string for unknownError"
+  },
+  "unlimitedMessages": "Unlimited",
+  "@unlimitedMessages": {
+    "description": "Localized string for unlimitedMessages"
+  },
+  "unsendMessage": "Unsend message",
+  "@unsendMessage": {
+    "description": "Localized string for unsendMessage"
+  },
+  "usagePurpose": "Usage Purpose",
+  "@usagePurpose": {
+    "description": "Localized string for usagePurpose"
+  },
+  "useOneHeart": "Use 1 Heart",
+  "@useOneHeart": {
+    "description": "Localized string for useOneHeart"
+  },
+  "useSystemLanguage": "Use System Language",
+  "@useSystemLanguage": {
+    "description": "Localized string for useSystemLanguage"
+  },
+  "user": "User: ",
+  "@user": {
+    "description": "Localized string for user"
+  },
+  "userMessage": "User Message:",
+  "@userMessage": {
+    "description": "Localized string for userMessage"
+  },
+  "userNotFound": "User not found",
+  "@userNotFound": {
+    "description": "Localized string for userNotFound"
   },
   "valentinesDay": "Valentine's Day",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
+  "verifyingAuth": "Verifying authentication",
+  "@verifyingAuth": {
+    "description": "Localized string for verifyingAuth"
+  },
+  "version": "Version",
+  "@version": {
+    "description": "Localized string for version"
+  },
+  "vietnamese": "Vietnamese",
+  "@vietnamese": {
+    "description": "Localized string for vietnamese"
+  },
+  "violentContent": "Violent content",
+  "@violentContent": {
+    "description": "Localized string for violentContent"
+  },
+  "voiceMessage": "🎤 Voice message",
+  "@voiceMessage": {
+    "description": "Localized string for voiceMessage"
+  },
+  "waitingForChat": "{name} is waiting to chat.",
+  "@waitingForChat": {
+    "description": "Shows that a persona is waiting to chat",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "walk": "Walk",
+  "@walk": {
+    "description": "Localized string for walk"
+  },
+  "wasHelpful": "Was this helpful?",
+  "@wasHelpful": {
+    "description": "Localized string for wasHelpful"
+  },
+  "weatherClear": "Clear",
+  "@weatherClear": {
+    "description": "Localized string for weatherClear"
+  },
+  "weatherCloudy": "Cloudy",
+  "@weatherCloudy": {
+    "description": "Localized string for weatherCloudy"
+  },
+  "weatherContext": "Weather Context",
+  "@weatherContext": {
+    "description": "Localized string for weatherContext"
+  },
+  "weatherContextDesc": "Provide conversation context based on weather",
+  "@weatherContextDesc": {
+    "description": "Localized string for weatherContextDesc"
+  },
+  "weatherDrizzle": "Drizzle",
+  "@weatherDrizzle": {
+    "description": "Localized string for weatherDrizzle"
+  },
+  "weatherFog": "Fog",
+  "@weatherFog": {
+    "description": "Localized string for weatherFog"
+  },
+  "weatherMist": "Mist",
+  "@weatherMist": {
+    "description": "Localized string for weatherMist"
+  },
+  "weatherRain": "Rain",
+  "@weatherRain": {
+    "description": "Localized string for weatherRain"
+  },
+  "weatherRainy": "Regnerisch",
+  "@weatherRainy": {
+    "description": "Localized string for weatherRainy"
+  },
+  "weatherSnow": "Snow",
+  "@weatherSnow": {
+    "description": "Localized string for weatherSnow"
+  },
+  "weatherSnowy": "Schneeig",
+  "@weatherSnowy": {
+    "description": "Localized string for weatherSnowy"
+  },
+  "weatherThunderstorm": "Thunderstorm",
+  "@weatherThunderstorm": {
+    "description": "Localized string for weatherThunderstorm"
+  },
+  "wednesday": "Wednesday",
+  "@wednesday": {
+    "description": "Localized string for wednesday"
+  },
+  "weekdays": "So,Mo,Di,Mi,Do,Fr,Sa",
+  "@weekdays": {
+    "description": "Localized string for weekdays"
+  },
+  "welcomeMessage": "Welcome💕",
+  "@welcomeMessage": {
+    "description": "Localized string for welcomeMessage"
+  },
+  "whatTopicsToTalk": "What topics would you like to talk about? (Optional)",
+  "@whatTopicsToTalk": {
+    "description": "Localized string for whatTopicsToTalk"
+  },
   "whiteDay": "White Day",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "childrensDay": "Children's Day",
-  "@childrensDay": {
-    "description": "Localized string for childrensDay"
+  "winter": "Winter",
+  "@winter": {
+    "description": "Localized string for winter"
   },
-  "parentsDay": "Parents' Day",
-  "@parentsDay": {
-    "description": "Localized string for parentsDay"
+  "wrongTranslation": "Wrong Translation",
+  "@wrongTranslation": {
+    "description": "Localized string for wrongTranslation"
   },
-  "teachersDay": "Teachers' Day",
-  "@teachersDay": {
-    "description": "Localized string for teachersDay"
-  },
-  "christmas": "Christmas",
-  "@christmas": {
-    "description": "Localized string for christmas"
+  "year": "Year",
+  "@year": {
+    "description": "Localized string for year"
   },
   "yearEnd": "Year End",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
-  "weatherRainy": "Regnerisch",
-  "weatherSnowy": "Schneeig",
-  "tapBottomForDetails": "Unten tippen für Details",
-  "tutorialWelcomeTitle": "Willkommen bei SONA!",
-  "@tutorialWelcomeTitle": {
-    "description": "Tutorial: Welcome title"
+  "yes": "Ja",
+  "@yes": {
+    "description": "Localized string for yes"
   },
-  "tutorialWelcomeDescription": "Schaffen Sie besondere Beziehungen mit KI-Personas.",
-  "@tutorialWelcomeDescription": {
-    "description": "Tutorial: Welcome description"
+  "yesterday": "Gestern",
+  "@yesterday": {
+    "description": "Localized string for yesterday"
+  },
+  "yesterdayChats": "Yesterday",
+  "@yesterdayChats": {
+    "description": "Localized string for yesterdayChats"
+  },
+  "you": "You",
+  "@you": {
+    "description": "Localized string for you"
   }
 }

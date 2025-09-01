@@ -148,7 +148,7 @@ class _BlockedPersonasScreenState extends State<BlockedPersonasScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(localizations.errorWithMessage('Error', e.toString())),
+              content: Text(localizations.errorWithMessage(e.toString())),
               backgroundColor: Colors.red,
             ),
           );

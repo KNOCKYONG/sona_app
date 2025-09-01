@@ -1,1768 +1,16 @@
 {
   "@@locale": "ko",
-  "appName": "SONA",
-  "@appName": {
-    "description": "Localized string for appName"
-  },
-  "loading": "로딩 중...",
-  "@loading": {
-    "description": "Localized string for loading"
-  },
-  "error": "오류",
-  "@error": {
-    "description": "Localized string for error"
-  },
-  "retry": "다시 시도",
-  "@retry": {
-    "description": "Localized string for retry"
-  },
-  "cancel": "취소",
-  "@cancel": {
-    "description": "Localized string for cancel"
-  },
-  "confirm": "확인",
-  "@confirm": {
-    "description": "Localized string for confirm"
-  },
-  "next": "다음",
-  "@next": {
-    "description": "Localized string for next"
-  },
-  "skip": "건너뛰기",
-  "@skip": {
-    "description": "Localized string for skip"
-  },
-  "done": "완료",
-  "@done": {
-    "description": "Localized string for done"
-  },
-  "save": "저장",
-  "@save": {
-    "description": "Localized string for save"
-  },
-  "delete": "삭제",
-  "@delete": {
-    "description": "Localized string for delete"
-  },
-  "edit": "수정",
-  "@edit": {
-    "description": "Localized string for edit"
-  },
-  "close": "닫기",
-  "@close": {
-    "description": "Localized string for close"
-  },
-  "search": "검색",
-  "@search": {
-    "description": "Localized string for search"
-  },
-  "filter": "필터",
-  "@filter": {
-    "description": "Localized string for filter"
-  },
-  "sort": "정렬",
-  "@sort": {
-    "description": "Localized string for sort"
-  },
-  "refresh": "새로고침",
-  "@refresh": {
-    "description": "Localized string for refresh"
-  },
-  "yes": "예",
-  "@yes": {
-    "description": "Localized string for yes"
-  },
-  "no": "아니오",
-  "@no": {
-    "description": "Localized string for no"
-  },
-  "you": "나",
-  "@you": {
-    "description": "Localized string for you"
-  },
-  "login": "로그인",
-  "@login": {
-    "description": "Localized string for login"
-  },
-  "signup": "회원가입",
-  "@signup": {
-    "description": "Localized string for signup"
-  },
-  "meetAIPersonas": "AI 페르소나를 만나보세요",
-  "@meetAIPersonas": {
-    "description": "Localized string for meetAIPersonas"
-  },
-  "welcomeMessage": "오신 걸 환영해요💕",
-  "@welcomeMessage": {
-    "description": "Localized string for welcomeMessage"
-  },
-  "loginSignup": "로그인/회원가입",
-  "@loginSignup": {
-    "description": "Localized string for loginSignup"
-  },
-  "or": "또는",
-  "@or": {
-    "description": "Localized string for or"
-  },
-  "startWithEmail": "이메일로 시작하기",
-  "@startWithEmail": {
-    "description": "Localized string for startWithEmail"
-  },
-  "startWithGoogle": "Google로 시작하기",
-  "@startWithGoogle": {
-    "description": "Localized string for startWithGoogle"
-  },
-  "loginError": "로그인에 실패했습니다",
-  "@loginError": {
-    "description": "Localized string for loginError"
-  },
-  "loginCancelled": "로그인이 취소되었습니다",
-  "@loginCancelled": {
-    "description": "Localized string for loginCancelled"
-  },
-  "logout": "로그아웃",
-  "@logout": {
-    "description": "Localized string for logout"
-  },
-  "basicInfo": "기본 정보",
-  "@basicInfo": {
-    "description": "Localized string for basicInfo"
-  },
-  "email": "이메일",
-  "@email": {
-    "description": "Localized string for email"
-  },
-  "password": "비밀번호",
-  "@password": {
-    "description": "Localized string for password"
-  },
-  "nickname": "닉네임",
-  "@nickname": {
-    "description": "Localized string for nickname"
-  },
-  "nicknameRequired": "닉네임 *",
-  "@nicknameRequired": {
-    "description": "Localized string for nicknameRequired"
-  },
-  "emailRequired": "이메일 *",
-  "@emailRequired": {
-    "description": "Localized string for emailRequired"
-  },
-  "passwordRequired": "비밀번호 *",
-  "@passwordRequired": {
-    "description": "Localized string for passwordRequired"
-  },
-  "emailHint": "example@email.com",
-  "@emailHint": {
-    "description": "Localized string for emailHint"
-  },
-  "passwordHint": "6자 이상",
-  "@passwordHint": {
-    "description": "Localized string for passwordHint"
-  },
-  "nicknameHint": "3-10자",
-  "@nicknameHint": {
-    "description": "Localized string for nicknameHint"
-  },
-  "enterEmail": "이메일을 입력해주세요",
-  "@enterEmail": {
-    "description": "Localized string for enterEmail"
-  },
-  "profilePhoto": "프로필 사진",
-  "@profilePhoto": {
-    "description": "Localized string for profilePhoto"
-  },
-  "gender": "성별",
-  "@gender": {
-    "description": "Localized string for gender"
-  },
-  "genderRequired": "성별 *",
-  "@genderRequired": {
-    "description": "Localized string for genderRequired"
-  },
-  "male": "남성",
-  "@male": {
-    "description": "Localized string for male"
-  },
-  "female": "여성",
-  "@female": {
-    "description": "Localized string for female"
-  },
-  "other": "기타",
-  "@other": {
-    "description": "Localized string for other"
-  },
-  "birthDate": "생년월일",
-  "@birthDate": {
-    "description": "Localized string for birthDate"
-  },
-  "birthDateRequired": "생년월일 *",
-  "@birthDateRequired": {
-    "description": "Localized string for birthDateRequired"
-  },
-  "selectGender": "성별을 선택해주세요",
-  "@selectGender": {
-    "description": "Localized string for selectGender"
-  },
-  "genderOptional": "성별 (선택)",
-  "@genderOptional": {
-    "description": "Localized string for genderOptional"
-  },
-  "birthDateOptional": "생년월일 (선택)",
-  "@birthDateOptional": {
-    "description": "Localized string for birthDateOptional"
-  },
-  "setNow": "지금 설정하기",
-  "@setNow": {
-    "description": "Localized string for setNow"
-  },
-  "myGenderSection": "내 성별 (선택)",
-  "@myGenderSection": {
-    "description": "Localized string for myGenderSection"
-  },
-  "personaGenderSection": "만나고 싶은 페르소나 성별",
-  "@personaGenderSection": {
-    "description": "Localized string for personaGenderSection"
-  },
-  "showAllGendersOption": "모든 성별 보기",
-  "@showAllGendersOption": {
-    "description": "Localized string for showAllGendersOption"
+  "about": "앱 정보",
+  "@about": {
+    "description": "Localized string for about"
   },
   "accountAndProfile": "계정 & 프로필 정보",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "enterBasicInformation": "기본 정보를 입력해주세요",
-  "@enterBasicInformation": {
-    "description": "Localized string for enterBasicInformation"
-  },
-  "optional": "선택",
-  "@optional": {
-    "description": "Localized string for optional"
-  },
-  "previous": "이전",
-  "@previous": {
-    "description": "Localized string for previous"
-  },
-  "completeSignup": "가입 완료",
-  "@completeSignup": {
-    "description": "Localized string for completeSignup"
-  },
-  "referrerEmailLabel": "추천인 이메일 (선택)",
-  "@referrerEmailLabel": {
-    "description": "Localized string for referrerEmailLabel"
-  },
-  "year": "년",
-  "@year": {
-    "description": "Localized string for year"
-  },
-  "month": "월",
-  "@month": {
-    "description": "Localized string for month"
-  },
-  "day": "일",
-  "@day": {
-    "description": "Localized string for day"
-  },
-  "selfIntroduction": "자기소개 (선택)",
-  "@selfIntroduction": {
-    "description": "Localized string for selfIntroduction"
-  },
-  "selfIntroductionHint": "간단한 자기소개를 작성해주세요",
-  "@selfIntroductionHint": {
-    "description": "Localized string for selfIntroductionHint"
-  },
-  "usagePurpose": "사용 목적",
-  "@usagePurpose": {
-    "description": "Localized string for usagePurpose"
-  },
-  "selectFeeling": "감정 선택",
-  "@selectFeeling": {
-    "description": "Localized string for selectFeeling"
-  },
-  "happy": "행복해요",
-  "@happy": {
-    "description": "Localized string for happy"
-  },
-  "sad": "슬퍼요",
-  "@sad": {
-    "description": "Localized string for sad"
-  },
-  "angry": "화나요",
-  "@angry": {
-    "description": "Localized string for angry"
-  },
-  "anxious": "불안해요",
-  "@anxious": {
-    "description": "Localized string for anxious"
-  },
-  "tired": "피곤해요",
-  "@tired": {
-    "description": "Localized string for tired"
-  },
-  "lonely": "외로워요",
-  "@lonely": {
-    "description": "Localized string for lonely"
-  },
-  "stressed": "스트레스받아요",
-  "@stressed": {
-    "description": "Localized string for stressed"
-  },
-  "depressed": "우울해요",
-  "@depressed": {
-    "description": "Localized string for depressed"
-  },
-  "excited": "신나요",
-  "@excited": {
-    "description": "Localized string for excited"
-  },
-  "calm": "평온해요",
-  "@calm": {
-    "description": "Localized string for calm"
-  },
-  "allPersonas": "모든 페르소나",
-  "@allPersonas": {
-    "description": "Localized string for allPersonas"
-  },
-  "chat": "채팅",
-  "@chat": {
-    "description": "Localized string for chat"
-  },
-  "chats": "채팅",
-  "@chats": {
-    "description": "Localized string for chats"
-  },
-  "startChat": "대화 시작",
-  "@startChat": {
-    "description": "Localized string for startChat"
-  },
-  "endChat": "대화 종료",
-  "@endChat": {
-    "description": "Localized string for endChat"
-  },
-  "typeMessage": "메시지를 입력하세요...",
-  "@typeMessage": {
-    "description": "Localized string for typeMessage"
-  },
-  "send": "전송",
-  "@send": {
-    "description": "Localized string for send"
-  },
-  "noChatsYet": "아직 대화가 없습니다",
-  "@noChatsYet": {
-    "description": "Localized string for noChatsYet"
-  },
-  "todayChats": "오늘",
-  "@todayChats": {
-    "description": "Localized string for todayChats"
-  },
-  "yesterdayChats": "어제",
-  "@yesterdayChats": {
-    "description": "Localized string for yesterdayChats"
-  },
-  "olderChats": "이전",
-  "@olderChats": {
-    "description": "Localized string for olderChats"
-  },
-  "chatEndedMessage": "대화가 종료되었습니다",
-  "@chatEndedMessage": {
-    "description": "Localized string for chatEndedMessage"
-  },
-  "messageDeleted": "메시지가 삭제되었습니다",
-  "@messageDeleted": {
-    "description": "Localized string for messageDeleted"
-  },
-  "unsendMessage": "메시지 취소",
-  "@unsendMessage": {
-    "description": "Localized string for unsendMessage"
-  },
-  "copyMessage": "메시지 복사",
-  "@copyMessage": {
-    "description": "Localized string for copyMessage"
-  },
-  "messageCopied": "메시지가 복사되었습니다",
-  "@messageCopied": {
-    "description": "Localized string for messageCopied"
-  },
-  "voiceMessage": "🎤 음성 메시지",
-  "@voiceMessage": {
-    "description": "Localized string for voiceMessage"
-  },
-  "signUp": "회원가입",
-  "@signUp": {
-    "description": "Localized string for signUp"
-  },
-  "meetPersonas": "페르소나 만나기",
-  "@meetPersonas": {
-    "description": "Localized string for meetPersonas"
-  },
-  "allPersonasMatched": "모든 페르소나와 매칭되었습니다! 대화를 나눠보세요.",
-  "@allPersonasMatched": {
-    "description": "Localized string for allPersonasMatched"
-  },
-  "noPersonasAvailable": "사용 가능한 페르소나가 없습니다. 다시 시도해주세요.",
-  "@noPersonasAvailable": {
-    "description": "Localized string for noPersonasAvailable"
-  },
-  "heartInsufficient": "하트가 부족합니다",
-  "@heartInsufficient": {
-    "description": "Localized string for heartInsufficient"
-  },
-  "leaveChatTitle": "채팅방 나가기",
-  "@leaveChatTitle": {
-    "description": "Localized string for leaveChatTitle"
-  },
-  "leave": "나가기",
-  "@leave": {
-    "description": "Localized string for leave"
-  },
-  "store": "스토어",
-  "@store": {
-    "description": "Localized string for store"
-  },
-  "hearts": "하트",
-  "@hearts": {
-    "description": "Localized string for hearts"
-  },
-  "notSubscribed": "미가입",
-  "@notSubscribed": {
-    "description": "Localized string for notSubscribed"
-  },
-  "expired": "만료됨",
-  "@expired": {
-    "description": "Localized string for expired"
-  },
-  "purchaseConfirm": "구매 확인",
-  "@purchaseConfirm": {
-    "description": "Localized string for purchaseConfirm"
-  },
-  "purchaseButton": "구매하기",
-  "@purchaseButton": {
-    "description": "Localized string for purchaseButton"
-  },
-  "discount20": "20% 할인",
-  "@discount20": {
-    "description": "Localized string for discount20"
-  },
-  "discount30": "30% 할인",
-  "@discount30": {
-    "description": "Localized string for discount30"
-  },
-  "hearts10": "하트 10개",
-  "@hearts10": {
-    "description": "Localized string for hearts10"
-  },
-  "hearts30": "하트 30개",
-  "@hearts30": {
-    "description": "Localized string for hearts30"
-  },
-  "hearts50": "하트 50개",
-  "@hearts50": {
-    "description": "Localized string for hearts50"
-  },
-  "originalPrice": "원가",
-  "@originalPrice": {
-    "description": "Localized string for originalPrice"
-  },
-  "discountAmount": "할인",
-  "@discountAmount": {
-    "description": "Localized string for discountAmount"
-  },
-  "hearts30Discount": "할인",
-  "@hearts30Discount": {
-    "description": "Localized string for hearts30Discount"
-  },
-  "hearts50Discount": "할인",
-  "@hearts50Discount": {
-    "description": "Localized string for hearts50Discount"
-  },
-  "settings": "설정",
-  "@settings": {
-    "description": "Localized string for settings"
-  },
-  "profile": "프로필",
-  "@profile": {
-    "description": "Localized string for profile"
-  },
-  "editProfile": "프로필 편집",
-  "@editProfile": {
-    "description": "Localized string for editProfile"
-  },
-  "purchaseHeartsOnly": "하트 구매",
-  "@purchaseHeartsOnly": {
-    "description": "Localized string for purchaseHeartsOnly"
-  },
-  "tutorialAccount": "튜토리얼 계정",
-  "@tutorialAccount": {
-    "description": "Localized string for tutorialAccount"
-  },
-  "subscriptionStatus": "구독 현황",
-  "@subscriptionStatus": {
-    "description": "Localized string for subscriptionStatus"
-  },
-  "editInfo": "정보 수정",
-  "@editInfo": {
-    "description": "Localized string for editInfo"
-  },
-  "joinDate": "가입일",
-  "@joinDate": {
-    "description": "Localized string for joinDate"
-  },
-  "notifications": "알림",
-  "@notifications": {
-    "description": "Localized string for notifications"
-  },
-  "pushNotifications": "푸시 알림",
-  "@pushNotifications": {
-    "description": "Localized string for pushNotifications"
-  },
-  "soundSettings": "소리 설정",
-  "@soundSettings": {
-    "description": "Localized string for soundSettings"
-  },
-  "effectSound": "효과음",
-  "@effectSound": {
-    "description": "Localized string for effectSound"
-  },
-  "language": "언어",
-  "@language": {
-    "description": "Localized string for language"
-  },
-  "languageSettings": "언어 설정",
-  "@languageSettings": {
-    "description": "Localized string for languageSettings"
-  },
-  "theme": "테마",
-  "@theme": {
-    "description": "Localized string for theme"
-  },
-  "themeSettings": "테마 설정",
-  "@themeSettings": {
-    "description": "Localized string for themeSettings"
-  },
-  "darkMode": "다크 모드",
-  "@darkMode": {
-    "description": "Localized string for darkMode"
-  },
-  "privacy": "개인정보 처리방침",
-  "@privacy": {
-    "description": "Localized string for privacy"
-  },
-  "terms": "이용약관",
-  "@terms": {
-    "description": "Localized string for terms"
-  },
-  "help": "도움말",
-  "@help": {
-    "description": "Localized string for help"
-  },
-  "frequentlyAskedQuestions": "자주 묻는 질문",
-  "@frequentlyAskedQuestions": {
-    "description": "Localized string for frequentlyAskedQuestions"
-  },
-  "searchFAQ": "FAQ 검색...",
-  "@searchFAQ": {
-    "description": "Localized string for searchFAQ"
-  },
-  "searchResults": "검색 결과",
-  "@searchResults": {
-    "description": "Localized string for searchResults"
-  },
-  "relatedFAQ": "관련 FAQ",
-  "@relatedFAQ": {
-    "description": "Localized string for relatedFAQ"
-  },
-  "wasHelpful": "도움이 되었나요?",
-  "@wasHelpful": {
-    "description": "Localized string for wasHelpful"
-  },
-  "thanksFeedback": "피드백 감사합니다!",
-  "@thanksFeedback": {
-    "description": "Localized string for thanksFeedback"
-  },
-  "about": "앱 정보",
-  "@about": {
-    "description": "Localized string for about"
-  },
-  "version": "버전",
-  "@version": {
-    "description": "Localized string for version"
-  },
-  "others": "기타",
-  "@others": {
-    "description": "Localized string for others"
-  },
-  "accountManagement": "계정 관리",
-  "@accountManagement": {
-    "description": "Localized string for accountManagement"
-  },
-  "deleteAccount": "계정 삭제",
-  "@deleteAccount": {
-    "description": "Localized string for deleteAccount"
-  },
-  "howToUse": "SONA 사용 방법",
-  "@howToUse": {
-    "description": "Localized string for howToUse"
-  },
-  "inquiries": "문의사항",
-  "@inquiries": {
-    "description": "Localized string for inquiries"
-  },
-  "loginRequired": "로그인이 필요합니다",
-  "@loginRequired": {
-    "description": "Localized string for loginRequired"
-  },
-  "sonaFriend": "소나 친구",
-  "@sonaFriend": {
-    "description": "Localized string for sonaFriend"
-  },
-  "messagesRemaining": "메시지 잔량",
-  "@messagesRemaining": {
-    "description": "Localized string for messagesRemaining"
-  },
-  "totalLikes": "총 Like",
-  "@totalLikes": {
-    "description": "Localized string for totalLikes"
-  },
-  "ownedHearts": "보유 하트",
-  "@ownedHearts": {
-    "description": "Localized string for ownedHearts"
-  },
-  "matchedPersonas": "매칭된 소나",
-  "@matchedPersonas": {
-    "description": "Localized string for matchedPersonas"
-  },
-  "retryButton": "다시 시도",
-  "@retryButton": {
-    "description": "Localized string for retryButton"
-  },
-  "matchingFailed": "매칭에 실패했습니다.",
-  "@matchingFailed": {
-    "description": "Localized string for matchingFailed"
-  },
-  "errorOccurred": "오류가 발생했습니다.",
-  "@errorOccurred": {
-    "description": "Localized string for errorOccurred"
-  },
-  "signupComplete": "가입완료",
-  "@signupComplete": {
-    "description": "Localized string for signupComplete"
-  },
-  "accountDeletionTitle": "계정 삭제",
-  "@accountDeletionTitle": {
-    "description": "Localized string for accountDeletionTitle"
-  },
-  "continueButton": "계속",
-  "@continueButton": {
-    "description": "Localized string for continueButton"
-  },
-  "userNotFound": "사용자를 찾을 수 없습니다",
-  "@userNotFound": {
-    "description": "Localized string for userNotFound"
-  },
-  "loadingData": "데이터를 로딩 중입니다...",
-  "@loadingData": {
-    "description": "Localized string for loadingData"
-  },
-  "report": "신고하기",
-  "@report": {
-    "description": "Localized string for report"
-  },
-  "reportAI": "신고",
-  "@reportAI": {
-    "description": "Localized string for reportAI"
-  },
-  "reportAITitle": "AI 대화 신고",
-  "@reportAITitle": {
-    "description": "Localized string for reportAITitle"
-  },
-  "termsOfService": "서비스 이용약관",
-  "@termsOfService": {
-    "description": "Localized string for termsOfService"
-  },
-  "privacyPolicy": "개인정보 처리방침",
-  "@privacyPolicy": {
-    "description": "Localized string for privacyPolicy"
-  },
-  "grantPermission": "계속",
-  "@grantPermission": {
-    "description": "Localized string for grantPermission"
-  },
-  "goToSettings": "설정으로 이동",
-  "@goToSettings": {
-    "description": "Localized string for goToSettings"
-  },
-  "later": "나중에",
-  "@later": {
-    "description": "Localized string for later"
-  },
-  "sessionExpired": "세션이 만료되었습니다",
-  "@sessionExpired": {
-    "description": "Localized string for sessionExpired"
-  },
-  "notEnoughHearts": "하트가 부족합니다",
-  "@notEnoughHearts": {
-    "description": "Localized string for notEnoughHearts"
-  },
-  "spamAdvertising": "스팸/광고",
-  "@spamAdvertising": {
-    "description": "Localized string for spamAdvertising"
-  },
-  "hateSpeech": "혐오 발언",
-  "@hateSpeech": {
-    "description": "Localized string for hateSpeech"
-  },
-  "sexualContent": "성적인 콘텐츠",
-  "@sexualContent": {
-    "description": "Localized string for sexualContent"
-  },
-  "violentContent": "폭력적인 콘텐츠",
-  "@violentContent": {
-    "description": "Localized string for violentContent"
-  },
-  "harassmentBullying": "괴롭힘/따돌림",
-  "@harassmentBullying": {
-    "description": "Localized string for harassmentBullying"
-  },
-  "detailedReason": "상세 사유",
-  "@detailedReason": {
-    "description": "Localized string for detailedReason"
-  },
-  "permissionRequired": "권한 필요",
-  "@permissionRequired": {
-    "description": "Localized string for permissionRequired"
-  },
-  "cameraPermission": "카메라 권한",
-  "@cameraPermission": {
-    "description": "Localized string for cameraPermission"
-  },
-  "galleryPermission": "갤러리 권한",
-  "@galleryPermission": {
-    "description": "Localized string for galleryPermission"
-  },
-  "permissionDenied": "권한이 거부되었습니다",
-  "@permissionDenied": {
-    "description": "Localized string for permissionDenied"
-  },
-  "openSettings": "설정 열기",
-  "@openSettings": {
-    "description": "Localized string for openSettings"
-  },
-  "unlimitedMessages": "무제한",
-  "@unlimitedMessages": {
-    "description": "Localized string for unlimitedMessages"
-  },
-  "profileInfo": "프로필 정보",
-  "@profileInfo": {
-    "description": "Localized string for profileInfo"
-  },
-  "generalPersona": "일반 페르소나",
-  "@generalPersona": {
-    "description": "Localized string for generalPersona"
-  },
-  "expertPersona": "전문가 페르소나",
-  "@expertPersona": {
-    "description": "Localized string for expertPersona"
-  },
-  "interests": "관심사",
-  "@interests": {
-    "description": "Localized string for interests"
-  },
-  "termsAgreement": "약관 동의",
-  "@termsAgreement": {
-    "description": "Localized string for termsAgreement"
-  },
-  "preferenceSettings": "선호 설정",
-  "@preferenceSettings": {
-    "description": "Localized string for preferenceSettings"
-  },
-  "leaveChatRoom": "채팅방 나가기",
-  "@leaveChatRoom": {
-    "description": "Localized string for leaveChatRoom"
-  },
-  "backButton": "뒤로가기",
-  "@backButton": {
-    "description": "Localized string for backButton"
-  },
-  "moreButton": "더보기",
-  "@moreButton": {
-    "description": "Localized string for moreButton"
-  },
-  "chatListTab": "채팅 목록 탭",
-  "@chatListTab": {
-    "description": "Localized string for chatListTab"
-  },
-  "loginTab": "로그인",
-  "@loginTab": {
-    "description": "Localized string for loginTab"
-  },
-  "signupTab": "회원가입",
-  "@signupTab": {
-    "description": "Localized string for signupTab"
-  },
-  "emailLabel": "이메일",
-  "@emailLabel": {
-    "description": "Localized string for emailLabel"
-  },
-  "passwordLabel": "비밀번호",
-  "@passwordLabel": {
-    "description": "Localized string for passwordLabel"
-  },
-  "sendingEmail": "이메일 발송 중...",
-  "@sendingEmail": {
-    "description": "Localized string for sendingEmail"
-  },
-  "forgotPassword": "비밀번호 찾기",
-  "@forgotPassword": {
-    "description": "Localized string for forgotPassword"
-  },
-  "endTutorial": "튜토리얼 종료",
-  "@endTutorial": {
-    "description": "Localized string for endTutorial"
-  },
-  "profileEdit": "프로필 편집",
-  "@profileEdit": {
-    "description": "Localized string for profileEdit"
-  },
-  "complete": "완료",
-  "@complete": {
-    "description": "Localized string for complete"
-  },
-  "me": "나",
-  "@me": {
-    "description": "Localized string for me"
-  },
-  "photo": "사진",
-  "@photo": {
-    "description": "Localized string for photo"
-  },
-  "justNow": "방금 전",
-  "@justNow": {
-    "description": "Localized string for justNow"
-  },
-  "storyEvent": "스토리 이벤트",
-  "@storyEvent": {
-    "description": "Localized string for storyEvent"
-  },
-  "chooseOption": "선택하세요:",
-  "@chooseOption": {
-    "description": "Localized string for chooseOption"
-  },
-  "allowPermission": "계속",
-  "@allowPermission": {
-    "description": "Localized string for allowPermission"
-  },
-  "privacySection6Title": "6. 이용자의 권리",
-  "@privacySection6Title": {
-    "description": "Localized string for privacySection6Title"
-  },
-  "selectTheme": "테마를 선택하세요",
-  "@selectTheme": {
-    "description": "Localized string for selectTheme"
-  },
-  "systemTheme": "시스템 설정 따르기",
-  "@systemTheme": {
-    "description": "Localized string for systemTheme"
-  },
-  "lightTheme": "라이트 모드",
-  "@lightTheme": {
-    "description": "Localized string for lightTheme"
-  },
-  "lightThemeDesc": "밝은 테마를 사용합니다",
-  "@lightThemeDesc": {
-    "description": "Localized string for lightThemeDesc"
-  },
-  "darkTheme": "다크 모드",
-  "@darkTheme": {
-    "description": "Localized string for darkTheme"
-  },
-  "darkThemeDesc": "어두운 테마를 사용합니다",
-  "@darkThemeDesc": {
-    "description": "Localized string for darkThemeDesc"
-  },
-  "preview": "미리보기",
-  "@preview": {
-    "description": "Localized string for preview"
-  },
-  "helloEmoji": "안녕하세요! 😊",
-  "@helloEmoji": {
-    "description": "Localized string for helloEmoji"
-  },
-  "niceToMeetYou": "반가워요!",
-  "@niceToMeetYou": {
-    "description": "Localized string for niceToMeetYou"
-  },
-  "purchaseSection6Title": "6. 문의사항",
-  "@purchaseSection6Title": {
-    "description": "Localized string for purchaseSection6Title"
-  },
-  "makeFriends": "친구 만들기",
-  "@makeFriends": {
-    "description": "Localized string for makeFriends"
-  },
-  "hobbySharing": "취미 공유",
-  "@hobbySharing": {
-    "description": "Localized string for hobbySharing"
-  },
-  "lonelinessRelief": "외로움 해소",
-  "@lonelinessRelief": {
-    "description": "Localized string for lonelinessRelief"
-  },
-  "dailyConversation": "일상 대화",
-  "@dailyConversation": {
-    "description": "Localized string for dailyConversation"
-  },
-  "entertainmentFun": "오락/재미",
-  "@entertainmentFun": {
-    "description": "Localized string for entertainmentFun"
-  },
-  "ageUnit": "세",
-  "@ageUnit": {
-    "description": "Localized string for ageUnit"
-  },
-  "gaming": "게임",
-  "@gaming": {
-    "description": "Localized string for gaming"
-  },
-  "movies": "영화",
-  "@movies": {
-    "description": "Localized string for movies"
-  },
-  "music": "음악",
-  "@music": {
-    "description": "Localized string for music"
-  },
-  "reading": "독서",
-  "@reading": {
-    "description": "Localized string for reading"
-  },
-  "sports": "스포츠",
-  "@sports": {
-    "description": "Localized string for sports"
-  },
-  "travel": "여행",
-  "@travel": {
-    "description": "Localized string for travel"
-  },
-  "cooking": "요리",
-  "@cooking": {
-    "description": "Localized string for cooking"
-  },
-  "fashion": "패션",
-  "@fashion": {
-    "description": "Localized string for fashion"
-  },
-  "technology": "기술",
-  "@technology": {
-    "description": "Localized string for technology"
-  },
-  "art": "예술",
-  "@art": {
-    "description": "Localized string for art"
-  },
-  "pets": "반려동물",
-  "@pets": {
-    "description": "Localized string for pets"
-  },
-  "photography": "사진",
-  "@photography": {
-    "description": "Localized string for photography"
-  },
-  "dailyChat": "일상 대화",
-  "@dailyChat": {
-    "description": "Localized string for dailyChat"
-  },
-  "datingAdvice": "연애 상담",
-  "@datingAdvice": {
-    "description": "Localized string for datingAdvice"
-  },
-  "hobbyTalk": "취미 이야기",
-  "@hobbyTalk": {
-    "description": "Localized string for hobbyTalk"
-  },
-  "lifeAdvice": "인생 조언",
-  "@lifeAdvice": {
-    "description": "Localized string for lifeAdvice"
-  },
-  "funChat": "재미있는 대화",
-  "@funChat": {
-    "description": "Localized string for funChat"
-  },
-  "deepTalk": "깊은 대화",
-  "@deepTalk": {
-    "description": "Localized string for deepTalk"
-  },
-  "lightTalk": "가벼운 수다",
-  "@lightTalk": {
-    "description": "Localized string for lightTalk"
-  },
-  "allAgree": "전체 동의",
-  "@allAgree": {
-    "description": "Localized string for allAgree"
-  },
-  "required": "[필수]",
-  "@required": {
-    "description": "Localized string for required"
-  },
-  "preferredLanguage": "선호 언어",
-  "@preferredLanguage": {
-    "description": "Localized string for preferredLanguage"
-  },
-  "selectLanguage": "언어를 선택하세요",
-  "@selectLanguage": {
-    "description": "Localized string for selectLanguage"
-  },
-  "korean": "한국어",
-  "@korean": {
-    "description": "Localized string for korean"
-  },
-  "english": "영어",
-  "@english": {
-    "description": "Localized string for english"
-  },
-  "japanese": "일본어",
-  "@japanese": {
-    "description": "Localized string for japanese"
-  },
-  "chinese": "중국어",
-  "@chinese": {
-    "description": "Localized string for chinese"
-  },
-  "indonesian": "인도네시아어",
-  "@indonesian": {
-    "description": "Localized string for indonesian"
-  },
-  "vietnamese": "베트남어",
-  "@vietnamese": {
-    "description": "Localized string for vietnamese"
-  },
-  "spanish": "스페인어",
-  "@spanish": {
-    "description": "Localized string for spanish"
-  },
-  "thai": "태국어",
-  "@thai": {
-    "description": "Localized string for thai"
-  },
-  "showOriginalText": "원문 보기",
-  "@showOriginalText": {
-    "description": "Localized string for showOriginalText"
-  },
-  "hideOriginalText": "원문 숨기기",
-  "@hideOriginalText": {
-    "description": "Localized string for hideOriginalText"
-  },
-  "errorDetails": "오류 상세 내용",
-  "@errorDetails": {
-    "description": "Localized string for errorDetails"
-  },
-  "submitReport": "신고 제출",
-  "@submitReport": {
-    "description": "Localized string for submitReport"
-  },
-  "multilingualChat": "다국어 채팅",
-  "@multilingualChat": {
-    "description": "Localized string for multilingualChat"
-  },
-  "languageIndicator": "언어",
-  "@languageIndicator": {
-    "description": "Localized string for languageIndicator"
-  },
-  "translatedFrom": "번역됨",
-  "@translatedFrom": {
-    "description": "Localized string for translatedFrom"
-  },
-  "originalText": "원문",
-  "@originalText": {
-    "description": "Localized string for originalText"
-  },
-  "translatedText": "번역",
-  "@translatedText": {
-    "description": "Localized string for translatedText"
-  },
-  "autoTranslate": "자동 번역",
-  "@autoTranslate": {
-    "description": "Localized string for autoTranslate"
-  },
-  "translationSettings": "번역 설정",
-  "@translationSettings": {
-    "description": "Localized string for translationSettings"
-  },
-  "translationQuality": "번역 품질",
-  "@translationQuality": {
-    "description": "Localized string for translationQuality"
-  },
-  "selectErrorType": "오류 유형을 선택하세요",
-  "@selectErrorType": {
-    "description": "Localized string for selectErrorType"
-  },
-  "wrongTranslation": "잘못된 번역",
-  "@wrongTranslation": {
-    "description": "Localized string for wrongTranslation"
-  },
-  "awkwardExpression": "어색한 표현",
-  "@awkwardExpression": {
-    "description": "Localized string for awkwardExpression"
-  },
-  "missingTranslation": "번역 누락",
-  "@missingTranslation": {
-    "description": "Localized string for missingTranslation"
-  },
-  "culturalIssue": "문화적 오류",
-  "@culturalIssue": {
-    "description": "Localized string for culturalIssue"
-  },
-  "technicalError": "기술적 오류",
-  "@technicalError": {
-    "description": "Localized string for technicalError"
-  },
-  "otherError": "기타 오류",
-  "@otherError": {
-    "description": "Localized string for otherError"
-  },
-  "reportAndBlock": "신고 및 차단",
-  "@reportAndBlock": {
-    "description": "Localized string for reportAndBlock"
-  },
-  "blockThisAI": "이 AI 차단하기",
-  "@blockThisAI": {
-    "description": "Localized string for blockThisAI"
-  },
-  "blockedAIs": "차단된 AI",
-  "@blockedAIs": {
-    "description": "Localized string for blockedAIs"
-  },
-  "manageBlockedAIs": "차단된 AI 관리",
-  "@manageBlockedAIs": {
-    "description": "Localized string for manageBlockedAIs"
-  },
-  "unblock": "차단 해제",
-  "@unblock": {
-    "description": "Localized string for unblock"
-  },
-  "blockedSuccessfully": "차단되었습니다",
-  "@blockedSuccessfully": {
-    "description": "Localized string for blockedSuccessfully"
-  },
-  "unblockedSuccessfully": "차단이 해제되었습니다",
-  "@unblockedSuccessfully": {
-    "description": "Localized string for unblockedSuccessfully"
-  },
-  "noBlockedAIs": "차단된 AI가 없습니다",
-  "@noBlockedAIs": {
-    "description": "Localized string for noBlockedAIs"
-  },
-  "blockReason": "차단 사유",
-  "@blockReason": {
-    "description": "Localized string for blockReason"
-  },
-  "blockedAt": "차단 날짜",
-  "@blockedAt": {
-    "description": "Localized string for blockedAt"
-  },
-  "alsoBlockThisAI": "이 AI도 차단하기",
-  "@alsoBlockThisAI": {
-    "description": "Localized string for alsoBlockThisAI"
-  },
-  "termsSection1Title": "제1조 (목적)",
-  "@termsSection1Title": {
-    "description": "Localized string for termsSection1Title"
-  },
-  "termsSection2Title": "제2조 (정의)",
-  "@termsSection2Title": {
-    "description": "Localized string for termsSection2Title"
-  },
-  "termsSection3Title": "제3조 (약관의 효력 및 변경)",
-  "@termsSection3Title": {
-    "description": "Localized string for termsSection3Title"
-  },
-  "termsSection4Title": "제4조 (서비스의 제공)",
-  "@termsSection4Title": {
-    "description": "Localized string for termsSection4Title"
-  },
-  "termsSection5Title": "제5조 (회원가입)",
-  "@termsSection5Title": {
-    "description": "Localized string for termsSection5Title"
-  },
-  "termsSection6Title": "제6조 (이용자의 의무)",
-  "@termsSection6Title": {
-    "description": "Localized string for termsSection6Title"
-  },
-  "termsSection7Title": "제7조 (서비스 이용제한)",
-  "@termsSection7Title": {
-    "description": "Localized string for termsSection7Title"
-  },
-  "termsSection8Title": "제8조 (서비스 중단)",
-  "@termsSection8Title": {
-    "description": "Localized string for termsSection8Title"
-  },
-  "termsSection9Title": "제9조 (면책조항)",
-  "@termsSection9Title": {
-    "description": "Localized string for termsSection9Title"
-  },
-  "termsSection10Title": "제10조 (분쟁해결)",
-  "@termsSection10Title": {
-    "description": "Localized string for termsSection10Title"
-  },
-  "termsSection11Title": "제11조 (AI 서비스 특별조항)",
-  "@termsSection11Title": {
-    "description": "Localized string for termsSection11Title"
-  },
-  "termsSection12Title": "제12조 (데이터 수집 및 활용)",
-  "@termsSection12Title": {
-    "description": "Localized string for termsSection12Title"
-  },
-  "privacySettings": "프라이버시 설정",
-  "@privacySettings": {
-    "description": "Localized string for privacySettings"
-  },
-  "dataCollection": "데이터 수집 설정",
-  "@dataCollection": {
-    "description": "Localized string for dataCollection"
-  },
-  "emotionAnalysis": "감정 분석",
-  "@emotionAnalysis": {
-    "description": "Localized string for emotionAnalysis"
-  },
-  "memoryAlbum": "추억 앨범",
-  "@memoryAlbum": {
-    "description": "Localized string for memoryAlbum"
-  },
-  "weatherContext": "날씨 컨텍스트",
-  "@weatherContext": {
-    "description": "Localized string for weatherContext"
-  },
-  "dailyCare": "일상 케어",
-  "@dailyCare": {
-    "description": "Localized string for dailyCare"
-  },
-  "interestSharing": "관심사 공유",
-  "@interestSharing": {
-    "description": "Localized string for interestSharing"
-  },
-  "conversationContinuity": "대화 연속성",
-  "@conversationContinuity": {
-    "description": "Localized string for conversationContinuity"
-  },
-  "guestModeTitle": "게스트로 체험하기",
-  "@guestModeTitle": {
-    "description": "Localized string for guestModeTitle"
-  },
-  "guestMessageExhausted": "무료 메시지를 모두 사용했어요",
-  "@guestMessageExhausted": {
-    "description": "Localized string for guestMessageExhausted"
-  },
-  "memberBenefits": "회원가입 시 100개 이상의 메시지와 하트 10개 지급!",
-  "@memberBenefits": {
-    "description": "Localized string for memberBenefits"
-  },
-  "loginTitle": "로그인",
-  "@loginTitle": {
-    "description": "Localized string for loginTitle"
-  },
-  "continueWithGoogle": "Google로 계속하기",
-  "@continueWithGoogle": {
-    "description": "Localized string for continueWithGoogle"
-  },
-  "continueWithApple": "Apple로 계속하기",
-  "@continueWithApple": {
-    "description": "Localized string for continueWithApple"
-  },
-  "convertToMember": "회원가입 하기",
-  "@convertToMember": {
-    "description": "Localized string for convertToMember"
-  },
-  "continueAsGuest": "게스트로 계속하기",
-  "@continueAsGuest": {
-    "description": "Localized string for continueAsGuest"
-  },
-  "guestModeBanner": "게스트 모드",
-  "@guestModeBanner": {
-    "description": "Localized string for guestModeBanner"
-  },
-  "keepGuestData": "대화 기록 유지",
-  "@keepGuestData": {
-    "description": "Localized string for keepGuestData"
-  },
-  "discardGuestData": "새로 시작",
-  "@discardGuestData": {
-    "description": "Localized string for discardGuestData"
-  },
-  "guestModeWelcome": "게스트 모드로 시작합니다",
-  "@guestModeWelcome": {
-    "description": "Localized string for guestModeWelcome"
-  },
-  "guestModeFailedMessage": "게스트 모드 시작에 실패했습니다",
-  "@guestModeFailedMessage": {
-    "description": "Localized string for guestModeFailedMessage"
-  },
-  "loginRequiredTitle": "로그인이 필요합니다",
-  "@loginRequiredTitle": {
-    "description": "Localized string for loginRequiredTitle"
-  },
-  "loginButton": "로그인",
-  "@loginButton": {
-    "description": "Localized string for loginButton"
-  },
-  "restartConversation": "다시 대화하기",
-  "@restartConversation": {
-    "description": "Localized string for restartConversation"
-  },
-  "sendChatError": "대화 오류 전송하기",
-  "@sendChatError": {
-    "description": "Localized string for sendChatError"
-  },
-  "newMessage": "새 메시지",
-  "@newMessage": {
-    "description": "Localized string for newMessage"
-  },
-  "newMessages": "새 메시지",
-  "@newMessages": {
-    "description": "Localized string for newMessages"
-  },
-  "chatErrorSentSuccessfully": "대화 오류가 성공적으로 전송되었습니다.",
-  "@chatErrorSentSuccessfully": {
-    "description": "Localized string for chatErrorSentSuccessfully"
-  },
-  "errorSendingFailed": "오류 전송 실패",
-  "@errorSendingFailed": {
-    "description": "Localized string for errorSendingFailed"
-  },
-  "selectPersonaPlease": "페르소나를 선택해 주세요.",
-  "@selectPersonaPlease": {
-    "description": "Localized string for selectPersonaPlease"
-  },
-  "reportChatError": "대화 오류 신고",
-  "@reportChatError": {
-    "description": "Localized string for reportChatError"
-  },
-  "selectProblematicMessage": "문제가 있는 메시지를 선택해주세요 (선택사항)",
-  "@selectProblematicMessage": {
-    "description": "Localized string for selectProblematicMessage"
-  },
-  "describeError": "어떤 문제가 있나요?",
-  "@describeError": {
-    "description": "Localized string for describeError"
-  },
-  "errorDescriptionHint": "예: 이상한 대답을 했어요, 반복적으로 같은 말만 해요, 맥락에 맞지 않는 대답을 해요...",
-  "@errorDescriptionHint": {
-    "description": "Localized string for errorDescriptionHint"
-  },
-  "sendReport": "신고하기",
-  "@sendReport": {
-    "description": "Localized string for sendReport"
-  },
-  "useOneHeart": "하트 1개 사용하기",
-  "@useOneHeart": {
-    "description": "Localized string for useOneHeart"
-  },
-  "heartRequired": "하트 1개가 필요합니다",
-  "@heartRequired": {
-    "description": "Localized string for heartRequired"
-  },
-  "heartUsageFailed": "하트 사용에 실패했습니다.",
-  "@heartUsageFailed": {
-    "description": "Localized string for heartUsageFailed"
-  },
-  "errorOccurredTryAgain": "오류가 발생했습니다. 다시 시도해주세요.",
-  "@errorOccurredTryAgain": {
-    "description": "Localized string for errorOccurredTryAgain"
-  },
-  "permissionDeniedTryLater": "권한이 없습니다. 나중에 다시 시도해 주세요.",
-  "@permissionDeniedTryLater": {
-    "description": "Localized string for permissionDeniedTryLater"
-  },
-  "networkErrorOccurred": "네트워크 오류가 발생했습니다.",
-  "@networkErrorOccurred": {
-    "description": "Localized string for networkErrorOccurred"
-  },
-  "today": "오늘",
-  "@today": {
-    "description": "Localized string for today"
-  },
-  "yesterday": "어제",
-  "@yesterday": {
-    "description": "Localized string for yesterday"
-  },
-  "consultQualityMonitoring": "상담 품질 모니터링",
-  "@consultQualityMonitoring": {
-    "description": "Localized string for consultQualityMonitoring"
-  },
-  "averageQualityScore": "평균 품질 점수",
-  "@averageQualityScore": {
-    "description": "Localized string for averageQualityScore"
-  },
-  "totalConsultSessions": "총 상담 세션",
-  "@totalConsultSessions": {
-    "description": "Localized string for totalConsultSessions"
-  },
-  "lowQualityResponses": "낮은 품질 응답",
-  "@lowQualityResponses": {
-    "description": "Localized string for lowQualityResponses"
-  },
-  "crisisDetected": "위기 상황 감지",
-  "@crisisDetected": {
-    "description": "Localized string for crisisDetected"
-  },
-  "personaQualityStats": "페르소나별 품질 통계",
-  "@personaQualityStats": {
-    "description": "Localized string for personaQualityStats"
-  },
-  "realtimeQualityLog": "실시간 품질 로그",
-  "@realtimeQualityLog": {
-    "description": "Localized string for realtimeQualityLog"
-  },
-  "averageQuality": "평균 품질",
-  "@averageQuality": {
-    "description": "Localized string for averageQuality"
-  },
-  "totalResponses": "총 응답",
-  "@totalResponses": {
-    "description": "Localized string for totalResponses"
-  },
-  "expertiseScore": "전문성 점수",
-  "@expertiseScore": {
-    "description": "Localized string for expertiseScore"
-  },
-  "chatErrorDashboard": "대화 오류 대시보드",
-  "@chatErrorDashboard": {
-    "description": "Localized string for chatErrorDashboard"
-  },
-  "errorStats": "에러 통계",
-  "@errorStats": {
-    "description": "Localized string for errorStats"
-  },
-  "totalErrorCount": "총 에러 수",
-  "@totalErrorCount": {
-    "description": "Localized string for totalErrorCount"
-  },
-  "mostFrequentError": "가장 많은 에러",
-  "@mostFrequentError": {
-    "description": "Localized string for mostFrequentError"
-  },
-  "mainErrorType": "주요 에러 타입",
-  "@mainErrorType": {
-    "description": "Localized string for mainErrorType"
-  },
-  "byPersona": "페르소나별",
-  "@byPersona": {
-    "description": "Localized string for byPersona"
-  },
-  "byErrorType": "에러 타입별",
-  "@byErrorType": {
-    "description": "Localized string for byErrorType"
-  },
-  "all": "전체",
-  "@all": {
-    "description": "Localized string for all"
-  },
-  "problemOccurred": "문제 발생",
-  "@problemOccurred": {
-    "description": "Localized string for problemOccurred"
-  },
-  "timeout": "타임아웃",
-  "@timeout": {
-    "description": "Localized string for timeout"
-  },
-  "requestLimit": "요청 제한",
-  "@requestLimit": {
-    "description": "Localized string for requestLimit"
-  },
-  "serverErrorDashboard": "서버 오류",
-  "@serverErrorDashboard": {
-    "description": "Localized string for serverErrorDashboard"
-  },
-  "authError": "인증 오류",
-  "@authError": {
-    "description": "Localized string for authError"
-  },
-  "unknown": "알 수 없음",
-  "@unknown": {
-    "description": "Localized string for unknown"
-  },
-  "exitApp": "앱 종료",
-  "@exitApp": {
-    "description": "Localized string for exitApp"
-  },
-  "exitConfirmMessage": "정말 앱을 종료하시겠습니까?",
-  "@exitConfirmMessage": {
-    "description": "Localized string for exitConfirmMessage"
-  },
-  "exit": "종료",
-  "@exit": {
-    "description": "Localized string for exit"
-  },
-  "profileNav": "프로필",
-  "@profileNav": {
-    "description": "Localized string for profileNav"
-  },
-  "imageCacheManagement": "이미지 캐시 관리",
-  "@imageCacheManagement": {
-    "description": "Localized string for imageCacheManagement"
-  },
-  "managePersonaImageCache": "페르소나 이미지 캐시를 관리합니다",
-  "@managePersonaImageCache": {
-    "description": "Localized string for managePersonaImageCache"
-  },
-  "currentCacheSize": "현재 캐시 크기",
-  "@currentCacheSize": {
-    "description": "Localized string for currentCacheSize"
-  },
-  "deleteCache": "캐시 삭제",
-  "@deleteCache": {
-    "description": "Localized string for deleteCache"
-  },
-  "cacheDeleted": "이미지 캐시가 삭제되었습니다",
-  "@cacheDeleted": {
-    "description": "Localized string for cacheDeleted"
-  },
-  "storageManagement": "저장소 관리",
-  "@storageManagement": {
-    "description": "Localized string for storageManagement"
-  },
-  "hapticFeedback": "햅틱 피드백",
-  "@hapticFeedback": {
-    "description": "Localized string for hapticFeedback"
-  },
-  "subtleVibrationOnTouch": "터치 시 미세한 진동 효과",
-  "@subtleVibrationOnTouch": {
-    "description": "Localized string for subtleVibrationOnTouch"
-  },
-  "profileSettings": "프로필 설정",
-  "@profileSettings": {
-    "description": "Localized string for profileSettings"
-  },
-  "privacySettingsScreen": "개인정보 보호 설정",
-  "@privacySettingsScreen": {
-    "description": "Localized string for privacySettingsScreen"
-  },
-  "useSystemLanguage": "시스템 언어 사용",
-  "@useSystemLanguage": {
-    "description": "Localized string for useSystemLanguage"
-  },
-  "followDeviceLanguage": "기기의 언어 설정을 따릅니다",
-  "@followDeviceLanguage": {
-    "description": "Localized string for followDeviceLanguage"
-  },
-  "setAppInterfaceLanguage": "앱 인터페이스 언어를 설정합니다",
-  "@setAppInterfaceLanguage": {
-    "description": "Localized string for setAppInterfaceLanguage"
-  },
-  "koreanLanguage": "한국어",
-  "@koreanLanguage": {
-    "description": "Localized string for koreanLanguage"
-  },
-  "laterButton": "나중에",
-  "@laterButton": {
-    "description": "Localized string for laterButton"
-  },
-  "startChatButton": "채팅 시작",
-  "@startChatButton": {
-    "description": "Localized string for startChatButton"
-  },
-  "noPersonasToSelect": "선택할 소나가 없습니다",
-  "@noPersonasToSelect": {
-    "description": "Localized string for noPersonasToSelect"
-  },
-  "matchedSona": "매칭된 소나",
-  "@matchedSona": {
-    "description": "Localized string for matchedSona"
-  },
-  "noMatchedSonas": "아직 매칭된 소나가 없어요",
-  "@noMatchedSonas": {
-    "description": "Localized string for noMatchedSonas"
-  },
-  "startConversationLikeAFriend": "소나와 친구처럼 대화를 시작해보세요",
-  "@startConversationLikeAFriend": {
-    "description": "Localized string for startConversationLikeAFriend"
-  },
-  "startingApp": "앱을 시작하고 있어요",
-  "@startingApp": {
-    "description": "Localized string for startingApp"
-  },
-  "checkingUserInfo": "사용자 정보 확인 중",
-  "@checkingUserInfo": {
-    "description": "Localized string for checkingUserInfo"
-  },
-  "connectingToServer": "서버 연결 중",
-  "@connectingToServer": {
-    "description": "Localized string for connectingToServer"
-  },
-  "verifyingAuth": "인증 확인 중",
-  "@verifyingAuth": {
-    "description": "Localized string for verifyingAuth"
-  },
-  "loadingProfile": "프로필 불러오는 중",
-  "@loadingProfile": {
-    "description": "Localized string for loadingProfile"
-  },
-  "anonymousLogin": "익명 로그인 중",
-  "@anonymousLogin": {
-    "description": "Localized string for anonymousLogin"
-  },
-  "creatingAccount": "계정 생성 중",
-  "@creatingAccount": {
-    "description": "Localized string for creatingAccount"
-  },
-  "preparingNewMeeting": "새로운 만남 준비 중",
-  "@preparingNewMeeting": {
-    "description": "Localized string for preparingNewMeeting"
-  },
-  "downloadingPersonaImages": "새로운 페르소나 이미지를 다운로드하고 있어요",
-  "@downloadingPersonaImages": {
-    "description": "Localized string for downloadingPersonaImages"
-  },
-  "preparingPersonas": "페르소나를 준비하고 있어요",
-  "@preparingPersonas": {
-    "description": "Localized string for preparingPersonas"
-  },
-  "profileSetup": "프로필 설정 중",
-  "@profileSetup": {
-    "description": "Localized string for profileSetup"
-  },
-  "preparingPersonaImages": "페르소나 이미지를 준비하고 있어요",
-  "@preparingPersonaImages": {
-    "description": "Localized string for preparingPersonaImages"
-  },
-  "matching": "매칭",
-  "@matching": {
-    "description": "Localized string for matching"
-  },
-  "noErrorReports": "에러 리포트가 없습니다.",
-  "@noErrorReports": {
-    "description": "Localized string for noErrorReports"
-  },
-  "noQualityIssues": "최근 1시간 동안 품질 문제가 없습니다 ✅",
-  "@noQualityIssues": {
-    "description": "Localized string for noQualityIssues"
-  },
-  "noQualityLogs": "아직 품질 로그가 없습니다.",
-  "@noQualityLogs": {
-    "description": "Localized string for noQualityLogs"
-  },
-  "insufficientHearts": "하트가 부족합니다.",
-  "@insufficientHearts": {
-    "description": "Localized string for insufficientHearts"
-  },
-  "unblockFailed": "차단 해제에 실패했습니다",
-  "@unblockFailed": {
-    "description": "Localized string for unblockFailed"
-  },
-  "noImageAvailable": "이미지가 없습니다",
-  "@noImageAvailable": {
-    "description": "Localized string for noImageAvailable"
-  },
-  "aiDatingQuestion": "AI와 함께하는 특별한 일상\n당신만의 페르소나를 만나보세요.",
-  "@aiDatingQuestion": {
-    "description": "Localized string for aiDatingQuestion"
-  },
-  "googleLoginError": "Google 로그인 중 오류가 발생했습니다.",
-  "@googleLoginError": {
-    "description": "Localized string for googleLoginError"
-  },
-  "appleLoginError": "Apple 로그인 중 오류가 발생했습니다.",
-  "@appleLoginError": {
-    "description": "Localized string for appleLoginError"
-  },
-  "enterBasicInfo": "계정 생성을 위한 기본 정보를 입력해줘",
-  "@enterBasicInfo": {
-    "description": "Localized string for enterBasicInfo"
-  },
-  "passwordTooShort": "비밀번호는 6자 이상이어야 합니다",
-  "@passwordTooShort": {
-    "description": "Localized string for passwordTooShort"
-  },
-  "profilePhotoAndInfo": "프로필 사진과 기본 정보를 입력해주세요",
-  "@profilePhotoAndInfo": {
-    "description": "Localized string for profilePhotoAndInfo"
-  },
-  "showOppositeGenderOnly": "체크하지 않으면 이성 페르소나만 표시됩니다",
-  "@showOppositeGenderOnly": {
-    "description": "Localized string for showOppositeGenderOnly"
-  },
-  "genderNotSelectedInfo": "성별을 선택하지 않으면 모든 성별의 페르소나가 표시됩니다",
-  "@genderNotSelectedInfo": {
-    "description": "Localized string for genderNotSelectedInfo"
-  },
-  "canChangeInSettings": "나중에 설정에서 변경 가능합니다",
-  "@canChangeInSettings": {
-    "description": "Localized string for canChangeInSettings"
-  },
-  "genderSelectionInfo": "선택하지 않으면 모든 성별의 페르소나를 만날 수 있어요",
-  "@genderSelectionInfo": {
-    "description": "Localized string for genderSelectionInfo"
-  },
-  "genderPreferenceActive": "모든 성별의 페르소나를 만날 수 있어요",
-  "@genderPreferenceActive": {
-    "description": "Localized string for genderPreferenceActive"
-  },
-  "genderPreferenceInactive": "이성 페르소나만 보여집니다",
-  "@genderPreferenceInactive": {
-    "description": "Localized string for genderPreferenceInactive"
-  },
-  "genderPreferenceDisabled": "성별을 선택하면 이성만 보기 옵션이 활성화됩니다",
-  "@genderPreferenceDisabled": {
-    "description": "Localized string for genderPreferenceDisabled"
-  },
-  "selectUsagePurpose": "SONA를 사용하시는 목적을 선택해주세요",
-  "@selectUsagePurpose": {
-    "description": "Localized string for selectUsagePurpose"
-  },
-  "adaptiveConversationDesc": "상대방의 말투와 스타일에 맞춰 대화합니다",
-  "@adaptiveConversationDesc": {
-    "description": "Localized string for adaptiveConversationDesc"
-  },
-  "canMeetPreviousPersonas": "이전에 스와이프한 페르소나들을\n다시 만날 수 있어요!",
-  "@canMeetPreviousPersonas": {
-    "description": "Localized string for canMeetPreviousPersonas"
-  },
-  "endTutorialAndLogin": "튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.",
-  "@endTutorialAndLogin": {
-    "description": "Localized string for endTutorialAndLogin"
-  },
-  "messageSendFailed": "메시지 전송에 실패했습니다. 다시 시도해주세요.",
-  "@messageSendFailed": {
-    "description": "Localized string for messageSendFailed"
-  },
-  "leaveChatConfirm": "이 채팅방을 나가시겠습니까?\n채팅 목록에서 사라집니다.",
-  "@leaveChatConfirm": {
-    "description": "Localized string for leaveChatConfirm"
-  },
-  "loginRequiredForProfile": "프로필을 보고 소나와의 기록을 확인하려면\n로그인이 필요해요",
-  "@loginRequiredForProfile": {
-    "description": "Localized string for loginRequiredForProfile"
-  },
-  "deleteAccountConfirm": "정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
-  "@deleteAccountConfirm": {
-    "description": "Localized string for deleteAccountConfirm"
-  },
-  "matchPersonaStep": "1. 페르소나 매칭: 좌우로 스와이프하여 마음에 드는 AI 페르소나를 선택하세요.",
-  "@matchPersonaStep": {
-    "description": "Localized string for matchPersonaStep"
-  },
-  "startConversationStep": "2. 대화 시작: 매칭된 페르소나와 자유롭게 대화를 나누세요.",
-  "@startConversationStep": {
-    "description": "Localized string for startConversationStep"
-  },
-  "developRelationshipStep": "3. 관계 발전: 대화를 통해 친밀도를 쌓고 특별한 관계로 발전시켜보세요.",
-  "@developRelationshipStep": {
-    "description": "Localized string for developRelationshipStep"
-  },
-  "heartInsufficientPleaseCharge": "하트가 부족합니다. 하트를 충전해주세요.",
-  "@heartInsufficientPleaseCharge": {
-    "description": "Localized string for heartInsufficientPleaseCharge"
-  },
-  "specialRelationshipDesc": "서로를 이해하고 깊은 유대감을 쌓아요",
-  "@specialRelationshipDesc": {
-    "description": "Localized string for specialRelationshipDesc"
-  },
-  "emotionalSupportDesc": "고민을 나누고 따뜻한 위로를 받아요",
-  "@emotionalSupportDesc": {
-    "description": "Localized string for emotionalSupportDesc"
-  },
-  "entertainmentAndFunDesc": "즐거운 게임과 유쾌한 대화를 즐겨요",
-  "@entertainmentAndFunDesc": {
-    "description": "Localized string for entertainmentAndFunDesc"
+  "accountDeletedSuccess": "계정이 성공적으로 삭제되었습니다",
+  "@accountDeletedSuccess": {
+    "description": "Localized string for accountDeletedSuccess"
   },
   "accountDeletionContent": "정말로 계정을 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.",
   "@accountDeletionContent": {
@@ -1772,515 +20,13 @@
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "passwordConfirmationDesc": "계정 삭제를 위해 비밀번호를 다시 입력해주세요.",
-  "@passwordConfirmationDesc": {
-    "description": "Localized string for passwordConfirmationDesc"
-  },
-  "reportAIDescription": "AI가 당신에게 불쾌감을 주었다면 내용을 적어 신고하세요.",
-  "@reportAIDescription": {
-    "description": "Localized string for reportAIDescription"
-  },
-  "reportSubmitted": "신고가 접수되었습니다. 검토 후 조치하겠습니다.",
-  "@reportSubmitted": {
-    "description": "Localized string for reportSubmitted"
-  },
-  "notificationPermissionDesc": "새로운 메시지를 받으려면 알림 권한이 필요합니다.",
-  "@notificationPermissionDesc": {
-    "description": "Localized string for notificationPermissionDesc"
-  },
-  "explainReportReason": "신고 사유를 자세히 설명해주세요",
-  "@explainReportReason": {
-    "description": "Localized string for explainReportReason"
-  },
-  "cameraPermissionDesc": "프로필 사진 촬영을 위해 카메라 접근이 필요합니다.",
-  "@cameraPermissionDesc": {
-    "description": "Localized string for cameraPermissionDesc"
-  },
-  "galleryPermissionDesc": "프로필 사진 선택을 위해 갤러리 접근이 필요합니다.",
-  "@galleryPermissionDesc": {
-    "description": "Localized string for galleryPermissionDesc"
-  },
-  "purchaseMoreHearts": "하트를 구매하여 대화를 계속하세요",
-  "@purchaseMoreHearts": {
-    "description": "Localized string for purchaseMoreHearts"
-  },
-  "basicInfoDescription": "계정 생성을 위한 기본 정보를 입력해주세요",
-  "@basicInfoDescription": {
-    "description": "Localized string for basicInfoDescription"
-  },
-  "profileInfoDescription": "프로필 사진과 기본 정보를 입력해주세요",
-  "@profileInfoDescription": {
-    "description": "Localized string for profileInfoDescription"
-  },
-  "friendshipDescription": "새로운 친구를 만나고 대화를 나누고 싶어요",
-  "@friendshipDescription": {
-    "description": "Localized string for friendshipDescription"
-  },
-  "datingDescription": "깊은 고민과 진솔한 대화를 나누고 싶어요",
-  "@datingDescription": {
-    "description": "Localized string for datingDescription"
-  },
-  "entertainmentDescription": "재미있는 대화와 즐거운 시간을 보내고 싶어요",
-  "@entertainmentDescription": {
-    "description": "Localized string for entertainmentDescription"
-  },
-  "selectInterests": "관심사를 선택해주세요 (최소 1개)",
-  "@selectInterests": {
-    "description": "Localized string for selectInterests"
-  },
-  "whatTopicsToTalk": "어떤 주제로 대화하고 싶으신가요? (선택사항)",
-  "@whatTopicsToTalk": {
-    "description": "Localized string for whatTopicsToTalk"
-  },
-  "selectPreferredMbti": "특정 MBTI 유형의 페르소나를 선호하신다면 선택해주세요",
-  "@selectPreferredMbti": {
-    "description": "Localized string for selectPreferredMbti"
-  },
-  "termsAgreementDescription": "서비스 이용을 위한 약관에 동의해주세요",
-  "@termsAgreementDescription": {
-    "description": "Localized string for termsAgreementDescription"
-  },
-  "sonaUsagePurpose": "SONA를 사용하시는 목적을 선택해주세요",
-  "@sonaUsagePurpose": {
-    "description": "Localized string for sonaUsagePurpose"
-  },
-  "aiPersonaPreferenceDescription": "AI 페르소나 매칭을 위한 선호도를 설정해주세요",
-  "@aiPersonaPreferenceDescription": {
-    "description": "Localized string for aiPersonaPreferenceDescription"
-  },
-  "unexpectedLoginError": "로그인 중 예상치 못한 오류가 발생했습니다",
-  "@unexpectedLoginError": {
-    "description": "Localized string for unexpectedLoginError"
-  },
-  "googleLoginCanceled": "구글 로그인이 취소되었습니다.\n다시 시도해주세요.",
-  "@googleLoginCanceled": {
-    "description": "Localized string for googleLoginCanceled"
-  },
-  "appleLoginCanceled": "Apple 로그인이 취소되었습니다.\n다시 시도해주세요.",
-  "@appleLoginCanceled": {
-    "description": "Localized string for appleLoginCanceled"
-  },
-  "passwordResetEmailPrompt": "비밀번호를 재설정할 이메일을 입력해주세요",
-  "@passwordResetEmailPrompt": {
-    "description": "Localized string for passwordResetEmailPrompt"
-  },
-  "passwordResetEmailSent": "비밀번호 재설정 이메일을 발송했습니다. 이메일을 확인해주세요.",
-  "@passwordResetEmailSent": {
-    "description": "Localized string for passwordResetEmailSent"
-  },
-  "simpleInfoRequired": "AI 페르소나와의 매칭을 위해\n간단한 정보가 필요해요",
-  "@simpleInfoRequired": {
-    "description": "Localized string for simpleInfoRequired"
-  },
-  "endTutorialMessage": "튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.",
-  "@endTutorialMessage": {
-    "description": "Localized string for endTutorialMessage"
-  },
-  "onlyOppositeGenderNote": "체크하지 않으면 이성 페르소나만 표시됩니다",
-  "@onlyOppositeGenderNote": {
-    "description": "Localized string for onlyOppositeGenderNote"
-  },
-  "startConversationWithSona": "소나와 친구처럼 대화를 시작해보세요!",
-  "@startConversationWithSona": {
-    "description": "Localized string for startConversationWithSona"
-  },
-  "privacySection1Title": "1. 개인정보 수집 및 이용 목적",
-  "@privacySection1Title": {
-    "description": "Localized string for privacySection1Title"
-  },
-  "privacySection3Title": "3. 개인정보 보관 및 이용 기간",
-  "@privacySection3Title": {
-    "description": "Localized string for privacySection3Title"
-  },
-  "privacySection4Title": "4. 개인정보 제3자 제공",
-  "@privacySection4Title": {
-    "description": "Localized string for privacySection4Title"
-  },
-  "privacySection5Title": "5. 개인정보 보호를 위한 기술적 보호조치",
-  "@privacySection5Title": {
-    "description": "Localized string for privacySection5Title"
-  },
-  "themeDescription": "앱의 외관을 원하는 대로 설정할 수 있습니다",
-  "@themeDescription": {
-    "description": "Localized string for themeDescription"
-  },
-  "systemThemeDesc": "기기의 다크 모드 설정에 따라 자동으로 변경됩니다",
-  "@systemThemeDesc": {
-    "description": "Localized string for systemThemeDesc"
-  },
-  "marketingAgree": "마케팅 정보 수신 동의 (선택)",
-  "@marketingAgree": {
-    "description": "Localized string for marketingAgree"
-  },
-  "marketingDescription": "이벤트 및 혜택 정보를 받아보실 수 있습니다",
-  "@marketingDescription": {
-    "description": "Localized string for marketingDescription"
-  },
-  "ageConfirmation": "만 14세 이상이며, 위 내용을 확인했습니다.",
-  "@ageConfirmation": {
-    "description": "Localized string for ageConfirmation"
-  },
-  "languageDescription": "AI가 선택한 언어로 응답합니다",
-  "@languageDescription": {
-    "description": "Localized string for languageDescription"
-  },
-  "translationErrorDescription": "잘못된 번역이나 어색한 표현을 신고해주세요",
-  "@translationErrorDescription": {
-    "description": "Localized string for translationErrorDescription"
-  },
-  "errorDetailsHint": "어떤 부분이 잘못되었는지 자세히 설명해주세요",
-  "@errorDetailsHint": {
-    "description": "Localized string for errorDetailsHint"
-  },
-  "reportSubmittedSuccess": "신고가 접수되었습니다. 감사합니다!",
-  "@reportSubmittedSuccess": {
-    "description": "Localized string for reportSubmittedSuccess"
-  },
-  "translationNote": "※ AI 번역은 완벽하지 않을 수 있습니다",
-  "@translationNote": {
-    "description": "Localized string for translationNote"
-  },
-  "selectTranslationError": "번역 오류가 있는 메시지를 선택해주세요",
-  "@selectTranslationError": {
-    "description": "Localized string for selectTranslationError"
-  },
-  "translationErrorReported": "번역 오류가 신고되었습니다. 감사합니다!",
-  "@translationErrorReported": {
-    "description": "Localized string for translationErrorReported"
-  },
-  "blockConfirm": "이 AI를 차단하시겠습니까?\n차단된 AI는 매칭과 채팅 목록에서 제외됩니다.",
-  "@blockConfirm": {
-    "description": "Localized string for blockConfirm"
-  },
-  "reportAndBlockDescription": "이 AI의 부적절한 행동을 신고하고 차단할 수 있습니다",
-  "@reportAndBlockDescription": {
-    "description": "Localized string for reportAndBlockDescription"
-  },
-  "termsSection1Content": "본 약관은 SONA(이하 \"회사\")가 제공하는 AI 페르소나 대화 매칭 서비스(이하 \"서비스\")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.",
-  "@termsSection1Content": {
-    "description": "Localized string for termsSection1Content"
-  },
-  "termsSection7Content": "회사는 이용자가 본 약관의 의무를 위반하거나 서비스의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지 등으로 서비스 이용을 단계적으로 제한할 수 있습니다.",
-  "@termsSection7Content": {
-    "description": "Localized string for termsSection7Content"
-  },
-  "emotionAnalysisDesc": "대화 중 감정을 분석하여 공감 응답 제공",
-  "@emotionAnalysisDesc": {
-    "description": "Localized string for emotionAnalysisDesc"
-  },
-  "memoryAlbumDesc": "특별한 순간을 자동으로 저장하고 회상",
-  "@memoryAlbumDesc": {
-    "description": "Localized string for memoryAlbumDesc"
-  },
-  "weatherContextDesc": "날씨 정보를 활용한 대화 맥락 제공",
-  "@weatherContextDesc": {
-    "description": "Localized string for weatherContextDesc"
-  },
-  "dailyCareDesc": "식사, 수면, 건강 등 일상 챙김 메시지",
-  "@dailyCareDesc": {
-    "description": "Localized string for dailyCareDesc"
-  },
-  "interestSharingDesc": "공통 관심사 발견 및 추천",
-  "@interestSharingDesc": {
-    "description": "Localized string for interestSharingDesc"
-  },
-  "conversationContinuityDesc": "이전 대화 기억 및 주제 연결",
-  "@conversationContinuityDesc": {
-    "description": "Localized string for conversationContinuityDesc"
-  },
-  "allFeaturesRequired": "※ 모든 기능은 서비스 제공을 위해 필요합니다",
-  "@allFeaturesRequired": {
-    "description": "Localized string for allFeaturesRequired"
-  },
-  "privacySettingsInfo": "각 기능을 개별적으로 끄면 해당 서비스를 이용할 수 없습니다",
-  "@privacySettingsInfo": {
-    "description": "Localized string for privacySettingsInfo"
-  },
-  "guestModeDescription": "회원가입 없이 SONA를 체험해보세요\n• 20회 메시지 제한\n• 하트 1개 제공\n• 모든 페르소나 조회 가능",
-  "@guestModeDescription": {
-    "description": "Localized string for guestModeDescription"
-  },
-  "guestLimitReached": "게스트 체험이 끝났습니다.\n회원가입하고 무제한으로 대화하세요!",
-  "@guestLimitReached": {
-    "description": "Localized string for guestLimitReached"
-  },
-  "guestModeWarning": "게스트 모드는 24시간 동안 유지되며,\n이후 데이터가 삭제됩니다.",
-  "@guestModeWarning": {
-    "description": "Localized string for guestModeWarning"
-  },
-  "signUpFromGuest": "지금 회원가입하고 모든 기능을 이용하세요!",
-  "@signUpFromGuest": {
-    "description": "Localized string for signUpFromGuest"
-  },
-  "guestDataMigration": "회원가입 시 현재 대화 기록을 보존하시겠습니까?",
-  "@guestDataMigration": {
-    "description": "Localized string for guestDataMigration"
-  },
-  "guestModeLimitation": "게스트 모드에서는 일부 기능이 제한됩니다",
-  "@guestModeLimitation": {
-    "description": "Localized string for guestModeLimitation"
-  },
-  "storeLoginRequiredMessage": "스토어 이용을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?",
-  "@storeLoginRequiredMessage": {
-    "description": "Localized string for storeLoginRequiredMessage"
-  },
-  "profileEditLoginRequiredMessage": "프로필 편집을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?",
-  "@profileEditLoginRequiredMessage": {
-    "description": "Localized string for profileEditLoginRequiredMessage"
-  },
-  "waitingForChat": "{name}님이 대화를 기다리고 있어요.",
-  "@waitingForChat": {
-    "description": "Shows that a persona is waiting to chat",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "conversationWith": "{name}",
-  "@conversationWith": {
-    "description": "Conversation with name",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "refreshComplete": "새로고침 완료! {count}명의 매칭된 페르소나",
-  "@refreshComplete": {
-    "description": "Refresh complete message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "daysRemaining": "{days}일 남음",
-  "@daysRemaining": {
-    "description": "Days remaining",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmMessage": "{title}을(를) {price}에 구매하시겠습니까? {description}",
-  "@purchaseConfirmMessage": {
-    "description": "Purchase confirmation message",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "discountAmountValue": "₩{amount} 할인",
-  "@discountAmountValue": {
-    "description": "Discount amount",
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "chattingWithPersonas": "{count}명의 소나와 대화중",
-  "@chattingWithPersonas": {
-    "description": "Number of personas chatting with",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "purchaseConfirmContent": "{product}을(를) {price}에 구매하시겠습니까?",
-  "@purchaseConfirmContent": {
-    "description": "Purchase confirmation content",
-    "placeholders": {
-      "product": {
-        "type": "String"
-      },
-      "price": {
-        "type": "String"
-      }
-    }
-  },
-  "reportError": "신고 접수 중 오류가 발생했습니다: {error}",
-  "@reportError": {
-    "description": "Report error message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "permissionDeniedMessage": "{permissionName} 권한이 거부되었습니다.\\n설정에서 권한을 허용해주세요.",
-  "@permissionDeniedMessage": {
-    "description": "Permission denied message",
-    "placeholders": {
-      "permissionName": {
-        "type": "String"
-      }
-    }
-  },
-  "daysAgo": "{count}일 전",
-  "@daysAgo": {
-    "description": "Days ago",
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "hoursAgo": "{count}시간 전",
-  "@hoursAgo": {
-    "description": "Hours ago",
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "minutesAgo": "{count}분 전",
-  "@minutesAgo": {
-    "description": "Minutes ago",
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "isTyping": "{name}님이 입력 중...",
-  "@isTyping": {
-    "description": "Shows someone is typing",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "ageRange": "{min}~{max}세",
-  "@ageRange": {
-    "description": "Age range",
-    "placeholders": {
-      "min": {
-        "type": "int"
-      },
-      "max": {
-        "type": "int"
-      }
-    }
-  },
-  "blockedAICount": "차단된 AI {count}개",
-  "@blockedAICount": {
-    "description": "Number of blocked AIs",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "guestMessageRemaining": "게스트 메시지 {count}회 남음",
-  "@guestMessageRemaining": {
-    "description": "Guest messages remaining",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "newMessageCount": "새 메시지 {count}개",
-  "@newMessageCount": {
-    "description": "Number of new messages",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "notEnoughHeartsCount": "하트가 부족합니다. (현재: {count}개)",
-  "@notEnoughHeartsCount": {
-    "description": "Not enough hearts message",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "restartConversationWithName": "{name}와 다시 대화를 시작합니다!",
-  "@restartConversationWithName": {
-    "description": "Restarting conversation message",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "restartConversationQuestion": "{name}와 다시 대화를 시작하시겠어요?",
-  "@restartConversationQuestion": {
-    "description": "Restart conversation question",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "monthDay": "{month}월 {day}일",
-  "@monthDay": {
-    "description": "Month and day format",
-    "placeholders": {
-      "month": {
-        "type": "String"
-      },
-      "day": {
-        "type": "int"
-      }
-    }
-  },
-  "alreadyChattingWith": "{name}님과는 이미 대화중이에요!",
-  "@alreadyChattingWith": {
-    "description": "Already chatting with persona",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "cacheDeleteError": "캐시 삭제 중 오류가 발생했습니다: {error}",
-  "@cacheDeleteError": {
-    "description": "Cache delete error",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "unblockPersonaConfirm": "{name}의 차단을 해제하시겠습니까?",
-  "@unblockPersonaConfirm": {
-    "description": "Unblock persona confirmation",
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "errorWithMessage": "오류가 발생했습니다: {error}",
-  "@errorWithMessage": {
-    "description": "Error with message",
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
-  "accountDeletedSuccess": "계정이 성공적으로 삭제되었습니다",
-  "@accountDeletedSuccess": {
-    "description": "Localized string for accountDeletedSuccess"
-  },
   "accountDeletionInfo": "계정 삭제 안내",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
+  },
+  "accountDeletionTitle": "계정 삭제",
+  "@accountDeletionTitle": {
+    "description": "Localized string for accountDeletionTitle"
   },
   "accountDeletionWarning1": "경고: 이 작업은 되돌릴 수 없습니다",
   "@accountDeletionWarning1": {
@@ -2298,29 +44,442 @@
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
+  "accountManagement": "계정 관리",
+  "@accountManagement": {
+    "description": "Localized string for accountManagement"
+  },
+  "adaptiveConversationDesc": "상대방의 말투와 스타일에 맞춰 대화합니다",
+  "@adaptiveConversationDesc": {
+    "description": "Localized string for adaptiveConversationDesc"
+  },
+  "afternoon": "오후",
+  "@afternoon": {
+    "description": "Localized string for afternoon"
+  },
+  "afternoonFatigue": "오후피로",
+  "@afternoonFatigue": {
+    "description": "Localized string for afternoonFatigue"
+  },
+  "ageConfirmation": "만 14세 이상이며, 위 내용을 확인했습니다.",
+  "@ageConfirmation": {
+    "description": "Localized string for ageConfirmation"
+  },
+  "ageRange": "{min}~{max}세",
+  "@ageRange": {
+    "description": "Age range",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "ageUnit": "세",
+  "@ageUnit": {
+    "description": "Localized string for ageUnit"
+  },
   "agreeToTerms": "약관에 동의합니다",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
+  },
+  "aiDatingQuestion": "AI와 함께하는 특별한 일상\n당신만의 페르소나를 만나보세요.",
+  "@aiDatingQuestion": {
+    "description": "Localized string for aiDatingQuestion"
+  },
+  "aiPersonaPreferenceDescription": "AI 페르소나 매칭을 위한 선호도를 설정해주세요",
+  "@aiPersonaPreferenceDescription": {
+    "description": "Localized string for aiPersonaPreferenceDescription"
+  },
+  "all": "전체",
+  "@all": {
+    "description": "Localized string for all"
+  },
+  "allAgree": "전체 동의",
+  "@allAgree": {
+    "description": "Localized string for allAgree"
+  },
+  "allFeaturesRequired": "※ 모든 기능은 서비스 제공을 위해 필요합니다",
+  "@allFeaturesRequired": {
+    "description": "Localized string for allFeaturesRequired"
+  },
+  "allPersonas": "모든 페르소나",
+  "@allPersonas": {
+    "description": "Localized string for allPersonas"
+  },
+  "allPersonasMatched": "모든 페르소나와 매칭되었습니다! 대화를 나눠보세요.",
+  "@allPersonasMatched": {
+    "description": "Localized string for allPersonasMatched"
+  },
+  "allowPermission": "계속",
+  "@allowPermission": {
+    "description": "Localized string for allowPermission"
+  },
+  "alreadyChattingWith": "{name}님과는 이미 대화중이에요!",
+  "@alreadyChattingWith": {
+    "description": "Already chatting with persona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "alsoBlockThisAI": "이 AI도 차단하기",
+  "@alsoBlockThisAI": {
+    "description": "Localized string for alsoBlockThisAI"
+  },
+  "angry": "화나요",
+  "@angry": {
+    "description": "Localized string for angry"
+  },
+  "anonymousLogin": "익명 로그인 중",
+  "@anonymousLogin": {
+    "description": "Localized string for anonymousLogin"
+  },
+  "anxious": "불안해요",
+  "@anxious": {
+    "description": "Localized string for anxious"
+  },
+  "apiKeyError": "API 키 오류",
+  "@apiKeyError": {
+    "description": "Localized string for apiKeyError"
+  },
+  "appName": "SONA",
+  "@appName": {
+    "description": "Localized string for appName"
   },
   "appTagline": "당신의 AI 친구들",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
+  "appleLoginCanceled": "Apple 로그인이 취소되었습니다.\n다시 시도해주세요.",
+  "@appleLoginCanceled": {
+    "description": "Localized string for appleLoginCanceled"
+  },
+  "appleLoginError": "Apple 로그인 중 오류가 발생했습니다.",
+  "@appleLoginError": {
+    "description": "Localized string for appleLoginError"
+  },
+  "art": "예술",
+  "@art": {
+    "description": "Localized string for art"
+  },
+  "authError": "인증 오류",
+  "@authError": {
+    "description": "Localized string for authError"
+  },
+  "autoTranslate": "자동 번역",
+  "@autoTranslate": {
+    "description": "Localized string for autoTranslate"
+  },
+  "autumn": "가을",
+  "@autumn": {
+    "description": "Localized string for autumn"
+  },
+  "averageQuality": "평균 품질",
+  "@averageQuality": {
+    "description": "Localized string for averageQuality"
+  },
+  "averageQualityScore": "평균 품질 점수",
+  "@averageQualityScore": {
+    "description": "Localized string for averageQualityScore"
+  },
+  "awkwardExpression": "어색한 표현",
+  "@awkwardExpression": {
+    "description": "Localized string for awkwardExpression"
+  },
+  "backButton": "뒤로가기",
+  "@backButton": {
+    "description": "Localized string for backButton"
+  },
+  "basicInfo": "기본 정보",
+  "@basicInfo": {
+    "description": "Localized string for basicInfo"
+  },
+  "basicInfoDescription": "계정 생성을 위한 기본 정보를 입력해주세요",
+  "@basicInfoDescription": {
+    "description": "Localized string for basicInfoDescription"
+  },
+  "birthDate": "생년월일",
+  "@birthDate": {
+    "description": "Localized string for birthDate"
+  },
+  "birthDateOptional": "생년월일 (선택)",
+  "@birthDateOptional": {
+    "description": "Localized string for birthDateOptional"
+  },
+  "birthDateRequired": "생년월일 *",
+  "@birthDateRequired": {
+    "description": "Localized string for birthDateRequired"
+  },
+  "blockConfirm": "이 AI를 차단하시겠습니까?\n차단된 AI는 매칭과 채팅 목록에서 제외됩니다.",
+  "@blockConfirm": {
+    "description": "Localized string for blockConfirm"
+  },
+  "blockReason": "차단 사유",
+  "@blockReason": {
+    "description": "Localized string for blockReason"
+  },
+  "blockThisAI": "이 AI 차단하기",
+  "@blockThisAI": {
+    "description": "Localized string for blockThisAI"
+  },
+  "blockedAICount": "차단된 AI {count}개",
+  "@blockedAICount": {
+    "description": "Number of blocked AIs",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "blockedAIs": "차단된 AI",
+  "@blockedAIs": {
+    "description": "Localized string for blockedAIs"
+  },
+  "blockedAt": "차단 날짜",
+  "@blockedAt": {
+    "description": "Localized string for blockedAt"
+  },
+  "blockedSuccessfully": "차단되었습니다",
+  "@blockedSuccessfully": {
+    "description": "Localized string for blockedSuccessfully"
+  },
+  "breakfast": "아침식사",
+  "@breakfast": {
+    "description": "Localized string for breakfast"
+  },
+  "byErrorType": "에러 타입별",
+  "@byErrorType": {
+    "description": "Localized string for byErrorType"
+  },
+  "byPersona": "페르소나별",
+  "@byPersona": {
+    "description": "Localized string for byPersona"
+  },
+  "cacheDeleteError": "캐시 삭제 중 오류가 발생했습니다: {error}",
+  "@cacheDeleteError": {
+    "description": "Cache delete error",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cacheDeleted": "이미지 캐시가 삭제되었습니다",
+  "@cacheDeleted": {
+    "description": "Localized string for cacheDeleted"
+  },
+  "cafeTerrace": "카페 테라스",
+  "@cafeTerrace": {
+    "description": "Localized string for cafeTerrace"
+  },
+  "calm": "평온해요",
+  "@calm": {
+    "description": "Localized string for calm"
+  },
+  "cameraPermission": "카메라 권한",
+  "@cameraPermission": {
+    "description": "Localized string for cameraPermission"
+  },
+  "cameraPermissionDesc": "프로필 사진 촬영을 위해 카메라 접근이 필요합니다.",
+  "@cameraPermissionDesc": {
+    "description": "Localized string for cameraPermissionDesc"
+  },
+  "canChangeInSettings": "나중에 설정에서 변경 가능합니다",
+  "@canChangeInSettings": {
+    "description": "Localized string for canChangeInSettings"
+  },
+  "canMeetPreviousPersonas": "이전에 스와이프한 페르소나들을\n다시 만날 수 있어요!",
+  "@canMeetPreviousPersonas": {
+    "description": "Localized string for canMeetPreviousPersonas"
+  },
+  "cancel": "취소",
+  "@cancel": {
+    "description": "Localized string for cancel"
+  },
   "changeProfilePhoto": "프로필 사진 변경",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
+  },
+  "chat": "채팅",
+  "@chat": {
+    "description": "Localized string for chat"
+  },
+  "chatEndedMessage": "대화가 종료되었습니다",
+  "@chatEndedMessage": {
+    "description": "Localized string for chatEndedMessage"
+  },
+  "chatErrorDashboard": "대화 오류 대시보드",
+  "@chatErrorDashboard": {
+    "description": "Localized string for chatErrorDashboard"
+  },
+  "chatErrorSentSuccessfully": "대화 오류가 성공적으로 전송되었습니다.",
+  "@chatErrorSentSuccessfully": {
+    "description": "Localized string for chatErrorSentSuccessfully"
+  },
+  "chatListTab": "채팅 목록 탭",
+  "@chatListTab": {
+    "description": "Localized string for chatListTab"
+  },
+  "chats": "채팅",
+  "@chats": {
+    "description": "Localized string for chats"
+  },
+  "chattingWithPersonas": "{count}명의 소나와 대화중",
+  "@chattingWithPersonas": {
+    "description": "Number of personas chatting with",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "checkInternetConnection": "인터넷 연결을 확인해주세요",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
+  "checkingUserInfo": "사용자 정보 확인 중",
+  "@checkingUserInfo": {
+    "description": "Localized string for checkingUserInfo"
+  },
+  "childrensDay": "어린이날",
+  "@childrensDay": {
+    "description": "Localized string for childrensDay"
+  },
+  "chinese": "중국어",
+  "@chinese": {
+    "description": "Localized string for chinese"
+  },
+  "chooseOption": "선택하세요:",
+  "@chooseOption": {
+    "description": "Localized string for chooseOption"
+  },
+  "christmas": "크리스마스",
+  "@christmas": {
+    "description": "Localized string for christmas"
+  },
+  "close": "닫기",
+  "@close": {
+    "description": "Localized string for close"
+  },
+  "complete": "완료",
+  "@complete": {
+    "description": "Localized string for complete"
+  },
+  "completeSignup": "가입 완료",
+  "@completeSignup": {
+    "description": "Localized string for completeSignup"
+  },
+  "confirm": "확인",
+  "@confirm": {
+    "description": "Localized string for confirm"
+  },
+  "connectingToServer": "서버 연결 중",
+  "@connectingToServer": {
+    "description": "Localized string for connectingToServer"
+  },
+  "consultQualityMonitoring": "상담 품질 모니터링",
+  "@consultQualityMonitoring": {
+    "description": "Localized string for consultQualityMonitoring"
+  },
+  "continueAsGuest": "게스트로 계속하기",
+  "@continueAsGuest": {
+    "description": "Localized string for continueAsGuest"
+  },
+  "continueButton": "계속",
+  "@continueButton": {
+    "description": "Localized string for continueButton"
+  },
+  "continueWithApple": "Apple로 계속하기",
+  "@continueWithApple": {
+    "description": "Localized string for continueWithApple"
+  },
+  "continueWithGoogle": "Google로 계속하기",
+  "@continueWithGoogle": {
+    "description": "Localized string for continueWithGoogle"
+  },
+  "conversationContinuity": "대화 연속성",
+  "@conversationContinuity": {
+    "description": "Localized string for conversationContinuity"
+  },
+  "conversationContinuityDesc": "이전 대화 기억 및 주제 연결",
+  "@conversationContinuityDesc": {
+    "description": "Localized string for conversationContinuityDesc"
+  },
+  "conversationWith": "{name}",
+  "@conversationWith": {
+    "description": "Conversation with name",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "convertToMember": "회원가입 하기",
+  "@convertToMember": {
+    "description": "Localized string for convertToMember"
+  },
+  "cooking": "요리",
+  "@cooking": {
+    "description": "Localized string for cooking"
+  },
+  "copyMessage": "메시지 복사",
+  "@copyMessage": {
+    "description": "Localized string for copyMessage"
+  },
   "copyrightInfringement": "저작권 침해",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
+  "creatingAccount": "계정 생성 중",
+  "@creatingAccount": {
+    "description": "Localized string for creatingAccount"
+  },
+  "crisisDetected": "위기 상황 감지",
+  "@crisisDetected": {
+    "description": "Localized string for crisisDetected"
+  },
+  "culturalIssue": "문화적 오류",
+  "@culturalIssue": {
+    "description": "Localized string for culturalIssue"
+  },
+  "current": "현재",
+  "@current": {
+    "description": "Localized string for current"
+  },
+  "currentCacheSize": "현재 캐시 크기",
+  "@currentCacheSize": {
+    "description": "Localized string for currentCacheSize"
+  },
   "currentLanguage": "현재 언어",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
+  },
+  "cycling": "자전거",
+  "@cycling": {
+    "description": "Localized string for cycling"
+  },
+  "dailyCare": "일상 케어",
+  "@dailyCare": {
+    "description": "Localized string for dailyCare"
+  },
+  "dailyCareDesc": "식사, 수면, 건강 등 일상 챙김 메시지",
+  "@dailyCareDesc": {
+    "description": "Localized string for dailyCareDesc"
+  },
+  "dailyChat": "일상 대화",
+  "@dailyChat": {
+    "description": "Localized string for dailyChat"
+  },
+  "dailyCheck": "일상체크",
+  "@dailyCheck": {
+    "description": "Localized string for dailyCheck"
+  },
+  "dailyConversation": "일상 대화",
+  "@dailyConversation": {
+    "description": "Localized string for dailyConversation"
   },
   "dailyLimitDescription": "일일 메시지 한도에 도달했습니다",
   "@dailyLimitDescription": {
@@ -2330,21 +489,253 @@
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
+  "darkMode": "다크 모드",
+  "@darkMode": {
+    "description": "Localized string for darkMode"
+  },
+  "darkTheme": "다크 모드",
+  "@darkTheme": {
+    "description": "Localized string for darkTheme"
+  },
+  "darkThemeDesc": "어두운 테마를 사용합니다",
+  "@darkThemeDesc": {
+    "description": "Localized string for darkThemeDesc"
+  },
+  "dataCollection": "데이터 수집 설정",
+  "@dataCollection": {
+    "description": "Localized string for dataCollection"
+  },
+  "datingAdvice": "연애 상담",
+  "@datingAdvice": {
+    "description": "Localized string for datingAdvice"
+  },
+  "datingDescription": "깊은 고민과 진솔한 대화를 나누고 싶어요",
+  "@datingDescription": {
+    "description": "Localized string for datingDescription"
+  },
+  "dawn": "새벽",
+  "@dawn": {
+    "description": "Localized string for dawn"
+  },
+  "day": "일",
+  "@day": {
+    "description": "Localized string for day"
+  },
+  "dayAfterTomorrow": "모레",
+  "@dayAfterTomorrow": {
+    "description": "Localized string for dayAfterTomorrow"
+  },
+  "daysAgo": "{count}일 전",
+  "@daysAgo": {
+    "description": "Days ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "days ago"
+      }
+    }
+  },
+  "daysRemaining": "{days}일 남음",
+  "@daysRemaining": {
+    "description": "Days remaining",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "deepTalk": "깊은 대화",
+  "@deepTalk": {
+    "description": "Localized string for deepTalk"
+  },
+  "delete": "삭제",
+  "@delete": {
+    "description": "Localized string for delete"
+  },
+  "deleteAccount": "계정 삭제",
+  "@deleteAccount": {
+    "description": "Localized string for deleteAccount"
+  },
+  "deleteAccountConfirm": "정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+  "@deleteAccountConfirm": {
+    "description": "Localized string for deleteAccountConfirm"
+  },
   "deleteAccountWarning": "정말로 계정을 삭제하시겠습니까?",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
+  },
+  "deleteCache": "캐시 삭제",
+  "@deleteCache": {
+    "description": "Localized string for deleteCache"
   },
   "deletingAccount": "계정 삭제 중...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
+  "depressed": "우울해요",
+  "@depressed": {
+    "description": "Localized string for depressed"
+  },
+  "describeError": "어떤 문제가 있나요?",
+  "@describeError": {
+    "description": "Localized string for describeError"
+  },
+  "detailedReason": "상세 사유",
+  "@detailedReason": {
+    "description": "Localized string for detailedReason"
+  },
+  "developRelationshipStep": "3. 관계 발전: 대화를 통해 친밀도를 쌓고 특별한 관계로 발전시켜보세요.",
+  "@developRelationshipStep": {
+    "description": "Localized string for developRelationshipStep"
+  },
+  "dinner": "저녁식사",
+  "@dinner": {
+    "description": "Localized string for dinner"
+  },
+  "discardGuestData": "새로 시작",
+  "@discardGuestData": {
+    "description": "Localized string for discardGuestData"
+  },
+  "discount20": "20% 할인",
+  "@discount20": {
+    "description": "Localized string for discount20"
+  },
+  "discount30": "30% 할인",
+  "@discount30": {
+    "description": "Localized string for discount30"
+  },
+  "discountAmount": "할인",
+  "@discountAmount": {
+    "description": "Localized string for discountAmount"
+  },
+  "discountAmountValue": "₩{amount} 할인",
+  "@discountAmountValue": {
+    "description": "Discount amount",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "done": "완료",
+  "@done": {
+    "description": "Localized string for done"
+  },
+  "downloadingPersonaImages": "새로운 페르소나 이미지를 다운로드하고 있어요",
+  "@downloadingPersonaImages": {
+    "description": "Localized string for downloadingPersonaImages"
+  },
+  "edit": "수정",
+  "@edit": {
+    "description": "Localized string for edit"
+  },
+  "editInfo": "정보 수정",
+  "@editInfo": {
+    "description": "Localized string for editInfo"
+  },
+  "editProfile": "프로필 편집",
+  "@editProfile": {
+    "description": "Localized string for editProfile"
+  },
+  "effectSound": "효과음",
+  "@effectSound": {
+    "description": "Localized string for effectSound"
+  },
   "effectSoundDescription": "효과음 재생",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
+  "email": "이메일",
+  "@email": {
+    "description": "Localized string for email"
+  },
+  "emailHint": "example@email.com",
+  "@emailHint": {
+    "description": "Localized string for emailHint"
+  },
+  "emailLabel": "이메일",
+  "@emailLabel": {
+    "description": "Localized string for emailLabel"
+  },
+  "emailRequired": "이메일 *",
+  "@emailRequired": {
+    "description": "Localized string for emailRequired"
+  },
+  "emotionAnalysis": "감정 분석",
+  "@emotionAnalysis": {
+    "description": "Localized string for emotionAnalysis"
+  },
+  "emotionAnalysisDesc": "대화 중 감정을 분석하여 공감 응답 제공",
+  "@emotionAnalysisDesc": {
+    "description": "Localized string for emotionAnalysisDesc"
+  },
+  "emotionAngry": "화남",
+  "@emotionAngry": {
+    "description": "Localized string for emotionAngry"
+  },
   "emotionBasedEncounters": "감정 기반 만남",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
+  },
+  "emotionCool": "쿨함",
+  "@emotionCool": {
+    "description": "Localized string for emotionCool"
+  },
+  "emotionHappy": "행복",
+  "@emotionHappy": {
+    "description": "Localized string for emotionHappy"
+  },
+  "emotionLove": "사랑",
+  "@emotionLove": {
+    "description": "Localized string for emotionLove"
+  },
+  "emotionSad": "슬픔",
+  "@emotionSad": {
+    "description": "Localized string for emotionSad"
+  },
+  "emotionThinking": "생각",
+  "@emotionThinking": {
+    "description": "Localized string for emotionThinking"
+  },
+  "emotionalSupportDesc": "고민을 나누고 따뜻한 위로를 받아요",
+  "@emotionalSupportDesc": {
+    "description": "Localized string for emotionalSupportDesc"
+  },
+  "endChat": "대화 종료",
+  "@endChat": {
+    "description": "Localized string for endChat"
+  },
+  "endTutorial": "튜토리얼 종료",
+  "@endTutorial": {
+    "description": "Localized string for endTutorial"
+  },
+  "endTutorialAndLogin": "튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.",
+  "@endTutorialAndLogin": {
+    "description": "Localized string for endTutorialAndLogin"
+  },
+  "endTutorialMessage": "튜토리얼을 종료하고 로그인하시겠습니까?\n로그인하면 데이터가 저장되고 모든 기능을 사용할 수 있습니다.",
+  "@endTutorialMessage": {
+    "description": "Localized string for endTutorialMessage"
+  },
+  "english": "영어",
+  "@english": {
+    "description": "Localized string for english"
+  },
+  "enterBasicInfo": "계정 생성을 위한 기본 정보를 입력해줘",
+  "@enterBasicInfo": {
+    "description": "Localized string for enterBasicInfo"
+  },
+  "enterBasicInformation": "기본 정보를 입력해주세요",
+  "@enterBasicInformation": {
+    "description": "Localized string for enterBasicInformation"
+  },
+  "enterEmail": "이메일을 입력해주세요",
+  "@enterEmail": {
+    "description": "Localized string for enterEmail"
   },
   "enterNickname": "닉네임을 입력해주세요",
   "@enterNickname": {
@@ -2354,25 +745,413 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
+  "entertainmentAndFunDesc": "즐거운 게임과 유쾌한 대화를 즐겨요",
+  "@entertainmentAndFunDesc": {
+    "description": "Localized string for entertainmentAndFunDesc"
+  },
+  "entertainmentDescription": "재미있는 대화와 즐거운 시간을 보내고 싶어요",
+  "@entertainmentDescription": {
+    "description": "Localized string for entertainmentDescription"
+  },
+  "entertainmentFun": "오락/재미",
+  "@entertainmentFun": {
+    "description": "Localized string for entertainmentFun"
+  },
+  "error": "오류",
+  "@error": {
+    "description": "Localized string for error"
+  },
   "errorDescription": "오류 설명",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
+  },
+  "errorDescriptionHint": "예: 이상한 대답을 했어요, 반복적으로 같은 말만 해요, 맥락에 맞지 않는 대답을 해요...",
+  "@errorDescriptionHint": {
+    "description": "Localized string for errorDescriptionHint"
+  },
+  "errorDetails": "오류 상세 내용",
+  "@errorDetails": {
+    "description": "Localized string for errorDetails"
+  },
+  "errorDetailsHint": "어떤 부분이 잘못되었는지 자세히 설명해주세요",
+  "@errorDetailsHint": {
+    "description": "Localized string for errorDetailsHint"
+  },
+  "errorFrequency24h": "에러 발생 빈도 (최근 24시간)",
+  "@errorFrequency24h": {
+    "description": "Localized string for errorFrequency24h"
+  },
+  "errorMessage": "에러 메시지:",
+  "@errorMessage": {
+    "description": "Localized string for errorMessage"
+  },
+  "errorOccurred": "오류가 발생했습니다.",
+  "@errorOccurred": {
+    "description": "Localized string for errorOccurred"
+  },
+  "errorOccurredTryAgain": "오류가 발생했습니다. 다시 시도해주세요.",
+  "@errorOccurredTryAgain": {
+    "description": "Localized string for errorOccurredTryAgain"
+  },
+  "errorSendingFailed": "오류 전송 실패",
+  "@errorSendingFailed": {
+    "description": "Localized string for errorSendingFailed"
+  },
+  "errorStats": "에러 통계",
+  "@errorStats": {
+    "description": "Localized string for errorStats"
+  },
+  "errorWithMessage": "오류가 발생했습니다: {error}",
+  "@errorWithMessage": {
+    "description": "Error with message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "evening": "저녁",
+  "@evening": {
+    "description": "Localized string for evening"
+  },
+  "excited": "신나요",
+  "@excited": {
+    "description": "Localized string for excited"
+  },
+  "exit": "종료",
+  "@exit": {
+    "description": "Localized string for exit"
+  },
+  "exitApp": "앱 종료",
+  "@exitApp": {
+    "description": "Localized string for exitApp"
+  },
+  "exitConfirmMessage": "정말 앱을 종료하시겠습니까?",
+  "@exitConfirmMessage": {
+    "description": "Localized string for exitConfirmMessage"
+  },
+  "expertPersona": "전문가 페르소나",
+  "@expertPersona": {
+    "description": "Localized string for expertPersona"
+  },
+  "expertiseScore": "전문성 점수",
+  "@expertiseScore": {
+    "description": "Localized string for expertiseScore"
+  },
+  "expired": "만료됨",
+  "@expired": {
+    "description": "Localized string for expired"
+  },
+  "explainReportReason": "신고 사유를 자세히 설명해주세요",
+  "@explainReportReason": {
+    "description": "Localized string for explainReportReason"
+  },
+  "fashion": "패션",
+  "@fashion": {
+    "description": "Localized string for fashion"
+  },
+  "female": "여성",
+  "@female": {
+    "description": "Localized string for female"
+  },
+  "filter": "필터",
+  "@filter": {
+    "description": "Localized string for filter"
+  },
+  "firstOccurred": "첫 발생: ",
+  "@firstOccurred": {
+    "description": "Localized string for firstOccurred"
+  },
+  "followDeviceLanguage": "기기의 언어 설정을 따릅니다",
+  "@followDeviceLanguage": {
+    "description": "Localized string for followDeviceLanguage"
+  },
+  "forenoon": "오전",
+  "@forenoon": {
+    "description": "Localized string for forenoon"
+  },
+  "forgotPassword": "비밀번호 찾기",
+  "@forgotPassword": {
+    "description": "Localized string for forgotPassword"
+  },
+  "frequentlyAskedQuestions": "자주 묻는 질문",
+  "@frequentlyAskedQuestions": {
+    "description": "Localized string for frequentlyAskedQuestions"
+  },
+  "friday": "금요일",
+  "@friday": {
+    "description": "Localized string for friday"
+  },
+  "friendshipDescription": "새로운 친구를 만나고 대화를 나누고 싶어요",
+  "@friendshipDescription": {
+    "description": "Localized string for friendshipDescription"
+  },
+  "funChat": "재미있는 대화",
+  "@funChat": {
+    "description": "Localized string for funChat"
+  },
+  "galleryPermission": "갤러리 권한",
+  "@galleryPermission": {
+    "description": "Localized string for galleryPermission"
+  },
+  "galleryPermissionDesc": "프로필 사진 선택을 위해 갤러리 접근이 필요합니다.",
+  "@galleryPermissionDesc": {
+    "description": "Localized string for galleryPermissionDesc"
+  },
+  "gaming": "게임",
+  "@gaming": {
+    "description": "Localized string for gaming"
+  },
+  "gender": "성별",
+  "@gender": {
+    "description": "Localized string for gender"
+  },
+  "genderNotSelectedInfo": "성별을 선택하지 않으면 모든 성별의 페르소나가 표시됩니다",
+  "@genderNotSelectedInfo": {
+    "description": "Localized string for genderNotSelectedInfo"
+  },
+  "genderOptional": "성별 (선택)",
+  "@genderOptional": {
+    "description": "Localized string for genderOptional"
+  },
+  "genderPreferenceActive": "모든 성별의 페르소나를 만날 수 있어요",
+  "@genderPreferenceActive": {
+    "description": "Localized string for genderPreferenceActive"
+  },
+  "genderPreferenceDisabled": "성별을 선택하면 이성만 보기 옵션이 활성화됩니다",
+  "@genderPreferenceDisabled": {
+    "description": "Localized string for genderPreferenceDisabled"
+  },
+  "genderPreferenceInactive": "이성 페르소나만 보여집니다",
+  "@genderPreferenceInactive": {
+    "description": "Localized string for genderPreferenceInactive"
+  },
+  "genderRequired": "성별 *",
+  "@genderRequired": {
+    "description": "Localized string for genderRequired"
+  },
+  "genderSelectionInfo": "선택하지 않으면 모든 성별의 페르소나를 만날 수 있어요",
+  "@genderSelectionInfo": {
+    "description": "Localized string for genderSelectionInfo"
+  },
+  "generalPersona": "일반 페르소나",
+  "@generalPersona": {
+    "description": "Localized string for generalPersona"
+  },
+  "goToSettings": "설정으로 이동",
+  "@goToSettings": {
+    "description": "Localized string for goToSettings"
+  },
+  "googleLoginCanceled": "구글 로그인이 취소되었습니다.\n다시 시도해주세요.",
+  "@googleLoginCanceled": {
+    "description": "Localized string for googleLoginCanceled"
+  },
+  "googleLoginError": "Google 로그인 중 오류가 발생했습니다.",
+  "@googleLoginError": {
+    "description": "Localized string for googleLoginError"
+  },
+  "grantPermission": "계속",
+  "@grantPermission": {
+    "description": "Localized string for grantPermission"
+  },
+  "guest": "게스트",
+  "@guest": {
+    "description": "Localized string for guest"
+  },
+  "guestDataMigration": "회원가입 시 현재 대화 기록을 보존하시겠습니까?",
+  "@guestDataMigration": {
+    "description": "Localized string for guestDataMigration"
+  },
+  "guestLimitReached": "게스트 체험이 끝났습니다.\n회원가입하고 무제한으로 대화하세요!",
+  "@guestLimitReached": {
+    "description": "Localized string for guestLimitReached"
   },
   "guestLoginPromptMessage": "대화를 계속하려면 로그인하세요",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
+  "guestMessageExhausted": "무료 메시지를 모두 사용했어요",
+  "@guestMessageExhausted": {
+    "description": "Localized string for guestMessageExhausted"
+  },
+  "guestMessageRemaining": "게스트 메시지 {count}회 남음",
+  "@guestMessageRemaining": {
+    "description": "Guest messages remaining",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "guestModeBanner": "게스트 모드",
+  "@guestModeBanner": {
+    "description": "Localized string for guestModeBanner"
+  },
+  "guestModeDescription": "회원가입 없이 SONA를 체험해보세요\n• 20회 메시지 제한\n• 하트 1개 제공\n• 모든 페르소나 조회 가능",
+  "@guestModeDescription": {
+    "description": "Localized string for guestModeDescription"
+  },
+  "guestModeFailedMessage": "게스트 모드 시작에 실패했습니다",
+  "@guestModeFailedMessage": {
+    "description": "Localized string for guestModeFailedMessage"
+  },
+  "guestModeLimitation": "게스트 모드에서는 일부 기능이 제한됩니다",
+  "@guestModeLimitation": {
+    "description": "Localized string for guestModeLimitation"
+  },
+  "guestModeTitle": "게스트로 체험하기",
+  "@guestModeTitle": {
+    "description": "Localized string for guestModeTitle"
+  },
+  "guestModeWarning": "게스트 모드는 24시간 동안 유지되며,\n이후 데이터가 삭제됩니다.",
+  "@guestModeWarning": {
+    "description": "Localized string for guestModeWarning"
+  },
+  "guestModeWelcome": "게스트 모드로 시작합니다",
+  "@guestModeWelcome": {
+    "description": "Localized string for guestModeWelcome"
+  },
+  "happy": "행복해요",
+  "@happy": {
+    "description": "Localized string for happy"
+  },
+  "hapticFeedback": "햅틱 피드백",
+  "@hapticFeedback": {
+    "description": "Localized string for hapticFeedback"
+  },
+  "harassmentBullying": "괴롭힘/따돌림",
+  "@harassmentBullying": {
+    "description": "Localized string for harassmentBullying"
+  },
+  "hateSpeech": "혐오 발언",
+  "@hateSpeech": {
+    "description": "Localized string for hateSpeech"
+  },
   "heartDescription": "더 많은 메시지를 위한 하트",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
+  },
+  "heartInsufficient": "하트가 부족합니다",
+  "@heartInsufficient": {
+    "description": "Localized string for heartInsufficient"
+  },
+  "heartInsufficientPleaseCharge": "하트가 부족합니다. 하트를 충전해주세요.",
+  "@heartInsufficientPleaseCharge": {
+    "description": "Localized string for heartInsufficientPleaseCharge"
+  },
+  "heartRequired": "하트 1개가 필요합니다",
+  "@heartRequired": {
+    "description": "Localized string for heartRequired"
+  },
+  "heartUsageFailed": "하트 사용에 실패했습니다.",
+  "@heartUsageFailed": {
+    "description": "Localized string for heartUsageFailed"
+  },
+  "hearts": "하트",
+  "@hearts": {
+    "description": "Localized string for hearts"
+  },
+  "hearts10": "하트 10개",
+  "@hearts10": {
+    "description": "Localized string for hearts10"
+  },
+  "hearts30": "하트 30개",
+  "@hearts30": {
+    "description": "Localized string for hearts30"
+  },
+  "hearts30Discount": "할인",
+  "@hearts30Discount": {
+    "description": "Localized string for hearts30Discount"
+  },
+  "hearts50": "하트 50개",
+  "@hearts50": {
+    "description": "Localized string for hearts50"
+  },
+  "hearts50Discount": "할인",
+  "@hearts50Discount": {
+    "description": "Localized string for hearts50Discount"
+  },
+  "helloEmoji": "안녕하세요! 😊",
+  "@helloEmoji": {
+    "description": "Localized string for helloEmoji"
+  },
+  "help": "도움말",
+  "@help": {
+    "description": "Localized string for help"
+  },
+  "hideOriginalText": "원문 숨기기",
+  "@hideOriginalText": {
+    "description": "Localized string for hideOriginalText"
+  },
+  "hobbySharing": "취미 공유",
+  "@hobbySharing": {
+    "description": "Localized string for hobbySharing"
+  },
+  "hobbyTalk": "취미 이야기",
+  "@hobbyTalk": {
+    "description": "Localized string for hobbyTalk"
+  },
+  "hours24Ago": "24시간 전",
+  "@hours24Ago": {
+    "description": "Localized string for hours24Ago"
+  },
+  "hoursAgo": "{count}시간 전",
+  "@hoursAgo": {
+    "description": "Hours ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "hours ago"
+      }
+    }
+  },
+  "howToUse": "SONA 사용 방법",
+  "@howToUse": {
+    "description": "Localized string for howToUse"
+  },
+  "imageCacheManagement": "이미지 캐시 관리",
+  "@imageCacheManagement": {
+    "description": "Localized string for imageCacheManagement"
   },
   "inappropriateContent": "부적절한 콘텐츠",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
+  "incorrect": "올바르지 않습니다",
+  "@incorrect": {
+    "description": "Localized string for incorrect"
+  },
   "incorrectPassword": "잘못된 비밀번호",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
+  },
+  "indonesian": "인도네시아어",
+  "@indonesian": {
+    "description": "Localized string for indonesian"
+  },
+  "inquiries": "문의사항",
+  "@inquiries": {
+    "description": "Localized string for inquiries"
+  },
+  "insufficientHearts": "하트가 부족합니다.",
+  "@insufficientHearts": {
+    "description": "Localized string for insufficientHearts"
+  },
+  "interestSharing": "관심사 공유",
+  "@interestSharing": {
+    "description": "Localized string for interestSharing"
+  },
+  "interestSharingDesc": "공통 관심사 발견 및 추천",
+  "@interestSharingDesc": {
+    "description": "Localized string for interestSharingDesc"
+  },
+  "interests": "관심사",
+  "@interests": {
+    "description": "Localized string for interests"
   },
   "invalidEmailFormat": "잘못된 이메일 형식",
   "@invalidEmailFormat": {
@@ -2382,17 +1161,142 @@
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
+  "isTyping": "{name}님이 입력 중...",
+  "@isTyping": {
+    "description": "Shows someone is typing",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "japanese": "일본어",
+  "@japanese": {
+    "description": "Localized string for japanese"
+  },
+  "joinDate": "가입일",
+  "@joinDate": {
+    "description": "Localized string for joinDate"
+  },
+  "justNow": "방금 전",
+  "@justNow": {
+    "description": "Localized string for justNow"
+  },
+  "keepGuestData": "대화 기록 유지",
+  "@keepGuestData": {
+    "description": "Localized string for keepGuestData"
+  },
+  "korean": "한국어",
+  "@korean": {
+    "description": "Localized string for korean"
+  },
+  "koreanLanguage": "한국어",
+  "@koreanLanguage": {
+    "description": "Localized string for koreanLanguage"
+  },
+  "language": "언어",
+  "@language": {
+    "description": "Localized string for language"
+  },
+  "languageDescription": "AI가 선택한 언어로 응답합니다",
+  "@languageDescription": {
+    "description": "Localized string for languageDescription"
+  },
+  "languageIndicator": "언어",
+  "@languageIndicator": {
+    "description": "Localized string for languageIndicator"
+  },
+  "languageSettings": "언어 설정",
+  "@languageSettings": {
+    "description": "Localized string for languageSettings"
+  },
+  "lastOccurred": "마지막 발생: ",
+  "@lastOccurred": {
+    "description": "Localized string for lastOccurred"
+  },
   "lastUpdated": "마지막 업데이트",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
+  },
+  "lateNight": "늦은시간",
+  "@lateNight": {
+    "description": "Localized string for lateNight"
+  },
+  "later": "나중에",
+  "@later": {
+    "description": "Localized string for later"
+  },
+  "laterButton": "나중에",
+  "@laterButton": {
+    "description": "Localized string for laterButton"
+  },
+  "leave": "나가기",
+  "@leave": {
+    "description": "Localized string for leave"
+  },
+  "leaveChatConfirm": "이 채팅방을 나가시겠습니까?\n채팅 목록에서 사라집니다.",
+  "@leaveChatConfirm": {
+    "description": "Localized string for leaveChatConfirm"
+  },
+  "leaveChatRoom": "채팅방 나가기",
+  "@leaveChatRoom": {
+    "description": "Localized string for leaveChatRoom"
+  },
+  "leaveChatTitle": "채팅방 나가기",
+  "@leaveChatTitle": {
+    "description": "Localized string for leaveChatTitle"
+  },
+  "lifeAdvice": "인생 조언",
+  "@lifeAdvice": {
+    "description": "Localized string for lifeAdvice"
+  },
+  "lightTalk": "가벼운 수다",
+  "@lightTalk": {
+    "description": "Localized string for lightTalk"
+  },
+  "lightTheme": "라이트 모드",
+  "@lightTheme": {
+    "description": "Localized string for lightTheme"
+  },
+  "lightThemeDesc": "밝은 테마를 사용합니다",
+  "@lightThemeDesc": {
+    "description": "Localized string for lightThemeDesc"
+  },
+  "loading": "로딩 중...",
+  "@loading": {
+    "description": "Localized string for loading"
+  },
+  "loadingData": "데이터를 로딩 중입니다...",
+  "@loadingData": {
+    "description": "Localized string for loadingData"
   },
   "loadingProducts": "상품 불러오는 중...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
+  "loadingProfile": "프로필 불러오는 중",
+  "@loadingProfile": {
+    "description": "Localized string for loadingProfile"
+  },
+  "login": "로그인",
+  "@login": {
+    "description": "Localized string for login"
+  },
+  "loginButton": "로그인",
+  "@loginButton": {
+    "description": "Localized string for loginButton"
+  },
+  "loginCancelled": "로그인이 취소되었습니다",
+  "@loginCancelled": {
+    "description": "Localized string for loginCancelled"
+  },
   "loginComplete": "로그인 완료",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
+  },
+  "loginError": "로그인에 실패했습니다",
+  "@loginError": {
+    "description": "Localized string for loginError"
   },
   "loginFailed": "로그인 실패",
   "@loginFailed": {
@@ -2402,9 +1306,33 @@
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
+  "loginRequired": "로그인이 필요합니다",
+  "@loginRequired": {
+    "description": "Localized string for loginRequired"
+  },
+  "loginRequiredForProfile": "프로필을 보고 소나와의 기록을 확인하려면\n로그인이 필요해요",
+  "@loginRequiredForProfile": {
+    "description": "Localized string for loginRequiredForProfile"
+  },
   "loginRequiredService": "이 서비스를 이용하려면 로그인이 필요합니다",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
+  },
+  "loginRequiredTitle": "로그인이 필요합니다",
+  "@loginRequiredTitle": {
+    "description": "Localized string for loginRequiredTitle"
+  },
+  "loginSignup": "로그인/회원가입",
+  "@loginSignup": {
+    "description": "Localized string for loginSignup"
+  },
+  "loginTab": "로그인",
+  "@loginTab": {
+    "description": "Localized string for loginTab"
+  },
+  "loginTitle": "로그인",
+  "@loginTitle": {
+    "description": "Localized string for loginTitle"
   },
   "loginWithApple": "Apple로 로그인",
   "@loginWithApple": {
@@ -2414,21 +1342,236 @@
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
+  "logout": "로그아웃",
+  "@logout": {
+    "description": "Localized string for logout"
+  },
   "logoutConfirm": "정말로 로그아웃하시겠습니까?",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
+  },
+  "lonelinessRelief": "외로움 해소",
+  "@lonelinessRelief": {
+    "description": "Localized string for lonelinessRelief"
+  },
+  "lonely": "외로워요",
+  "@lonely": {
+    "description": "Localized string for lonely"
+  },
+  "lowQualityResponses": "낮은 품질 응답",
+  "@lowQualityResponses": {
+    "description": "Localized string for lowQualityResponses"
+  },
+  "lunch": "점심식사",
+  "@lunch": {
+    "description": "Localized string for lunch"
+  },
+  "lunchtime": "점심시간",
+  "@lunchtime": {
+    "description": "Localized string for lunchtime"
+  },
+  "mainErrorType": "주요 에러 타입",
+  "@mainErrorType": {
+    "description": "Localized string for mainErrorType"
+  },
+  "makeFriends": "친구 만들기",
+  "@makeFriends": {
+    "description": "Localized string for makeFriends"
+  },
+  "male": "남성",
+  "@male": {
+    "description": "Localized string for male"
+  },
+  "manageBlockedAIs": "차단된 AI 관리",
+  "@manageBlockedAIs": {
+    "description": "Localized string for manageBlockedAIs"
+  },
+  "managePersonaImageCache": "페르소나 이미지 캐시를 관리합니다",
+  "@managePersonaImageCache": {
+    "description": "Localized string for managePersonaImageCache"
+  },
+  "marketingAgree": "마케팅 정보 수신 동의 (선택)",
+  "@marketingAgree": {
+    "description": "Localized string for marketingAgree"
+  },
+  "marketingDescription": "이벤트 및 혜택 정보를 받아보실 수 있습니다",
+  "@marketingDescription": {
+    "description": "Localized string for marketingDescription"
+  },
+  "matchPersonaStep": "1. 페르소나 매칭: 좌우로 스와이프하여 마음에 드는 AI 페르소나를 선택하세요.",
+  "@matchPersonaStep": {
+    "description": "Localized string for matchPersonaStep"
+  },
+  "matchedPersonas": "매칭된 소나",
+  "@matchedPersonas": {
+    "description": "Localized string for matchedPersonas"
+  },
+  "matchedSona": "매칭된 소나",
+  "@matchedSona": {
+    "description": "Localized string for matchedSona"
+  },
+  "matching": "매칭",
+  "@matching": {
+    "description": "Localized string for matching"
+  },
+  "matchingFailed": "매칭에 실패했습니다.",
+  "@matchingFailed": {
+    "description": "Localized string for matchingFailed"
+  },
+  "me": "나",
+  "@me": {
+    "description": "Localized string for me"
+  },
+  "meetAIPersonas": "AI 페르소나를 만나보세요",
+  "@meetAIPersonas": {
+    "description": "Localized string for meetAIPersonas"
   },
   "meetNewPersonas": "새로운 페르소나 만나기",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
+  "meetPersonas": "페르소나 만나기",
+  "@meetPersonas": {
+    "description": "Localized string for meetPersonas"
+  },
+  "memberBenefits": "회원가입 시 100개 이상의 메시지와 하트 10개 지급!",
+  "@memberBenefits": {
+    "description": "Localized string for memberBenefits"
+  },
+  "memoryAlbum": "추억 앨범",
+  "@memoryAlbum": {
+    "description": "Localized string for memoryAlbum"
+  },
+  "memoryAlbumDesc": "특별한 순간을 자동으로 저장하고 회상",
+  "@memoryAlbumDesc": {
+    "description": "Localized string for memoryAlbumDesc"
+  },
+  "messageCopied": "메시지가 복사되었습니다",
+  "@messageCopied": {
+    "description": "Localized string for messageCopied"
+  },
+  "messageDeleted": "메시지가 삭제되었습니다",
+  "@messageDeleted": {
+    "description": "Localized string for messageDeleted"
+  },
   "messageLimitReset": "메시지 한도는 자정에 초기화됩니다",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
+  "messageSendFailed": "메시지 전송에 실패했습니다. 다시 시도해주세요.",
+  "@messageSendFailed": {
+    "description": "Localized string for messageSendFailed"
+  },
+  "messagesRemaining": "메시지 잔량",
+  "@messagesRemaining": {
+    "description": "Label for messages remaining"
+  },
+  "minutesAgo": "{count}분 전",
+  "@minutesAgo": {
+    "description": "Minutes ago format",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "3"
+      },
+      "formatted": {
+        "type": "String",
+        "example": "minutes ago"
+      }
+    }
+  },
+  "missingTranslation": "번역 누락",
+  "@missingTranslation": {
+    "description": "Localized string for missingTranslation"
+  },
+  "monday": "월요일",
+  "@monday": {
+    "description": "Localized string for monday"
+  },
+  "month": "월",
+  "@month": {
+    "description": "Localized string for month"
+  },
+  "monthDay": "{month}월 {day}일",
+  "@monthDay": {
+    "description": "Month and day format",
+    "placeholders": {
+      "month": {
+        "type": "String"
+      },
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "moreButton": "더보기",
+  "@moreButton": {
+    "description": "Localized string for moreButton"
+  },
+  "morning": "아침",
+  "@morning": {
+    "description": "Localized string for morning"
+  },
+  "mostFrequentError": "가장 많은 에러",
+  "@mostFrequentError": {
+    "description": "Localized string for mostFrequentError"
+  },
+  "movies": "영화",
+  "@movies": {
+    "description": "Localized string for movies"
+  },
+  "multilingualChat": "다국어 채팅",
+  "@multilingualChat": {
+    "description": "Localized string for multilingualChat"
+  },
+  "music": "음악",
+  "@music": {
+    "description": "Localized string for music"
+  },
+  "myGenderSection": "내 성별 (선택)",
+  "@myGenderSection": {
+    "description": "Localized string for myGenderSection"
+  },
+  "networkErrorOccurred": "네트워크 오류가 발생했습니다.",
+  "@networkErrorOccurred": {
+    "description": "Localized string for networkErrorOccurred"
+  },
+  "newMessage": "새 메시지",
+  "@newMessage": {
+    "description": "Localized string for newMessage"
+  },
+  "newMessageCount": "새 메시지 {count}개",
+  "@newMessageCount": {
+    "description": "Number of new messages",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "newMessageNotification": "새 메시지 알림",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
+  },
+  "newMessages": "새 메시지",
+  "@newMessages": {
+    "description": "Localized string for newMessages"
+  },
+  "newYear": "새해",
+  "@newYear": {
+    "description": "Localized string for newYear"
+  },
+  "next": "다음",
+  "@next": {
+    "description": "Localized string for next"
+  },
+  "niceToMeetYou": "반가워요!",
+  "@niceToMeetYou": {
+    "description": "Localized string for niceToMeetYou"
+  },
+  "nickname": "닉네임",
+  "@nickname": {
+    "description": "Localized string for nickname"
   },
   "nicknameAlreadyUsed": "이미 사용 중인 닉네임입니다",
   "@nicknameAlreadyUsed": {
@@ -2437,6 +1580,10 @@
   "nicknameHelperText": "3-10자",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
+  },
+  "nicknameHint": "3-10자",
+  "@nicknameHint": {
+    "description": "Localized string for nicknameHint"
   },
   "nicknameInUse": "이미 사용 중인 닉네임입니다",
   "@nicknameInUse": {
@@ -2454,17 +1601,90 @@
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
+  "nicknameRequired": "닉네임 *",
+  "@nicknameRequired": {
+    "description": "Localized string for nicknameRequired"
+  },
+  "night": "밤",
+  "@night": {
+    "description": "Localized string for night"
+  },
+  "no": "아니오",
+  "@no": {
+    "description": "Localized string for no"
+  },
+  "noBlockedAIs": "차단된 AI가 없습니다",
+  "@noBlockedAIs": {
+    "description": "Localized string for noBlockedAIs"
+  },
+  "noChatsYet": "아직 대화가 없습니다",
+  "@noChatsYet": {
+    "description": "Localized string for noChatsYet"
+  },
   "noConversationYet": "아직 대화가 없습니다",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
+  },
+  "noErrorReports": "에러 리포트가 없습니다.",
+  "@noErrorReports": {
+    "description": "Localized string for noErrorReports"
+  },
+  "noImageAvailable": "이미지가 없습니다",
+  "@noImageAvailable": {
+    "description": "Localized string for noImageAvailable"
   },
   "noMatchedPersonas": "아직 매칭된 페르소나가 없습니다",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
+  "noMatchedSonas": "아직 매칭된 소나가 없어요",
+  "@noMatchedSonas": {
+    "description": "Localized string for noMatchedSonas"
+  },
+  "noPersonasAvailable": "사용 가능한 페르소나가 없습니다. 다시 시도해주세요.",
+  "@noPersonasAvailable": {
+    "description": "Localized string for noPersonasAvailable"
+  },
+  "noPersonasToSelect": "선택할 소나가 없습니다",
+  "@noPersonasToSelect": {
+    "description": "Localized string for noPersonasToSelect"
+  },
+  "noQualityIssues": "최근 1시간 동안 품질 문제가 없습니다 ✅",
+  "@noQualityIssues": {
+    "description": "Localized string for noQualityIssues"
+  },
+  "noQualityLogs": "아직 품질 로그가 없습니다.",
+  "@noQualityLogs": {
+    "description": "Localized string for noQualityLogs"
+  },
   "noTranslatedMessages": "번역할 메시지가 없습니다",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
+  },
+  "notEnoughHearts": "하트가 부족합니다",
+  "@notEnoughHearts": {
+    "description": "Localized string for notEnoughHearts"
+  },
+  "notEnoughHeartsCount": "하트가 부족합니다. (현재: {count}개)",
+  "@notEnoughHeartsCount": {
+    "description": "Not enough hearts message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notRegistered": "등록되지 않은",
+  "@notRegistered": {
+    "description": "Localized string for notRegistered"
+  },
+  "notSubscribed": "미가입",
+  "@notSubscribed": {
+    "description": "Localized string for notSubscribed"
+  },
+  "notificationPermissionDesc": "새로운 메시지를 받으려면 알림 권한이 필요합니다.",
+  "@notificationPermissionDesc": {
+    "description": "Localized string for notificationPermissionDesc"
   },
   "notificationPermissionRequired": "알림 권한이 필요합니다",
   "@notificationPermissionRequired": {
@@ -2474,13 +1694,194 @@
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
+  "notifications": "알림",
+  "@notifications": {
+    "description": "Localized string for notifications"
+  },
+  "occurrenceInfo": "발생 정보:",
+  "@occurrenceInfo": {
+    "description": "Localized string for occurrenceInfo"
+  },
+  "olderChats": "이전",
+  "@olderChats": {
+    "description": "Localized string for olderChats"
+  },
+  "onlyOppositeGenderNote": "체크하지 않으면 이성 페르소나만 표시됩니다",
+  "@onlyOppositeGenderNote": {
+    "description": "Localized string for onlyOppositeGenderNote"
+  },
+  "openSettings": "설정 열기",
+  "@openSettings": {
+    "description": "Localized string for openSettings"
+  },
+  "optional": "선택",
+  "@optional": {
+    "description": "Localized string for optional"
+  },
+  "or": "또는",
+  "@or": {
+    "description": "Localized string for or"
+  },
+  "originalPrice": "원가",
+  "@originalPrice": {
+    "description": "Localized string for originalPrice"
+  },
+  "originalText": "원문",
+  "@originalText": {
+    "description": "Localized string for originalText"
+  },
+  "other": "기타",
+  "@other": {
+    "description": "Localized string for other"
+  },
+  "otherError": "기타 오류",
+  "@otherError": {
+    "description": "Localized string for otherError"
+  },
+  "others": "기타",
+  "@others": {
+    "description": "Localized string for others"
+  },
+  "ownedHearts": "보유 하트",
+  "@ownedHearts": {
+    "description": "Localized string for ownedHearts"
+  },
+  "parentsDay": "어버이날",
+  "@parentsDay": {
+    "description": "Localized string for parentsDay"
+  },
+  "password": "비밀번호",
+  "@password": {
+    "description": "Localized string for password"
+  },
   "passwordConfirmation": "확인을 위해 비밀번호를 입력하세요",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
+  "passwordConfirmationDesc": "계정 삭제를 위해 비밀번호를 다시 입력해주세요.",
+  "@passwordConfirmationDesc": {
+    "description": "Localized string for passwordConfirmationDesc"
+  },
+  "passwordHint": "6자 이상",
+  "@passwordHint": {
+    "description": "Localized string for passwordHint"
+  },
+  "passwordLabel": "비밀번호",
+  "@passwordLabel": {
+    "description": "Localized string for passwordLabel"
+  },
+  "passwordRequired": "비밀번호 *",
+  "@passwordRequired": {
+    "description": "Localized string for passwordRequired"
+  },
+  "passwordResetEmailPrompt": "비밀번호를 재설정할 이메일을 입력해주세요",
+  "@passwordResetEmailPrompt": {
+    "description": "Localized string for passwordResetEmailPrompt"
+  },
+  "passwordResetEmailSent": "비밀번호 재설정 이메일을 발송했습니다. 이메일을 확인해주세요.",
+  "@passwordResetEmailSent": {
+    "description": "Localized string for passwordResetEmailSent"
+  },
+  "passwordText": "비밀번호",
+  "@passwordText": {
+    "description": "Localized string for passwordText"
+  },
+  "passwordTooShort": "비밀번호는 6자 이상이어야 합니다",
+  "@passwordTooShort": {
+    "description": "Localized string for passwordTooShort"
+  },
+  "permissionDenied": "권한이 거부되었습니다",
+  "@permissionDenied": {
+    "description": "Localized string for permissionDenied"
+  },
+  "permissionDeniedMessage": "{permissionName} 권한이 거부되었습니다.\\n설정에서 권한을 허용해주세요.",
+  "@permissionDeniedMessage": {
+    "description": "Permission denied message",
+    "placeholders": {
+      "permissionName": {
+        "type": "String"
+      }
+    }
+  },
+  "permissionDeniedTryLater": "권한이 없습니다. 나중에 다시 시도해 주세요.",
+  "@permissionDeniedTryLater": {
+    "description": "Localized string for permissionDeniedTryLater"
+  },
+  "permissionRequired": "권한 필요",
+  "@permissionRequired": {
+    "description": "Localized string for permissionRequired"
+  },
+  "personaGenderSection": "만나고 싶은 페르소나 성별",
+  "@personaGenderSection": {
+    "description": "Localized string for personaGenderSection"
+  },
+  "personaQualityStats": "페르소나별 품질 통계",
+  "@personaQualityStats": {
+    "description": "Localized string for personaQualityStats"
+  },
   "personalInfoExposure": "개인정보 노출",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
+  },
+  "personality": "성격",
+  "@personality": {
+    "description": "Localized string for personality"
+  },
+  "pets": "반려동물",
+  "@pets": {
+    "description": "Localized string for pets"
+  },
+  "photo": "사진",
+  "@photo": {
+    "description": "Localized string for photo"
+  },
+  "photography": "사진",
+  "@photography": {
+    "description": "Localized string for photography"
+  },
+  "picnic": "피크닉",
+  "@picnic": {
+    "description": "Localized string for picnic"
+  },
+  "preferenceSettings": "선호 설정",
+  "@preferenceSettings": {
+    "description": "Localized string for preferenceSettings"
+  },
+  "preferredLanguage": "선호 언어",
+  "@preferredLanguage": {
+    "description": "Localized string for preferredLanguage"
+  },
+  "preparingForSleep": "수면준비",
+  "@preparingForSleep": {
+    "description": "Localized string for preparingForSleep"
+  },
+  "preparingNewMeeting": "새로운 만남 준비 중",
+  "@preparingNewMeeting": {
+    "description": "Localized string for preparingNewMeeting"
+  },
+  "preparingPersonaImages": "페르소나 이미지를 준비하고 있어요",
+  "@preparingPersonaImages": {
+    "description": "Localized string for preparingPersonaImages"
+  },
+  "preparingPersonas": "페르소나를 준비하고 있어요",
+  "@preparingPersonas": {
+    "description": "Localized string for preparingPersonas"
+  },
+  "preview": "미리보기",
+  "@preview": {
+    "description": "Localized string for preview"
+  },
+  "previous": "이전",
+  "@previous": {
+    "description": "Localized string for previous"
+  },
+  "privacy": "개인정보 처리방침",
+  "@privacy": {
+    "description": "Localized string for privacy"
+  },
+  "privacyPolicy": "개인정보 처리방침",
+  "@privacyPolicy": {
+    "description": "Localized string for privacyPolicy"
   },
   "privacyPolicyAgreement": "개인정보 처리방침에 동의해주세요",
   "@privacyPolicyAgreement": {
@@ -2489,6 +1890,10 @@
   "privacySection1Content": "저희는 귀하의 개인정보를 보호하기 위해 최선을 다하고 있습니다. 본 개인정보 처리방침은 귀하가 서비스를 이용할 때 저희가 정보를 수집, 사용, 보호하는 방법을 설명합니다.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
+  },
+  "privacySection1Title": "1. 개인정보 수집 및 이용 목적",
+  "@privacySection1Title": {
+    "description": "Localized string for privacySection1Title"
   },
   "privacySection2Content": "저희는 귀하가 계정을 생성하거나, 프로필을 업데이트하거나, 서비스를 이용할 때 직접 제공하는 정보를 수집합니다.",
   "@privacySection2Content": {
@@ -2502,17 +1907,33 @@
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
+  "privacySection3Title": "3. 개인정보 보관 및 이용 기간",
+  "@privacySection3Title": {
+    "description": "Localized string for privacySection3Title"
+  },
   "privacySection4Content": "저희는 귀하의 동의 없이 개인정보를 제3자에게 판매, 거래 또는 전송하지 않습니다.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
+  },
+  "privacySection4Title": "4. 개인정보 제3자 제공",
+  "@privacySection4Title": {
+    "description": "Localized string for privacySection4Title"
   },
   "privacySection5Content": "저희는 무단 액세스, 변경, 공개 또는 파괴로부터 귀하의 개인정보를 보호하기 위해 적절한 보안 조치를 구현합니다.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
+  "privacySection5Title": "5. 개인정보 보호를 위한 기술적 보호조치",
+  "@privacySection5Title": {
+    "description": "Localized string for privacySection5Title"
+  },
   "privacySection6Content": "저희는 서비스 제공 및 법적 의무 준수에 필요한 기간 동안 개인정보를 보관합니다.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
+  },
+  "privacySection6Title": "6. 이용자의 권리",
+  "@privacySection6Title": {
+    "description": "Localized string for privacySection6Title"
   },
   "privacySection7Content": "귀하는 언제든지 계정 설정을 통해 개인정보에 접근, 업데이트 또는 삭제할 권리가 있습니다.",
   "@privacySection7Content": {
@@ -2530,9 +1951,57 @@
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
+  "privacySettings": "프라이버시 설정",
+  "@privacySettings": {
+    "description": "Localized string for privacySettings"
+  },
+  "privacySettingsInfo": "각 기능을 개별적으로 끄면 해당 서비스를 이용할 수 없습니다",
+  "@privacySettingsInfo": {
+    "description": "Localized string for privacySettingsInfo"
+  },
+  "privacySettingsScreen": "개인정보 보호 설정",
+  "@privacySettingsScreen": {
+    "description": "Localized string for privacySettingsScreen"
+  },
   "problemMessage": "문제",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
+  },
+  "problemOccurred": "문제 발생",
+  "@problemOccurred": {
+    "description": "Localized string for problemOccurred"
+  },
+  "profile": "프로필",
+  "@profile": {
+    "description": "Localized string for profile"
+  },
+  "profileEdit": "프로필 편집",
+  "@profileEdit": {
+    "description": "Localized string for profileEdit"
+  },
+  "profileEditLoginRequiredMessage": "프로필 편집을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?",
+  "@profileEditLoginRequiredMessage": {
+    "description": "Localized string for profileEditLoginRequiredMessage"
+  },
+  "profileInfo": "프로필 정보",
+  "@profileInfo": {
+    "description": "Localized string for profileInfo"
+  },
+  "profileInfoDescription": "프로필 사진과 기본 정보를 입력해주세요",
+  "@profileInfoDescription": {
+    "description": "Localized string for profileInfoDescription"
+  },
+  "profileNav": "프로필",
+  "@profileNav": {
+    "description": "Localized string for profileNav"
+  },
+  "profilePhoto": "프로필 사진",
+  "@profilePhoto": {
+    "description": "Localized string for profilePhoto"
+  },
+  "profilePhotoAndInfo": "프로필 사진과 기본 정보를 입력해주세요",
+  "@profilePhotoAndInfo": {
+    "description": "Localized string for profilePhotoAndInfo"
   },
   "profilePhotoUpdateFailed": "프로필 사진 업데이트 실패",
   "@profilePhotoUpdateFailed": {
@@ -2541,6 +2010,14 @@
   "profilePhotoUpdated": "프로필 사진이 업데이트되었습니다",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
+  },
+  "profileSettings": "프로필 설정",
+  "@profileSettings": {
+    "description": "Localized string for profileSettings"
+  },
+  "profileSetup": "프로필 설정 중",
+  "@profileSetup": {
+    "description": "Localized string for profileSetup"
   },
   "profileUpdateFailed": "프로필 업데이트 실패",
   "@profileUpdateFailed": {
@@ -2554,9 +2031,55 @@
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
+  "purchaseButton": "구매하기",
+  "@purchaseButton": {
+    "description": "Localized string for purchaseButton"
+  },
+  "purchaseConfirm": "구매 확인",
+  "@purchaseConfirm": {
+    "description": "Localized string for purchaseConfirm"
+  },
+  "purchaseConfirmContent": "{product}을(를) {price}에 구매하시겠습니까?",
+  "@purchaseConfirmContent": {
+    "description": "Purchase confirmation content",
+    "placeholders": {
+      "product": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "purchaseConfirmMessage": "{title}을(를) {price}에 구매하시겠습니까? {description}",
+  "@purchaseConfirmMessage": {
+    "description": "Purchase confirmation message",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Premium Package"
+      },
+      "price": {
+        "type": "String",
+        "example": "$9.99"
+      },
+      "description": {
+        "type": "String",
+        "example": "This includes..."
+      }
+    }
+  },
   "purchaseFailed": "구매 실패",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
+  },
+  "purchaseHeartsOnly": "하트 구매",
+  "@purchaseHeartsOnly": {
+    "description": "Localized string for purchaseHeartsOnly"
+  },
+  "purchaseMoreHearts": "하트를 구매하여 대화를 계속하세요",
+  "@purchaseMoreHearts": {
+    "description": "Localized string for purchaseMoreHearts"
   },
   "purchasePending": "구매 처리 중...",
   "@purchasePending": {
@@ -2610,6 +2133,26 @@
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
+  "purchaseSection6Title": "6. 문의사항",
+  "@purchaseSection6Title": {
+    "description": "Localized string for purchaseSection6Title"
+  },
+  "pushNotifications": "푸시 알림",
+  "@pushNotifications": {
+    "description": "Localized string for pushNotifications"
+  },
+  "reading": "독서",
+  "@reading": {
+    "description": "Localized string for reading"
+  },
+  "realtimeQualityLog": "실시간 품질 로그",
+  "@realtimeQualityLog": {
+    "description": "Localized string for realtimeQualityLog"
+  },
+  "recentConversation": "최근 대화:",
+  "@recentConversation": {
+    "description": "Localized string for recentConversation"
+  },
   "recentLoginRequired": "보안을 위해 다시 로그인해주세요",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
@@ -2622,6 +2165,23 @@
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
+  "referrerEmailLabel": "추천인 이메일 (선택)",
+  "@referrerEmailLabel": {
+    "description": "Localized string for referrerEmailLabel"
+  },
+  "refresh": "새로고침",
+  "@refresh": {
+    "description": "Localized string for refresh"
+  },
+  "refreshComplete": "새로고침 완료! {count}명의 매칭된 페르소나",
+  "@refreshComplete": {
+    "description": "Refresh complete message",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "refreshFailed": "Refresh failed",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
@@ -2630,33 +2190,288 @@
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
+  "relatedFAQ": "관련 FAQ",
+  "@relatedFAQ": {
+    "description": "Localized string for relatedFAQ"
+  },
+  "report": "신고하기",
+  "@report": {
+    "description": "Localized string for report"
+  },
+  "reportAI": "신고",
+  "@reportAI": {
+    "description": "Localized string for reportAI"
+  },
+  "reportAIDescription": "AI가 당신에게 불쾌감을 주었다면 내용을 적어 신고하세요.",
+  "@reportAIDescription": {
+    "description": "Localized string for reportAIDescription"
+  },
+  "reportAITitle": "AI 대화 신고",
+  "@reportAITitle": {
+    "description": "Localized string for reportAITitle"
+  },
+  "reportAndBlock": "신고 및 차단",
+  "@reportAndBlock": {
+    "description": "Localized string for reportAndBlock"
+  },
+  "reportAndBlockDescription": "이 AI의 부적절한 행동을 신고하고 차단할 수 있습니다",
+  "@reportAndBlockDescription": {
+    "description": "Localized string for reportAndBlockDescription"
+  },
+  "reportChatError": "대화 오류 신고",
+  "@reportChatError": {
+    "description": "Localized string for reportChatError"
+  },
+  "reportError": "신고 접수 중 오류가 발생했습니다: {error}",
+  "@reportError": {
+    "description": "Report error message",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "reportFailed": "Report failed",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
+  },
+  "reportSubmitted": "신고가 접수되었습니다. 검토 후 조치하겠습니다.",
+  "@reportSubmitted": {
+    "description": "Localized string for reportSubmitted"
+  },
+  "reportSubmittedSuccess": "신고가 접수되었습니다. 감사합니다!",
+  "@reportSubmittedSuccess": {
+    "description": "Localized string for reportSubmittedSuccess"
+  },
+  "requestLimit": "요청 제한",
+  "@requestLimit": {
+    "description": "Localized string for requestLimit"
+  },
+  "required": "[필수]",
+  "@required": {
+    "description": "Localized string for required"
   },
   "requiredTermsAgreement": "Please agree to the terms",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
+  "restartConversation": "다시 대화하기",
+  "@restartConversation": {
+    "description": "Localized string for restartConversation"
+  },
+  "restartConversationQuestion": "{name}와 다시 대화를 시작하시겠어요?",
+  "@restartConversationQuestion": {
+    "description": "Restart conversation question",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "restartConversationWithName": "{name}와 다시 대화를 시작합니다!",
+  "@restartConversationWithName": {
+    "description": "Restarting conversation message",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "retry": "다시 시도",
+  "@retry": {
+    "description": "Localized string for retry"
+  },
+  "retryButton": "다시 시도",
+  "@retryButton": {
+    "description": "Localized string for retryButton"
+  },
+  "sad": "슬퍼요",
+  "@sad": {
+    "description": "Localized string for sad"
+  },
+  "saturday": "토요일",
+  "@saturday": {
+    "description": "Localized string for saturday"
+  },
+  "save": "저장",
+  "@save": {
+    "description": "Localized string for save"
+  },
+  "search": "검색",
+  "@search": {
+    "description": "Localized string for search"
+  },
+  "searchFAQ": "FAQ 검색...",
+  "@searchFAQ": {
+    "description": "Localized string for searchFAQ"
+  },
+  "searchResults": "검색 결과",
+  "@searchResults": {
+    "description": "Localized string for searchResults"
+  },
+  "selectEmotion": "감정 선택",
+  "@selectEmotion": {
+    "description": "Localized string for selectEmotion"
+  },
+  "selectErrorType": "오류 유형을 선택하세요",
+  "@selectErrorType": {
+    "description": "Localized string for selectErrorType"
+  },
+  "selectFeeling": "감정 선택",
+  "@selectFeeling": {
+    "description": "Localized string for selectFeeling"
+  },
+  "selectGender": "성별을 선택해주세요",
+  "@selectGender": {
+    "description": "Localized string for selectGender"
+  },
+  "selectInterests": "관심사를 선택해주세요 (최소 1개)",
+  "@selectInterests": {
+    "description": "Localized string for selectInterests"
+  },
+  "selectLanguage": "언어를 선택하세요",
+  "@selectLanguage": {
+    "description": "Localized string for selectLanguage"
+  },
   "selectPersona": "Select a persona",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
+  },
+  "selectPersonaPlease": "페르소나를 선택해 주세요.",
+  "@selectPersonaPlease": {
+    "description": "Localized string for selectPersonaPlease"
+  },
+  "selectPreferredMbti": "특정 MBTI 유형의 페르소나를 선호하신다면 선택해주세요",
+  "@selectPreferredMbti": {
+    "description": "Localized string for selectPreferredMbti"
+  },
+  "selectProblematicMessage": "문제가 있는 메시지를 선택해주세요 (선택사항)",
+  "@selectProblematicMessage": {
+    "description": "Localized string for selectProblematicMessage"
   },
   "selectReportReason": "Select report reason",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
+  "selectTheme": "테마를 선택하세요",
+  "@selectTheme": {
+    "description": "Localized string for selectTheme"
+  },
+  "selectTranslationError": "번역 오류가 있는 메시지를 선택해주세요",
+  "@selectTranslationError": {
+    "description": "Localized string for selectTranslationError"
+  },
+  "selectUsagePurpose": "SONA를 사용하시는 목적을 선택해주세요",
+  "@selectUsagePurpose": {
+    "description": "Localized string for selectUsagePurpose"
+  },
+  "selfIntroduction": "자기소개 (선택)",
+  "@selfIntroduction": {
+    "description": "Localized string for selfIntroduction"
+  },
+  "selfIntroductionHint": "간단한 자기소개를 작성해주세요",
+  "@selfIntroductionHint": {
+    "description": "Localized string for selfIntroductionHint"
+  },
+  "send": "전송",
+  "@send": {
+    "description": "Localized string for send"
+  },
+  "sendChatError": "대화 오류 전송하기",
+  "@sendChatError": {
+    "description": "Localized string for sendChatError"
+  },
   "sendFirstMessage": "Send your first message",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
+  },
+  "sendReport": "신고하기",
+  "@sendReport": {
+    "description": "Localized string for sendReport"
+  },
+  "sendingEmail": "이메일 발송 중...",
+  "@sendingEmail": {
+    "description": "Localized string for sendingEmail"
+  },
+  "seoul": "서울",
+  "@seoul": {
+    "description": "Localized string for seoul"
+  },
+  "serverErrorDashboard": "서버 오류",
+  "@serverErrorDashboard": {
+    "description": "Localized string for serverErrorDashboard"
   },
   "serviceTermsAgreement": "Please agree to the terms of service",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
+  "sessionExpired": "세션이 만료되었습니다",
+  "@sessionExpired": {
+    "description": "Localized string for sessionExpired"
+  },
+  "setAppInterfaceLanguage": "앱 인터페이스 언어를 설정합니다",
+  "@setAppInterfaceLanguage": {
+    "description": "Localized string for setAppInterfaceLanguage"
+  },
+  "setNow": "지금 설정하기",
+  "@setNow": {
+    "description": "Localized string for setNow"
+  },
+  "settings": "설정",
+  "@settings": {
+    "description": "Localized string for settings"
+  },
+  "sexualContent": "성적인 콘텐츠",
+  "@sexualContent": {
+    "description": "Localized string for sexualContent"
+  },
   "showAllGenderPersonas": "모든 성별 페르소나 보기",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
+  },
+  "showAllGendersOption": "모든 성별 보기",
+  "@showAllGendersOption": {
+    "description": "Localized string for showAllGendersOption"
+  },
+  "showOppositeGenderOnly": "체크하지 않으면 이성 페르소나만 표시됩니다",
+  "@showOppositeGenderOnly": {
+    "description": "Localized string for showOppositeGenderOnly"
+  },
+  "showOriginalText": "원문 보기",
+  "@showOriginalText": {
+    "description": "Localized string for showOriginalText"
+  },
+  "signUp": "회원가입",
+  "@signUp": {
+    "description": "Localized string for signUp"
+  },
+  "signUpFromGuest": "지금 회원가입하고 모든 기능을 이용하세요!",
+  "@signUpFromGuest": {
+    "description": "Localized string for signUpFromGuest"
+  },
+  "signup": "회원가입",
+  "@signup": {
+    "description": "Localized string for signup"
+  },
+  "signupComplete": "가입완료",
+  "@signupComplete": {
+    "description": "Localized string for signupComplete"
+  },
+  "signupTab": "회원가입",
+  "@signupTab": {
+    "description": "Localized string for signupTab"
+  },
+  "simpleInfoRequired": "AI 페르소나와의 매칭을 위해\n간단한 정보가 필요해요",
+  "@simpleInfoRequired": {
+    "description": "Localized string for simpleInfoRequired"
+  },
+  "skip": "건너뛰기",
+  "@skip": {
+    "description": "Localized string for skip"
+  },
+  "sonaFriend": "소나 친구",
+  "@sonaFriend": {
+    "description": "Localized string for sonaFriend"
   },
   "sonaPrivacyPolicy": "SONA Privacy Policy",
   "@sonaPrivacyPolicy": {
@@ -2670,105 +2485,125 @@
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
+  "sonaUsagePurpose": "SONA를 사용하시는 목적을 선택해주세요",
+  "@sonaUsagePurpose": {
+    "description": "Localized string for sonaUsagePurpose"
+  },
   "sorryNotHelpful": "Sorry this wasn't helpful",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
+  },
+  "sort": "정렬",
+  "@sort": {
+    "description": "Localized string for sort"
+  },
+  "soundSettings": "소리 설정",
+  "@soundSettings": {
+    "description": "Localized string for soundSettings"
+  },
+  "spamAdvertising": "스팸/광고",
+  "@spamAdvertising": {
+    "description": "Localized string for spamAdvertising"
+  },
+  "spanish": "스페인어",
+  "@spanish": {
+    "description": "Localized string for spanish"
+  },
+  "specialRelationshipDesc": "서로를 이해하고 깊은 유대감을 쌓아요",
+  "@specialRelationshipDesc": {
+    "description": "Localized string for specialRelationshipDesc"
+  },
+  "sports": "스포츠",
+  "@sports": {
+    "description": "Localized string for sports"
+  },
+  "spring": "봄",
+  "@spring": {
+    "description": "Localized string for spring"
+  },
+  "startChat": "대화 시작",
+  "@startChat": {
+    "description": "Localized string for startChat"
+  },
+  "startChatButton": "채팅 시작",
+  "@startChatButton": {
+    "description": "Localized string for startChatButton"
   },
   "startConversation": "Start a conversation",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
+  "startConversationLikeAFriend": "소나와 친구처럼 대화를 시작해보세요",
+  "@startConversationLikeAFriend": {
+    "description": "Localized string for startConversationLikeAFriend"
+  },
+  "startConversationStep": "2. 대화 시작: 매칭된 페르소나와 자유롭게 대화를 나누세요.",
+  "@startConversationStep": {
+    "description": "Localized string for startConversationStep"
+  },
+  "startConversationWithSona": "소나와 친구처럼 대화를 시작해보세요!",
+  "@startConversationWithSona": {
+    "description": "Localized string for startConversationWithSona"
+  },
+  "startWithEmail": "이메일로 시작하기",
+  "@startWithEmail": {
+    "description": "Localized string for startWithEmail"
+  },
+  "startWithGoogle": "Google로 시작하기",
+  "@startWithGoogle": {
+    "description": "Localized string for startWithGoogle"
+  },
+  "startingApp": "앱을 시작하고 있어요",
+  "@startingApp": {
+    "description": "Localized string for startingApp"
+  },
+  "storageManagement": "저장소 관리",
+  "@storageManagement": {
+    "description": "Localized string for storageManagement"
+  },
+  "store": "스토어",
+  "@store": {
+    "description": "Localized string for store"
+  },
   "storeConnectionError": "Could not connect to store",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
+  },
+  "storeLoginRequiredMessage": "스토어 이용을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?",
+  "@storeLoginRequiredMessage": {
+    "description": "Localized string for storeLoginRequiredMessage"
   },
   "storeNotAvailable": "Store is not available",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
-  "@tapToSwipePhotos": {
-    "description": "Localized string for tapToSwipePhotos"
+  "storyEvent": "스토리 이벤트",
+  "@storyEvent": {
+    "description": "Localized string for storyEvent"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
-  "@termsSection10Content": {
-    "description": "Localized string for termsSection10Content"
+  "stressed": "스트레스받아요",
+  "@stressed": {
+    "description": "Localized string for stressed"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
-  "@termsSection11Content": {
-    "description": "Localized string for termsSection11Content"
+  "submitReport": "신고 제출",
+  "@submitReport": {
+    "description": "Localized string for submitReport"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
-  "@termsSection12Content": {
-    "description": "Localized string for termsSection12Content"
+  "subscriptionStatus": "구독 현황",
+  "@subscriptionStatus": {
+    "description": "Localized string for subscriptionStatus"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
-  "@termsSection2Content": {
-    "description": "Localized string for termsSection2Content"
+  "subtleVibrationOnTouch": "터치 시 미세한 진동 효과",
+  "@subtleVibrationOnTouch": {
+    "description": "Localized string for subtleVibrationOnTouch"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
-  "@termsSection3Content": {
-    "description": "Localized string for termsSection3Content"
+  "summer": "여름",
+  "@summer": {
+    "description": "Localized string for summer"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
-  "@termsSection4Content": {
-    "description": "Localized string for termsSection4Content"
-  },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
-  "@termsSection5Content": {
-    "description": "Localized string for termsSection5Content"
-  },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
-  "@termsSection6Content": {
-    "description": "Localized string for termsSection6Content"
-  },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
-  "@termsSection8Content": {
-    "description": "Localized string for termsSection8Content"
-  },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
-  "@termsSection9Content": {
-    "description": "Localized string for termsSection9Content"
-  },
-  "termsSupplementary": "Supplementary Terms",
-  "@termsSupplementary": {
-    "description": "Localized string for termsSupplementary"
-  },
-  "translationError": "Translation error",
-  "@translationError": {
-    "description": "Localized string for translationError"
-  },
-  "weekdays": "일,월,화,수,목,금,토",
-  "@weekdays": {
-    "description": "Localized string for weekdays"
-  },
-  "emotionHappy": "행복",
-  "@emotionHappy": {
-    "description": "Localized string for emotionHappy"
-  },
-  "emotionLove": "사랑",
-  "@emotionLove": {
-    "description": "Localized string for emotionLove"
-  },
-  "emotionSad": "슬픔",
-  "@emotionSad": {
-    "description": "Localized string for emotionSad"
-  },
-  "emotionAngry": "화남",
-  "@emotionAngry": {
-    "description": "Localized string for emotionAngry"
-  },
-  "emotionCool": "쿨함",
-  "@emotionCool": {
-    "description": "Localized string for emotionCool"
-  },
-  "emotionThinking": "생각",
-  "@emotionThinking": {
-    "description": "Localized string for emotionThinking"
-  },
-  "selectEmotion": "감정 선택",
-  "@selectEmotion": {
-    "description": "Localized string for selectEmotion"
+  "sunday": "일요일",
+  "@sunday": {
+    "description": "Localized string for sunday"
   },
   "swipeAnyDirection": "아무 방향으로나 스와이프하세요",
   "@swipeAnyDirection": {
@@ -2778,213 +2613,193 @@
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
+  "systemTheme": "시스템 설정 따르기",
+  "@systemTheme": {
+    "description": "Localized string for systemTheme"
+  },
+  "systemThemeDesc": "기기의 다크 모드 설정에 따라 자동으로 변경됩니다",
+  "@systemThemeDesc": {
+    "description": "Localized string for systemThemeDesc"
+  },
+  "tapBottomForDetails": "하단 영역을 탭하여 상세 정보 보기",
+  "@tapBottomForDetails": {
+    "description": "Localized string for tapBottomForDetails"
+  },
   "tapForDetails": "하단 영역을 탭하여 상세 정보 보기",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "personality": "성격",
-  "@personality": {
-    "description": "Localized string for personality"
+  "tapToSwipePhotos": "Tap to swipe photos",
+  "@tapToSwipePhotos": {
+    "description": "Localized string for tapToSwipePhotos"
   },
-  "weatherClear": "맑음",
-  "@weatherClear": {
-    "description": "Localized string for weatherClear"
+  "teachersDay": "스승의날",
+  "@teachersDay": {
+    "description": "Localized string for teachersDay"
   },
-  "weatherCloudy": "흐림",
-  "@weatherCloudy": {
-    "description": "Localized string for weatherCloudy"
+  "technicalError": "기술적 오류",
+  "@technicalError": {
+    "description": "Localized string for technicalError"
   },
-  "weatherRain": "비",
-  "@weatherRain": {
-    "description": "Localized string for weatherRain"
+  "technology": "기술",
+  "@technology": {
+    "description": "Localized string for technology"
   },
-  "weatherDrizzle": "이슬비",
-  "@weatherDrizzle": {
-    "description": "Localized string for weatherDrizzle"
+  "terms": "이용약관",
+  "@terms": {
+    "description": "Localized string for terms"
   },
-  "weatherThunderstorm": "뇌우",
-  "@weatherThunderstorm": {
-    "description": "Localized string for weatherThunderstorm"
+  "termsAgreement": "약관 동의",
+  "@termsAgreement": {
+    "description": "Localized string for termsAgreement"
   },
-  "weatherSnow": "눈",
-  "@weatherSnow": {
-    "description": "Localized string for weatherSnow"
+  "termsAgreementDescription": "서비스 이용을 위한 약관에 동의해주세요",
+  "@termsAgreementDescription": {
+    "description": "Localized string for termsAgreementDescription"
   },
-  "weatherMist": "안개",
-  "@weatherMist": {
-    "description": "Localized string for weatherMist"
+  "termsOfService": "서비스 이용약관",
+  "@termsOfService": {
+    "description": "Localized string for termsOfService"
   },
-  "weatherFog": "짙은 안개",
-  "@weatherFog": {
-    "description": "Localized string for weatherFog"
+  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "@termsSection10Content": {
+    "description": "Localized string for termsSection10Content"
   },
-  "monday": "월요일",
-  "@monday": {
-    "description": "Localized string for monday"
+  "termsSection10Title": "제10조 (분쟁해결)",
+  "@termsSection10Title": {
+    "description": "Localized string for termsSection10Title"
   },
-  "tuesday": "화요일",
-  "@tuesday": {
-    "description": "Localized string for tuesday"
+  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "@termsSection11Content": {
+    "description": "Localized string for termsSection11Content"
   },
-  "wednesday": "수요일",
-  "@wednesday": {
-    "description": "Localized string for wednesday"
+  "termsSection11Title": "제11조 (AI 서비스 특별조항)",
+  "@termsSection11Title": {
+    "description": "Localized string for termsSection11Title"
+  },
+  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "@termsSection12Content": {
+    "description": "Localized string for termsSection12Content"
+  },
+  "termsSection12Title": "제12조 (데이터 수집 및 활용)",
+  "@termsSection12Title": {
+    "description": "Localized string for termsSection12Title"
+  },
+  "termsSection1Content": "본 약관은 SONA(이하 \"회사\")가 제공하는 AI 페르소나 대화 매칭 서비스(이하 \"서비스\")의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.",
+  "@termsSection1Content": {
+    "description": "Localized string for termsSection1Content"
+  },
+  "termsSection1Title": "제1조 (목적)",
+  "@termsSection1Title": {
+    "description": "Localized string for termsSection1Title"
+  },
+  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "@termsSection2Content": {
+    "description": "Localized string for termsSection2Content"
+  },
+  "termsSection2Title": "제2조 (정의)",
+  "@termsSection2Title": {
+    "description": "Localized string for termsSection2Title"
+  },
+  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "@termsSection3Content": {
+    "description": "Localized string for termsSection3Content"
+  },
+  "termsSection3Title": "제3조 (약관의 효력 및 변경)",
+  "@termsSection3Title": {
+    "description": "Localized string for termsSection3Title"
+  },
+  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "@termsSection4Content": {
+    "description": "Localized string for termsSection4Content"
+  },
+  "termsSection4Title": "제4조 (서비스의 제공)",
+  "@termsSection4Title": {
+    "description": "Localized string for termsSection4Title"
+  },
+  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "@termsSection5Content": {
+    "description": "Localized string for termsSection5Content"
+  },
+  "termsSection5Title": "제5조 (회원가입)",
+  "@termsSection5Title": {
+    "description": "Localized string for termsSection5Title"
+  },
+  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "@termsSection6Content": {
+    "description": "Localized string for termsSection6Content"
+  },
+  "termsSection6Title": "제6조 (이용자의 의무)",
+  "@termsSection6Title": {
+    "description": "Localized string for termsSection6Title"
+  },
+  "termsSection7Content": "회사는 이용자가 본 약관의 의무를 위반하거나 서비스의 정상적인 운영을 방해한 경우, 경고, 일시정지, 영구이용정지 등으로 서비스 이용을 단계적으로 제한할 수 있습니다.",
+  "@termsSection7Content": {
+    "description": "Localized string for termsSection7Content"
+  },
+  "termsSection7Title": "제7조 (서비스 이용제한)",
+  "@termsSection7Title": {
+    "description": "Localized string for termsSection7Title"
+  },
+  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "@termsSection8Content": {
+    "description": "Localized string for termsSection8Content"
+  },
+  "termsSection8Title": "제8조 (서비스 중단)",
+  "@termsSection8Title": {
+    "description": "Localized string for termsSection8Title"
+  },
+  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "@termsSection9Content": {
+    "description": "Localized string for termsSection9Content"
+  },
+  "termsSection9Title": "제9조 (면책조항)",
+  "@termsSection9Title": {
+    "description": "Localized string for termsSection9Title"
+  },
+  "termsSupplementary": "Supplementary Terms",
+  "@termsSupplementary": {
+    "description": "Localized string for termsSupplementary"
+  },
+  "thai": "태국어",
+  "@thai": {
+    "description": "Localized string for thai"
+  },
+  "thanksFeedback": "피드백 감사합니다!",
+  "@thanksFeedback": {
+    "description": "Localized string for thanksFeedback"
+  },
+  "theme": "테마",
+  "@theme": {
+    "description": "Localized string for theme"
+  },
+  "themeDescription": "앱의 외관을 원하는 대로 설정할 수 있습니다",
+  "@themeDescription": {
+    "description": "Localized string for themeDescription"
+  },
+  "themeSettings": "테마 설정",
+  "@themeSettings": {
+    "description": "Localized string for themeSettings"
   },
   "thursday": "목요일",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "friday": "금요일",
-  "@friday": {
-    "description": "Localized string for friday"
+  "timeout": "타임아웃",
+  "@timeout": {
+    "description": "Localized string for timeout"
   },
-  "saturday": "토요일",
-  "@saturday": {
-    "description": "Localized string for saturday"
+  "tired": "피곤해요",
+  "@tired": {
+    "description": "Localized string for tired"
   },
-  "sunday": "일요일",
-  "@sunday": {
-    "description": "Localized string for sunday"
+  "today": "오늘",
+  "@today": {
+    "description": "Localized string for today"
   },
-  "morning": "아침",
-  "@morning": {
-    "description": "Localized string for morning"
-  },
-  "forenoon": "오전",
-  "@forenoon": {
-    "description": "Localized string for forenoon"
-  },
-  "lunchtime": "점심시간",
-  "@lunchtime": {
-    "description": "Localized string for lunchtime"
-  },
-  "afternoon": "오후",
-  "@afternoon": {
-    "description": "Localized string for afternoon"
-  },
-  "evening": "저녁",
-  "@evening": {
-    "description": "Localized string for evening"
-  },
-  "night": "밤",
-  "@night": {
-    "description": "Localized string for night"
-  },
-  "dawn": "새벽",
-  "@dawn": {
-    "description": "Localized string for dawn"
-  },
-  "spring": "봄",
-  "@spring": {
-    "description": "Localized string for spring"
-  },
-  "summer": "여름",
-  "@summer": {
-    "description": "Localized string for summer"
-  },
-  "autumn": "가을",
-  "@autumn": {
-    "description": "Localized string for autumn"
-  },
-  "winter": "겨울",
-  "@winter": {
-    "description": "Localized string for winter"
-  },
-  "breakfast": "아침식사",
-  "@breakfast": {
-    "description": "Localized string for breakfast"
-  },
-  "lunch": "점심식사",
-  "@lunch": {
-    "description": "Localized string for lunch"
-  },
-  "dinner": "저녁식사",
-  "@dinner": {
-    "description": "Localized string for dinner"
-  },
-  "preparingForSleep": "수면준비",
-  "@preparingForSleep": {
-    "description": "Localized string for preparingForSleep"
-  },
-  "lateNight": "늦은시간",
-  "@lateNight": {
-    "description": "Localized string for lateNight"
-  },
-  "afternoonFatigue": "오후피로",
-  "@afternoonFatigue": {
-    "description": "Localized string for afternoonFatigue"
-  },
-  "dailyCheck": "일상체크",
-  "@dailyCheck": {
-    "description": "Localized string for dailyCheck"
-  },
-  "unknownError": "알 수 없는 오류가 발생했습니다",
-  "@unknownError": {
-    "description": "Localized string for unknownError"
-  },
-  "guest": "게스트",
-  "@guest": {
-    "description": "Localized string for guest"
-  },
-  "current": "현재",
-  "@current": {
-    "description": "Localized string for current"
-  },
-  "errorMessage": "에러 메시지:",
-  "@errorMessage": {
-    "description": "Localized string for errorMessage"
-  },
-  "userMessage": "사용자 메시지:",
-  "@userMessage": {
-    "description": "Localized string for userMessage"
-  },
-  "recentConversation": "최근 대화:",
-  "@recentConversation": {
-    "description": "Localized string for recentConversation"
-  },
-  "user": "사용자: ",
-  "@user": {
-    "description": "Localized string for user"
-  },
-  "occurrenceInfo": "발생 정보:",
-  "@occurrenceInfo": {
-    "description": "Localized string for occurrenceInfo"
-  },
-  "firstOccurred": "첫 발생: ",
-  "@firstOccurred": {
-    "description": "Localized string for firstOccurred"
-  },
-  "lastOccurred": "마지막 발생: ",
-  "@lastOccurred": {
-    "description": "Localized string for lastOccurred"
-  },
-  "totalOccurrences": "총 {count}회 발생",
-  "@totalOccurrences": {
-    "description": "Localized string for totalOccurrences"
-  },
-  "errorFrequency24h": "에러 발생 빈도 (최근 24시간)",
-  "@errorFrequency24h": {
-    "description": "Localized string for errorFrequency24h"
-  },
-  "hours24Ago": "24시간 전",
-  "@hours24Ago": {
-    "description": "Localized string for hours24Ago"
-  },
-  "apiKeyError": "API 키 오류",
-  "@apiKeyError": {
-    "description": "Localized string for apiKeyError"
-  },
-  "passwordText": "비밀번호",
-  "@passwordText": {
-    "description": "Localized string for passwordText"
-  },
-  "notRegistered": "등록되지 않은",
-  "@notRegistered": {
-    "description": "Localized string for notRegistered"
-  },
-  "incorrect": "올바르지 않습니다",
-  "@incorrect": {
-    "description": "Localized string for incorrect"
+  "todayChats": "오늘",
+  "@todayChats": {
+    "description": "Localized string for todayChats"
   },
   "todayText": "오늘",
   "@todayText": {
@@ -2994,71 +2809,286 @@
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "dayAfterTomorrow": "모레",
-  "@dayAfterTomorrow": {
-    "description": "Localized string for dayAfterTomorrow"
+  "totalConsultSessions": "총 상담 세션",
+  "@totalConsultSessions": {
+    "description": "Localized string for totalConsultSessions"
   },
-  "seoul": "서울",
-  "@seoul": {
-    "description": "Localized string for seoul"
+  "totalErrorCount": "총 에러 수",
+  "@totalErrorCount": {
+    "description": "Localized string for totalErrorCount"
   },
-  "walk": "산책",
-  "@walk": {
-    "description": "Localized string for walk"
+  "totalLikes": "총 Like",
+  "@totalLikes": {
+    "description": "Localized string for totalLikes"
   },
-  "picnic": "피크닉",
-  "@picnic": {
-    "description": "Localized string for picnic"
+  "totalOccurrences": "총 {count}회 발생",
+  "@totalOccurrences": {
+    "description": "Localized string for totalOccurrences"
   },
-  "cycling": "자전거",
-  "@cycling": {
-    "description": "Localized string for cycling"
+  "totalResponses": "총 응답",
+  "@totalResponses": {
+    "description": "Localized string for totalResponses"
   },
-  "cafeTerrace": "카페 테라스",
-  "@cafeTerrace": {
-    "description": "Localized string for cafeTerrace"
+  "translatedFrom": "번역됨",
+  "@translatedFrom": {
+    "description": "Localized string for translatedFrom"
   },
-  "newYear": "새해",
-  "@newYear": {
-    "description": "Localized string for newYear"
+  "translatedText": "번역",
+  "@translatedText": {
+    "description": "Localized string for translatedText"
+  },
+  "translationError": "Translation error",
+  "@translationError": {
+    "description": "Localized string for translationError"
+  },
+  "translationErrorDescription": "잘못된 번역이나 어색한 표현을 신고해주세요",
+  "@translationErrorDescription": {
+    "description": "Localized string for translationErrorDescription"
+  },
+  "translationErrorReported": "번역 오류가 신고되었습니다. 감사합니다!",
+  "@translationErrorReported": {
+    "description": "Localized string for translationErrorReported"
+  },
+  "translationNote": "※ AI 번역은 완벽하지 않을 수 있습니다",
+  "@translationNote": {
+    "description": "Localized string for translationNote"
+  },
+  "translationQuality": "번역 품질",
+  "@translationQuality": {
+    "description": "Localized string for translationQuality"
+  },
+  "translationSettings": "번역 설정",
+  "@translationSettings": {
+    "description": "Localized string for translationSettings"
+  },
+  "travel": "여행",
+  "@travel": {
+    "description": "Localized string for travel"
+  },
+  "tuesday": "화요일",
+  "@tuesday": {
+    "description": "Localized string for tuesday"
+  },
+  "tutorialAccount": "튜토리얼 계정",
+  "@tutorialAccount": {
+    "description": "Localized string for tutorialAccount"
+  },
+  "tutorialWelcomeDescription": "AI 페르소나와 특별한 관계를 만들어보세요.",
+  "@tutorialWelcomeDescription": {
+    "description": "Tutorial: Welcome description"
+  },
+  "tutorialWelcomeTitle": "SONA에 오신 것을 환영합니다!",
+  "@tutorialWelcomeTitle": {
+    "description": "Tutorial: Welcome title"
+  },
+  "typeMessage": "메시지를 입력하세요...",
+  "@typeMessage": {
+    "description": "Localized string for typeMessage"
+  },
+  "unblock": "차단 해제",
+  "@unblock": {
+    "description": "Localized string for unblock"
+  },
+  "unblockFailed": "차단 해제에 실패했습니다",
+  "@unblockFailed": {
+    "description": "Localized string for unblockFailed"
+  },
+  "unblockPersonaConfirm": "{name}의 차단을 해제하시겠습니까?",
+  "@unblockPersonaConfirm": {
+    "description": "Unblock persona confirmation",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unblockedSuccessfully": "차단이 해제되었습니다",
+  "@unblockedSuccessfully": {
+    "description": "Localized string for unblockedSuccessfully"
+  },
+  "unexpectedLoginError": "로그인 중 예상치 못한 오류가 발생했습니다",
+  "@unexpectedLoginError": {
+    "description": "Localized string for unexpectedLoginError"
+  },
+  "unknown": "알 수 없음",
+  "@unknown": {
+    "description": "Localized string for unknown"
+  },
+  "unknownError": "알 수 없는 오류가 발생했습니다",
+  "@unknownError": {
+    "description": "Localized string for unknownError"
+  },
+  "unlimitedMessages": "무제한",
+  "@unlimitedMessages": {
+    "description": "Localized string for unlimitedMessages"
+  },
+  "unsendMessage": "메시지 취소",
+  "@unsendMessage": {
+    "description": "Localized string for unsendMessage"
+  },
+  "usagePurpose": "사용 목적",
+  "@usagePurpose": {
+    "description": "Localized string for usagePurpose"
+  },
+  "useOneHeart": "하트 1개 사용하기",
+  "@useOneHeart": {
+    "description": "Localized string for useOneHeart"
+  },
+  "useSystemLanguage": "시스템 언어 사용",
+  "@useSystemLanguage": {
+    "description": "Localized string for useSystemLanguage"
+  },
+  "user": "사용자: ",
+  "@user": {
+    "description": "Localized string for user"
+  },
+  "userMessage": "사용자 메시지:",
+  "@userMessage": {
+    "description": "Localized string for userMessage"
+  },
+  "userNotFound": "사용자를 찾을 수 없습니다",
+  "@userNotFound": {
+    "description": "Localized string for userNotFound"
   },
   "valentinesDay": "발렌타인데이",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
+  "verifyingAuth": "인증 확인 중",
+  "@verifyingAuth": {
+    "description": "Localized string for verifyingAuth"
+  },
+  "version": "버전",
+  "@version": {
+    "description": "Localized string for version"
+  },
+  "vietnamese": "베트남어",
+  "@vietnamese": {
+    "description": "Localized string for vietnamese"
+  },
+  "violentContent": "폭력적인 콘텐츠",
+  "@violentContent": {
+    "description": "Localized string for violentContent"
+  },
+  "voiceMessage": "🎤 음성 메시지",
+  "@voiceMessage": {
+    "description": "Localized string for voiceMessage"
+  },
+  "waitingForChat": "{name}님이 대화를 기다리고 있어요.",
+  "@waitingForChat": {
+    "description": "Shows that a persona is waiting to chat",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "walk": "산책",
+  "@walk": {
+    "description": "Localized string for walk"
+  },
+  "wasHelpful": "도움이 되었나요?",
+  "@wasHelpful": {
+    "description": "Localized string for wasHelpful"
+  },
+  "weatherClear": "맑음",
+  "@weatherClear": {
+    "description": "Localized string for weatherClear"
+  },
+  "weatherCloudy": "흐림",
+  "@weatherCloudy": {
+    "description": "Localized string for weatherCloudy"
+  },
+  "weatherContext": "날씨 컨텍스트",
+  "@weatherContext": {
+    "description": "Localized string for weatherContext"
+  },
+  "weatherContextDesc": "날씨 정보를 활용한 대화 맥락 제공",
+  "@weatherContextDesc": {
+    "description": "Localized string for weatherContextDesc"
+  },
+  "weatherDrizzle": "이슬비",
+  "@weatherDrizzle": {
+    "description": "Localized string for weatherDrizzle"
+  },
+  "weatherFog": "짙은 안개",
+  "@weatherFog": {
+    "description": "Localized string for weatherFog"
+  },
+  "weatherMist": "안개",
+  "@weatherMist": {
+    "description": "Localized string for weatherMist"
+  },
+  "weatherRain": "비",
+  "@weatherRain": {
+    "description": "Localized string for weatherRain"
+  },
+  "weatherRainy": "비",
+  "@weatherRainy": {
+    "description": "Localized string for weatherRainy"
+  },
+  "weatherSnow": "눈",
+  "@weatherSnow": {
+    "description": "Localized string for weatherSnow"
+  },
+  "weatherSnowy": "눈",
+  "@weatherSnowy": {
+    "description": "Localized string for weatherSnowy"
+  },
+  "weatherThunderstorm": "뇌우",
+  "@weatherThunderstorm": {
+    "description": "Localized string for weatherThunderstorm"
+  },
+  "wednesday": "수요일",
+  "@wednesday": {
+    "description": "Localized string for wednesday"
+  },
+  "weekdays": "일,월,화,수,목,금,토",
+  "@weekdays": {
+    "description": "Localized string for weekdays"
+  },
+  "welcomeMessage": "오신 걸 환영해요💕",
+  "@welcomeMessage": {
+    "description": "Localized string for welcomeMessage"
+  },
+  "whatTopicsToTalk": "어떤 주제로 대화하고 싶으신가요? (선택사항)",
+  "@whatTopicsToTalk": {
+    "description": "Localized string for whatTopicsToTalk"
+  },
   "whiteDay": "화이트데이",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "childrensDay": "어린이날",
-  "@childrensDay": {
-    "description": "Localized string for childrensDay"
+  "winter": "겨울",
+  "@winter": {
+    "description": "Localized string for winter"
   },
-  "parentsDay": "어버이날",
-  "@parentsDay": {
-    "description": "Localized string for parentsDay"
+  "wrongTranslation": "잘못된 번역",
+  "@wrongTranslation": {
+    "description": "Localized string for wrongTranslation"
   },
-  "teachersDay": "스승의날",
-  "@teachersDay": {
-    "description": "Localized string for teachersDay"
-  },
-  "christmas": "크리스마스",
-  "@christmas": {
-    "description": "Localized string for christmas"
+  "year": "년",
+  "@year": {
+    "description": "Localized string for year"
   },
   "yearEnd": "연말",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
-  "weatherRainy": "비",
-  "weatherSnowy": "눈",
-  "tapBottomForDetails": "하단 영역을 탭하여 상세 정보 보기",
-  "tutorialWelcomeTitle": "SONA에 오신 것을 환영합니다!",
-  "@tutorialWelcomeTitle": {
-    "description": "Tutorial: Welcome title"
+  "yes": "예",
+  "@yes": {
+    "description": "Localized string for yes"
   },
-  "tutorialWelcomeDescription": "AI 페르소나와 특별한 관계를 만들어보세요.",
-  "@tutorialWelcomeDescription": {
-    "description": "Tutorial: Welcome description"
+  "yesterday": "어제",
+  "@yesterday": {
+    "description": "Localized string for yesterday"
+  },
+  "yesterdayChats": "어제",
+  "@yesterdayChats": {
+    "description": "Localized string for yesterdayChats"
+  },
+  "you": "나",
+  "@you": {
+    "description": "Localized string for you"
   }
 }

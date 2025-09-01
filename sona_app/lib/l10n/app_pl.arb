@@ -1,14 +1,14 @@
 {
-  "@@locale": "id",
-  "about": "Tentang",
+  "@@locale": "pl",
+  "about": "O aplikacji",
   "@about": {
     "description": "Localized string for about"
   },
-  "accountAndProfile": "Akun & Profil",
+  "accountAndProfile": "Account & Profile Information",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "accountDeletedSuccess": "Akun berhasil dihapus",
+  "accountDeletedSuccess": "Account deleted successfully",
   "@accountDeletedSuccess": {
     "description": "Localized string for accountDeletedSuccess"
   },
@@ -20,7 +20,7 @@
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "accountDeletionInfo": "Informasi penghapusan akun",
+  "accountDeletionInfo": "Account deletion information",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
   },
@@ -28,23 +28,23 @@
   "@accountDeletionTitle": {
     "description": "Localized string for accountDeletionTitle"
   },
-  "accountDeletionWarning1": "Peringatan: Tindakan ini tidak dapat dibatalkan",
+  "accountDeletionWarning1": "Warning: This action cannot be undone",
   "@accountDeletionWarning1": {
     "description": "Localized string for accountDeletionWarning1"
   },
-  "accountDeletionWarning2": "Semua data Anda akan dihapus permanen",
+  "accountDeletionWarning2": "All your data will be permanently deleted",
   "@accountDeletionWarning2": {
     "description": "Localized string for accountDeletionWarning2"
   },
-  "accountDeletionWarning3": "Anda akan kehilangan akses ke semua percakapan",
+  "accountDeletionWarning3": "You will lose access to all conversations",
   "@accountDeletionWarning3": {
     "description": "Localized string for accountDeletionWarning3"
   },
-  "accountDeletionWarning4": "Ini termasuk semua konten yang dibeli",
+  "accountDeletionWarning4": "This includes all purchased content",
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
-  "accountManagement": "Manajemen akun",
+  "accountManagement": "Account Management",
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
@@ -64,7 +64,7 @@
   "@ageConfirmation": {
     "description": "Localized string for ageConfirmation"
   },
-  "ageRange": "{min}-{max} tahun",
+  "ageRange": "{min}-{max} years old",
   "@ageRange": {
     "description": "Age range",
     "placeholders": {
@@ -80,11 +80,11 @@
   "@ageUnit": {
     "description": "Localized string for ageUnit"
   },
-  "agreeToTerms": "Saya setuju dengan persyaratan",
+  "agreeToTerms": "I agree to the terms",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
   },
-  "aiDatingQuestion": "Tertarik berkencan dengan AI?",
+  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
   "@aiDatingQuestion": {
     "description": "Localized string for aiDatingQuestion"
   },
@@ -104,11 +104,11 @@
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "Semua persona",
+  "allPersonas": "All Personas",
   "@allPersonas": {
     "description": "Localized string for allPersonas"
   },
-  "allPersonasMatched": "Semua persona dicocokkan",
+  "allPersonasMatched": "All personas matched! Start chatting with them.",
   "@allPersonasMatched": {
     "description": "Localized string for allPersonasMatched"
   },
@@ -129,7 +129,7 @@
   "@alsoBlockThisAI": {
     "description": "Localized string for alsoBlockThisAI"
   },
-  "angry": "Marah",
+  "angry": "Angry",
   "@angry": {
     "description": "Localized string for angry"
   },
@@ -137,7 +137,7 @@
   "@anonymousLogin": {
     "description": "Localized string for anonymousLogin"
   },
-  "anxious": "Cemas",
+  "anxious": "Anxious",
   "@anxious": {
     "description": "Localized string for anxious"
   },
@@ -149,7 +149,7 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "appTagline": "Teman AI Anda",
+  "appTagline": "Your AI companions",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
@@ -157,11 +157,11 @@
   "@appleLoginCanceled": {
     "description": "Localized string for appleLoginCanceled"
   },
-  "appleLoginError": "Error masuk Apple",
+  "appleLoginError": "Error occurred during Apple login.",
   "@appleLoginError": {
     "description": "Localized string for appleLoginError"
   },
-  "art": "Seni",
+  "art": "Art",
   "@art": {
     "description": "Localized string for art"
   },
@@ -193,7 +193,7 @@
   "@backButton": {
     "description": "Localized string for backButton"
   },
-  "basicInfo": "Informasi dasar",
+  "basicInfo": "Basic Information",
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
@@ -201,15 +201,15 @@
   "@basicInfoDescription": {
     "description": "Localized string for basicInfoDescription"
   },
-  "birthDate": "Tanggal lahir",
+  "birthDate": "Data urodzenia",
   "@birthDate": {
     "description": "Localized string for birthDate"
   },
-  "birthDateOptional": "Tanggal lahir (opsional)",
+  "birthDateOptional": "Birth Date (Optional)",
   "@birthDateOptional": {
     "description": "Localized string for birthDateOptional"
   },
-  "birthDateRequired": "Silakan pilih tanggal lahir",
+  "birthDateRequired": "Birth Date *",
   "@birthDateRequired": {
     "description": "Localized string for birthDateRequired"
   },
@@ -275,11 +275,11 @@
   "@cafeTerrace": {
     "description": "Localized string for cafeTerrace"
   },
-  "calm": "Tenang",
+  "calm": "Calm",
   "@calm": {
     "description": "Localized string for calm"
   },
-  "cameraPermission": "Izin kamera",
+  "cameraPermission": "Camera Permission",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
@@ -295,19 +295,19 @@
   "@canMeetPreviousPersonas": {
     "description": "Localized string for canMeetPreviousPersonas"
   },
-  "cancel": "Batal",
+  "cancel": "Anuluj",
   "@cancel": {
     "description": "Localized string for cancel"
   },
-  "changeProfilePhoto": "Ubah Foto Profil",
+  "changeProfilePhoto": "Change Profile Photo",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
   },
-  "chat": "Obrolan",
+  "chat": "Czat",
   "@chat": {
     "description": "Localized string for chat"
   },
-  "chatEndedMessage": "Obrolan berakhir",
+  "chatEndedMessage": "Chat has ended",
   "@chatEndedMessage": {
     "description": "Localized string for chatEndedMessage"
   },
@@ -323,7 +323,7 @@
   "@chatListTab": {
     "description": "Localized string for chatListTab"
   },
-  "chats": "Obrolan",
+  "chats": "Chats",
   "@chats": {
     "description": "Localized string for chats"
   },
@@ -336,7 +336,7 @@
       }
     }
   },
-  "checkInternetConnection": "Silakan periksa koneksi internet Anda",
+  "checkInternetConnection": "Please check your internet connection",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
@@ -360,7 +360,7 @@
   "@christmas": {
     "description": "Localized string for christmas"
   },
-  "close": "Tutup",
+  "close": "Zamknij",
   "@close": {
     "description": "Localized string for close"
   },
@@ -368,11 +368,11 @@
   "@complete": {
     "description": "Localized string for complete"
   },
-  "completeSignup": "Selesaikan pendaftaran",
+  "completeSignup": "Complete Sign Up",
   "@completeSignup": {
     "description": "Localized string for completeSignup"
   },
-  "confirm": "Konfirmasi",
+  "confirm": "Potwierdź",
   "@confirm": {
     "description": "Localized string for confirm"
   },
@@ -392,11 +392,11 @@
   "@continueButton": {
     "description": "Localized string for continueButton"
   },
-  "continueWithApple": "Lanjutkan dengan Apple",
+  "continueWithApple": "Continue with Apple",
   "@continueWithApple": {
     "description": "Localized string for continueWithApple"
   },
-  "continueWithGoogle": "Lanjutkan dengan Google",
+  "continueWithGoogle": "Continue with Google",
   "@continueWithGoogle": {
     "description": "Localized string for continueWithGoogle"
   },
@@ -421,15 +421,15 @@
   "@convertToMember": {
     "description": "Localized string for convertToMember"
   },
-  "cooking": "Memasak",
+  "cooking": "Cooking",
   "@cooking": {
     "description": "Localized string for cooking"
   },
-  "copyMessage": "Salin pesan",
+  "copyMessage": "Copy message",
   "@copyMessage": {
     "description": "Localized string for copyMessage"
   },
-  "copyrightInfringement": "Pelanggaran hak cipta",
+  "copyrightInfringement": "Copyright infringement",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
@@ -453,7 +453,7 @@
   "@currentCacheSize": {
     "description": "Localized string for currentCacheSize"
   },
-  "currentLanguage": "Bahasa Saat Ini",
+  "currentLanguage": "Current Language",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
@@ -481,15 +481,15 @@
   "@dailyConversation": {
     "description": "Localized string for dailyConversation"
   },
-  "dailyLimitDescription": "Anda telah mencapai batas pesan harian",
+  "dailyLimitDescription": "You have reached your daily message limit",
   "@dailyLimitDescription": {
     "description": "Localized string for dailyLimitDescription"
   },
-  "dailyLimitTitle": "Batas Harian Tercapai",
+  "dailyLimitTitle": "Daily Limit Reached",
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
-  "darkMode": "Mode gelap",
+  "darkMode": "Tryb ciemny",
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
@@ -517,7 +517,7 @@
   "@dawn": {
     "description": "Localized string for dawn"
   },
-  "day": "Hari",
+  "day": "Day",
   "@day": {
     "description": "Localized string for day"
   },
@@ -525,7 +525,7 @@
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
-  "daysAgo": "{count} hari yang lalu",
+  "daysAgo": "{count} days ago",
   "@daysAgo": {
     "description": "Days ago format",
     "placeholders": {
@@ -552,11 +552,11 @@
   "@deepTalk": {
     "description": "Localized string for deepTalk"
   },
-  "delete": "Hapus",
+  "delete": "Usuń",
   "@delete": {
     "description": "Localized string for delete"
   },
-  "deleteAccount": "Hapus akun",
+  "deleteAccount": "Delete Account",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -576,7 +576,7 @@
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
-  "depressed": "Depresi",
+  "depressed": "Depressed",
   "@depressed": {
     "description": "Localized string for depressed"
   },
@@ -600,15 +600,15 @@
   "@discardGuestData": {
     "description": "Localized string for discardGuestData"
   },
-  "discount20": "Diskon 20%",
+  "discount20": "20% off",
   "@discount20": {
     "description": "Localized string for discount20"
   },
-  "discount30": "Diskon 30%",
+  "discount30": "30% off",
   "@discount30": {
     "description": "Localized string for discount30"
   },
-  "discountAmount": "Jumlah diskon",
+  "discountAmount": "Save",
   "@discountAmount": {
     "description": "Localized string for discountAmount"
   },
@@ -621,7 +621,7 @@
       }
     }
   },
-  "done": "Selesai",
+  "done": "Gotowe",
   "@done": {
     "description": "Localized string for done"
   },
@@ -629,19 +629,19 @@
   "@downloadingPersonaImages": {
     "description": "Localized string for downloadingPersonaImages"
   },
-  "edit": "Edit",
+  "edit": "Edytuj",
   "@edit": {
     "description": "Localized string for edit"
   },
-  "editInfo": "Edit informasi",
+  "editInfo": "Edit Info",
   "@editInfo": {
     "description": "Localized string for editInfo"
   },
-  "editProfile": "Edit profil",
+  "editProfile": "Edit Profile",
   "@editProfile": {
     "description": "Localized string for editProfile"
   },
-  "effectSound": "Efek suara",
+  "effectSound": "Sound Effects",
   "@effectSound": {
     "description": "Localized string for effectSound"
   },
@@ -649,11 +649,11 @@
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
-  "email": "Email",
+  "email": "E-mail",
   "@email": {
     "description": "Localized string for email"
   },
-  "emailHint": "contoh@email.com",
+  "emailHint": "example@email.com",
   "@emailHint": {
     "description": "Localized string for emailHint"
   },
@@ -661,7 +661,7 @@
   "@emailLabel": {
     "description": "Localized string for emailLabel"
   },
-  "emailRequired": "Silakan masukkan email",
+  "emailRequired": "Email *",
   "@emailRequired": {
     "description": "Localized string for emailRequired"
   },
@@ -705,7 +705,7 @@
   "@emotionalSupportDesc": {
     "description": "Localized string for emotionalSupportDesc"
   },
-  "endChat": "Akhiri obrolan",
+  "endChat": "End Chat",
   "@endChat": {
     "description": "Localized string for endChat"
   },
@@ -729,11 +729,11 @@
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
-  "enterBasicInformation": "Masukkan informasi dasar",
+  "enterBasicInformation": "Please enter basic information",
   "@enterBasicInformation": {
     "description": "Localized string for enterBasicInformation"
   },
-  "enterEmail": "Masukkan email",
+  "enterEmail": "Please enter email",
   "@enterEmail": {
     "description": "Localized string for enterEmail"
   },
@@ -757,7 +757,7 @@
   "@entertainmentFun": {
     "description": "Localized string for entertainmentFun"
   },
-  "error": "Kesalahan",
+  "error": "Błąd",
   "@error": {
     "description": "Localized string for error"
   },
@@ -814,11 +814,11 @@
   "@evening": {
     "description": "Localized string for evening"
   },
-  "excited": "Bersemangat",
+  "excited": "Excited",
   "@excited": {
     "description": "Localized string for excited"
   },
-  "exit": "Exit",
+  "exit": "Wyjście",
   "@exit": {
     "description": "Localized string for exit"
   },
@@ -838,7 +838,7 @@
   "@expertiseScore": {
     "description": "Localized string for expertiseScore"
   },
-  "expired": "Kedaluwarsa",
+  "expired": "Wygasły",
   "@expired": {
     "description": "Localized string for expired"
   },
@@ -846,15 +846,15 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "fashion": "Mode",
+  "fashion": "Fashion",
   "@fashion": {
     "description": "Localized string for fashion"
   },
-  "female": "Perempuan",
+  "female": "Kobieta",
   "@female": {
     "description": "Localized string for female"
   },
-  "filter": "Filter",
+  "filter": "Filtruj",
   "@filter": {
     "description": "Localized string for filter"
   },
@@ -870,15 +870,15 @@
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
-  "forgotPassword": "Lupa kata sandi?",
+  "forgotPassword": "Zapomniałeś hasła?",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
-  "frequentlyAskedQuestions": "Pertanyaan yang sering diajukan",
+  "frequentlyAskedQuestions": "Frequently Asked Questions",
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
-  "friday": "Friday",
+  "friday": "Piątek",
   "@friday": {
     "description": "Localized string for friday"
   },
@@ -902,7 +902,7 @@
   "@gaming": {
     "description": "Localized string for gaming"
   },
-  "gender": "Jenis kelamin",
+  "gender": "Płeć",
   "@gender": {
     "description": "Localized string for gender"
   },
@@ -910,7 +910,7 @@
   "@genderNotSelectedInfo": {
     "description": "Localized string for genderNotSelectedInfo"
   },
-  "genderOptional": "Jenis kelamin (opsional)",
+  "genderOptional": "Gender (Optional)",
   "@genderOptional": {
     "description": "Localized string for genderOptional"
   },
@@ -926,7 +926,7 @@
   "@genderPreferenceInactive": {
     "description": "Localized string for genderPreferenceInactive"
   },
-  "genderRequired": "Silakan pilih jenis kelamin",
+  "genderRequired": "Gender *",
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
@@ -938,7 +938,7 @@
   "@generalPersona": {
     "description": "Localized string for generalPersona"
   },
-  "goToSettings": "Ke pengaturan",
+  "goToSettings": "Go to Settings",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -946,11 +946,11 @@
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
   },
-  "googleLoginError": "Error masuk Google",
+  "googleLoginError": "Error occurred during Google login.",
   "@googleLoginError": {
     "description": "Localized string for googleLoginError"
   },
-  "grantPermission": "Lanjutkan",
+  "grantPermission": "Continue",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
@@ -1011,7 +1011,7 @@
   "@guestModeWelcome": {
     "description": "Localized string for guestModeWelcome"
   },
-  "happy": "Senang",
+  "happy": "Happy",
   "@happy": {
     "description": "Localized string for happy"
   },
@@ -1031,7 +1031,7 @@
   "@heartDescription": {
     "description": "Localized string for heartDescription"
   },
-  "heartInsufficient": "Hati tidak cukup",
+  "heartInsufficient": "Not enough hearts",
   "@heartInsufficient": {
     "description": "Localized string for heartInsufficient"
   },
@@ -1047,27 +1047,27 @@
   "@heartUsageFailed": {
     "description": "Localized string for heartUsageFailed"
   },
-  "hearts": "Hati",
+  "hearts": "Hearts",
   "@hearts": {
     "description": "Localized string for hearts"
   },
-  "hearts10": "10 Hati",
+  "hearts10": "10 Hearts",
   "@hearts10": {
     "description": "Localized string for hearts10"
   },
-  "hearts30": "30 Hati",
+  "hearts30": "30 Hearts",
   "@hearts30": {
     "description": "Localized string for hearts30"
   },
-  "hearts30Discount": "30 Hati (Diskon)",
+  "hearts30Discount": "SALE",
   "@hearts30Discount": {
     "description": "Localized string for hearts30Discount"
   },
-  "hearts50": "50 Hati",
+  "hearts50": "50 Hearts",
   "@hearts50": {
     "description": "Localized string for hearts50"
   },
-  "hearts50Discount": "50 Hati (Diskon)",
+  "hearts50Discount": "SALE",
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
@@ -1075,7 +1075,7 @@
   "@helloEmoji": {
     "description": "Localized string for helloEmoji"
   },
-  "help": "Bantuan",
+  "help": "Pomoc",
   "@help": {
     "description": "Localized string for help"
   },
@@ -1095,7 +1095,7 @@
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
-  "hoursAgo": "{count} jam yang lalu",
+  "hoursAgo": "{count} hours ago",
   "@hoursAgo": {
     "description": "Hours ago format",
     "placeholders": {
@@ -1109,7 +1109,7 @@
       }
     }
   },
-  "howToUse": "Cara penggunaan",
+  "howToUse": "How to use SONA",
   "@howToUse": {
     "description": "Localized string for howToUse"
   },
@@ -1133,11 +1133,11 @@
   "@indonesian": {
     "description": "Localized string for indonesian"
   },
-  "inquiries": "Pertanyaan",
+  "inquiries": "Inquiries",
   "@inquiries": {
     "description": "Localized string for inquiries"
   },
-  "insufficientHearts": "Hati tidak cukup",
+  "insufficientHearts": "Insufficient hearts.",
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
@@ -1149,7 +1149,7 @@
   "@interestSharingDesc": {
     "description": "Localized string for interestSharingDesc"
   },
-  "interests": "Minat",
+  "interests": "Interests",
   "@interests": {
     "description": "Localized string for interests"
   },
@@ -1174,11 +1174,11 @@
   "@japanese": {
     "description": "Localized string for japanese"
   },
-  "joinDate": "Tanggal bergabung",
+  "joinDate": "Join Date",
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "justNow": "Baru saja",
+  "justNow": "Just now",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -1194,7 +1194,7 @@
   "@koreanLanguage": {
     "description": "Localized string for koreanLanguage"
   },
-  "language": "Bahasa",
+  "language": "Język",
   "@language": {
     "description": "Localized string for language"
   },
@@ -1206,7 +1206,7 @@
   "@languageIndicator": {
     "description": "Localized string for languageIndicator"
   },
-  "languageSettings": "Pengaturan bahasa",
+  "languageSettings": "Language Settings",
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
@@ -1230,7 +1230,7 @@
   "@laterButton": {
     "description": "Localized string for laterButton"
   },
-  "leave": "Tinggalkan",
+  "leave": "Leave",
   "@leave": {
     "description": "Localized string for leave"
   },
@@ -1242,7 +1242,7 @@
   "@leaveChatRoom": {
     "description": "Localized string for leaveChatRoom"
   },
-  "leaveChatTitle": "Tinggalkan obrolan",
+  "leaveChatTitle": "Leave Chat",
   "@leaveChatTitle": {
     "description": "Localized string for leaveChatTitle"
   },
@@ -1262,7 +1262,7 @@
   "@lightThemeDesc": {
     "description": "Localized string for lightThemeDesc"
   },
-  "loading": "Memuat...",
+  "loading": "Ładowanie...",
   "@loading": {
     "description": "Localized string for loading"
   },
@@ -1278,7 +1278,7 @@
   "@loadingProfile": {
     "description": "Localized string for loadingProfile"
   },
-  "login": "Masuk",
+  "login": "Zaloguj",
   "@login": {
     "description": "Localized string for login"
   },
@@ -1286,7 +1286,7 @@
   "@loginButton": {
     "description": "Localized string for loginButton"
   },
-  "loginCancelled": "Masuk dibatalkan",
+  "loginCancelled": "Login cancelled",
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
@@ -1294,7 +1294,7 @@
   "@loginComplete": {
     "description": "Localized string for loginComplete"
   },
-  "loginError": "Error masuk",
+  "loginError": "Login failed",
   "@loginError": {
     "description": "Localized string for loginError"
   },
@@ -1306,7 +1306,7 @@
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
-  "loginRequired": "Perlu masuk",
+  "loginRequired": "Login required",
   "@loginRequired": {
     "description": "Localized string for loginRequired"
   },
@@ -1322,7 +1322,7 @@
   "@loginRequiredTitle": {
     "description": "Localized string for loginRequiredTitle"
   },
-  "loginSignup": "Masuk/Daftar",
+  "loginSignup": "Login/Sign Up",
   "@loginSignup": {
     "description": "Localized string for loginSignup"
   },
@@ -1342,7 +1342,7 @@
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
-  "logout": "Keluar",
+  "logout": "Wyloguj",
   "@logout": {
     "description": "Localized string for logout"
   },
@@ -1354,7 +1354,7 @@
   "@lonelinessRelief": {
     "description": "Localized string for lonelinessRelief"
   },
-  "lonely": "Kesepian",
+  "lonely": "Lonely",
   "@lonely": {
     "description": "Localized string for lonely"
   },
@@ -1378,7 +1378,7 @@
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
-  "male": "Laki-laki",
+  "male": "Mężczyzna",
   "@male": {
     "description": "Localized string for male"
   },
@@ -1422,7 +1422,7 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "meetAIPersonas": "Temui Persona AI",
+  "meetAIPersonas": "Meet AI Personas",
   "@meetAIPersonas": {
     "description": "Localized string for meetAIPersonas"
   },
@@ -1430,7 +1430,7 @@
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
-  "meetPersonas": "Temui persona",
+  "meetPersonas": "Meet Personas",
   "@meetPersonas": {
     "description": "Localized string for meetPersonas"
   },
@@ -1446,11 +1446,11 @@
   "@memoryAlbumDesc": {
     "description": "Localized string for memoryAlbumDesc"
   },
-  "messageCopied": "Pesan disalin",
+  "messageCopied": "Message copied",
   "@messageCopied": {
     "description": "Localized string for messageCopied"
   },
-  "messageDeleted": "Pesan dihapus",
+  "messageDeleted": "Message deleted",
   "@messageDeleted": {
     "description": "Localized string for messageDeleted"
   },
@@ -1462,11 +1462,11 @@
   "@messageSendFailed": {
     "description": "Localized string for messageSendFailed"
   },
-  "messagesRemaining": "Pesan Tersisa",
+  "messagesRemaining": "Messages Remaining",
   "@messagesRemaining": {
     "description": "Label for messages remaining"
   },
-  "minutesAgo": "{count} menit yang lalu",
+  "minutesAgo": "{count} minutes ago",
   "@minutesAgo": {
     "description": "Minutes ago format",
     "placeholders": {
@@ -1484,11 +1484,11 @@
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
-  "monday": "Monday",
+  "monday": "Poniedziałek",
   "@monday": {
     "description": "Localized string for monday"
   },
-  "month": "Bulan",
+  "month": "Miesiąc",
   "@month": {
     "description": "Localized string for month"
   },
@@ -1516,7 +1516,7 @@
   "@mostFrequentError": {
     "description": "Localized string for mostFrequentError"
   },
-  "movies": "Film",
+  "movies": "Movies",
   "@movies": {
     "description": "Localized string for movies"
   },
@@ -1524,11 +1524,11 @@
   "@multilingualChat": {
     "description": "Localized string for multilingualChat"
   },
-  "music": "Musik",
+  "music": "Music",
   "@music": {
     "description": "Localized string for music"
   },
-  "myGenderSection": "Jenis kelamin saya",
+  "myGenderSection": "My Gender (Optional)",
   "@myGenderSection": {
     "description": "Localized string for myGenderSection"
   },
@@ -1536,7 +1536,7 @@
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
-  "newMessage": "Pesan baru",
+  "newMessage": "Nowa wiadomość",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1553,7 +1553,7 @@
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
   },
-  "newMessages": "New messages",
+  "newMessages": "Nowe wiadomości",
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
@@ -1561,7 +1561,7 @@
   "@newYear": {
     "description": "Localized string for newYear"
   },
-  "next": "Berikutnya",
+  "next": "Dalej",
   "@next": {
     "description": "Localized string for next"
   },
@@ -1569,7 +1569,7 @@
   "@niceToMeetYou": {
     "description": "Localized string for niceToMeetYou"
   },
-  "nickname": "Nama panggilan",
+  "nickname": "Nickname",
   "@nickname": {
     "description": "Localized string for nickname"
   },
@@ -1581,7 +1581,7 @@
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
   },
-  "nicknameHint": "Masukkan nama panggilan",
+  "nicknameHint": "3-10 characters",
   "@nicknameHint": {
     "description": "Localized string for nicknameHint"
   },
@@ -1601,7 +1601,7 @@
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
-  "nicknameRequired": "Silakan masukkan nama panggilan",
+  "nicknameRequired": "Nickname *",
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
@@ -1609,7 +1609,7 @@
   "@night": {
     "description": "Localized string for night"
   },
-  "no": "Tidak",
+  "no": "Nie",
   "@no": {
     "description": "Localized string for no"
   },
@@ -1617,7 +1617,7 @@
   "@noBlockedAIs": {
     "description": "Localized string for noBlockedAIs"
   },
-  "noChatsYet": "Belum ada obrolan",
+  "noChatsYet": "No chats yet",
   "@noChatsYet": {
     "description": "Localized string for noChatsYet"
   },
@@ -1641,7 +1641,7 @@
   "@noMatchedSonas": {
     "description": "Localized string for noMatchedSonas"
   },
-  "noPersonasAvailable": "Tidak ada persona tersedia",
+  "noPersonasAvailable": "No personas available. Please try again.",
   "@noPersonasAvailable": {
     "description": "Localized string for noPersonasAvailable"
   },
@@ -1678,7 +1678,7 @@
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
-  "notSubscribed": "Tidak berlangganan",
+  "notSubscribed": "Not subscribed",
   "@notSubscribed": {
     "description": "Localized string for notSubscribed"
   },
@@ -1694,7 +1694,7 @@
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
-  "notifications": "Notifikasi",
+  "notifications": "Powiadomienia",
   "@notifications": {
     "description": "Localized string for notifications"
   },
@@ -1702,7 +1702,7 @@
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
-  "olderChats": "Lebih lama",
+  "olderChats": "Older",
   "@olderChats": {
     "description": "Localized string for olderChats"
   },
@@ -1714,15 +1714,15 @@
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Opsional",
+  "optional": "Optional",
   "@optional": {
     "description": "Localized string for optional"
   },
-  "or": "atau",
+  "or": "or",
   "@or": {
     "description": "Localized string for or"
   },
-  "originalPrice": "Harga asli",
+  "originalPrice": "Original",
   "@originalPrice": {
     "description": "Localized string for originalPrice"
   },
@@ -1730,7 +1730,7 @@
   "@originalText": {
     "description": "Localized string for originalText"
   },
-  "other": "Lainnya",
+  "other": "Inne",
   "@other": {
     "description": "Localized string for other"
   },
@@ -1738,7 +1738,7 @@
   "@otherError": {
     "description": "Localized string for otherError"
   },
-  "others": "Lainnya",
+  "others": "Others",
   "@others": {
     "description": "Localized string for others"
   },
@@ -1750,7 +1750,7 @@
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
-  "password": "Kata sandi",
+  "password": "Hasło",
   "@password": {
     "description": "Localized string for password"
   },
@@ -1762,7 +1762,7 @@
   "@passwordConfirmationDesc": {
     "description": "Localized string for passwordConfirmationDesc"
   },
-  "passwordHint": "Masukkan kata sandi",
+  "passwordHint": "6 characters or more",
   "@passwordHint": {
     "description": "Localized string for passwordHint"
   },
@@ -1770,7 +1770,7 @@
   "@passwordLabel": {
     "description": "Localized string for passwordLabel"
   },
-  "passwordRequired": "Silakan masukkan kata sandi",
+  "passwordRequired": "Password *",
   "@passwordRequired": {
     "description": "Localized string for passwordRequired"
   },
@@ -1786,7 +1786,7 @@
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
-  "passwordTooShort": "Kata sandi minimal 6 karakter",
+  "passwordTooShort": "Password must be at least 6 characters",
   "@passwordTooShort": {
     "description": "Localized string for passwordTooShort"
   },
@@ -1811,7 +1811,7 @@
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "personaGenderSection": "Jenis kelamin persona",
+  "personaGenderSection": "Persona Gender Preference",
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
@@ -1831,11 +1831,11 @@
   "@pets": {
     "description": "Localized string for pets"
   },
-  "photo": "Foto",
+  "photo": "Photo",
   "@photo": {
     "description": "Localized string for photo"
   },
-  "photography": "Fotografi",
+  "photography": "Photography",
   "@photography": {
     "description": "Localized string for photography"
   },
@@ -1871,15 +1871,15 @@
   "@preview": {
     "description": "Localized string for preview"
   },
-  "previous": "Sebelumnya",
+  "previous": "Previous",
   "@previous": {
     "description": "Localized string for previous"
   },
-  "privacy": "Privasi",
+  "privacy": "Privacy Policy",
   "@privacy": {
     "description": "Localized string for privacy"
   },
-  "privacyPolicy": "Kebijakan Privasi",
+  "privacyPolicy": "Polityka prywatności",
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
@@ -1951,7 +1951,7 @@
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
-  "privacySettings": "Pengaturan privasi",
+  "privacySettings": "Privacy Settings",
   "@privacySettings": {
     "description": "Localized string for privacySettings"
   },
@@ -1995,7 +1995,7 @@
   "@profileNav": {
     "description": "Localized string for profileNav"
   },
-  "profilePhoto": "Foto profil",
+  "profilePhoto": "Profile Photo",
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
@@ -2031,15 +2031,15 @@
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
-  "purchaseButton": "Beli",
+  "purchaseButton": "Purchase",
   "@purchaseButton": {
     "description": "Localized string for purchaseButton"
   },
-  "purchaseConfirm": "Konfirmasi pembelian",
+  "purchaseConfirm": "Purchase Confirmation",
   "@purchaseConfirm": {
     "description": "Localized string for purchaseConfirm"
   },
-  "purchaseConfirmContent": "Beli {product} seharga {price}?",
+  "purchaseConfirmContent": "Purchase {product} for {price}?",
   "@purchaseConfirmContent": {
     "description": "Purchase confirmation content",
     "placeholders": {
@@ -2051,7 +2051,7 @@
       }
     }
   },
-  "purchaseConfirmMessage": "Konfirmasi pembelian {title} seharga {price}? {description}",
+  "purchaseConfirmMessage": "Confirm purchase of {title} for {price}? {description}",
   "@purchaseConfirmMessage": {
     "description": "Purchase confirmation message",
     "placeholders": {
@@ -2073,7 +2073,7 @@
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
-  "purchaseHeartsOnly": "Beli hati saja",
+  "purchaseHeartsOnly": "Buy hearts",
   "@purchaseHeartsOnly": {
     "description": "Localized string for purchaseHeartsOnly"
   },
@@ -2137,7 +2137,7 @@
   "@purchaseSection6Title": {
     "description": "Localized string for purchaseSection6Title"
   },
-  "pushNotifications": "Notifikasi push",
+  "pushNotifications": "Push Notifications",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
@@ -2165,11 +2165,11 @@
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
-  "referrerEmailLabel": "Email perujuk",
+  "referrerEmailLabel": "Referrer Email (Optional)",
   "@referrerEmailLabel": {
     "description": "Localized string for referrerEmailLabel"
   },
-  "refresh": "Segarkan",
+  "refresh": "Odśwież",
   "@refresh": {
     "description": "Localized string for refresh"
   },
@@ -2190,11 +2190,11 @@
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
-  "relatedFAQ": "FAQ terkait",
+  "relatedFAQ": "Related FAQ",
   "@relatedFAQ": {
     "description": "Localized string for relatedFAQ"
   },
-  "report": "Report",
+  "report": "Raport",
   "@report": {
     "description": "Localized string for report"
   },
@@ -2235,7 +2235,7 @@
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
-  "reportSubmitted": "Laporan terkirim",
+  "reportSubmitted": "Report submitted. We will review and take action.",
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
@@ -2247,7 +2247,7 @@
   "@requestLimit": {
     "description": "Localized string for requestLimit"
   },
-  "required": "Wajib",
+  "required": "[Required]",
   "@required": {
     "description": "Localized string for required"
   },
@@ -2277,7 +2277,7 @@
       }
     }
   },
-  "retry": "Coba lagi",
+  "retry": "Spróbuj ponownie",
   "@retry": {
     "description": "Localized string for retry"
   },
@@ -2285,27 +2285,27 @@
   "@retryButton": {
     "description": "Localized string for retryButton"
   },
-  "sad": "Sedih",
+  "sad": "Sad",
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "Sobota",
   "@saturday": {
     "description": "Localized string for saturday"
   },
-  "save": "Simpan",
+  "save": "Zapisz",
   "@save": {
     "description": "Localized string for save"
   },
-  "search": "Cari",
+  "search": "Szukaj",
   "@search": {
     "description": "Localized string for search"
   },
-  "searchFAQ": "Cari FAQ",
+  "searchFAQ": "Search FAQ...",
   "@searchFAQ": {
     "description": "Localized string for searchFAQ"
   },
-  "searchResults": "Hasil pencarian",
+  "searchResults": "Search Results",
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
@@ -2317,11 +2317,11 @@
   "@selectErrorType": {
     "description": "Localized string for selectErrorType"
   },
-  "selectFeeling": "Bagaimana perasaan Anda?",
+  "selectFeeling": "Select Feeling",
   "@selectFeeling": {
     "description": "Localized string for selectFeeling"
   },
-  "selectGender": "Pilih jenis kelamin",
+  "selectGender": "Please select gender",
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
@@ -2365,15 +2365,15 @@
   "@selectUsagePurpose": {
     "description": "Localized string for selectUsagePurpose"
   },
-  "selfIntroduction": "Perkenalan diri",
+  "selfIntroduction": "Introduction (Optional)",
   "@selfIntroduction": {
     "description": "Localized string for selfIntroduction"
   },
-  "selfIntroductionHint": "Ceritakan tentang diri Anda",
+  "selfIntroductionHint": "Write a brief introduction about yourself",
   "@selfIntroductionHint": {
     "description": "Localized string for selfIntroductionHint"
   },
-  "send": "Kirim",
+  "send": "Wyślij",
   "@send": {
     "description": "Localized string for send"
   },
@@ -2405,7 +2405,7 @@
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
-  "sessionExpired": "Sesi berakhir",
+  "sessionExpired": "Session expired",
   "@sessionExpired": {
     "description": "Localized string for sessionExpired"
   },
@@ -2413,11 +2413,11 @@
   "@setAppInterfaceLanguage": {
     "description": "Localized string for setAppInterfaceLanguage"
   },
-  "setNow": "Atur sekarang",
+  "setNow": "Set Now",
   "@setNow": {
     "description": "Localized string for setNow"
   },
-  "settings": "Pengaturan",
+  "settings": "Ustawienia",
   "@settings": {
     "description": "Localized string for settings"
   },
@@ -2425,11 +2425,11 @@
   "@sexualContent": {
     "description": "Localized string for sexualContent"
   },
-  "showAllGenderPersonas": "Tampilkan Semua Gender Persona",
+  "showAllGenderPersonas": "Show All Gender Personas",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
   },
-  "showAllGendersOption": "Tampilkan semua jenis kelamin",
+  "showAllGendersOption": "Show All Genders",
   "@showAllGendersOption": {
     "description": "Localized string for showAllGendersOption"
   },
@@ -2441,7 +2441,7 @@
   "@showOriginalText": {
     "description": "Localized string for showOriginalText"
   },
-  "signUp": "Daftar",
+  "signUp": "Sign Up",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -2449,7 +2449,7 @@
   "@signUpFromGuest": {
     "description": "Localized string for signUpFromGuest"
   },
-  "signup": "Daftar",
+  "signup": "Zarejestruj się",
   "@signup": {
     "description": "Localized string for signup"
   },
@@ -2465,11 +2465,11 @@
   "@simpleInfoRequired": {
     "description": "Localized string for simpleInfoRequired"
   },
-  "skip": "Lewati",
+  "skip": "Pomiń",
   "@skip": {
     "description": "Localized string for skip"
   },
-  "sonaFriend": "Teman SONA",
+  "sonaFriend": "SONA Friend",
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
@@ -2493,11 +2493,11 @@
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
-  "sort": "Urutkan",
+  "sort": "Sortuj",
   "@sort": {
     "description": "Localized string for sort"
   },
-  "soundSettings": "Pengaturan suara",
+  "soundSettings": "Sound Settings",
   "@soundSettings": {
     "description": "Localized string for soundSettings"
   },
@@ -2513,7 +2513,7 @@
   "@specialRelationshipDesc": {
     "description": "Localized string for specialRelationshipDesc"
   },
-  "sports": "Olahraga",
+  "sports": "Sports",
   "@sports": {
     "description": "Localized string for sports"
   },
@@ -2521,7 +2521,7 @@
   "@spring": {
     "description": "Localized string for spring"
   },
-  "startChat": "Mulai obrolan",
+  "startChat": "Start Chat",
   "@startChat": {
     "description": "Localized string for startChat"
   },
@@ -2529,7 +2529,7 @@
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
-  "startConversation": "Start a conversation",
+  "startConversation": "Rozpocznij rozmowę",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
@@ -2545,11 +2545,11 @@
   "@startConversationWithSona": {
     "description": "Localized string for startConversationWithSona"
   },
-  "startWithEmail": "Mulai dengan Email",
+  "startWithEmail": "Start with Email",
   "@startWithEmail": {
     "description": "Localized string for startWithEmail"
   },
-  "startWithGoogle": "Mulai dengan Google",
+  "startWithGoogle": "Start with Google",
   "@startWithGoogle": {
     "description": "Localized string for startWithGoogle"
   },
@@ -2561,7 +2561,7 @@
   "@storageManagement": {
     "description": "Localized string for storageManagement"
   },
-  "store": "Toko",
+  "store": "Store",
   "@store": {
     "description": "Localized string for store"
   },
@@ -2581,7 +2581,7 @@
   "@storyEvent": {
     "description": "Localized string for storyEvent"
   },
-  "stressed": "Stres",
+  "stressed": "Stressed",
   "@stressed": {
     "description": "Localized string for stressed"
   },
@@ -2589,7 +2589,7 @@
   "@submitReport": {
     "description": "Localized string for submitReport"
   },
-  "subscriptionStatus": "Status langganan",
+  "subscriptionStatus": "Subscription Status",
   "@subscriptionStatus": {
     "description": "Localized string for subscriptionStatus"
   },
@@ -2601,7 +2601,7 @@
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "Niedziela",
   "@sunday": {
     "description": "Localized string for sunday"
   },
@@ -2621,7 +2621,7 @@
   "@systemThemeDesc": {
     "description": "Localized string for systemThemeDesc"
   },
-  "tapBottomForDetails": "Ketuk bagian bawah untuk detail",
+  "tapBottomForDetails": "Tap bottom area to see details",
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
@@ -2641,11 +2641,11 @@
   "@technicalError": {
     "description": "Localized string for technicalError"
   },
-  "technology": "Teknologi",
+  "technology": "Technology",
   "@technology": {
     "description": "Localized string for technology"
   },
-  "terms": "Ketentuan",
+  "terms": "Terms of Service",
   "@terms": {
     "description": "Localized string for terms"
   },
@@ -2657,7 +2657,7 @@
   "@termsAgreementDescription": {
     "description": "Localized string for termsAgreementDescription"
   },
-  "termsOfService": "Ketentuan Layanan",
+  "termsOfService": "Warunki korzystania",
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
@@ -2765,11 +2765,11 @@
   "@thai": {
     "description": "Localized string for thai"
   },
-  "thanksFeedback": "Terima kasih atas masukan Anda",
+  "thanksFeedback": "Thanks for your feedback!",
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
-  "theme": "Tema",
+  "theme": "Motyw",
   "@theme": {
     "description": "Localized string for theme"
   },
@@ -2777,11 +2777,11 @@
   "@themeDescription": {
     "description": "Localized string for themeDescription"
   },
-  "themeSettings": "Pengaturan tema",
+  "themeSettings": "Theme Settings",
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "Czwartek",
   "@thursday": {
     "description": "Localized string for thursday"
   },
@@ -2789,15 +2789,15 @@
   "@timeout": {
     "description": "Localized string for timeout"
   },
-  "tired": "Lelah",
+  "tired": "Tired",
   "@tired": {
     "description": "Localized string for tired"
   },
-  "today": "Hari ini",
+  "today": "Dziś",
   "@today": {
     "description": "Localized string for today"
   },
-  "todayChats": "Hari ini",
+  "todayChats": "Today",
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
@@ -2861,31 +2861,31 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
-  "travel": "Perjalanan",
+  "travel": "Travel",
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "Wtorek",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
-  "tutorialAccount": "Akun tutorial",
+  "tutorialAccount": "Tutorial Account",
   "@tutorialAccount": {
     "description": "Localized string for tutorialAccount"
   },
-  "tutorialWelcomeDescription": "Ciptakan hubungan istimewa dengan persona AI.",
+  "tutorialWelcomeDescription": "Create special relationships with AI personas.",
   "@tutorialWelcomeDescription": {
     "description": "Tutorial: Welcome description"
   },
-  "tutorialWelcomeTitle": "Selamat datang di SONA!",
+  "tutorialWelcomeTitle": "Welcome to SONA!",
   "@tutorialWelcomeTitle": {
     "description": "Tutorial: Welcome title"
   },
-  "typeMessage": "Ketik pesan...",
+  "typeMessage": "Wpisz wiadomość...",
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "unblock": "Unblock",
+  "unblock": "Odblokuj",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -2922,11 +2922,11 @@
   "@unlimitedMessages": {
     "description": "Localized string for unlimitedMessages"
   },
-  "unsendMessage": "Batalkan kirim pesan",
+  "unsendMessage": "Unsend message",
   "@unsendMessage": {
     "description": "Localized string for unsendMessage"
   },
-  "usagePurpose": "Tujuan penggunaan",
+  "usagePurpose": "Usage Purpose",
   "@usagePurpose": {
     "description": "Localized string for usagePurpose"
   },
@@ -2946,7 +2946,7 @@
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
-  "userNotFound": "Pengguna tidak ditemukan",
+  "userNotFound": "User not found",
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
@@ -2958,7 +2958,7 @@
   "@verifyingAuth": {
     "description": "Localized string for verifyingAuth"
   },
-  "version": "Versi",
+  "version": "Wersja",
   "@version": {
     "description": "Localized string for version"
   },
@@ -2970,7 +2970,7 @@
   "@violentContent": {
     "description": "Localized string for violentContent"
   },
-  "voiceMessage": "Pesan suara",
+  "voiceMessage": "🎤 Voice message",
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
@@ -2987,7 +2987,7 @@
   "@walk": {
     "description": "Localized string for walk"
   },
-  "wasHelpful": "Apakah membantu?",
+  "wasHelpful": "Was this helpful?",
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
@@ -3023,7 +3023,7 @@
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
-  "weatherRainy": "Hujan",
+  "weatherRainy": "Rainy",
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
@@ -3031,7 +3031,7 @@
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
-  "weatherSnowy": "Bersalju",
+  "weatherSnowy": "Snowy",
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
@@ -3039,15 +3039,15 @@
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "Środa",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
-  "weekdays": "Min,Sen,Sel,Rab,Kam,Jum,Sab",
+  "weekdays": "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
   "@weekdays": {
     "description": "Localized string for weekdays"
   },
-  "welcomeMessage": "Selamat datang💕",
+  "welcomeMessage": "Welcome💕",
   "@welcomeMessage": {
     "description": "Localized string for welcomeMessage"
   },
@@ -3067,7 +3067,7 @@
   "@wrongTranslation": {
     "description": "Localized string for wrongTranslation"
   },
-  "year": "Tahun",
+  "year": "Rok",
   "@year": {
     "description": "Localized string for year"
   },
@@ -3075,19 +3075,19 @@
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
-  "yes": "Ya",
+  "yes": "Tak",
   "@yes": {
     "description": "Localized string for yes"
   },
-  "yesterday": "Kemarin",
+  "yesterday": "Wczoraj",
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
-  "yesterdayChats": "Kemarin",
+  "yesterdayChats": "Yesterday",
   "@yesterdayChats": {
     "description": "Localized string for yesterdayChats"
   },
-  "you": "Anda",
+  "you": "You",
   "@you": {
     "description": "Localized string for you"
   }

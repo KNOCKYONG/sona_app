@@ -352,7 +352,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Flexible(
-                        child: _buildStatItem(AppLocalizations.of(context)!.messagesRemaining(remainingMessages), LocalizationHelper.formatNumber(remainingMessages, Localizations.localeOf(context))),
+                        child: _buildStatItem(AppLocalizations.of(context)!.messagesRemaining, LocalizationHelper.formatNumber(remainingMessages, Localizations.localeOf(context))),
                       ),
                       Flexible(
                         child: _buildStatItem(AppLocalizations.of(context)!.totalLikes,

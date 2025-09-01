@@ -55,6 +55,7 @@ import '../quality/emotional_nuance_system.dart';
 import '../quality/praise_encouragement_system.dart';
 import '../quality/fun_element_system.dart';
 import '../quality/intimacy_building_system.dart';
+import '../../language/language_detection_service.dart';
 
 /// 메시지 타입 enum
 enum ChatMessageType {
@@ -268,18 +269,29 @@ class ChatOrchestrator {
     int? userAge,
     String? userLanguage,
     String? conversationId,
+    String? systemLanguage, // 시스템 언어 추가
+    String? appLanguage, // 앱 설정 언어 추가
   }) async {
     try {
-      // 0단계: 외국어 감지 및 언어 식별
+      // 0단계: 우선순위 기반 언어 감지
       debugPrint('🔍 Checking language for message: "$userMessage"');
+      debugPrint('🌐 System language: $systemLanguage, App language: $appLanguage');
+      
       if (userLanguage == null) {
-        final detectedLang = _detectSpecificLanguage(userMessage);
-        if (detectedLang != null) {
+        // 우선순위 기반 언어 감지 사용
+        final languageService = LanguageDetectionService();
+        final detectedLang = languageService.detectLanguageWithPriority(
+          userMessage,
+          systemLanguage: systemLanguage,
+          appLanguage: appLanguage,
+        );
+        
+        if (detectedLang != 'ko') {
           userLanguage = detectedLang;
           debugPrint(
               '🌍 Language detected: $detectedLang (${_getLanguageName(detectedLang)})');
         } else {
-          debugPrint('🔍 No foreign language detected, using Korean');
+          debugPrint('🔍 Korean detected or using Korean as default');
         }
       }
 

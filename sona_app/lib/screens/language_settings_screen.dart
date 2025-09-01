@@ -40,16 +40,8 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
     final languages = _getLanguages(l10n);
 
     // 현재 선택된 언어 찾기
-    // 시스템 언어 사용 시 실제 시스템 로케일 사용
-    String currentLanguageCode;
-    if (localeService.useSystemLanguage) {
-      // 시스템 언어 사용 중일 때는 실제 시스템 로케일 가져오기
-      final systemLocale = View.of(context).platformDispatcher.locale;
-      currentLanguageCode = systemLocale.languageCode;
-    } else {
-      // 수동 설정된 언어 사용
-      currentLanguageCode = localeService.locale?.languageCode ?? 'en';
-    }
+    // 항상 현재 앱에서 사용 중인 언어를 표시
+    String currentLanguageCode = Localizations.localeOf(context).languageCode;
     
     final currentLanguage = languages.firstWhere(
       (lang) => lang.code == currentLanguageCode,

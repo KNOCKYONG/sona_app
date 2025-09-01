@@ -4,7 +4,7 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "loading": "กำลังโหลด",
+  "loading": "กำลังโหลด...",
   "@loading": {
     "description": "Localized string for loading"
   },
@@ -32,7 +32,7 @@
   "@skip": {
     "description": "Localized string for skip"
   },
-  "done": "เสร็จสิ้น",
+  "done": "เสร็จ",
   "@done": {
     "description": "Localized string for done"
   },
@@ -60,7 +60,7 @@
   "@filter": {
     "description": "Localized string for filter"
   },
-  "sort": "เรียงลำดับ",
+  "sort": "เรียง",
   "@sort": {
     "description": "Localized string for sort"
   },
@@ -240,7 +240,7 @@
   "@optional": {
     "description": "Localized string for optional"
   },
-  "previous": "Previous",
+  "previous": "ก่อนหน้า",
   "@previous": {
     "description": "Localized string for previous"
   },
@@ -344,7 +344,7 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "send": "Send",
+  "send": "ส่ง",
   "@send": {
     "description": "Localized string for send"
   },
@@ -388,7 +388,7 @@
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "สมัครสมาชิก",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -508,7 +508,7 @@
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "notifications": "Notifications",
+  "notifications": "การแจ้งเตือน",
   "@notifications": {
     "description": "Localized string for notifications"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "ช่วยเหลือ",
   "@help": {
     "description": "Localized string for help"
   },
@@ -664,7 +664,7 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "report": "Report",
+  "report": "รายงาน",
   "@report": {
     "description": "Localized string for report"
   },
@@ -676,7 +676,7 @@
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "termsOfService": "ข้อกำหนดการให้บริการ",
+  "termsOfService": "เงื่อนไขการให้บริการ",
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
@@ -684,11 +684,11 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "ดำเนินการต่อ",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "ไปที่การตั้งค่า",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,19 +728,19 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "ต้องการสิทธิ์",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "สิทธิ์กล้อง",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "สิทธิ์แกลเลอรี",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
-  "permissionDenied": "ปฏิเสธการอนุญาต",
+  "permissionDenied": "ปฏิเสธสิทธิ์",
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
@@ -812,7 +812,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "ลืมรหัสผ่าน?",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
@@ -832,11 +832,11 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "photo": "Photo",
+  "photo": "รูปภาพ",
   "@photo": {
     "description": "Localized string for photo"
   },
-  "justNow": "เมื่อกี้นี้",
+  "justNow": "เมื่อสักครู่",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "ดำเนินการต่อ",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1136,7 +1136,7 @@
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "unblock": "Unblock",
+  "unblock": "ยกเลิกบล็อก",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -1312,7 +1312,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "newMessage": "New message",
+  "newMessage": "ข้อความใหม่",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1452,7 +1452,7 @@
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "all": "All",
+  "all": "ทั้งหมด",
   "@all": {
     "description": "Localized string for all"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "ต้องการสิทธิ์การแจ้งเตือนเพื่อรับข้อความใหม่",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "ต้องการสิทธิ์กล้องเพื่อถ่ายรูปโปรไฟล์",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "ต้องการสิทธิ์แกลเลอรีเพื่อเลือกรูปโปรไฟล์",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
@@ -2470,7 +2470,7 @@
   "@notificationPermissionRequired": {
     "description": "Localized string for notificationPermissionRequired"
   },
-  "notificationSettings": "Notification Settings",
+  "notificationSettings": "ตั้งค่าการแจ้งเตือน",
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
@@ -2918,7 +2918,7 @@
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "ข้อผิดพลาดที่ไม่ทราบสาเหตุ",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },

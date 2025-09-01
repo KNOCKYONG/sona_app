@@ -4,7 +4,7 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "loading": "加载中",
+  "loading": "加载中...",
   "@loading": {
     "description": "Localized string for loading"
   },
@@ -120,7 +120,7 @@
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
-  "logout": "退出",
+  "logout": "退出登录",
   "@logout": {
     "description": "Localized string for logout"
   },
@@ -128,7 +128,7 @@
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "email": "邮箱",
+  "email": "电子邮件",
   "@email": {
     "description": "Localized string for email"
   },
@@ -260,7 +260,7 @@
   "@month": {
     "description": "Localized string for month"
   },
-  "day": "日",
+  "day": "天",
   "@day": {
     "description": "Localized string for day"
   },
@@ -332,11 +332,11 @@
   "@chats": {
     "description": "Localized string for chats"
   },
-  "startChat": "Start Chat",
+  "startChat": "开始聊天",
   "@startChat": {
     "description": "Localized string for startChat"
   },
-  "endChat": "End Chat",
+  "endChat": "结束聊天",
   "@endChat": {
     "description": "Localized string for endChat"
   },
@@ -344,7 +344,7 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "send": "Send",
+  "send": "发送",
   "@send": {
     "description": "Localized string for send"
   },
@@ -384,11 +384,11 @@
   "@messageCopied": {
     "description": "Localized string for messageCopied"
   },
-  "voiceMessage": "🎤 Voice message",
+  "voiceMessage": "语音消息",
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "注册",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -484,7 +484,7 @@
   "@profile": {
     "description": "Localized string for profile"
   },
-  "editProfile": "编辑资料",
+  "editProfile": "编辑个人资料",
   "@editProfile": {
     "description": "Localized string for editProfile"
   },
@@ -508,7 +508,7 @@
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
-  "notifications": "Notifications",
+  "notifications": "通知",
   "@notifications": {
     "description": "Localized string for notifications"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "帮助",
   "@help": {
     "description": "Localized string for help"
   },
@@ -596,7 +596,7 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "deleteAccount": "删除账号",
+  "deleteAccount": "删除账户",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -656,7 +656,7 @@
   "@continueButton": {
     "description": "Localized string for continueButton"
   },
-  "userNotFound": "User not found",
+  "userNotFound": "用户未找到",
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
@@ -664,7 +664,7 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "report": "Report",
+  "report": "举报",
   "@report": {
     "description": "Localized string for report"
   },
@@ -684,11 +684,11 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "继续",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "前往设置",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,15 +728,15 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "需要权限",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "相机权限",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "相册权限",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
@@ -812,7 +812,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "forgotPassword": "Forgot Password",
+  "forgotPassword": "忘记密码？",
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
@@ -832,7 +832,7 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "photo": "Photo",
+  "photo": "照片",
   "@photo": {
     "description": "Localized string for photo"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "继续",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1000,7 +1000,7 @@
   "@allAgree": {
     "description": "Localized string for allAgree"
   },
-  "required": "[Required]",
+  "required": "必需",
   "@required": {
     "description": "Localized string for required"
   },
@@ -1136,7 +1136,7 @@
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "unblock": "Unblock",
+  "unblock": "取消屏蔽",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -1212,7 +1212,7 @@
   "@termsSection12Title": {
     "description": "Localized string for termsSection12Title"
   },
-  "privacySettings": "Privacy Settings",
+  "privacySettings": "隐私设置",
   "@privacySettings": {
     "description": "Localized string for privacySettings"
   },
@@ -1312,7 +1312,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "newMessage": "New message",
+  "newMessage": "新消息",
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
@@ -1452,7 +1452,7 @@
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "all": "All",
+  "all": "全部",
   "@all": {
     "description": "Localized string for all"
   },
@@ -1616,7 +1616,7 @@
   "@preparingPersonas": {
     "description": "Localized string for preparingPersonas"
   },
-  "profileSetup": "Setting up profile",
+  "profileSetup": "设置个人资料",
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
@@ -1668,7 +1668,7 @@
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
-  "passwordTooShort": "Password must be at least 6 characters",
+  "passwordTooShort": "密码太短",
   "@passwordTooShort": {
     "description": "Localized string for passwordTooShort"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "需要通知权限来接收新消息。",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "需要相机权限来拍摄个人资料照片。",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "需要相册权限来选择个人资料照片。",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
@@ -2546,7 +2546,7 @@
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "资料已更新",
+  "profileUpdated": "个人资料已更新",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
@@ -2918,7 +2918,7 @@
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "未知错误",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },

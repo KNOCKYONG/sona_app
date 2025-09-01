@@ -2130,7 +2130,7 @@
       }
     }
   },
-  "daysAgo": "{count} {formatted}",
+  "daysAgo": "{count} days ago",
   "@daysAgo": {
     "description": "Days ago format",
     "placeholders": {
@@ -2144,7 +2144,7 @@
       }
     }
   },
-  "hoursAgo": "{count} {formatted}",
+  "hoursAgo": "{count} hours ago",
   "@hoursAgo": {
     "description": "Hours ago format",
     "placeholders": {
@@ -2158,7 +2158,7 @@
       }
     }
   },
-  "minutesAgo": "{count} {formatted}",
+  "minutesAgo": "{count} minutes ago",
   "@minutesAgo": {
     "description": "Minutes ago format",
     "placeholders": {

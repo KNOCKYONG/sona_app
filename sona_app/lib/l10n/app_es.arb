@@ -172,7 +172,7 @@
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "gender": "Gender",
+  "gender": "Género",
   "@gender": {
     "description": "Localized string for gender"
   },
@@ -180,15 +180,15 @@
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "male": "Male",
+  "male": "Hombre",
   "@male": {
     "description": "Localized string for male"
   },
-  "female": "Female",
+  "female": "Mujer",
   "@female": {
     "description": "Localized string for female"
   },
-  "other": "Other",
+  "other": "Otro",
   "@other": {
     "description": "Localized string for other"
   },
@@ -240,7 +240,7 @@
   "@optional": {
     "description": "Localized string for optional"
   },
-  "previous": "Previous",
+  "previous": "Anterior",
   "@previous": {
     "description": "Localized string for previous"
   },
@@ -388,7 +388,7 @@
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "signUp": "Sign Up",
+  "signUp": "Registrarse",
   "@signUp": {
     "description": "Localized string for signUp"
   },
@@ -476,7 +476,7 @@
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
-  "settings": "Configuración",
+  "settings": "Ajustes",
   "@settings": {
     "description": "Localized string for settings"
   },
@@ -512,7 +512,7 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Notificaciones push",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
@@ -544,7 +544,7 @@
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "Privacidad",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -552,7 +552,7 @@
   "@terms": {
     "description": "Localized string for terms"
   },
-  "help": "Help",
+  "help": "Ayuda",
   "@help": {
     "description": "Localized string for help"
   },
@@ -596,7 +596,7 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "deleteAccount": "Delete Account",
+  "deleteAccount": "Eliminar cuenta",
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
@@ -664,7 +664,7 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "report": "Report",
+  "report": "Reportar",
   "@report": {
     "description": "Localized string for report"
   },
@@ -684,11 +684,11 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Continue",
+  "grantPermission": "Continuar",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "goToSettings": "Go to Settings",
+  "goToSettings": "Ir a ajustes",
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
@@ -728,19 +728,19 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "permissionRequired": "Permission Required",
+  "permissionRequired": "Permiso requerido",
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "cameraPermission": "Camera Permission",
+  "cameraPermission": "Permiso de cámara",
   "@cameraPermission": {
     "description": "Localized string for cameraPermission"
   },
-  "galleryPermission": "Gallery Permission",
+  "galleryPermission": "Permiso de galería",
   "@galleryPermission": {
     "description": "Localized string for galleryPermission"
   },
-  "permissionDenied": "Permission denied",
+  "permissionDenied": "Permiso denegado",
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
@@ -836,7 +836,7 @@
   "@photo": {
     "description": "Localized string for photo"
   },
-  "justNow": "Justo ahora",
+  "justNow": "Ahora mismo",
   "@justNow": {
     "description": "Localized string for justNow"
   },
@@ -848,7 +848,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "allowPermission": "Continue",
+  "allowPermission": "Continuar",
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
@@ -1136,7 +1136,7 @@
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "unblock": "Unblock",
+  "unblock": "Desbloquear",
   "@unblock": {
     "description": "Localized string for unblock"
   },
@@ -1452,7 +1452,7 @@
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "all": "All",
+  "all": "Todo",
   "@all": {
     "description": "Localized string for all"
   },
@@ -1784,7 +1784,7 @@
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "notificationPermissionDesc": "Notification permission is required to receive new messages.",
+  "notificationPermissionDesc": "Se necesita permiso de notificación para recibir mensajes nuevos.",
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
@@ -1792,11 +1792,11 @@
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "cameraPermissionDesc": "Camera access is required to take profile photos.",
+  "cameraPermissionDesc": "Se necesita acceso a la cámara para tomar fotos de perfil.",
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "galleryPermissionDesc": "Gallery access is required to select profile photos.",
+  "galleryPermissionDesc": "Se necesita acceso a la galería para seleccionar fotos de perfil.",
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
@@ -2470,7 +2470,7 @@
   "@notificationPermissionRequired": {
     "description": "Localized string for notificationPermissionRequired"
   },
-  "notificationSettings": "Configuración de notificaciones",
+  "notificationSettings": "Ajustes de notificación",
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
@@ -2918,7 +2918,7 @@
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "Error desconocido",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },

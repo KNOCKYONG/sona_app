@@ -684,7 +684,7 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "grantPermission": "Berikan izin",
+  "grantPermission": "Lanjutkan",
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },

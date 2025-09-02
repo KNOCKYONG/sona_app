@@ -318,7 +318,7 @@ class PersonaService extends BaseService {
     notifyListeners();
 
     // Report progress: Loading all personas first
-    onProgress?.call(0.1, '페르소나 데이터 불러오는 중');
+    onProgress?.call(0.1, 'loadingPersonaData');
 
     // 🔥 먼저 모든 페르소나 데이터를 로드
     debugPrint(
@@ -328,7 +328,7 @@ class PersonaService extends BaseService {
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] All personas loaded: ${_allPersonas.length}');
 
     // Report progress: Loading matched personas
-    onProgress?.call(0.3, '매칭된 페르소나 확인 중');
+    onProgress?.call(0.3, 'checkingMatchedPersonas');
 
     // 이제 _allPersonas가 로드된 후 매칭된 페르소나 로드
     final results = await Future.wait([
@@ -342,7 +342,7 @@ class PersonaService extends BaseService {
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Matched personas loaded: ${_matchedPersonas.length}');
 
     // Report progress: Checking images
-    onProgress?.call(0.7, '이미지 준비 중');
+    onProgress?.call(0.7, 'preparingImages');
 
     // 🆕 Check and download new images in background (don't wait)
     checkAndDownloadNewImages().then((_) {
@@ -352,13 +352,13 @@ class PersonaService extends BaseService {
     });
 
     // Report progress: Final preparation
-    onProgress?.call(0.9, '마지막 준비 중');
+    onProgress?.call(0.9, 'finalPreparation');
 
     // Skip image preloading here - will be done in PersonaSelectionScreen
     // This speeds up initial loading significantly
 
     // Report completion
-    onProgress?.call(1.0, '완료!');
+    onProgress?.call(1.0, 'complete');
 
     // isLoading is managed by BaseService
     notifyListeners();

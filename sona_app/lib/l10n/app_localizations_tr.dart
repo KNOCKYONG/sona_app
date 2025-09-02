@@ -2374,4 +2374,16 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get you => 'Sen';
+
+  @override
+  String get loadingPersonaData => 'Kişilik verileri yükleniyor';
+
+  @override
+  String get checkingMatchedPersonas => 'Eşleşen kişilikler kontrol ediliyor';
+
+  @override
+  String get preparingImages => 'Görüntüler hazırlanıyor';
+
+  @override
+  String get finalPreparation => 'Son hazırlık';
 }

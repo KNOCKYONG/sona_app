@@ -3090,5 +3090,21 @@
   "you": "나",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "페르소나 데이터 불러오는 중",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "매칭된 페르소나 확인 중",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "이미지 준비 중",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "마지막 준비 중",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

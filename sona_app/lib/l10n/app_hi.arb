@@ -3090,5 +3090,21 @@
   "you": "आप",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "पर्सोना डेटा लोड हो रहा है",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "मैच किए गए पर्सोना की जांच हो रही है",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "छवियों को तैयार कर रहे हैं",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "अंतिम तैयारी",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

@@ -2366,4 +2366,16 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get you => 'Anda';
+
+  @override
+  String get loadingPersonaData => 'Memuat data persona';
+
+  @override
+  String get checkingMatchedPersonas => 'Memeriksa persona yang cocok';
+
+  @override
+  String get preparingImages => 'Menyiapkan gambar';
+
+  @override
+  String get finalPreparation => 'Persiapan akhir';
 }

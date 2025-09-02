@@ -2371,4 +2371,16 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get you => 'آپ';
+
+  @override
+  String get loadingPersonaData => 'پرسونا ڈیٹا لوڈ ہو رہا ہے';
+
+  @override
+  String get checkingMatchedPersonas => 'میچ شدہ پرسونا چیک کر رہے ہیں';
+
+  @override
+  String get preparingImages => 'تصاویر تیار کر رہے ہیں';
+
+  @override
+  String get finalPreparation => 'آخری تیاری';
 }

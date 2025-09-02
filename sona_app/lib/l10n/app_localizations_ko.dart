@@ -2284,4 +2284,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get you => '나';
+
+  @override
+  String get loadingPersonaData => '페르소나 데이터 불러오는 중';
+
+  @override
+  String get checkingMatchedPersonas => '매칭된 페르소나 확인 중';
+
+  @override
+  String get preparingImages => '이미지 준비 중';
+
+  @override
+  String get finalPreparation => '마지막 준비 중';
 }

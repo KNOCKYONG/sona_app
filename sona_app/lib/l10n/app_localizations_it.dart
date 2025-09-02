@@ -2392,4 +2392,16 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get you => 'Tu';
+
+  @override
+  String get loadingPersonaData => 'Caricamento dati persona';
+
+  @override
+  String get checkingMatchedPersonas => 'Controllo persone abbinate';
+
+  @override
+  String get preparingImages => 'Preparazione immagini';
+
+  @override
+  String get finalPreparation => 'Preparazione finale';
 }

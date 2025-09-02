@@ -3090,5 +3090,21 @@
   "you": "你",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "正在加载角色数据",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "正在检查匹配的角色",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "正在准备图片",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "最后准备",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

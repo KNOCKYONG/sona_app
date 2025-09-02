@@ -155,15 +155,33 @@ class _SplashScreenState extends State<SplashScreen>
               onProgress: (progress, message) {
                 // PersonaService의 진행률 (0.0~1.0)을 0.6~0.9 범위로 매핑
                 final mappedProgress = baseProgress + (progress * 0.3);
-                _updateProgress(mappedProgress, message);
+                
+                // Translate message keys to localized strings
+                String localizedMessage = message;
+                final l10n = AppLocalizations.of(context)!;
+                
+                // Map message keys to localized strings
+                if (message == 'loadingPersonaData') {
+                  localizedMessage = l10n.loadingPersonaData;
+                } else if (message == 'checkingMatchedPersonas') {
+                  localizedMessage = l10n.checkingMatchedPersonas;
+                } else if (message == 'preparingImages') {
+                  localizedMessage = l10n.preparingImages;
+                } else if (message == 'finalPreparation') {
+                  localizedMessage = l10n.finalPreparation;
+                } else if (message == 'complete') {
+                  localizedMessage = l10n.complete;
+                }
+                
+                _updateProgress(mappedProgress, localizedMessage);
                 
                 // 페르소나 개수 표시를 위한 특별 처리
-                if (message.contains('Persona data') && personaService.allPersonas.isNotEmpty) {
+                if (message == 'loadingPersonaData' && personaService.allPersonas.isNotEmpty) {
                   final count = personaService.allPersonas.length;
-                  _updateProgress(mappedProgress, 'Preparing personas... ($count)');
-                } else if (message.contains(AppLocalizations.of(context)!.matchedPersonas) && personaService.matchedPersonas.isNotEmpty) {
+                  _updateProgress(mappedProgress, '$localizedMessage ($count)');
+                } else if (message == 'checkingMatchedPersonas' && personaService.matchedPersonas.isNotEmpty) {
                   final count = personaService.matchedPersonas.length;
-                  _updateProgress(mappedProgress, 'Checking chat partners... ($count)');
+                  _updateProgress(mappedProgress, '$localizedMessage ($count)');
                 }
               },
             );

@@ -3090,5 +3090,21 @@
   "you": "Du",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Laddar persona-data",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Kontrollerar matchade personas",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Förbereder bilder",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Slutförberedelse",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

@@ -2321,4 +2321,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get you => 'Bạn';
+
+  @override
+  String get loadingPersonaData => 'Đang tải dữ liệu persona';
+
+  @override
+  String get checkingMatchedPersonas => 'Đang kiểm tra personas đã ghép đôi';
+
+  @override
+  String get preparingImages => 'Đang chuẩn bị hình ảnh';
+
+  @override
+  String get finalPreparation => 'Chuẩn bị cuối cùng';
 }

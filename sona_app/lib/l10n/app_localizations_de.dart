@@ -2403,4 +2403,16 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get you => 'Du';
+
+  @override
+  String get loadingPersonaData => 'Lade Persona-Daten';
+
+  @override
+  String get checkingMatchedPersonas => 'Überprüfe passende Personas';
+
+  @override
+  String get preparingImages => 'Bereite Bilder vor';
+
+  @override
+  String get finalPreparation => 'Letzte Vorbereitungen';
 }

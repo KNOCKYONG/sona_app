@@ -3090,5 +3090,21 @@
   "you": "آپ",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "پرسونا ڈیٹا لوڈ ہو رہا ہے",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "میچ شدہ پرسونا چیک کر رہے ہیں",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "تصاویر تیار کر رہے ہیں",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "آخری تیاری",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

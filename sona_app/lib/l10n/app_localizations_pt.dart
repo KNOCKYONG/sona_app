@@ -2383,4 +2383,16 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get you => 'Você';
+
+  @override
+  String get loadingPersonaData => 'Carregando dados de persona';
+
+  @override
+  String get checkingMatchedPersonas => 'Verificando personas correspondentes';
+
+  @override
+  String get preparingImages => 'Preparando imagens';
+
+  @override
+  String get finalPreparation => 'Preparação final';
 }

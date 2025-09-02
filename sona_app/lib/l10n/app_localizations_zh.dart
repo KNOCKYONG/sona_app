@@ -2264,4 +2264,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get you => '你';
+
+  @override
+  String get loadingPersonaData => '正在加载角色数据';
+
+  @override
+  String get checkingMatchedPersonas => '正在检查匹配的角色';
+
+  @override
+  String get preparingImages => '正在准备图片';
+
+  @override
+  String get finalPreparation => '最后准备';
 }

@@ -2340,4 +2340,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get you => 'You';
+
+  @override
+  String get loadingPersonaData => 'جاري تحميل بيانات الشخصية';
+
+  @override
+  String get checkingMatchedPersonas => 'جاري التحقق من الشخصيات المطابقة';
+
+  @override
+  String get preparingImages => 'جاري تحضير الصور';
+
+  @override
+  String get finalPreparation => 'التحضير النهائي';
 }

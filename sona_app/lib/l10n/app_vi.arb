@@ -3090,5 +3090,21 @@
   "you": "Bạn",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Đang tải dữ liệu persona",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Đang kiểm tra personas đã ghép đôi",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Đang chuẩn bị hình ảnh",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Chuẩn bị cuối cùng",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

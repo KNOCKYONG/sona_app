@@ -3090,5 +3090,21 @@
   "you": "Вы",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Загрузка данных персоны",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Проверка совпавших персон",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Подготовка изображений",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Финальная подготовка",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

@@ -2370,4 +2370,16 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get you => 'आप';
+
+  @override
+  String get loadingPersonaData => 'पर्सोना डेटा लोड हो रहा है';
+
+  @override
+  String get checkingMatchedPersonas => 'मैच किए गए पर्सोना की जांच हो रही है';
+
+  @override
+  String get preparingImages => 'छवियों को तैयार कर रहे हैं';
+
+  @override
+  String get finalPreparation => 'अंतिम तैयारी';
 }

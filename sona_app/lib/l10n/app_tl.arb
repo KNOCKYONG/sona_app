@@ -3090,5 +3090,21 @@
   "you": "Ikaw",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Naglo-load ng persona data",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Sinusuri ang mga tugmang persona",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Inihahanda ang mga larawan",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Huling paghahanda",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

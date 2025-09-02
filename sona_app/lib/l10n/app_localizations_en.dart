@@ -286,7 +286,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get close => 'Close';
 
   @override
-  String get complete => 'Done';
+  String get complete => 'Complete!';
 
   @override
   String get completeSignup => 'Complete Sign Up';
@@ -2371,4 +2371,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get you => 'You';
+
+  @override
+  String get loadingPersonaData => 'Loading persona data';
+
+  @override
+  String get checkingMatchedPersonas => 'Checking matched personas';
+
+  @override
+  String get preparingImages => 'Preparing images';
+
+  @override
+  String get finalPreparation => 'Final preparation';
 }

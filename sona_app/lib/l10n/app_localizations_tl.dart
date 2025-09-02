@@ -2401,4 +2401,16 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get you => 'Ikaw';
+
+  @override
+  String get loadingPersonaData => 'Naglo-load ng persona data';
+
+  @override
+  String get checkingMatchedPersonas => 'Sinusuri ang mga tugmang persona';
+
+  @override
+  String get preparingImages => 'Inihahanda ang mga larawan';
+
+  @override
+  String get finalPreparation => 'Huling paghahanda';
 }

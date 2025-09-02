@@ -3090,5 +3090,25 @@
   "you": "You",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Loading persona data",
+  "@loadingPersonaData": {
+    "description": "Loading message for persona data"
+  },
+  "checkingMatchedPersonas": "Checking matched personas",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checking matched personas"
+  },
+  "preparingImages": "Preparing images",
+  "@preparingImages": {
+    "description": "Loading message for preparing images"
+  },
+  "finalPreparation": "Final preparation",
+  "@finalPreparation": {
+    "description": "Loading message for final preparation"
+  },
+  "complete": "Complete!",
+  "@complete": {
+    "description": "Completion message"
   }
 }

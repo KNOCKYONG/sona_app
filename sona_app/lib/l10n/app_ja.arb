@@ -3090,5 +3090,21 @@
   "you": "あなた",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "ペルソナデータを読み込み中",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "マッチしたペルソナを確認中",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "画像を準備中",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "最終準備中",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

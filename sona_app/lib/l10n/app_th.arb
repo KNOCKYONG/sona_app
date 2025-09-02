@@ -3090,5 +3090,21 @@
   "you": "คุณ",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "กำลังโหลดข้อมูลเพอร์โซน่า",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "กำลังตรวจสอบเพอร์โซน่าที่จับคู่แล้ว",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "กำลังเตรียมรูปภาพ",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "การเตรียมการขั้นสุดท้าย",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

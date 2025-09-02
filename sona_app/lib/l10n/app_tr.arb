@@ -3090,5 +3090,21 @@
   "you": "Sen",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Kişilik verileri yükleniyor",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Eşleşen kişilikler kontrol ediliyor",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Görüntüler hazırlanıyor",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Son hazırlık",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

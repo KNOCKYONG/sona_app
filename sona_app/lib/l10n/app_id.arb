@@ -3090,5 +3090,21 @@
   "you": "Anda",
   "@you": {
     "description": "Localized string for you"
+  },
+  "loadingPersonaData": "Memuat data persona",
+  "@loadingPersonaData": {
+    "description": "Loading message for loadingPersonaData"
+  },
+  "checkingMatchedPersonas": "Memeriksa persona yang cocok",
+  "@checkingMatchedPersonas": {
+    "description": "Loading message for checkingMatchedPersonas"
+  },
+  "preparingImages": "Menyiapkan gambar",
+  "@preparingImages": {
+    "description": "Loading message for preparingImages"
+  },
+  "finalPreparation": "Persiapan akhir",
+  "@finalPreparation": {
+    "description": "Loading message for finalPreparation"
   }
 }

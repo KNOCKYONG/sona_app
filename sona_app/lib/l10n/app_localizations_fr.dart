@@ -2410,4 +2410,17 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get you => 'Vous';
+
+  @override
+  String get loadingPersonaData => 'Chargement des données de persona';
+
+  @override
+  String get checkingMatchedPersonas =>
+      'Vérification des personas correspondants';
+
+  @override
+  String get preparingImages => 'Préparation des images';
+
+  @override
+  String get finalPreparation => 'Préparation finale';
 }

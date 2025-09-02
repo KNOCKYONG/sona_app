@@ -2278,4 +2278,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get you => 'あなた';
+
+  @override
+  String get loadingPersonaData => 'ペルソナデータを読み込み中';
+
+  @override
+  String get checkingMatchedPersonas => 'マッチしたペルソナを確認中';
+
+  @override
+  String get preparingImages => '画像を準備中';
+
+  @override
+  String get finalPreparation => '最終準備中';
 }

@@ -2384,4 +2384,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get you => 'Ty';
+
+  @override
+  String get loadingPersonaData => 'Ładowanie danych persony';
+
+  @override
+  String get checkingMatchedPersonas => 'Sprawdzanie dopasowanych person';
+
+  @override
+  String get preparingImages => 'Przygotowywanie obrazów';
+
+  @override
+  String get finalPreparation => 'Ostatnie przygotowania';
 }

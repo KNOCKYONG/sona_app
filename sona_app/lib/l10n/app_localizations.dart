@@ -640,10 +640,10 @@ abstract class AppLocalizations {
   /// **'Close'**
   String get close;
 
-  /// Localized string for complete
+  /// Completion message
   ///
   /// In en, this message translates to:
-  /// **'Done'**
+  /// **'Complete!'**
   String get complete;
 
   /// Localized string for completeSignup
@@ -4527,6 +4527,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'You'**
   String get you;
+
+  /// Loading message for persona data
+  ///
+  /// In en, this message translates to:
+  /// **'Loading persona data'**
+  String get loadingPersonaData;
+
+  /// Loading message for checking matched personas
+  ///
+  /// In en, this message translates to:
+  /// **'Checking matched personas'**
+  String get checkingMatchedPersonas;
+
+  /// Loading message for preparing images
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing images'**
+  String get preparingImages;
+
+  /// Loading message for final preparation
+  ///
+  /// In en, this message translates to:
+  /// **'Final preparation'**
+  String get finalPreparation;
 }
 
 class _AppLocalizationsDelegate

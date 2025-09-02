@@ -2390,4 +2390,16 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get you => 'You';
+
+  @override
+  String get loadingPersonaData => 'Persona-gegevens laden';
+
+  @override
+  String get checkingMatchedPersonas => 'Gematchte personas controleren';
+
+  @override
+  String get preparingImages => 'Afbeeldingen voorbereiden';
+
+  @override
+  String get finalPreparation => 'Laatste voorbereiding';
 }

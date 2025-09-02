@@ -2378,4 +2378,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get you => 'Вы';
+
+  @override
+  String get loadingPersonaData => 'Загрузка данных персоны';
+
+  @override
+  String get checkingMatchedPersonas => 'Проверка совпавших персон';
+
+  @override
+  String get preparingImages => 'Подготовка изображений';
+
+  @override
+  String get finalPreparation => 'Финальная подготовка';
 }

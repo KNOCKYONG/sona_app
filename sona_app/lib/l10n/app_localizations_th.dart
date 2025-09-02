@@ -2335,4 +2335,16 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get you => 'คุณ';
+
+  @override
+  String get loadingPersonaData => 'กำลังโหลดข้อมูลเพอร์โซน่า';
+
+  @override
+  String get checkingMatchedPersonas => 'กำลังตรวจสอบเพอร์โซน่าที่จับคู่แล้ว';
+
+  @override
+  String get preparingImages => 'กำลังเตรียมรูปภาพ';
+
+  @override
+  String get finalPreparation => 'การเตรียมการขั้นสุดท้าย';
 }

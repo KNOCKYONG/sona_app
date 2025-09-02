@@ -2369,4 +2369,16 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get you => 'Du';
+
+  @override
+  String get loadingPersonaData => 'Laddar persona-data';
+
+  @override
+  String get checkingMatchedPersonas => 'Kontrollerar matchade personas';
+
+  @override
+  String get preparingImages => 'Förbereder bilder';
+
+  @override
+  String get finalPreparation => 'Slutförberedelse';
 }

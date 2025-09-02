@@ -249,35 +249,36 @@ class _TextMessageState extends State<_TextMessage> {
                     ),
                   );
                 },
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOutCubic,
-                  decoration: BoxDecoration(
-                    gradient: isFromUser ? AppTheme.primaryGradient : null,
-                    color: isFromUser ? null : MessageBubble._aiBubbleColor,
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(24),
-                      topRight: const Radius.circular(24),
-                      bottomLeft: Radius.circular(isFromUser ? 24 : 8),
-                      bottomRight: Radius.circular(isFromUser ? 8 : 24),
-                    ),
-                    boxShadow: isFromUser
-                        ? [
-                            BoxShadow(
-                              color: const Color(0xFFFF8FAD).withOpacity(0.20),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
+                child: IntrinsicHeight(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOutCubic,
+                    decoration: BoxDecoration(
+                      gradient: isFromUser ? AppTheme.primaryGradient : null,
+                      color: isFromUser ? null : MessageBubble._aiBubbleColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: const Radius.circular(24),
+                        topRight: const Radius.circular(24),
+                        bottomLeft: Radius.circular(isFromUser ? 24 : 8),
+                        bottomRight: Radius.circular(isFromUser ? 8 : 24),
+                      ),
+                      boxShadow: isFromUser
+                          ? [
+                              BoxShadow(
+                                color: const Color(0xFFFF8FAD).withOpacity(0.20),
+                                blurRadius: 16,
+                                offset: const Offset(0, 8),
+                              ),
+                            ]
+                          : AppTheme.softShadow,
+                      border: isFromUser
+                          ? null
+                          : Border.all(
+                              color: Colors.grey.withOpacity(0.1),
+                              width: 1,
                             ),
-                          ]
-                        : AppTheme.softShadow,
-                    border: isFromUser
-                        ? null
-                        : Border.all(
-                            color: Colors.grey.withOpacity(0.1),
-                            width: 1,
-                          ),
-                  ),
-                  child: Stack(
+                    ),
+                    child: Stack(
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -350,93 +351,100 @@ class _TextMessageState extends State<_TextMessage> {
                                 _showTranslation = !_showTranslation;
                               });
                             },
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
-                                if (!_showTranslation) ...[
-                                  Stack(
-                                    children: [
-                                      // 한국어 메시지 텍스트 (태그 제거 처리)
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 35),
-                                        child: Text(
-                                          _extractKoreanContent(widget.message.content),
-                                          style: _TextMessage._aiTextStyle,
-                                          softWrap: true,
-                                          textAlign: TextAlign.left,
-                                        ),
-                                      ),
-                                      // 번역 아이콘 표시 (우측 상단) - 시각적 표시용
-                                      Positioned(
-                                        top: -4,
-                                        right: -4,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          child: Icon(
-                                            Icons.language,
-                                            size: 18,
-                                            color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+                            child: AnimatedSize(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOutCubic,
+                              alignment: Alignment.topLeft,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
+                                  if (!_showTranslation) ...[
+                                    Stack(
+                                      children: [
+                                        // 한국어 메시지 텍스트 (태그 제거 처리)
+                                        Padding(
+                                          padding: const EdgeInsets.only(right: 35),
+                                          child: Text(
+                                            _extractKoreanContent(widget.message.content),
+                                            style: _TextMessage._aiTextStyle,
+                                            softWrap: true,
+                                            textAlign: TextAlign.left,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                                // 번역 모드 (회색 배경)
-                                if (_showTranslation) ...[
-                                  Stack(
-                                    children: [
-                                      Container(
-                                        width: double.infinity,
-                                        padding: const EdgeInsets.only(
-                                          left: 12,
-                                          right: 35,
-                                          top: 8,
-                                          bottom: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue.withOpacity(0.08),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: Colors.blue.withOpacity(0.2),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // 번역된 텍스트 (태그 제거 및 한글 제외)
-                                            Text(
-                                              _extractTranslatedContent(widget.message.translatedContent!),
-                                              style: TextStyle(
-                                                color: Colors.blue[900],
-                                                fontSize: 16,
-                                                height: 1.4,
-                                              ),
-                                              softWrap: true,
-                                              textAlign: TextAlign.left,
+                                        // 번역 아이콘 표시 (우측 상단) - 시각적 표시용
+                                        Positioned(
+                                          top: -4,
+                                          right: -4,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Icon(
+                                              Icons.language,
+                                              size: 18,
+                                              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                      // 지구본 아이콘 표시 (우측 상단) - 시각적 표시용
-                                      Positioned(
-                                        top: -4,
-                                        right: -4,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          child: Icon(
-                                            Icons.language,
-                                            size: 18,
-                                            color: Colors.blue.withOpacity(0.8),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
+                                  ],
+                                  // 번역 모드 (회색 배경)
+                                  if (_showTranslation) ...[
+                                    Stack(
+                                      children: [
+                                        Container(
+                                          width: double.infinity,
+                                          padding: const EdgeInsets.only(
+                                            left: 12,
+                                            right: 35,
+                                            top: 8,
+                                            bottom: 8,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.withOpacity(0.08),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: Colors.blue.withOpacity(0.2),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              // 번역된 텍스트 (태그 제거 및 한글 제외)
+                                              Text(
+                                                _extractTranslatedContent(widget.message.translatedContent!),
+                                                style: TextStyle(
+                                                  color: Colors.blue[900],
+                                                  fontSize: 16,
+                                                  height: 1.4,
+                                                ),
+                                                softWrap: true,
+                                                textAlign: TextAlign.left,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        // 지구본 아이콘 표시 (우측 상단) - 시각적 표시용
+                                        Positioned(
+                                          top: -4,
+                                          right: -4,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4),
+                                            child: Icon(
+                                              Icons.language,
+                                              size: 18,
+                                              color: Colors.blue.withOpacity(0.8),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ],
-                              ],
+                              ),
                             ),
                           ),
                         ] else ...[
@@ -533,6 +541,7 @@ class _TextMessageState extends State<_TextMessage> {
               ),
             ),
           ),
+          ), // Closing parenthesis for Flexible widget at line 220
         ],
       ),
     );

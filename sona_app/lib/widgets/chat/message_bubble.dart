@@ -249,10 +249,10 @@ class _TextMessageState extends State<_TextMessage> {
                     ),
                   );
                 },
-                child: IntrinsicHeight(
-                  child: AnimatedContainer(
+                child: AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOutCubic,
+                    clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
                       gradient: isFromUser ? AppTheme.primaryGradient : null,
                       color: isFromUser ? null : MessageBubble._aiBubbleColor,
@@ -280,15 +280,17 @@ class _TextMessageState extends State<_TextMessage> {
                     ),
                     child: Stack(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 10,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
+                      SingleChildScrollView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
                         // 답장 정보 표시
                         if (widget.message.metadata != null && 
                             widget.message.metadata!['replyTo'] != null) ...[
@@ -471,6 +473,7 @@ class _TextMessageState extends State<_TextMessage> {
                           ],
                         ),
                       ),
+                    ),
                       // 전송 실패 시 재시도 버튼
                       if (widget.message.hasFailed && isFromUser)
                         Positioned(
@@ -548,7 +551,6 @@ class _TextMessageState extends State<_TextMessage> {
               ),
             ),
           ),
-          ), // Closing parenthesis for Flexible widget at line 220
         ],
       ),
     );

@@ -3106,5 +3106,21 @@
   "finalPreparation": "Laatste voorbereiding",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "Bewerk geslacht, geboortedatum en introductie",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "Systeem",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "Licht",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "Donker",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

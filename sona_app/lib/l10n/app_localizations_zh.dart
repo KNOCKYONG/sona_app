@@ -2276,4 +2276,16 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get finalPreparation => '最后准备';
+
+  @override
+  String get editProfileSubtitle => '编辑性别、生日和自我介绍';
+
+  @override
+  String get systemThemeName => '系统';
+
+  @override
+  String get lightThemeName => '浅色';
+
+  @override
+  String get darkThemeName => '深色';
 }

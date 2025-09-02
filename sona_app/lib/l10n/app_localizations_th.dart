@@ -2347,4 +2347,16 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get finalPreparation => 'การเตรียมการขั้นสุดท้าย';
+
+  @override
+  String get editProfileSubtitle => 'แก้ไขเพศ วันเกิด และการแนะนำตัว';
+
+  @override
+  String get systemThemeName => 'ระบบ';
+
+  @override
+  String get lightThemeName => 'สว่าง';
+
+  @override
+  String get darkThemeName => 'มืด';
 }

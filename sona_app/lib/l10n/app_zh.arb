@@ -3106,5 +3106,21 @@
   "finalPreparation": "最后准备",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "编辑性别、生日和自我介绍",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "系统",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "浅色",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "深色",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

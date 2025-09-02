@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import '../base/base_service.dart';
 import '../../core/preferences_manager.dart';
+import '../../l10n/app_localizations.dart';
 
 enum ThemeType {
   system,
@@ -60,14 +61,15 @@ class ThemeService extends BaseService {
     notifyListeners();
   }
 
-  String getThemeDisplayName(ThemeType theme) {
+  String getThemeDisplayName(ThemeType theme, BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
     switch (theme) {
       case ThemeType.system:
-        return '시스템 설정';
+        return localizations.systemThemeName;
       case ThemeType.light:
-        return '라이트 모드';
+        return localizations.lightThemeName;
       case ThemeType.dark:
-        return '다크 모드';
+        return localizations.darkThemeName;
     }
   }
 

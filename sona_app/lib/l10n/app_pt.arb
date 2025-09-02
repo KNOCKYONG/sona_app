@@ -3106,5 +3106,21 @@
   "finalPreparation": "Preparação final",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "Editar gênero, data de nascimento e introdução",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "Sistema",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "Claro",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "Escuro",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

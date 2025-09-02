@@ -2386,4 +2386,17 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Son hazırlık';
+
+  @override
+  String get editProfileSubtitle =>
+      'Cinsiyet, doğum tarihi ve tanıtımı düzenle';
+
+  @override
+  String get systemThemeName => 'Sistem';
+
+  @override
+  String get lightThemeName => 'Açık';
+
+  @override
+  String get darkThemeName => 'Koyu';
 }

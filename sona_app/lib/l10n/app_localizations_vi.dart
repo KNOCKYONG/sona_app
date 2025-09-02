@@ -2333,4 +2333,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Chuẩn bị cuối cùng';
+
+  @override
+  String get editProfileSubtitle =>
+      'Chỉnh sửa giới tính, ngày sinh và giới thiệu';
+
+  @override
+  String get systemThemeName => 'Hệ thống';
+
+  @override
+  String get lightThemeName => 'Sáng';
+
+  @override
+  String get darkThemeName => 'Tối';
 }

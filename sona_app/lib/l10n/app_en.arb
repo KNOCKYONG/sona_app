@@ -3110,5 +3110,21 @@
   "complete": "Complete!",
   "@complete": {
     "description": "Completion message"
+  },
+  "editProfileSubtitle": "Edit gender, birthdate, and introduction",
+  "@editProfileSubtitle": {
+    "description": "Subtitle for edit profile menu item"
+  },
+  "systemThemeName": "System",
+  "@systemThemeName": {
+    "description": "System theme display name"
+  },
+  "lightThemeName": "Light",
+  "@lightThemeName": {
+    "description": "Light theme display name"
+  },
+  "darkThemeName": "Dark",
+  "@darkThemeName": {
+    "description": "Dark theme display name"
   }
 }

@@ -2383,4 +2383,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Final preparation';
+
+  @override
+  String get editProfileSubtitle => 'Edit gender, birthdate, and introduction';
+
+  @override
+  String get systemThemeName => 'System';
+
+  @override
+  String get lightThemeName => 'Light';
+
+  @override
+  String get darkThemeName => 'Dark';
 }

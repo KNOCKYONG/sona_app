@@ -402,14 +402,6 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
             ),
           ),
           
-          // 관련 FAQ
-          if (item.relatedIds != null && item.relatedIds!.isNotEmpty) ...[
-            const SizedBox(height: 16),
-            const Divider(height: 1),
-            const SizedBox(height: 12),
-            _buildRelatedItems(item, isKorean),
-          ],
-          
           // 도움이 되었나요?
           const SizedBox(height: 16),
           Row(
@@ -528,56 +520,6 @@ class _FAQScreenState extends State<FAQScreen> with TickerProviderStateMixin {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildRelatedItems(FAQItem item, bool isKorean) {
-    final relatedItems = FAQData.getRelatedItems(item.relatedIds, item.questionKo);
-    
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.relatedFAQ,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Theme.of(context).textTheme.bodySmall?.color,
-          ),
-        ),
-        const SizedBox(height: 8),
-        ...relatedItems.map((related) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: InkWell(
-              onTap: () {
-                // 관련 FAQ로 이동
-                HapticService.lightImpact();
-              },
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: 12,
-                    color: Theme.of(context).textTheme.bodySmall?.color,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      related.item.getQuestion(isKorean),
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).textTheme.bodyMedium?.color,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      ],
     );
   }
 

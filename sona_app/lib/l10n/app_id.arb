@@ -3106,5 +3106,21 @@
   "finalPreparation": "Persiapan akhir",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "Edit jenis kelamin, tanggal lahir, dan perkenalan",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "Sistem",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "Terang",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "Gelap",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

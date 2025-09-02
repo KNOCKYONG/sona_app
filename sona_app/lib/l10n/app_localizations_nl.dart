@@ -2402,4 +2402,17 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Laatste voorbereiding';
+
+  @override
+  String get editProfileSubtitle =>
+      'Bewerk geslacht, geboortedatum en introductie';
+
+  @override
+  String get systemThemeName => 'Systeem';
+
+  @override
+  String get lightThemeName => 'Licht';
+
+  @override
+  String get darkThemeName => 'Donker';
 }

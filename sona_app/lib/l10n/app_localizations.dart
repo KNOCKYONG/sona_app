@@ -4551,6 +4551,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Final preparation'**
   String get finalPreparation;
+
+  /// Subtitle for edit profile menu item
+  ///
+  /// In en, this message translates to:
+  /// **'Edit gender, birthdate, and introduction'**
+  String get editProfileSubtitle;
+
+  /// System theme display name
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get systemThemeName;
+
+  /// Light theme display name
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightThemeName;
+
+  /// Dark theme display name
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkThemeName;
 }
 
 class _AppLocalizationsDelegate

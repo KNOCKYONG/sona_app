@@ -2396,4 +2396,16 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Ostatnie przygotowania';
+
+  @override
+  String get editProfileSubtitle => 'Edytuj płeć, datę urodzenia i opis';
+
+  @override
+  String get systemThemeName => 'System';
+
+  @override
+  String get lightThemeName => 'Jasny';
+
+  @override
+  String get darkThemeName => 'Ciemny';
 }

@@ -3106,5 +3106,21 @@
   "finalPreparation": "التحضير النهائي",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "تعديل الجنس وتاريخ الميلاد والمقدمة",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "النظام",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "فاتح",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "داكن",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

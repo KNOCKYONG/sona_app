@@ -2381,4 +2381,17 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Slutförberedelse';
+
+  @override
+  String get editProfileSubtitle =>
+      'Redigera kön, födelsedatum och introduktion';
+
+  @override
+  String get systemThemeName => 'System';
+
+  @override
+  String get lightThemeName => 'Ljus';
+
+  @override
+  String get darkThemeName => 'Mörk';
 }

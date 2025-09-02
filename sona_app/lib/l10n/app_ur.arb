@@ -3106,5 +3106,21 @@
   "finalPreparation": "آخری تیاری",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "جنس، تاریخ پیدائش اور تعارف میں ترمیم کریں",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "سسٹم",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "لائٹ",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "ڈارک",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

@@ -111,9 +111,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _buildMenuItem(
               icon: Icons.person_outline,
               title: localizations.editProfile,
-              subtitle: Localizations.localeOf(context).languageCode == 'ko' 
-                  ? '성별, 생년월일, 자기소개 수정'
-                  : 'Edit gender, birthdate, and introduction',
+              subtitle: localizations.editProfileSubtitle,
               onTap: () {
                 Navigator.push(
                   context,
@@ -194,7 +192,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   icon: themeService.getThemeIcon(themeService.currentTheme),
                   title: localizations.themeSettings,
                   subtitle: themeService
-                      .getThemeDisplayName(themeService.currentTheme),
+                      .getThemeDisplayName(themeService.currentTheme, context),
                   onTap: () {
                     Navigator.pushNamed(context, '/theme-settings');
                   },

@@ -2352,4 +2352,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get finalPreparation => 'التحضير النهائي';
+
+  @override
+  String get editProfileSubtitle => 'تعديل الجنس وتاريخ الميلاد والمقدمة';
+
+  @override
+  String get systemThemeName => 'النظام';
+
+  @override
+  String get lightThemeName => 'فاتح';
+
+  @override
+  String get darkThemeName => 'داكن';
 }

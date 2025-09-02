@@ -3106,5 +3106,21 @@
   "finalPreparation": "마지막 준비 중",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "성별, 생년월일, 자기소개 수정",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "시스템 설정",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "라이트 모드",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "다크 모드",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

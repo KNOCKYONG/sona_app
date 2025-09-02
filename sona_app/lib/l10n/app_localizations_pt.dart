@@ -2395,4 +2395,17 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Preparação final';
+
+  @override
+  String get editProfileSubtitle =>
+      'Editar gênero, data de nascimento e introdução';
+
+  @override
+  String get systemThemeName => 'Sistema';
+
+  @override
+  String get lightThemeName => 'Claro';
+
+  @override
+  String get darkThemeName => 'Escuro';
 }

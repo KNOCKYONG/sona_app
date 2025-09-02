@@ -2296,4 +2296,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get finalPreparation => '마지막 준비 중';
+
+  @override
+  String get editProfileSubtitle => '성별, 생년월일, 자기소개 수정';
+
+  @override
+  String get systemThemeName => '시스템 설정';
+
+  @override
+  String get lightThemeName => '라이트 모드';
+
+  @override
+  String get darkThemeName => '다크 모드';
 }

@@ -2413,4 +2413,17 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Huling paghahanda';
+
+  @override
+  String get editProfileSubtitle =>
+      'I-edit ang kasarian, petsa ng kapanganakan at pagpapakilala';
+
+  @override
+  String get systemThemeName => 'Sistema';
+
+  @override
+  String get lightThemeName => 'Maliwanag';
+
+  @override
+  String get darkThemeName => 'Madilim';
 }

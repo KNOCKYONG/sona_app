@@ -3106,5 +3106,21 @@
   "finalPreparation": "Son hazırlık",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "Cinsiyet, doğum tarihi ve tanıtımı düzenle",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "Sistem",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "Açık",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "Koyu",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

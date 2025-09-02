@@ -2383,4 +2383,17 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get finalPreparation => 'آخری تیاری';
+
+  @override
+  String get editProfileSubtitle =>
+      'جنس، تاریخ پیدائش اور تعارف میں ترمیم کریں';
+
+  @override
+  String get systemThemeName => 'سسٹم';
+
+  @override
+  String get lightThemeName => 'لائٹ';
+
+  @override
+  String get darkThemeName => 'ڈارک';
 }

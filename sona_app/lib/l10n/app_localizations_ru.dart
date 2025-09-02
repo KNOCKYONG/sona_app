@@ -2390,4 +2390,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Финальная подготовка';
+
+  @override
+  String get editProfileSubtitle => 'Изменить пол, дату рождения и описание';
+
+  @override
+  String get systemThemeName => 'Система';
+
+  @override
+  String get lightThemeName => 'Светлая';
+
+  @override
+  String get darkThemeName => 'Темная';
 }

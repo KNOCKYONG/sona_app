@@ -2404,4 +2404,17 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Preparazione finale';
+
+  @override
+  String get editProfileSubtitle =>
+      'Modifica genere, data di nascita e presentazione';
+
+  @override
+  String get systemThemeName => 'Sistema';
+
+  @override
+  String get lightThemeName => 'Chiaro';
+
+  @override
+  String get darkThemeName => 'Scuro';
 }

@@ -2382,4 +2382,16 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get finalPreparation => 'अंतिम तैयारी';
+
+  @override
+  String get editProfileSubtitle => 'लिंग, जन्मतिथि और परिचय संपादित करें';
+
+  @override
+  String get systemThemeName => 'सिस्टम';
+
+  @override
+  String get lightThemeName => 'लाइट';
+
+  @override
+  String get darkThemeName => 'डार्क';
 }

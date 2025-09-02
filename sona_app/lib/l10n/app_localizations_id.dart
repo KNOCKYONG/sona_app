@@ -2378,4 +2378,17 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get finalPreparation => 'Persiapan akhir';
+
+  @override
+  String get editProfileSubtitle =>
+      'Edit jenis kelamin, tanggal lahir, dan perkenalan';
+
+  @override
+  String get systemThemeName => 'Sistem';
+
+  @override
+  String get lightThemeName => 'Terang';
+
+  @override
+  String get darkThemeName => 'Gelap';
 }

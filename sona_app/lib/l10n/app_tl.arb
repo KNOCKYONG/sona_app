@@ -3106,5 +3106,21 @@
   "finalPreparation": "Huling paghahanda",
   "@finalPreparation": {
     "description": "Loading message for finalPreparation"
+  },
+  "editProfileSubtitle": "I-edit ang kasarian, petsa ng kapanganakan at pagpapakilala",
+  "@editProfileSubtitle": {
+    "description": "Localized string for editProfileSubtitle"
+  },
+  "systemThemeName": "Sistema",
+  "@systemThemeName": {
+    "description": "Localized string for systemThemeName"
+  },
+  "lightThemeName": "Maliwanag",
+  "@lightThemeName": {
+    "description": "Localized string for lightThemeName"
+  },
+  "darkThemeName": "Madilim",
+  "@darkThemeName": {
+    "description": "Localized string for darkThemeName"
   }
 }

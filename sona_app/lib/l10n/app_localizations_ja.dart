@@ -2290,4 +2290,16 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get finalPreparation => '最終準備中';
+
+  @override
+  String get editProfileSubtitle => '性別、生年月日、自己紹介を編集';
+
+  @override
+  String get systemThemeName => 'システム';
+
+  @override
+  String get lightThemeName => 'ライト';
+
+  @override
+  String get darkThemeName => 'ダーク';
 }

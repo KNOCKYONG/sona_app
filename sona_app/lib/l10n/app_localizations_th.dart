@@ -1352,47 +1352,31 @@ class AppLocalizationsTh extends AppLocalizations {
   String get personaGenderSection => 'ความชอบเพศของบุคลิก';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'สถิติคุณภาพบุคลิก';
-  }
+  String get personaQualityStats => 'สถิติคุณภาพบุคลิก';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'การเปิดเผยข้อมูลส่วนบุคคล';
-  }
+  String get personalInfoExposure => 'การเปิดเผยข้อมูลส่วนบุคคล';
 
   @override
-  String personality(Object personality) {
-    return 'บุคลิกภาพ';
-  }
+  String get personality => 'บุคลิกภาพ';
 
   @override
-  String pets(Object pets) {
-    return 'สัตว์เลี้ยง';
-  }
+  String get pets => 'สัตว์เลี้ยง';
 
   @override
   String get photo => 'รูปภาพ';
 
   @override
-  String photography(Object photography) {
-    return 'การถ่ายภาพ';
-  }
+  String get photography => 'การถ่ายภาพ';
 
   @override
-  String picnic(Object picnic) {
-    return 'ปิคนิค';
-  }
+  String get picnic => 'ปิคนิค';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'การตั้งค่าความชอบ';
-  }
+  String get preferenceSettings => 'การตั้งค่าความชอบ';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'ภาษาโปรด';
-  }
+  String get preferredLanguage => 'ภาษาโปรด';
 
   @override
   String get preparingForSleep => 'กำลังเตรียมตัวสำหรับการนอน';

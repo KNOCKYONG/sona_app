@@ -1354,47 +1354,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get personaGenderSection => 'Giới tính nhân vật';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Thống kê chất lượng nhân vật';
-  }
+  String get personaQualityStats => 'Thống kê chất lượng nhân vật';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Tiết lộ thông tin cá nhân';
-  }
+  String get personalInfoExposure => 'Tiết lộ thông tin cá nhân';
 
   @override
-  String personality(Object personality) {
-    return 'Tính cách';
-  }
+  String get personality => 'Tính cách';
 
   @override
-  String pets(Object pets) {
-    return 'Thú cưng';
-  }
+  String get pets => 'Thú cưng';
 
   @override
   String get photo => 'Ảnh';
 
   @override
-  String photography(Object photography) {
-    return 'Nhiếp ảnh';
-  }
+  String get photography => 'Nhiếp ảnh';
 
   @override
-  String picnic(Object picnic) {
-    return 'Dã ngoại';
-  }
+  String get picnic => 'Dã ngoại';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Cài đặt ưu tiên';
-  }
+  String get preferenceSettings => 'Cài đặt ưu tiên';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Ngôn ngữ ưa thích';
-  }
+  String get preferredLanguage => 'Ngôn ngữ ưa thích';
 
   @override
   String get preparingForSleep => 'Chuẩn bị đi ngủ';

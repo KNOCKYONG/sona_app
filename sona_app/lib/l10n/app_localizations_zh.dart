@@ -1323,47 +1323,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personaGenderSection => '角色性别偏好';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return '个性质量统计';
-  }
+  String get personaQualityStats => '个性质量统计';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return '个人信息暴露';
-  }
+  String get personalInfoExposure => '个人信息暴露';
 
   @override
-  String personality(Object personality) {
-    return '个性';
-  }
+  String get personality => '个性';
 
   @override
-  String pets(Object pets) {
-    return '宠物';
-  }
+  String get pets => '宠物';
 
   @override
   String get photo => '照片';
 
   @override
-  String photography(Object photography) {
-    return '摄影';
-  }
+  String get photography => '摄影';
 
   @override
-  String picnic(Object picnic) {
-    return '野餐';
-  }
+  String get picnic => '野餐';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return '偏好设置';
-  }
+  String get preferenceSettings => '偏好设置';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return '首选语言';
-  }
+  String get preferredLanguage => '首选语言';
 
   @override
   String get preparingForSleep => '准备睡觉';

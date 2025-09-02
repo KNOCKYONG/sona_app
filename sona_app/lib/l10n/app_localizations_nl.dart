@@ -1387,47 +1387,32 @@ class AppLocalizationsNl extends AppLocalizations {
   String get personaGenderSection => 'Voorkeur voor geslacht van persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Persoonlijkheidskwaliteitsstatistieken';
-  }
+  String get personaQualityStats => 'Persoonlijkheidskwaliteitsstatistieken';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Blootstelling van persoonlijke informatie';
-  }
+  String get personalInfoExposure =>
+      'Blootstelling van persoonlijke informatie';
 
   @override
-  String personality(Object personality) {
-    return 'Persoonlijkheid';
-  }
+  String get personality => 'Persoonlijkheid';
 
   @override
-  String pets(Object pets) {
-    return 'Huisdieren';
-  }
+  String get pets => 'Huisdieren';
 
   @override
   String get photo => 'Foto';
 
   @override
-  String photography(Object photography) {
-    return 'Fotografie';
-  }
+  String get photography => 'Fotografie';
 
   @override
-  String picnic(Object picnic) {
-    return 'Picknick';
-  }
+  String get picnic => 'Picknick';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Voorkeurinstellingen';
-  }
+  String get preferenceSettings => 'Voorkeurinstellingen';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Voorkeurstaal';
-  }
+  String get preferredLanguage => 'Voorkeurstaal';
 
   @override
   String get preparingForSleep => 'Voorbereiden op slaap';

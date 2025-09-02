@@ -1375,47 +1375,31 @@ class AppLocalizationsSv extends AppLocalizations {
   String get personaGenderSection => 'Preferens för kön i persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Kvalitetsstatistik för persona';
-  }
+  String get personaQualityStats => 'Kvalitetsstatistik för persona';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Utlämnande av personlig information';
-  }
+  String get personalInfoExposure => 'Utlämnande av personlig information';
 
   @override
-  String personality(Object personality) {
-    return 'Personlighet';
-  }
+  String get personality => 'Personlighet';
 
   @override
-  String pets(Object pets) {
-    return 'Husdjur';
-  }
+  String get pets => 'Husdjur';
 
   @override
   String get photo => 'Foto';
 
   @override
-  String photography(Object photography) {
-    return 'Fotografi';
-  }
+  String get photography => 'Fotografi';
 
   @override
-  String picnic(Object picnic) {
-    return 'Picknick';
-  }
+  String get picnic => 'Picknick';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Inställningar för preferenser';
-  }
+  String get preferenceSettings => 'Inställningar för preferenser';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Föredraget språk';
-  }
+  String get preferredLanguage => 'Föredraget språk';
 
   @override
   String get preparingForSleep => 'Förbereder för sömn';

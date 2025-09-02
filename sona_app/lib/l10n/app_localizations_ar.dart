@@ -1359,47 +1359,31 @@ class AppLocalizationsAr extends AppLocalizations {
   String get personaGenderSection => 'تفضيل جنس الشخصية';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'إحصائيات جودة الشخصية';
-  }
+  String get personaQualityStats => 'إحصائيات جودة الشخصية';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'تعرض المعلومات الشخصية';
-  }
+  String get personalInfoExposure => 'تعرض المعلومات الشخصية';
 
   @override
-  String personality(Object personality) {
-    return 'الشخصية';
-  }
+  String get personality => 'الشخصية';
 
   @override
-  String pets(Object pets) {
-    return 'الحيوانات الأليفة';
-  }
+  String get pets => 'الحيوانات الأليفة';
 
   @override
   String get photo => 'صورة';
 
   @override
-  String photography(Object photography) {
-    return 'التصوير الفوتوغرافي';
-  }
+  String get photography => 'التصوير الفوتوغرافي';
 
   @override
-  String picnic(Object picnic) {
-    return 'نزهة';
-  }
+  String get picnic => 'نزهة';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'إعدادات التفضيلات';
-  }
+  String get preferenceSettings => 'إعدادات التفضيلات';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'اللغة المفضلة';
-  }
+  String get preferredLanguage => 'اللغة المفضلة';
 
   @override
   String get preparingForSleep => 'الاستعداد للنوم';

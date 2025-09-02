@@ -1375,47 +1375,31 @@ class AppLocalizationsId extends AppLocalizations {
   String get personaGenderSection => 'Jenis kelamin persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Statistik Kualitas Persona';
-  }
+  String get personaQualityStats => 'Statistik Kualitas Persona';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Paparan informasi pribadi';
-  }
+  String get personalInfoExposure => 'Paparan informasi pribadi';
 
   @override
-  String personality(Object personality) {
-    return 'Kepribadian';
-  }
+  String get personality => 'Kepribadian';
 
   @override
-  String pets(Object pets) {
-    return 'Hewan Peliharaan';
-  }
+  String get pets => 'Hewan Peliharaan';
 
   @override
   String get photo => 'Foto';
 
   @override
-  String photography(Object photography) {
-    return 'Fotografi';
-  }
+  String get photography => 'Fotografi';
 
   @override
-  String picnic(Object picnic) {
-    return 'Piknik';
-  }
+  String get picnic => 'Piknik';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Pengaturan Preferensi';
-  }
+  String get preferenceSettings => 'Pengaturan Preferensi';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Bahasa yang Diutamakan';
-  }
+  String get preferredLanguage => 'Bahasa yang Diutamakan';
 
   @override
   String get preparingForSleep => 'Mempersiapkan tidur';

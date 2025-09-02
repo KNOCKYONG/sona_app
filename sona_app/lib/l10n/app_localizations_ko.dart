@@ -1329,47 +1329,31 @@ class AppLocalizationsKo extends AppLocalizations {
   String get personaGenderSection => '만나고 싶은 페르소나 성별';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return '페르소나별 품질 통계';
-  }
+  String get personaQualityStats => '페르소나별 품질 통계';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return '개인정보 노출';
-  }
+  String get personalInfoExposure => '개인정보 노출';
 
   @override
-  String personality(Object personality) {
-    return '성격';
-  }
+  String get personality => '성격';
 
   @override
-  String pets(Object pets) {
-    return '반려동물';
-  }
+  String get pets => '반려동물';
 
   @override
   String get photo => '사진';
 
   @override
-  String photography(Object photography) {
-    return '사진';
-  }
+  String get photography => '사진';
 
   @override
-  String picnic(Object picnic) {
-    return '피크닉';
-  }
+  String get picnic => '피크닉';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return '선호 설정';
-  }
+  String get preferenceSettings => '선호 설정';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return '선호 언어';
-  }
+  String get preferredLanguage => '선호 언어';
 
   @override
   String get preparingForSleep => '수면준비';

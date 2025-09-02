@@ -1378,47 +1378,31 @@ class AppLocalizationsHi extends AppLocalizations {
   String get personaGenderSection => 'पर्सोना लिंग प्राथमिकता';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'पर्सोना गुणवत्ता सांख्यिकी';
-  }
+  String get personaQualityStats => 'पर्सोना गुणवत्ता सांख्यिकी';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'व्यक्तिगत जानकारी का खुलासा';
-  }
+  String get personalInfoExposure => 'व्यक्तिगत जानकारी का खुलासा';
 
   @override
-  String personality(Object personality) {
-    return 'व्यक्तित्व';
-  }
+  String get personality => 'व्यक्तित्व';
 
   @override
-  String pets(Object pets) {
-    return 'पालतू जानवर';
-  }
+  String get pets => 'पालतू जानवर';
 
   @override
   String get photo => 'फोटो';
 
   @override
-  String photography(Object photography) {
-    return 'फोटोग्राफी';
-  }
+  String get photography => 'फोटोग्राफी';
 
   @override
-  String picnic(Object picnic) {
-    return 'पिकनिक';
-  }
+  String get picnic => 'पिकनिक';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'प्राथमिकता सेटिंग्स';
-  }
+  String get preferenceSettings => 'प्राथमिकता सेटिंग्स';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'प्राथमिक भाषा';
-  }
+  String get preferredLanguage => 'प्राथमिक भाषा';
 
   @override
   String get preparingForSleep => 'सोने की तैयारी कर रहे हैं';

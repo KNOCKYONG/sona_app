@@ -1377,47 +1377,31 @@ class AppLocalizationsUr extends AppLocalizations {
   String get personaGenderSection => 'پرسنہ کی جنس کی ترجیح';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return '$personaQualityStats';
-  }
+  String get personaQualityStats => 'پرسونا کوالٹی کی شماریات';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return '$personalInfoExposure';
-  }
+  String get personalInfoExposure => 'ذاتی معلومات کی نمائش';
 
   @override
-  String personality(Object personality) {
-    return '$personality';
-  }
+  String get personality => 'شخصیت';
 
   @override
-  String pets(Object pets) {
-    return '$pets';
-  }
+  String get pets => 'پالتو جانور';
 
   @override
   String get photo => 'تصویر';
 
   @override
-  String photography(Object photography) {
-    return '$photography';
-  }
+  String get photography => 'Photography';
 
   @override
-  String picnic(Object picnic) {
-    return '$picnic';
-  }
+  String get picnic => 'Picnic';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return '$preferenceSettings';
-  }
+  String get preferenceSettings => 'Preference Settings';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return '$preferredLanguage';
-  }
+  String get preferredLanguage => 'Preferred Language';
 
   @override
   String get preparingForSleep => 'نیند کے لئے تیاری';

@@ -1380,47 +1380,31 @@ class AppLocalizationsRu extends AppLocalizations {
   String get personaGenderSection => 'Предпочтения по полу персонажа';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Статистика качества персонажа';
-  }
+  String get personaQualityStats => 'Статистика качества персонажа';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Раскрытие личной информации';
-  }
+  String get personalInfoExposure => 'Раскрытие личной информации';
 
   @override
-  String personality(Object personality) {
-    return 'Личность';
-  }
+  String get personality => 'Личность';
 
   @override
-  String pets(Object pets) {
-    return 'Питомцы';
-  }
+  String get pets => 'Питомцы';
 
   @override
   String get photo => 'Фото';
 
   @override
-  String photography(Object photography) {
-    return 'Фотография';
-  }
+  String get photography => 'Фотография';
 
   @override
-  String picnic(Object picnic) {
-    return 'Пикник';
-  }
+  String get picnic => 'Пикник';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Настройки предпочтений';
-  }
+  String get preferenceSettings => 'Настройки предпочтений';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Предпочитаемый язык';
-  }
+  String get preferredLanguage => 'Предпочитаемый язык';
 
   @override
   String get preparingForSleep => 'Подготовка ко сну';

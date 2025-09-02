@@ -1395,47 +1395,31 @@ class AppLocalizationsTl extends AppLocalizations {
   String get personaGenderSection => 'Kagustuhan sa Kasarian ng Persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Estadistika ng Kalidad ng Persona';
-  }
+  String get personaQualityStats => 'Estadistika ng Kalidad ng Persona';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Pagbubunyag ng Personal na Impormasyon';
-  }
+  String get personalInfoExposure => 'Pagbubunyag ng Personal na Impormasyon';
 
   @override
-  String personality(Object personality) {
-    return 'Personalidad';
-  }
+  String get personality => 'Personalidad';
 
   @override
-  String pets(Object pets) {
-    return 'Mga Alagang Hayop';
-  }
+  String get pets => 'Mga Alagang Hayop';
 
   @override
   String get photo => 'Larawan';
 
   @override
-  String photography(Object photography) {
-    return 'Potograpiya';
-  }
+  String get photography => 'Potograpiya';
 
   @override
-  String picnic(Object picnic) {
-    return 'Piknik';
-  }
+  String get picnic => 'Piknik';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Mga Setting ng Kagustuhan';
-  }
+  String get preferenceSettings => 'Mga Setting ng Kagustuhan';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Piniling Wika';
-  }
+  String get preferredLanguage => 'Piniling Wika';
 
   @override
   String get preparingForSleep => 'Naghahanda para sa Pagtulog';

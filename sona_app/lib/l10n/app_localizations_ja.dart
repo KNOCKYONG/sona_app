@@ -1326,47 +1326,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get personaGenderSection => 'ペルソナの性別設定';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'ペルソナ品質統計';
-  }
+  String get personaQualityStats => 'ペルソナ品質統計';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return '個人情報の露出';
-  }
+  String get personalInfoExposure => '個人情報の露出';
 
   @override
-  String personality(Object personality) {
-    return '性格';
-  }
+  String get personality => '性格';
 
   @override
-  String pets(Object pets) {
-    return 'ペット';
-  }
+  String get pets => 'ペット';
 
   @override
   String get photo => '写真';
 
   @override
-  String photography(Object photography) {
-    return '写真';
-  }
+  String get photography => '写真';
 
   @override
-  String picnic(Object picnic) {
-    return 'ピクニック';
-  }
+  String get picnic => 'ピクニック';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return '設定';
-  }
+  String get preferenceSettings => '設定';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return '優先言語';
-  }
+  String get preferredLanguage => '優先言語';
 
   @override
   String get preparingForSleep => '就寝準備中';

@@ -1389,47 +1389,31 @@ class AppLocalizationsIt extends AppLocalizations {
   String get personaGenderSection => 'Preferenza di Genere della Persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Statistiche di Qualità della Persona';
-  }
+  String get personaQualityStats => 'Statistiche di Qualità della Persona';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Esposizione informazioni personali';
-  }
+  String get personalInfoExposure => 'Esposizione informazioni personali';
 
   @override
-  String personality(Object personality) {
-    return 'Personality';
-  }
+  String get personality => 'Personality';
 
   @override
-  String pets(Object pets) {
-    return 'Pets';
-  }
+  String get pets => 'Pets';
 
   @override
   String get photo => 'Photo';
 
   @override
-  String photography(Object photography) {
-    return 'Photography';
-  }
+  String get photography => 'Photography';
 
   @override
-  String picnic(Object picnic) {
-    return 'Picnic';
-  }
+  String get picnic => 'Picnic';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Preference Settings';
-  }
+  String get preferenceSettings => 'Preference Settings';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Preferred Language';
-  }
+  String get preferredLanguage => 'Preferred Language';
 
   @override
   String get preparingForSleep => 'Preparing for sleep';

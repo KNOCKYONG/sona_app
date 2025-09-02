@@ -1399,47 +1399,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get personaGenderSection => 'Préférence de genre de persona';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Statistiques de qualité de persona';
-  }
+  String get personaQualityStats => 'Statistiques de qualité de persona';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Exposition d\'informations personnelles';
-  }
+  String get personalInfoExposure => 'Exposition d\'informations personnelles';
 
   @override
-  String personality(Object personality) {
-    return 'Personnalité';
-  }
+  String get personality => 'Personnalité';
 
   @override
-  String pets(Object pets) {
-    return 'Animaux de compagnie';
-  }
+  String get pets => 'Animaux de compagnie';
 
   @override
   String get photo => 'Photo';
 
   @override
-  String photography(Object photography) {
-    return 'Photographie';
-  }
+  String get photography => 'Photographie';
 
   @override
-  String picnic(Object picnic) {
-    return 'Pique-nique';
-  }
+  String get picnic => 'Pique-nique';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Paramètres de préférence';
-  }
+  String get preferenceSettings => 'Paramètres de préférence';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Langue préférée';
-  }
+  String get preferredLanguage => 'Langue préférée';
 
   @override
   String get preparingForSleep => 'Préparation au sommeil';

@@ -1815,19 +1815,19 @@
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
-  "personaQualityStats": "{personaQualityStats}",
+  "personaQualityStats": "پرسونا کوالٹی کی شماریات",
   "@personaQualityStats": {
     "description": "Localized string for personaQualityStats"
   },
-  "personalInfoExposure": "{personalInfoExposure}",
+  "personalInfoExposure": "ذاتی معلومات کی نمائش",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "{personality}",
+  "personality": "شخصیت",
   "@personality": {
     "description": "Localized string for personality"
   },
-  "pets": "{pets}",
+  "pets": "پالتو جانور",
   "@pets": {
     "description": "Localized string for pets"
   },
@@ -1835,19 +1835,19 @@
   "@photo": {
     "description": "Localized string for photo"
   },
-  "photography": "{photography}",
+  "photography": "Photography",
   "@photography": {
     "description": "Localized string for photography"
   },
-  "picnic": "{picnic}",
+  "picnic": "Picnic",
   "@picnic": {
     "description": "Localized string for picnic"
   },
-  "preferenceSettings": "{preferenceSettings}",
+  "preferenceSettings": "Preference Settings",
   "@preferenceSettings": {
     "description": "Localized string for preferenceSettings"
   },
-  "preferredLanguage": "{preferredLanguage}",
+  "preferredLanguage": "Preferred Language",
   "@preferredLanguage": {
     "description": "Localized string for preferredLanguage"
   },

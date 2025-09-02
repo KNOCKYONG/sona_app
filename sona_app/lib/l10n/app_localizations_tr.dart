@@ -1380,47 +1380,31 @@ class AppLocalizationsTr extends AppLocalizations {
   String get personaGenderSection => 'Persona Cinsiyet Tercihi';
 
   @override
-  String personaQualityStats(Object personaQualityStats) {
-    return 'Persona Kalite İstatistikleri';
-  }
+  String get personaQualityStats => 'Persona Kalite İstatistikleri';
 
   @override
-  String personalInfoExposure(Object personalInfoExposure) {
-    return 'Kişisel bilgi ifşası';
-  }
+  String get personalInfoExposure => 'Kişisel bilgi ifşası';
 
   @override
-  String personality(Object personality) {
-    return 'Kişilik';
-  }
+  String get personality => 'Kişilik';
 
   @override
-  String pets(Object pets) {
-    return 'Evcil hayvanlar';
-  }
+  String get pets => 'Evcil hayvanlar';
 
   @override
   String get photo => 'Fotoğraf';
 
   @override
-  String photography(Object photography) {
-    return 'Fotoğrafçılık';
-  }
+  String get photography => 'Fotoğrafçılık';
 
   @override
-  String picnic(Object picnic) {
-    return 'Piknik';
-  }
+  String get picnic => 'Piknik';
 
   @override
-  String preferenceSettings(Object preferenceSettings) {
-    return 'Tercih Ayarları';
-  }
+  String get preferenceSettings => 'Tercih Ayarları';
 
   @override
-  String preferredLanguage(Object preferredLanguage) {
-    return 'Tercih Edilen Dil';
-  }
+  String get preferredLanguage => 'Tercih Edilen Dil';
 
   @override
   String get preparingForSleep => 'Uykuya hazırlanıyor';

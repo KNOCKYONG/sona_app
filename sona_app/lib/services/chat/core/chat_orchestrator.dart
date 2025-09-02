@@ -3061,6 +3061,7 @@ class ChatOrchestrator {
     debugPrint('📝 Korean content: ${koreanMessages.join(' | ')}');
     debugPrint('🌍 Target language: $targetLanguage');
     debugPrint('🌍 Translation content: $translatedContent');
+    debugPrint('🔢 Translation length: ${translatedContent.length} characters');
     
     // 1. 전체 한글 텍스트 재구성 (분할 전 원본)
     final fullKorean = koreanMessages.join(' ');
@@ -3087,44 +3088,78 @@ class ChatOrchestrator {
       return [translatedContent];
     }
     
-    // 5. 각 한글 메시지의 길이 비율 계산
+    // 5. 번역 문장이 한국어 메시지보다 적은 경우 (번역이 누락된 경우)
+    if (translatedSentences.isEmpty) {
+      debugPrint('⚠️ No translated sentences found, returning full content for each message');
+      // 번역이 비어있으면 전체 번역을 각 메시지에 복사 (임시 방안)
+      return List.filled(koreanMessages.length, translatedContent);
+    }
+    
+    // 6. 각 한글 메시지의 길이 비율 계산
     final totalKoreanLength = fullKorean.length;
-    int processedTranslationIndex = 0;
+    
+    // 문장 단위가 아닌 문자 단위로 비율 계산하여 더 정확하게 분할
+    int currentTranslationIndex = 0;
+    final translationLength = translatedContent.length;
     
     for (int i = 0; i < koreanMessages.length; i++) {
       final koreanMsg = koreanMessages[i];
       final ratio = koreanMsg.length / totalKoreanLength;
       
-      // 해당 비율만큼의 번역 문장 할당
-      final targetSentenceCount = 
-          (translatedSentences.length * ratio).round();
-      
       if (i == koreanMessages.length - 1) {
-        // 마지막 메시지는 남은 모든 문장 포함
-        final remaining = translatedSentences
-            .skip(processedTranslationIndex)
-            .join(' ');
-        result.add(remaining);
+        // 마지막 메시지는 남은 모든 번역 포함
+        final remaining = translatedContent.substring(currentTranslationIndex).trim();
+        result.add(remaining.isNotEmpty ? remaining : translatedContent);
+        debugPrint('📌 Message ${i+1}: Remaining translation: $remaining');
       } else {
-        // 비율에 따른 문장 할당
-        final sentences = <String>[];
-        for (int j = 0; j < targetSentenceCount && 
-             processedTranslationIndex < translatedSentences.length; j++) {
-          sentences.add(translatedSentences[processedTranslationIndex]);
-          processedTranslationIndex++;
+        // 비율에 따른 문자 수 계산
+        final targetCharCount = (translationLength * ratio).round();
+        var endIndex = currentTranslationIndex + targetCharCount;
+        
+        // 문장 중간에 자르지 않도록 조정 (공백이나 구두점 위치 찾기)
+        if (endIndex < translationLength) {
+          // 가장 가까운 문장 끝 찾기 (. ! ? 등)
+          var bestEndIndex = endIndex;
+          final punctuations = ['. ', '! ', '? ', ', ', '; '];
+          
+          for (final punct in punctuations) {
+            final punctIndex = translatedContent.indexOf(punct, currentTranslationIndex);
+            if (punctIndex != -1 && punctIndex < endIndex + 50 && punctIndex > currentTranslationIndex) {
+              bestEndIndex = punctIndex + punct.length;
+              break;
+            }
+          }
+          
+          // 공백 위치로 조정 (문장 끝을 못 찾은 경우)
+          if (bestEndIndex == endIndex) {
+            final spaceIndex = translatedContent.lastIndexOf(' ', endIndex);
+            if (spaceIndex > currentTranslationIndex) {
+              bestEndIndex = spaceIndex;
+            }
+          }
+          
+          endIndex = bestEndIndex;
+        } else {
+          endIndex = translationLength;
         }
         
-        if (sentences.isEmpty && processedTranslationIndex < translatedSentences.length) {
-          // 최소 1개 문장은 포함
-          sentences.add(translatedSentences[processedTranslationIndex]);
-          processedTranslationIndex++;
-        }
-        
-        result.add(sentences.join(' '));
+        final translationPart = translatedContent.substring(currentTranslationIndex, endIndex).trim();
+        result.add(translationPart.isNotEmpty ? translationPart : translatedContent);
+        debugPrint('📌 Message ${i+1}: Translation part: $translationPart');
+        currentTranslationIndex = endIndex;
+      }
+    }
+    
+    // 결과 검증 - 빈 번역이 있으면 전체 번역으로 대체
+    for (int i = 0; i < result.length; i++) {
+      if (result[i].isEmpty) {
+        debugPrint('⚠️ Empty translation at index $i, using full translation');
+        result[i] = translatedContent;
       }
     }
     
     debugPrint('📦 Final translation split: ${result.length} messages');
+    debugPrint('📦 Split results: $result');
     return result;
   }
   

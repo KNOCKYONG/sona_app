@@ -52,11 +52,11 @@
   "@adaptiveConversationDesc": {
     "description": "Localized string for adaptiveConversationDesc"
   },
-  "afternoon": "Afternoon",
+  "afternoon": "午後",
   "@afternoon": {
     "description": "Localized string for afternoon"
   },
-  "afternoonFatigue": "Afternoon fatigue",
+  "afternoonFatigue": "午後の疲れ",
   "@afternoonFatigue": {
     "description": "Localized string for afternoonFatigue"
   },
@@ -141,7 +141,7 @@
   "@anxious": {
     "description": "Localized string for anxious"
   },
-  "apiKeyError": "API Key Error",
+  "apiKeyError": "APIキーエラー",
   "@apiKeyError": {
     "description": "Localized string for apiKeyError"
   },
@@ -173,7 +173,7 @@
   "@autoTranslate": {
     "description": "Localized string for autoTranslate"
   },
-  "autumn": "Autumn",
+  "autumn": "秋",
   "@autumn": {
     "description": "Localized string for autumn"
   },
@@ -246,7 +246,7 @@
   "@blockedSuccessfully": {
     "description": "Localized string for blockedSuccessfully"
   },
-  "breakfast": "Breakfast",
+  "breakfast": "朝食",
   "@breakfast": {
     "description": "Localized string for breakfast"
   },
@@ -271,7 +271,7 @@
   "@cacheDeleted": {
     "description": "Localized string for cacheDeleted"
   },
-  "cafeTerrace": "Cafe terrace",
+  "cafeTerrace": "カフェテラス",
   "@cafeTerrace": {
     "description": "Localized string for cafeTerrace"
   },
@@ -344,7 +344,7 @@
   "@checkingUserInfo": {
     "description": "Localized string for checkingUserInfo"
   },
-  "childrensDay": "Children's Day",
+  "childrensDay": "子供の日",
   "@childrensDay": {
     "description": "Localized string for childrensDay"
   },
@@ -356,7 +356,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "christmas": "Christmas",
+  "christmas": "クリスマス",
   "@christmas": {
     "description": "Localized string for christmas"
   },
@@ -445,7 +445,7 @@
   "@culturalIssue": {
     "description": "Localized string for culturalIssue"
   },
-  "current": "Current",
+  "current": "現在",
   "@current": {
     "description": "Localized string for current"
   },
@@ -457,7 +457,7 @@
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
-  "cycling": "Cycling",
+  "cycling": "サイクリング",
   "@cycling": {
     "description": "Localized string for cycling"
   },
@@ -473,7 +473,7 @@
   "@dailyChat": {
     "description": "Localized string for dailyChat"
   },
-  "dailyCheck": "Daily check",
+  "dailyCheck": "日次チェック",
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
@@ -513,7 +513,7 @@
   "@datingDescription": {
     "description": "Localized string for datingDescription"
   },
-  "dawn": "Dawn",
+  "dawn": "夜明け",
   "@dawn": {
     "description": "Localized string for dawn"
   },
@@ -521,7 +521,7 @@
   "@day": {
     "description": "Localized string for day"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
+  "dayAfterTomorrow": "明後日",
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
@@ -592,7 +592,7 @@
   "@developRelationshipStep": {
     "description": "Localized string for developRelationshipStep"
   },
-  "dinner": "Dinner",
+  "dinner": "夕食",
   "@dinner": {
     "description": "Localized string for dinner"
   },
@@ -673,7 +673,7 @@
   "@emotionAnalysisDesc": {
     "description": "Localized string for emotionAnalysisDesc"
   },
-  "emotionAngry": "Angry",
+  "emotionAngry": "怒っている",
   "@emotionAngry": {
     "description": "Localized string for emotionAngry"
   },
@@ -681,23 +681,23 @@
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
   },
-  "emotionCool": "Cool",
+  "emotionCool": "クール",
   "@emotionCool": {
     "description": "Localized string for emotionCool"
   },
-  "emotionHappy": "Happy",
+  "emotionHappy": "幸せ",
   "@emotionHappy": {
     "description": "Localized string for emotionHappy"
   },
-  "emotionLove": "Love",
+  "emotionLove": "愛",
   "@emotionLove": {
     "description": "Localized string for emotionLove"
   },
-  "emotionSad": "Sad",
+  "emotionSad": "悲しい",
   "@emotionSad": {
     "description": "Localized string for emotionSad"
   },
-  "emotionThinking": "Thinking",
+  "emotionThinking": "考え中",
   "@emotionThinking": {
     "description": "Localized string for emotionThinking"
   },
@@ -777,11 +777,11 @@
   "@errorDetailsHint": {
     "description": "Localized string for errorDetailsHint"
   },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "errorFrequency24h": "エラー頻度（過去24時間）",
   "@errorFrequency24h": {
     "description": "Localized string for errorFrequency24h"
   },
-  "errorMessage": "Error Message:",
+  "errorMessage": "エラーメッセージ：",
   "@errorMessage": {
     "description": "Localized string for errorMessage"
   },
@@ -810,7 +810,7 @@
       }
     }
   },
-  "evening": "Evening",
+  "evening": "夕方",
   "@evening": {
     "description": "Localized string for evening"
   },
@@ -858,7 +858,7 @@
   "@filter": {
     "description": "Localized string for filter"
   },
-  "firstOccurred": "First Occurred: ",
+  "firstOccurred": "最初の発生：",
   "@firstOccurred": {
     "description": "Localized string for firstOccurred"
   },
@@ -866,7 +866,7 @@
   "@followDeviceLanguage": {
     "description": "Localized string for followDeviceLanguage"
   },
-  "forenoon": "Forenoon",
+  "forenoon": "午前",
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
@@ -878,7 +878,7 @@
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
-  "friday": "Friday",
+  "friday": "金曜日",
   "@friday": {
     "description": "Localized string for friday"
   },
@@ -954,7 +954,7 @@
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "guest": "Guest",
+  "guest": "ゲスト",
   "@guest": {
     "description": "Localized string for guest"
   },
@@ -1091,7 +1091,7 @@
   "@hobbyTalk": {
     "description": "Localized string for hobbyTalk"
   },
-  "hours24Ago": "24 hours ago",
+  "hours24Ago": "24時間前",
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
@@ -1121,7 +1121,7 @@
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
-  "incorrect": "incorrect",
+  "incorrect": "不正確",
   "@incorrect": {
     "description": "Localized string for incorrect"
   },
@@ -1210,7 +1210,7 @@
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "lastOccurred": "Last Occurred: ",
+  "lastOccurred": "最後の発生：",
   "@lastOccurred": {
     "description": "Localized string for lastOccurred"
   },
@@ -1218,7 +1218,7 @@
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
   },
-  "lateNight": "Late night",
+  "lateNight": "深夜",
   "@lateNight": {
     "description": "Localized string for lateNight"
   },
@@ -1362,11 +1362,11 @@
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },
-  "lunch": "Lunch",
+  "lunch": "昼食",
   "@lunch": {
     "description": "Localized string for lunch"
   },
-  "lunchtime": "Lunchtime",
+  "lunchtime": "昼食時間",
   "@lunchtime": {
     "description": "Localized string for lunchtime"
   },
@@ -1484,7 +1484,7 @@
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
-  "monday": "Monday",
+  "monday": "月曜日",
   "@monday": {
     "description": "Localized string for monday"
   },
@@ -1508,7 +1508,7 @@
   "@moreButton": {
     "description": "Localized string for moreButton"
   },
-  "morning": "Morning",
+  "morning": "朝",
   "@morning": {
     "description": "Localized string for morning"
   },
@@ -1557,7 +1557,7 @@
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
-  "newYear": "New Year",
+  "newYear": "新年",
   "@newYear": {
     "description": "Localized string for newYear"
   },
@@ -1605,7 +1605,7 @@
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
-  "night": "Night",
+  "night": "夜",
   "@night": {
     "description": "Localized string for night"
   },
@@ -1674,7 +1674,7 @@
       }
     }
   },
-  "notRegistered": "not registered",
+  "notRegistered": "未登録",
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
@@ -1698,7 +1698,7 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "occurrenceInfo": "Occurrence Info:",
+  "occurrenceInfo": "発生情報：",
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
@@ -1746,7 +1746,7 @@
   "@ownedHearts": {
     "description": "Localized string for ownedHearts"
   },
-  "parentsDay": "Parents' Day",
+  "parentsDay": "父母の日",
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
@@ -1782,7 +1782,7 @@
   "@passwordResetEmailSent": {
     "description": "Localized string for passwordResetEmailSent"
   },
-  "passwordText": "password",
+  "passwordText": "パスワード",
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
@@ -1823,7 +1823,7 @@
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "Personality",
+  "personality": "性格",
   "@personality": {
     "description": "Localized string for personality"
   },
@@ -1839,7 +1839,7 @@
   "@photography": {
     "description": "Localized string for photography"
   },
-  "picnic": "Picnic",
+  "picnic": "ピクニック",
   "@picnic": {
     "description": "Localized string for picnic"
   },
@@ -1851,7 +1851,7 @@
   "@preferredLanguage": {
     "description": "Localized string for preferredLanguage"
   },
-  "preparingForSleep": "Preparing for sleep",
+  "preparingForSleep": "就寝準備中",
   "@preparingForSleep": {
     "description": "Localized string for preparingForSleep"
   },
@@ -1887,7 +1887,7 @@
   "@privacyPolicyAgreement": {
     "description": "Localized string for privacyPolicyAgreement"
   },
-  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "privacySection1Content": "私たちはあなたのプライバシーを保護することを約束します。このプライバシーポリシーでは、サービスを利用する際にどのように情報を収集、使用、保護するかを説明します。",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
   },
@@ -1895,15 +1895,15 @@
   "@privacySection1Title": {
     "description": "Localized string for privacySection1Title"
   },
-  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "privacySection2Content": "アカウントを作成したり、プロフィールを更新したり、サービスを利用したりする際に、直接提供された情報を収集します。",
   "@privacySection2Content": {
     "description": "Localized string for privacySection2Content"
   },
-  "privacySection2Title": "Information We Collect",
+  "privacySection2Title": "収集する情報",
   "@privacySection2Title": {
     "description": "Localized string for privacySection2Title"
   },
-  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "privacySection3Content": "収集した情報を使用して、サービスを提供、維持、改善し、あなたとコミュニケーションを取ります。",
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
@@ -1911,7 +1911,7 @@
   "@privacySection3Title": {
     "description": "Localized string for privacySection3Title"
   },
-  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "privacySection4Content": "あなたの同意なしに、個人情報を第三者に販売、取引、またはその他の方法で移転することはありません。",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
   },
@@ -1919,7 +1919,7 @@
   "@privacySection4Title": {
     "description": "Localized string for privacySection4Title"
   },
-  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "privacySection5Content": "不正アクセス、改ざん、開示、または破壊からあなたの個人情報を保護するために、適切なセキュリティ対策を実施しています。",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
@@ -1927,7 +1927,7 @@
   "@privacySection5Title": {
     "description": "Localized string for privacySection5Title"
   },
-  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "privacySection6Content": "サービスを提供し、法的義務を遵守するために必要な限り、個人情報を保持します。",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
   },
@@ -1935,19 +1935,19 @@
   "@privacySection6Title": {
     "description": "Localized string for privacySection6Title"
   },
-  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "privacySection7Content": "あなたは、アカウント設定を通じて、いつでも個人情報にアクセス、更新、または削除する権利があります。",
   "@privacySection7Content": {
     "description": "Localized string for privacySection7Content"
   },
-  "privacySection7Title": "Your Rights",
+  "privacySection7Title": "あなたの権利",
   "@privacySection7Title": {
     "description": "Localized string for privacySection7Title"
   },
-  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "privacySection8Content": "このプライバシーポリシーについて質問がある場合は、support@sona.comまでご連絡ください。",
   "@privacySection8Content": {
     "description": "Localized string for privacySection8Content"
   },
-  "privacySection8Title": "Contact Us",
+  "privacySection8Title": "お問い合わせ",
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
@@ -1963,7 +1963,7 @@
   "@privacySettingsScreen": {
     "description": "Localized string for privacySettingsScreen"
   },
-  "problemMessage": "Problem",
+  "problemMessage": "問題",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
   },
@@ -2003,11 +2003,11 @@
   "@profilePhotoAndInfo": {
     "description": "Localized string for profilePhotoAndInfo"
   },
-  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "profilePhotoUpdateFailed": "プロフィール写真の更新に失敗しました",
   "@profilePhotoUpdateFailed": {
     "description": "Localized string for profilePhotoUpdateFailed"
   },
-  "profilePhotoUpdated": "Profile photo updated",
+  "profilePhotoUpdated": "プロフィール写真が更新されました",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
   },
@@ -2019,15 +2019,15 @@
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
-  "profileUpdateFailed": "Failed to update profile",
+  "profileUpdateFailed": "プロフィールの更新に失敗しました",
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "Profile updated successfully",
+  "profileUpdated": "プロフィールが正常に更新されました",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
-  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "purchaseAndRefundPolicy": "購入および返金ポリシー",
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
@@ -2069,7 +2069,7 @@
       }
     }
   },
-  "purchaseFailed": "Purchase failed",
+  "purchaseFailed": "購入に失敗しました",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
@@ -2081,55 +2081,55 @@
   "@purchaseMoreHearts": {
     "description": "Localized string for purchaseMoreHearts"
   },
-  "purchasePending": "Purchase pending...",
+  "purchasePending": "購入処理中...",
   "@purchasePending": {
     "description": "Localized string for purchasePending"
   },
-  "purchasePolicy": "Purchase Policy",
+  "purchasePolicy": "購入ポリシー",
   "@purchasePolicy": {
     "description": "Localized string for purchasePolicy"
   },
-  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "purchaseSection1Content": "クレジットカードやデジタルウォレットなど、さまざまな支払い方法に対応しています。",
   "@purchaseSection1Content": {
     "description": "Localized string for purchaseSection1Content"
   },
-  "purchaseSection1Title": "Payment Methods",
+  "purchaseSection1Title": "支払い方法",
   "@purchaseSection1Title": {
     "description": "Localized string for purchaseSection1Title"
   },
-  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "purchaseSection2Content": "購入したアイテムを使用していない場合、購入から14日以内に返金が可能です。",
   "@purchaseSection2Content": {
     "description": "Localized string for purchaseSection2Content"
   },
-  "purchaseSection2Title": "Refund Policy",
+  "purchaseSection2Title": "返金ポリシー",
   "@purchaseSection2Title": {
     "description": "Localized string for purchaseSection2Title"
   },
-  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "purchaseSection3Content": "アカウント設定からいつでもサブスクリプションをキャンセルできます。",
   "@purchaseSection3Content": {
     "description": "Localized string for purchaseSection3Content"
   },
-  "purchaseSection3Title": "Cancellation",
+  "purchaseSection3Title": "キャンセル",
   "@purchaseSection3Title": {
     "description": "Localized string for purchaseSection3Title"
   },
-  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "purchaseSection4Content": "購入を行うことで、利用規約およびサービス契約に同意したことになります。",
   "@purchaseSection4Content": {
     "description": "Localized string for purchaseSection4Content"
   },
-  "purchaseSection4Title": "Terms of Use",
+  "purchaseSection4Title": "利用規約",
   "@purchaseSection4Title": {
     "description": "Localized string for purchaseSection4Title"
   },
-  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "purchaseSection5Content": "購入に関する問題については、サポートチームにお問い合わせください。",
   "@purchaseSection5Content": {
     "description": "Localized string for purchaseSection5Content"
   },
-  "purchaseSection5Title": "Contact Support",
+  "purchaseSection5Title": "サポートに連絡",
   "@purchaseSection5Title": {
     "description": "Localized string for purchaseSection5Title"
   },
-  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "purchaseSection6Content": "すべての購入は、当社の標準利用規約および条件に従います。",
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
@@ -2149,19 +2149,19 @@
   "@realtimeQualityLog": {
     "description": "Localized string for realtimeQualityLog"
   },
-  "recentConversation": "Recent Conversation:",
+  "recentConversation": "最近の会話:",
   "@recentConversation": {
     "description": "Localized string for recentConversation"
   },
-  "recentLoginRequired": "Please login again for security",
+  "recentLoginRequired": "セキュリティのため再度ログインしてください",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
   },
-  "referrerEmail": "Referrer Email",
+  "referrerEmail": "紹介者のメール",
   "@referrerEmail": {
     "description": "Localized string for referrerEmail"
   },
-  "referrerEmailHelper": "Optional: Email of who referred you",
+  "referrerEmailHelper": "任意: あなたを紹介した人のメールアドレス",
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
@@ -2182,11 +2182,11 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "更新に失敗しました",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "チャットリストを更新中です...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
@@ -2231,7 +2231,7 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "通報に失敗しました",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
@@ -2251,7 +2251,7 @@
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "利用規約に同意してください",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
@@ -2289,7 +2289,7 @@
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "土曜日",
   "@saturday": {
     "description": "Localized string for saturday"
   },
@@ -2309,7 +2309,7 @@
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
-  "selectEmotion": "Select Emotion",
+  "selectEmotion": "感情を選択してください",
   "@selectEmotion": {
     "description": "Localized string for selectEmotion"
   },
@@ -2333,7 +2333,7 @@
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "ペルソナを選択してください",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
@@ -2349,7 +2349,7 @@
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "通報理由を選択してください",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
@@ -2381,7 +2381,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "最初のメッセージを送信してください",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
@@ -2393,7 +2393,7 @@
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "seoul": "Seoul",
+  "seoul": "ソウル",
   "@seoul": {
     "description": "Localized string for seoul"
   },
@@ -2401,7 +2401,7 @@
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "サービス利用規約に同意してください",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
@@ -2473,15 +2473,15 @@
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "SONA プライバシーポリシー",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "SONA 購入ポリシー",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "SONA 利用規約",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
@@ -2489,7 +2489,7 @@
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "お役に立てず申し訳ありません",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
@@ -2517,7 +2517,7 @@
   "@sports": {
     "description": "Localized string for sports"
   },
-  "spring": "Spring",
+  "spring": "春",
   "@spring": {
     "description": "Localized string for spring"
   },
@@ -2529,7 +2529,7 @@
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
-  "startConversation": "Start a conversation",
+  "startConversation": "会話を始める",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
@@ -2565,7 +2565,7 @@
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "ストアに接続できませんでした",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
@@ -2573,7 +2573,7 @@
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "ストアは利用できません",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
@@ -2597,19 +2597,19 @@
   "@subtleVibrationOnTouch": {
     "description": "Localized string for subtleVibrationOnTouch"
   },
-  "summer": "Summer",
+  "summer": "夏",
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "日曜日",
   "@sunday": {
     "description": "Localized string for sunday"
   },
-  "swipeAnyDirection": "Swipe in any direction",
+  "swipeAnyDirection": "任意の方向にスワイプ",
   "@swipeAnyDirection": {
     "description": "Localized string for swipeAnyDirection"
   },
-  "swipeDownToClose": "Swipe down to close",
+  "swipeDownToClose": "下にスワイプして閉じる",
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
@@ -2625,15 +2625,15 @@
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
-  "tapForDetails": "Tap bottom area for details",
+  "tapForDetails": "詳細を見るには下部をタップ",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "写真をスワイプするにはタップ",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
-  "teachersDay": "Teachers' Day",
+  "teachersDay": "教師の日",
   "@teachersDay": {
     "description": "Localized string for teachersDay"
   },
@@ -2661,7 +2661,7 @@
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "termsSection10Content": "当社は、ユーザーに通知の上、これらの条件をいつでも変更する権利を留保します。",
   "@termsSection10Content": {
     "description": "Localized string for termsSection10Content"
   },
@@ -2669,7 +2669,7 @@
   "@termsSection10Title": {
     "description": "Localized string for termsSection10Title"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "termsSection11Content": "これらの条件は、当社が運営する管轄区域の法律に準拠します。",
   "@termsSection11Content": {
     "description": "Localized string for termsSection11Content"
   },
@@ -2677,7 +2677,7 @@
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "これらの条件のいずれかの条項が執行不可能と判断された場合でも、残りの条項は引き続き有効です。",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
@@ -2693,7 +2693,7 @@
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "当社のサービスを利用することにより、これらの利用規約およびプライバシーポリシーに従うことに同意したものとみなされます。",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
@@ -2701,7 +2701,7 @@
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "当社のサービスを利用するには、13歳以上である必要があります。",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
@@ -2709,7 +2709,7 @@
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "アカウントとパスワードの機密性を維持する責任はあなたにあります。",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
@@ -2717,7 +2717,7 @@
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "あなたは、当社のサービスを違法または無許可の目的で使用しないことに同意します。",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
@@ -2725,7 +2725,7 @@
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "当社は、これらの条件に違反した場合、あなたのアカウントを終了または一時停止する権利を留保します。",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
@@ -2741,7 +2741,7 @@
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "当社のサービスの利用に起因する間接的、偶発的、または結果的な損害について、当社は責任を負いません。",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
@@ -2749,7 +2749,7 @@
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "当社のサービスで利用可能なすべてのコンテンツおよび資料は、知的財産権によって保護されています。",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
@@ -2757,7 +2757,7 @@
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "補足条件",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
@@ -2781,7 +2781,7 @@
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "木曜日",
   "@thursday": {
     "description": "Localized string for thursday"
   },
@@ -2801,11 +2801,11 @@
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
-  "todayText": "Today",
+  "todayText": "今日",
   "@todayText": {
     "description": "Localized string for todayText"
   },
-  "tomorrowText": "Tomorrow",
+  "tomorrowText": "明日",
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
@@ -2821,7 +2821,7 @@
   "@totalLikes": {
     "description": "Localized string for totalLikes"
   },
-  "totalOccurrences": "Total {count} occurrences",
+  "totalOccurrences": "合計 {count} 回の発生",
   "@totalOccurrences": {
     "description": "Localized string for totalOccurrences"
   },
@@ -2837,7 +2837,7 @@
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "翻訳エラー",
   "@translationError": {
     "description": "Localized string for translationError"
   },
@@ -2865,7 +2865,7 @@
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "火曜日",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
@@ -2914,7 +2914,7 @@
   "@unknown": {
     "description": "Localized string for unknown"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "不明なエラーが発生しました",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },
@@ -2938,11 +2938,11 @@
   "@useSystemLanguage": {
     "description": "Localized string for useSystemLanguage"
   },
-  "user": "User: ",
+  "user": "ユーザー:",
   "@user": {
     "description": "Localized string for user"
   },
-  "userMessage": "User Message:",
+  "userMessage": "ユーザーメッセージ:",
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
@@ -2950,7 +2950,7 @@
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
-  "valentinesDay": "Valentine's Day",
+  "valentinesDay": "バレンタインデー",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
@@ -2983,7 +2983,7 @@
       }
     }
   },
-  "walk": "Walk",
+  "walk": "散歩",
   "@walk": {
     "description": "Localized string for walk"
   },
@@ -2991,11 +2991,11 @@
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
-  "weatherClear": "Clear",
+  "weatherClear": "晴れ",
   "@weatherClear": {
     "description": "Localized string for weatherClear"
   },
-  "weatherCloudy": "Cloudy",
+  "weatherCloudy": "曇り",
   "@weatherCloudy": {
     "description": "Localized string for weatherCloudy"
   },
@@ -3007,19 +3007,19 @@
   "@weatherContextDesc": {
     "description": "Localized string for weatherContextDesc"
   },
-  "weatherDrizzle": "Drizzle",
+  "weatherDrizzle": "霧雨",
   "@weatherDrizzle": {
     "description": "Localized string for weatherDrizzle"
   },
-  "weatherFog": "Fog",
+  "weatherFog": "霧",
   "@weatherFog": {
     "description": "Localized string for weatherFog"
   },
-  "weatherMist": "Mist",
+  "weatherMist": "ミスト",
   "@weatherMist": {
     "description": "Localized string for weatherMist"
   },
-  "weatherRain": "Rain",
+  "weatherRain": "雨",
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
@@ -3027,7 +3027,7 @@
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
-  "weatherSnow": "Snow",
+  "weatherSnow": "雪",
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
@@ -3035,11 +3035,11 @@
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
-  "weatherThunderstorm": "Thunderstorm",
+  "weatherThunderstorm": "雷雨",
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "水曜日",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
@@ -3055,11 +3055,11 @@
   "@whatTopicsToTalk": {
     "description": "Localized string for whatTopicsToTalk"
   },
-  "whiteDay": "White Day",
+  "whiteDay": "ホワイトデー",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "winter": "Winter",
+  "winter": "冬",
   "@winter": {
     "description": "Localized string for winter"
   },
@@ -3071,7 +3071,7 @@
   "@year": {
     "description": "Localized string for year"
   },
-  "yearEnd": "Year End",
+  "yearEnd": "年末",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },

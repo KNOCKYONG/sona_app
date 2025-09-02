@@ -4,67 +4,67 @@
   "@about": {
     "description": "Localized string for about"
   },
-  "accountAndProfile": "Account & Profile Information",
+  "accountAndProfile": "खाता और प्रोफ़ाइल जानकारी",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "accountDeletedSuccess": "Account deleted successfully",
+  "accountDeletedSuccess": "खाता सफलतापूर्वक हटाया गया",
   "@accountDeletedSuccess": {
     "description": "Localized string for accountDeletedSuccess"
   },
-  "accountDeletionContent": "Are you sure you want to delete your account?\nThis action cannot be undone.",
+  "accountDeletionContent": "क्या आप वास्तव में अपना खाता हटाना चाहते हैं?",
   "@accountDeletionContent": {
     "description": "Localized string for accountDeletionContent"
   },
-  "accountDeletionError": "Error occurred while deleting account.",
+  "accountDeletionError": "खाता हटाने में त्रुटि हुई।",
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "accountDeletionInfo": "Account deletion information",
+  "accountDeletionInfo": "खाता हटाने की जानकारी",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
   },
-  "accountDeletionTitle": "Delete Account",
+  "accountDeletionTitle": "खाता हटाएँ",
   "@accountDeletionTitle": {
     "description": "Localized string for accountDeletionTitle"
   },
-  "accountDeletionWarning1": "Warning: This action cannot be undone",
+  "accountDeletionWarning1": "चेतावनी: यह क्रिया पूर्ववत नहीं की जा सकती",
   "@accountDeletionWarning1": {
     "description": "Localized string for accountDeletionWarning1"
   },
-  "accountDeletionWarning2": "All your data will be permanently deleted",
+  "accountDeletionWarning2": "आपका सारा डेटा स्थायी रूप से हटा दिया जाएगा",
   "@accountDeletionWarning2": {
     "description": "Localized string for accountDeletionWarning2"
   },
-  "accountDeletionWarning3": "You will lose access to all conversations",
+  "accountDeletionWarning3": "आप सभी वार्तालापों तक पहुँच खो देंगे",
   "@accountDeletionWarning3": {
     "description": "Localized string for accountDeletionWarning3"
   },
-  "accountDeletionWarning4": "This includes all purchased content",
+  "accountDeletionWarning4": "इसमें सभी खरीदी गई सामग्री शामिल है",
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
-  "accountManagement": "Account Management",
+  "accountManagement": "खाता प्रबंधन",
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "adaptiveConversationDesc": "Adapts conversation style to match yours",
+  "adaptiveConversationDesc": "आपकी शैली के अनुसार बातचीत के तरीके को अनुकूलित करता है",
   "@adaptiveConversationDesc": {
     "description": "Localized string for adaptiveConversationDesc"
   },
-  "afternoon": "Afternoon",
+  "afternoon": "दोपहर",
   "@afternoon": {
     "description": "Localized string for afternoon"
   },
-  "afternoonFatigue": "Afternoon fatigue",
+  "afternoonFatigue": "दोपहर की थकान",
   "@afternoonFatigue": {
     "description": "Localized string for afternoonFatigue"
   },
-  "ageConfirmation": "I am 14 years or older and have confirmed the above.",
+  "ageConfirmation": "मैं 14 वर्ष या उससे अधिक का हूँ और मैंने ऊपर की पुष्टि की है।",
   "@ageConfirmation": {
     "description": "Localized string for ageConfirmation"
   },
-  "ageRange": "{min}-{max} years old",
+  "ageRange": "{min}-{max} वर्ष",
   "@ageRange": {
     "description": "Age range",
     "placeholders": {
@@ -76,39 +76,39 @@
       }
     }
   },
-  "ageUnit": "years old",
+  "ageUnit": "वर्ष",
   "@ageUnit": {
     "description": "Localized string for ageUnit"
   },
-  "agreeToTerms": "I agree to the terms",
+  "agreeToTerms": "मैं शर्तों से सहमत हूँ",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
   },
-  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
+  "aiDatingQuestion": "AI के साथ एक विशेष दैनिक जीवन",
   "@aiDatingQuestion": {
     "description": "Localized string for aiDatingQuestion"
   },
-  "aiPersonaPreferenceDescription": "Please set your preferences for AI persona matching",
+  "aiPersonaPreferenceDescription": "कृपया AI व्यक्तित्व मिलान के लिए अपनी प्राथमिकताएँ सेट करें",
   "@aiPersonaPreferenceDescription": {
     "description": "Localized string for aiPersonaPreferenceDescription"
   },
-  "all": "All",
+  "all": "सभी",
   "@all": {
     "description": "Localized string for all"
   },
-  "allAgree": "Agree to All",
+  "allAgree": "सभी से सहमत",
   "@allAgree": {
     "description": "Localized string for allAgree"
   },
-  "allFeaturesRequired": "※ All features are required for service provision",
+  "allFeaturesRequired": "※ सेवा प्रदान करने के लिए सभी सुविधाएँ आवश्यक हैं",
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "All Personas",
+  "allPersonas": "सभी व्यक्तित्व",
   "@allPersonas": {
     "description": "Localized string for allPersonas"
   },
-  "allPersonasMatched": "All personas matched! Start chatting with them.",
+  "allPersonasMatched": "सभी व्यक्तित्व मेल खा गए! उनके साथ चैट करना शुरू करें।",
   "@allPersonasMatched": {
     "description": "Localized string for allPersonasMatched"
   },
@@ -116,7 +116,7 @@
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
-  "alreadyChattingWith": "Already chatting with {name}!",
+  "alreadyChattingWith": "आप पहले से ही {name} के साथ चैट कर रहे हैं!",
   "@alreadyChattingWith": {
     "description": "Already chatting with persona",
     "placeholders": {
@@ -125,23 +125,23 @@
       }
     }
   },
-  "alsoBlockThisAI": "Also block this AI",
+  "alsoBlockThisAI": "इस AI को भी ब्लॉक करें",
   "@alsoBlockThisAI": {
     "description": "Localized string for alsoBlockThisAI"
   },
-  "angry": "Angry",
+  "angry": "गुस्सा",
   "@angry": {
     "description": "Localized string for angry"
   },
-  "anonymousLogin": "Anonymous login",
+  "anonymousLogin": "गुमनाम लॉगिन",
   "@anonymousLogin": {
     "description": "Localized string for anonymousLogin"
   },
-  "anxious": "Anxious",
+  "anxious": "चिंतित",
   "@anxious": {
     "description": "Localized string for anxious"
   },
-  "apiKeyError": "API Key Error",
+  "apiKeyError": "API कुंजी त्रुटि",
   "@apiKeyError": {
     "description": "Localized string for apiKeyError"
   },
@@ -149,83 +149,83 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "appTagline": "Your AI companions",
+  "appTagline": "आपके AI साथी",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
-  "appleLoginCanceled": "Apple login was canceled.\nPlease try again.",
+  "appleLoginCanceled": "Apple लॉगिन रद्द कर दिया गया। कृपया फिर से प्रयास करें।",
   "@appleLoginCanceled": {
     "description": "Localized string for appleLoginCanceled"
   },
-  "appleLoginError": "Error occurred during Apple login.",
+  "appleLoginError": "Apple लॉगिन के दौरान त्रुटि हुई।",
   "@appleLoginError": {
     "description": "Localized string for appleLoginError"
   },
-  "art": "Art",
+  "art": "कला",
   "@art": {
     "description": "Localized string for art"
   },
-  "authError": "Authentication Error",
+  "authError": "प्रमाणीकरण त्रुटि",
   "@authError": {
     "description": "Localized string for authError"
   },
-  "autoTranslate": "Auto Translate",
+  "autoTranslate": "ऑटो ट्रांसलेट",
   "@autoTranslate": {
     "description": "Localized string for autoTranslate"
   },
-  "autumn": "Autumn",
+  "autumn": "शरद ऋतु",
   "@autumn": {
     "description": "Localized string for autumn"
   },
-  "averageQuality": "Average Quality",
+  "averageQuality": "औसत गुणवत्ता",
   "@averageQuality": {
     "description": "Localized string for averageQuality"
   },
-  "averageQualityScore": "Average Quality Score",
+  "averageQualityScore": "औसत गुणवत्ता स्कोर",
   "@averageQualityScore": {
     "description": "Localized string for averageQualityScore"
   },
-  "awkwardExpression": "Awkward Expression",
+  "awkwardExpression": "अजीब अभिव्यक्ति",
   "@awkwardExpression": {
     "description": "Localized string for awkwardExpression"
   },
-  "backButton": "Back",
+  "backButton": "वापस",
   "@backButton": {
     "description": "Localized string for backButton"
   },
-  "basicInfo": "Basic Information",
+  "basicInfo": "बुनियादी जानकारी",
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "basicInfoDescription": "Please enter basic information to create an account",
+  "basicInfoDescription": "कृपया खाता बनाने के लिए बुनियादी जानकारी दर्ज करें",
   "@basicInfoDescription": {
     "description": "Localized string for basicInfoDescription"
   },
-  "birthDate": "Birth Date",
+  "birthDate": "जन्म तिथि",
   "@birthDate": {
     "description": "Localized string for birthDate"
   },
-  "birthDateOptional": "Birth Date (Optional)",
+  "birthDateOptional": "जन्म तिथि (वैकल्पिक)",
   "@birthDateOptional": {
     "description": "Localized string for birthDateOptional"
   },
-  "birthDateRequired": "Birth Date *",
+  "birthDateRequired": "जन्म तिथि *",
   "@birthDateRequired": {
     "description": "Localized string for birthDateRequired"
   },
-  "blockConfirm": "Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.",
+  "blockConfirm": "क्या आप इस AI को ब्लॉक करना चाहते हैं?",
   "@blockConfirm": {
     "description": "Localized string for blockConfirm"
   },
-  "blockReason": "Block reason",
+  "blockReason": "ब्लॉक करने का कारण",
   "@blockReason": {
     "description": "Localized string for blockReason"
   },
-  "blockThisAI": "Block this AI",
+  "blockThisAI": "इस AI को ब्लॉक करें",
   "@blockThisAI": {
     "description": "Localized string for blockThisAI"
   },
-  "blockedAICount": "{count} blocked AIs",
+  "blockedAICount": "{count} ब्लॉक किए गए AIs",
   "@blockedAICount": {
     "description": "Number of blocked AIs",
     "placeholders": {
@@ -234,31 +234,31 @@
       }
     }
   },
-  "blockedAIs": "Blocked AIs",
+  "blockedAIs": "ब्लॉक किए गए AIs",
   "@blockedAIs": {
     "description": "Localized string for blockedAIs"
   },
-  "blockedAt": "Blocked at",
+  "blockedAt": "ब्लॉक किया गया",
   "@blockedAt": {
     "description": "Localized string for blockedAt"
   },
-  "blockedSuccessfully": "Blocked successfully",
+  "blockedSuccessfully": "सफलतापूर्वक ब्लॉक किया गया",
   "@blockedSuccessfully": {
     "description": "Localized string for blockedSuccessfully"
   },
-  "breakfast": "Breakfast",
+  "breakfast": "नाश्ता",
   "@breakfast": {
     "description": "Localized string for breakfast"
   },
-  "byErrorType": "By Error Type",
+  "byErrorType": "त्रुटि प्रकार द्वारा",
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "byPersona": "By Persona",
+  "byPersona": "पर्सोना द्वारा",
   "@byPersona": {
     "description": "Localized string for byPersona"
   },
-  "cacheDeleteError": "Error deleting cache: {error}",
+  "cacheDeleteError": "कैश हटाने में त्रुटि: {error}",
   "@cacheDeleteError": {
     "description": "Cache delete error",
     "placeholders": {
@@ -267,15 +267,15 @@
       }
     }
   },
-  "cacheDeleted": "Image cache has been deleted",
+  "cacheDeleted": "इमेज कैश हटा दिया गया है",
   "@cacheDeleted": {
     "description": "Localized string for cacheDeleted"
   },
-  "cafeTerrace": "Cafe terrace",
+  "cafeTerrace": "कैफे की छत",
   "@cafeTerrace": {
     "description": "Localized string for cafeTerrace"
   },
-  "calm": "Calm",
+  "calm": "शांत",
   "@calm": {
     "description": "Localized string for calm"
   },
@@ -287,11 +287,11 @@
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "canChangeInSettings": "You can change this later in settings",
+  "canChangeInSettings": "आप इसे बाद में सेटिंग्स में बदल सकते हैं",
   "@canChangeInSettings": {
     "description": "Localized string for canChangeInSettings"
   },
-  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
+  "canMeetPreviousPersonas": "आप पहले स्वाइप किए गए व्यक्तित्वों से फिर मिल सकते हैं!",
   "@canMeetPreviousPersonas": {
     "description": "Localized string for canMeetPreviousPersonas"
   },
@@ -299,35 +299,35 @@
   "@cancel": {
     "description": "Localized string for cancel"
   },
-  "changeProfilePhoto": "Change Profile Photo",
+  "changeProfilePhoto": "प्रोफ़ाइल फोटो बदलें",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
   },
-  "chat": "Chat",
+  "chat": "चैट",
   "@chat": {
     "description": "Localized string for chat"
   },
-  "chatEndedMessage": "Chat has ended",
+  "chatEndedMessage": "चैट समाप्त हो गई",
   "@chatEndedMessage": {
     "description": "Localized string for chatEndedMessage"
   },
-  "chatErrorDashboard": "Chat Error Dashboard",
+  "chatErrorDashboard": "चैट त्रुटि डैशबोर्ड",
   "@chatErrorDashboard": {
     "description": "Localized string for chatErrorDashboard"
   },
-  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
+  "chatErrorSentSuccessfully": "चैट त्रुटि सफलतापूर्वक भेजी गई है।",
   "@chatErrorSentSuccessfully": {
     "description": "Localized string for chatErrorSentSuccessfully"
   },
-  "chatListTab": "Chat List Tab",
+  "chatListTab": "चैट सूची टैब",
   "@chatListTab": {
     "description": "Localized string for chatListTab"
   },
-  "chats": "Chats",
+  "chats": "चैट्स",
   "@chats": {
     "description": "Localized string for chats"
   },
-  "chattingWithPersonas": "Chatting with {count} personas",
+  "chattingWithPersonas": "{count} व्यक्तित्वों के साथ चैट कर रहे हैं",
   "@chattingWithPersonas": {
     "description": "Number of personas chatting with",
     "placeholders": {
@@ -336,39 +336,39 @@
       }
     }
   },
-  "checkInternetConnection": "Please check your internet connection",
+  "checkInternetConnection": "कृपया अपना इंटरनेट कनेक्शन जांचें",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
-  "checkingUserInfo": "Checking user info",
+  "checkingUserInfo": "उपयोगकर्ता जानकारी की जांच कर रहे हैं",
   "@checkingUserInfo": {
     "description": "Localized string for checkingUserInfo"
   },
-  "childrensDay": "Children's Day",
+  "childrensDay": "बच्चों का दिन",
   "@childrensDay": {
     "description": "Localized string for childrensDay"
   },
-  "chinese": "Chinese",
+  "chinese": "चीनी",
   "@chinese": {
     "description": "Localized string for chinese"
   },
-  "chooseOption": "Please choose:",
+  "chooseOption": "कृपया चुनें:",
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "christmas": "Christmas",
+  "christmas": "क्रिसमस",
   "@christmas": {
     "description": "Localized string for christmas"
   },
-  "close": "Close",
+  "close": "बंद करें",
   "@close": {
     "description": "Localized string for close"
   },
-  "complete": "Done",
+  "complete": "पूरा",
   "@complete": {
     "description": "Localized string for complete"
   },
-  "completeSignup": "Complete Sign Up",
+  "completeSignup": "साइन अप पूरा करें",
   "@completeSignup": {
     "description": "Localized string for completeSignup"
   },
@@ -376,35 +376,35 @@
   "@confirm": {
     "description": "Localized string for confirm"
   },
-  "connectingToServer": "Connecting to server",
+  "connectingToServer": "सर्वर से कनेक्ट हो रहा है",
   "@connectingToServer": {
     "description": "Localized string for connectingToServer"
   },
-  "consultQualityMonitoring": "Consultation Quality Monitoring",
+  "consultQualityMonitoring": "परामर्श गुणवत्ता निगरानी",
   "@consultQualityMonitoring": {
     "description": "Localized string for consultQualityMonitoring"
   },
-  "continueAsGuest": "Continue as Guest",
+  "continueAsGuest": "मेहमान के रूप में जारी रखें",
   "@continueAsGuest": {
     "description": "Localized string for continueAsGuest"
   },
-  "continueButton": "Continue",
+  "continueButton": "जारी रखें",
   "@continueButton": {
     "description": "Localized string for continueButton"
   },
-  "continueWithApple": "Continue with Apple",
+  "continueWithApple": "एप्पल के साथ जारी रखें",
   "@continueWithApple": {
     "description": "Localized string for continueWithApple"
   },
-  "continueWithGoogle": "Continue with Google",
+  "continueWithGoogle": "गूगल के साथ जारी रखें",
   "@continueWithGoogle": {
     "description": "Localized string for continueWithGoogle"
   },
-  "conversationContinuity": "Conversation Continuity",
+  "conversationContinuity": "बातचीत की निरंतरता",
   "@conversationContinuity": {
     "description": "Localized string for conversationContinuity"
   },
-  "conversationContinuityDesc": "Remember previous conversations and connect topics",
+  "conversationContinuityDesc": "पिछले वार्तालापों को याद रखें और विषयों को जोड़ें",
   "@conversationContinuityDesc": {
     "description": "Localized string for conversationContinuityDesc"
   },
@@ -417,75 +417,75 @@
       }
     }
   },
-  "convertToMember": "Sign Up",
+  "convertToMember": "साइन अप करें",
   "@convertToMember": {
     "description": "Localized string for convertToMember"
   },
-  "cooking": "Cooking",
+  "cooking": "खाना बनाना",
   "@cooking": {
     "description": "Localized string for cooking"
   },
-  "copyMessage": "Copy message",
+  "copyMessage": "संदेश कॉपी करें",
   "@copyMessage": {
     "description": "Localized string for copyMessage"
   },
-  "copyrightInfringement": "Copyright infringement",
+  "copyrightInfringement": "कॉपीराइट उल्लंघन",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
-  "creatingAccount": "Creating account",
+  "creatingAccount": "खाता बना रहे हैं",
   "@creatingAccount": {
     "description": "Localized string for creatingAccount"
   },
-  "crisisDetected": "Crisis Detected",
+  "crisisDetected": "संकट का पता चला",
   "@crisisDetected": {
     "description": "Localized string for crisisDetected"
   },
-  "culturalIssue": "Cultural Issue",
+  "culturalIssue": "सांस्कृतिक मुद्दा",
   "@culturalIssue": {
     "description": "Localized string for culturalIssue"
   },
-  "current": "Current",
+  "current": "वर्तमान",
   "@current": {
     "description": "Localized string for current"
   },
-  "currentCacheSize": "Current Cache Size",
+  "currentCacheSize": "वर्तमान कैश आकार",
   "@currentCacheSize": {
     "description": "Localized string for currentCacheSize"
   },
-  "currentLanguage": "Current Language",
+  "currentLanguage": "वर्तमान भाषा",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
-  "cycling": "Cycling",
+  "cycling": "साइकिलिंग",
   "@cycling": {
     "description": "Localized string for cycling"
   },
-  "dailyCare": "Daily Care",
+  "dailyCare": "दैनिक देखभाल",
   "@dailyCare": {
     "description": "Localized string for dailyCare"
   },
-  "dailyCareDesc": "Daily care messages for meals, sleep, health",
+  "dailyCareDesc": "भोजन, नींद, स्वास्थ्य के लिए दैनिक देखभाल संदेश",
   "@dailyCareDesc": {
     "description": "Localized string for dailyCareDesc"
   },
-  "dailyChat": "Daily Chat",
+  "dailyChat": "दैनिक चैट",
   "@dailyChat": {
     "description": "Localized string for dailyChat"
   },
-  "dailyCheck": "Daily check",
+  "dailyCheck": "दैनिक जांच",
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "dailyConversation": "Daily Conversation",
+  "dailyConversation": "दैनिक बातचीत",
   "@dailyConversation": {
     "description": "Localized string for dailyConversation"
   },
-  "dailyLimitDescription": "You have reached your daily message limit",
+  "dailyLimitDescription": "आपने अपने दैनिक संदेश सीमा तक पहुँच गया है",
   "@dailyLimitDescription": {
     "description": "Localized string for dailyLimitDescription"
   },
-  "dailyLimitTitle": "Daily Limit Reached",
+  "dailyLimitTitle": "दैनिक सीमा पहुँच गई",
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
@@ -493,35 +493,35 @@
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "darkTheme": "Dark Mode",
+  "darkTheme": "डार्क मोड",
   "@darkTheme": {
     "description": "Localized string for darkTheme"
   },
-  "darkThemeDesc": "Use dark theme",
+  "darkThemeDesc": "डार्क थीम का उपयोग करें",
   "@darkThemeDesc": {
     "description": "Localized string for darkThemeDesc"
   },
-  "dataCollection": "Data Collection Settings",
+  "dataCollection": "डेटा संग्रह सेटिंग्स",
   "@dataCollection": {
     "description": "Localized string for dataCollection"
   },
-  "datingAdvice": "Dating Advice",
+  "datingAdvice": "डेटिंग सलाह",
   "@datingAdvice": {
     "description": "Localized string for datingAdvice"
   },
-  "datingDescription": "I want to share deep thoughts and have sincere conversations",
+  "datingDescription": "मैं गहरे विचार साझा करना चाहता हूँ और ईमानदार बातचीत करना चाहता हूँ",
   "@datingDescription": {
     "description": "Localized string for datingDescription"
   },
-  "dawn": "Dawn",
+  "dawn": "सुबह",
   "@dawn": {
     "description": "Localized string for dawn"
   },
-  "day": "Day",
+  "day": "दिन",
   "@day": {
     "description": "Localized string for day"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
+  "dayAfterTomorrow": "परसों",
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
@@ -539,7 +539,7 @@
       }
     }
   },
-  "daysRemaining": "{days} days remaining",
+  "daysRemaining": "{days} दिन शेष",
   "@daysRemaining": {
     "description": "Days remaining",
     "placeholders": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "deepTalk": "Deep Talk",
+  "deepTalk": "गहरी बातचीत",
   "@deepTalk": {
     "description": "Localized string for deepTalk"
   },
@@ -560,59 +560,59 @@
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
-  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "deleteAccountConfirm": "क्या आप सुनिश्चित हैं कि आप अपना खाता हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।",
   "@deleteAccountConfirm": {
     "description": "Localized string for deleteAccountConfirm"
   },
-  "deleteAccountWarning": "Are you sure you want to delete your account?",
+  "deleteAccountWarning": "क्या आप सुनिश्चित हैं कि आप अपना खाता हटाना चाहते हैं?",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
   },
-  "deleteCache": "Delete Cache",
+  "deleteCache": "कैश हटाएँ",
   "@deleteCache": {
     "description": "Localized string for deleteCache"
   },
-  "deletingAccount": "Deleting account...",
+  "deletingAccount": "खाता हटाया जा रहा है...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
-  "depressed": "Depressed",
+  "depressed": "उदास",
   "@depressed": {
     "description": "Localized string for depressed"
   },
-  "describeError": "What is the problem?",
+  "describeError": "समस्या क्या है?",
   "@describeError": {
     "description": "Localized string for describeError"
   },
-  "detailedReason": "Detailed reason",
+  "detailedReason": "विस्तृत कारण",
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
+  "developRelationshipStep": "3. संबंध विकसित करें: बातचीत के माध्यम से निकटता बनाएं और विशेष संबंध विकसित करें।",
   "@developRelationshipStep": {
     "description": "Localized string for developRelationshipStep"
   },
-  "dinner": "Dinner",
+  "dinner": "रात का खाना",
   "@dinner": {
     "description": "Localized string for dinner"
   },
-  "discardGuestData": "Start Fresh",
+  "discardGuestData": "नया शुरू करें",
   "@discardGuestData": {
     "description": "Localized string for discardGuestData"
   },
-  "discount20": "20% off",
+  "discount20": "20% की छूट",
   "@discount20": {
     "description": "Localized string for discount20"
   },
-  "discount30": "30% off",
+  "discount30": "30% की छूट",
   "@discount30": {
     "description": "Localized string for discount30"
   },
-  "discountAmount": "Save",
+  "discountAmount": "बचत",
   "@discountAmount": {
     "description": "Localized string for discountAmount"
   },
-  "discountAmountValue": "Save ₩{amount}",
+  "discountAmountValue": "बचत करें ₩{amount}",
   "@discountAmountValue": {
     "description": "Discount amount",
     "placeholders": {
@@ -625,7 +625,7 @@
   "@done": {
     "description": "Localized string for done"
   },
-  "downloadingPersonaImages": "Downloading new persona images",
+  "downloadingPersonaImages": "नए पर्सोना चित्र डाउनलोड हो रहे हैं",
   "@downloadingPersonaImages": {
     "description": "Localized string for downloadingPersonaImages"
   },
@@ -633,19 +633,19 @@
   "@edit": {
     "description": "Localized string for edit"
   },
-  "editInfo": "Edit Info",
+  "editInfo": "जानकारी संपादित करें",
   "@editInfo": {
     "description": "Localized string for editInfo"
   },
-  "editProfile": "Edit Profile",
+  "editProfile": "प्रोफ़ाइल संपादित करें",
   "@editProfile": {
     "description": "Localized string for editProfile"
   },
-  "effectSound": "Sound Effects",
+  "effectSound": "ध्वनि प्रभाव",
   "@effectSound": {
     "description": "Localized string for effectSound"
   },
-  "effectSoundDescription": "Play sound effects",
+  "effectSoundDescription": "ध्वनि प्रभाव चलाएँ",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
@@ -657,79 +657,79 @@
   "@emailHint": {
     "description": "Localized string for emailHint"
   },
-  "emailLabel": "Email",
+  "emailLabel": "ईमेल",
   "@emailLabel": {
     "description": "Localized string for emailLabel"
   },
-  "emailRequired": "Email *",
+  "emailRequired": "ईमेल *",
   "@emailRequired": {
     "description": "Localized string for emailRequired"
   },
-  "emotionAnalysis": "Emotion Analysis",
+  "emotionAnalysis": "भावना विश्लेषण",
   "@emotionAnalysis": {
     "description": "Localized string for emotionAnalysis"
   },
-  "emotionAnalysisDesc": "Analyze emotions for empathetic responses",
+  "emotionAnalysisDesc": "सहानुभूतिपूर्ण प्रतिक्रियाओं के लिए भावनाओं का विश्लेषण करें",
   "@emotionAnalysisDesc": {
     "description": "Localized string for emotionAnalysisDesc"
   },
-  "emotionAngry": "Angry",
+  "emotionAngry": "गुस्सा",
   "@emotionAngry": {
     "description": "Localized string for emotionAngry"
   },
-  "emotionBasedEncounters": "Meet personas based on your emotions",
+  "emotionBasedEncounters": "अपनी भावनाओं के आधार पर व्यक्तित्वों से मिलें",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
   },
-  "emotionCool": "Cool",
+  "emotionCool": "कूल",
   "@emotionCool": {
     "description": "Localized string for emotionCool"
   },
-  "emotionHappy": "Happy",
+  "emotionHappy": "खुश",
   "@emotionHappy": {
     "description": "Localized string for emotionHappy"
   },
-  "emotionLove": "Love",
+  "emotionLove": "प्यार",
   "@emotionLove": {
     "description": "Localized string for emotionLove"
   },
-  "emotionSad": "Sad",
+  "emotionSad": "उदास",
   "@emotionSad": {
     "description": "Localized string for emotionSad"
   },
-  "emotionThinking": "Thinking",
+  "emotionThinking": "सोचते हुए",
   "@emotionThinking": {
     "description": "Localized string for emotionThinking"
   },
-  "emotionalSupportDesc": "Share your concerns and receive warm comfort",
+  "emotionalSupportDesc": "अपनी चिंताओं को साझा करें और गर्मजोशी से सहारा प्राप्त करें",
   "@emotionalSupportDesc": {
     "description": "Localized string for emotionalSupportDesc"
   },
-  "endChat": "End Chat",
+  "endChat": "चैट समाप्त करें",
   "@endChat": {
     "description": "Localized string for endChat"
   },
-  "endTutorial": "End Tutorial",
+  "endTutorial": "ट्यूटोरियल समाप्त करें",
   "@endTutorial": {
     "description": "Localized string for endTutorial"
   },
-  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
+  "endTutorialAndLogin": "क्या आप ट्यूटोरियल समाप्त करके लॉगिन करना चाहते हैं?",
   "@endTutorialAndLogin": {
     "description": "Localized string for endTutorialAndLogin"
   },
-  "endTutorialMessage": "Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.",
+  "endTutorialMessage": "क्या आप ट्यूटोरियल समाप्त करके लॉगिन करना चाहते हैं?",
   "@endTutorialMessage": {
     "description": "Localized string for endTutorialMessage"
   },
-  "english": "English",
+  "english": "अंग्रेजी",
   "@english": {
     "description": "Localized string for english"
   },
-  "enterBasicInfo": "Please enter basic information to create an account",
+  "enterBasicInfo": "कृपया एक खाता बनाने के लिए बुनियादी जानकारी दर्ज करें",
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
-  "enterBasicInformation": "Please enter basic information",
+  "enterBasicInformation": "कृपया बुनियादी जानकारी दर्ज करें",
   "@enterBasicInformation": {
     "description": "Localized string for enterBasicInformation"
   },
@@ -737,7 +737,7 @@
   "@enterEmail": {
     "description": "Localized string for enterEmail"
   },
-  "enterNickname": "Please enter a nickname",
+  "enterNickname": "कृपया एक उपनाम दर्ज करें",
   "@enterNickname": {
     "description": "Localized string for enterNickname"
   },
@@ -745,15 +745,15 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
-  "entertainmentAndFunDesc": "Enjoy fun games and pleasant conversations",
+  "entertainmentAndFunDesc": "मजेदार खेलों और सुखद बातचीत का आनंद लें",
   "@entertainmentAndFunDesc": {
     "description": "Localized string for entertainmentAndFunDesc"
   },
-  "entertainmentDescription": "I want to have fun conversations and enjoy my time",
+  "entertainmentDescription": "मैं मजेदार बातचीत करना चाहता हूँ और अपना समय बिताना चाहता हूँ",
   "@entertainmentDescription": {
     "description": "Localized string for entertainmentDescription"
   },
-  "entertainmentFun": "Entertainment/Fun",
+  "entertainmentFun": "मनोरंजन/मज़ा",
   "@entertainmentFun": {
     "description": "Localized string for entertainmentFun"
   },
@@ -761,47 +761,47 @@
   "@error": {
     "description": "Localized string for error"
   },
-  "errorDescription": "Error description",
+  "errorDescription": "त्रुटि विवरण",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
   },
-  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
+  "errorDescriptionHint": "जैसे, अजीब जवाब दिए, वही बात दोहराते हैं, संदर्भ के अनुसार अनुपयुक्त प्रतिक्रियाएँ देते हैं...",
   "@errorDescriptionHint": {
     "description": "Localized string for errorDescriptionHint"
   },
-  "errorDetails": "Error Details",
+  "errorDetails": "त्रुटि विवरण",
   "@errorDetails": {
     "description": "Localized string for errorDetails"
   },
-  "errorDetailsHint": "Please explain in detail what is wrong",
+  "errorDetailsHint": "कृपया विस्तार से बताएं कि क्या गलत है",
   "@errorDetailsHint": {
     "description": "Localized string for errorDetailsHint"
   },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "errorFrequency24h": "त्रुटि आवृत्ति (पिछले 24 घंटे)",
   "@errorFrequency24h": {
     "description": "Localized string for errorFrequency24h"
   },
-  "errorMessage": "Error Message:",
+  "errorMessage": "त्रुटि संदेश:",
   "@errorMessage": {
     "description": "Localized string for errorMessage"
   },
-  "errorOccurred": "An error occurred.",
+  "errorOccurred": "एक त्रुटि हुई।",
   "@errorOccurred": {
     "description": "Localized string for errorOccurred"
   },
-  "errorOccurredTryAgain": "An error occurred. Please try again.",
+  "errorOccurredTryAgain": "एक त्रुटि हुई। कृपया फिर से प्रयास करें।",
   "@errorOccurredTryAgain": {
     "description": "Localized string for errorOccurredTryAgain"
   },
-  "errorSendingFailed": "Failed to send error",
+  "errorSendingFailed": "त्रुटि भेजने में विफल",
   "@errorSendingFailed": {
     "description": "Localized string for errorSendingFailed"
   },
-  "errorStats": "Error Statistics",
+  "errorStats": "त्रुटि सांख्यिकी",
   "@errorStats": {
     "description": "Localized string for errorStats"
   },
-  "errorWithMessage": "Error occurred: {error}",
+  "errorWithMessage": "त्रुटि हुई: {error}",
   "@errorWithMessage": {
     "description": "Error with message",
     "placeholders": {
@@ -810,43 +810,43 @@
       }
     }
   },
-  "evening": "Evening",
+  "evening": "शाम",
   "@evening": {
     "description": "Localized string for evening"
   },
-  "excited": "Excited",
+  "excited": "उत्साहित",
   "@excited": {
     "description": "Localized string for excited"
   },
-  "exit": "Exit",
+  "exit": "बाहर निकलें",
   "@exit": {
     "description": "Localized string for exit"
   },
-  "exitApp": "Exit App",
+  "exitApp": "ऐप से बाहर निकलें",
   "@exitApp": {
     "description": "Localized string for exitApp"
   },
-  "exitConfirmMessage": "Are you sure you want to exit the app?",
+  "exitConfirmMessage": "क्या आप वाकई ऐप से बाहर निकलना चाहते हैं?",
   "@exitConfirmMessage": {
     "description": "Localized string for exitConfirmMessage"
   },
-  "expertPersona": "Expert Persona",
+  "expertPersona": "विशेषज्ञ व्यक्तित्व",
   "@expertPersona": {
     "description": "Localized string for expertPersona"
   },
-  "expertiseScore": "Expertise Score",
+  "expertiseScore": "विशेषज्ञता स्कोर",
   "@expertiseScore": {
     "description": "Localized string for expertiseScore"
   },
-  "expired": "Expired",
+  "expired": "समाप्त",
   "@expired": {
     "description": "Localized string for expired"
   },
-  "explainReportReason": "Please explain the report reason in detail",
+  "explainReportReason": "कृपया रिपोर्ट कारण को विस्तार से समझाएं",
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "fashion": "Fashion",
+  "fashion": "फैशन",
   "@fashion": {
     "description": "Localized string for fashion"
   },
@@ -858,15 +858,15 @@
   "@filter": {
     "description": "Localized string for filter"
   },
-  "firstOccurred": "First Occurred: ",
+  "firstOccurred": "पहली बार हुआ:",
   "@firstOccurred": {
     "description": "Localized string for firstOccurred"
   },
-  "followDeviceLanguage": "Follow device language settings",
+  "followDeviceLanguage": "डिवाइस की भाषा सेटिंग का पालन करें",
   "@followDeviceLanguage": {
     "description": "Localized string for followDeviceLanguage"
   },
-  "forenoon": "Forenoon",
+  "forenoon": "पूर्वाह्न",
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
@@ -874,19 +874,19 @@
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
-  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "frequentlyAskedQuestions": "अक्सर पूछे जाने वाले प्रश्न",
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
-  "friday": "Friday",
+  "friday": "शुक्रवार",
   "@friday": {
     "description": "Localized string for friday"
   },
-  "friendshipDescription": "I want to meet new friends and have conversations",
+  "friendshipDescription": "मैं नए दोस्तों से मिलना चाहता हूँ और बातचीत करना चाहता हूँ",
   "@friendshipDescription": {
     "description": "Localized string for friendshipDescription"
   },
-  "funChat": "Fun Chat",
+  "funChat": "मजेदार चैट",
   "@funChat": {
     "description": "Localized string for funChat"
   },
@@ -898,7 +898,7 @@
   "@galleryPermissionDesc": {
     "description": "Localized string for galleryPermissionDesc"
   },
-  "gaming": "Gaming",
+  "gaming": "गेमिंग",
   "@gaming": {
     "description": "Localized string for gaming"
   },
@@ -906,35 +906,35 @@
   "@gender": {
     "description": "Localized string for gender"
   },
-  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
+  "genderNotSelectedInfo": "यदि लिंग चयनित नहीं है, तो सभी लिंगों के व्यक्तित्व दिखाए जाएंगे",
   "@genderNotSelectedInfo": {
     "description": "Localized string for genderNotSelectedInfo"
   },
-  "genderOptional": "Gender (Optional)",
+  "genderOptional": "लिंग (वैकल्पिक)",
   "@genderOptional": {
     "description": "Localized string for genderOptional"
   },
-  "genderPreferenceActive": "You can meet personas of all genders",
+  "genderPreferenceActive": "आप सभी लिंगों के व्यक्तित्व से मिल सकते हैं",
   "@genderPreferenceActive": {
     "description": "Localized string for genderPreferenceActive"
   },
-  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
+  "genderPreferenceDisabled": "केवल विपरीत लिंग का विकल्प सक्षम करने के लिए अपना लिंग चुनें",
   "@genderPreferenceDisabled": {
     "description": "Localized string for genderPreferenceDisabled"
   },
-  "genderPreferenceInactive": "Only opposite gender personas will be shown",
+  "genderPreferenceInactive": "केवल विपरीत लिंग के व्यक्तित्व दिखाए जाएंगे",
   "@genderPreferenceInactive": {
     "description": "Localized string for genderPreferenceInactive"
   },
-  "genderRequired": "Gender *",
+  "genderRequired": "लिंग *",
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
+  "genderSelectionInfo": "यदि चयनित नहीं किया गया, तो आप सभी लिंगों के व्यक्तित्व से मिल सकते हैं",
   "@genderSelectionInfo": {
     "description": "Localized string for genderSelectionInfo"
   },
-  "generalPersona": "General Persona",
+  "generalPersona": "सामान्य व्यक्तित्व",
   "@generalPersona": {
     "description": "Localized string for generalPersona"
   },
@@ -942,11 +942,11 @@
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
-  "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
+  "googleLoginCanceled": "गूगल लॉगिन रद्द कर दिया गया। कृपया फिर से प्रयास करें।",
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
   },
-  "googleLoginError": "Error occurred during Google login.",
+  "googleLoginError": "गूगल लॉगिन के दौरान त्रुटि हुई।",
   "@googleLoginError": {
     "description": "Localized string for googleLoginError"
   },
@@ -954,27 +954,27 @@
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "guest": "Guest",
+  "guest": "मेहमान",
   "@guest": {
     "description": "Localized string for guest"
   },
-  "guestDataMigration": "Would you like to keep your current chat history when signing up?",
+  "guestDataMigration": "क्या आप साइन अप करते समय अपनी वर्तमान चैट इतिहास को रखना चाहेंगे?",
   "@guestDataMigration": {
     "description": "Localized string for guestDataMigration"
   },
-  "guestLimitReached": "Guest trial ended.\nSign up for unlimited conversations!",
+  "guestLimitReached": "मेहमान परीक्षण समाप्त हो गया। असीमित बातचीत के लिए साइन अप करें!",
   "@guestLimitReached": {
     "description": "Localized string for guestLimitReached"
   },
-  "guestLoginPromptMessage": "Login to continue the conversation",
+  "guestLoginPromptMessage": "बातचीत जारी रखने के लिए लॉगिन करें",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
-  "guestMessageExhausted": "Free messages exhausted",
+  "guestMessageExhausted": "मुफ्त संदेश समाप्त हो गए",
   "@guestMessageExhausted": {
     "description": "Localized string for guestMessageExhausted"
   },
-  "guestMessageRemaining": "{count} guest messages remaining",
+  "guestMessageRemaining": "{count} मेहमान संदेश शेष हैं",
   "@guestMessageRemaining": {
     "description": "Guest messages remaining",
     "placeholders": {
@@ -983,95 +983,95 @@
       }
     }
   },
-  "guestModeBanner": "Guest Mode",
+  "guestModeBanner": "अतिथि मोड",
   "@guestModeBanner": {
     "description": "Localized string for guestModeBanner"
   },
-  "guestModeDescription": "Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas",
+  "guestModeDescription": "बिना साइन अप किए SONA आजमाएँ",
   "@guestModeDescription": {
     "description": "Localized string for guestModeDescription"
   },
-  "guestModeFailedMessage": "Failed to start Guest Mode",
+  "guestModeFailedMessage": "अतिथि मोड शुरू करने में विफल",
   "@guestModeFailedMessage": {
     "description": "Localized string for guestModeFailedMessage"
   },
-  "guestModeLimitation": "Some features are limited in Guest Mode",
+  "guestModeLimitation": "कुछ सुविधाएँ अतिथि मोड में सीमित हैं",
   "@guestModeLimitation": {
     "description": "Localized string for guestModeLimitation"
   },
-  "guestModeTitle": "Try as Guest",
+  "guestModeTitle": "अतिथि के रूप में आजमाएँ",
   "@guestModeTitle": {
     "description": "Localized string for guestModeTitle"
   },
-  "guestModeWarning": "Guest mode lasts for 24 hours,\nafter which data will be deleted.",
+  "guestModeWarning": "अतिथि मोड 24 घंटे तक चलता है,",
   "@guestModeWarning": {
     "description": "Localized string for guestModeWarning"
   },
-  "guestModeWelcome": "Starting in Guest Mode",
+  "guestModeWelcome": "अतिथि मोड में शुरू करना",
   "@guestModeWelcome": {
     "description": "Localized string for guestModeWelcome"
   },
-  "happy": "Happy",
+  "happy": "खुश",
   "@happy": {
     "description": "Localized string for happy"
   },
-  "hapticFeedback": "Haptic Feedback",
+  "hapticFeedback": "हैप्टिक फीडबैक",
   "@hapticFeedback": {
     "description": "Localized string for hapticFeedback"
   },
-  "harassmentBullying": "Harassment/Bullying",
+  "harassmentBullying": "उत्पीड़न/बुलिंग",
   "@harassmentBullying": {
     "description": "Localized string for harassmentBullying"
   },
-  "hateSpeech": "Hate speech",
+  "hateSpeech": "नफरत भरी बातें",
   "@hateSpeech": {
     "description": "Localized string for hateSpeech"
   },
-  "heartDescription": "Hearts for more messages",
+  "heartDescription": "अधिक संदेशों के लिए दिल",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
   },
-  "heartInsufficient": "Not enough hearts",
+  "heartInsufficient": "पर्याप्त दिल नहीं हैं",
   "@heartInsufficient": {
     "description": "Localized string for heartInsufficient"
   },
-  "heartInsufficientPleaseCharge": "Not enough hearts. Please recharge hearts.",
+  "heartInsufficientPleaseCharge": "पर्याप्त दिल नहीं हैं। कृपया दिल रिचार्ज करें।",
   "@heartInsufficientPleaseCharge": {
     "description": "Localized string for heartInsufficientPleaseCharge"
   },
-  "heartRequired": "1 heart is required",
+  "heartRequired": "1 दिल की आवश्यकता है",
   "@heartRequired": {
     "description": "Localized string for heartRequired"
   },
-  "heartUsageFailed": "Failed to use heart.",
+  "heartUsageFailed": "दिल का उपयोग करने में विफल।",
   "@heartUsageFailed": {
     "description": "Localized string for heartUsageFailed"
   },
-  "hearts": "Hearts",
+  "hearts": "दिल",
   "@hearts": {
     "description": "Localized string for hearts"
   },
-  "hearts10": "10 Hearts",
+  "hearts10": "10 दिल",
   "@hearts10": {
     "description": "Localized string for hearts10"
   },
-  "hearts30": "30 Hearts",
+  "hearts30": "30 दिल",
   "@hearts30": {
     "description": "Localized string for hearts30"
   },
-  "hearts30Discount": "SALE",
+  "hearts30Discount": "बिक्री",
   "@hearts30Discount": {
     "description": "Localized string for hearts30Discount"
   },
-  "hearts50": "50 Hearts",
+  "hearts50": "50 दिल",
   "@hearts50": {
     "description": "Localized string for hearts50"
   },
-  "hearts50Discount": "SALE",
+  "hearts50Discount": "बिक्री",
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
-  "helloEmoji": "Hello! 😊",
+  "helloEmoji": "नमस्ते! 😊",
   "@helloEmoji": {
     "description": "Localized string for helloEmoji"
   },
@@ -1079,19 +1079,19 @@
   "@help": {
     "description": "Localized string for help"
   },
-  "hideOriginalText": "Hide Original",
+  "hideOriginalText": "मूल पाठ छिपाएँ",
   "@hideOriginalText": {
     "description": "Localized string for hideOriginalText"
   },
-  "hobbySharing": "Hobby Sharing",
+  "hobbySharing": "शौक साझा करना",
   "@hobbySharing": {
     "description": "Localized string for hobbySharing"
   },
-  "hobbyTalk": "Hobby Talk",
+  "hobbyTalk": "शौक की बातें",
   "@hobbyTalk": {
     "description": "Localized string for hobbyTalk"
   },
-  "hours24Ago": "24 hours ago",
+  "hours24Ago": "24 घंटे पहले",
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
@@ -1109,59 +1109,59 @@
       }
     }
   },
-  "howToUse": "How to use SONA",
+  "howToUse": "SONA का उपयोग कैसे करें",
   "@howToUse": {
     "description": "Localized string for howToUse"
   },
-  "imageCacheManagement": "Image Cache Management",
+  "imageCacheManagement": "इमेज कैश प्रबंधन",
   "@imageCacheManagement": {
     "description": "Localized string for imageCacheManagement"
   },
-  "inappropriateContent": "Inappropriate content",
+  "inappropriateContent": "अनुपयुक्त सामग्री",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
-  "incorrect": "incorrect",
+  "incorrect": "गलत",
   "@incorrect": {
     "description": "Localized string for incorrect"
   },
-  "incorrectPassword": "Incorrect password",
+  "incorrectPassword": "गलत पासवर्ड",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
   },
-  "indonesian": "Indonesian",
+  "indonesian": "इंडोनेशियाई",
   "@indonesian": {
     "description": "Localized string for indonesian"
   },
-  "inquiries": "Inquiries",
+  "inquiries": "पूछताछ",
   "@inquiries": {
     "description": "Localized string for inquiries"
   },
-  "insufficientHearts": "Insufficient hearts.",
+  "insufficientHearts": "पर्याप्त दिल नहीं हैं।",
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
-  "interestSharing": "Interest Sharing",
+  "interestSharing": "रुचि साझा करना",
   "@interestSharing": {
     "description": "Localized string for interestSharing"
   },
-  "interestSharingDesc": "Discover and recommend shared interests",
+  "interestSharingDesc": "साझा रुचियों को खोजें और सिफारिश करें",
   "@interestSharingDesc": {
     "description": "Localized string for interestSharingDesc"
   },
-  "interests": "Interests",
+  "interests": "रुचियाँ",
   "@interests": {
     "description": "Localized string for interests"
   },
-  "invalidEmailFormat": "Invalid email format",
+  "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
   "@invalidEmailFormat": {
     "description": "Localized string for invalidEmailFormat"
   },
-  "invalidEmailFormatError": "Please enter a valid email address",
+  "invalidEmailFormatError": "कृपया एक मान्य ईमेल पता दर्ज करें",
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
-  "isTyping": "{name} is typing...",
+  "isTyping": "{name} टाइप कर रहा है...",
   "@isTyping": {
     "description": "Shows someone is typing",
     "placeholders": {
@@ -1170,11 +1170,11 @@
       }
     }
   },
-  "japanese": "Japanese",
+  "japanese": "जापानी",
   "@japanese": {
     "description": "Localized string for japanese"
   },
-  "joinDate": "Join Date",
+  "joinDate": "शामिल होने की तिथि",
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
@@ -1182,15 +1182,15 @@
   "@justNow": {
     "description": "Localized string for justNow"
   },
-  "keepGuestData": "Keep Chat History",
+  "keepGuestData": "चैट इतिहास रखें",
   "@keepGuestData": {
     "description": "Localized string for keepGuestData"
   },
-  "korean": "Korean",
+  "korean": "कोरियाई",
   "@korean": {
     "description": "Localized string for korean"
   },
-  "koreanLanguage": "Korean",
+  "koreanLanguage": "कोरियाई",
   "@koreanLanguage": {
     "description": "Localized string for koreanLanguage"
   },
@@ -1198,67 +1198,67 @@
   "@language": {
     "description": "Localized string for language"
   },
-  "languageDescription": "AI will respond in your selected language",
+  "languageDescription": "एआई आपके द्वारा चुनी गई भाषा में उत्तर देगा",
   "@languageDescription": {
     "description": "Localized string for languageDescription"
   },
-  "languageIndicator": "Language",
+  "languageIndicator": "भाषा",
   "@languageIndicator": {
     "description": "Localized string for languageIndicator"
   },
-  "languageSettings": "Language Settings",
+  "languageSettings": "भाषा सेटिंग्स",
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "lastOccurred": "Last Occurred: ",
+  "lastOccurred": "अंतिम बार हुआ:",
   "@lastOccurred": {
     "description": "Localized string for lastOccurred"
   },
-  "lastUpdated": "Last Updated",
+  "lastUpdated": "अंतिम बार अपडेट किया गया",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
   },
-  "lateNight": "Late night",
+  "lateNight": "देर रात",
   "@lateNight": {
     "description": "Localized string for lateNight"
   },
-  "later": "Later",
+  "later": "बाद में",
   "@later": {
     "description": "Localized string for later"
   },
-  "laterButton": "Later",
+  "laterButton": "बाद में",
   "@laterButton": {
     "description": "Localized string for laterButton"
   },
-  "leave": "Leave",
+  "leave": "छोड़ें",
   "@leave": {
     "description": "Localized string for leave"
   },
-  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
+  "leaveChatConfirm": "क्या आप इस चैट को छोड़ना चाहते हैं?",
   "@leaveChatConfirm": {
     "description": "Localized string for leaveChatConfirm"
   },
-  "leaveChatRoom": "Leave Chat Room",
+  "leaveChatRoom": "चैट रूम छोड़ें",
   "@leaveChatRoom": {
     "description": "Localized string for leaveChatRoom"
   },
-  "leaveChatTitle": "Leave Chat",
+  "leaveChatTitle": "चैट छोड़ें",
   "@leaveChatTitle": {
     "description": "Localized string for leaveChatTitle"
   },
-  "lifeAdvice": "Life Advice",
+  "lifeAdvice": "जीवन सलाह",
   "@lifeAdvice": {
     "description": "Localized string for lifeAdvice"
   },
-  "lightTalk": "Light Talk",
+  "lightTalk": "हल्की बातचीत",
   "@lightTalk": {
     "description": "Localized string for lightTalk"
   },
-  "lightTheme": "Light Mode",
+  "lightTheme": "लाइट मोड",
   "@lightTheme": {
     "description": "Localized string for lightTheme"
   },
-  "lightThemeDesc": "Use bright theme",
+  "lightThemeDesc": "उज्ज्वल थीम का उपयोग करें",
   "@lightThemeDesc": {
     "description": "Localized string for lightThemeDesc"
   },
@@ -1266,15 +1266,15 @@
   "@loading": {
     "description": "Localized string for loading"
   },
-  "loadingData": "Loading data...",
+  "loadingData": "डेटा लोड हो रहा है...",
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "loadingProducts": "Loading products...",
+  "loadingProducts": "उत्पाद लोड हो रहे हैं...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
-  "loadingProfile": "Loading profile",
+  "loadingProfile": "प्रोफ़ाइल लोड हो रही है",
   "@loadingProfile": {
     "description": "Localized string for loadingProfile"
   },
@@ -1282,63 +1282,63 @@
   "@login": {
     "description": "Localized string for login"
   },
-  "loginButton": "Login",
+  "loginButton": "लॉगिन",
   "@loginButton": {
     "description": "Localized string for loginButton"
   },
-  "loginCancelled": "Login cancelled",
+  "loginCancelled": "लॉगिन रद्द किया गया",
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
-  "loginComplete": "Login complete",
+  "loginComplete": "लॉगिन पूरा हुआ",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
   },
-  "loginError": "Login failed",
+  "loginError": "लॉगिन विफल",
   "@loginError": {
     "description": "Localized string for loginError"
   },
-  "loginFailed": "Login failed",
+  "loginFailed": "लॉगिन विफल",
   "@loginFailed": {
     "description": "Localized string for loginFailed"
   },
-  "loginFailedTryAgain": "Login failed. Please try again.",
+  "loginFailedTryAgain": "लॉगिन विफल। कृपया फिर से प्रयास करें।",
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
-  "loginRequired": "Login required",
+  "loginRequired": "लॉगिन आवश्यक है",
   "@loginRequired": {
     "description": "Localized string for loginRequired"
   },
-  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
+  "loginRequiredForProfile": "प्रोफ़ाइल देखने और SONA के साथ रिकॉर्ड चेक करने के लिए लॉगिन आवश्यक है",
   "@loginRequiredForProfile": {
     "description": "Localized string for loginRequiredForProfile"
   },
-  "loginRequiredService": "Login required to use this service",
+  "loginRequiredService": "इस सेवा का उपयोग करने के लिए लॉगिन आवश्यक है",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
   },
-  "loginRequiredTitle": "Login Required",
+  "loginRequiredTitle": "लॉगिन आवश्यक",
   "@loginRequiredTitle": {
     "description": "Localized string for loginRequiredTitle"
   },
-  "loginSignup": "Login/Sign Up",
+  "loginSignup": "लॉगिन/साइन अप",
   "@loginSignup": {
     "description": "Localized string for loginSignup"
   },
-  "loginTab": "Login",
+  "loginTab": "लॉगिन",
   "@loginTab": {
     "description": "Localized string for loginTab"
   },
-  "loginTitle": "Login",
+  "loginTitle": "लॉगिन",
   "@loginTitle": {
     "description": "Localized string for loginTitle"
   },
-  "loginWithApple": "Login with Apple",
+  "loginWithApple": "एप्पल के साथ लॉगिन",
   "@loginWithApple": {
     "description": "Localized string for loginWithApple"
   },
-  "loginWithGoogle": "Login with Google",
+  "loginWithGoogle": "गूगल के साथ लॉगिन",
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
@@ -1346,35 +1346,35 @@
   "@logout": {
     "description": "Localized string for logout"
   },
-  "logoutConfirm": "Are you sure you want to logout?",
+  "logoutConfirm": "क्या आप वाकई लॉगआउट करना चाहते हैं?",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
   },
-  "lonelinessRelief": "Loneliness Relief",
+  "lonelinessRelief": "अकेलेपन से राहत",
   "@lonelinessRelief": {
     "description": "Localized string for lonelinessRelief"
   },
-  "lonely": "Lonely",
+  "lonely": "अकेला",
   "@lonely": {
     "description": "Localized string for lonely"
   },
-  "lowQualityResponses": "Low Quality Responses",
+  "lowQualityResponses": "निम्न गुणवत्ता की प्रतिक्रियाएँ",
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },
-  "lunch": "Lunch",
+  "lunch": "दोपहर का भोजन",
   "@lunch": {
     "description": "Localized string for lunch"
   },
-  "lunchtime": "Lunchtime",
+  "lunchtime": "दोपहर का समय",
   "@lunchtime": {
     "description": "Localized string for lunchtime"
   },
-  "mainErrorType": "Main Error Type",
+  "mainErrorType": "मुख्य त्रुटि प्रकार",
   "@mainErrorType": {
     "description": "Localized string for mainErrorType"
   },
-  "makeFriends": "Make Friends",
+  "makeFriends": "मित्र बनाएं",
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
@@ -1382,39 +1382,39 @@
   "@male": {
     "description": "Localized string for male"
   },
-  "manageBlockedAIs": "Manage Blocked AIs",
+  "manageBlockedAIs": "अवरुद्ध AIs का प्रबंधन करें",
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "managePersonaImageCache": "Manage persona image cache",
+  "managePersonaImageCache": "पर्सोना इमेज कैश का प्रबंधन करें",
   "@managePersonaImageCache": {
     "description": "Localized string for managePersonaImageCache"
   },
-  "marketingAgree": "Agree to Marketing Information (Optional)",
+  "marketingAgree": "मार्केटिंग जानकारी के लिए सहमत हों (वैकल्पिक)",
   "@marketingAgree": {
     "description": "Localized string for marketingAgree"
   },
-  "marketingDescription": "You can receive event and benefit information",
+  "marketingDescription": "आप कार्यक्रम और लाभ की जानकारी प्राप्त कर सकते हैं",
   "@marketingDescription": {
     "description": "Localized string for marketingDescription"
   },
-  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "matchPersonaStep": "1. पर्सोनाओं का मिलान करें: अपने पसंदीदा AI पर्सोनाओं का चयन करने के लिए बाएं या दाएं स्वाइप करें।",
   "@matchPersonaStep": {
     "description": "Localized string for matchPersonaStep"
   },
-  "matchedPersonas": "Matched Personas",
+  "matchedPersonas": "मिलान की गई पर्सोनाएं",
   "@matchedPersonas": {
     "description": "Localized string for matchedPersonas"
   },
-  "matchedSona": "Matched Sona",
+  "matchedSona": "मिलान की गई SONA",
   "@matchedSona": {
     "description": "Localized string for matchedSona"
   },
-  "matching": "Matching",
+  "matching": "मिलान कर रहा है",
   "@matching": {
     "description": "Localized string for matching"
   },
-  "matchingFailed": "Matching failed.",
+  "matchingFailed": "मिलान विफल हो गया।",
   "@matchingFailed": {
     "description": "Localized string for matchingFailed"
   },
@@ -1422,47 +1422,47 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "meetAIPersonas": "Meet AI Personas",
+  "meetAIPersonas": "AI व्यक्तित्व से मिलें",
   "@meetAIPersonas": {
     "description": "Localized string for meetAIPersonas"
   },
-  "meetNewPersonas": "Meet New Personas",
+  "meetNewPersonas": "नए व्यक्तित्व से मिलें",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
-  "meetPersonas": "Meet Personas",
+  "meetPersonas": "व्यक्तित्व से मिलें",
   "@meetPersonas": {
     "description": "Localized string for meetPersonas"
   },
-  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "memberBenefits": "साइन अप करने पर 100+ संदेश और 10 दिल प्राप्त करें!",
   "@memberBenefits": {
     "description": "Localized string for memberBenefits"
   },
-  "memoryAlbum": "Memory Album",
+  "memoryAlbum": "मेमोरी एल्बम",
   "@memoryAlbum": {
     "description": "Localized string for memoryAlbum"
   },
-  "memoryAlbumDesc": "Automatically save and recall special moments",
+  "memoryAlbumDesc": "विशेष क्षणों को स्वचालित रूप से सहेजें और याद करें",
   "@memoryAlbumDesc": {
     "description": "Localized string for memoryAlbumDesc"
   },
-  "messageCopied": "Message copied",
+  "messageCopied": "संदेश कॉपी कर लिया गया",
   "@messageCopied": {
     "description": "Localized string for messageCopied"
   },
-  "messageDeleted": "Message deleted",
+  "messageDeleted": "संदेश हटा दिया गया",
   "@messageDeleted": {
     "description": "Localized string for messageDeleted"
   },
-  "messageLimitReset": "Message limit will reset at midnight",
+  "messageLimitReset": "संदेश सीमा मध्यरात्रि पर रीसेट होगी",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
-  "messageSendFailed": "Failed to send message. Please try again.",
+  "messageSendFailed": "संदेश भेजने में विफल। कृपया फिर से प्रयास करें।",
   "@messageSendFailed": {
     "description": "Localized string for messageSendFailed"
   },
-  "messagesRemaining": "Messages Remaining",
+  "messagesRemaining": "शेष संदेश",
   "@messagesRemaining": {
     "description": "Label for messages remaining"
   },
@@ -1480,15 +1480,15 @@
       }
     }
   },
-  "missingTranslation": "Missing Translation",
+  "missingTranslation": "अनुवाद गायब है",
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
-  "monday": "Monday",
+  "monday": "सोमवार",
   "@monday": {
     "description": "Localized string for monday"
   },
-  "month": "Month",
+  "month": "महीना",
   "@month": {
     "description": "Localized string for month"
   },
@@ -1504,35 +1504,35 @@
       }
     }
   },
-  "moreButton": "More",
+  "moreButton": "और",
   "@moreButton": {
     "description": "Localized string for moreButton"
   },
-  "morning": "Morning",
+  "morning": "सुबह",
   "@morning": {
     "description": "Localized string for morning"
   },
-  "mostFrequentError": "Most Frequent Error",
+  "mostFrequentError": "सबसे सामान्य त्रुटि",
   "@mostFrequentError": {
     "description": "Localized string for mostFrequentError"
   },
-  "movies": "Movies",
+  "movies": "फिल्में",
   "@movies": {
     "description": "Localized string for movies"
   },
-  "multilingualChat": "Multilingual Chat",
+  "multilingualChat": "बहुभाषी चैट",
   "@multilingualChat": {
     "description": "Localized string for multilingualChat"
   },
-  "music": "Music",
+  "music": "संगीत",
   "@music": {
     "description": "Localized string for music"
   },
-  "myGenderSection": "My Gender (Optional)",
+  "myGenderSection": "मेरा लिंग (वैकल्पिक)",
   "@myGenderSection": {
     "description": "Localized string for myGenderSection"
   },
-  "networkErrorOccurred": "A network error occurred.",
+  "networkErrorOccurred": "एक नेटवर्क त्रुटि हुई।",
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
@@ -1540,7 +1540,7 @@
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
-  "newMessageCount": "{count} new messages",
+  "newMessageCount": "{count} नए संदेश",
   "@newMessageCount": {
     "description": "Number of new messages",
     "placeholders": {
@@ -1549,15 +1549,15 @@
       }
     }
   },
-  "newMessageNotification": "Notify me of new messages",
+  "newMessageNotification": "नए संदेशों की सूचना दें",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
   },
-  "newMessages": "New messages",
+  "newMessages": "नए संदेश",
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
-  "newYear": "New Year",
+  "newYear": "नया साल",
   "@newYear": {
     "description": "Localized string for newYear"
   },
@@ -1565,47 +1565,47 @@
   "@next": {
     "description": "Localized string for next"
   },
-  "niceToMeetYou": "Nice to meet you!",
+  "niceToMeetYou": "आपसे मिलकर अच्छा लगा!",
   "@niceToMeetYou": {
     "description": "Localized string for niceToMeetYou"
   },
-  "nickname": "Nickname",
+  "nickname": "उपनाम",
   "@nickname": {
     "description": "Localized string for nickname"
   },
-  "nicknameAlreadyUsed": "This nickname is already in use",
+  "nicknameAlreadyUsed": "यह उपनाम पहले से उपयोग में है",
   "@nicknameAlreadyUsed": {
     "description": "Localized string for nicknameAlreadyUsed"
   },
-  "nicknameHelperText": "3-10 characters",
+  "nicknameHelperText": "3-10 अक्षर",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
   },
-  "nicknameHint": "3-10 characters",
+  "nicknameHint": "3-10 अक्षर",
   "@nicknameHint": {
     "description": "Localized string for nicknameHint"
   },
-  "nicknameInUse": "This nickname is already in use",
+  "nicknameInUse": "यह उपनाम पहले से उपयोग में है",
   "@nicknameInUse": {
     "description": "Localized string for nicknameInUse"
   },
-  "nicknameLabel": "Nickname",
+  "nicknameLabel": "उपनाम",
   "@nicknameLabel": {
     "description": "Localized string for nicknameLabel"
   },
-  "nicknameLengthError": "Nickname must be 3-10 characters",
+  "nicknameLengthError": "उपनाम 3-10 अक्षर होना चाहिए",
   "@nicknameLengthError": {
     "description": "Localized string for nicknameLengthError"
   },
-  "nicknamePlaceholder": "Enter your nickname",
+  "nicknamePlaceholder": "अपना उपनाम दर्ज करें",
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
-  "nicknameRequired": "Nickname *",
+  "nicknameRequired": "उपनाम *",
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
-  "night": "Night",
+  "night": "रात",
   "@night": {
     "description": "Localized string for night"
   },
@@ -1613,59 +1613,59 @@
   "@no": {
     "description": "Localized string for no"
   },
-  "noBlockedAIs": "No blocked AIs",
+  "noBlockedAIs": "कोई ब्लॉक किए गए एआई नहीं",
   "@noBlockedAIs": {
     "description": "Localized string for noBlockedAIs"
   },
-  "noChatsYet": "No chats yet",
+  "noChatsYet": "अभी तक कोई चैट नहीं",
   "@noChatsYet": {
     "description": "Localized string for noChatsYet"
   },
-  "noConversationYet": "No conversation yet",
+  "noConversationYet": "अभी तक कोई बातचीत नहीं",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
   },
-  "noErrorReports": "No error reports.",
+  "noErrorReports": "कोई त्रुटि रिपोर्ट नहीं।",
   "@noErrorReports": {
     "description": "Localized string for noErrorReports"
   },
-  "noImageAvailable": "No image available",
+  "noImageAvailable": "कोई चित्र उपलब्ध नहीं",
   "@noImageAvailable": {
     "description": "Localized string for noImageAvailable"
   },
-  "noMatchedPersonas": "No matched personas yet",
+  "noMatchedPersonas": "अभी तक कोई मेल खाने वाले व्यक्तित्व नहीं",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
-  "noMatchedSonas": "No matched Sonas yet",
+  "noMatchedSonas": "अभी तक कोई मेल खाने वाले SONA नहीं",
   "@noMatchedSonas": {
     "description": "Localized string for noMatchedSonas"
   },
-  "noPersonasAvailable": "No personas available. Please try again.",
+  "noPersonasAvailable": "कोई व्यक्तित्व उपलब्ध नहीं। कृपया पुनः प्रयास करें।",
   "@noPersonasAvailable": {
     "description": "Localized string for noPersonasAvailable"
   },
-  "noPersonasToSelect": "No personas available",
+  "noPersonasToSelect": "कोई व्यक्तित्व उपलब्ध नहीं",
   "@noPersonasToSelect": {
     "description": "Localized string for noPersonasToSelect"
   },
-  "noQualityIssues": "No quality issues in the last hour ✅",
+  "noQualityIssues": "पिछले एक घंटे में कोई गुणवत्ता समस्या नहीं ✅",
   "@noQualityIssues": {
     "description": "Localized string for noQualityIssues"
   },
-  "noQualityLogs": "No quality logs yet.",
+  "noQualityLogs": "अभी तक कोई गुणवत्ता लॉग नहीं हैं।",
   "@noQualityLogs": {
     "description": "Localized string for noQualityLogs"
   },
-  "noTranslatedMessages": "No messages to translate",
+  "noTranslatedMessages": "अनुवाद करने के लिए कोई संदेश नहीं हैं।",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
   },
-  "notEnoughHearts": "Not enough hearts",
+  "notEnoughHearts": "पर्याप्त दिल नहीं हैं।",
   "@notEnoughHearts": {
     "description": "Localized string for notEnoughHearts"
   },
-  "notEnoughHeartsCount": "Not enough hearts. (Current: {count})",
+  "notEnoughHeartsCount": "पर्याप्त दिल नहीं हैं। (वर्तमान: {count})",
   "@notEnoughHeartsCount": {
     "description": "Not enough hearts message",
     "placeholders": {
@@ -1674,11 +1674,11 @@
       }
     }
   },
-  "notRegistered": "not registered",
+  "notRegistered": "पंजीकृत नहीं है।",
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
-  "notSubscribed": "Not subscribed",
+  "notSubscribed": "सदस्यता नहीं ली है।",
   "@notSubscribed": {
     "description": "Localized string for notSubscribed"
   },
@@ -1698,23 +1698,23 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "occurrenceInfo": "Occurrence Info:",
+  "occurrenceInfo": "घटना जानकारी:",
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
-  "olderChats": "Older",
+  "olderChats": "पुराने",
   "@olderChats": {
     "description": "Localized string for olderChats"
   },
-  "onlyOppositeGenderNote": "If unchecked, only opposite gender personas will be shown",
+  "onlyOppositeGenderNote": "यदि अनचेक किया गया, तो केवल विपरीत लिंग के व्यक्तित्व दिखाए जाएंगे।",
   "@onlyOppositeGenderNote": {
     "description": "Localized string for onlyOppositeGenderNote"
   },
-  "openSettings": "Open Settings",
+  "openSettings": "सेटिंग्स खोलें।",
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Optional",
+  "optional": "वैकल्पिक",
   "@optional": {
     "description": "Localized string for optional"
   },
@@ -1722,11 +1722,11 @@
   "@or": {
     "description": "Localized string for or"
   },
-  "originalPrice": "Original",
+  "originalPrice": "मूल",
   "@originalPrice": {
     "description": "Localized string for originalPrice"
   },
-  "originalText": "Original",
+  "originalText": "मूल",
   "@originalText": {
     "description": "Localized string for originalText"
   },
@@ -1734,19 +1734,19 @@
   "@other": {
     "description": "Localized string for other"
   },
-  "otherError": "Other Error",
+  "otherError": "अन्य त्रुटि",
   "@otherError": {
     "description": "Localized string for otherError"
   },
-  "others": "Others",
+  "others": "अन्य",
   "@others": {
     "description": "Localized string for others"
   },
-  "ownedHearts": "Owned Hearts",
+  "ownedHearts": "स्वामित्व वाले दिल",
   "@ownedHearts": {
     "description": "Localized string for ownedHearts"
   },
-  "parentsDay": "Parents' Day",
+  "parentsDay": "माता-पिता का दिन",
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
@@ -1754,39 +1754,39 @@
   "@password": {
     "description": "Localized string for password"
   },
-  "passwordConfirmation": "Enter password to confirm",
+  "passwordConfirmation": "पासवर्ड की पुष्टि करने के लिए पासवर्ड दर्ज करें",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
-  "passwordConfirmationDesc": "Please re-enter your password to delete account.",
+  "passwordConfirmationDesc": "कृपया अपने खाते को हटाने के लिए अपना पासवर्ड फिर से दर्ज करें।",
   "@passwordConfirmationDesc": {
     "description": "Localized string for passwordConfirmationDesc"
   },
-  "passwordHint": "6 characters or more",
+  "passwordHint": "6 अक्षर या उससे अधिक",
   "@passwordHint": {
     "description": "Localized string for passwordHint"
   },
-  "passwordLabel": "Password",
+  "passwordLabel": "पासवर्ड",
   "@passwordLabel": {
     "description": "Localized string for passwordLabel"
   },
-  "passwordRequired": "Password *",
+  "passwordRequired": "पासवर्ड *",
   "@passwordRequired": {
     "description": "Localized string for passwordRequired"
   },
-  "passwordResetEmailPrompt": "Please enter your email to reset password",
+  "passwordResetEmailPrompt": "कृपया पासवर्ड रीसेट करने के लिए अपना ईमेल दर्ज करें",
   "@passwordResetEmailPrompt": {
     "description": "Localized string for passwordResetEmailPrompt"
   },
-  "passwordResetEmailSent": "Password reset email has been sent. Please check your email.",
+  "passwordResetEmailSent": "पासवर्ड रीसेट करने वाला ईमेल भेजा गया है। कृपया अपने ईमेल की जांच करें।",
   "@passwordResetEmailSent": {
     "description": "Localized string for passwordResetEmailSent"
   },
-  "passwordText": "password",
+  "passwordText": "पासवर्ड",
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
-  "passwordTooShort": "Password must be at least 6 characters",
+  "passwordTooShort": "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए",
   "@passwordTooShort": {
     "description": "Localized string for passwordTooShort"
   },
@@ -1803,7 +1803,7 @@
       }
     }
   },
-  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "permissionDeniedTryLater": "अनुमति अस्वीकृत। कृपया बाद में पुनः प्रयास करें।",
   "@permissionDeniedTryLater": {
     "description": "Localized string for permissionDeniedTryLater"
   },
@@ -1811,23 +1811,23 @@
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "personaGenderSection": "Persona Gender Preference",
+  "personaGenderSection": "पर्सोना लिंग प्राथमिकता",
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
-  "personaQualityStats": "Persona Quality Statistics",
+  "personaQualityStats": "पर्सोना गुणवत्ता सांख्यिकी",
   "@personaQualityStats": {
     "description": "Localized string for personaQualityStats"
   },
-  "personalInfoExposure": "Personal information exposure",
+  "personalInfoExposure": "व्यक्तिगत जानकारी का खुलासा",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "Personality",
+  "personality": "व्यक्तित्व",
   "@personality": {
     "description": "Localized string for personality"
   },
-  "pets": "Pets",
+  "pets": "पालतू जानवर",
   "@pets": {
     "description": "Localized string for pets"
   },
@@ -1835,47 +1835,47 @@
   "@photo": {
     "description": "Localized string for photo"
   },
-  "photography": "Photography",
+  "photography": "फोटोग्राफी",
   "@photography": {
     "description": "Localized string for photography"
   },
-  "picnic": "Picnic",
+  "picnic": "पिकनिक",
   "@picnic": {
     "description": "Localized string for picnic"
   },
-  "preferenceSettings": "Preference Settings",
+  "preferenceSettings": "प्राथमिकता सेटिंग्स",
   "@preferenceSettings": {
     "description": "Localized string for preferenceSettings"
   },
-  "preferredLanguage": "Preferred Language",
+  "preferredLanguage": "प्राथमिक भाषा",
   "@preferredLanguage": {
     "description": "Localized string for preferredLanguage"
   },
-  "preparingForSleep": "Preparing for sleep",
+  "preparingForSleep": "सोने की तैयारी कर रहे हैं",
   "@preparingForSleep": {
     "description": "Localized string for preparingForSleep"
   },
-  "preparingNewMeeting": "Preparing new meeting",
+  "preparingNewMeeting": "नई बैठक की तैयारी कर रहे हैं",
   "@preparingNewMeeting": {
     "description": "Localized string for preparingNewMeeting"
   },
-  "preparingPersonaImages": "Preparing persona images",
+  "preparingPersonaImages": "पर्सोना छवियों की तैयारी कर रहे हैं",
   "@preparingPersonaImages": {
     "description": "Localized string for preparingPersonaImages"
   },
-  "preparingPersonas": "Preparing personas",
+  "preparingPersonas": "पर्सोना की तैयारी कर रहे हैं",
   "@preparingPersonas": {
     "description": "Localized string for preparingPersonas"
   },
-  "preview": "Preview",
+  "preview": "पूर्वावलोकन",
   "@preview": {
     "description": "Localized string for preview"
   },
-  "previous": "Previous",
+  "previous": "पिछला",
   "@previous": {
     "description": "Localized string for previous"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "गोपनीयता नीति",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -1883,91 +1883,91 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "privacyPolicyAgreement": "Please agree to the privacy policy",
+  "privacyPolicyAgreement": "कृपया गोपनीयता नीति से सहमत हों",
   "@privacyPolicyAgreement": {
     "description": "Localized string for privacyPolicyAgreement"
   },
-  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "privacySection1Content": "हम आपकी गोपनीयता की रक्षा के लिए प्रतिबद्ध हैं। यह गोपनीयता नीति बताती है कि हम आपकी जानकारी को कैसे इकट्ठा, उपयोग और सुरक्षित करते हैं जब आप हमारी सेवा का उपयोग करते हैं।",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
   },
-  "privacySection1Title": "1. Purpose of Collection and Use of Personal Information",
+  "privacySection1Title": "1. व्यक्तिगत जानकारी के संग्रह और उपयोग का उद्देश्य",
   "@privacySection1Title": {
     "description": "Localized string for privacySection1Title"
   },
-  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "privacySection2Content": "हम आपकी द्वारा सीधे प्रदान की गई जानकारी एकत्र करते हैं, जैसे कि जब आप एक खाता बनाते हैं, अपने प्रोफ़ाइल को अपडेट करते हैं, या हमारी सेवाओं का उपयोग करते हैं।",
   "@privacySection2Content": {
     "description": "Localized string for privacySection2Content"
   },
-  "privacySection2Title": "Information We Collect",
+  "privacySection2Title": "हम कौन सी जानकारी एकत्र करते हैं",
   "@privacySection2Title": {
     "description": "Localized string for privacySection2Title"
   },
-  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "privacySection3Content": "हम जो जानकारी एकत्र करते हैं, उसका उपयोग अपनी सेवाओं को प्रदान करने, बनाए रखने और सुधारने के लिए तथा आपसे संवाद करने के लिए करते हैं।",
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
-  "privacySection3Title": "3. Retention and Use Period of Personal Information",
+  "privacySection3Title": "3. व्यक्तिगत जानकारी का संरक्षण और उपयोग अवधि",
   "@privacySection3Title": {
     "description": "Localized string for privacySection3Title"
   },
-  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "privacySection4Content": "हम आपकी व्यक्तिगत जानकारी को आपकी सहमति के बिना तीसरे पक्ष को नहीं बेचते, व्यापार करते हैं, या अन्यथा स्थानांतरित करते हैं।",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
   },
-  "privacySection4Title": "4. Provision of Personal Information to Third Parties",
+  "privacySection4Title": "4. तीसरे पक्ष को व्यक्तिगत जानकारी का प्रावधान",
   "@privacySection4Title": {
     "description": "Localized string for privacySection4Title"
   },
-  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "privacySection5Content": "हम आपकी व्यक्तिगत जानकारी को अनधिकृत पहुंच, परिवर्तन, प्रकटीकरण या विनाश से सुरक्षित रखने के लिए उचित सुरक्षा उपाय लागू करते हैं।",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
-  "privacySection5Title": "5. Technical Protection Measures for Personal Information",
+  "privacySection5Title": "5. व्यक्तिगत जानकारी के लिए तकनीकी सुरक्षा उपाय",
   "@privacySection5Title": {
     "description": "Localized string for privacySection5Title"
   },
-  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "privacySection6Content": "हम अपनी सेवाओं को प्रदान करने और कानूनी दायित्वों का पालन करने के लिए आवश्यक समय तक व्यक्तिगत जानकारी को बनाए रखते हैं।",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
   },
-  "privacySection6Title": "6. User Rights",
+  "privacySection6Title": "6. उपयोगकर्ता अधिकार",
   "@privacySection6Title": {
     "description": "Localized string for privacySection6Title"
   },
-  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "privacySection7Content": "आपके पास कभी भी अपने खाते की सेटिंग्स के माध्यम से अपनी व्यक्तिगत जानकारी तक पहुंचने, अपडेट करने या उसे हटाने का अधिकार है।",
   "@privacySection7Content": {
     "description": "Localized string for privacySection7Content"
   },
-  "privacySection7Title": "Your Rights",
+  "privacySection7Title": "आपके अधिकार",
   "@privacySection7Title": {
     "description": "Localized string for privacySection7Title"
   },
-  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "privacySection8Content": "यदि आपको इस गोपनीयता नीति के बारे में कोई प्रश्न है, तो कृपया हमसे support@sona.com पर संपर्क करें।",
   "@privacySection8Content": {
     "description": "Localized string for privacySection8Content"
   },
-  "privacySection8Title": "Contact Us",
+  "privacySection8Title": "हमसे संपर्क करें",
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
-  "privacySettings": "Privacy Settings",
+  "privacySettings": "गोपनीयता सेटिंग्स",
   "@privacySettings": {
     "description": "Localized string for privacySettings"
   },
-  "privacySettingsInfo": "Disabling individual features will make those services unavailable",
+  "privacySettingsInfo": "व्यक्तिगत सुविधाओं को बंद करने से वे सेवाएँ अनुपलब्ध हो जाएँगी",
   "@privacySettingsInfo": {
     "description": "Localized string for privacySettingsInfo"
   },
-  "privacySettingsScreen": "Privacy Settings",
+  "privacySettingsScreen": "गोपनीयता सेटिंग्स",
   "@privacySettingsScreen": {
     "description": "Localized string for privacySettingsScreen"
   },
-  "problemMessage": "Problem",
+  "problemMessage": "समस्या",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
   },
-  "problemOccurred": "Problem Occurred",
+  "problemOccurred": "समस्या हुई",
   "@problemOccurred": {
     "description": "Localized string for problemOccurred"
   },
@@ -1975,43 +1975,43 @@
   "@profile": {
     "description": "Localized string for profile"
   },
-  "profileEdit": "Edit Profile",
+  "profileEdit": "प्रोफ़ाइल संपादित करें",
   "@profileEdit": {
     "description": "Localized string for profileEdit"
   },
-  "profileEditLoginRequiredMessage": "Login is required to edit your profile.\nWould you like to go to the login screen?",
+  "profileEditLoginRequiredMessage": "अपनी प्रोफ़ाइल संपादित करने के लिए लॉगिन आवश्यक है। क्या आप लॉगिन स्क्रीन पर जाना चाहेंगे?",
   "@profileEditLoginRequiredMessage": {
     "description": "Localized string for profileEditLoginRequiredMessage"
   },
-  "profileInfo": "Profile Information",
+  "profileInfo": "प्रोफ़ाइल जानकारी",
   "@profileInfo": {
     "description": "Localized string for profileInfo"
   },
-  "profileInfoDescription": "Please enter your profile photo and basic information",
+  "profileInfoDescription": "कृपया अपनी प्रोफ़ाइल फोटो और बुनियादी जानकारी दर्ज करें",
   "@profileInfoDescription": {
     "description": "Localized string for profileInfoDescription"
   },
-  "profileNav": "Profile",
+  "profileNav": "प्रोफ़ाइल",
   "@profileNav": {
     "description": "Localized string for profileNav"
   },
-  "profilePhoto": "Profile Photo",
+  "profilePhoto": "प्रोफ़ाइल फोटो",
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "profilePhotoAndInfo": "कृपया प्रोफ़ाइल फोटो और बुनियादी जानकारी दर्ज करें",
   "@profilePhotoAndInfo": {
     "description": "Localized string for profilePhotoAndInfo"
   },
-  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "profilePhotoUpdateFailed": "प्रोफ़ाइल फ़ोटो अपडेट करने में विफल",
   "@profilePhotoUpdateFailed": {
     "description": "Localized string for profilePhotoUpdateFailed"
   },
-  "profilePhotoUpdated": "Profile photo updated",
+  "profilePhotoUpdated": "प्रोफ़ाइल फ़ोटो अपडेट हो गई",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
   },
-  "profileSettings": "Profile Settings",
+  "profileSettings": "प्रोफ़ाइल सेटिंग्स",
   "@profileSettings": {
     "description": "Localized string for profileSettings"
   },
@@ -2019,27 +2019,27 @@
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
-  "profileUpdateFailed": "Failed to update profile",
+  "profileUpdateFailed": "प्रोफ़ाइल अपडेट करने में विफल",
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "Profile updated successfully",
+  "profileUpdated": "प्रोफ़ाइल सफलतापूर्वक अपडेट हो गई",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
-  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "purchaseAndRefundPolicy": "खरीद और रिफंड नीति",
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
-  "purchaseButton": "Purchase",
+  "purchaseButton": "खरीदें",
   "@purchaseButton": {
     "description": "Localized string for purchaseButton"
   },
-  "purchaseConfirm": "Purchase Confirmation",
+  "purchaseConfirm": "खरीद पुष्टि",
   "@purchaseConfirm": {
     "description": "Localized string for purchaseConfirm"
   },
-  "purchaseConfirmContent": "Purchase {product} for {price}?",
+  "purchaseConfirmContent": "{price} में {product} खरीदें?",
   "@purchaseConfirmContent": {
     "description": "Purchase confirmation content",
     "placeholders": {
@@ -2051,7 +2051,7 @@
       }
     }
   },
-  "purchaseConfirmMessage": "Confirm purchase of {title} for {price}? {description}",
+  "purchaseConfirmMessage": "{price} में {title} की खरीद की पुष्टि करें? {description}",
   "@purchaseConfirmMessage": {
     "description": "Purchase confirmation message",
     "placeholders": {
@@ -2069,71 +2069,71 @@
       }
     }
   },
-  "purchaseFailed": "Purchase failed",
+  "purchaseFailed": "खरीद विफल",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
-  "purchaseHeartsOnly": "Buy hearts",
+  "purchaseHeartsOnly": "दिल खरीदें",
   "@purchaseHeartsOnly": {
     "description": "Localized string for purchaseHeartsOnly"
   },
-  "purchaseMoreHearts": "Purchase hearts to continue conversations",
+  "purchaseMoreHearts": "बातचीत जारी रखने के लिए दिल खरीदें",
   "@purchaseMoreHearts": {
     "description": "Localized string for purchaseMoreHearts"
   },
-  "purchasePending": "Purchase pending...",
+  "purchasePending": "खरीदारी लंबित...",
   "@purchasePending": {
     "description": "Localized string for purchasePending"
   },
-  "purchasePolicy": "Purchase Policy",
+  "purchasePolicy": "खरीदारी नीति",
   "@purchasePolicy": {
     "description": "Localized string for purchasePolicy"
   },
-  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "purchaseSection1Content": "हम क्रेडिट कार्ड और डिजिटल वॉलेट सहित विभिन्न भुगतान विधियों को स्वीकार करते हैं।",
   "@purchaseSection1Content": {
     "description": "Localized string for purchaseSection1Content"
   },
-  "purchaseSection1Title": "Payment Methods",
+  "purchaseSection1Title": "भुगतान विधियाँ",
   "@purchaseSection1Title": {
     "description": "Localized string for purchaseSection1Title"
   },
-  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "purchaseSection2Content": "यदि आपने खरीदी गई वस्तुओं का उपयोग नहीं किया है, तो 14 दिनों के भीतर रिफंड उपलब्ध है।",
   "@purchaseSection2Content": {
     "description": "Localized string for purchaseSection2Content"
   },
-  "purchaseSection2Title": "Refund Policy",
+  "purchaseSection2Title": "रिफंड नीति",
   "@purchaseSection2Title": {
     "description": "Localized string for purchaseSection2Title"
   },
-  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "purchaseSection3Content": "आप किसी भी समय अपने खाता सेटिंग्स के माध्यम से अपनी सदस्यता रद्द कर सकते हैं।",
   "@purchaseSection3Content": {
     "description": "Localized string for purchaseSection3Content"
   },
-  "purchaseSection3Title": "Cancellation",
+  "purchaseSection3Title": "रद्दीकरण",
   "@purchaseSection3Title": {
     "description": "Localized string for purchaseSection3Title"
   },
-  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "purchaseSection4Content": "खरीदारी करके, आप हमारी उपयोग की शर्तों और सेवा समझौते से सहमत होते हैं।",
   "@purchaseSection4Content": {
     "description": "Localized string for purchaseSection4Content"
   },
-  "purchaseSection4Title": "Terms of Use",
+  "purchaseSection4Title": "उपयोग की शर्तें",
   "@purchaseSection4Title": {
     "description": "Localized string for purchaseSection4Title"
   },
-  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "purchaseSection5Content": "खरीदारी से संबंधित मुद्दों के लिए, कृपया हमारी सहायता टीम से संपर्क करें।",
   "@purchaseSection5Content": {
     "description": "Localized string for purchaseSection5Content"
   },
-  "purchaseSection5Title": "Contact Support",
+  "purchaseSection5Title": "समर्थन से संपर्क करें",
   "@purchaseSection5Title": {
     "description": "Localized string for purchaseSection5Title"
   },
-  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "purchaseSection6Content": "सभी खरीद हमारे मानक शर्तों और नियमों के अधीन हैं।",
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
-  "purchaseSection6Title": "6. Inquiries",
+  "purchaseSection6Title": "6. पूछताछ",
   "@purchaseSection6Title": {
     "description": "Localized string for purchaseSection6Title"
   },
@@ -2141,31 +2141,31 @@
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
-  "reading": "Reading",
+  "reading": "पढ़ाई",
   "@reading": {
     "description": "Localized string for reading"
   },
-  "realtimeQualityLog": "Real-time Quality Log",
+  "realtimeQualityLog": "वास्तविक समय गुणवत्ता लॉग",
   "@realtimeQualityLog": {
     "description": "Localized string for realtimeQualityLog"
   },
-  "recentConversation": "Recent Conversation:",
+  "recentConversation": "हाल की बातचीत:",
   "@recentConversation": {
     "description": "Localized string for recentConversation"
   },
-  "recentLoginRequired": "Please login again for security",
+  "recentLoginRequired": "सुरक्षा के लिए कृपया फिर से लॉगिन करें",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
   },
-  "referrerEmail": "Referrer Email",
+  "referrerEmail": "संदर्भित करने वाले का ईमेल",
   "@referrerEmail": {
     "description": "Localized string for referrerEmail"
   },
-  "referrerEmailHelper": "Optional: Email of who referred you",
+  "referrerEmailHelper": "वैकल्पिक: जिस व्यक्ति ने आपको संदर्भित किया उसका ईमेल",
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
-  "referrerEmailLabel": "Referrer Email (Optional)",
+  "referrerEmailLabel": "संदर्भित करने वाले का ईमेल (वैकल्पिक)",
   "@referrerEmailLabel": {
     "description": "Localized string for referrerEmailLabel"
   },
@@ -2173,7 +2173,7 @@
   "@refresh": {
     "description": "Localized string for refresh"
   },
-  "refreshComplete": "Refresh complete! {count} matched personas",
+  "refreshComplete": "रिफ्रेश पूरा! {count} मेल खाते व्यक्तित्व",
   "@refreshComplete": {
     "description": "Refresh complete message",
     "placeholders": {
@@ -2182,15 +2182,15 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "रिफ्रेश विफल हुआ",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "चैट सूची को ताज़ा किया जा रहा है...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
-  "relatedFAQ": "Related FAQ",
+  "relatedFAQ": "संबंधित FAQ",
   "@relatedFAQ": {
     "description": "Localized string for relatedFAQ"
   },
@@ -2198,31 +2198,31 @@
   "@report": {
     "description": "Localized string for report"
   },
-  "reportAI": "Report",
+  "reportAI": "रिपोर्ट करें",
   "@reportAI": {
     "description": "Localized string for reportAI"
   },
-  "reportAIDescription": "If the AI made you uncomfortable, please describe the issue.",
+  "reportAIDescription": "यदि AI ने आपको असहज किया, तो कृपया समस्या का विवरण दें।",
   "@reportAIDescription": {
     "description": "Localized string for reportAIDescription"
   },
-  "reportAITitle": "Report AI Conversation",
+  "reportAITitle": "AI बातचीत की रिपोर्ट करें",
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "reportAndBlock": "Report & Block",
+  "reportAndBlock": "रिपोर्ट और ब्लॉक करें",
   "@reportAndBlock": {
     "description": "Localized string for reportAndBlock"
   },
-  "reportAndBlockDescription": "You can report and block inappropriate behavior of this AI",
+  "reportAndBlockDescription": "आप इस AI के अनुचित व्यवहार की रिपोर्ट और ब्लॉक कर सकते हैं",
   "@reportAndBlockDescription": {
     "description": "Localized string for reportAndBlockDescription"
   },
-  "reportChatError": "Report Chat Error",
+  "reportChatError": "चैट त्रुटि की रिपोर्ट करें",
   "@reportChatError": {
     "description": "Localized string for reportChatError"
   },
-  "reportError": "Error occurred while reporting: {error}",
+  "reportError": "रिपोर्ट करते समय त्रुटि हुई: {error}",
   "@reportError": {
     "description": "Report error message",
     "placeholders": {
@@ -2231,35 +2231,35 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "रिपोर्ट विफल",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
-  "reportSubmitted": "Report submitted. We will review and take action.",
+  "reportSubmitted": "रिपोर्ट जमा कर दी गई है। हम इसकी समीक्षा करेंगे और कार्रवाई करेंगे।",
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "reportSubmittedSuccess": "Your report has been submitted. Thank you!",
+  "reportSubmittedSuccess": "आपकी रिपोर्ट जमा कर दी गई है। धन्यवाद!",
   "@reportSubmittedSuccess": {
     "description": "Localized string for reportSubmittedSuccess"
   },
-  "requestLimit": "Request Limit",
+  "requestLimit": "अनुरोध सीमा",
   "@requestLimit": {
     "description": "Localized string for requestLimit"
   },
-  "required": "[Required]",
+  "required": "[आवश्यक]",
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "कृपया शर्तों से सहमत हों",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
-  "restartConversation": "Restart Conversation",
+  "restartConversation": "बातचीत पुनः प्रारंभ करें",
   "@restartConversation": {
     "description": "Localized string for restartConversation"
   },
-  "restartConversationQuestion": "Would you like to restart the conversation with {name}?",
+  "restartConversationQuestion": "क्या आप {name} के साथ बातचीत पुनः प्रारंभ करना चाहेंगे?",
   "@restartConversationQuestion": {
     "description": "Restart conversation question",
     "placeholders": {
@@ -2268,7 +2268,7 @@
       }
     }
   },
-  "restartConversationWithName": "Restarting conversation with {name}!",
+  "restartConversationWithName": "{name} के साथ बातचीत पुनः प्रारंभ की जा रही है!",
   "@restartConversationWithName": {
     "description": "Restarting conversation message",
     "placeholders": {
@@ -2281,15 +2281,15 @@
   "@retry": {
     "description": "Localized string for retry"
   },
-  "retryButton": "Retry",
+  "retryButton": "पुनः प्रयास करें",
   "@retryButton": {
     "description": "Localized string for retryButton"
   },
-  "sad": "Sad",
+  "sad": "उदास",
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "शनिवार",
   "@saturday": {
     "description": "Localized string for saturday"
   },
@@ -2301,7 +2301,7 @@
   "@search": {
     "description": "Localized string for search"
   },
-  "searchFAQ": "Search FAQ...",
+  "searchFAQ": "FAQ खोजें...",
   "@searchFAQ": {
     "description": "Localized string for searchFAQ"
   },
@@ -2309,15 +2309,15 @@
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
-  "selectEmotion": "Select Emotion",
+  "selectEmotion": "भावना चुनें",
   "@selectEmotion": {
     "description": "Localized string for selectEmotion"
   },
-  "selectErrorType": "Select error type",
+  "selectErrorType": "त्रुटि प्रकार चुनें",
   "@selectErrorType": {
     "description": "Localized string for selectErrorType"
   },
-  "selectFeeling": "Select Feeling",
+  "selectFeeling": "भावना चुनें",
   "@selectFeeling": {
     "description": "Localized string for selectFeeling"
   },
@@ -2325,7 +2325,7 @@
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
-  "selectInterests": "Please select your interests (at least 1)",
+  "selectInterests": "कृपया अपनी रुचियाँ चुनें (कम से कम 1)",
   "@selectInterests": {
     "description": "Localized string for selectInterests"
   },
@@ -2333,23 +2333,23 @@
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "एक व्यक्तित्व चुनें",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
-  "selectPersonaPlease": "Please select a persona.",
+  "selectPersonaPlease": "कृपया एक व्यक्तित्व चुनें।",
   "@selectPersonaPlease": {
     "description": "Localized string for selectPersonaPlease"
   },
-  "selectPreferredMbti": "If you prefer personas with specific MBTI types, please select",
+  "selectPreferredMbti": "यदि आप विशेष MBTI प्रकार के व्यक्तित्व पसंद करते हैं, तो कृपया चुनें",
   "@selectPreferredMbti": {
     "description": "Localized string for selectPreferredMbti"
   },
-  "selectProblematicMessage": "Select the problematic message (optional)",
+  "selectProblematicMessage": "समस्या वाली संदेश चुनें (वैकल्पिक)",
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "रिपोर्ट का कारण चुनें",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
@@ -2357,19 +2357,19 @@
   "@selectTheme": {
     "description": "Localized string for selectTheme"
   },
-  "selectTranslationError": "Please select a message with translation error",
+  "selectTranslationError": "कृपया एक संदेश चुनें जिसमें अनुवाद की गलती हो",
   "@selectTranslationError": {
     "description": "Localized string for selectTranslationError"
   },
-  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "selectUsagePurpose": "कृपया SONA का उपयोग करने का अपना उद्देश्य चुनें",
   "@selectUsagePurpose": {
     "description": "Localized string for selectUsagePurpose"
   },
-  "selfIntroduction": "Introduction (Optional)",
+  "selfIntroduction": "परिचय (वैकल्पिक)",
   "@selfIntroduction": {
     "description": "Localized string for selfIntroduction"
   },
-  "selfIntroductionHint": "Write a brief introduction about yourself",
+  "selfIntroductionHint": "अपने बारे में एक संक्षिप्त परिचय लिखें",
   "@selfIntroductionHint": {
     "description": "Localized string for selfIntroductionHint"
   },
@@ -2377,43 +2377,43 @@
   "@send": {
     "description": "Localized string for send"
   },
-  "sendChatError": "Send Chat Error",
+  "sendChatError": "चैट भेजने में त्रुटि",
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "अपना पहला संदेश भेजें",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
-  "sendReport": "Send Report",
+  "sendReport": "रिपोर्ट भेजें",
   "@sendReport": {
     "description": "Localized string for sendReport"
   },
-  "sendingEmail": "Sending email...",
+  "sendingEmail": "ईमेल भेजा जा रहा है...",
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
-  "seoul": "Seoul",
+  "seoul": "सियोल",
   "@seoul": {
     "description": "Localized string for seoul"
   },
-  "serverErrorDashboard": "Server Error",
+  "serverErrorDashboard": "सर्वर त्रुटि",
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "कृपया सेवा की शर्तों से सहमत हों",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
-  "sessionExpired": "Session expired",
+  "sessionExpired": "सत्र समाप्त हो गया",
   "@sessionExpired": {
     "description": "Localized string for sessionExpired"
   },
-  "setAppInterfaceLanguage": "Set app interface language",
+  "setAppInterfaceLanguage": "ऐप इंटरफेस भाषा सेट करें",
   "@setAppInterfaceLanguage": {
     "description": "Localized string for setAppInterfaceLanguage"
   },
-  "setNow": "Set Now",
+  "setNow": "अभी सेट करें",
   "@setNow": {
     "description": "Localized string for setNow"
   },
@@ -2421,23 +2421,23 @@
   "@settings": {
     "description": "Localized string for settings"
   },
-  "sexualContent": "Sexual content",
+  "sexualContent": "यौन सामग्री",
   "@sexualContent": {
     "description": "Localized string for sexualContent"
   },
-  "showAllGenderPersonas": "Show All Gender Personas",
+  "showAllGenderPersonas": "सभी लिंग व्यक्तित्व दिखाएँ",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
   },
-  "showAllGendersOption": "Show All Genders",
+  "showAllGendersOption": "सभी लिंग दिखाएँ",
   "@showAllGendersOption": {
     "description": "Localized string for showAllGendersOption"
   },
-  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "showOppositeGenderOnly": "यदि अनचेक किया गया, तो केवल विपरीत लिंग के व्यक्तित्व दिखाए जाएंगे",
   "@showOppositeGenderOnly": {
     "description": "Localized string for showOppositeGenderOnly"
   },
-  "showOriginalText": "Show Original",
+  "showOriginalText": "मूल दिखाएँ",
   "@showOriginalText": {
     "description": "Localized string for showOriginalText"
   },
@@ -2445,23 +2445,23 @@
   "@signUp": {
     "description": "Localized string for signUp"
   },
-  "signUpFromGuest": "Sign up now to access all features!",
+  "signUpFromGuest": "सभी सुविधाओं तक पहुँचने के लिए अभी साइन अप करें!",
   "@signUpFromGuest": {
     "description": "Localized string for signUpFromGuest"
   },
-  "signup": "Sign Up",
+  "signup": "साइन अप करें",
   "@signup": {
     "description": "Localized string for signup"
   },
-  "signupComplete": "Sign Up Complete",
+  "signupComplete": "साइन अप पूरा",
   "@signupComplete": {
     "description": "Localized string for signupComplete"
   },
-  "signupTab": "Sign Up",
+  "signupTab": "साइन अप",
   "@signupTab": {
     "description": "Localized string for signupTab"
   },
-  "simpleInfoRequired": "Simple information is required\nfor matching with AI personas",
+  "simpleInfoRequired": "सरल जानकारी आवश्यक है",
   "@simpleInfoRequired": {
     "description": "Localized string for simpleInfoRequired"
   },
@@ -2469,27 +2469,27 @@
   "@skip": {
     "description": "Localized string for skip"
   },
-  "sonaFriend": "SONA Friend",
+  "sonaFriend": "SONA मित्र",
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "SONA गोपनीयता नीति",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "SONA खरीद नीति",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "SONA सेवा की शर्तें",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
-  "sonaUsagePurpose": "Please select your purpose for using SONA",
+  "sonaUsagePurpose": "कृपया SONA का उपयोग करने का अपना उद्देश्य चुनें",
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "खेद है, यह सहायक नहीं था",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
@@ -2497,35 +2497,35 @@
   "@sort": {
     "description": "Localized string for sort"
   },
-  "soundSettings": "Sound Settings",
+  "soundSettings": "ध्वनि सेटिंग्स",
   "@soundSettings": {
     "description": "Localized string for soundSettings"
   },
-  "spamAdvertising": "Spam/Advertising",
+  "spamAdvertising": "स्पैम/विज्ञापन",
   "@spamAdvertising": {
     "description": "Localized string for spamAdvertising"
   },
-  "spanish": "Spanish",
+  "spanish": "स्पेनिश",
   "@spanish": {
     "description": "Localized string for spanish"
   },
-  "specialRelationshipDesc": "Understand each other and build deep bonds",
+  "specialRelationshipDesc": "एक-दूसरे को समझें और गहरे रिश्ते बनाएं",
   "@specialRelationshipDesc": {
     "description": "Localized string for specialRelationshipDesc"
   },
-  "sports": "Sports",
+  "sports": "खेल",
   "@sports": {
     "description": "Localized string for sports"
   },
-  "spring": "Spring",
+  "spring": "वसंत",
   "@spring": {
     "description": "Localized string for spring"
   },
-  "startChat": "Start Chat",
+  "startChat": "चैट शुरू करें",
   "@startChat": {
     "description": "Localized string for startChat"
   },
-  "startChatButton": "Start Chat",
+  "startChatButton": "चैट शुरू करें",
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
@@ -2533,127 +2533,127 @@
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
-  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "startConversationLikeAFriend": "SONA के साथ दोस्त की तरह बातचीत शुरू करें",
   "@startConversationLikeAFriend": {
     "description": "Localized string for startConversationLikeAFriend"
   },
-  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "startConversationStep": "2. बातचीत शुरू करें: मिलान किए गए व्यक्तित्वों के साथ स्वतंत्र रूप से चैट करें।",
   "@startConversationStep": {
     "description": "Localized string for startConversationStep"
   },
-  "startConversationWithSona": "Start chatting with Sona like a friend!",
+  "startConversationWithSona": "SONA के साथ दोस्त की तरह चैट करना शुरू करें!",
   "@startConversationWithSona": {
     "description": "Localized string for startConversationWithSona"
   },
-  "startWithEmail": "Start with Email",
+  "startWithEmail": "ईमेल से शुरू करें",
   "@startWithEmail": {
     "description": "Localized string for startWithEmail"
   },
-  "startWithGoogle": "Start with Google",
+  "startWithGoogle": "गूगल से शुरू करें",
   "@startWithGoogle": {
     "description": "Localized string for startWithGoogle"
   },
-  "startingApp": "Starting app",
+  "startingApp": "ऐप शुरू हो रहा है",
   "@startingApp": {
     "description": "Localized string for startingApp"
   },
-  "storageManagement": "Storage Management",
+  "storageManagement": "स्टोरेज प्रबंधन",
   "@storageManagement": {
     "description": "Localized string for storageManagement"
   },
-  "store": "Store",
+  "store": "स्टोर",
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "स्टोर से कनेक्ट नहीं हो सका",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
-  "storeLoginRequiredMessage": "Login is required to use the store.\nWould you like to go to the login screen?",
+  "storeLoginRequiredMessage": "स्टोर का उपयोग करने के लिए लॉगिन आवश्यक है।",
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "स्टोर उपलब्ध नहीं है",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "storyEvent": "Story Event",
+  "storyEvent": "कहानी कार्यक्रम",
   "@storyEvent": {
     "description": "Localized string for storyEvent"
   },
-  "stressed": "Stressed",
+  "stressed": "तनावग्रस्त",
   "@stressed": {
     "description": "Localized string for stressed"
   },
-  "submitReport": "Submit Report",
+  "submitReport": "रिपोर्ट सबमिट करें",
   "@submitReport": {
     "description": "Localized string for submitReport"
   },
-  "subscriptionStatus": "Subscription Status",
+  "subscriptionStatus": "सदस्यता स्थिति",
   "@subscriptionStatus": {
     "description": "Localized string for subscriptionStatus"
   },
-  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "subtleVibrationOnTouch": "स्पर्श पर हल्की कंपन",
   "@subtleVibrationOnTouch": {
     "description": "Localized string for subtleVibrationOnTouch"
   },
-  "summer": "Summer",
+  "summer": "गर्मी",
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "रविवार",
   "@sunday": {
     "description": "Localized string for sunday"
   },
-  "swipeAnyDirection": "Swipe in any direction",
+  "swipeAnyDirection": "किसी भी दिशा में स्वाइप करें",
   "@swipeAnyDirection": {
     "description": "Localized string for swipeAnyDirection"
   },
-  "swipeDownToClose": "Swipe down to close",
+  "swipeDownToClose": "बंद करने के लिए नीचे स्वाइप करें",
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
-  "systemTheme": "Follow System",
+  "systemTheme": "सिस्टम का पालन करें",
   "@systemTheme": {
     "description": "Localized string for systemTheme"
   },
-  "systemThemeDesc": "Automatically changes based on device dark mode settings",
+  "systemThemeDesc": "डिवाइस के डार्क मोड सेटिंग्स के आधार पर स्वचालित रूप से बदलता है",
   "@systemThemeDesc": {
     "description": "Localized string for systemThemeDesc"
   },
-  "tapBottomForDetails": "Tap bottom area to see details",
+  "tapBottomForDetails": "विवरण देखने के लिए नीचे के क्षेत्र पर टैप करें",
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
-  "tapForDetails": "Tap bottom area for details",
+  "tapForDetails": "विवरण के लिए नीचे के क्षेत्र पर टैप करें",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "फोटो स्वाइप करने के लिए टैप करें",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
-  "teachersDay": "Teachers' Day",
+  "teachersDay": "शिक्षक दिवस",
   "@teachersDay": {
     "description": "Localized string for teachersDay"
   },
-  "technicalError": "Technical Error",
+  "technicalError": "तकनीकी त्रुटि",
   "@technicalError": {
     "description": "Localized string for technicalError"
   },
-  "technology": "Technology",
+  "technology": "प्रौद्योगिकी",
   "@technology": {
     "description": "Localized string for technology"
   },
-  "terms": "Terms of Service",
+  "terms": "सेवा की शर्तें",
   "@terms": {
     "description": "Localized string for terms"
   },
-  "termsAgreement": "Terms Agreement",
+  "termsAgreement": "शर्तों पर सहमति",
   "@termsAgreement": {
     "description": "Localized string for termsAgreement"
   },
-  "termsAgreementDescription": "Please agree to the terms for using the service",
+  "termsAgreementDescription": "कृपया सेवा का उपयोग करने के लिए शर्तों पर सहमति दें",
   "@termsAgreementDescription": {
     "description": "Localized string for termsAgreementDescription"
   },
@@ -2661,111 +2661,111 @@
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "termsSection10Content": "हम उपयोगकर्ताओं को सूचित करते हुए इन शर्तों में किसी भी समय संशोधन करने का अधिकार सुरक्षित रखते हैं।",
   "@termsSection10Content": {
     "description": "Localized string for termsSection10Content"
   },
-  "termsSection10Title": "Article 10 (Dispute Resolution)",
+  "termsSection10Title": "अनुच्छेद 10 (विवाद समाधान)",
   "@termsSection10Title": {
     "description": "Localized string for termsSection10Title"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "termsSection11Content": "ये शर्तें उस क्षेत्राधिकार के कानूनों द्वारा संचालित होंगी जिसमें हम कार्य करते हैं।",
   "@termsSection11Content": {
     "description": "Localized string for termsSection11Content"
   },
-  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
+  "termsSection11Title": "अनुच्छेद 11 (एआई सेवा विशेष प्रावधान)",
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "यदि इन शर्तों का कोई प्रावधान लागू नहीं किया जा सकता है, तो शेष प्रावधान पूरी ताकत और प्रभाव में बने रहेंगे।",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
-  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "termsSection12Title": "अनुच्छेद 12 (डेटा संग्रह और उपयोग)",
   "@termsSection12Title": {
     "description": "Localized string for termsSection12Title"
   },
-  "termsSection1Content": "These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.",
+  "termsSection1Content": "ये शर्तें और नियम SONA (जिसे आगे \"कंपनी\" कहा जाएगा) और उपयोगकर्ताओं के बीच एआई व्यक्तित्व वार्तालाप मिलान सेवा (जिसे आगे \"सेवा\" कहा जाएगा) के उपयोग के संबंध में अधिकारों, दायित्वों और जिम्मेदारियों को परिभाषित करने का उद्देश्य रखते हैं।",
   "@termsSection1Content": {
     "description": "Localized string for termsSection1Content"
   },
-  "termsSection1Title": "Article 1 (Purpose)",
+  "termsSection1Title": "अनुच्छेद 1 (उद्देश्य)",
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "हमारी सेवा का उपयोग करके, आप इन सेवा की शर्तों और हमारी गोपनीयता नीति के तहत बंधने के लिए सहमत होते हैं।",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
-  "termsSection2Title": "Article 2 (Definitions)",
+  "termsSection2Title": "अनुच्छेद 2 (परिभाषाएँ)",
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "हमारी सेवा का उपयोग करने के लिए आपकी उम्र कम से कम 13 वर्ष होनी चाहिए।",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
-  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "termsSection3Title": "अनुच्छेद 3 (शर्तों का प्रभाव और संशोधन)",
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "आपके खाते और पासवर्ड की गोपनीयता बनाए रखने की जिम्मेदारी आपकी है।",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
-  "termsSection4Title": "Article 4 (Provision of Service)",
+  "termsSection4Title": "अनुच्छेद 4 (सेवा का प्रावधान)",
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "आप सहमत हैं कि हमारी सेवा का उपयोग किसी भी अवैध या अनधिकृत उद्देश्य के लिए नहीं करेंगे।",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
-  "termsSection5Title": "Article 5 (Membership Registration)",
+  "termsSection5Title": "अनुच्छेद 5 (सदस्यता पंजीकरण)",
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "हम इन शर्तों का उल्लंघन करने पर आपके खाते को समाप्त या निलंबित करने का अधिकार सुरक्षित रखते हैं।",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
-  "termsSection6Title": "Article 6 (User Obligations)",
+  "termsSection6Title": "अनुच्छेद 6 (उपयोगकर्ता की जिम्मेदारियाँ)",
   "@termsSection6Title": {
     "description": "Localized string for termsSection6Title"
   },
-  "termsSection7Content": "The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.",
+  "termsSection7Content": "यदि उपयोगकर्ता इन शर्तों की जिम्मेदारियों का उल्लंघन करते हैं या सामान्य सेवा संचालन में हस्तक्षेप करते हैं, तो कंपनी चेतावनियों, अस्थायी निलंबन या स्थायी निलंबन के माध्यम से सेवा के उपयोग को धीरे-धीरे प्रतिबंधित कर सकती है।",
   "@termsSection7Content": {
     "description": "Localized string for termsSection7Content"
   },
-  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "termsSection7Title": "अनुच्छेद 7 (सेवा उपयोग प्रतिबंध)",
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "हम आपकी सेवा के उपयोग से उत्पन्न किसी भी अप्रत्यक्ष, आकस्मिक, या परिणामी क्षति के लिए जिम्मेदार नहीं हैं।",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
-  "termsSection8Title": "Article 8 (Service Interruption)",
+  "termsSection8Title": "अनुच्छेद 8 (सेवा में बाधा)",
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "हमारी सेवा पर उपलब्ध सभी सामग्री और सामग्री बौद्धिक संपदा अधिकारों द्वारा सुरक्षित हैं।",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
-  "termsSection9Title": "Article 9 (Disclaimer)",
+  "termsSection9Title": "अनुच्छेद 9 (अस्वीकृति)",
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "पूरक शर्तें",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
-  "thai": "Thai",
+  "thai": "थाई",
   "@thai": {
     "description": "Localized string for thai"
   },
-  "thanksFeedback": "Thanks for your feedback!",
+  "thanksFeedback": "आपकी प्रतिक्रिया के लिए धन्यवाद!",
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
@@ -2773,23 +2773,23 @@
   "@theme": {
     "description": "Localized string for theme"
   },
-  "themeDescription": "You can customize the app appearance as you like",
+  "themeDescription": "आप ऐप की उपस्थिति को अपनी पसंद के अनुसार अनुकूलित कर सकते हैं",
   "@themeDescription": {
     "description": "Localized string for themeDescription"
   },
-  "themeSettings": "Theme Settings",
+  "themeSettings": "थीम सेटिंग्स",
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "गुरुवार",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "timeout": "Timeout",
+  "timeout": "टाइमआउट",
   "@timeout": {
     "description": "Localized string for timeout"
   },
-  "tired": "Tired",
+  "tired": "थका हुआ",
   "@tired": {
     "description": "Localized string for tired"
   },
@@ -2797,91 +2797,91 @@
   "@today": {
     "description": "Localized string for today"
   },
-  "todayChats": "Today",
+  "todayChats": "आज",
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
-  "todayText": "Today",
+  "todayText": "आज",
   "@todayText": {
     "description": "Localized string for todayText"
   },
-  "tomorrowText": "Tomorrow",
+  "tomorrowText": "कल",
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "totalConsultSessions": "Total Consultation Sessions",
+  "totalConsultSessions": "कुल परामर्श सत्र",
   "@totalConsultSessions": {
     "description": "Localized string for totalConsultSessions"
   },
-  "totalErrorCount": "Total Error Count",
+  "totalErrorCount": "कुल त्रुटि संख्या",
   "@totalErrorCount": {
     "description": "Localized string for totalErrorCount"
   },
-  "totalLikes": "Total Likes",
+  "totalLikes": "कुल लाइक्स",
   "@totalLikes": {
     "description": "Localized string for totalLikes"
   },
-  "totalOccurrences": "Total {count} occurrences",
+  "totalOccurrences": "कुल {count} घटनाएँ",
   "@totalOccurrences": {
     "description": "Localized string for totalOccurrences"
   },
-  "totalResponses": "Total Responses",
+  "totalResponses": "कुल प्रतिक्रियाएँ",
   "@totalResponses": {
     "description": "Localized string for totalResponses"
   },
-  "translatedFrom": "Translated",
+  "translatedFrom": "अनुवादित",
   "@translatedFrom": {
     "description": "Localized string for translatedFrom"
   },
-  "translatedText": "Translation",
+  "translatedText": "अनुवाद",
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "अनुवाद त्रुटि",
   "@translationError": {
     "description": "Localized string for translationError"
   },
-  "translationErrorDescription": "Please report incorrect translations or awkward expressions",
+  "translationErrorDescription": "कृपया गलत अनुवाद या अजीब अभिव्यक्तियों की रिपोर्ट करें",
   "@translationErrorDescription": {
     "description": "Localized string for translationErrorDescription"
   },
-  "translationErrorReported": "Translation error reported. Thank you!",
+  "translationErrorReported": "अनुवाद त्रुटि रिपोर्ट की गई। धन्यवाद!",
   "@translationErrorReported": {
     "description": "Localized string for translationErrorReported"
   },
-  "translationNote": "※ AI translation may not be perfect",
+  "translationNote": "※ एआई अनुवाद सही नहीं हो सकता",
   "@translationNote": {
     "description": "Localized string for translationNote"
   },
-  "translationQuality": "Translation Quality",
+  "translationQuality": "अनुवाद गुणवत्ता",
   "@translationQuality": {
     "description": "Localized string for translationQuality"
   },
-  "translationSettings": "Translation Settings",
+  "translationSettings": "अनुवाद सेटिंग्स",
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
-  "travel": "Travel",
+  "travel": "यात्रा",
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "मंगलवार",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
-  "tutorialAccount": "Tutorial Account",
+  "tutorialAccount": "ट्यूटोरियल खाता",
   "@tutorialAccount": {
     "description": "Localized string for tutorialAccount"
   },
-  "tutorialWelcomeDescription": "Create special relationships with AI personas.",
+  "tutorialWelcomeDescription": "एआई व्यक्तित्वों के साथ विशेष संबंध बनाएं।",
   "@tutorialWelcomeDescription": {
     "description": "Tutorial: Welcome description"
   },
-  "tutorialWelcomeTitle": "Welcome to SONA!",
+  "tutorialWelcomeTitle": "SONA में आपका स्वागत है!",
   "@tutorialWelcomeTitle": {
     "description": "Tutorial: Welcome title"
   },
-  "typeMessage": "Type a message...",
+  "typeMessage": "एक संदेश टाइप करें...",
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
@@ -2889,11 +2889,11 @@
   "@unblock": {
     "description": "Localized string for unblock"
   },
-  "unblockFailed": "Failed to unblock",
+  "unblockFailed": "अनब्लॉक करने में विफल",
   "@unblockFailed": {
     "description": "Localized string for unblockFailed"
   },
-  "unblockPersonaConfirm": "Unblock {name}?",
+  "unblockPersonaConfirm": "{name} को अनब्लॉक करें?",
   "@unblockPersonaConfirm": {
     "description": "Unblock persona confirmation",
     "placeholders": {
@@ -2902,15 +2902,15 @@
       }
     }
   },
-  "unblockedSuccessfully": "Unblocked successfully",
+  "unblockedSuccessfully": "सफलतापूर्वक अनब्लॉक किया गया",
   "@unblockedSuccessfully": {
     "description": "Localized string for unblockedSuccessfully"
   },
-  "unexpectedLoginError": "An unexpected error occurred during login",
+  "unexpectedLoginError": "लॉगिन के दौरान एक अप्रत्याशित त्रुटि हुई",
   "@unexpectedLoginError": {
     "description": "Localized string for unexpectedLoginError"
   },
-  "unknown": "Unknown",
+  "unknown": "अज्ञात",
   "@unknown": {
     "description": "Localized string for unknown"
   },
@@ -2918,63 +2918,63 @@
   "@unknownError": {
     "description": "Localized string for unknownError"
   },
-  "unlimitedMessages": "Unlimited",
+  "unlimitedMessages": "असीमित",
   "@unlimitedMessages": {
     "description": "Localized string for unlimitedMessages"
   },
-  "unsendMessage": "Unsend message",
+  "unsendMessage": "संदेश वापस लें",
   "@unsendMessage": {
     "description": "Localized string for unsendMessage"
   },
-  "usagePurpose": "Usage Purpose",
+  "usagePurpose": "उपयोग का उद्देश्य",
   "@usagePurpose": {
     "description": "Localized string for usagePurpose"
   },
-  "useOneHeart": "Use 1 Heart",
+  "useOneHeart": "1 दिल का उपयोग करें",
   "@useOneHeart": {
     "description": "Localized string for useOneHeart"
   },
-  "useSystemLanguage": "Use System Language",
+  "useSystemLanguage": "सिस्टम भाषा का उपयोग करें",
   "@useSystemLanguage": {
     "description": "Localized string for useSystemLanguage"
   },
-  "user": "User: ",
+  "user": "उपयोगकर्ता:",
   "@user": {
     "description": "Localized string for user"
   },
-  "userMessage": "User Message:",
+  "userMessage": "उपयोगकर्ता संदेश:",
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
-  "userNotFound": "User not found",
+  "userNotFound": "उपयोगकर्ता नहीं मिला",
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
-  "valentinesDay": "Valentine's Day",
+  "valentinesDay": "वैलेंटाइन डे",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
-  "verifyingAuth": "Verifying authentication",
+  "verifyingAuth": "प्रमाणीकरण की जांच की जा रही है",
   "@verifyingAuth": {
     "description": "Localized string for verifyingAuth"
   },
-  "version": "Version",
+  "version": "संस्करण",
   "@version": {
     "description": "Localized string for version"
   },
-  "vietnamese": "Vietnamese",
+  "vietnamese": "वियतनामी",
   "@vietnamese": {
     "description": "Localized string for vietnamese"
   },
-  "violentContent": "Violent content",
+  "violentContent": "हिंसक सामग्री",
   "@violentContent": {
     "description": "Localized string for violentContent"
   },
-  "voiceMessage": "🎤 Voice message",
+  "voiceMessage": "🎤 वॉयस संदेश",
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "waitingForChat": "{name} is waiting to chat.",
+  "waitingForChat": "{name} चैट करने का इंतज़ार कर रहा है।",
   "@waitingForChat": {
     "description": "Shows that a persona is waiting to chat",
     "placeholders": {
@@ -2983,95 +2983,95 @@
       }
     }
   },
-  "walk": "Walk",
+  "walk": "चलना",
   "@walk": {
     "description": "Localized string for walk"
   },
-  "wasHelpful": "Was this helpful?",
+  "wasHelpful": "क्या यह मददगार था?",
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
-  "weatherClear": "Clear",
+  "weatherClear": "साफ",
   "@weatherClear": {
     "description": "Localized string for weatherClear"
   },
-  "weatherCloudy": "Cloudy",
+  "weatherCloudy": "बादलदार",
   "@weatherCloudy": {
     "description": "Localized string for weatherCloudy"
   },
-  "weatherContext": "Weather Context",
+  "weatherContext": "मौसम संदर्भ",
   "@weatherContext": {
     "description": "Localized string for weatherContext"
   },
-  "weatherContextDesc": "Provide conversation context based on weather",
+  "weatherContextDesc": "मौसम के आधार पर बातचीत का संदर्भ प्रदान करें",
   "@weatherContextDesc": {
     "description": "Localized string for weatherContextDesc"
   },
-  "weatherDrizzle": "Drizzle",
+  "weatherDrizzle": "बूंदाबांदी",
   "@weatherDrizzle": {
     "description": "Localized string for weatherDrizzle"
   },
-  "weatherFog": "Fog",
+  "weatherFog": "कोहरा",
   "@weatherFog": {
     "description": "Localized string for weatherFog"
   },
-  "weatherMist": "Mist",
+  "weatherMist": "धुंध",
   "@weatherMist": {
     "description": "Localized string for weatherMist"
   },
-  "weatherRain": "Rain",
+  "weatherRain": "बारिश",
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
-  "weatherRainy": "Rainy",
+  "weatherRainy": "बारिश वाला",
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
-  "weatherSnow": "Snow",
+  "weatherSnow": "बर्फ",
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
-  "weatherSnowy": "Snowy",
+  "weatherSnowy": "बर्फीला",
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
-  "weatherThunderstorm": "Thunderstorm",
+  "weatherThunderstorm": "गरज-चमक",
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "बुधवार",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
-  "weekdays": "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+  "weekdays": "रवि,सोम,मंगल,बुध,गुरु,शुक्र,शनिवार",
   "@weekdays": {
     "description": "Localized string for weekdays"
   },
-  "welcomeMessage": "Welcome💕",
+  "welcomeMessage": "स्वागत है💕",
   "@welcomeMessage": {
     "description": "Localized string for welcomeMessage"
   },
-  "whatTopicsToTalk": "What topics would you like to talk about? (Optional)",
+  "whatTopicsToTalk": "आप किस विषय पर बात करना चाहेंगे? (वैकल्पिक)",
   "@whatTopicsToTalk": {
     "description": "Localized string for whatTopicsToTalk"
   },
-  "whiteDay": "White Day",
+  "whiteDay": "व्हाइट डे",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "winter": "Winter",
+  "winter": "सर्दी",
   "@winter": {
     "description": "Localized string for winter"
   },
-  "wrongTranslation": "Wrong Translation",
+  "wrongTranslation": "गलत अनुवाद",
   "@wrongTranslation": {
     "description": "Localized string for wrongTranslation"
   },
-  "year": "Year",
+  "year": "वर्ष",
   "@year": {
     "description": "Localized string for year"
   },
-  "yearEnd": "Year End",
+  "yearEnd": "वर्ष समाप्ति",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
@@ -3083,11 +3083,11 @@
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
-  "yesterdayChats": "Yesterday",
+  "yesterdayChats": "कल",
   "@yesterdayChats": {
     "description": "Localized string for yesterdayChats"
   },
-  "you": "You",
+  "you": "आप",
   "@you": {
     "description": "Localized string for you"
   }

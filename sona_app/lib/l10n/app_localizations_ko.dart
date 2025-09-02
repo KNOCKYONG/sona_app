@@ -478,7 +478,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get email => '이메일';
 
   @override
-  String get emailHint => 'example@email.com';
+  String get emailHint => '예시@email.com';
 
   @override
   String get emailLabel => '이메일';
@@ -1329,31 +1329,47 @@ class AppLocalizationsKo extends AppLocalizations {
   String get personaGenderSection => '만나고 싶은 페르소나 성별';
 
   @override
-  String get personaQualityStats => '페르소나별 품질 통계';
+  String personaQualityStats(Object personaQualityStats) {
+    return '페르소나별 품질 통계';
+  }
 
   @override
-  String get personalInfoExposure => '개인정보 노출';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return '개인정보 노출';
+  }
 
   @override
-  String get personality => '성격';
+  String personality(Object personality) {
+    return '성격';
+  }
 
   @override
-  String get pets => '반려동물';
+  String pets(Object pets) {
+    return '반려동물';
+  }
 
   @override
   String get photo => '사진';
 
   @override
-  String get photography => '사진';
+  String photography(Object photography) {
+    return '사진';
+  }
 
   @override
-  String get picnic => '피크닉';
+  String picnic(Object picnic) {
+    return '피크닉';
+  }
 
   @override
-  String get preferenceSettings => '선호 설정';
+  String preferenceSettings(Object preferenceSettings) {
+    return '선호 설정';
+  }
 
   @override
-  String get preferredLanguage => '선호 언어';
+  String preferredLanguage(Object preferredLanguage) {
+    return '선호 언어';
+  }
 
   @override
   String get preparingForSleep => '수면준비';
@@ -1601,10 +1617,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => '새로 고침에 실패했습니다';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => '채팅 목록을 새로 고치는 중...';
 
   @override
   String get relatedFAQ => '관련 FAQ';
@@ -1636,7 +1652,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => '신고에 실패했습니다';
 
   @override
   String get reportSubmitted => '신고가 접수되었습니다. 검토 후 조치하겠습니다.';
@@ -1651,7 +1667,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get required => '[필수]';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => '약관에 동의해 주세요';
 
   @override
   String get restartConversation => '다시 대화하기';
@@ -1709,7 +1725,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get selectLanguage => '언어를 선택하세요';
 
   @override
-  String get selectPersona => 'Select a persona';
+  String get selectPersona => '페르소나를 선택하세요';
 
   @override
   String get selectPersonaPlease => '페르소나를 선택해 주세요.';
@@ -1721,7 +1737,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get selectProblematicMessage => '문제가 있는 메시지를 선택해주세요 (선택사항)';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => '신고 사유를 선택하세요';
 
   @override
   String get selectTheme => '테마를 선택하세요';
@@ -1745,7 +1761,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get sendChatError => '대화 오류 전송하기';
 
   @override
-  String get sendFirstMessage => 'Send your first message';
+  String get sendFirstMessage => '첫 번째 메시지를 보내세요';
 
   @override
   String get sendReport => '신고하기';
@@ -1760,7 +1776,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get serverErrorDashboard => '서버 오류';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement => '서비스 약관에 동의해 주세요';
 
   @override
   String get sessionExpired => '세션이 만료되었습니다';
@@ -1814,19 +1830,19 @@ class AppLocalizationsKo extends AppLocalizations {
   String get sonaFriend => '소나 친구';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'SONA 개인정보 보호정책';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'SONA 구매 정책';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'SONA 서비스 약관';
 
   @override
   String get sonaUsagePurpose => 'SONA를 사용하시는 목적을 선택해주세요';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => '도움이 되지 않아 죄송합니다';
 
   @override
   String get sort => '정렬';
@@ -1856,7 +1872,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get startChatButton => '채팅 시작';
 
   @override
-  String get startConversation => 'Start a conversation';
+  String get startConversation => '대화를 시작하세요';
 
   @override
   String get startConversationLikeAFriend => '소나와 친구처럼 대화를 시작해보세요';
@@ -1883,14 +1899,14 @@ class AppLocalizationsKo extends AppLocalizations {
   String get store => '스토어';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => '스토에 연결할 수 없습니다';
 
   @override
   String get storeLoginRequiredMessage =>
       '스토어 이용을 위해 로그인이 필요합니다.\n로그인 화면으로 이동하시겠습니까?';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => '스토를 사용할 수 없습니다';
 
   @override
   String get storyEvent => '스토리 이벤트';
@@ -1932,7 +1948,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tapForDetails => '하단 영역을 탭하여 상세 정보 보기';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => '사진을 넘기려면 탭하세요';
 
   @override
   String get teachersDay => '스승의날';
@@ -1957,21 +1973,20 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+      '우리는 사용자에게 통지하고 언제든지 이 약관을 수정할 권리를 보유합니다.';
 
   @override
   String get termsSection10Title => '제10조 (분쟁해결)';
 
   @override
-  String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+  String get termsSection11Content => '이 약관은 우리가 운영하는 관할권의 법률에 따라 규율됩니다.';
 
   @override
   String get termsSection11Title => '제11조 (AI 서비스 특별조항)';
 
   @override
   String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+      '이 약관의 어떤 조항이 집행 불가능한 것으로 판단될 경우, 나머지 조항은 계속해서 완전한 효력을 유지합니다.';
 
   @override
   String get termsSection12Title => '제12조 (데이터 수집 및 활용)';
@@ -1985,35 +2000,33 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+      '저희 서비스를 이용함으로써, 귀하는 이 서비스 약관 및 개인정보 처리방침에 동의하는 것입니다.';
 
   @override
   String get termsSection2Title => '제2조 (정의)';
 
   @override
-  String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+  String get termsSection3Content => '저희 서비스를 이용하려면 최소 13세 이상이어야 합니다.';
 
   @override
   String get termsSection3Title => '제3조 (약관의 효력 및 변경)';
 
   @override
-  String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+  String get termsSection4Content => '귀하는 계정 및 비밀번호의 기밀을 유지할 책임이 있습니다.';
 
   @override
   String get termsSection4Title => '제4조 (서비스의 제공)';
 
   @override
   String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+      '귀하는 저희 서비스를 불법적이거나 무단의 목적으로 사용하지 않기로 동의합니다.';
 
   @override
   String get termsSection5Title => '제5조 (회원가입)';
 
   @override
   String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+      '저희는 이러한 약관을 위반할 경우 귀하의 계정을 종료하거나 일시 중지할 권리를 보유합니다.';
 
   @override
   String get termsSection6Title => '제6조 (이용자의 의무)';
@@ -2027,20 +2040,20 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+      '저희 서비스 이용으로 인해 발생하는 간접적, 우발적, 또는 결과적 손해에 대해서는 책임을 지지 않습니다.';
 
   @override
   String get termsSection8Title => '제8조 (서비스 중단)';
 
   @override
   String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+      '저희 서비스에서 제공되는 모든 콘텐츠 및 자료는 지적 재산권에 의해 보호됩니다.';
 
   @override
   String get termsSection9Title => '제9조 (면책조항)';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => '부가 약관';
 
   @override
   String get thai => '태국어';
@@ -2102,7 +2115,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get translatedText => '번역';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => '번역 오류';
 
   @override
   String get translationErrorDescription => '잘못된 번역이나 어색한 표현을 신고해주세요';

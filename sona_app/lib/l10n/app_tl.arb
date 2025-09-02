@@ -4,67 +4,67 @@
   "@about": {
     "description": "Localized string for about"
   },
-  "accountAndProfile": "Account & Profile Information",
+  "accountAndProfile": "Impormasyon sa Account at Profile",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
-  "accountDeletedSuccess": "Account deleted successfully",
+  "accountDeletedSuccess": "Matagumpay na na-delete ang account",
   "@accountDeletedSuccess": {
     "description": "Localized string for accountDeletedSuccess"
   },
-  "accountDeletionContent": "Are you sure you want to delete your account?\nThis action cannot be undone.",
+  "accountDeletionContent": "Sigurado ka bang nais mong i-delete ang iyong account?",
   "@accountDeletionContent": {
     "description": "Localized string for accountDeletionContent"
   },
-  "accountDeletionError": "Error occurred while deleting account.",
+  "accountDeletionError": "Nagkaroon ng error habang nagde-delete ng account.",
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
-  "accountDeletionInfo": "Account deletion information",
+  "accountDeletionInfo": "Impormasyon sa Pag-delete ng Account",
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
   },
-  "accountDeletionTitle": "Delete Account",
+  "accountDeletionTitle": "I-delete ang Account",
   "@accountDeletionTitle": {
     "description": "Localized string for accountDeletionTitle"
   },
-  "accountDeletionWarning1": "Warning: This action cannot be undone",
+  "accountDeletionWarning1": "Babala: Ang aksyong ito ay hindi maibabalik",
   "@accountDeletionWarning1": {
     "description": "Localized string for accountDeletionWarning1"
   },
-  "accountDeletionWarning2": "All your data will be permanently deleted",
+  "accountDeletionWarning2": "Lahat ng iyong data ay permanenteng mabubura",
   "@accountDeletionWarning2": {
     "description": "Localized string for accountDeletionWarning2"
   },
-  "accountDeletionWarning3": "You will lose access to all conversations",
+  "accountDeletionWarning3": "Mawawalan ka ng access sa lahat ng pag-uusap",
   "@accountDeletionWarning3": {
     "description": "Localized string for accountDeletionWarning3"
   },
-  "accountDeletionWarning4": "This includes all purchased content",
+  "accountDeletionWarning4": "Kasama dito ang lahat ng biniling nilalaman",
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
-  "accountManagement": "Account Management",
+  "accountManagement": "Pamamahala ng Account",
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "adaptiveConversationDesc": "Adapts conversation style to match yours",
+  "adaptiveConversationDesc": "Inaangkop ang estilo ng pag-uusap upang umangkop sa iyo",
   "@adaptiveConversationDesc": {
     "description": "Localized string for adaptiveConversationDesc"
   },
-  "afternoon": "Afternoon",
+  "afternoon": "Hapon",
   "@afternoon": {
     "description": "Localized string for afternoon"
   },
-  "afternoonFatigue": "Afternoon fatigue",
+  "afternoonFatigue": "Pagkapagod sa Hapon",
   "@afternoonFatigue": {
     "description": "Localized string for afternoonFatigue"
   },
-  "ageConfirmation": "I am 14 years or older and have confirmed the above.",
+  "ageConfirmation": "Ako ay 14 na taong gulang o mas matanda at nakumpirma ang nasa itaas.",
   "@ageConfirmation": {
     "description": "Localized string for ageConfirmation"
   },
-  "ageRange": "{min}-{max} years old",
+  "ageRange": "{min}-{max} taong gulang",
   "@ageRange": {
     "description": "Age range",
     "placeholders": {
@@ -76,39 +76,39 @@
       }
     }
   },
-  "ageUnit": "years old",
+  "ageUnit": "taong gulang",
   "@ageUnit": {
     "description": "Localized string for ageUnit"
   },
-  "agreeToTerms": "I agree to the terms",
+  "agreeToTerms": "Sumasang-ayon ako sa mga tuntunin",
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
   },
-  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
+  "aiDatingQuestion": "Isang espesyal na pang-araw-araw na buhay kasama ang AI",
   "@aiDatingQuestion": {
     "description": "Localized string for aiDatingQuestion"
   },
-  "aiPersonaPreferenceDescription": "Please set your preferences for AI persona matching",
+  "aiPersonaPreferenceDescription": "Mangyaring itakda ang iyong mga kagustuhan para sa pagtutugma ng AI persona",
   "@aiPersonaPreferenceDescription": {
     "description": "Localized string for aiPersonaPreferenceDescription"
   },
-  "all": "All",
+  "all": "Lahat",
   "@all": {
     "description": "Localized string for all"
   },
-  "allAgree": "Agree to All",
+  "allAgree": "Sumasang-ayon sa Lahat",
   "@allAgree": {
     "description": "Localized string for allAgree"
   },
-  "allFeaturesRequired": "※ All features are required for service provision",
+  "allFeaturesRequired": "※ Lahat ng tampok ay kinakailangan para sa pagbibigay ng serbisyo",
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "All Personas",
+  "allPersonas": "Lahat ng Persona",
   "@allPersonas": {
     "description": "Localized string for allPersonas"
   },
-  "allPersonasMatched": "All personas matched! Start chatting with them.",
+  "allPersonasMatched": "Lahat ng persona ay naitugma! Simulan ang pakikipag-chat sa kanila.",
   "@allPersonasMatched": {
     "description": "Localized string for allPersonasMatched"
   },
@@ -116,7 +116,7 @@
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
-  "alreadyChattingWith": "Already chatting with {name}!",
+  "alreadyChattingWith": "Nakikipag-chat na kay {name}!",
   "@alreadyChattingWith": {
     "description": "Already chatting with persona",
     "placeholders": {
@@ -125,23 +125,23 @@
       }
     }
   },
-  "alsoBlockThisAI": "Also block this AI",
+  "alsoBlockThisAI": "I-block din ang AI na ito",
   "@alsoBlockThisAI": {
     "description": "Localized string for alsoBlockThisAI"
   },
-  "angry": "Angry",
+  "angry": "Galit",
   "@angry": {
     "description": "Localized string for angry"
   },
-  "anonymousLogin": "Anonymous login",
+  "anonymousLogin": "Walang pangalan na pag-login",
   "@anonymousLogin": {
     "description": "Localized string for anonymousLogin"
   },
-  "anxious": "Anxious",
+  "anxious": "Nababalisa",
   "@anxious": {
     "description": "Localized string for anxious"
   },
-  "apiKeyError": "API Key Error",
+  "apiKeyError": "Error sa API Key",
   "@apiKeyError": {
     "description": "Localized string for apiKeyError"
   },
@@ -149,39 +149,39 @@
   "@appName": {
     "description": "Localized string for appName"
   },
-  "appTagline": "Your AI companions",
+  "appTagline": "Ang iyong mga AI kasama",
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
-  "appleLoginCanceled": "Apple login was canceled.\nPlease try again.",
+  "appleLoginCanceled": "Nakansela ang pag-login sa Apple. Pakisubukan muli.",
   "@appleLoginCanceled": {
     "description": "Localized string for appleLoginCanceled"
   },
-  "appleLoginError": "Error occurred during Apple login.",
+  "appleLoginError": "Nagkaroon ng error sa pag-login sa Apple.",
   "@appleLoginError": {
     "description": "Localized string for appleLoginError"
   },
-  "art": "Art",
+  "art": "Sining",
   "@art": {
     "description": "Localized string for art"
   },
-  "authError": "Authentication Error",
+  "authError": "Error sa Pagpapatotoo",
   "@authError": {
     "description": "Localized string for authError"
   },
-  "autoTranslate": "Auto Translate",
+  "autoTranslate": "Awtomatikong Isasalin",
   "@autoTranslate": {
     "description": "Localized string for autoTranslate"
   },
-  "autumn": "Autumn",
+  "autumn": "Taglagas",
   "@autumn": {
     "description": "Localized string for autumn"
   },
-  "averageQuality": "Average Quality",
+  "averageQuality": "Karaniwang Kalidad",
   "@averageQuality": {
     "description": "Localized string for averageQuality"
   },
-  "averageQualityScore": "Average Quality Score",
+  "averageQualityScore": "Karaniwang Iskor ng Kalidad",
   "@averageQualityScore": {
     "description": "Localized string for averageQualityScore"
   },
@@ -189,43 +189,43 @@
   "@awkwardExpression": {
     "description": "Localized string for awkwardExpression"
   },
-  "backButton": "Back",
+  "backButton": "Bumalik",
   "@backButton": {
     "description": "Localized string for backButton"
   },
-  "basicInfo": "Basic Information",
+  "basicInfo": "Pangunahing Impormasyon",
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "basicInfoDescription": "Please enter basic information to create an account",
+  "basicInfoDescription": "Pakisok ang pangunahing impormasyon upang makagawa ng account",
   "@basicInfoDescription": {
     "description": "Localized string for basicInfoDescription"
   },
-  "birthDate": "Birth Date",
+  "birthDate": "Petsa ng Kapanganakan",
   "@birthDate": {
     "description": "Localized string for birthDate"
   },
-  "birthDateOptional": "Birth Date (Optional)",
+  "birthDateOptional": "Petsa ng Kapanganakan (Opsyonal)",
   "@birthDateOptional": {
     "description": "Localized string for birthDateOptional"
   },
-  "birthDateRequired": "Birth Date *",
+  "birthDateRequired": "Petsa ng Kapanganakan *",
   "@birthDateRequired": {
     "description": "Localized string for birthDateRequired"
   },
-  "blockConfirm": "Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.",
+  "blockConfirm": "Gusto mo bang i-block ang AI na ito?",
   "@blockConfirm": {
     "description": "Localized string for blockConfirm"
   },
-  "blockReason": "Block reason",
+  "blockReason": "Dahilan ng pag-block",
   "@blockReason": {
     "description": "Localized string for blockReason"
   },
-  "blockThisAI": "Block this AI",
+  "blockThisAI": "I-block ang AI na ito",
   "@blockThisAI": {
     "description": "Localized string for blockThisAI"
   },
-  "blockedAICount": "{count} blocked AIs",
+  "blockedAICount": "{count} na naka-block na AIs",
   "@blockedAICount": {
     "description": "Number of blocked AIs",
     "placeholders": {
@@ -234,31 +234,31 @@
       }
     }
   },
-  "blockedAIs": "Blocked AIs",
+  "blockedAIs": "Naka-block na AIs",
   "@blockedAIs": {
     "description": "Localized string for blockedAIs"
   },
-  "blockedAt": "Blocked at",
+  "blockedAt": "Naka-block sa",
   "@blockedAt": {
     "description": "Localized string for blockedAt"
   },
-  "blockedSuccessfully": "Blocked successfully",
+  "blockedSuccessfully": "Matagumpay na naka-block",
   "@blockedSuccessfully": {
     "description": "Localized string for blockedSuccessfully"
   },
-  "breakfast": "Breakfast",
+  "breakfast": "Almusal",
   "@breakfast": {
     "description": "Localized string for breakfast"
   },
-  "byErrorType": "By Error Type",
+  "byErrorType": "Ayon sa Uri ng Error",
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "byPersona": "By Persona",
+  "byPersona": "Ayon sa Persona",
   "@byPersona": {
     "description": "Localized string for byPersona"
   },
-  "cacheDeleteError": "Error deleting cache: {error}",
+  "cacheDeleteError": "Error sa pagtanggal ng cache: {error}",
   "@cacheDeleteError": {
     "description": "Cache delete error",
     "placeholders": {
@@ -267,15 +267,15 @@
       }
     }
   },
-  "cacheDeleted": "Image cache has been deleted",
+  "cacheDeleted": "Na-delete na ang image cache",
   "@cacheDeleted": {
     "description": "Localized string for cacheDeleted"
   },
-  "cafeTerrace": "Cafe terrace",
+  "cafeTerrace": "Terrace ng cafe",
   "@cafeTerrace": {
     "description": "Localized string for cafeTerrace"
   },
-  "calm": "Calm",
+  "calm": "Kalma",
   "@calm": {
     "description": "Localized string for calm"
   },
@@ -287,11 +287,11 @@
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "canChangeInSettings": "You can change this later in settings",
+  "canChangeInSettings": "Maaari mo itong baguhin sa mga setting mamaya",
   "@canChangeInSettings": {
     "description": "Localized string for canChangeInSettings"
   },
-  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
+  "canMeetPreviousPersonas": "Maaari mong makilala muli ang mga persona na iyong na-swipe dati!",
   "@canMeetPreviousPersonas": {
     "description": "Localized string for canMeetPreviousPersonas"
   },
@@ -299,35 +299,35 @@
   "@cancel": {
     "description": "Localized string for cancel"
   },
-  "changeProfilePhoto": "Change Profile Photo",
+  "changeProfilePhoto": "Palitan ang Larawan ng Profile",
   "@changeProfilePhoto": {
     "description": "Localized string for changeProfilePhoto"
   },
-  "chat": "Chat",
+  "chat": "Usapan",
   "@chat": {
     "description": "Localized string for chat"
   },
-  "chatEndedMessage": "Chat has ended",
+  "chatEndedMessage": "Natapos na ang usapan",
   "@chatEndedMessage": {
     "description": "Localized string for chatEndedMessage"
   },
-  "chatErrorDashboard": "Chat Error Dashboard",
+  "chatErrorDashboard": "Dashboard ng Error sa Usapan",
   "@chatErrorDashboard": {
     "description": "Localized string for chatErrorDashboard"
   },
-  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
+  "chatErrorSentSuccessfully": "Matagumpay na naipadala ang error sa usapan.",
   "@chatErrorSentSuccessfully": {
     "description": "Localized string for chatErrorSentSuccessfully"
   },
-  "chatListTab": "Chat List Tab",
+  "chatListTab": "Tab ng Listahan ng Usapan",
   "@chatListTab": {
     "description": "Localized string for chatListTab"
   },
-  "chats": "Chats",
+  "chats": "Mga Usapan",
   "@chats": {
     "description": "Localized string for chats"
   },
-  "chattingWithPersonas": "Chatting with {count} personas",
+  "chattingWithPersonas": "Nakikipag-chat sa {count} persona",
   "@chattingWithPersonas": {
     "description": "Number of personas chatting with",
     "placeholders": {
@@ -336,39 +336,39 @@
       }
     }
   },
-  "checkInternetConnection": "Please check your internet connection",
+  "checkInternetConnection": "Pakisuri ang iyong koneksyon sa internet",
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
-  "checkingUserInfo": "Checking user info",
+  "checkingUserInfo": "Sinusuri ang impormasyon ng gumagamit",
   "@checkingUserInfo": {
     "description": "Localized string for checkingUserInfo"
   },
-  "childrensDay": "Children's Day",
+  "childrensDay": "Araw ng mga Bata",
   "@childrensDay": {
     "description": "Localized string for childrensDay"
   },
-  "chinese": "Chinese",
+  "chinese": "Tsino",
   "@chinese": {
     "description": "Localized string for chinese"
   },
-  "chooseOption": "Please choose:",
+  "chooseOption": "Pakipili:",
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "christmas": "Christmas",
+  "christmas": "Pasko",
   "@christmas": {
     "description": "Localized string for christmas"
   },
-  "close": "Close",
+  "close": "Isara",
   "@close": {
     "description": "Localized string for close"
   },
-  "complete": "Done",
+  "complete": "Tapos na",
   "@complete": {
     "description": "Localized string for complete"
   },
-  "completeSignup": "Complete Sign Up",
+  "completeSignup": "Kumpletuhin ang Pag-sign Up",
   "@completeSignup": {
     "description": "Localized string for completeSignup"
   },
@@ -376,35 +376,35 @@
   "@confirm": {
     "description": "Localized string for confirm"
   },
-  "connectingToServer": "Connecting to server",
+  "connectingToServer": "Kumokonekta sa server",
   "@connectingToServer": {
     "description": "Localized string for connectingToServer"
   },
-  "consultQualityMonitoring": "Consultation Quality Monitoring",
+  "consultQualityMonitoring": "Pagsusuri ng Kalidad ng Konsultasyon",
   "@consultQualityMonitoring": {
     "description": "Localized string for consultQualityMonitoring"
   },
-  "continueAsGuest": "Continue as Guest",
+  "continueAsGuest": "Magpatuloy bilang Bisita",
   "@continueAsGuest": {
     "description": "Localized string for continueAsGuest"
   },
-  "continueButton": "Continue",
+  "continueButton": "Magpatuloy",
   "@continueButton": {
     "description": "Localized string for continueButton"
   },
-  "continueWithApple": "Continue with Apple",
+  "continueWithApple": "Magpatuloy gamit ang Apple",
   "@continueWithApple": {
     "description": "Localized string for continueWithApple"
   },
-  "continueWithGoogle": "Continue with Google",
+  "continueWithGoogle": "Magpatuloy gamit ang Google",
   "@continueWithGoogle": {
     "description": "Localized string for continueWithGoogle"
   },
-  "conversationContinuity": "Conversation Continuity",
+  "conversationContinuity": "Pagpapatuloy ng Usapan",
   "@conversationContinuity": {
     "description": "Localized string for conversationContinuity"
   },
-  "conversationContinuityDesc": "Remember previous conversations and connect topics",
+  "conversationContinuityDesc": "Tandaan ang mga nakaraang usapan at ikonekta ang mga paksa",
   "@conversationContinuityDesc": {
     "description": "Localized string for conversationContinuityDesc"
   },
@@ -417,111 +417,111 @@
       }
     }
   },
-  "convertToMember": "Sign Up",
+  "convertToMember": "Mag-sign Up",
   "@convertToMember": {
     "description": "Localized string for convertToMember"
   },
-  "cooking": "Cooking",
+  "cooking": "Pagluluto",
   "@cooking": {
     "description": "Localized string for cooking"
   },
-  "copyMessage": "Copy message",
+  "copyMessage": "Kopyahin ang mensahe",
   "@copyMessage": {
     "description": "Localized string for copyMessage"
   },
-  "copyrightInfringement": "Copyright infringement",
+  "copyrightInfringement": "Paglabag sa Copyright",
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
-  "creatingAccount": "Creating account",
+  "creatingAccount": "Gumagawa ng account",
   "@creatingAccount": {
     "description": "Localized string for creatingAccount"
   },
-  "crisisDetected": "Crisis Detected",
+  "crisisDetected": "Nakatagpo ng Krisis",
   "@crisisDetected": {
     "description": "Localized string for crisisDetected"
   },
-  "culturalIssue": "Cultural Issue",
+  "culturalIssue": "Isyu sa Kultura",
   "@culturalIssue": {
     "description": "Localized string for culturalIssue"
   },
-  "current": "Current",
+  "current": "Kasalukuyan",
   "@current": {
     "description": "Localized string for current"
   },
-  "currentCacheSize": "Current Cache Size",
+  "currentCacheSize": "Kasalukuyang Sukat ng Cache",
   "@currentCacheSize": {
     "description": "Localized string for currentCacheSize"
   },
-  "currentLanguage": "Current Language",
+  "currentLanguage": "Kasalukuyang Wika",
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
-  "cycling": "Cycling",
+  "cycling": "Pagbibisikleta",
   "@cycling": {
     "description": "Localized string for cycling"
   },
-  "dailyCare": "Daily Care",
+  "dailyCare": "Araw-araw na Pangangalaga",
   "@dailyCare": {
     "description": "Localized string for dailyCare"
   },
-  "dailyCareDesc": "Daily care messages for meals, sleep, health",
+  "dailyCareDesc": "Mga mensahe para sa pang-araw-araw na pangangalaga sa pagkain, tulog, at kalusugan",
   "@dailyCareDesc": {
     "description": "Localized string for dailyCareDesc"
   },
-  "dailyChat": "Daily Chat",
+  "dailyChat": "Pang-araw-araw na Usapan",
   "@dailyChat": {
     "description": "Localized string for dailyChat"
   },
-  "dailyCheck": "Daily check",
+  "dailyCheck": "Pang-araw-araw na Suri",
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "dailyConversation": "Daily Conversation",
+  "dailyConversation": "Pang-araw-araw na Pag-uusap",
   "@dailyConversation": {
     "description": "Localized string for dailyConversation"
   },
-  "dailyLimitDescription": "You have reached your daily message limit",
+  "dailyLimitDescription": "Naabot mo na ang iyong pang-araw-araw na limitasyon sa mensahe",
   "@dailyLimitDescription": {
     "description": "Localized string for dailyLimitDescription"
   },
-  "dailyLimitTitle": "Daily Limit Reached",
+  "dailyLimitTitle": "Naabot na ang Pang-araw-araw na Limit",
   "@dailyLimitTitle": {
     "description": "Localized string for dailyLimitTitle"
   },
-  "darkMode": "Dark Mode",
+  "darkMode": "Madilim na Mode",
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "darkTheme": "Dark Mode",
+  "darkTheme": "Madilim na Tema",
   "@darkTheme": {
     "description": "Localized string for darkTheme"
   },
-  "darkThemeDesc": "Use dark theme",
+  "darkThemeDesc": "Gumamit ng madilim na tema",
   "@darkThemeDesc": {
     "description": "Localized string for darkThemeDesc"
   },
-  "dataCollection": "Data Collection Settings",
+  "dataCollection": "Mga Setting ng Pagkolekta ng Data",
   "@dataCollection": {
     "description": "Localized string for dataCollection"
   },
-  "datingAdvice": "Dating Advice",
+  "datingAdvice": "Payo sa Pakikipag-date",
   "@datingAdvice": {
     "description": "Localized string for datingAdvice"
   },
-  "datingDescription": "I want to share deep thoughts and have sincere conversations",
+  "datingDescription": "Nais kong magbahagi ng malalalim na kaisipan at magkaroon ng tapat na pag-uusap",
   "@datingDescription": {
     "description": "Localized string for datingDescription"
   },
-  "dawn": "Dawn",
+  "dawn": "Bukang-liwayway",
   "@dawn": {
     "description": "Localized string for dawn"
   },
-  "day": "Day",
+  "day": "Araw",
   "@day": {
     "description": "Localized string for day"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
+  "dayAfterTomorrow": "Araw pagkatapos ng bukas",
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
@@ -539,7 +539,7 @@
       }
     }
   },
-  "daysRemaining": "{days} days remaining",
+  "daysRemaining": "{days} natitirang araw",
   "@daysRemaining": {
     "description": "Days remaining",
     "placeholders": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "deepTalk": "Deep Talk",
+  "deepTalk": "Malalim na Usapan",
   "@deepTalk": {
     "description": "Localized string for deepTalk"
   },
@@ -560,59 +560,59 @@
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
-  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "deleteAccountConfirm": "Sigurado ka bang nais mong tanggalin ang iyong account? Ang hakbang na ito ay hindi maibabalik.",
   "@deleteAccountConfirm": {
     "description": "Localized string for deleteAccountConfirm"
   },
-  "deleteAccountWarning": "Are you sure you want to delete your account?",
+  "deleteAccountWarning": "Sigurado ka bang nais mong tanggalin ang iyong account?",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
   },
-  "deleteCache": "Delete Cache",
+  "deleteCache": "Tanggalin ang Cache",
   "@deleteCache": {
     "description": "Localized string for deleteCache"
   },
-  "deletingAccount": "Deleting account...",
+  "deletingAccount": "Binubura ang account...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
-  "depressed": "Depressed",
+  "depressed": "Nalulumbay",
   "@depressed": {
     "description": "Localized string for depressed"
   },
-  "describeError": "What is the problem?",
+  "describeError": "Ano ang problema?",
   "@describeError": {
     "description": "Localized string for describeError"
   },
-  "detailedReason": "Detailed reason",
+  "detailedReason": "Detalyadong dahilan",
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
+  "developRelationshipStep": "3. Paunlarin ang Relasyon: Magtayo ng pagkakaintindihan sa pamamagitan ng mga pag-uusap at paunlarin ang mga espesyal na relasyon.",
   "@developRelationshipStep": {
     "description": "Localized string for developRelationshipStep"
   },
-  "dinner": "Dinner",
+  "dinner": "Hapunan",
   "@dinner": {
     "description": "Localized string for dinner"
   },
-  "discardGuestData": "Start Fresh",
+  "discardGuestData": "Magsimula Muli",
   "@discardGuestData": {
     "description": "Localized string for discardGuestData"
   },
-  "discount20": "20% off",
+  "discount20": "20% diskwento",
   "@discount20": {
     "description": "Localized string for discount20"
   },
-  "discount30": "30% off",
+  "discount30": "30% diskwento",
   "@discount30": {
     "description": "Localized string for discount30"
   },
-  "discountAmount": "Save",
+  "discountAmount": "Magtipid",
   "@discountAmount": {
     "description": "Localized string for discountAmount"
   },
-  "discountAmountValue": "Save ₩{amount}",
+  "discountAmountValue": "I-save ₩{amount}",
   "@discountAmountValue": {
     "description": "Discount amount",
     "placeholders": {
@@ -625,7 +625,7 @@
   "@done": {
     "description": "Localized string for done"
   },
-  "downloadingPersonaImages": "Downloading new persona images",
+  "downloadingPersonaImages": "Nagda-download ng mga bagong larawan ng persona",
   "@downloadingPersonaImages": {
     "description": "Localized string for downloadingPersonaImages"
   },
@@ -633,19 +633,19 @@
   "@edit": {
     "description": "Localized string for edit"
   },
-  "editInfo": "Edit Info",
+  "editInfo": "I-edit ang Impormasyon",
   "@editInfo": {
     "description": "Localized string for editInfo"
   },
-  "editProfile": "Edit Profile",
+  "editProfile": "I-edit ang Profile",
   "@editProfile": {
     "description": "Localized string for editProfile"
   },
-  "effectSound": "Sound Effects",
+  "effectSound": "Mga Epekto ng Tunog",
   "@effectSound": {
     "description": "Localized string for effectSound"
   },
-  "effectSoundDescription": "Play sound effects",
+  "effectSoundDescription": "Mag-play ng mga epekto ng tunog",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
@@ -653,7 +653,7 @@
   "@email": {
     "description": "Localized string for email"
   },
-  "emailHint": "example@email.com",
+  "emailHint": "halimbawa@email.com",
   "@emailHint": {
     "description": "Localized string for emailHint"
   },
@@ -665,71 +665,71 @@
   "@emailRequired": {
     "description": "Localized string for emailRequired"
   },
-  "emotionAnalysis": "Emotion Analysis",
+  "emotionAnalysis": "Pagsusuri ng Emosyon",
   "@emotionAnalysis": {
     "description": "Localized string for emotionAnalysis"
   },
-  "emotionAnalysisDesc": "Analyze emotions for empathetic responses",
+  "emotionAnalysisDesc": "Suriin ang mga emosyon para sa mga empatikong tugon",
   "@emotionAnalysisDesc": {
     "description": "Localized string for emotionAnalysisDesc"
   },
-  "emotionAngry": "Angry",
+  "emotionAngry": "Galit",
   "@emotionAngry": {
     "description": "Localized string for emotionAngry"
   },
-  "emotionBasedEncounters": "Meet personas based on your emotions",
+  "emotionBasedEncounters": "Makipagkita sa mga persona batay sa iyong emosyon",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
   },
-  "emotionCool": "Cool",
+  "emotionCool": "Astig",
   "@emotionCool": {
     "description": "Localized string for emotionCool"
   },
-  "emotionHappy": "Happy",
+  "emotionHappy": "Masaya",
   "@emotionHappy": {
     "description": "Localized string for emotionHappy"
   },
-  "emotionLove": "Love",
+  "emotionLove": "Pag-ibig",
   "@emotionLove": {
     "description": "Localized string for emotionLove"
   },
-  "emotionSad": "Sad",
+  "emotionSad": "Malungkot",
   "@emotionSad": {
     "description": "Localized string for emotionSad"
   },
-  "emotionThinking": "Thinking",
+  "emotionThinking": "Nag-iisip",
   "@emotionThinking": {
     "description": "Localized string for emotionThinking"
   },
-  "emotionalSupportDesc": "Share your concerns and receive warm comfort",
+  "emotionalSupportDesc": "Ibahagi ang iyong mga alalahanin at tumanggap ng mainit na aliw",
   "@emotionalSupportDesc": {
     "description": "Localized string for emotionalSupportDesc"
   },
-  "endChat": "End Chat",
+  "endChat": "Tapusin ang Usapan",
   "@endChat": {
     "description": "Localized string for endChat"
   },
-  "endTutorial": "End Tutorial",
+  "endTutorial": "Tapusin ang Tutorial",
   "@endTutorial": {
     "description": "Localized string for endTutorial"
   },
-  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
+  "endTutorialAndLogin": "Tatapusin ba ang tutorial at mag-login?",
   "@endTutorialAndLogin": {
     "description": "Localized string for endTutorialAndLogin"
   },
-  "endTutorialMessage": "Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.",
+  "endTutorialMessage": "Gusto mo bang tapusin ang tutorial at mag-login?",
   "@endTutorialMessage": {
     "description": "Localized string for endTutorialMessage"
   },
-  "english": "English",
+  "english": "Ingles",
   "@english": {
     "description": "Localized string for english"
   },
-  "enterBasicInfo": "Please enter basic information to create an account",
+  "enterBasicInfo": "Pakisagutan ang pangunahing impormasyon upang makagawa ng account",
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
-  "enterBasicInformation": "Please enter basic information",
+  "enterBasicInformation": "Pakisagutan ang pangunahing impormasyon",
   "@enterBasicInformation": {
     "description": "Localized string for enterBasicInformation"
   },
@@ -737,7 +737,7 @@
   "@enterEmail": {
     "description": "Localized string for enterEmail"
   },
-  "enterNickname": "Please enter a nickname",
+  "enterNickname": "Pakisagutan ang palayaw",
   "@enterNickname": {
     "description": "Localized string for enterNickname"
   },
@@ -745,15 +745,15 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
-  "entertainmentAndFunDesc": "Enjoy fun games and pleasant conversations",
+  "entertainmentAndFunDesc": "Mag-enjoy sa mga masayang laro at kaaya-ayang usapan",
   "@entertainmentAndFunDesc": {
     "description": "Localized string for entertainmentAndFunDesc"
   },
-  "entertainmentDescription": "I want to have fun conversations and enjoy my time",
+  "entertainmentDescription": "Gusto kong magkaroon ng masayang usapan at mag-enjoy sa aking oras",
   "@entertainmentDescription": {
     "description": "Localized string for entertainmentDescription"
   },
-  "entertainmentFun": "Entertainment/Fun",
+  "entertainmentFun": "Libangan/Saya",
   "@entertainmentFun": {
     "description": "Localized string for entertainmentFun"
   },
@@ -761,47 +761,47 @@
   "@error": {
     "description": "Localized string for error"
   },
-  "errorDescription": "Error description",
+  "errorDescription": "Paglalarawan ng error",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
   },
-  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
+  "errorDescriptionHint": "halimbawa, Nagbigay ng kakaibang sagot, Paulit-ulit ang parehong bagay, Nagbibigay ng hindi angkop na mga tugon sa konteksto...",
   "@errorDescriptionHint": {
     "description": "Localized string for errorDescriptionHint"
   },
-  "errorDetails": "Error Details",
+  "errorDetails": "Mga Detalye ng Error",
   "@errorDetails": {
     "description": "Localized string for errorDetails"
   },
-  "errorDetailsHint": "Please explain in detail what is wrong",
+  "errorDetailsHint": "Pakisabihin nang detalyado kung ano ang mali",
   "@errorDetailsHint": {
     "description": "Localized string for errorDetailsHint"
   },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "errorFrequency24h": "Dalas ng Error (Huling 24 na oras)",
   "@errorFrequency24h": {
     "description": "Localized string for errorFrequency24h"
   },
-  "errorMessage": "Error Message:",
+  "errorMessage": "Mensahe ng Error:",
   "@errorMessage": {
     "description": "Localized string for errorMessage"
   },
-  "errorOccurred": "An error occurred.",
+  "errorOccurred": "Nagkaroon ng error.",
   "@errorOccurred": {
     "description": "Localized string for errorOccurred"
   },
-  "errorOccurredTryAgain": "An error occurred. Please try again.",
+  "errorOccurredTryAgain": "Nagkaroon ng error. Pakisubukan muli.",
   "@errorOccurredTryAgain": {
     "description": "Localized string for errorOccurredTryAgain"
   },
-  "errorSendingFailed": "Failed to send error",
+  "errorSendingFailed": "Nabigong magpadala ng error",
   "@errorSendingFailed": {
     "description": "Localized string for errorSendingFailed"
   },
-  "errorStats": "Error Statistics",
+  "errorStats": "Estadistika ng Error",
   "@errorStats": {
     "description": "Localized string for errorStats"
   },
-  "errorWithMessage": "Error occurred: {error}",
+  "errorWithMessage": "Naganap ang error: {error}",
   "@errorWithMessage": {
     "description": "Error with message",
     "placeholders": {
@@ -810,43 +810,43 @@
       }
     }
   },
-  "evening": "Evening",
+  "evening": "Gabi",
   "@evening": {
     "description": "Localized string for evening"
   },
-  "excited": "Excited",
+  "excited": "Nasasabik",
   "@excited": {
     "description": "Localized string for excited"
   },
-  "exit": "Exit",
+  "exit": "Lumabas",
   "@exit": {
     "description": "Localized string for exit"
   },
-  "exitApp": "Exit App",
+  "exitApp": "Lumabas sa App",
   "@exitApp": {
     "description": "Localized string for exitApp"
   },
-  "exitConfirmMessage": "Are you sure you want to exit the app?",
+  "exitConfirmMessage": "Sigurado ka bang nais mong lumabas sa app?",
   "@exitConfirmMessage": {
     "description": "Localized string for exitConfirmMessage"
   },
-  "expertPersona": "Expert Persona",
+  "expertPersona": "Ekspertong Persona",
   "@expertPersona": {
     "description": "Localized string for expertPersona"
   },
-  "expertiseScore": "Expertise Score",
+  "expertiseScore": "Iskor ng Kasanayan",
   "@expertiseScore": {
     "description": "Localized string for expertiseScore"
   },
-  "expired": "Expired",
+  "expired": "Nag-expire",
   "@expired": {
     "description": "Localized string for expired"
   },
-  "explainReportReason": "Please explain the report reason in detail",
+  "explainReportReason": "Mangyaring ipaliwanag ang dahilan ng ulat nang detalyado",
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "fashion": "Fashion",
+  "fashion": "Moda",
   "@fashion": {
     "description": "Localized string for fashion"
   },
@@ -858,15 +858,15 @@
   "@filter": {
     "description": "Localized string for filter"
   },
-  "firstOccurred": "First Occurred: ",
+  "firstOccurred": "Unang Nangyari:",
   "@firstOccurred": {
     "description": "Localized string for firstOccurred"
   },
-  "followDeviceLanguage": "Follow device language settings",
+  "followDeviceLanguage": "Sundin ang mga setting ng wika ng aparato",
   "@followDeviceLanguage": {
     "description": "Localized string for followDeviceLanguage"
   },
-  "forenoon": "Forenoon",
+  "forenoon": "Umaga",
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
@@ -874,19 +874,19 @@
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
-  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "frequentlyAskedQuestions": "Madalas na Itinataas na mga Tanong",
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
-  "friday": "Friday",
+  "friday": "Biyernes",
   "@friday": {
     "description": "Localized string for friday"
   },
-  "friendshipDescription": "I want to meet new friends and have conversations",
+  "friendshipDescription": "Gusto kong makilala ang mga bagong kaibigan at makipag-usap",
   "@friendshipDescription": {
     "description": "Localized string for friendshipDescription"
   },
-  "funChat": "Fun Chat",
+  "funChat": "Masayang Usapan",
   "@funChat": {
     "description": "Localized string for funChat"
   },
@@ -906,35 +906,35 @@
   "@gender": {
     "description": "Localized string for gender"
   },
-  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
+  "genderNotSelectedInfo": "Kung hindi napili ang kasarian, ipapakita ang mga persona ng lahat ng kasarian",
   "@genderNotSelectedInfo": {
     "description": "Localized string for genderNotSelectedInfo"
   },
-  "genderOptional": "Gender (Optional)",
+  "genderOptional": "Kasarian (Opsyonal)",
   "@genderOptional": {
     "description": "Localized string for genderOptional"
   },
-  "genderPreferenceActive": "You can meet personas of all genders",
+  "genderPreferenceActive": "Maaari kang makilala ng mga persona ng lahat ng kasarian",
   "@genderPreferenceActive": {
     "description": "Localized string for genderPreferenceActive"
   },
-  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
+  "genderPreferenceDisabled": "Pumili ng iyong kasarian upang paganahin ang opsyon na tanging kabaligtaran ng kasarian lamang",
   "@genderPreferenceDisabled": {
     "description": "Localized string for genderPreferenceDisabled"
   },
-  "genderPreferenceInactive": "Only opposite gender personas will be shown",
+  "genderPreferenceInactive": "Tanging mga persona ng kabaligtaran ng kasarian ang ipapakita",
   "@genderPreferenceInactive": {
     "description": "Localized string for genderPreferenceInactive"
   },
-  "genderRequired": "Gender *",
+  "genderRequired": "Kasarian *",
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
+  "genderSelectionInfo": "Kung hindi napili, maaari kang makilala ng mga persona ng lahat ng kasarian",
   "@genderSelectionInfo": {
     "description": "Localized string for genderSelectionInfo"
   },
-  "generalPersona": "General Persona",
+  "generalPersona": "Pangkalahatang Persona",
   "@generalPersona": {
     "description": "Localized string for generalPersona"
   },
@@ -942,11 +942,11 @@
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
-  "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
+  "googleLoginCanceled": "Nakansela ang pag-login sa Google.",
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
   },
-  "googleLoginError": "Error occurred during Google login.",
+  "googleLoginError": "Nagkaroon ng error sa pag-login gamit ang Google.",
   "@googleLoginError": {
     "description": "Localized string for googleLoginError"
   },
@@ -954,27 +954,27 @@
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "guest": "Guest",
+  "guest": "Bisita",
   "@guest": {
     "description": "Localized string for guest"
   },
-  "guestDataMigration": "Would you like to keep your current chat history when signing up?",
+  "guestDataMigration": "Gusto mo bang panatilihin ang iyong kasalukuyang kasaysayan ng chat kapag nag-sign up?",
   "@guestDataMigration": {
     "description": "Localized string for guestDataMigration"
   },
-  "guestLimitReached": "Guest trial ended.\nSign up for unlimited conversations!",
+  "guestLimitReached": "Natapos na ang trial ng bisita.",
   "@guestLimitReached": {
     "description": "Localized string for guestLimitReached"
   },
-  "guestLoginPromptMessage": "Login to continue the conversation",
+  "guestLoginPromptMessage": "Mag-login upang ipagpatuloy ang pag-uusap",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
-  "guestMessageExhausted": "Free messages exhausted",
+  "guestMessageExhausted": "Naubos na ang mga libreng mensahe",
   "@guestMessageExhausted": {
     "description": "Localized string for guestMessageExhausted"
   },
-  "guestMessageRemaining": "{count} guest messages remaining",
+  "guestMessageRemaining": "{count} natitirang mensahe ng bisita",
   "@guestMessageRemaining": {
     "description": "Guest messages remaining",
     "placeholders": {
@@ -983,35 +983,35 @@
       }
     }
   },
-  "guestModeBanner": "Guest Mode",
+  "guestModeBanner": "Mode ng Bisita",
   "@guestModeBanner": {
     "description": "Localized string for guestModeBanner"
   },
-  "guestModeDescription": "Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas",
+  "guestModeDescription": "Subukan ang SONA nang hindi nag-sign up",
   "@guestModeDescription": {
     "description": "Localized string for guestModeDescription"
   },
-  "guestModeFailedMessage": "Failed to start Guest Mode",
+  "guestModeFailedMessage": "Nabigong simulan ang Mode ng Bisita",
   "@guestModeFailedMessage": {
     "description": "Localized string for guestModeFailedMessage"
   },
-  "guestModeLimitation": "Some features are limited in Guest Mode",
+  "guestModeLimitation": "Ang ilang mga tampok ay limitado sa Guest Mode",
   "@guestModeLimitation": {
     "description": "Localized string for guestModeLimitation"
   },
-  "guestModeTitle": "Try as Guest",
+  "guestModeTitle": "Subukan bilang Bisita",
   "@guestModeTitle": {
     "description": "Localized string for guestModeTitle"
   },
-  "guestModeWarning": "Guest mode lasts for 24 hours,\nafter which data will be deleted.",
+  "guestModeWarning": "Ang Guest mode ay tumatagal ng 24 na oras, pagkatapos nito ay mabubura ang data.",
   "@guestModeWarning": {
     "description": "Localized string for guestModeWarning"
   },
-  "guestModeWelcome": "Starting in Guest Mode",
+  "guestModeWelcome": "Nagsisimula sa Guest Mode",
   "@guestModeWelcome": {
     "description": "Localized string for guestModeWelcome"
   },
-  "happy": "Happy",
+  "happy": "Masaya",
   "@happy": {
     "description": "Localized string for happy"
   },
@@ -1019,43 +1019,43 @@
   "@hapticFeedback": {
     "description": "Localized string for hapticFeedback"
   },
-  "harassmentBullying": "Harassment/Bullying",
+  "harassmentBullying": "Pang-aabuso/Pang-bu-bully",
   "@harassmentBullying": {
     "description": "Localized string for harassmentBullying"
   },
-  "hateSpeech": "Hate speech",
+  "hateSpeech": "Pananalita ng poot",
   "@hateSpeech": {
     "description": "Localized string for hateSpeech"
   },
-  "heartDescription": "Hearts for more messages",
+  "heartDescription": "Mga puso para sa higit pang mga mensahe",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
   },
-  "heartInsufficient": "Not enough hearts",
+  "heartInsufficient": "Hindi sapat na mga puso",
   "@heartInsufficient": {
     "description": "Localized string for heartInsufficient"
   },
-  "heartInsufficientPleaseCharge": "Not enough hearts. Please recharge hearts.",
+  "heartInsufficientPleaseCharge": "Hindi sapat ang mga puso. Mangyaring mag-recharge ng mga puso.",
   "@heartInsufficientPleaseCharge": {
     "description": "Localized string for heartInsufficientPleaseCharge"
   },
-  "heartRequired": "1 heart is required",
+  "heartRequired": "1 puso ang kinakailangan",
   "@heartRequired": {
     "description": "Localized string for heartRequired"
   },
-  "heartUsageFailed": "Failed to use heart.",
+  "heartUsageFailed": "Nabigong gamitin ang puso.",
   "@heartUsageFailed": {
     "description": "Localized string for heartUsageFailed"
   },
-  "hearts": "Hearts",
+  "hearts": "Mga Puso",
   "@hearts": {
     "description": "Localized string for hearts"
   },
-  "hearts10": "10 Hearts",
+  "hearts10": "10 Mga Puso",
   "@hearts10": {
     "description": "Localized string for hearts10"
   },
-  "hearts30": "30 Hearts",
+  "hearts30": "30 Mga Puso",
   "@hearts30": {
     "description": "Localized string for hearts30"
   },
@@ -1063,15 +1063,15 @@
   "@hearts30Discount": {
     "description": "Localized string for hearts30Discount"
   },
-  "hearts50": "50 Hearts",
+  "hearts50": "50 Mga Puso",
   "@hearts50": {
     "description": "Localized string for hearts50"
   },
-  "hearts50Discount": "SALE",
+  "hearts50Discount": "BENTA",
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
-  "helloEmoji": "Hello! 😊",
+  "helloEmoji": "Kamusta! 😊",
   "@helloEmoji": {
     "description": "Localized string for helloEmoji"
   },
@@ -1079,19 +1079,19 @@
   "@help": {
     "description": "Localized string for help"
   },
-  "hideOriginalText": "Hide Original",
+  "hideOriginalText": "Itago ang Orihinal",
   "@hideOriginalText": {
     "description": "Localized string for hideOriginalText"
   },
-  "hobbySharing": "Hobby Sharing",
+  "hobbySharing": "Pagbabahagi ng Libangan",
   "@hobbySharing": {
     "description": "Localized string for hobbySharing"
   },
-  "hobbyTalk": "Hobby Talk",
+  "hobbyTalk": "Usapang Libangan",
   "@hobbyTalk": {
     "description": "Localized string for hobbyTalk"
   },
-  "hours24Ago": "24 hours ago",
+  "hours24Ago": "24 oras na ang nakalipas",
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
@@ -1109,23 +1109,23 @@
       }
     }
   },
-  "howToUse": "How to use SONA",
+  "howToUse": "Paano gamitin ang SONA",
   "@howToUse": {
     "description": "Localized string for howToUse"
   },
-  "imageCacheManagement": "Image Cache Management",
+  "imageCacheManagement": "Pamamahala ng Image Cache",
   "@imageCacheManagement": {
     "description": "Localized string for imageCacheManagement"
   },
-  "inappropriateContent": "Inappropriate content",
+  "inappropriateContent": "Hindi angkop na nilalaman",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
-  "incorrect": "incorrect",
+  "incorrect": "mali",
   "@incorrect": {
     "description": "Localized string for incorrect"
   },
-  "incorrectPassword": "Incorrect password",
+  "incorrectPassword": "Mali ang password",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
   },
@@ -1133,35 +1133,35 @@
   "@indonesian": {
     "description": "Localized string for indonesian"
   },
-  "inquiries": "Inquiries",
+  "inquiries": "Mga Katanungan",
   "@inquiries": {
     "description": "Localized string for inquiries"
   },
-  "insufficientHearts": "Insufficient hearts.",
+  "insufficientHearts": "Hindi sapat na puso.",
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
-  "interestSharing": "Interest Sharing",
+  "interestSharing": "Pagsasalo ng Interes",
   "@interestSharing": {
     "description": "Localized string for interestSharing"
   },
-  "interestSharingDesc": "Discover and recommend shared interests",
+  "interestSharingDesc": "Tuklasin at irekomenda ang mga ibinahaging interes",
   "@interestSharingDesc": {
     "description": "Localized string for interestSharingDesc"
   },
-  "interests": "Interests",
+  "interests": "Mga Interes",
   "@interests": {
     "description": "Localized string for interests"
   },
-  "invalidEmailFormat": "Invalid email format",
+  "invalidEmailFormat": "Di-wastong format ng email",
   "@invalidEmailFormat": {
     "description": "Localized string for invalidEmailFormat"
   },
-  "invalidEmailFormatError": "Please enter a valid email address",
+  "invalidEmailFormatError": "Mangyaring maglagay ng wastong address ng email",
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
-  "isTyping": "{name} is typing...",
+  "isTyping": "Nagtatype si {name}...",
   "@isTyping": {
     "description": "Shows someone is typing",
     "placeholders": {
@@ -1170,11 +1170,11 @@
       }
     }
   },
-  "japanese": "Japanese",
+  "japanese": "Hapon",
   "@japanese": {
     "description": "Localized string for japanese"
   },
-  "joinDate": "Join Date",
+  "joinDate": "Petsa ng Pagsali",
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
@@ -1182,15 +1182,15 @@
   "@justNow": {
     "description": "Localized string for justNow"
   },
-  "keepGuestData": "Keep Chat History",
+  "keepGuestData": "Panatilihin ang Kasaysayan ng Chat",
   "@keepGuestData": {
     "description": "Localized string for keepGuestData"
   },
-  "korean": "Korean",
+  "korean": "Koreano",
   "@korean": {
     "description": "Localized string for korean"
   },
-  "koreanLanguage": "Korean",
+  "koreanLanguage": "Koreano",
   "@koreanLanguage": {
     "description": "Localized string for koreanLanguage"
   },
@@ -1198,67 +1198,67 @@
   "@language": {
     "description": "Localized string for language"
   },
-  "languageDescription": "AI will respond in your selected language",
+  "languageDescription": "Ang AI ay tutugon sa iyong napiling wika",
   "@languageDescription": {
     "description": "Localized string for languageDescription"
   },
-  "languageIndicator": "Language",
+  "languageIndicator": "Wika",
   "@languageIndicator": {
     "description": "Localized string for languageIndicator"
   },
-  "languageSettings": "Language Settings",
+  "languageSettings": "Mga Setting ng Wika",
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "lastOccurred": "Last Occurred: ",
+  "lastOccurred": "Huling Nangyari:",
   "@lastOccurred": {
     "description": "Localized string for lastOccurred"
   },
-  "lastUpdated": "Last Updated",
+  "lastUpdated": "Huling Na-update",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
   },
-  "lateNight": "Late night",
+  "lateNight": "Hatingabi",
   "@lateNight": {
     "description": "Localized string for lateNight"
   },
-  "later": "Later",
+  "later": "Mamaya",
   "@later": {
     "description": "Localized string for later"
   },
-  "laterButton": "Later",
+  "laterButton": "Mamaya",
   "@laterButton": {
     "description": "Localized string for laterButton"
   },
-  "leave": "Leave",
+  "leave": "Umalis",
   "@leave": {
     "description": "Localized string for leave"
   },
-  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
+  "leaveChatConfirm": "Umalis sa chat na ito?",
   "@leaveChatConfirm": {
     "description": "Localized string for leaveChatConfirm"
   },
-  "leaveChatRoom": "Leave Chat Room",
+  "leaveChatRoom": "Umalis sa Chat Room",
   "@leaveChatRoom": {
     "description": "Localized string for leaveChatRoom"
   },
-  "leaveChatTitle": "Leave Chat",
+  "leaveChatTitle": "Umalis sa Chat",
   "@leaveChatTitle": {
     "description": "Localized string for leaveChatTitle"
   },
-  "lifeAdvice": "Life Advice",
+  "lifeAdvice": "Payo sa Buhay",
   "@lifeAdvice": {
     "description": "Localized string for lifeAdvice"
   },
-  "lightTalk": "Light Talk",
+  "lightTalk": "Magaan na Usapan",
   "@lightTalk": {
     "description": "Localized string for lightTalk"
   },
-  "lightTheme": "Light Mode",
+  "lightTheme": "Maliwanag na Tema",
   "@lightTheme": {
     "description": "Localized string for lightTheme"
   },
-  "lightThemeDesc": "Use bright theme",
+  "lightThemeDesc": "Gumamit ng maliwanag na tema",
   "@lightThemeDesc": {
     "description": "Localized string for lightThemeDesc"
   },
@@ -1266,15 +1266,15 @@
   "@loading": {
     "description": "Localized string for loading"
   },
-  "loadingData": "Loading data...",
+  "loadingData": "Naglo-load ng data...",
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "loadingProducts": "Loading products...",
+  "loadingProducts": "Naglo-load ng mga produkto...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
-  "loadingProfile": "Loading profile",
+  "loadingProfile": "Naglo-load ng profile",
   "@loadingProfile": {
     "description": "Localized string for loadingProfile"
   },
@@ -1282,63 +1282,63 @@
   "@login": {
     "description": "Localized string for login"
   },
-  "loginButton": "Login",
+  "loginButton": "Mag-login",
   "@loginButton": {
     "description": "Localized string for loginButton"
   },
-  "loginCancelled": "Login cancelled",
+  "loginCancelled": "Nakansela ang pag-login",
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
-  "loginComplete": "Login complete",
+  "loginComplete": "Kumpleto ang pag-login",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
   },
-  "loginError": "Login failed",
+  "loginError": "Nabigong mag-login",
   "@loginError": {
     "description": "Localized string for loginError"
   },
-  "loginFailed": "Login failed",
+  "loginFailed": "Nabigong mag-login",
   "@loginFailed": {
     "description": "Localized string for loginFailed"
   },
-  "loginFailedTryAgain": "Login failed. Please try again.",
+  "loginFailedTryAgain": "Nabigong mag-login. Pakisubukan muli.",
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
-  "loginRequired": "Login required",
+  "loginRequired": "Kinakailangan ang pag-login",
   "@loginRequired": {
     "description": "Localized string for loginRequired"
   },
-  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
+  "loginRequiredForProfile": "Kinakailangan ang pag-login upang makita ang profile",
   "@loginRequiredForProfile": {
     "description": "Localized string for loginRequiredForProfile"
   },
-  "loginRequiredService": "Login required to use this service",
+  "loginRequiredService": "Kinakailangan ang pag-login upang magamit ang serbisyong ito",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
   },
-  "loginRequiredTitle": "Login Required",
+  "loginRequiredTitle": "Kinakailangan ang Pag-login",
   "@loginRequiredTitle": {
     "description": "Localized string for loginRequiredTitle"
   },
-  "loginSignup": "Login/Sign Up",
+  "loginSignup": "Mag-login/Mag-sign Up",
   "@loginSignup": {
     "description": "Localized string for loginSignup"
   },
-  "loginTab": "Login",
+  "loginTab": "Mag-login",
   "@loginTab": {
     "description": "Localized string for loginTab"
   },
-  "loginTitle": "Login",
+  "loginTitle": "Mag-login",
   "@loginTitle": {
     "description": "Localized string for loginTitle"
   },
-  "loginWithApple": "Login with Apple",
+  "loginWithApple": "Mag-login gamit ang Apple",
   "@loginWithApple": {
     "description": "Localized string for loginWithApple"
   },
-  "loginWithGoogle": "Login with Google",
+  "loginWithGoogle": "Mag-login gamit ang Google",
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
@@ -1346,35 +1346,35 @@
   "@logout": {
     "description": "Localized string for logout"
   },
-  "logoutConfirm": "Are you sure you want to logout?",
+  "logoutConfirm": "Sigurado ka bang nais mong mag-logout?",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
   },
-  "lonelinessRelief": "Loneliness Relief",
+  "lonelinessRelief": "Pagbawas ng Kalungkutan",
   "@lonelinessRelief": {
     "description": "Localized string for lonelinessRelief"
   },
-  "lonely": "Lonely",
+  "lonely": "Nag-iisa",
   "@lonely": {
     "description": "Localized string for lonely"
   },
-  "lowQualityResponses": "Low Quality Responses",
+  "lowQualityResponses": "Mababang Kalidad ng Mga Tugon",
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },
-  "lunch": "Lunch",
+  "lunch": "Tanghalian",
   "@lunch": {
     "description": "Localized string for lunch"
   },
-  "lunchtime": "Lunchtime",
+  "lunchtime": "Oras ng Tanghalian",
   "@lunchtime": {
     "description": "Localized string for lunchtime"
   },
-  "mainErrorType": "Main Error Type",
+  "mainErrorType": "Pangunahing Uri ng Error",
   "@mainErrorType": {
     "description": "Localized string for mainErrorType"
   },
-  "makeFriends": "Make Friends",
+  "makeFriends": "Gumawa ng Mga Kaibigan",
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
@@ -1382,39 +1382,39 @@
   "@male": {
     "description": "Localized string for male"
   },
-  "manageBlockedAIs": "Manage Blocked AIs",
+  "manageBlockedAIs": "Pamahalaan ang Mga Naharang na AI",
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "managePersonaImageCache": "Manage persona image cache",
+  "managePersonaImageCache": "Pamahalaan ang cache ng larawan ng persona",
   "@managePersonaImageCache": {
     "description": "Localized string for managePersonaImageCache"
   },
-  "marketingAgree": "Agree to Marketing Information (Optional)",
+  "marketingAgree": "Sumang-ayon sa Impormasyon sa Marketing (Opsyonal)",
   "@marketingAgree": {
     "description": "Localized string for marketingAgree"
   },
-  "marketingDescription": "You can receive event and benefit information",
+  "marketingDescription": "Maaari kang makatanggap ng impormasyon tungkol sa mga kaganapan at benepisyo",
   "@marketingDescription": {
     "description": "Localized string for marketingDescription"
   },
-  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "matchPersonaStep": "1. Itugma ang Mga Persona: Mag-swipe pakaliwa o pakanan upang piliin ang iyong paboritong AI persona.",
   "@matchPersonaStep": {
     "description": "Localized string for matchPersonaStep"
   },
-  "matchedPersonas": "Matched Personas",
+  "matchedPersonas": "Nakatugmang Personas",
   "@matchedPersonas": {
     "description": "Localized string for matchedPersonas"
   },
-  "matchedSona": "Matched Sona",
+  "matchedSona": "Nakatugmang Sona",
   "@matchedSona": {
     "description": "Localized string for matchedSona"
   },
-  "matching": "Matching",
+  "matching": "Nagtutugma",
   "@matching": {
     "description": "Localized string for matching"
   },
-  "matchingFailed": "Matching failed.",
+  "matchingFailed": "Nabigo ang pagtutugma.",
   "@matchingFailed": {
     "description": "Localized string for matchingFailed"
   },
@@ -1422,47 +1422,47 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "meetAIPersonas": "Meet AI Personas",
+  "meetAIPersonas": "Kilalanin ang AI Personas",
   "@meetAIPersonas": {
     "description": "Localized string for meetAIPersonas"
   },
-  "meetNewPersonas": "Meet New Personas",
+  "meetNewPersonas": "Kilalanin ang Mga Bagong Personas",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
-  "meetPersonas": "Meet Personas",
+  "meetPersonas": "Kilalanin ang Mga Personas",
   "@meetPersonas": {
     "description": "Localized string for meetPersonas"
   },
-  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "memberBenefits": "Makakuha ng 100+ mensahe at 10 puso kapag nag-sign up ka!",
   "@memberBenefits": {
     "description": "Localized string for memberBenefits"
   },
-  "memoryAlbum": "Memory Album",
+  "memoryAlbum": "Album ng Alaala",
   "@memoryAlbum": {
     "description": "Localized string for memoryAlbum"
   },
-  "memoryAlbumDesc": "Automatically save and recall special moments",
+  "memoryAlbumDesc": "Awtomatikong i-save at alalahanin ang mga espesyal na sandali",
   "@memoryAlbumDesc": {
     "description": "Localized string for memoryAlbumDesc"
   },
-  "messageCopied": "Message copied",
+  "messageCopied": "Mensahe na kopya",
   "@messageCopied": {
     "description": "Localized string for messageCopied"
   },
-  "messageDeleted": "Message deleted",
+  "messageDeleted": "Mensahe na tanggal",
   "@messageDeleted": {
     "description": "Localized string for messageDeleted"
   },
-  "messageLimitReset": "Message limit will reset at midnight",
+  "messageLimitReset": "Magre-reset ang limit ng mensahe sa hatingabi",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
-  "messageSendFailed": "Failed to send message. Please try again.",
+  "messageSendFailed": "Nabigong magpadala ng mensahe. Pakisubukan muli.",
   "@messageSendFailed": {
     "description": "Localized string for messageSendFailed"
   },
-  "messagesRemaining": "Messages Remaining",
+  "messagesRemaining": "Natitirang Mensahe",
   "@messagesRemaining": {
     "description": "Label for messages remaining"
   },
@@ -1480,15 +1480,15 @@
       }
     }
   },
-  "missingTranslation": "Missing Translation",
+  "missingTranslation": "Nawawalang Pagsasalin",
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
-  "monday": "Monday",
+  "monday": "Lunes",
   "@monday": {
     "description": "Localized string for monday"
   },
-  "month": "Month",
+  "month": "Buwan",
   "@month": {
     "description": "Localized string for month"
   },
@@ -1504,35 +1504,35 @@
       }
     }
   },
-  "moreButton": "More",
+  "moreButton": "Higit Pa",
   "@moreButton": {
     "description": "Localized string for moreButton"
   },
-  "morning": "Morning",
+  "morning": "Umaga",
   "@morning": {
     "description": "Localized string for morning"
   },
-  "mostFrequentError": "Most Frequent Error",
+  "mostFrequentError": "Pinakamadalas na Error",
   "@mostFrequentError": {
     "description": "Localized string for mostFrequentError"
   },
-  "movies": "Movies",
+  "movies": "Mga Pelikula",
   "@movies": {
     "description": "Localized string for movies"
   },
-  "multilingualChat": "Multilingual Chat",
+  "multilingualChat": "Multilinggwal na Chat",
   "@multilingualChat": {
     "description": "Localized string for multilingualChat"
   },
-  "music": "Music",
+  "music": "Musika",
   "@music": {
     "description": "Localized string for music"
   },
-  "myGenderSection": "My Gender (Optional)",
+  "myGenderSection": "Ang Aking Kasarian (Opsyonal)",
   "@myGenderSection": {
     "description": "Localized string for myGenderSection"
   },
-  "networkErrorOccurred": "A network error occurred.",
+  "networkErrorOccurred": "Nagkaroon ng error sa network.",
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
@@ -1540,7 +1540,7 @@
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
-  "newMessageCount": "{count} new messages",
+  "newMessageCount": "{count} bagong mensahe",
   "@newMessageCount": {
     "description": "Number of new messages",
     "placeholders": {
@@ -1549,15 +1549,15 @@
       }
     }
   },
-  "newMessageNotification": "Notify me of new messages",
+  "newMessageNotification": "Ipaalam sa akin ang tungkol sa mga bagong mensahe",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
   },
-  "newMessages": "New messages",
+  "newMessages": "Mga bagong mensahe",
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
-  "newYear": "New Year",
+  "newYear": "Bagong Taon",
   "@newYear": {
     "description": "Localized string for newYear"
   },
@@ -1565,47 +1565,47 @@
   "@next": {
     "description": "Localized string for next"
   },
-  "niceToMeetYou": "Nice to meet you!",
+  "niceToMeetYou": "Ikaw ay ikinagagalak kong makilala!",
   "@niceToMeetYou": {
     "description": "Localized string for niceToMeetYou"
   },
-  "nickname": "Nickname",
+  "nickname": "Palayaw",
   "@nickname": {
     "description": "Localized string for nickname"
   },
-  "nicknameAlreadyUsed": "This nickname is already in use",
+  "nicknameAlreadyUsed": "Ang palayaw na ito ay ginagamit na",
   "@nicknameAlreadyUsed": {
     "description": "Localized string for nicknameAlreadyUsed"
   },
-  "nicknameHelperText": "3-10 characters",
+  "nicknameHelperText": "3-10 na karakter",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
   },
-  "nicknameHint": "3-10 characters",
+  "nicknameHint": "3-10 na karakter",
   "@nicknameHint": {
     "description": "Localized string for nicknameHint"
   },
-  "nicknameInUse": "This nickname is already in use",
+  "nicknameInUse": "Ang palayaw na ito ay ginagamit na",
   "@nicknameInUse": {
     "description": "Localized string for nicknameInUse"
   },
-  "nicknameLabel": "Nickname",
+  "nicknameLabel": "Palayaw",
   "@nicknameLabel": {
     "description": "Localized string for nicknameLabel"
   },
-  "nicknameLengthError": "Nickname must be 3-10 characters",
+  "nicknameLengthError": "Ang palayaw ay dapat na 3-10 na karakter",
   "@nicknameLengthError": {
     "description": "Localized string for nicknameLengthError"
   },
-  "nicknamePlaceholder": "Enter your nickname",
+  "nicknamePlaceholder": "Ipasok ang iyong palayaw",
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
-  "nicknameRequired": "Nickname *",
+  "nicknameRequired": "Palayaw *",
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
-  "night": "Night",
+  "night": "Gabi",
   "@night": {
     "description": "Localized string for night"
   },
@@ -1613,59 +1613,59 @@
   "@no": {
     "description": "Localized string for no"
   },
-  "noBlockedAIs": "No blocked AIs",
+  "noBlockedAIs": "Walang naka-block na AIs",
   "@noBlockedAIs": {
     "description": "Localized string for noBlockedAIs"
   },
-  "noChatsYet": "No chats yet",
+  "noChatsYet": "Wala pang mga chat",
   "@noChatsYet": {
     "description": "Localized string for noChatsYet"
   },
-  "noConversationYet": "No conversation yet",
+  "noConversationYet": "Wala pang pag-uusap",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
   },
-  "noErrorReports": "No error reports.",
+  "noErrorReports": "Walang ulat ng error.",
   "@noErrorReports": {
     "description": "Localized string for noErrorReports"
   },
-  "noImageAvailable": "No image available",
+  "noImageAvailable": "Walang magagamit na larawan",
   "@noImageAvailable": {
     "description": "Localized string for noImageAvailable"
   },
-  "noMatchedPersonas": "No matched personas yet",
+  "noMatchedPersonas": "Walang na-match na personas pa",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
-  "noMatchedSonas": "No matched Sonas yet",
+  "noMatchedSonas": "Walang na-match na Sonas pa",
   "@noMatchedSonas": {
     "description": "Localized string for noMatchedSonas"
   },
-  "noPersonasAvailable": "No personas available. Please try again.",
+  "noPersonasAvailable": "Walang magagamit na personas. Pakisubukan muli.",
   "@noPersonasAvailable": {
     "description": "Localized string for noPersonasAvailable"
   },
-  "noPersonasToSelect": "No personas available",
+  "noPersonasToSelect": "Walang magagamit na personas",
   "@noPersonasToSelect": {
     "description": "Localized string for noPersonasToSelect"
   },
-  "noQualityIssues": "No quality issues in the last hour ✅",
+  "noQualityIssues": "Walang isyu sa kalidad sa nakaraang oras ✅",
   "@noQualityIssues": {
     "description": "Localized string for noQualityIssues"
   },
-  "noQualityLogs": "No quality logs yet.",
+  "noQualityLogs": "Wala pang mga tala ng kalidad.",
   "@noQualityLogs": {
     "description": "Localized string for noQualityLogs"
   },
-  "noTranslatedMessages": "No messages to translate",
+  "noTranslatedMessages": "Walang mensahe na isasalin",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
   },
-  "notEnoughHearts": "Not enough hearts",
+  "notEnoughHearts": "Hindi sapat ang mga puso",
   "@notEnoughHearts": {
     "description": "Localized string for notEnoughHearts"
   },
-  "notEnoughHeartsCount": "Not enough hearts. (Current: {count})",
+  "notEnoughHeartsCount": "Hindi sapat ang mga puso. (Kasalukuyan: {count})",
   "@notEnoughHeartsCount": {
     "description": "Not enough hearts message",
     "placeholders": {
@@ -1674,11 +1674,11 @@
       }
     }
   },
-  "notRegistered": "not registered",
+  "notRegistered": "hindi nakarehistro",
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
-  "notSubscribed": "Not subscribed",
+  "notSubscribed": "Hindi nakasubscribe",
   "@notSubscribed": {
     "description": "Localized string for notSubscribed"
   },
@@ -1698,23 +1698,23 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "occurrenceInfo": "Occurrence Info:",
+  "occurrenceInfo": "Impormasyon sa Pagkakataon:",
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
-  "olderChats": "Older",
+  "olderChats": "Mas matanda",
   "@olderChats": {
     "description": "Localized string for olderChats"
   },
-  "onlyOppositeGenderNote": "If unchecked, only opposite gender personas will be shown",
+  "onlyOppositeGenderNote": "Kung hindi naka-check, tanging mga persona ng kabaligtarang kasarian lamang ang ipapakita",
   "@onlyOppositeGenderNote": {
     "description": "Localized string for onlyOppositeGenderNote"
   },
-  "openSettings": "Open Settings",
+  "openSettings": "Buksan ang Mga Setting",
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Optional",
+  "optional": "Opsyonal",
   "@optional": {
     "description": "Localized string for optional"
   },
@@ -1722,11 +1722,11 @@
   "@or": {
     "description": "Localized string for or"
   },
-  "originalPrice": "Original",
+  "originalPrice": "Orihinal",
   "@originalPrice": {
     "description": "Localized string for originalPrice"
   },
-  "originalText": "Original",
+  "originalText": "Orihinal",
   "@originalText": {
     "description": "Localized string for originalText"
   },
@@ -1734,19 +1734,19 @@
   "@other": {
     "description": "Localized string for other"
   },
-  "otherError": "Other Error",
+  "otherError": "Ibang Error",
   "@otherError": {
     "description": "Localized string for otherError"
   },
-  "others": "Others",
+  "others": "Iba pa",
   "@others": {
     "description": "Localized string for others"
   },
-  "ownedHearts": "Owned Hearts",
+  "ownedHearts": "Nabiling Puso",
   "@ownedHearts": {
     "description": "Localized string for ownedHearts"
   },
-  "parentsDay": "Parents' Day",
+  "parentsDay": "Araw ng mga Magulang",
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
@@ -1754,15 +1754,15 @@
   "@password": {
     "description": "Localized string for password"
   },
-  "passwordConfirmation": "Enter password to confirm",
+  "passwordConfirmation": "Ipasok ang password upang kumpirmahin",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
-  "passwordConfirmationDesc": "Please re-enter your password to delete account.",
+  "passwordConfirmationDesc": "Pakisulit ang iyong password upang tanggalin ang account.",
   "@passwordConfirmationDesc": {
     "description": "Localized string for passwordConfirmationDesc"
   },
-  "passwordHint": "6 characters or more",
+  "passwordHint": "6 na karakter o higit pa",
   "@passwordHint": {
     "description": "Localized string for passwordHint"
   },
@@ -1774,11 +1774,11 @@
   "@passwordRequired": {
     "description": "Localized string for passwordRequired"
   },
-  "passwordResetEmailPrompt": "Please enter your email to reset password",
+  "passwordResetEmailPrompt": "Pakisulat ang iyong email upang i-reset ang password",
   "@passwordResetEmailPrompt": {
     "description": "Localized string for passwordResetEmailPrompt"
   },
-  "passwordResetEmailSent": "Password reset email has been sent. Please check your email.",
+  "passwordResetEmailSent": "Ang email para sa pag-reset ng password ay naipadala na. Pakisuri ang iyong email.",
   "@passwordResetEmailSent": {
     "description": "Localized string for passwordResetEmailSent"
   },
@@ -1786,7 +1786,7 @@
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
-  "passwordTooShort": "Password must be at least 6 characters",
+  "passwordTooShort": "Ang password ay dapat hindi bababa sa 6 na karakter",
   "@passwordTooShort": {
     "description": "Localized string for passwordTooShort"
   },
@@ -1803,7 +1803,7 @@
       }
     }
   },
-  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "permissionDeniedTryLater": "Tinanggihan ang pahintulot. Pakisubukan muli mamaya.",
   "@permissionDeniedTryLater": {
     "description": "Localized string for permissionDeniedTryLater"
   },
@@ -1811,23 +1811,23 @@
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "personaGenderSection": "Persona Gender Preference",
+  "personaGenderSection": "Kagustuhan sa Kasarian ng Persona",
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
-  "personaQualityStats": "Persona Quality Statistics",
+  "personaQualityStats": "Estadistika ng Kalidad ng Persona",
   "@personaQualityStats": {
     "description": "Localized string for personaQualityStats"
   },
-  "personalInfoExposure": "Personal information exposure",
+  "personalInfoExposure": "Pagbubunyag ng Personal na Impormasyon",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "Personality",
+  "personality": "Personalidad",
   "@personality": {
     "description": "Localized string for personality"
   },
-  "pets": "Pets",
+  "pets": "Mga Alagang Hayop",
   "@pets": {
     "description": "Localized string for pets"
   },
@@ -1835,47 +1835,47 @@
   "@photo": {
     "description": "Localized string for photo"
   },
-  "photography": "Photography",
+  "photography": "Potograpiya",
   "@photography": {
     "description": "Localized string for photography"
   },
-  "picnic": "Picnic",
+  "picnic": "Piknik",
   "@picnic": {
     "description": "Localized string for picnic"
   },
-  "preferenceSettings": "Preference Settings",
+  "preferenceSettings": "Mga Setting ng Kagustuhan",
   "@preferenceSettings": {
     "description": "Localized string for preferenceSettings"
   },
-  "preferredLanguage": "Preferred Language",
+  "preferredLanguage": "Piniling Wika",
   "@preferredLanguage": {
     "description": "Localized string for preferredLanguage"
   },
-  "preparingForSleep": "Preparing for sleep",
+  "preparingForSleep": "Naghahanda para sa Pagtulog",
   "@preparingForSleep": {
     "description": "Localized string for preparingForSleep"
   },
-  "preparingNewMeeting": "Preparing new meeting",
+  "preparingNewMeeting": "Naghahanda ng Bagong Pulong",
   "@preparingNewMeeting": {
     "description": "Localized string for preparingNewMeeting"
   },
-  "preparingPersonaImages": "Preparing persona images",
+  "preparingPersonaImages": "Naghahanda ng mga larawan ng persona",
   "@preparingPersonaImages": {
     "description": "Localized string for preparingPersonaImages"
   },
-  "preparingPersonas": "Preparing personas",
+  "preparingPersonas": "Naghahanda ng mga persona",
   "@preparingPersonas": {
     "description": "Localized string for preparingPersonas"
   },
-  "preview": "Preview",
+  "preview": "Pagsusuri",
   "@preview": {
     "description": "Localized string for preview"
   },
-  "previous": "Previous",
+  "previous": "Nakaraan",
   "@previous": {
     "description": "Localized string for previous"
   },
-  "privacy": "Privacy Policy",
+  "privacy": "Patakaran sa Privacy",
   "@privacy": {
     "description": "Localized string for privacy"
   },
@@ -1883,91 +1883,91 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "privacyPolicyAgreement": "Please agree to the privacy policy",
+  "privacyPolicyAgreement": "Pakisuyo, sumang-ayon sa patakaran sa privacy",
   "@privacyPolicyAgreement": {
     "description": "Localized string for privacyPolicyAgreement"
   },
-  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "privacySection1Content": "Kami ay nakatuon sa pagprotekta sa iyong privacy. Ang Patakaran sa Privacy na ito ay nagpapaliwanag kung paano namin kinokolekta, ginagamit, at pinangangalagaan ang iyong impormasyon kapag ginagamit mo ang aming serbisyo.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
   },
-  "privacySection1Title": "1. Purpose of Collection and Use of Personal Information",
+  "privacySection1Title": "1. Layunin ng Pagkolekta at Paggamit ng Personal na Impormasyon",
   "@privacySection1Title": {
     "description": "Localized string for privacySection1Title"
   },
-  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "privacySection2Content": "Kinokolekta namin ang impormasyong ibinibigay mo nang direkta sa amin, tulad ng kapag lumikha ka ng isang account, nag-update ng iyong profile, o gumamit ng aming mga serbisyo.",
   "@privacySection2Content": {
     "description": "Localized string for privacySection2Content"
   },
-  "privacySection2Title": "Information We Collect",
+  "privacySection2Title": "Impormasyon na Kinokolekta Namin",
   "@privacySection2Title": {
     "description": "Localized string for privacySection2Title"
   },
-  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "privacySection3Content": "Ginagamit namin ang impormasyong aming kinokolekta upang magbigay, magpanatili, at magpabuti ng aming mga serbisyo, at upang makipag-ugnayan sa iyo.",
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
-  "privacySection3Title": "3. Retention and Use Period of Personal Information",
+  "privacySection3Title": "3. Panahon ng Pag-iingat at Paggamit ng Personal na Impormasyon",
   "@privacySection3Title": {
     "description": "Localized string for privacySection3Title"
   },
-  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "privacySection4Content": "Hindi namin ibinibenta, ipinagpapalit, o sa ibang paraan ay inililipat ang iyong personal na impormasyon sa mga ikatlong partido nang walang iyong pahintulot.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
   },
-  "privacySection4Title": "4. Provision of Personal Information to Third Parties",
+  "privacySection4Title": "4. Pagbibigay ng Personal na Impormasyon sa mga Ikatlong Partido",
   "@privacySection4Title": {
     "description": "Localized string for privacySection4Title"
   },
-  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "privacySection5Content": "Nagpapatupad kami ng angkop na mga hakbang sa seguridad upang protektahan ang iyong personal na impormasyon laban sa hindi awtorisadong pag-access, pagbabago, pagsisiwalat, o pagkasira.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
-  "privacySection5Title": "5. Technical Protection Measures for Personal Information",
+  "privacySection5Title": "5. Mga Teknikal na Hakbang sa Proteksyon para sa Personal na Impormasyon",
   "@privacySection5Title": {
     "description": "Localized string for privacySection5Title"
   },
-  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "privacySection6Content": "Nananatili kami ng personal na impormasyon hangga't kinakailangan upang maibigay ang aming mga serbisyo at sumunod sa mga legal na obligasyon.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
   },
-  "privacySection6Title": "6. User Rights",
+  "privacySection6Title": "6. Mga Karapatan ng Gumagamit",
   "@privacySection6Title": {
     "description": "Localized string for privacySection6Title"
   },
-  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "privacySection7Content": "May karapatan kang ma-access, i-update, o tanggalin ang iyong personal na impormasyon anumang oras sa pamamagitan ng iyong mga setting ng account.",
   "@privacySection7Content": {
     "description": "Localized string for privacySection7Content"
   },
-  "privacySection7Title": "Your Rights",
+  "privacySection7Title": "Ang Iyong Mga Karapatan",
   "@privacySection7Title": {
     "description": "Localized string for privacySection7Title"
   },
-  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "privacySection8Content": "Kung mayroon kang anumang katanungan tungkol sa Patakarang ito sa Privacy, mangyaring makipag-ugnayan sa amin sa support@sona.com.",
   "@privacySection8Content": {
     "description": "Localized string for privacySection8Content"
   },
-  "privacySection8Title": "Contact Us",
+  "privacySection8Title": "Makipag-ugnayan sa Amin",
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
-  "privacySettings": "Privacy Settings",
+  "privacySettings": "Mga Setting ng Privacy",
   "@privacySettings": {
     "description": "Localized string for privacySettings"
   },
-  "privacySettingsInfo": "Disabling individual features will make those services unavailable",
+  "privacySettingsInfo": "Ang pag-disable ng mga indibidwal na tampok ay magpapawalang-bisa sa mga serbisyong iyon",
   "@privacySettingsInfo": {
     "description": "Localized string for privacySettingsInfo"
   },
-  "privacySettingsScreen": "Privacy Settings",
+  "privacySettingsScreen": "Mga Setting ng Privacy",
   "@privacySettingsScreen": {
     "description": "Localized string for privacySettingsScreen"
   },
-  "problemMessage": "Problem",
+  "problemMessage": "Problema",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
   },
-  "problemOccurred": "Problem Occurred",
+  "problemOccurred": "Naganap ang Problema",
   "@problemOccurred": {
     "description": "Localized string for problemOccurred"
   },
@@ -1975,19 +1975,19 @@
   "@profile": {
     "description": "Localized string for profile"
   },
-  "profileEdit": "Edit Profile",
+  "profileEdit": "I-edit ang Profile",
   "@profileEdit": {
     "description": "Localized string for profileEdit"
   },
-  "profileEditLoginRequiredMessage": "Login is required to edit your profile.\nWould you like to go to the login screen?",
+  "profileEditLoginRequiredMessage": "Kinakailangan ang pag-login upang i-edit ang iyong profile.",
   "@profileEditLoginRequiredMessage": {
     "description": "Localized string for profileEditLoginRequiredMessage"
   },
-  "profileInfo": "Profile Information",
+  "profileInfo": "Impormasyon sa Profile",
   "@profileInfo": {
     "description": "Localized string for profileInfo"
   },
-  "profileInfoDescription": "Please enter your profile photo and basic information",
+  "profileInfoDescription": "Pakisuyong ilagay ang iyong larawan sa profile at pangunahing impormasyon",
   "@profileInfoDescription": {
     "description": "Localized string for profileInfoDescription"
   },
@@ -1995,23 +1995,23 @@
   "@profileNav": {
     "description": "Localized string for profileNav"
   },
-  "profilePhoto": "Profile Photo",
+  "profilePhoto": "Larawan sa Profile",
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "profilePhotoAndInfo": "Pakisuyong ilagay ang larawan sa profile at pangunahing impormasyon",
   "@profilePhotoAndInfo": {
     "description": "Localized string for profilePhotoAndInfo"
   },
-  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "profilePhotoUpdateFailed": "Nabigong i-update ang larawan sa profile",
   "@profilePhotoUpdateFailed": {
     "description": "Localized string for profilePhotoUpdateFailed"
   },
-  "profilePhotoUpdated": "Profile photo updated",
+  "profilePhotoUpdated": "Na-update ang larawan sa profile",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
   },
-  "profileSettings": "Profile Settings",
+  "profileSettings": "Mga Setting ng Profile",
   "@profileSettings": {
     "description": "Localized string for profileSettings"
   },
@@ -2019,27 +2019,27 @@
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
-  "profileUpdateFailed": "Failed to update profile",
+  "profileUpdateFailed": "Nabigong i-update ang profile",
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "Profile updated successfully",
+  "profileUpdated": "Matagumpay na na-update ang profile",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
-  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "purchaseAndRefundPolicy": "Patakaran sa Pagbili at Pagbabalik",
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
-  "purchaseButton": "Purchase",
+  "purchaseButton": "Bumili",
   "@purchaseButton": {
     "description": "Localized string for purchaseButton"
   },
-  "purchaseConfirm": "Purchase Confirmation",
+  "purchaseConfirm": "Kumpirmasyon ng Pagbili",
   "@purchaseConfirm": {
     "description": "Localized string for purchaseConfirm"
   },
-  "purchaseConfirmContent": "Purchase {product} for {price}?",
+  "purchaseConfirmContent": "Bibilhin ang {product} para sa {price}?",
   "@purchaseConfirmContent": {
     "description": "Purchase confirmation content",
     "placeholders": {
@@ -2051,7 +2051,7 @@
       }
     }
   },
-  "purchaseConfirmMessage": "Confirm purchase of {title} for {price}? {description}",
+  "purchaseConfirmMessage": "Kumpirmahin ang pagbili ng {title} para sa {price}? {description}",
   "@purchaseConfirmMessage": {
     "description": "Purchase confirmation message",
     "placeholders": {
@@ -2069,103 +2069,103 @@
       }
     }
   },
-  "purchaseFailed": "Purchase failed",
+  "purchaseFailed": "Nabigo ang pagbili",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
-  "purchaseHeartsOnly": "Buy hearts",
+  "purchaseHeartsOnly": "Bumili ng mga puso",
   "@purchaseHeartsOnly": {
     "description": "Localized string for purchaseHeartsOnly"
   },
-  "purchaseMoreHearts": "Purchase hearts to continue conversations",
+  "purchaseMoreHearts": "Bumili ng mga puso upang ipagpatuloy ang mga pag-uusap",
   "@purchaseMoreHearts": {
     "description": "Localized string for purchaseMoreHearts"
   },
-  "purchasePending": "Purchase pending...",
+  "purchasePending": "Naghihintay ng pagbili...",
   "@purchasePending": {
     "description": "Localized string for purchasePending"
   },
-  "purchasePolicy": "Purchase Policy",
+  "purchasePolicy": "Patakaran sa Pagbili",
   "@purchasePolicy": {
     "description": "Localized string for purchasePolicy"
   },
-  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "purchaseSection1Content": "Tumatanggap kami ng iba't ibang paraan ng pagbabayad kabilang ang mga credit card at digital wallets.",
   "@purchaseSection1Content": {
     "description": "Localized string for purchaseSection1Content"
   },
-  "purchaseSection1Title": "Payment Methods",
+  "purchaseSection1Title": "Mga Paraan ng Pagbabayad",
   "@purchaseSection1Title": {
     "description": "Localized string for purchaseSection1Title"
   },
-  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "purchaseSection2Content": "Ang mga refund ay available sa loob ng 14 na araw mula sa pagbili kung hindi mo pa nagamit ang mga biniling item.",
   "@purchaseSection2Content": {
     "description": "Localized string for purchaseSection2Content"
   },
-  "purchaseSection2Title": "Refund Policy",
+  "purchaseSection2Title": "Patakaran sa Refund",
   "@purchaseSection2Title": {
     "description": "Localized string for purchaseSection2Title"
   },
-  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "purchaseSection3Content": "Maaari mong kanselahin ang iyong subscription anumang oras sa pamamagitan ng iyong account settings.",
   "@purchaseSection3Content": {
     "description": "Localized string for purchaseSection3Content"
   },
-  "purchaseSection3Title": "Cancellation",
+  "purchaseSection3Title": "Kanselasyon",
   "@purchaseSection3Title": {
     "description": "Localized string for purchaseSection3Title"
   },
-  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "purchaseSection4Content": "Sa paggawa ng pagbili, sumasang-ayon ka sa aming mga tuntunin ng paggamit at kasunduan sa serbisyo.",
   "@purchaseSection4Content": {
     "description": "Localized string for purchaseSection4Content"
   },
-  "purchaseSection4Title": "Terms of Use",
+  "purchaseSection4Title": "Mga Tuntunin ng Paggamit",
   "@purchaseSection4Title": {
     "description": "Localized string for purchaseSection4Title"
   },
-  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "purchaseSection5Content": "Para sa mga isyu na may kaugnayan sa pagbili, mangyaring makipag-ugnayan sa aming support team.",
   "@purchaseSection5Content": {
     "description": "Localized string for purchaseSection5Content"
   },
-  "purchaseSection5Title": "Contact Support",
+  "purchaseSection5Title": "Makipag-ugnayan sa Suporta",
   "@purchaseSection5Title": {
     "description": "Localized string for purchaseSection5Title"
   },
-  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "purchaseSection6Content": "Ang lahat ng pagbili ay napapailalim sa aming mga karaniwang tuntunin at kundisyon.",
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
-  "purchaseSection6Title": "6. Inquiries",
+  "purchaseSection6Title": "6. Mga Katanungan",
   "@purchaseSection6Title": {
     "description": "Localized string for purchaseSection6Title"
   },
-  "pushNotifications": "Push Notifications",
+  "pushNotifications": "Mga Push Notification",
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
-  "reading": "Reading",
+  "reading": "Pagbasa",
   "@reading": {
     "description": "Localized string for reading"
   },
-  "realtimeQualityLog": "Real-time Quality Log",
+  "realtimeQualityLog": "Real-time na Quality Log",
   "@realtimeQualityLog": {
     "description": "Localized string for realtimeQualityLog"
   },
-  "recentConversation": "Recent Conversation:",
+  "recentConversation": "Kamakailang Usapan:",
   "@recentConversation": {
     "description": "Localized string for recentConversation"
   },
-  "recentLoginRequired": "Please login again for security",
+  "recentLoginRequired": "Mangyaring mag-login muli para sa seguridad",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
   },
-  "referrerEmail": "Referrer Email",
+  "referrerEmail": "Email ng Nag-refer",
   "@referrerEmail": {
     "description": "Localized string for referrerEmail"
   },
-  "referrerEmailHelper": "Optional: Email of who referred you",
+  "referrerEmailHelper": "Opsyonal: Email ng nag-refer sa iyo",
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
-  "referrerEmailLabel": "Referrer Email (Optional)",
+  "referrerEmailLabel": "Email ng Nag-refer (Opsyonal)",
   "@referrerEmailLabel": {
     "description": "Localized string for referrerEmailLabel"
   },
@@ -2173,7 +2173,7 @@
   "@refresh": {
     "description": "Localized string for refresh"
   },
-  "refreshComplete": "Refresh complete! {count} matched personas",
+  "refreshComplete": "Natapos ang pag-refresh! {count} na tugmang persona",
   "@refreshComplete": {
     "description": "Refresh complete message",
     "placeholders": {
@@ -2182,15 +2182,15 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "Nabigo ang pag-refresh",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "Nagre-refresh ng listahan ng chat...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
-  "relatedFAQ": "Related FAQ",
+  "relatedFAQ": "Kaugnay na FAQ",
   "@relatedFAQ": {
     "description": "Localized string for relatedFAQ"
   },
@@ -2198,31 +2198,31 @@
   "@report": {
     "description": "Localized string for report"
   },
-  "reportAI": "Report",
+  "reportAI": "Iulat",
   "@reportAI": {
     "description": "Localized string for reportAI"
   },
-  "reportAIDescription": "If the AI made you uncomfortable, please describe the issue.",
+  "reportAIDescription": "Kung ang AI ay nagdulot sa iyo ng hindi komportable, mangyaring ilarawan ang isyu.",
   "@reportAIDescription": {
     "description": "Localized string for reportAIDescription"
   },
-  "reportAITitle": "Report AI Conversation",
+  "reportAITitle": "Iulat ang Usapan sa AI",
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "reportAndBlock": "Report & Block",
+  "reportAndBlock": "Iulat at I-block",
   "@reportAndBlock": {
     "description": "Localized string for reportAndBlock"
   },
-  "reportAndBlockDescription": "You can report and block inappropriate behavior of this AI",
+  "reportAndBlockDescription": "Maaari mong iulat at i-block ang hindi angkop na pag-uugali ng AI na ito",
   "@reportAndBlockDescription": {
     "description": "Localized string for reportAndBlockDescription"
   },
-  "reportChatError": "Report Chat Error",
+  "reportChatError": "Iulat ang Error sa Chat",
   "@reportChatError": {
     "description": "Localized string for reportChatError"
   },
-  "reportError": "Error occurred while reporting: {error}",
+  "reportError": "Nagkaroon ng error habang nag-uulat: {error}",
   "@reportError": {
     "description": "Report error message",
     "placeholders": {
@@ -2231,35 +2231,35 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "Nabigo ang ulat",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
-  "reportSubmitted": "Report submitted. We will review and take action.",
+  "reportSubmitted": "Naipasa na ang ulat. Susuriin namin ito at gagawa ng aksyon.",
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "reportSubmittedSuccess": "Your report has been submitted. Thank you!",
+  "reportSubmittedSuccess": "Naipasa na ang iyong ulat. Salamat!",
   "@reportSubmittedSuccess": {
     "description": "Localized string for reportSubmittedSuccess"
   },
-  "requestLimit": "Request Limit",
+  "requestLimit": "Limit ng Kahilingan",
   "@requestLimit": {
     "description": "Localized string for requestLimit"
   },
-  "required": "[Required]",
+  "required": "[Kailangan]",
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "Pakisundin ang mga tuntunin",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
-  "restartConversation": "Restart Conversation",
+  "restartConversation": "I-restart ang Usapan",
   "@restartConversation": {
     "description": "Localized string for restartConversation"
   },
-  "restartConversationQuestion": "Would you like to restart the conversation with {name}?",
+  "restartConversationQuestion": "Gusto mo bang i-restart ang usapan kasama si {name}?",
   "@restartConversationQuestion": {
     "description": "Restart conversation question",
     "placeholders": {
@@ -2268,7 +2268,7 @@
       }
     }
   },
-  "restartConversationWithName": "Restarting conversation with {name}!",
+  "restartConversationWithName": "I-rerestart ang usapan kasama si {name}!",
   "@restartConversationWithName": {
     "description": "Restarting conversation message",
     "placeholders": {
@@ -2281,15 +2281,15 @@
   "@retry": {
     "description": "Localized string for retry"
   },
-  "retryButton": "Retry",
+  "retryButton": "Subukan Muli",
   "@retryButton": {
     "description": "Localized string for retryButton"
   },
-  "sad": "Sad",
+  "sad": "Malungkot",
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "Sabado",
   "@saturday": {
     "description": "Localized string for saturday"
   },
@@ -2301,7 +2301,7 @@
   "@search": {
     "description": "Localized string for search"
   },
-  "searchFAQ": "Search FAQ...",
+  "searchFAQ": "Maghanap ng FAQ...",
   "@searchFAQ": {
     "description": "Localized string for searchFAQ"
   },
@@ -2309,15 +2309,15 @@
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
-  "selectEmotion": "Select Emotion",
+  "selectEmotion": "Pumili ng Emosyon",
   "@selectEmotion": {
     "description": "Localized string for selectEmotion"
   },
-  "selectErrorType": "Select error type",
+  "selectErrorType": "Pumili ng uri ng error",
   "@selectErrorType": {
     "description": "Localized string for selectErrorType"
   },
-  "selectFeeling": "Select Feeling",
+  "selectFeeling": "Pumili ng Pakiramdam",
   "@selectFeeling": {
     "description": "Localized string for selectFeeling"
   },
@@ -2325,7 +2325,7 @@
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
-  "selectInterests": "Please select your interests (at least 1)",
+  "selectInterests": "Mangyaring pumili ng iyong mga interes (higit sa 1)",
   "@selectInterests": {
     "description": "Localized string for selectInterests"
   },
@@ -2333,23 +2333,23 @@
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "Pumili ng persona",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
-  "selectPersonaPlease": "Please select a persona.",
+  "selectPersonaPlease": "Mangyaring pumili ng isang persona.",
   "@selectPersonaPlease": {
     "description": "Localized string for selectPersonaPlease"
   },
-  "selectPreferredMbti": "If you prefer personas with specific MBTI types, please select",
+  "selectPreferredMbti": "Kung mas gusto mo ang mga persona na may tiyak na uri ng MBTI, mangyaring pumili",
   "@selectPreferredMbti": {
     "description": "Localized string for selectPreferredMbti"
   },
-  "selectProblematicMessage": "Select the problematic message (optional)",
+  "selectProblematicMessage": "Pumili ng problemadong mensahe (opsyonal)",
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "Pumili ng dahilan ng ulat",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
@@ -2357,19 +2357,19 @@
   "@selectTheme": {
     "description": "Localized string for selectTheme"
   },
-  "selectTranslationError": "Please select a message with translation error",
+  "selectTranslationError": "Mangyaring pumili ng mensahe na may pagkakamali sa pagsasalin",
   "@selectTranslationError": {
     "description": "Localized string for selectTranslationError"
   },
-  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "selectUsagePurpose": "Mangyaring pumili ng iyong layunin sa paggamit ng SONA",
   "@selectUsagePurpose": {
     "description": "Localized string for selectUsagePurpose"
   },
-  "selfIntroduction": "Introduction (Optional)",
+  "selfIntroduction": "Panimula (Opsyonal)",
   "@selfIntroduction": {
     "description": "Localized string for selfIntroduction"
   },
-  "selfIntroductionHint": "Write a brief introduction about yourself",
+  "selfIntroductionHint": "Isulat ang isang maikling panimula tungkol sa iyong sarili",
   "@selfIntroductionHint": {
     "description": "Localized string for selfIntroductionHint"
   },
@@ -2377,19 +2377,19 @@
   "@send": {
     "description": "Localized string for send"
   },
-  "sendChatError": "Send Chat Error",
+  "sendChatError": "Nagkaroon ng error sa pagpapadala ng chat",
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "Ipadala ang iyong unang mensahe",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
-  "sendReport": "Send Report",
+  "sendReport": "Ipadala ang Ulat",
   "@sendReport": {
     "description": "Localized string for sendReport"
   },
-  "sendingEmail": "Sending email...",
+  "sendingEmail": "Nagpapadala ng email...",
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
@@ -2397,23 +2397,23 @@
   "@seoul": {
     "description": "Localized string for seoul"
   },
-  "serverErrorDashboard": "Server Error",
+  "serverErrorDashboard": "Error sa Server",
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "Pakisundin ang mga tuntunin ng serbisyo",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
-  "sessionExpired": "Session expired",
+  "sessionExpired": "Nawala ang session",
   "@sessionExpired": {
     "description": "Localized string for sessionExpired"
   },
-  "setAppInterfaceLanguage": "Set app interface language",
+  "setAppInterfaceLanguage": "Itakda ang wika ng interface ng app",
   "@setAppInterfaceLanguage": {
     "description": "Localized string for setAppInterfaceLanguage"
   },
-  "setNow": "Set Now",
+  "setNow": "Itakda Ngayon",
   "@setNow": {
     "description": "Localized string for setNow"
   },
@@ -2421,23 +2421,23 @@
   "@settings": {
     "description": "Localized string for settings"
   },
-  "sexualContent": "Sexual content",
+  "sexualContent": "Nilalaman na Sekswal",
   "@sexualContent": {
     "description": "Localized string for sexualContent"
   },
-  "showAllGenderPersonas": "Show All Gender Personas",
+  "showAllGenderPersonas": "Ipakita ang Lahat ng Gender Personas",
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
   },
-  "showAllGendersOption": "Show All Genders",
+  "showAllGendersOption": "Ipakita ang Lahat ng Kasarian",
   "@showAllGendersOption": {
     "description": "Localized string for showAllGendersOption"
   },
-  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "showOppositeGenderOnly": "Kung hindi naka-check, tanging mga persona ng kabaligtarang kasarian lamang ang ipapakita",
   "@showOppositeGenderOnly": {
     "description": "Localized string for showOppositeGenderOnly"
   },
-  "showOriginalText": "Show Original",
+  "showOriginalText": "Ipakita ang Orihinal",
   "@showOriginalText": {
     "description": "Localized string for showOriginalText"
   },
@@ -2445,23 +2445,23 @@
   "@signUp": {
     "description": "Localized string for signUp"
   },
-  "signUpFromGuest": "Sign up now to access all features!",
+  "signUpFromGuest": "Mag-sign up ngayon upang ma-access ang lahat ng mga tampok!",
   "@signUpFromGuest": {
     "description": "Localized string for signUpFromGuest"
   },
-  "signup": "Sign Up",
+  "signup": "Mag-sign Up",
   "@signup": {
     "description": "Localized string for signup"
   },
-  "signupComplete": "Sign Up Complete",
+  "signupComplete": "Kumpleto na ang Pag-sign Up",
   "@signupComplete": {
     "description": "Localized string for signupComplete"
   },
-  "signupTab": "Sign Up",
+  "signupTab": "Mag-sign Up",
   "@signupTab": {
     "description": "Localized string for signupTab"
   },
-  "simpleInfoRequired": "Simple information is required\nfor matching with AI personas",
+  "simpleInfoRequired": "Kinakailangan ang simpleng impormasyon",
   "@simpleInfoRequired": {
     "description": "Localized string for simpleInfoRequired"
   },
@@ -2469,27 +2469,27 @@
   "@skip": {
     "description": "Localized string for skip"
   },
-  "sonaFriend": "SONA Friend",
+  "sonaFriend": "SONA Kaibigan",
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "Patakaran sa Privacy ng SONA",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "Patakaran sa Pagbili ng SONA",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "Mga Tuntunin ng Serbisyo ng SONA",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
-  "sonaUsagePurpose": "Please select your purpose for using SONA",
+  "sonaUsagePurpose": "Pakisuyong piliin ang iyong layunin sa paggamit ng SONA",
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "Paumanhin, hindi ito nakatulong",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
@@ -2497,35 +2497,35 @@
   "@sort": {
     "description": "Localized string for sort"
   },
-  "soundSettings": "Sound Settings",
+  "soundSettings": "Mga Setting ng Tunog",
   "@soundSettings": {
     "description": "Localized string for soundSettings"
   },
-  "spamAdvertising": "Spam/Advertising",
+  "spamAdvertising": "Spam/Pag-aanunsyo",
   "@spamAdvertising": {
     "description": "Localized string for spamAdvertising"
   },
-  "spanish": "Spanish",
+  "spanish": "Espanyol",
   "@spanish": {
     "description": "Localized string for spanish"
   },
-  "specialRelationshipDesc": "Understand each other and build deep bonds",
+  "specialRelationshipDesc": "Magkaintindihan at bumuo ng malalim na ugnayan",
   "@specialRelationshipDesc": {
     "description": "Localized string for specialRelationshipDesc"
   },
-  "sports": "Sports",
+  "sports": "Isports",
   "@sports": {
     "description": "Localized string for sports"
   },
-  "spring": "Spring",
+  "spring": "Tagsibol",
   "@spring": {
     "description": "Localized string for spring"
   },
-  "startChat": "Start Chat",
+  "startChat": "Simulan ang Usapan",
   "@startChat": {
     "description": "Localized string for startChat"
   },
-  "startChatButton": "Start Chat",
+  "startChatButton": "Simulan ang Usapan",
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
@@ -2533,127 +2533,127 @@
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
-  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "startConversationLikeAFriend": "Simulan ang usapan kay Sona na parang kaibigan",
   "@startConversationLikeAFriend": {
     "description": "Localized string for startConversationLikeAFriend"
   },
-  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "startConversationStep": "2. Simulan ang Usapan: Makipag-chat nang malaya sa mga katugmang persona.",
   "@startConversationStep": {
     "description": "Localized string for startConversationStep"
   },
-  "startConversationWithSona": "Start chatting with Sona like a friend!",
+  "startConversationWithSona": "Simulan ang pakikipag-chat kay Sona na parang kaibigan!",
   "@startConversationWithSona": {
     "description": "Localized string for startConversationWithSona"
   },
-  "startWithEmail": "Start with Email",
+  "startWithEmail": "Simulan gamit ang Email",
   "@startWithEmail": {
     "description": "Localized string for startWithEmail"
   },
-  "startWithGoogle": "Start with Google",
+  "startWithGoogle": "Simulan gamit ang Google",
   "@startWithGoogle": {
     "description": "Localized string for startWithGoogle"
   },
-  "startingApp": "Starting app",
+  "startingApp": "Sinisimulan ang app",
   "@startingApp": {
     "description": "Localized string for startingApp"
   },
-  "storageManagement": "Storage Management",
+  "storageManagement": "Pamamahala ng Imbakan",
   "@storageManagement": {
     "description": "Localized string for storageManagement"
   },
-  "store": "Store",
+  "store": "Tindahan",
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "Hindi makakonekta sa tindahan",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
-  "storeLoginRequiredMessage": "Login is required to use the store.\nWould you like to go to the login screen?",
+  "storeLoginRequiredMessage": "Kinakailangan ang pag-login upang magamit ang tindahan.",
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "Hindi available ang tindahan",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "storyEvent": "Story Event",
+  "storyEvent": "Kaganapan ng Kwento",
   "@storyEvent": {
     "description": "Localized string for storyEvent"
   },
-  "stressed": "Stressed",
+  "stressed": "Na-stress",
   "@stressed": {
     "description": "Localized string for stressed"
   },
-  "submitReport": "Submit Report",
+  "submitReport": "Isumite ang Ulat",
   "@submitReport": {
     "description": "Localized string for submitReport"
   },
-  "subscriptionStatus": "Subscription Status",
+  "subscriptionStatus": "Katayuan ng Subscription",
   "@subscriptionStatus": {
     "description": "Localized string for subscriptionStatus"
   },
-  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "subtleVibrationOnTouch": "Banayad na panginginig sa pagdampi",
   "@subtleVibrationOnTouch": {
     "description": "Localized string for subtleVibrationOnTouch"
   },
-  "summer": "Summer",
+  "summer": "Tag-init",
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "Linggo",
   "@sunday": {
     "description": "Localized string for sunday"
   },
-  "swipeAnyDirection": "Swipe in any direction",
+  "swipeAnyDirection": "Mag-swipe sa anumang direksyon",
   "@swipeAnyDirection": {
     "description": "Localized string for swipeAnyDirection"
   },
-  "swipeDownToClose": "Swipe down to close",
+  "swipeDownToClose": "I-swipe pababa upang isara",
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
-  "systemTheme": "Follow System",
+  "systemTheme": "Sundin ang Sistema",
   "@systemTheme": {
     "description": "Localized string for systemTheme"
   },
-  "systemThemeDesc": "Automatically changes based on device dark mode settings",
+  "systemThemeDesc": "Awtomatikong nagbabago batay sa mga setting ng madilim na mode ng aparato",
   "@systemThemeDesc": {
     "description": "Localized string for systemThemeDesc"
   },
-  "tapBottomForDetails": "Tap bottom area to see details",
+  "tapBottomForDetails": "I-tap ang ibabang bahagi upang makita ang mga detalye",
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
-  "tapForDetails": "Tap bottom area for details",
+  "tapForDetails": "I-tap ang ibabang bahagi para sa mga detalye",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "I-tap upang i-swipe ang mga larawan",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
-  "teachersDay": "Teachers' Day",
+  "teachersDay": "Araw ng mga Guro",
   "@teachersDay": {
     "description": "Localized string for teachersDay"
   },
-  "technicalError": "Technical Error",
+  "technicalError": "Teknikal na Error",
   "@technicalError": {
     "description": "Localized string for technicalError"
   },
-  "technology": "Technology",
+  "technology": "Teknolohiya",
   "@technology": {
     "description": "Localized string for technology"
   },
-  "terms": "Terms of Service",
+  "terms": "Mga Tuntunin ng Serbisyo",
   "@terms": {
     "description": "Localized string for terms"
   },
-  "termsAgreement": "Terms Agreement",
+  "termsAgreement": "Kasunduan ng mga Tuntunin",
   "@termsAgreement": {
     "description": "Localized string for termsAgreement"
   },
-  "termsAgreementDescription": "Please agree to the terms for using the service",
+  "termsAgreementDescription": "Mangyaring sumang-ayon sa mga tuntunin para sa paggamit ng serbisyo",
   "@termsAgreementDescription": {
     "description": "Localized string for termsAgreementDescription"
   },
@@ -2661,103 +2661,103 @@
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "termsSection10Content": "Nananatili ang karapatan naming baguhin ang mga tuntuning ito anumang oras na may abiso sa mga gumagamit.",
   "@termsSection10Content": {
     "description": "Localized string for termsSection10Content"
   },
-  "termsSection10Title": "Article 10 (Dispute Resolution)",
+  "termsSection10Title": "Artikulo 10 (Pagsusuri ng Alitan)",
   "@termsSection10Title": {
     "description": "Localized string for termsSection10Title"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "termsSection11Content": "Ang mga tuntuning ito ay pamamahalaan ng mga batas ng hurisdiksyon kung saan kami nagpapatakbo.",
   "@termsSection11Content": {
     "description": "Localized string for termsSection11Content"
   },
-  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
+  "termsSection11Title": "Artikulo 11 (Mga Espesyal na Probisyon ng Serbisyo ng AI)",
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "Kung ang anumang probisyon ng mga tuntuning ito ay natagpuang hindi maipatutupad, ang mga natitirang probisyon ay mananatiling may buong bisa at epekto.",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
-  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "termsSection12Title": "Artikulo 12 (Pagkolekta at Paggamit ng Data)",
   "@termsSection12Title": {
     "description": "Localized string for termsSection12Title"
   },
-  "termsSection1Content": "These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.",
+  "termsSection1Content": "Layunin ng mga tuntunin at kundisyong ito na tukuyin ang mga karapatan, obligasyon, at responsibilidad sa pagitan ng SONA (na tinutukoy dito bilang \"Kompanya\") at mga gumagamit kaugnay ng paggamit ng serbisyo ng pag-uusap na tumutugma sa AI persona (na tinutukoy dito bilang \"Serbisyo\") na ibinibigay ng Kompanya.",
   "@termsSection1Content": {
     "description": "Localized string for termsSection1Content"
   },
-  "termsSection1Title": "Article 1 (Purpose)",
+  "termsSection1Title": "Artikulo 1 (Layunin)",
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "Sa paggamit ng aming serbisyo, sumasang-ayon ka na sumunod sa mga Tuntunin ng Serbisyo na ito at sa aming Patakaran sa Privacy.",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
-  "termsSection2Title": "Article 2 (Definitions)",
+  "termsSection2Title": "Artikulo 2 (Mga Kahulugan)",
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "Dapat kang hindi bababa sa 13 taong gulang upang magamit ang aming serbisyo.",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
-  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "termsSection3Title": "Artikulo 3 (Epekto at Pagbabago ng mga Tuntunin)",
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "Ikaw ang may pananagutan sa pagpapanatili ng pagiging kompidensyal ng iyong account at password.",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
-  "termsSection4Title": "Article 4 (Provision of Service)",
+  "termsSection4Title": "Artikulo 4 (Pagbibigay ng Serbisyo)",
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "Sumasang-ayon kang hindi gamitin ang aming serbisyo para sa anumang ilegal o hindi awtorisadong layunin.",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
-  "termsSection5Title": "Article 5 (Membership Registration)",
+  "termsSection5Title": "Artikulo 5 (Rehistrasyon ng Miyembro)",
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "Inilalaan namin ang karapatan na wakasan o suspindihin ang iyong account dahil sa paglabag sa mga tuntuning ito.",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
-  "termsSection6Title": "Article 6 (User Obligations)",
+  "termsSection6Title": "Artikulo 6 (Mga Obligasyon ng Gumagamit)",
   "@termsSection6Title": {
     "description": "Localized string for termsSection6Title"
   },
-  "termsSection7Content": "The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.",
+  "termsSection7Content": "Maaaring unti-unting limitahan ng Kumpanya ang paggamit ng serbisyo sa pamamagitan ng mga babala, pansamantalang pagsuspinde, o permanenteng pagsuspinde kung ang mga gumagamit ay lumalabag sa mga obligasyon ng mga terminong ito o nakikialam sa normal na operasyon ng serbisyo.",
   "@termsSection7Content": {
     "description": "Localized string for termsSection7Content"
   },
-  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "termsSection7Title": "Artikulo 7 (Mga Paghihigpit sa Paggamit ng Serbisyo)",
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "Wala kaming pananagutan para sa anumang di-tuwirang, incidental, o consequential na pinsala na nagmumula sa iyong paggamit ng aming serbisyo.",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
-  "termsSection8Title": "Article 8 (Service Interruption)",
+  "termsSection8Title": "Artikulo 8 (Pagkakasuspinde ng Serbisyo)",
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "Lahat ng nilalaman at materyales na available sa aming serbisyo ay protektado ng mga karapatan sa intelektwal na ari-arian.",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
-  "termsSection9Title": "Article 9 (Disclaimer)",
+  "termsSection9Title": "Artikulo 9 (Pagtatanggi)",
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "Mga Karagdagang Tuntunin",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
@@ -2765,7 +2765,7 @@
   "@thai": {
     "description": "Localized string for thai"
   },
-  "thanksFeedback": "Thanks for your feedback!",
+  "thanksFeedback": "Salamat sa iyong feedback!",
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
@@ -2773,23 +2773,23 @@
   "@theme": {
     "description": "Localized string for theme"
   },
-  "themeDescription": "You can customize the app appearance as you like",
+  "themeDescription": "Maaari mong i-customize ang hitsura ng app ayon sa iyong gusto.",
   "@themeDescription": {
     "description": "Localized string for themeDescription"
   },
-  "themeSettings": "Theme Settings",
+  "themeSettings": "Mga Setting ng Tema",
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "Huwebes",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "timeout": "Timeout",
+  "timeout": "Oras ng Pagtigil",
   "@timeout": {
     "description": "Localized string for timeout"
   },
-  "tired": "Tired",
+  "tired": "Pagod",
   "@tired": {
     "description": "Localized string for tired"
   },
@@ -2797,91 +2797,91 @@
   "@today": {
     "description": "Localized string for today"
   },
-  "todayChats": "Today",
+  "todayChats": "Ngayon",
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
-  "todayText": "Today",
+  "todayText": "Ngayon",
   "@todayText": {
     "description": "Localized string for todayText"
   },
-  "tomorrowText": "Tomorrow",
+  "tomorrowText": "Bukas",
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "totalConsultSessions": "Total Consultation Sessions",
+  "totalConsultSessions": "Kabuuang Sesyon ng Konsultasyon",
   "@totalConsultSessions": {
     "description": "Localized string for totalConsultSessions"
   },
-  "totalErrorCount": "Total Error Count",
+  "totalErrorCount": "Kabuuang Bilang ng Error",
   "@totalErrorCount": {
     "description": "Localized string for totalErrorCount"
   },
-  "totalLikes": "Total Likes",
+  "totalLikes": "Kabuuang Likes",
   "@totalLikes": {
     "description": "Localized string for totalLikes"
   },
-  "totalOccurrences": "Total {count} occurrences",
+  "totalOccurrences": "Kabuuang {count} na mga pagkakataon",
   "@totalOccurrences": {
     "description": "Localized string for totalOccurrences"
   },
-  "totalResponses": "Total Responses",
+  "totalResponses": "Kabuuang Tugon",
   "@totalResponses": {
     "description": "Localized string for totalResponses"
   },
-  "translatedFrom": "Translated",
+  "translatedFrom": "Isinalin mula",
   "@translatedFrom": {
     "description": "Localized string for translatedFrom"
   },
-  "translatedText": "Translation",
+  "translatedText": "Pagsasalin",
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "Kamalian sa pagsasalin",
   "@translationError": {
     "description": "Localized string for translationError"
   },
-  "translationErrorDescription": "Please report incorrect translations or awkward expressions",
+  "translationErrorDescription": "Pakisabi ang mga maling pagsasalin o hindi natural na mga ekspresyon",
   "@translationErrorDescription": {
     "description": "Localized string for translationErrorDescription"
   },
-  "translationErrorReported": "Translation error reported. Thank you!",
+  "translationErrorReported": "Naiulat ang kamalian sa pagsasalin. Salamat!",
   "@translationErrorReported": {
     "description": "Localized string for translationErrorReported"
   },
-  "translationNote": "※ AI translation may not be perfect",
+  "translationNote": "※ Maaaring hindi perpekto ang pagsasalin ng AI",
   "@translationNote": {
     "description": "Localized string for translationNote"
   },
-  "translationQuality": "Translation Quality",
+  "translationQuality": "Kalidad ng Pagsasalin",
   "@translationQuality": {
     "description": "Localized string for translationQuality"
   },
-  "translationSettings": "Translation Settings",
+  "translationSettings": "Mga Setting ng Pagsasalin",
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
-  "travel": "Travel",
+  "travel": "Maglakbay",
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "Martes",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
-  "tutorialAccount": "Tutorial Account",
+  "tutorialAccount": "Tutorial na Account",
   "@tutorialAccount": {
     "description": "Localized string for tutorialAccount"
   },
-  "tutorialWelcomeDescription": "Create special relationships with AI personas.",
+  "tutorialWelcomeDescription": "Lumikha ng espesyal na ugnayan sa mga AI persona.",
   "@tutorialWelcomeDescription": {
     "description": "Tutorial: Welcome description"
   },
-  "tutorialWelcomeTitle": "Welcome to SONA!",
+  "tutorialWelcomeTitle": "Maligayang pagdating sa SONA!",
   "@tutorialWelcomeTitle": {
     "description": "Tutorial: Welcome title"
   },
-  "typeMessage": "Type a message...",
+  "typeMessage": "Mag-type ng mensahe...",
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
@@ -2889,11 +2889,11 @@
   "@unblock": {
     "description": "Localized string for unblock"
   },
-  "unblockFailed": "Failed to unblock",
+  "unblockFailed": "Nabigong i-unblock",
   "@unblockFailed": {
     "description": "Localized string for unblockFailed"
   },
-  "unblockPersonaConfirm": "Unblock {name}?",
+  "unblockPersonaConfirm": "I-unblock si {name}?",
   "@unblockPersonaConfirm": {
     "description": "Unblock persona confirmation",
     "placeholders": {
@@ -2902,15 +2902,15 @@
       }
     }
   },
-  "unblockedSuccessfully": "Unblocked successfully",
+  "unblockedSuccessfully": "Matagumpay na na-unblock",
   "@unblockedSuccessfully": {
     "description": "Localized string for unblockedSuccessfully"
   },
-  "unexpectedLoginError": "An unexpected error occurred during login",
+  "unexpectedLoginError": "Isang hindi inaasahang error ang nangyari sa pag-login",
   "@unexpectedLoginError": {
     "description": "Localized string for unexpectedLoginError"
   },
-  "unknown": "Unknown",
+  "unknown": "Hindi Kilala",
   "@unknown": {
     "description": "Localized string for unknown"
   },
@@ -2918,47 +2918,47 @@
   "@unknownError": {
     "description": "Localized string for unknownError"
   },
-  "unlimitedMessages": "Unlimited",
+  "unlimitedMessages": "Walang Hanggang Mensahe",
   "@unlimitedMessages": {
     "description": "Localized string for unlimitedMessages"
   },
-  "unsendMessage": "Unsend message",
+  "unsendMessage": "I-undo ang mensahe",
   "@unsendMessage": {
     "description": "Localized string for unsendMessage"
   },
-  "usagePurpose": "Usage Purpose",
+  "usagePurpose": "Layunin ng Paggamit",
   "@usagePurpose": {
     "description": "Localized string for usagePurpose"
   },
-  "useOneHeart": "Use 1 Heart",
+  "useOneHeart": "Gumamit ng 1 Puso",
   "@useOneHeart": {
     "description": "Localized string for useOneHeart"
   },
-  "useSystemLanguage": "Use System Language",
+  "useSystemLanguage": "Gamitin ang Wika ng Sistema",
   "@useSystemLanguage": {
     "description": "Localized string for useSystemLanguage"
   },
-  "user": "User: ",
+  "user": "Gumagamit:",
   "@user": {
     "description": "Localized string for user"
   },
-  "userMessage": "User Message:",
+  "userMessage": "Mensahe ng Gumagamit:",
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
-  "userNotFound": "User not found",
+  "userNotFound": "Hindi natagpuan ang gumagamit",
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
-  "valentinesDay": "Valentine's Day",
+  "valentinesDay": "Araw ng mga Puso",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
-  "verifyingAuth": "Verifying authentication",
+  "verifyingAuth": "Nagsasagawa ng pagpapatunay ng awtorisasyon",
   "@verifyingAuth": {
     "description": "Localized string for verifyingAuth"
   },
-  "version": "Version",
+  "version": "Bersyon",
   "@version": {
     "description": "Localized string for version"
   },
@@ -2966,15 +2966,15 @@
   "@vietnamese": {
     "description": "Localized string for vietnamese"
   },
-  "violentContent": "Violent content",
+  "violentContent": "Marahas na nilalaman",
   "@violentContent": {
     "description": "Localized string for violentContent"
   },
-  "voiceMessage": "🎤 Voice message",
+  "voiceMessage": "🎤 Mensahe ng boses",
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "waitingForChat": "{name} is waiting to chat.",
+  "waitingForChat": "Naghihintay si {name} na makipag-chat.",
   "@waitingForChat": {
     "description": "Shows that a persona is waiting to chat",
     "placeholders": {
@@ -2983,95 +2983,95 @@
       }
     }
   },
-  "walk": "Walk",
+  "walk": "Maglakad",
   "@walk": {
     "description": "Localized string for walk"
   },
-  "wasHelpful": "Was this helpful?",
+  "wasHelpful": "Nakakatulong ba ito?",
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
-  "weatherClear": "Clear",
+  "weatherClear": "Maliwanag",
   "@weatherClear": {
     "description": "Localized string for weatherClear"
   },
-  "weatherCloudy": "Cloudy",
+  "weatherCloudy": "Maulap",
   "@weatherCloudy": {
     "description": "Localized string for weatherCloudy"
   },
-  "weatherContext": "Weather Context",
+  "weatherContext": "Konteksto ng Panahon",
   "@weatherContext": {
     "description": "Localized string for weatherContext"
   },
-  "weatherContextDesc": "Provide conversation context based on weather",
+  "weatherContextDesc": "Magbigay ng konteksto ng pag-uusap batay sa panahon",
   "@weatherContextDesc": {
     "description": "Localized string for weatherContextDesc"
   },
-  "weatherDrizzle": "Drizzle",
+  "weatherDrizzle": "Ambon",
   "@weatherDrizzle": {
     "description": "Localized string for weatherDrizzle"
   },
-  "weatherFog": "Fog",
+  "weatherFog": "Hamog",
   "@weatherFog": {
     "description": "Localized string for weatherFog"
   },
-  "weatherMist": "Mist",
+  "weatherMist": "Ulap",
   "@weatherMist": {
     "description": "Localized string for weatherMist"
   },
-  "weatherRain": "Rain",
+  "weatherRain": "Ulan",
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
-  "weatherRainy": "Rainy",
+  "weatherRainy": "Maulan",
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
-  "weatherSnow": "Snow",
+  "weatherSnow": "Niyeber",
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
-  "weatherSnowy": "Snowy",
+  "weatherSnowy": "Niyebe",
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
-  "weatherThunderstorm": "Thunderstorm",
+  "weatherThunderstorm": "Bagyo ng Kidlat",
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "Miyerkules",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
-  "weekdays": "Sun,Mon,Tue,Wed,Thu,Fri,Sat",
+  "weekdays": "Linggo,Lunes,Martes,Miyerkules,Huwebes,Biyernes,Sabado",
   "@weekdays": {
     "description": "Localized string for weekdays"
   },
-  "welcomeMessage": "Welcome💕",
+  "welcomeMessage": "Maligayang pagdating💕",
   "@welcomeMessage": {
     "description": "Localized string for welcomeMessage"
   },
-  "whatTopicsToTalk": "What topics would you like to talk about? (Optional)",
+  "whatTopicsToTalk": "Anong mga paksa ang nais mong pag-usapan? (Opsyonal)",
   "@whatTopicsToTalk": {
     "description": "Localized string for whatTopicsToTalk"
   },
-  "whiteDay": "White Day",
+  "whiteDay": "Araw ng mga Puti",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "winter": "Winter",
+  "winter": "Taglamig",
   "@winter": {
     "description": "Localized string for winter"
   },
-  "wrongTranslation": "Wrong Translation",
+  "wrongTranslation": "Mali ang Pagsasalin",
   "@wrongTranslation": {
     "description": "Localized string for wrongTranslation"
   },
-  "year": "Year",
+  "year": "Taon",
   "@year": {
     "description": "Localized string for year"
   },
-  "yearEnd": "Year End",
+  "yearEnd": "Pagtatapos ng Taon",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
@@ -3083,11 +3083,11 @@
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
-  "yesterdayChats": "Yesterday",
+  "yesterdayChats": "Kahapon",
   "@yesterdayChats": {
     "description": "Localized string for yesterdayChats"
   },
-  "you": "You",
+  "you": "Ikaw",
   "@you": {
     "description": "Localized string for you"
   }

@@ -1,0 +1,102 @@
+{
+  "ar": {
+    "total": 732,
+    "untranslated": 17,
+    "percentage": 97.6775956284153
+  },
+  "de": {
+    "total": 732,
+    "untranslated": 15,
+    "percentage": 97.95081967213115
+  },
+  "es": {
+    "total": 732,
+    "untranslated": 6,
+    "percentage": 99.18032786885246
+  },
+  "fr": {
+    "total": 732,
+    "untranslated": 11,
+    "percentage": 98.49726775956285
+  },
+  "hi": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  },
+  "id": {
+    "total": 732,
+    "untranslated": 6,
+    "percentage": 99.18032786885246
+  },
+  "it": {
+    "total": 732,
+    "untranslated": 56,
+    "percentage": 92.34972677595628
+  },
+  "ja": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  },
+  "ko": {
+    "total": 732,
+    "untranslated": 0,
+    "percentage": 100.0
+  },
+  "nl": {
+    "total": 732,
+    "untranslated": 52,
+    "percentage": 92.89617486338798
+  },
+  "pl": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  },
+  "pt": {
+    "total": 732,
+    "untranslated": 11,
+    "percentage": 98.49726775956285
+  },
+  "ru": {
+    "total": 732,
+    "untranslated": 16,
+    "percentage": 97.81420765027322
+  },
+  "sv": {
+    "total": 732,
+    "untranslated": 8,
+    "percentage": 98.90710382513662
+  },
+  "th": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  },
+  "tl": {
+    "total": 732,
+    "untranslated": 18,
+    "percentage": 97.54098360655738
+  },
+  "tr": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  },
+  "ur": {
+    "total": 732,
+    "untranslated": 34,
+    "percentage": 95.3551912568306
+  },
+  "vi": {
+    "total": 732,
+    "untranslated": 4,
+    "percentage": 99.4535519125683
+  },
+  "zh": {
+    "total": 732,
+    "untranslated": 1,
+    "percentage": 99.86338797814209
+  }
+}

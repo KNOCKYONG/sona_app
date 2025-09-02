@@ -12,23 +12,23 @@ class AppLocalizationsPt extends AppLocalizations {
   String get about => 'Sobre';
 
   @override
-  String get accountAndProfile => 'Account & Profile Information';
+  String get accountAndProfile => 'Informações da Conta e do Perfil';
 
   @override
   String get accountDeletedSuccess => 'Conta excluída com sucesso';
 
   @override
   String get accountDeletionContent =>
-      'Are you sure you want to delete your account?\nThis action cannot be undone.';
+      'Você tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.';
 
   @override
-  String get accountDeletionError => 'Error occurred while deleting account.';
+  String get accountDeletionError => 'Ocorreu um erro ao excluir a conta.';
 
   @override
   String get accountDeletionInfo => 'Informações sobre exclusão de conta';
 
   @override
-  String get accountDeletionTitle => 'Delete Account';
+  String get accountDeletionTitle => 'Excluir Conta';
 
   @override
   String get accountDeletionWarning1 =>
@@ -46,80 +46,78 @@ class AppLocalizationsPt extends AppLocalizations {
   String get accountDeletionWarning4 => 'Isso inclui todo o conteúdo comprado';
 
   @override
-  String get accountManagement => 'Account Management';
+  String get accountManagement => 'Gerenciamento de Conta';
 
   @override
   String get adaptiveConversationDesc =>
-      'Adapts conversation style to match yours';
+      'Adapta o estilo da conversa para combinar com o seu';
 
   @override
-  String get afternoon => 'Afternoon';
+  String get afternoon => 'Tarde';
 
   @override
-  String get afternoonFatigue => 'Afternoon fatigue';
+  String get afternoonFatigue => 'Cansaço da Tarde';
 
   @override
-  String get ageConfirmation =>
-      'I am 14 years or older and have confirmed the above.';
+  String get ageConfirmation => 'Tenho 14 anos ou mais e confirmei o acima.';
 
   @override
   String ageRange(int min, int max) {
-    return '$min-$max years old';
+    return '$min-$max anos';
   }
 
   @override
-  String get ageUnit => 'years old';
+  String get ageUnit => 'anos';
 
   @override
   String get agreeToTerms => 'Concordo com os termos';
 
   @override
-  String get aiDatingQuestion =>
-      'A special daily life with AI\nMeet your own personas.';
+  String get aiDatingQuestion => 'Uma vida especial do dia a dia com a IA';
 
   @override
   String get aiPersonaPreferenceDescription =>
-      'Please set your preferences for AI persona matching';
+      'Por favor, defina suas preferências para o emparelhamento de personas de IA';
 
   @override
-  String get all => 'All';
+  String get all => 'Todos';
 
   @override
-  String get allAgree => 'Agree to All';
+  String get allAgree => 'Concordar com Todos';
 
   @override
   String get allFeaturesRequired =>
-      '※ All features are required for service provision';
+      '※ Todas as funcionalidades são necessárias para a prestação do serviço';
 
   @override
-  String get allPersonas => 'All Personas';
+  String get allPersonas => 'Todas as Personas';
 
   @override
   String get allPersonasMatched =>
-      'All personas matched! Start chatting with them.';
+      'Todas as personas correspondem! Comece a conversar com elas.';
 
   @override
   String get allowPermission => 'Continuar';
 
   @override
   String alreadyChattingWith(String name) {
-    return 'Already chatting with $name!';
+    return 'Já está conversando com $name!';
   }
 
   @override
-  String get alsoBlockThisAI => 'Also block this AI';
+  String get alsoBlockThisAI => 'Também bloquear esta IA';
 
   @override
-  String get angry => 'Angry';
+  String get angry => 'Bravo';
 
   @override
-  String get anonymousLogin => 'Anonymous login';
+  String get anonymousLogin => 'Login anônimo';
 
   @override
-  String get anxious => 'Anxious';
+  String get anxious => 'Ansioso';
 
   @override
-  String get apiKeyError => 'API Key Error';
+  String get apiKeyError => 'Erro de Chave de API';
 
   @override
   String get appName => 'SONA';
@@ -129,97 +127,97 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get appleLoginCanceled =>
-      'Apple login was canceled.\nPlease try again.';
+      'O login com a Apple foi cancelado. Por favor, tente novamente.';
 
   @override
-  String get appleLoginError => 'Error occurred during Apple login.';
+  String get appleLoginError => 'Ocorreu um erro durante o login com a Apple.';
 
   @override
-  String get art => 'Art';
+  String get art => 'Arte';
 
   @override
-  String get authError => 'Authentication Error';
+  String get authError => 'Erro de Autenticação';
 
   @override
-  String get autoTranslate => 'Auto Translate';
+  String get autoTranslate => 'Tradução Automática';
 
   @override
-  String get autumn => 'Autumn';
+  String get autumn => 'Outono';
 
   @override
-  String get averageQuality => 'Average Quality';
+  String get averageQuality => 'Qualidade Média';
 
   @override
-  String get averageQualityScore => 'Average Quality Score';
+  String get averageQualityScore => 'Pontuação de Qualidade Média';
 
   @override
-  String get awkwardExpression => 'Awkward Expression';
+  String get awkwardExpression => 'Expressão Estranha';
 
   @override
-  String get backButton => 'Back';
+  String get backButton => 'Voltar';
 
   @override
-  String get basicInfo => 'Basic Information';
+  String get basicInfo => 'Informações Básicas';
 
   @override
   String get basicInfoDescription =>
-      'Please enter basic information to create an account';
+      'Por favor, insira informações básicas para criar uma conta';
 
   @override
-  String get birthDate => 'Birth Date';
+  String get birthDate => 'Data de Nascimento';
 
   @override
-  String get birthDateOptional => 'Birth Date (Optional)';
+  String get birthDateOptional => 'Data de Nascimento (Opcional)';
 
   @override
-  String get birthDateRequired => 'Birth Date *';
+  String get birthDateRequired => 'Data de Nascimento *';
 
   @override
   String get blockConfirm =>
-      'Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.';
+      'Você deseja bloquear esta IA? AIs bloqueadas serão excluídas da lista de correspondência e chat.';
 
   @override
-  String get blockReason => 'Block reason';
+  String get blockReason => 'Motivo do bloqueio';
 
   @override
-  String get blockThisAI => 'Block this AI';
+  String get blockThisAI => 'Bloquear esta IA';
 
   @override
   String blockedAICount(int count) {
-    return '$count blocked AIs';
+    return '$count AIs bloqueadas';
   }
 
   @override
-  String get blockedAIs => 'Blocked AIs';
+  String get blockedAIs => 'AIs Bloqueadas';
 
   @override
-  String get blockedAt => 'Blocked at';
+  String get blockedAt => 'Bloqueado em';
 
   @override
-  String get blockedSuccessfully => 'Blocked successfully';
+  String get blockedSuccessfully => 'Bloqueado com sucesso';
 
   @override
-  String get breakfast => 'Breakfast';
+  String get breakfast => 'Café da manhã';
 
   @override
-  String get byErrorType => 'By Error Type';
+  String get byErrorType => 'Por Tipo de Erro';
 
   @override
-  String get byPersona => 'By Persona';
+  String get byPersona => 'Por Persona';
 
   @override
   String cacheDeleteError(String error) {
-    return 'Error deleting cache: $error';
+    return 'Erro ao deletar cache: $error';
   }
 
   @override
-  String get cacheDeleted => 'Image cache has been deleted';
+  String get cacheDeleted => 'O cache de imagens foi deletado';
 
   @override
-  String get cafeTerrace => 'Cafe terrace';
+  String get cafeTerrace => 'Terraço do café';
 
   @override
-  String get calm => 'Calm';
+  String get calm => 'Calmo';
 
   @override
   String get cameraPermission => 'Permissão da câmera';
@@ -229,11 +227,12 @@ class AppLocalizationsPt extends AppLocalizations {
       'O acesso à câmera é necessário para tirar fotos do perfil.';
 
   @override
-  String get canChangeInSettings => 'You can change this later in settings';
+  String get canChangeInSettings =>
+      'Você pode mudar isso depois nas configurações';
 
   @override
   String get canMeetPreviousPersonas =>
-      'You can meet personas\nyou swiped before again!';
+      'Você pode encontrar personas que você deslizou antes novamente!';
 
   @override
   String get cancel => 'Cancelar';
@@ -245,80 +244,81 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chat => 'Conversa';
 
   @override
-  String get chatEndedMessage => 'Chat has ended';
+  String get chatEndedMessage => 'O chat foi encerrado';
 
   @override
-  String get chatErrorDashboard => 'Chat Error Dashboard';
+  String get chatErrorDashboard => 'Painel de Erros de Chat';
 
   @override
   String get chatErrorSentSuccessfully =>
-      'Chat error has been sent successfully.';
+      'O erro do chat foi enviado com sucesso.';
 
   @override
-  String get chatListTab => 'Chat List Tab';
+  String get chatListTab => 'Aba de Lista de Chats';
 
   @override
   String get chats => 'Chats';
 
   @override
   String chattingWithPersonas(int count) {
-    return 'Chatting with $count personas';
+    return 'Conversando com $count personas';
   }
 
   @override
   String get checkInternetConnection => 'Verifique sua conexão com a internet';
 
   @override
-  String get checkingUserInfo => 'Checking user info';
+  String get checkingUserInfo => 'Verificando informações do usuário';
 
   @override
-  String get childrensDay => 'Children\'s Day';
+  String get childrensDay => 'Dia das Crianças';
 
   @override
-  String get chinese => 'Chinese';
+  String get chinese => 'Chinês';
 
   @override
-  String get chooseOption => 'Please choose:';
+  String get chooseOption => 'Por favor, escolha:';
 
   @override
-  String get christmas => 'Christmas';
+  String get christmas => 'Natal';
 
   @override
   String get close => 'Fechar';
 
   @override
-  String get complete => 'Done';
+  String get complete => 'Concluído';
 
   @override
-  String get completeSignup => 'Complete Sign Up';
+  String get completeSignup => 'Finalizar Cadastro';
 
   @override
   String get confirm => 'Confirmar';
 
   @override
-  String get connectingToServer => 'Connecting to server';
+  String get connectingToServer => 'Conectando ao servidor';
 
   @override
-  String get consultQualityMonitoring => 'Consultation Quality Monitoring';
+  String get consultQualityMonitoring =>
+      'Monitoramento de Qualidade da Consulta';
 
   @override
-  String get continueAsGuest => 'Continue as Guest';
+  String get continueAsGuest => 'Continuar como Convidado';
 
   @override
-  String get continueButton => 'Continue';
+  String get continueButton => 'Continuar';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get continueWithApple => 'Continuar com a Apple';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get continueWithGoogle => 'Continuar com o Google';
 
   @override
-  String get conversationContinuity => 'Conversation Continuity';
+  String get conversationContinuity => 'Continuidade da Conversa';
 
   @override
   String get conversationContinuityDesc =>
-      'Remember previous conversations and connect topics';
+      'Lembre-se das conversas anteriores e conecte os tópicos';
 
   @override
   String conversationWith(String name) {
@@ -326,52 +326,53 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get convertToMember => 'Sign Up';
+  String get convertToMember => 'Inscrever-se';
 
   @override
-  String get cooking => 'Cooking';
+  String get cooking => 'Cozinhando';
 
   @override
-  String get copyMessage => 'Copy message';
+  String get copyMessage => 'Copiar mensagem';
 
   @override
   String get copyrightInfringement => 'Violação de direitos autorais';
 
   @override
-  String get creatingAccount => 'Creating account';
+  String get creatingAccount => 'Criando conta';
 
   @override
-  String get crisisDetected => 'Crisis Detected';
+  String get crisisDetected => 'Crise Detectada';
 
   @override
-  String get culturalIssue => 'Cultural Issue';
+  String get culturalIssue => 'Questão Cultural';
 
   @override
-  String get current => 'Current';
+  String get current => 'Atual';
 
   @override
-  String get currentCacheSize => 'Current Cache Size';
+  String get currentCacheSize => 'Tamanho Atual do Cache';
 
   @override
   String get currentLanguage => 'Idioma atual';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => 'Ciclismo';
 
   @override
-  String get dailyCare => 'Daily Care';
+  String get dailyCare => 'Cuidados Diários';
 
   @override
-  String get dailyCareDesc => 'Daily care messages for meals, sleep, health';
+  String get dailyCareDesc =>
+      'Mensagens diárias de cuidados para refeições, sono, saúde';
 
   @override
-  String get dailyChat => 'Daily Chat';
+  String get dailyChat => 'Bate-papo Diário';
 
   @override
-  String get dailyCheck => 'Daily check';
+  String get dailyCheck => 'Verificação Diária';
 
   @override
-  String get dailyConversation => 'Daily Conversation';
+  String get dailyConversation => 'Conversa Diária';
 
   @override
   String get dailyLimitDescription =>
@@ -384,29 +385,29 @@ class AppLocalizationsPt extends AppLocalizations {
   String get darkMode => 'Modo escuro';
 
   @override
-  String get darkTheme => 'Dark Mode';
+  String get darkTheme => 'Modo Escuro';
 
   @override
-  String get darkThemeDesc => 'Use dark theme';
+  String get darkThemeDesc => 'Use o tema escuro';
 
   @override
-  String get dataCollection => 'Data Collection Settings';
+  String get dataCollection => 'Configurações de Coleta de Dados';
 
   @override
-  String get datingAdvice => 'Dating Advice';
+  String get datingAdvice => 'Conselhos sobre Relacionamento';
 
   @override
   String get datingDescription =>
-      'I want to share deep thoughts and have sincere conversations';
+      'Quero compartilhar pensamentos profundos e ter conversas sinceras';
 
   @override
-  String get dawn => 'Dawn';
+  String get dawn => 'Amanhecer';
 
   @override
-  String get day => 'Day';
+  String get day => 'Dia';
 
   @override
-  String get dayAfterTomorrow => 'Day after tomorrow';
+  String get dayAfterTomorrow => 'Depois de amanhã';
 
   @override
   String daysAgo(int count, String formatted) {
@@ -415,11 +416,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String daysRemaining(int days) {
-    return '$days days remaining';
+    return '$days dias restantes';
   }
 
   @override
-  String get deepTalk => 'Deep Talk';
+  String get deepTalk => 'Conversa Profunda';
 
   @override
   String get delete => 'Excluir';
@@ -429,68 +430,68 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm =>
-      'Are you sure you want to delete your account? This action cannot be undone.';
+      'Você tem certeza de que deseja excluir sua conta? Esta ação não pode ser desfeita.';
 
   @override
   String get deleteAccountWarning =>
       'Tem certeza de que deseja excluir sua conta?';
 
   @override
-  String get deleteCache => 'Delete Cache';
+  String get deleteCache => 'Excluir Cache';
 
   @override
   String get deletingAccount => 'Excluindo conta...';
 
   @override
-  String get depressed => 'Depressed';
+  String get depressed => 'Deprimido';
 
   @override
-  String get describeError => 'What is the problem?';
+  String get describeError => 'Qual é o problema?';
 
   @override
-  String get detailedReason => 'Detailed reason';
+  String get detailedReason => 'Motivo detalhado';
 
   @override
   String get developRelationshipStep =>
-      '3. Develop Relationship: Build intimacy through conversations and develop special relationships.';
+      '3. Desenvolver Relacionamento: Crie intimidade através de conversas e desenvolva relacionamentos especiais.';
 
   @override
-  String get dinner => 'Dinner';
+  String get dinner => 'Jantar';
 
   @override
-  String get discardGuestData => 'Start Fresh';
+  String get discardGuestData => 'Começar do Zero';
 
   @override
-  String get discount20 => '20% off';
+  String get discount20 => '20% de desconto';
 
   @override
-  String get discount30 => '30% off';
+  String get discount30 => '30% de desconto';
 
   @override
-  String get discountAmount => 'Save';
+  String get discountAmount => 'Economize';
 
   @override
   String discountAmountValue(String amount) {
-    return 'Save ₩$amount';
+    return 'Economize ₩$amount';
   }
 
   @override
   String get done => 'Concluído';
 
   @override
-  String get downloadingPersonaImages => 'Downloading new persona images';
+  String get downloadingPersonaImages => 'Baixando novas imagens de persona';
 
   @override
   String get edit => 'Editar';
 
   @override
-  String get editInfo => 'Edit Info';
+  String get editInfo => 'Editar Informações';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'Editar Perfil';
 
   @override
-  String get effectSound => 'Sound Effects';
+  String get effectSound => 'Efeitos Sonoros';
 
   @override
   String get effectSoundDescription => 'Reproduzir efeitos sonoros';
@@ -499,7 +500,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get email => 'E-mail';
 
   @override
-  String get emailHint => 'example@email.com';
+  String get emailHint => 'exemplo@email.com';
 
   @override
   String get emailLabel => 'Email';
@@ -508,62 +509,61 @@ class AppLocalizationsPt extends AppLocalizations {
   String get emailRequired => 'Email *';
 
   @override
-  String get emotionAnalysis => 'Emotion Analysis';
+  String get emotionAnalysis => 'Análise de Emoção';
 
   @override
-  String get emotionAnalysisDesc => 'Analyze emotions for empathetic responses';
+  String get emotionAnalysisDesc => 'Analise emoções para respostas empáticas';
 
   @override
-  String get emotionAngry => 'Angry';
+  String get emotionAngry => 'Bravo';
 
   @override
   String get emotionBasedEncounters => 'Encontros baseados em emoções';
 
   @override
-  String get emotionCool => 'Cool';
+  String get emotionCool => 'Legal';
 
   @override
-  String get emotionHappy => 'Happy';
+  String get emotionHappy => 'Feliz';
 
   @override
-  String get emotionLove => 'Love';
+  String get emotionLove => 'Amor';
 
   @override
-  String get emotionSad => 'Sad';
+  String get emotionSad => 'Triste';
 
   @override
-  String get emotionThinking => 'Thinking';
+  String get emotionThinking => 'Pensando';
 
   @override
   String get emotionalSupportDesc =>
-      'Share your concerns and receive warm comfort';
+      'Compartilhe suas preocupações e receba conforto acolhedor';
 
   @override
-  String get endChat => 'End Chat';
+  String get endChat => 'Encerrar Chat';
 
   @override
-  String get endTutorial => 'End Tutorial';
+  String get endTutorial => 'Encerrar Tutorial';
 
   @override
-  String get endTutorialAndLogin =>
-      'End tutorial and login?\nLogin to save data and use all features.';
+  String get endTutorialAndLogin => 'Encerrar o tutorial e fazer login?';
 
   @override
   String get endTutorialMessage =>
-      'Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.';
+      'Você quer encerrar o tutorial e fazer login?';
 
   @override
-  String get english => 'English';
+  String get english => 'Inglês';
 
   @override
   String get enterBasicInfo =>
-      'Please enter basic information to create an account';
+      'Por favor, insira informações básicas para criar uma conta';
 
   @override
-  String get enterBasicInformation => 'Please enter basic information';
+  String get enterBasicInformation => 'Por favor, insira informações básicas';
 
   @override
-  String get enterEmail => 'Please enter email';
+  String get enterEmail => 'Por favor, insira o e-mail';
 
   @override
   String get enterNickname => 'Digite um apelido';
@@ -573,14 +573,14 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get entertainmentAndFunDesc =>
-      'Enjoy fun games and pleasant conversations';
+      'Aproveite jogos divertidos e conversas agradáveis';
 
   @override
   String get entertainmentDescription =>
-      'I want to have fun conversations and enjoy my time';
+      'Quero ter conversas divertidas e aproveitar meu tempo';
 
   @override
-  String get entertainmentFun => 'Entertainment/Fun';
+  String get entertainmentFun => 'Entretenimento/Diversão';
 
   @override
   String get error => 'Erro';
@@ -590,98 +590,102 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get errorDescriptionHint =>
-      'e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...';
+      'por exemplo, Deu respostas estranhas, Repete a mesma coisa, Dá respostas contextualmente inadequadas...';
 
   @override
-  String get errorDetails => 'Error Details';
+  String get errorDetails => 'Detalhes do Erro';
 
   @override
-  String get errorDetailsHint => 'Please explain in detail what is wrong';
+  String get errorDetailsHint =>
+      'Por favor, explique em detalhes o que está errado';
 
   @override
-  String get errorFrequency24h => 'Error Frequency (Last 24 hours)';
+  String get errorFrequency24h => 'Frequência de Erros (Últimas 24 horas)';
 
   @override
-  String get errorMessage => 'Error Message:';
+  String get errorMessage => 'Mensagem de Erro:';
 
   @override
-  String get errorOccurred => 'An error occurred.';
+  String get errorOccurred => 'Ocorreu um erro.';
 
   @override
-  String get errorOccurredTryAgain => 'An error occurred. Please try again.';
+  String get errorOccurredTryAgain =>
+      'Ocorreu um erro. Por favor, tente novamente.';
 
   @override
-  String get errorSendingFailed => 'Failed to send error';
+  String get errorSendingFailed => 'Falha ao enviar o erro';
 
   @override
-  String get errorStats => 'Error Statistics';
+  String get errorStats => 'Estatísticas de Erros';
 
   @override
   String errorWithMessage(String error) {
-    return 'Error occurred: $error';
+    return 'Ocorreu um erro: $error';
   }
 
   @override
-  String get evening => 'Evening';
+  String get evening => 'Noite';
 
   @override
-  String get excited => 'Excited';
+  String get excited => 'Animado';
 
   @override
-  String get exit => 'Exit';
+  String get exit => 'Sair';
 
   @override
-  String get exitApp => 'Exit App';
+  String get exitApp => 'Sair do App';
 
   @override
-  String get exitConfirmMessage => 'Are you sure you want to exit the app?';
+  String get exitConfirmMessage =>
+      'Você tem certeza de que deseja sair do app?';
 
   @override
-  String get expertPersona => 'Expert Persona';
+  String get expertPersona => 'Persona Especialista';
 
   @override
-  String get expertiseScore => 'Expertise Score';
+  String get expertiseScore => 'Pontuação de Especialização';
 
   @override
-  String get expired => 'Expired';
+  String get expired => 'Expirado';
 
   @override
   String get explainReportReason =>
-      'Please explain the report reason in detail';
+      'Por favor, explique o motivo da denúncia em detalhes';
 
   @override
-  String get fashion => 'Fashion';
+  String get fashion => 'Moda';
 
   @override
   String get female => 'Feminino';
 
   @override
-  String get filter => 'Filter';
+  String get filter => 'Filtro';
 
   @override
-  String get firstOccurred => 'First Occurred: ';
+  String get firstOccurred => 'Primeira Ocorrência:';
 
   @override
-  String get followDeviceLanguage => 'Follow device language settings';
+  String get followDeviceLanguage =>
+      'Seguir as configurações de idioma do dispositivo';
 
   @override
-  String get forenoon => 'Forenoon';
+  String get forenoon => 'Manhã';
 
   @override
   String get forgotPassword => 'Esqueceu a senha?';
 
   @override
-  String get frequentlyAskedQuestions => 'Frequently Asked Questions';
+  String get frequentlyAskedQuestions => 'Perguntas Frequentes';
 
   @override
-  String get friday => 'Friday';
+  String get friday => 'Sexta-feira';
 
   @override
   String get friendshipDescription =>
-      'I want to meet new friends and have conversations';
+      'Quero conhecer novos amigos e ter conversas';
 
   @override
-  String get funChat => 'Fun Chat';
+  String get funChat => 'Bate-papo Divertido';
 
   @override
   String get galleryPermission => 'Permissão da galeria';
@@ -691,160 +695,159 @@ class AppLocalizationsPt extends AppLocalizations {
       'O acesso à galeria é necessário para selecionar fotos do perfil.';
 
   @override
-  String get gaming => 'Gaming';
+  String get gaming => 'Jogos';
 
   @override
   String get gender => 'Gênero';
 
   @override
   String get genderNotSelectedInfo =>
-      'If gender is not selected, personas of all genders will be shown';
+      'Se o gênero não for selecionado, serão mostradas personas de todos os gêneros';
 
   @override
-  String get genderOptional => 'Gender (Optional)';
+  String get genderOptional => 'Gênero (Opcional)';
 
   @override
-  String get genderPreferenceActive => 'You can meet personas of all genders';
+  String get genderPreferenceActive =>
+      'Você pode conhecer personas de todos os gêneros';
 
   @override
   String get genderPreferenceDisabled =>
-      'Select your gender to enable opposite gender only option';
+      'Selecione seu gênero para habilitar a opção de gênero oposto apenas';
 
   @override
   String get genderPreferenceInactive =>
-      'Only opposite gender personas will be shown';
+      'Apenas personas do gênero oposto serão mostradas';
 
   @override
-  String get genderRequired => 'Gender *';
+  String get genderRequired => 'Gênero *';
 
   @override
   String get genderSelectionInfo =>
-      'If not selected, you can meet personas of all genders';
+      'Se não selecionado, você pode conhecer personas de todos os gêneros';
 
   @override
-  String get generalPersona => 'General Persona';
+  String get generalPersona => 'Persona Geral';
 
   @override
   String get goToSettings => 'Ir para configurações';
 
   @override
   String get googleLoginCanceled =>
-      'Google login was canceled.\nPlease try again.';
+      'O login do Google foi cancelado. Por favor, tente novamente.';
 
   @override
-  String get googleLoginError => 'Error occurred during Google login.';
+  String get googleLoginError => 'Ocorreu um erro durante o login do Google.';
 
   @override
   String get grantPermission => 'Continuar';
 
   @override
-  String get guest => 'Guest';
+  String get guest => 'Convidado';
 
   @override
   String get guestDataMigration =>
-      'Would you like to keep your current chat history when signing up?';
+      'Você gostaria de manter seu histórico de chat atual ao se inscrever?';
 
   @override
-  String get guestLimitReached =>
-      'Guest trial ended.\nSign up for unlimited conversations!';
+  String get guestLimitReached => 'O período de teste do convidado terminou.';
 
   @override
   String get guestLoginPromptMessage => 'Faça login para continuar a conversa';
 
   @override
-  String get guestMessageExhausted => 'Free messages exhausted';
+  String get guestMessageExhausted => 'Mensagens gratuitas esgotadas';
 
   @override
   String guestMessageRemaining(int count) {
-    return '$count guest messages remaining';
+    return '$count mensagens de convidado restantes';
   }
 
   @override
-  String get guestModeBanner => 'Guest Mode';
+  String get guestModeBanner => 'Modo Convidado';
 
   @override
-  String get guestModeDescription =>
-      'Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas';
+  String get guestModeDescription => 'Experimente o SONA sem se inscrever';
 
   @override
-  String get guestModeFailedMessage => 'Failed to start Guest Mode';
+  String get guestModeFailedMessage => 'Falha ao iniciar o Modo Convidado';
 
   @override
-  String get guestModeLimitation => 'Some features are limited in Guest Mode';
+  String get guestModeLimitation =>
+      'Alguns recursos são limitados no Modo Convidado';
 
   @override
-  String get guestModeTitle => 'Try as Guest';
+  String get guestModeTitle => 'Experimente como Convidado';
 
   @override
-  String get guestModeWarning =>
-      'Guest mode lasts for 24 hours,\nafter which data will be deleted.';
+  String get guestModeWarning => 'O modo convidado dura 24 horas,';
 
   @override
-  String get guestModeWelcome => 'Starting in Guest Mode';
+  String get guestModeWelcome => 'Iniciando no Modo Convidado';
 
   @override
-  String get happy => 'Happy';
+  String get happy => 'Feliz';
 
   @override
-  String get hapticFeedback => 'Haptic Feedback';
+  String get hapticFeedback => 'Feedback Háptico';
 
   @override
-  String get harassmentBullying => 'Harassment/Bullying';
+  String get harassmentBullying => 'Assédio/Bullying';
 
   @override
-  String get hateSpeech => 'Hate speech';
+  String get hateSpeech => 'Discurso de ódio';
 
   @override
   String get heartDescription => 'Corações para mais mensagens';
 
   @override
-  String get heartInsufficient => 'Not enough hearts';
+  String get heartInsufficient => 'Corações insuficientes';
 
   @override
   String get heartInsufficientPleaseCharge =>
-      'Not enough hearts. Please recharge hearts.';
+      'Não há corações suficientes. Por favor, recarregue os corações.';
 
   @override
-  String get heartRequired => '1 heart is required';
+  String get heartRequired => '1 coração é necessário';
 
   @override
-  String get heartUsageFailed => 'Failed to use heart.';
+  String get heartUsageFailed => 'Falha ao usar o coração.';
 
   @override
-  String get hearts => 'Hearts';
+  String get hearts => 'Corações';
 
   @override
-  String get hearts10 => '10 Hearts';
+  String get hearts10 => '10 Corações';
 
   @override
-  String get hearts30 => '30 Hearts';
+  String get hearts30 => '30 Corações';
 
   @override
-  String get hearts30Discount => 'SALE';
+  String get hearts30Discount => 'PROMOÇÃO';
 
   @override
-  String get hearts50 => '50 Hearts';
+  String get hearts50 => '50 Corações';
 
   @override
-  String get hearts50Discount => 'SALE';
+  String get hearts50Discount => 'PROMOÇÃO';
 
   @override
-  String get helloEmoji => 'Hello! 😊';
+  String get helloEmoji => 'Olá! 😊';
 
   @override
   String get help => 'Ajuda';
 
   @override
-  String get hideOriginalText => 'Hide Original';
+  String get hideOriginalText => 'Ocultar Original';
 
   @override
-  String get hobbySharing => 'Hobby Sharing';
+  String get hobbySharing => 'Compartilhamento de Hobbies';
 
   @override
-  String get hobbyTalk => 'Hobby Talk';
+  String get hobbyTalk => 'Conversa sobre Hobbies';
 
   @override
-  String get hours24Ago => '24 hours ago';
+  String get hours24Ago => '24 horas atrás';
 
   @override
   String hoursAgo(int count, String formatted) {
@@ -852,37 +855,38 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get howToUse => 'How to use SONA';
+  String get howToUse => 'Como usar o SONA';
 
   @override
-  String get imageCacheManagement => 'Image Cache Management';
+  String get imageCacheManagement => 'Gerenciamento de Cache de Imagens';
 
   @override
   String get inappropriateContent => 'Conteúdo inapropriado';
 
   @override
-  String get incorrect => 'incorrect';
+  String get incorrect => 'incorreto';
 
   @override
   String get incorrectPassword => 'Senha incorreta';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Indonésio';
 
   @override
-  String get inquiries => 'Inquiries';
+  String get inquiries => 'Consultas';
 
   @override
-  String get insufficientHearts => 'Insufficient hearts.';
+  String get insufficientHearts => 'Corações insuficientes.';
 
   @override
-  String get interestSharing => 'Interest Sharing';
+  String get interestSharing => 'Compartilhamento de Interesses';
 
   @override
-  String get interestSharingDesc => 'Discover and recommend shared interests';
+  String get interestSharingDesc =>
+      'Descubra e recomende interesses compartilhados';
 
   @override
-  String get interests => 'Interests';
+  String get interests => 'Interesses';
 
   @override
   String get invalidEmailFormat => 'Formato de email inválido';
@@ -892,105 +896,104 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String isTyping(String name) {
-    return '$name is typing...';
+    return '$name está digitando...';
   }
 
   @override
-  String get japanese => 'Japanese';
+  String get japanese => 'Japonês';
 
   @override
-  String get joinDate => 'Join Date';
+  String get joinDate => 'Data de Entrada';
 
   @override
   String get justNow => 'Agora mesmo';
 
   @override
-  String get keepGuestData => 'Keep Chat History';
+  String get keepGuestData => 'Manter Histórico de Conversas';
 
   @override
-  String get korean => 'Korean';
+  String get korean => 'Coreano';
 
   @override
-  String get koreanLanguage => 'Korean';
+  String get koreanLanguage => 'Coreano';
 
   @override
   String get language => 'Idioma';
 
   @override
-  String get languageDescription => 'AI will respond in your selected language';
+  String get languageDescription => 'A IA responderá no seu idioma selecionado';
 
   @override
-  String get languageIndicator => 'Language';
+  String get languageIndicator => 'Idioma';
 
   @override
-  String get languageSettings => 'Language Settings';
+  String get languageSettings => 'Configurações de Idioma';
 
   @override
-  String get lastOccurred => 'Last Occurred: ';
+  String get lastOccurred => 'Última Ocorrência:';
 
   @override
   String get lastUpdated => 'Última atualização';
 
   @override
-  String get lateNight => 'Late night';
+  String get lateNight => 'Madrugada';
 
   @override
-  String get later => 'Later';
+  String get later => 'Depois';
 
   @override
-  String get laterButton => 'Later';
+  String get laterButton => 'Depois';
 
   @override
-  String get leave => 'Leave';
+  String get leave => 'Sair';
 
   @override
-  String get leaveChatConfirm =>
-      'Leave this chat?\nIt will disappear from your chat list.';
+  String get leaveChatConfirm => 'Sair deste chat?';
 
   @override
-  String get leaveChatRoom => 'Leave Chat Room';
+  String get leaveChatRoom => 'Sair da Sala de Chat';
 
   @override
-  String get leaveChatTitle => 'Leave Chat';
+  String get leaveChatTitle => 'Sair do Chat';
 
   @override
-  String get lifeAdvice => 'Life Advice';
+  String get lifeAdvice => 'Conselhos de Vida';
 
   @override
-  String get lightTalk => 'Light Talk';
+  String get lightTalk => 'Conversa Leve';
 
   @override
-  String get lightTheme => 'Light Mode';
+  String get lightTheme => 'Modo Claro';
 
   @override
-  String get lightThemeDesc => 'Use bright theme';
+  String get lightThemeDesc => 'Use tema claro';
 
   @override
   String get loading => 'Carregando...';
 
   @override
-  String get loadingData => 'Loading data...';
+  String get loadingData => 'Carregando dados...';
 
   @override
   String get loadingProducts => 'Carregando produtos...';
 
   @override
-  String get loadingProfile => 'Loading profile';
+  String get loadingProfile => 'Carregando perfil';
 
   @override
   String get login => 'Entrar';
 
   @override
-  String get loginButton => 'Login';
+  String get loginButton => 'Entrar';
 
   @override
-  String get loginCancelled => 'Login cancelled';
+  String get loginCancelled => 'Login cancelado';
 
   @override
   String get loginComplete => 'Login concluído';
 
   @override
-  String get loginError => 'Login failed';
+  String get loginError => 'Falha no login';
 
   @override
   String get loginFailed => 'Falha no login';
@@ -999,20 +1002,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get loginFailedTryAgain => 'Falha no login. Tente novamente.';
 
   @override
-  String get loginRequired => 'Login required';
+  String get loginRequired => 'Login necessário';
 
   @override
-  String get loginRequiredForProfile =>
-      'Login required to view profile\nand check records with SONA';
+  String get loginRequiredForProfile => 'Login necessário para ver o perfil';
 
   @override
   String get loginRequiredService => 'Login necessário para usar este serviço';
 
   @override
-  String get loginRequiredTitle => 'Login Required';
+  String get loginRequiredTitle => 'Login Necessário';
 
   @override
-  String get loginSignup => 'Login/Sign Up';
+  String get loginSignup => 'Login/Cadastrar';
 
   @override
   String get loginTab => 'Login';
@@ -1033,95 +1035,98 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logoutConfirm => 'Tem certeza de que deseja sair?';
 
   @override
-  String get lonelinessRelief => 'Loneliness Relief';
+  String get lonelinessRelief => 'Alívio da Solidão';
 
   @override
-  String get lonely => 'Lonely';
+  String get lonely => 'Sozinho';
 
   @override
-  String get lowQualityResponses => 'Low Quality Responses';
+  String get lowQualityResponses => 'Respostas de Baixa Qualidade';
 
   @override
-  String get lunch => 'Lunch';
+  String get lunch => 'Almoço';
 
   @override
-  String get lunchtime => 'Lunchtime';
+  String get lunchtime => 'Hora do Almoço';
 
   @override
-  String get mainErrorType => 'Main Error Type';
+  String get mainErrorType => 'Tipo de Erro Principal';
 
   @override
-  String get makeFriends => 'Make Friends';
+  String get makeFriends => 'Fazer Amigos';
 
   @override
   String get male => 'Masculino';
 
   @override
-  String get manageBlockedAIs => 'Manage Blocked AIs';
+  String get manageBlockedAIs => 'Gerenciar AIs Bloqueados';
 
   @override
-  String get managePersonaImageCache => 'Manage persona image cache';
+  String get managePersonaImageCache => 'Gerenciar cache de imagem da persona';
 
   @override
-  String get marketingAgree => 'Agree to Marketing Information (Optional)';
+  String get marketingAgree =>
+      'Concordar com Informações de Marketing (Opcional)';
 
   @override
   String get marketingDescription =>
-      'You can receive event and benefit information';
+      'Você pode receber informações sobre eventos e benefícios';
 
   @override
   String get matchPersonaStep =>
-      '1. Match Personas: Swipe left or right to select your favorite AI personas.';
+      '1. Combinar Personas: Deslize para a esquerda ou para a direita para selecionar suas personas de IA favoritas.';
 
   @override
-  String get matchedPersonas => 'Matched Personas';
+  String get matchedPersonas => 'Personas Correspondidas';
 
   @override
-  String get matchedSona => 'Matched Sona';
+  String get matchedSona => 'Sona Correspondida';
 
   @override
-  String get matching => 'Matching';
+  String get matching => 'Correspondendo';
 
   @override
-  String get matchingFailed => 'Matching failed.';
+  String get matchingFailed => 'A correspondência falhou.';
 
   @override
   String get me => 'Me';
 
   @override
-  String get meetAIPersonas => 'Meet AI Personas';
+  String get meetAIPersonas => 'Conheça Personas de IA';
 
   @override
   String get meetNewPersonas => 'Conhecer novas personas';
 
   @override
-  String get meetPersonas => 'Meet Personas';
+  String get meetPersonas => 'Conheça Personas';
 
   @override
   String get memberBenefits =>
-      'Get 100+ messages and 10 hearts when you sign up!';
+      'Receba mais de 100 mensagens e 10 corações ao se inscrever!';
 
   @override
-  String get memoryAlbum => 'Memory Album';
+  String get memoryAlbum => 'Álbum de Memórias';
 
   @override
-  String get memoryAlbumDesc => 'Automatically save and recall special moments';
+  String get memoryAlbumDesc =>
+      'Salve e recorde automaticamente momentos especiais';
 
   @override
-  String get messageCopied => 'Message copied';
+  String get messageCopied => 'Mensagem copiada';
 
   @override
-  String get messageDeleted => 'Message deleted';
+  String get messageDeleted => 'Mensagem deletada';
 
   @override
   String get messageLimitReset =>
       'O limite de mensagens será redefinido à meia-noite';
 
   @override
-  String get messageSendFailed => 'Failed to send message. Please try again.';
+  String get messageSendFailed =>
+      'Falha ao enviar a mensagem. Por favor, tente novamente.';
 
   @override
-  String get messagesRemaining => 'Messages Remaining';
+  String get messagesRemaining => 'Mensagens restantes';
 
   @override
   String minutesAgo(int count, String formatted) {
@@ -1129,13 +1134,13 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get missingTranslation => 'Missing Translation';
+  String get missingTranslation => 'Tradução ausente';
 
   @override
-  String get monday => 'Monday';
+  String get monday => 'Segunda-feira';
 
   @override
-  String get month => 'Month';
+  String get month => 'Mês';
 
   @override
   String monthDay(String month, int day) {
@@ -1143,54 +1148,54 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get moreButton => 'More';
+  String get moreButton => 'Mais';
 
   @override
-  String get morning => 'Morning';
+  String get morning => 'Manhã';
 
   @override
-  String get mostFrequentError => 'Most Frequent Error';
+  String get mostFrequentError => 'Erro mais frequente';
 
   @override
-  String get movies => 'Movies';
+  String get movies => 'Filmes';
 
   @override
-  String get multilingualChat => 'Multilingual Chat';
+  String get multilingualChat => 'Chat multilíngue';
 
   @override
-  String get music => 'Music';
+  String get music => 'Música';
 
   @override
-  String get myGenderSection => 'My Gender (Optional)';
+  String get myGenderSection => 'Meu Gênero (Opcional)';
 
   @override
-  String get networkErrorOccurred => 'A network error occurred.';
+  String get networkErrorOccurred => 'Ocorreu um erro de rede.';
 
   @override
   String get newMessage => 'Nova mensagem';
 
   @override
   String newMessageCount(int count) {
-    return '$count new messages';
+    return '$count novas mensagens';
   }
 
   @override
   String get newMessageNotification => 'Notificação de nova mensagem';
 
   @override
-  String get newMessages => 'New messages';
+  String get newMessages => 'Novas mensagens';
 
   @override
-  String get newYear => 'New Year';
+  String get newYear => 'Ano Novo';
 
   @override
   String get next => 'Próximo';
 
   @override
-  String get niceToMeetYou => 'Nice to meet you!';
+  String get niceToMeetYou => 'Prazer em conhecê-lo!';
 
   @override
-  String get nickname => 'Nickname';
+  String get nickname => 'Apelido';
 
   @override
   String get nicknameAlreadyUsed => 'Este apelido já está em uso';
@@ -1199,7 +1204,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get nicknameHelperText => '3-10 caracteres';
 
   @override
-  String get nicknameHint => '3-10 characters';
+  String get nicknameHint => '3-10 caracteres';
 
   @override
   String get nicknameInUse => 'Este apelido já está em uso';
@@ -1215,63 +1220,64 @@ class AppLocalizationsPt extends AppLocalizations {
   String get nicknamePlaceholder => 'Digite seu apelido';
 
   @override
-  String get nicknameRequired => 'Nickname *';
+  String get nicknameRequired => 'Apelido *';
 
   @override
-  String get night => 'Night';
+  String get night => 'Noite';
 
   @override
   String get no => 'Não';
 
   @override
-  String get noBlockedAIs => 'No blocked AIs';
+  String get noBlockedAIs => 'Nenhuma IA bloqueada';
 
   @override
-  String get noChatsYet => 'No chats yet';
+  String get noChatsYet => 'Nenhuma conversa ainda';
 
   @override
   String get noConversationYet => 'Ainda sem conversa';
 
   @override
-  String get noErrorReports => 'No error reports.';
+  String get noErrorReports => 'Nenhum relatório de erro.';
 
   @override
-  String get noImageAvailable => 'No image available';
+  String get noImageAvailable => 'Nenhuma imagem disponível';
 
   @override
   String get noMatchedPersonas => 'Ainda sem personas correspondentes';
 
   @override
-  String get noMatchedSonas => 'No matched Sonas yet';
+  String get noMatchedSonas => 'Nenhum SONA correspondente até agora';
 
   @override
-  String get noPersonasAvailable => 'No personas available. Please try again.';
+  String get noPersonasAvailable =>
+      'Nenhuma persona disponível. Por favor, tente novamente.';
 
   @override
-  String get noPersonasToSelect => 'No personas available';
+  String get noPersonasToSelect => 'Nenhuma persona disponível';
 
   @override
-  String get noQualityIssues => 'No quality issues in the last hour ✅';
+  String get noQualityIssues => 'Nenhum problema de qualidade na última hora ✅';
 
   @override
-  String get noQualityLogs => 'No quality logs yet.';
+  String get noQualityLogs => 'Nenhum registro de qualidade ainda.';
 
   @override
   String get noTranslatedMessages => 'Sem mensagens para traduzir';
 
   @override
-  String get notEnoughHearts => 'Not enough hearts';
+  String get notEnoughHearts => 'Corações insuficientes';
 
   @override
   String notEnoughHeartsCount(int count) {
-    return 'Not enough hearts. (Current: $count)';
+    return 'Corações insuficientes. (Atual: $count)';
   }
 
   @override
-  String get notRegistered => 'not registered';
+  String get notRegistered => 'não registrado';
 
   @override
-  String get notSubscribed => 'Not subscribed';
+  String get notSubscribed => 'Não inscrito';
 
   @override
   String get notificationPermissionDesc =>
@@ -1288,20 +1294,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get notifications => 'Notificações';
 
   @override
-  String get occurrenceInfo => 'Occurrence Info:';
+  String get occurrenceInfo => 'Informações da Ocorrência:';
 
   @override
-  String get olderChats => 'Older';
+  String get olderChats => 'Mais antigos';
 
   @override
   String get onlyOppositeGenderNote =>
-      'If unchecked, only opposite gender personas will be shown';
+      'Se desmarcado, apenas personas do gênero oposto serão exibidas';
 
   @override
-  String get openSettings => 'Open Settings';
+  String get openSettings => 'Abrir Configurações';
 
   @override
-  String get optional => 'Optional';
+  String get optional => 'Opcional';
 
   @override
   String get or => 'or';
@@ -1316,16 +1322,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get other => 'Outro';
 
   @override
-  String get otherError => 'Other Error';
+  String get otherError => 'Outro Erro';
 
   @override
-  String get others => 'Others';
+  String get others => 'Outros';
 
   @override
-  String get ownedHearts => 'Owned Hearts';
+  String get ownedHearts => 'Corações Possuídos';
 
   @override
-  String get parentsDay => 'Parents\' Day';
+  String get parentsDay => 'Dia dos Pais';
 
   @override
   String get password => 'Senha';
@@ -1335,90 +1341,106 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get passwordConfirmationDesc =>
-      'Please re-enter your password to delete account.';
+      'Por favor, reentre sua senha para deletar a conta.';
 
   @override
-  String get passwordHint => '6 characters or more';
+  String get passwordHint => '6 caracteres ou mais';
 
   @override
-  String get passwordLabel => 'Password';
+  String get passwordLabel => 'Senha';
 
   @override
-  String get passwordRequired => 'Password *';
+  String get passwordRequired => 'Senha *';
 
   @override
   String get passwordResetEmailPrompt =>
-      'Please enter your email to reset password';
+      'Por favor, insira seu e-mail para redefinir a senha';
 
   @override
   String get passwordResetEmailSent =>
-      'Password reset email has been sent. Please check your email.';
+      'E-mail de redefinição de senha foi enviado. Por favor, verifique seu e-mail.';
 
   @override
-  String get passwordText => 'password';
+  String get passwordText => 'senha';
 
   @override
-  String get passwordTooShort => 'Password must be at least 6 characters';
+  String get passwordTooShort => 'A senha deve ter pelo menos 6 caracteres';
 
   @override
   String get permissionDenied => 'Permissão negada';
 
   @override
   String permissionDeniedMessage(String permissionName) {
-    return '$permissionName permission was denied.\\nPlease allow the permission in settings.';
+    return 'A permissão $permissionName foi negada.\\nPor favor, permita a permissão nas configurações.';
   }
 
   @override
   String get permissionDeniedTryLater =>
-      'Permission denied. Please try again later.';
+      'Permissão negada. Por favor, tente novamente mais tarde.';
 
   @override
   String get permissionRequired => 'Permissão necessária';
 
   @override
-  String get personaGenderSection => 'Persona Gender Preference';
+  String get personaGenderSection => 'Preferência de Gênero da Persona';
 
   @override
-  String get personaQualityStats => 'Persona Quality Statistics';
+  String personaQualityStats(Object personaQualityStats) {
+    return 'Estatísticas de Qualidade da Persona';
+  }
 
   @override
-  String get personalInfoExposure => 'Exposição de informações pessoais';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return 'Exposição de informações pessoais';
+  }
 
   @override
-  String get personality => 'Personality';
+  String personality(Object personality) {
+    return 'Personality';
+  }
 
   @override
-  String get pets => 'Pets';
+  String pets(Object pets) {
+    return 'Animais de Estimação';
+  }
 
   @override
   String get photo => 'Photo';
 
   @override
-  String get photography => 'Photography';
+  String photography(Object photography) {
+    return 'Photography';
+  }
 
   @override
-  String get picnic => 'Picnic';
+  String picnic(Object picnic) {
+    return 'Picnic';
+  }
 
   @override
-  String get preferenceSettings => 'Preference Settings';
+  String preferenceSettings(Object preferenceSettings) {
+    return 'Configurações de Preferência';
+  }
 
   @override
-  String get preferredLanguage => 'Preferred Language';
+  String preferredLanguage(Object preferredLanguage) {
+    return 'Idioma Preferido';
+  }
 
   @override
-  String get preparingForSleep => 'Preparing for sleep';
+  String get preparingForSleep => 'Preparando-se para dormir';
 
   @override
-  String get preparingNewMeeting => 'Preparing new meeting';
+  String get preparingNewMeeting => 'Preparando nova reunião';
 
   @override
-  String get preparingPersonaImages => 'Preparing persona images';
+  String get preparingPersonaImages => 'Preparando imagens de persona';
 
   @override
-  String get preparingPersonas => 'Preparing personas';
+  String get preparingPersonas => 'Preparando personas';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Prévia';
 
   @override
   String get previous => 'Anterior';
@@ -1434,133 +1456,133 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get privacySection1Content =>
-      'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+      'Estamos comprometidos em proteger sua privacidade. Esta Política de Privacidade explica como coletamos, usamos e protegemos suas informações quando você utiliza nosso serviço.';
 
   @override
   String get privacySection1Title =>
-      '1. Purpose of Collection and Use of Personal Information';
+      '1. Propósito da Coleta e Uso de Informações Pessoais';
 
   @override
   String get privacySection2Content =>
-      'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+      'Coletamos informações que você nos fornece diretamente, como quando você cria uma conta, atualiza seu perfil ou utiliza nossos serviços.';
 
   @override
-  String get privacySection2Title => 'Information We Collect';
+  String get privacySection2Title => 'Informações que Coletamos';
 
   @override
   String get privacySection3Content =>
-      'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+      'Usamos as informações que coletamos para fornecer, manter e melhorar nossos serviços, e para nos comunicarmos com você.';
 
   @override
   String get privacySection3Title =>
-      '3. Retention and Use Period of Personal Information';
+      '3. Período de Retenção e Uso de Informações Pessoais';
 
   @override
   String get privacySection4Content =>
-      'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+      'Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros sem o seu consentimento.';
 
   @override
   String get privacySection4Title =>
-      '4. Provision of Personal Information to Third Parties';
+      '4. Fornecimento de Informações Pessoais a Terceiros';
 
   @override
   String get privacySection5Content =>
-      'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+      'Implementamos medidas de segurança apropriadas para proteger suas informações pessoais contra acesso não autorizado, alteração, divulgação ou destruição.';
 
   @override
   String get privacySection5Title =>
-      '5. Technical Protection Measures for Personal Information';
+      '5. Medidas de Proteção Técnica para Informações Pessoais';
 
   @override
   String get privacySection6Content =>
-      'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+      'Retemos informações pessoais pelo tempo necessário para fornecer nossos serviços e cumprir obrigações legais.';
 
   @override
-  String get privacySection6Title => '6. User Rights';
+  String get privacySection6Title => '6. Direitos do Usuário';
 
   @override
   String get privacySection7Content =>
-      'You have the right to access, update, or delete your personal information at any time through your account settings.';
+      'Você tem o direito de acessar, atualizar ou excluir suas informações pessoais a qualquer momento através das configurações da sua conta.';
 
   @override
-  String get privacySection7Title => 'Your Rights';
+  String get privacySection7Title => 'Seus Direitos';
 
   @override
   String get privacySection8Content =>
-      'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+      'Se você tiver alguma dúvida sobre esta Política de Privacidade, entre em contato conosco pelo e-mail support@sona.com.';
 
   @override
-  String get privacySection8Title => 'Contact Us';
+  String get privacySection8Title => 'Fale Conosco';
 
   @override
-  String get privacySettings => 'Privacy Settings';
+  String get privacySettings => 'Configurações de Privacidade';
 
   @override
   String get privacySettingsInfo =>
-      'Disabling individual features will make those services unavailable';
+      'Desativar recursos individuais tornará esses serviços indisponíveis';
 
   @override
-  String get privacySettingsScreen => 'Privacy Settings';
+  String get privacySettingsScreen => 'Configurações de Privacidade';
 
   @override
-  String get problemMessage => 'Problem';
+  String get problemMessage => 'Problema';
 
   @override
-  String get problemOccurred => 'Problem Occurred';
+  String get problemOccurred => 'Ocorreu um Problema';
 
   @override
   String get profile => 'Perfil';
 
   @override
-  String get profileEdit => 'Edit Profile';
+  String get profileEdit => 'Editar Perfil';
 
   @override
   String get profileEditLoginRequiredMessage =>
-      'Login is required to edit your profile.\nWould you like to go to the login screen?';
+      'É necessário fazer login para editar seu perfil. Você gostaria de ir para a tela de login?';
 
   @override
-  String get profileInfo => 'Profile Information';
+  String get profileInfo => 'Informações do Perfil';
 
   @override
   String get profileInfoDescription =>
-      'Please enter your profile photo and basic information';
+      'Por favor, insira sua foto de perfil e informações básicas';
 
   @override
-  String get profileNav => 'Profile';
+  String get profileNav => 'Perfil';
 
   @override
-  String get profilePhoto => 'Profile Photo';
+  String get profilePhoto => 'Foto do Perfil';
 
   @override
   String get profilePhotoAndInfo =>
-      'Please enter profile photo and basic information';
+      'Por favor, insira a foto do perfil e informações básicas';
 
   @override
-  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+  String get profilePhotoUpdateFailed => 'Falha ao atualizar a foto do perfil';
 
   @override
-  String get profilePhotoUpdated => 'Profile photo updated';
+  String get profilePhotoUpdated => 'Foto do perfil atualizada';
 
   @override
-  String get profileSettings => 'Profile Settings';
+  String get profileSettings => 'Configurações do Perfil';
 
   @override
-  String get profileSetup => 'Setting up profile';
+  String get profileSetup => 'Configurando o perfil';
 
   @override
-  String get profileUpdateFailed => 'Failed to update profile';
+  String get profileUpdateFailed => 'Falha ao atualizar o perfil';
 
   @override
-  String get profileUpdated => 'Profile updated successfully';
+  String get profileUpdated => 'Perfil atualizado com sucesso';
 
   @override
-  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+  String get purchaseAndRefundPolicy => 'Política de Compra e Reembolso';
 
   @override
-  String get purchaseButton => 'Purchase';
+  String get purchaseButton => 'Comprar';
 
   @override
-  String get purchaseConfirm => 'Purchase Confirmation';
+  String get purchaseConfirm => 'Confirmação de Compra';
 
   @override
   String purchaseConfirmContent(String product, String price) {
@@ -1574,175 +1596,176 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get purchaseFailed => 'Purchase failed';
+  String get purchaseFailed => 'Compra falhou';
 
   @override
-  String get purchaseHeartsOnly => 'Buy hearts';
+  String get purchaseHeartsOnly => 'Comprar corações';
 
   @override
-  String get purchaseMoreHearts => 'Purchase hearts to continue conversations';
+  String get purchaseMoreHearts =>
+      'Compre corações para continuar as conversas';
 
   @override
-  String get purchasePending => 'Purchase pending...';
+  String get purchasePending => 'Compra pendente...';
 
   @override
-  String get purchasePolicy => 'Purchase Policy';
+  String get purchasePolicy => 'Política de Compra';
 
   @override
   String get purchaseSection1Content =>
-      'We accept various payment methods including credit cards and digital wallets.';
+      'Aceitamos vários métodos de pagamento, incluindo cartões de crédito e carteiras digitais.';
 
   @override
-  String get purchaseSection1Title => 'Payment Methods';
+  String get purchaseSection1Title => 'Métodos de Pagamento';
 
   @override
   String get purchaseSection2Content =>
-      'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+      'Reembolsos estão disponíveis dentro de 14 dias após a compra, se você não tiver utilizado os itens adquiridos.';
 
   @override
-  String get purchaseSection2Title => 'Refund Policy';
+  String get purchaseSection2Title => 'Política de Reembolso';
 
   @override
   String get purchaseSection3Content =>
-      'You can cancel your subscription at any time through your account settings.';
+      'Você pode cancelar sua assinatura a qualquer momento através das configurações da sua conta.';
 
   @override
-  String get purchaseSection3Title => 'Cancellation';
+  String get purchaseSection3Title => 'Cancelamento';
 
   @override
   String get purchaseSection4Content =>
-      'By making a purchase, you agree to our terms of use and service agreement.';
+      'Ao fazer uma compra, você concorda com nossos termos de uso e contrato de serviço.';
 
   @override
-  String get purchaseSection4Title => 'Terms of Use';
+  String get purchaseSection4Title => 'Termos de Uso';
 
   @override
   String get purchaseSection5Content =>
-      'For purchase-related issues, please contact our support team.';
+      'Para questões relacionadas a compras, entre em contato com nossa equipe de suporte.';
 
   @override
-  String get purchaseSection5Title => 'Contact Support';
+  String get purchaseSection5Title => 'Contatar Suporte';
 
   @override
   String get purchaseSection6Content =>
-      'All purchases are subject to our standard terms and conditions.';
+      'Todas as compras estão sujeitas aos nossos termos e condições padrão.';
 
   @override
-  String get purchaseSection6Title => '6. Inquiries';
+  String get purchaseSection6Title => '6. Consultas';
 
   @override
   String get pushNotifications => 'Notificações push';
 
   @override
-  String get reading => 'Reading';
+  String get reading => 'Lendo';
 
   @override
-  String get realtimeQualityLog => 'Real-time Quality Log';
+  String get realtimeQualityLog => 'Registro de Qualidade em Tempo Real';
 
   @override
-  String get recentConversation => 'Recent Conversation:';
+  String get recentConversation => 'Conversa Recente:';
 
   @override
-  String get recentLoginRequired => 'Please login again for security';
+  String get recentLoginRequired =>
+      'Por favor, faça login novamente por segurança';
 
   @override
-  String get referrerEmail => 'Referrer Email';
+  String get referrerEmail => 'E-mail do Referente';
 
   @override
-  String get referrerEmailHelper => 'Optional: Email of who referred you';
+  String get referrerEmailHelper => 'Opcional: E-mail de quem te referiu';
 
   @override
-  String get referrerEmailLabel => 'Referrer Email (Optional)';
+  String get referrerEmailLabel => 'E-mail do Referente (Opcional)';
 
   @override
-  String get refresh => 'Refresh';
+  String get refresh => 'Atualizar';
 
   @override
   String refreshComplete(int count) {
-    return 'Refresh complete! $count matched personas';
+    return 'Atualização completa! $count personas correspondentes';
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => 'Falha ao atualizar';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => 'Atualizando lista de chats...';
 
   @override
-  String get relatedFAQ => 'Related FAQ';
+  String get relatedFAQ => 'Perguntas Frequentes Relacionadas';
 
   @override
-  String get report => 'Report';
+  String get report => 'Denunciar';
 
   @override
-  String get reportAI => 'Report';
+  String get reportAI => 'Denunciar';
 
   @override
   String get reportAIDescription =>
-      'If the AI made you uncomfortable, please describe the issue.';
+      'Se a IA te deixou desconfortável, por favor descreva o problema.';
 
   @override
-  String get reportAITitle => 'Report AI Conversation';
+  String get reportAITitle => 'Denunciar Conversa com a IA';
 
   @override
-  String get reportAndBlock => 'Report & Block';
+  String get reportAndBlock => 'Denunciar e Bloquear';
 
   @override
   String get reportAndBlockDescription =>
-      'You can report and block inappropriate behavior of this AI';
+      'Você pode denunciar e bloquear comportamentos inadequados desta IA';
 
   @override
-  String get reportChatError => 'Report Chat Error';
+  String get reportChatError => 'Denunciar Erro de Chat';
 
   @override
   String reportError(String error) {
-    return 'Error occurred while reporting: $error';
+    return 'Ocorreu um erro ao denunciar: $error';
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => 'Falha ao denunciar';
 
   @override
   String get reportSubmitted =>
-      'Report submitted. We will review and take action.';
+      'Denúncia enviada. Nós iremos revisar e tomar uma ação.';
 
   @override
-  String get reportSubmittedSuccess =>
-      'Your report has been submitted. Thank you!';
+  String get reportSubmittedSuccess => 'Sua denúncia foi enviada. Obrigado!';
 
   @override
-  String get requestLimit => 'Request Limit';
+  String get requestLimit => 'Limite de Solicitações';
 
   @override
-  String get required => '[Required]';
+  String get required => '[Obrigatório]';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => 'Por favor, concorde com os termos';
 
   @override
-  String get restartConversation => 'Restart Conversation';
+  String get restartConversation => 'Reiniciar Conversa';
 
   @override
   String restartConversationQuestion(String name) {
-    return 'Would you like to restart the conversation with $name?';
+    return 'Você gostaria de reiniciar a conversa com $name?';
   }
 
   @override
   String restartConversationWithName(String name) {
-    return 'Restarting conversation with $name!';
+    return 'Reiniciando a conversa com $name!';
   }
 
   @override
   String get retry => 'Tentar novamente';
 
   @override
-  String get retryButton => 'Retry';
+  String get retryButton => 'Tentar Novamente';
 
   @override
-  String get sad => 'Sad';
+  String get sad => 'Triste';
 
   @override
-  String get saturday => 'Saturday';
+  String get saturday => 'Sábado';
 
   @override
   String get save => 'Salvar';
@@ -1751,465 +1774,467 @@ class AppLocalizationsPt extends AppLocalizations {
   String get search => 'Buscar';
 
   @override
-  String get searchFAQ => 'Search FAQ...';
+  String get searchFAQ => 'Pesquisar FAQ...';
 
   @override
-  String get searchResults => 'Search Results';
+  String get searchResults => 'Resultados da Pesquisa';
 
   @override
-  String get selectEmotion => 'Select Emotion';
+  String get selectEmotion => 'Selecione Emoção';
 
   @override
-  String get selectErrorType => 'Select error type';
+  String get selectErrorType => 'Selecione o tipo de erro';
 
   @override
-  String get selectFeeling => 'Select Feeling';
+  String get selectFeeling => 'Selecione Sentimento';
 
   @override
-  String get selectGender => 'Please select gender';
+  String get selectGender => 'Por favor, selecione o gênero';
 
   @override
-  String get selectInterests => 'Please select your interests (at least 1)';
+  String get selectInterests =>
+      'Por favor, selecione seus interesses (pelo menos 1)';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => 'Selecionar Idioma';
 
   @override
-  String get selectPersona => 'Select a persona';
+  String get selectPersona => 'Selecionar uma persona';
 
   @override
-  String get selectPersonaPlease => 'Please select a persona.';
+  String get selectPersonaPlease => 'Por favor, selecione uma persona.';
 
   @override
   String get selectPreferredMbti =>
-      'If you prefer personas with specific MBTI types, please select';
+      'Se você prefere personas com tipos MBTI específicos, por favor selecione';
 
   @override
   String get selectProblematicMessage =>
-      'Select the problematic message (optional)';
+      'Selecione a mensagem problemática (opcional)';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => 'Selecione o motivo do relatório';
 
   @override
-  String get selectTheme => 'Select Theme';
+  String get selectTheme => 'Selecionar Tema';
 
   @override
   String get selectTranslationError =>
-      'Please select a message with translation error';
+      'Por favor, selecione uma mensagem com erro de tradução';
 
   @override
-  String get selectUsagePurpose => 'Please select your purpose for using SONA';
+  String get selectUsagePurpose =>
+      'Por favor, selecione seu propósito para usar o SONA';
 
   @override
-  String get selfIntroduction => 'Introduction (Optional)';
+  String get selfIntroduction => 'Introdução (Opcional)';
 
   @override
-  String get selfIntroductionHint =>
-      'Write a brief introduction about yourself';
+  String get selfIntroductionHint => 'Escreva uma breve introdução sobre você';
 
   @override
   String get send => 'Enviar';
 
   @override
-  String get sendChatError => 'Send Chat Error';
+  String get sendChatError => 'Erro ao Enviar Chat';
 
   @override
-  String get sendFirstMessage => 'Send your first message';
+  String get sendFirstMessage => 'Envie sua primeira mensagem';
 
   @override
-  String get sendReport => 'Send Report';
+  String get sendReport => 'Enviar Relatório';
 
   @override
-  String get sendingEmail => 'Sending email...';
+  String get sendingEmail => 'Enviando e-mail...';
 
   @override
-  String get seoul => 'Seoul';
+  String get seoul => 'Seul';
 
   @override
-  String get serverErrorDashboard => 'Server Error';
+  String get serverErrorDashboard => 'Erro no Servidor';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement =>
+      'Por favor, concorde com os termos de serviço';
 
   @override
-  String get sessionExpired => 'Session expired';
+  String get sessionExpired => 'Sessão expirada';
 
   @override
-  String get setAppInterfaceLanguage => 'Set app interface language';
+  String get setAppInterfaceLanguage => 'Definir idioma da interface do app';
 
   @override
-  String get setNow => 'Set Now';
+  String get setNow => 'Definir Agora';
 
   @override
   String get settings => 'Configurações';
 
   @override
-  String get sexualContent => 'Sexual content';
+  String get sexualContent => 'Conteúdo sexual';
 
   @override
   String get showAllGenderPersonas => 'Mostrar personas de todos os gêneros';
 
   @override
-  String get showAllGendersOption => 'Show All Genders';
+  String get showAllGendersOption => 'Mostrar Todos os Gêneros';
 
   @override
   String get showOppositeGenderOnly =>
-      'If unchecked, only opposite gender personas will be shown';
+      'Se desmarcado, apenas personas do gênero oposto serão exibidas';
 
   @override
-  String get showOriginalText => 'Show Original';
+  String get showOriginalText => 'Mostrar Original';
 
   @override
   String get signUp => 'Cadastrar';
 
   @override
-  String get signUpFromGuest => 'Sign up now to access all features!';
+  String get signUpFromGuest =>
+      'Cadastre-se agora para acessar todos os recursos!';
 
   @override
   String get signup => 'Cadastrar';
 
   @override
-  String get signupComplete => 'Sign Up Complete';
+  String get signupComplete => 'Cadastro Completo';
 
   @override
-  String get signupTab => 'Sign Up';
+  String get signupTab => 'Cadastro';
 
   @override
-  String get simpleInfoRequired =>
-      'Simple information is required\nfor matching with AI personas';
+  String get simpleInfoRequired => 'Informações simples são necessárias';
 
   @override
   String get skip => 'Pular';
 
   @override
-  String get sonaFriend => 'SONA Friend';
+  String get sonaFriend => 'Amigo SONA';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'Política de Privacidade da SONA';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'Política de Compras da SONA';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'Termos de Serviço da SONA';
 
   @override
-  String get sonaUsagePurpose => 'Please select your purpose for using SONA';
+  String get sonaUsagePurpose =>
+      'Por favor, selecione seu propósito para usar a SONA';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => 'Desculpe, isso não foi útil';
 
   @override
-  String get sort => 'Sort';
+  String get sort => 'Ordenar';
 
   @override
-  String get soundSettings => 'Sound Settings';
+  String get soundSettings => 'Configurações de Som';
 
   @override
-  String get spamAdvertising => 'Spam/Advertising';
+  String get spamAdvertising => 'Spam/Publicidade';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'Espanhol';
 
   @override
   String get specialRelationshipDesc =>
-      'Understand each other and build deep bonds';
+      'Entendam-se e construam laços profundos';
 
   @override
-  String get sports => 'Sports';
+  String get sports => 'Esportes';
 
   @override
-  String get spring => 'Spring';
+  String get spring => 'Primavera';
 
   @override
-  String get startChat => 'Start Chat';
+  String get startChat => 'Iniciar Chat';
 
   @override
-  String get startChatButton => 'Start Chat';
+  String get startChatButton => 'Iniciar Chat';
 
   @override
-  String get startConversation => 'Start a conversation';
+  String get startConversation => 'Iniciar uma conversa';
 
   @override
   String get startConversationLikeAFriend =>
-      'Start a conversation with Sona like a friend';
+      'Comece uma conversa com Sona como um amigo';
 
   @override
   String get startConversationStep =>
-      '2. Start Conversation: Chat freely with matched personas.';
+      '2. Iniciar Conversa: Converse livremente com as personas combinadas.';
 
   @override
   String get startConversationWithSona =>
-      'Start chatting with Sona like a friend!';
+      'Comece a conversar com Sona como um amigo!';
 
   @override
-  String get startWithEmail => 'Start with Email';
+  String get startWithEmail => 'Comece com Email';
 
   @override
-  String get startWithGoogle => 'Start with Google';
+  String get startWithGoogle => 'Comece com Google';
 
   @override
-  String get startingApp => 'Starting app';
+  String get startingApp => 'Iniciando o aplicativo';
 
   @override
-  String get storageManagement => 'Storage Management';
+  String get storageManagement => 'Gerenciamento de Armazenamento';
 
   @override
-  String get store => 'Store';
+  String get store => 'Loja';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => 'Não foi possível conectar à loja';
 
   @override
   String get storeLoginRequiredMessage =>
-      'Login is required to use the store.\nWould you like to go to the login screen?';
+      'É necessário fazer login para usar a loja. Você gostaria de ir para a tela de login?';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => 'Loja não está disponível';
 
   @override
-  String get storyEvent => 'Story Event';
+  String get storyEvent => 'Evento da História';
 
   @override
-  String get stressed => 'Stressed';
+  String get stressed => 'Estressado';
 
   @override
-  String get submitReport => 'Submit Report';
+  String get submitReport => 'Enviar Relatório';
 
   @override
-  String get subscriptionStatus => 'Subscription Status';
+  String get subscriptionStatus => 'Status da Assinatura';
 
   @override
-  String get subtleVibrationOnTouch => 'Subtle vibration on touch';
+  String get subtleVibrationOnTouch => 'Vibração sutil ao tocar';
 
   @override
-  String get summer => 'Summer';
+  String get summer => 'Verão';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => 'Domingo';
 
   @override
-  String get swipeAnyDirection => 'Swipe in any direction';
+  String get swipeAnyDirection => 'Deslize em qualquer direção';
 
   @override
-  String get swipeDownToClose => 'Swipe down to close';
+  String get swipeDownToClose => 'Deslize para baixo para fechar';
 
   @override
-  String get systemTheme => 'Follow System';
+  String get systemTheme => 'Seguir o Sistema';
 
   @override
   String get systemThemeDesc =>
-      'Automatically changes based on device dark mode settings';
+      'Muda automaticamente com base nas configurações do modo escuro do dispositivo';
 
   @override
   String get tapBottomForDetails => 'Toque na parte inferior para ver detalhes';
 
   @override
-  String get tapForDetails => 'Tap bottom area for details';
+  String get tapForDetails => 'Toque na área inferior para detalhes';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => 'Toque para deslizar fotos';
 
   @override
-  String get teachersDay => 'Teachers\' Day';
+  String get teachersDay => 'Dia dos Professores';
 
   @override
-  String get technicalError => 'Technical Error';
+  String get technicalError => 'Erro Técnico';
 
   @override
-  String get technology => 'Technology';
+  String get technology => 'Tecnologia';
 
   @override
-  String get terms => 'Terms of Service';
+  String get terms => 'Termos de Serviço';
 
   @override
-  String get termsAgreement => 'Terms Agreement';
+  String get termsAgreement => 'Acordo de Termos';
 
   @override
   String get termsAgreementDescription =>
-      'Please agree to the terms for using the service';
+      'Por favor, concorde com os termos para usar o serviço';
 
   @override
   String get termsOfService => 'Termos de serviço';
 
   @override
   String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+      'Reservamos o direito de modificar estes termos a qualquer momento com aviso aos usuários.';
 
   @override
-  String get termsSection10Title => 'Article 10 (Dispute Resolution)';
+  String get termsSection10Title => 'Artigo 10 (Resolução de Disputas)';
 
   @override
   String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+      'Estes termos serão regidos pelas leis da jurisdição em que operamos.';
 
   @override
   String get termsSection11Title =>
-      'Article 11 (AI Service Special Provisions)';
+      'Artigo 11 (Disposições Especiais do Serviço de IA)';
 
   @override
   String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+      'Se qualquer disposição destes termos for considerada inaplicável, as disposições restantes continuarão em pleno vigor e efeito.';
 
   @override
-  String get termsSection12Title => 'Article 12 (Data Collection and Usage)';
+  String get termsSection12Title => 'Artigo 12 (Coleta e Uso de Dados)';
 
   @override
   String get termsSection1Content =>
-      'These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.';
+      'Estes termos e condições têm como objetivo definir os direitos, obrigações e responsabilidades entre a SONA (doravante \"Empresa\") e os usuários em relação ao uso do serviço de correspondência de conversa com persona de IA (doravante \"Serviço\") fornecido pela Empresa.';
 
   @override
-  String get termsSection1Title => 'Article 1 (Purpose)';
+  String get termsSection1Title => 'Artigo 1 (Finalidade)';
 
   @override
   String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+      'Ao usar nosso serviço, você concorda em estar vinculado a estes Termos de Serviço e à nossa Política de Privacidade.';
 
   @override
-  String get termsSection2Title => 'Article 2 (Definitions)';
+  String get termsSection2Title => 'Artigo 2 (Definições)';
 
   @override
   String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+      'Você deve ter pelo menos 13 anos para usar nosso serviço.';
 
   @override
-  String get termsSection3Title =>
-      'Article 3 (Effect and Modification of Terms)';
+  String get termsSection3Title => 'Artigo 3 (Efeito e Modificação dos Termos)';
 
   @override
   String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+      'Você é responsável por manter a confidencialidade da sua conta e senha.';
 
   @override
-  String get termsSection4Title => 'Article 4 (Provision of Service)';
+  String get termsSection4Title => 'Artigo 4 (Prestação do Serviço)';
 
   @override
   String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+      'Você concorda em não usar nosso serviço para qualquer finalidade ilegal ou não autorizada.';
 
   @override
-  String get termsSection5Title => 'Article 5 (Membership Registration)';
+  String get termsSection5Title => 'Artigo 5 (Registro de Membro)';
 
   @override
   String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+      'Reservamos o direito de encerrar ou suspender sua conta por violação destes termos.';
 
   @override
-  String get termsSection6Title => 'Article 6 (User Obligations)';
+  String get termsSection6Title => 'Artigo 6 (Obrigações do Usuário)';
 
   @override
   String get termsSection7Content =>
-      'The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.';
+      'A Empresa pode restringir gradualmente o uso do serviço por meio de avisos, suspensão temporária ou suspensão permanente se os usuários violarem as obrigações destes termos ou interferirem nas operações normais do serviço.';
 
   @override
-  String get termsSection7Title => 'Article 7 (Service Usage Restrictions)';
+  String get termsSection7Title => 'Artigo 7 (Restrições de Uso do Serviço)';
 
   @override
   String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+      'Não somos responsáveis por quaisquer danos indiretos, incidentais ou consequenciais decorrentes do seu uso do nosso serviço.';
 
   @override
-  String get termsSection8Title => 'Article 8 (Service Interruption)';
+  String get termsSection8Title => 'Artigo 8 (Interrupção do Serviço)';
 
   @override
   String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+      'Todo o conteúdo e materiais disponíveis em nosso serviço estão protegidos por direitos de propriedade intelectual.';
 
   @override
-  String get termsSection9Title => 'Article 9 (Disclaimer)';
+  String get termsSection9Title => 'Artigo 9 (Isenção de Responsabilidade)';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => 'Termos Suplementares';
 
   @override
-  String get thai => 'Thai';
+  String get thai => 'Tailandês';
 
   @override
-  String get thanksFeedback => 'Thanks for your feedback!';
+  String get thanksFeedback => 'Obrigado pelo seu feedback!';
 
   @override
   String get theme => 'Tema';
 
   @override
   String get themeDescription =>
-      'You can customize the app appearance as you like';
+      'Você pode personalizar a aparência do aplicativo como quiser';
 
   @override
-  String get themeSettings => 'Theme Settings';
+  String get themeSettings => 'Configurações do Tema';
 
   @override
-  String get thursday => 'Thursday';
+  String get thursday => 'Quinta-feira';
 
   @override
-  String get timeout => 'Timeout';
+  String get timeout => 'Tempo esgotado';
 
   @override
-  String get tired => 'Tired';
+  String get tired => 'Cansado';
 
   @override
   String get today => 'Hoje';
 
   @override
-  String get todayChats => 'Today';
+  String get todayChats => 'Hoje';
 
   @override
-  String get todayText => 'Today';
+  String get todayText => 'Hoje';
 
   @override
-  String get tomorrowText => 'Tomorrow';
+  String get tomorrowText => 'Amanhã';
 
   @override
-  String get totalConsultSessions => 'Total Consultation Sessions';
+  String get totalConsultSessions => 'Total de Sessões de Consulta';
 
   @override
-  String get totalErrorCount => 'Total Error Count';
+  String get totalErrorCount => 'Total de Erros';
 
   @override
-  String get totalLikes => 'Total Likes';
+  String get totalLikes => 'Total de Curtidas';
 
   @override
   String totalOccurrences(Object count) {
-    return 'Total $count occurrences';
+    return 'Total de $count ocorrências';
   }
 
   @override
-  String get totalResponses => 'Total Responses';
+  String get totalResponses => 'Total de Respostas';
 
   @override
-  String get translatedFrom => 'Translated';
+  String get translatedFrom => 'Traduzido';
 
   @override
-  String get translatedText => 'Translation';
+  String get translatedText => 'Tradução';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => 'Erro de tradução';
 
   @override
   String get translationErrorDescription =>
-      'Please report incorrect translations or awkward expressions';
+      'Por favor, reporte traduções incorretas ou expressões estranhas';
 
   @override
   String get translationErrorReported =>
-      'Translation error reported. Thank you!';
+      'Erro de tradução reportado. Obrigado!';
 
   @override
-  String get translationNote => '※ AI translation may not be perfect';
+  String get translationNote => '※ A tradução por IA pode não ser perfeita';
 
   @override
-  String get translationQuality => 'Translation Quality';
+  String get translationQuality => 'Qualidade da Tradução';
 
   @override
-  String get translationSettings => 'Translation Settings';
+  String get translationSettings => 'Configurações de Tradução';
 
   @override
-  String get travel => 'Travel';
+  String get travel => 'Viagem';
 
   @override
-  String get tuesday => 'Tuesday';
+  String get tuesday => 'Terça-feira';
 
   @override
-  String get tutorialAccount => 'Tutorial Account';
+  String get tutorialAccount => 'Conta de Tutorial';
 
   @override
   String get tutorialWelcomeDescription =>
@@ -2219,149 +2244,149 @@ class AppLocalizationsPt extends AppLocalizations {
   String get tutorialWelcomeTitle => 'Bem-vindo ao SONA!';
 
   @override
-  String get typeMessage => 'Type a message...';
+  String get typeMessage => 'Digite uma mensagem...';
 
   @override
-  String get unblock => 'Unblock';
+  String get unblock => 'Desbloquear';
 
   @override
-  String get unblockFailed => 'Failed to unblock';
+  String get unblockFailed => 'Falha ao desbloquear';
 
   @override
   String unblockPersonaConfirm(String name) {
-    return 'Unblock $name?';
+    return 'Desbloquear $name?';
   }
 
   @override
-  String get unblockedSuccessfully => 'Unblocked successfully';
+  String get unblockedSuccessfully => 'Desbloqueado com sucesso';
 
   @override
   String get unexpectedLoginError =>
-      'An unexpected error occurred during login';
+      'Ocorreu um erro inesperado durante o login';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Desconhecido';
 
   @override
-  String get unknownError => 'An unknown error occurred';
+  String get unknownError => 'Ocorreu um erro desconhecido';
 
   @override
-  String get unlimitedMessages => 'Unlimited';
+  String get unlimitedMessages => 'Mensagens ilimitadas';
 
   @override
-  String get unsendMessage => 'Unsend message';
+  String get unsendMessage => 'Desfazer envio da mensagem';
 
   @override
-  String get usagePurpose => 'Usage Purpose';
+  String get usagePurpose => 'Propósito de uso';
 
   @override
-  String get useOneHeart => 'Use 1 Heart';
+  String get useOneHeart => 'Usar 1 Coração';
 
   @override
-  String get useSystemLanguage => 'Use System Language';
+  String get useSystemLanguage => 'Usar Idioma do Sistema';
 
   @override
-  String get user => 'User: ';
+  String get user => 'Usuário:';
 
   @override
-  String get userMessage => 'User Message:';
+  String get userMessage => 'Mensagem do Usuário:';
 
   @override
-  String get userNotFound => 'User not found';
+  String get userNotFound => 'Usuário não encontrado';
 
   @override
-  String get valentinesDay => 'Valentine\'s Day';
+  String get valentinesDay => 'Dia dos Namorados';
 
   @override
-  String get verifyingAuth => 'Verifying authentication';
+  String get verifyingAuth => 'Verificando autenticação';
 
   @override
   String get version => 'Versão';
 
   @override
-  String get vietnamese => 'Vietnamese';
+  String get vietnamese => 'Vietnamita';
 
   @override
-  String get violentContent => 'Violent content';
+  String get violentContent => 'Conteúdo violento';
 
   @override
-  String get voiceMessage => '🎤 Voice message';
+  String get voiceMessage => '🎤 Mensagem de voz';
 
   @override
   String waitingForChat(String name) {
-    return '$name is waiting to chat.';
+    return '$name está aguardando para conversar.';
   }
 
   @override
-  String get walk => 'Walk';
+  String get walk => 'Caminhar';
 
   @override
-  String get wasHelpful => 'Was this helpful?';
+  String get wasHelpful => 'Isso foi útil?';
 
   @override
-  String get weatherClear => 'Clear';
+  String get weatherClear => 'Limpo';
 
   @override
-  String get weatherCloudy => 'Cloudy';
+  String get weatherCloudy => 'Nublado';
 
   @override
-  String get weatherContext => 'Weather Context';
+  String get weatherContext => 'Contexto do Tempo';
 
   @override
   String get weatherContextDesc =>
-      'Provide conversation context based on weather';
+      'Forneça contexto de conversa com base no clima';
 
   @override
-  String get weatherDrizzle => 'Drizzle';
+  String get weatherDrizzle => 'Chuvisco';
 
   @override
-  String get weatherFog => 'Fog';
+  String get weatherFog => 'Névoa';
 
   @override
-  String get weatherMist => 'Mist';
+  String get weatherMist => 'Bruma';
 
   @override
-  String get weatherRain => 'Rain';
+  String get weatherRain => 'Chuva';
 
   @override
   String get weatherRainy => 'Chuvoso';
 
   @override
-  String get weatherSnow => 'Snow';
+  String get weatherSnow => 'Neve';
 
   @override
   String get weatherSnowy => 'Nevado';
 
   @override
-  String get weatherThunderstorm => 'Thunderstorm';
+  String get weatherThunderstorm => 'Tempestade';
 
   @override
-  String get wednesday => 'Wednesday';
+  String get wednesday => 'Quarta-feira';
 
   @override
   String get weekdays => 'Dom,Seg,Ter,Qua,Qui,Sex,Sáb';
 
   @override
-  String get welcomeMessage => 'Welcome💕';
+  String get welcomeMessage => 'Bem-vindo💕';
 
   @override
   String get whatTopicsToTalk =>
-      'What topics would you like to talk about? (Optional)';
+      'Sobre quais tópicos você gostaria de conversar? (Opcional)';
 
   @override
-  String get whiteDay => 'White Day';
+  String get whiteDay => 'Dia Branco';
 
   @override
-  String get winter => 'Winter';
+  String get winter => 'Inverno';
 
   @override
-  String get wrongTranslation => 'Wrong Translation';
+  String get wrongTranslation => 'Tradução Incorreta';
 
   @override
-  String get year => 'Year';
+  String get year => 'Ano';
 
   @override
-  String get yearEnd => 'Year End';
+  String get yearEnd => 'Fim do Ano';
 
   @override
   String get yes => 'Sim';
@@ -2370,8 +2395,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get yesterday => 'Ontem';
 
   @override
-  String get yesterdayChats => 'Yesterday';
+  String get yesterdayChats => 'Ontem';
 
   @override
-  String get you => 'You';
+  String get you => 'Você';
 }

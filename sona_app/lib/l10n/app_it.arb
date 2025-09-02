@@ -4,7 +4,7 @@
   "@about": {
     "description": "Localized string for about"
   },
-  "accountAndProfile": "Account & Profile Information",
+  "accountAndProfile": "Informazioni su Account e Profilo",
   "@accountAndProfile": {
     "description": "Localized string for accountAndProfile"
   },
@@ -12,11 +12,11 @@
   "@accountDeletedSuccess": {
     "description": "Localized string for accountDeletedSuccess"
   },
-  "accountDeletionContent": "Are you sure you want to delete your account?\nThis action cannot be undone.",
+  "accountDeletionContent": "Sei sicuro di voler eliminare il tuo account?",
   "@accountDeletionContent": {
     "description": "Localized string for accountDeletionContent"
   },
-  "accountDeletionError": "Error occurred while deleting account.",
+  "accountDeletionError": "Si è verificato un errore durante l'eliminazione dell'account.",
   "@accountDeletionError": {
     "description": "Localized string for accountDeletionError"
   },
@@ -24,7 +24,7 @@
   "@accountDeletionInfo": {
     "description": "Localized string for accountDeletionInfo"
   },
-  "accountDeletionTitle": "Delete Account",
+  "accountDeletionTitle": "Elimina Account",
   "@accountDeletionTitle": {
     "description": "Localized string for accountDeletionTitle"
   },
@@ -44,27 +44,27 @@
   "@accountDeletionWarning4": {
     "description": "Localized string for accountDeletionWarning4"
   },
-  "accountManagement": "Account Management",
+  "accountManagement": "Gestione Account",
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "adaptiveConversationDesc": "Adapts conversation style to match yours",
+  "adaptiveConversationDesc": "Adatta lo stile della conversazione per allinearsi al tuo",
   "@adaptiveConversationDesc": {
     "description": "Localized string for adaptiveConversationDesc"
   },
-  "afternoon": "Afternoon",
+  "afternoon": "Pomeriggio",
   "@afternoon": {
     "description": "Localized string for afternoon"
   },
-  "afternoonFatigue": "Afternoon fatigue",
+  "afternoonFatigue": "Fatica pomeridiana",
   "@afternoonFatigue": {
     "description": "Localized string for afternoonFatigue"
   },
-  "ageConfirmation": "I am 14 years or older and have confirmed the above.",
+  "ageConfirmation": "Ho 14 anni o più e ho confermato quanto sopra.",
   "@ageConfirmation": {
     "description": "Localized string for ageConfirmation"
   },
-  "ageRange": "{min}-{max} years old",
+  "ageRange": "{min}-{max} anni",
   "@ageRange": {
     "description": "Age range",
     "placeholders": {
@@ -76,7 +76,7 @@
       }
     }
   },
-  "ageUnit": "years old",
+  "ageUnit": "anni",
   "@ageUnit": {
     "description": "Localized string for ageUnit"
   },
@@ -84,31 +84,31 @@
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
   },
-  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
+  "aiDatingQuestion": "Una vita quotidiana speciale con l'AI",
   "@aiDatingQuestion": {
     "description": "Localized string for aiDatingQuestion"
   },
-  "aiPersonaPreferenceDescription": "Please set your preferences for AI persona matching",
+  "aiPersonaPreferenceDescription": "Imposta le tue preferenze per l'abbinamento delle persone AI",
   "@aiPersonaPreferenceDescription": {
     "description": "Localized string for aiPersonaPreferenceDescription"
   },
-  "all": "All",
+  "all": "Tutto",
   "@all": {
     "description": "Localized string for all"
   },
-  "allAgree": "Agree to All",
+  "allAgree": "Accetta tutto",
   "@allAgree": {
     "description": "Localized string for allAgree"
   },
-  "allFeaturesRequired": "※ All features are required for service provision",
+  "allFeaturesRequired": "※ Tutte le funzionalità sono necessarie per la fornitura del servizio",
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "All Personas",
+  "allPersonas": "Tutte le Personas",
   "@allPersonas": {
     "description": "Localized string for allPersonas"
   },
-  "allPersonasMatched": "All personas matched! Start chatting with them.",
+  "allPersonasMatched": "Tutte le personas abbinate! Inizia a chattare con loro.",
   "@allPersonasMatched": {
     "description": "Localized string for allPersonasMatched"
   },
@@ -116,7 +116,7 @@
   "@allowPermission": {
     "description": "Localized string for allowPermission"
   },
-  "alreadyChattingWith": "Already chatting with {name}!",
+  "alreadyChattingWith": "Stai già chattando con {name}!",
   "@alreadyChattingWith": {
     "description": "Already chatting with persona",
     "placeholders": {
@@ -125,23 +125,23 @@
       }
     }
   },
-  "alsoBlockThisAI": "Also block this AI",
+  "alsoBlockThisAI": "Blocca anche questa IA",
   "@alsoBlockThisAI": {
     "description": "Localized string for alsoBlockThisAI"
   },
-  "angry": "Angry",
+  "angry": "Arrabbiato",
   "@angry": {
     "description": "Localized string for angry"
   },
-  "anonymousLogin": "Anonymous login",
+  "anonymousLogin": "Accesso anonimo",
   "@anonymousLogin": {
     "description": "Localized string for anonymousLogin"
   },
-  "anxious": "Anxious",
+  "anxious": "Ansioso",
   "@anxious": {
     "description": "Localized string for anxious"
   },
-  "apiKeyError": "API Key Error",
+  "apiKeyError": "Errore della chiave API",
   "@apiKeyError": {
     "description": "Localized string for apiKeyError"
   },
@@ -153,79 +153,79 @@
   "@appTagline": {
     "description": "Localized string for appTagline"
   },
-  "appleLoginCanceled": "Apple login was canceled.\nPlease try again.",
+  "appleLoginCanceled": "L'accesso con Apple è stato annullato.",
   "@appleLoginCanceled": {
     "description": "Localized string for appleLoginCanceled"
   },
-  "appleLoginError": "Error occurred during Apple login.",
+  "appleLoginError": "Si è verificato un errore durante l'accesso con Apple.",
   "@appleLoginError": {
     "description": "Localized string for appleLoginError"
   },
-  "art": "Art",
+  "art": "Arte",
   "@art": {
     "description": "Localized string for art"
   },
-  "authError": "Authentication Error",
+  "authError": "Errore di autenticazione",
   "@authError": {
     "description": "Localized string for authError"
   },
-  "autoTranslate": "Auto Translate",
+  "autoTranslate": "Traduzione automatica",
   "@autoTranslate": {
     "description": "Localized string for autoTranslate"
   },
-  "autumn": "Autumn",
+  "autumn": "Autunno",
   "@autumn": {
     "description": "Localized string for autumn"
   },
-  "averageQuality": "Average Quality",
+  "averageQuality": "Qualità Media",
   "@averageQuality": {
     "description": "Localized string for averageQuality"
   },
-  "averageQualityScore": "Average Quality Score",
+  "averageQualityScore": "Punteggio Qualità Media",
   "@averageQualityScore": {
     "description": "Localized string for averageQualityScore"
   },
-  "awkwardExpression": "Awkward Expression",
+  "awkwardExpression": "Espressione Imbarazzante",
   "@awkwardExpression": {
     "description": "Localized string for awkwardExpression"
   },
-  "backButton": "Back",
+  "backButton": "Indietro",
   "@backButton": {
     "description": "Localized string for backButton"
   },
-  "basicInfo": "Basic Information",
+  "basicInfo": "Informazioni di Base",
   "@basicInfo": {
     "description": "Localized string for basicInfo"
   },
-  "basicInfoDescription": "Please enter basic information to create an account",
+  "basicInfoDescription": "Si prega di inserire informazioni di base per creare un account",
   "@basicInfoDescription": {
     "description": "Localized string for basicInfoDescription"
   },
-  "birthDate": "Birth Date",
+  "birthDate": "Data di Nascita",
   "@birthDate": {
     "description": "Localized string for birthDate"
   },
-  "birthDateOptional": "Birth Date (Optional)",
+  "birthDateOptional": "Data di Nascita (Facoltativa)",
   "@birthDateOptional": {
     "description": "Localized string for birthDateOptional"
   },
-  "birthDateRequired": "Birth Date *",
+  "birthDateRequired": "Data di nascita *",
   "@birthDateRequired": {
     "description": "Localized string for birthDateRequired"
   },
-  "blockConfirm": "Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.",
+  "blockConfirm": "Vuoi bloccare questa IA?",
   "@blockConfirm": {
     "description": "Localized string for blockConfirm"
   },
-  "blockReason": "Block reason",
+  "blockReason": "Motivo del blocco",
   "@blockReason": {
     "description": "Localized string for blockReason"
   },
-  "blockThisAI": "Block this AI",
+  "blockThisAI": "Blocca questa IA",
   "@blockThisAI": {
     "description": "Localized string for blockThisAI"
   },
-  "blockedAICount": "{count} blocked AIs",
+  "blockedAICount": "{count} IA bloccate",
   "@blockedAICount": {
     "description": "Number of blocked AIs",
     "placeholders": {
@@ -234,15 +234,15 @@
       }
     }
   },
-  "blockedAIs": "Blocked AIs",
+  "blockedAIs": "IA bloccate",
   "@blockedAIs": {
     "description": "Localized string for blockedAIs"
   },
-  "blockedAt": "Blocked at",
+  "blockedAt": "Bloccato il",
   "@blockedAt": {
     "description": "Localized string for blockedAt"
   },
-  "blockedSuccessfully": "Blocked successfully",
+  "blockedSuccessfully": "Bloccato con successo",
   "@blockedSuccessfully": {
     "description": "Localized string for blockedSuccessfully"
   },
@@ -291,7 +291,7 @@
   "@canChangeInSettings": {
     "description": "Localized string for canChangeInSettings"
   },
-  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
+  "canMeetPreviousPersonas": "Puoi incontrare di nuovo le personas che hai scambiato in precedenza!",
   "@canMeetPreviousPersonas": {
     "description": "Localized string for canMeetPreviousPersonas"
   },
@@ -307,27 +307,27 @@
   "@chat": {
     "description": "Localized string for chat"
   },
-  "chatEndedMessage": "Chat has ended",
+  "chatEndedMessage": "La chat è terminata",
   "@chatEndedMessage": {
     "description": "Localized string for chatEndedMessage"
   },
-  "chatErrorDashboard": "Chat Error Dashboard",
+  "chatErrorDashboard": "Dashboard degli errori di chat",
   "@chatErrorDashboard": {
     "description": "Localized string for chatErrorDashboard"
   },
-  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
+  "chatErrorSentSuccessfully": "L'errore della chat è stato inviato con successo.",
   "@chatErrorSentSuccessfully": {
     "description": "Localized string for chatErrorSentSuccessfully"
   },
-  "chatListTab": "Chat List Tab",
+  "chatListTab": "Scheda della lista chat",
   "@chatListTab": {
     "description": "Localized string for chatListTab"
   },
-  "chats": "Chats",
+  "chats": "Chat",
   "@chats": {
     "description": "Localized string for chats"
   },
-  "chattingWithPersonas": "Chatting with {count} personas",
+  "chattingWithPersonas": "Chatting con {count} personas",
   "@chattingWithPersonas": {
     "description": "Number of personas chatting with",
     "placeholders": {
@@ -340,23 +340,23 @@
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
-  "checkingUserInfo": "Checking user info",
+  "checkingUserInfo": "Controllo informazioni utente",
   "@checkingUserInfo": {
     "description": "Localized string for checkingUserInfo"
   },
-  "childrensDay": "Children's Day",
+  "childrensDay": "Giorno dei Bambini",
   "@childrensDay": {
     "description": "Localized string for childrensDay"
   },
-  "chinese": "Chinese",
+  "chinese": "Cinese",
   "@chinese": {
     "description": "Localized string for chinese"
   },
-  "chooseOption": "Please choose:",
+  "chooseOption": "Si prega di scegliere:",
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "christmas": "Christmas",
+  "christmas": "Natale",
   "@christmas": {
     "description": "Localized string for christmas"
   },
@@ -364,11 +364,11 @@
   "@close": {
     "description": "Localized string for close"
   },
-  "complete": "Done",
+  "complete": "Fatto",
   "@complete": {
     "description": "Localized string for complete"
   },
-  "completeSignup": "Complete Sign Up",
+  "completeSignup": "Completa la registrazione",
   "@completeSignup": {
     "description": "Localized string for completeSignup"
   },
@@ -376,35 +376,35 @@
   "@confirm": {
     "description": "Localized string for confirm"
   },
-  "connectingToServer": "Connecting to server",
+  "connectingToServer": "Connessione al server",
   "@connectingToServer": {
     "description": "Localized string for connectingToServer"
   },
-  "consultQualityMonitoring": "Consultation Quality Monitoring",
+  "consultQualityMonitoring": "Monitoraggio della Qualità della Consultazione",
   "@consultQualityMonitoring": {
     "description": "Localized string for consultQualityMonitoring"
   },
-  "continueAsGuest": "Continue as Guest",
+  "continueAsGuest": "Continua come Ospite",
   "@continueAsGuest": {
     "description": "Localized string for continueAsGuest"
   },
-  "continueButton": "Continue",
+  "continueButton": "Continua",
   "@continueButton": {
     "description": "Localized string for continueButton"
   },
-  "continueWithApple": "Continue with Apple",
+  "continueWithApple": "Continua con Apple",
   "@continueWithApple": {
     "description": "Localized string for continueWithApple"
   },
-  "continueWithGoogle": "Continue with Google",
+  "continueWithGoogle": "Continua con Google",
   "@continueWithGoogle": {
     "description": "Localized string for continueWithGoogle"
   },
-  "conversationContinuity": "Conversation Continuity",
+  "conversationContinuity": "Continuità della Conversazione",
   "@conversationContinuity": {
     "description": "Localized string for conversationContinuity"
   },
-  "conversationContinuityDesc": "Remember previous conversations and connect topics",
+  "conversationContinuityDesc": "Ricorda le conversazioni precedenti e collega gli argomenti",
   "@conversationContinuityDesc": {
     "description": "Localized string for conversationContinuityDesc"
   },
@@ -417,15 +417,15 @@
       }
     }
   },
-  "convertToMember": "Sign Up",
+  "convertToMember": "Iscriviti",
   "@convertToMember": {
     "description": "Localized string for convertToMember"
   },
-  "cooking": "Cooking",
+  "cooking": "Cucinare",
   "@cooking": {
     "description": "Localized string for cooking"
   },
-  "copyMessage": "Copy message",
+  "copyMessage": "Copia messaggio",
   "@copyMessage": {
     "description": "Localized string for copyMessage"
   },
@@ -433,23 +433,23 @@
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
-  "creatingAccount": "Creating account",
+  "creatingAccount": "Creazione account",
   "@creatingAccount": {
     "description": "Localized string for creatingAccount"
   },
-  "crisisDetected": "Crisis Detected",
+  "crisisDetected": "Crisi Rilevata",
   "@crisisDetected": {
     "description": "Localized string for crisisDetected"
   },
-  "culturalIssue": "Cultural Issue",
+  "culturalIssue": "Problema Culturale",
   "@culturalIssue": {
     "description": "Localized string for culturalIssue"
   },
-  "current": "Current",
+  "current": "Corrente",
   "@current": {
     "description": "Localized string for current"
   },
-  "currentCacheSize": "Current Cache Size",
+  "currentCacheSize": "Dimensione Cache Corrente",
   "@currentCacheSize": {
     "description": "Localized string for currentCacheSize"
   },
@@ -457,27 +457,27 @@
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
-  "cycling": "Cycling",
+  "cycling": "Ciclismo",
   "@cycling": {
     "description": "Localized string for cycling"
   },
-  "dailyCare": "Daily Care",
+  "dailyCare": "Cura Giornaliera",
   "@dailyCare": {
     "description": "Localized string for dailyCare"
   },
-  "dailyCareDesc": "Daily care messages for meals, sleep, health",
+  "dailyCareDesc": "Messaggi di cura giornaliera per pasti, sonno, salute",
   "@dailyCareDesc": {
     "description": "Localized string for dailyCareDesc"
   },
-  "dailyChat": "Daily Chat",
+  "dailyChat": "Chat Giornaliera",
   "@dailyChat": {
     "description": "Localized string for dailyChat"
   },
-  "dailyCheck": "Daily check",
+  "dailyCheck": "Controllo Giornaliero",
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "dailyConversation": "Daily Conversation",
+  "dailyConversation": "Conversazione Giornaliera",
   "@dailyConversation": {
     "description": "Localized string for dailyConversation"
   },
@@ -493,35 +493,35 @@
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "darkTheme": "Dark Mode",
+  "darkTheme": "Modalità Scura",
   "@darkTheme": {
     "description": "Localized string for darkTheme"
   },
-  "darkThemeDesc": "Use dark theme",
+  "darkThemeDesc": "Usa tema scuro",
   "@darkThemeDesc": {
     "description": "Localized string for darkThemeDesc"
   },
-  "dataCollection": "Data Collection Settings",
+  "dataCollection": "Impostazioni Raccolta Dati",
   "@dataCollection": {
     "description": "Localized string for dataCollection"
   },
-  "datingAdvice": "Dating Advice",
+  "datingAdvice": "Consigli per gli appuntamenti",
   "@datingAdvice": {
     "description": "Localized string for datingAdvice"
   },
-  "datingDescription": "I want to share deep thoughts and have sincere conversations",
+  "datingDescription": "Voglio condividere pensieri profondi e avere conversazioni sincere",
   "@datingDescription": {
     "description": "Localized string for datingDescription"
   },
-  "dawn": "Dawn",
+  "dawn": "Alba",
   "@dawn": {
     "description": "Localized string for dawn"
   },
-  "day": "Day",
+  "day": "Giorno",
   "@day": {
     "description": "Localized string for day"
   },
-  "dayAfterTomorrow": "Day after tomorrow",
+  "dayAfterTomorrow": "Dopodomani",
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
@@ -539,7 +539,7 @@
       }
     }
   },
-  "daysRemaining": "{days} days remaining",
+  "daysRemaining": "{days} giorni rimanenti",
   "@daysRemaining": {
     "description": "Days remaining",
     "placeholders": {
@@ -548,7 +548,7 @@
       }
     }
   },
-  "deepTalk": "Deep Talk",
+  "deepTalk": "Conversazione profonda",
   "@deepTalk": {
     "description": "Localized string for deepTalk"
   },
@@ -560,7 +560,7 @@
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
-  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
+  "deleteAccountConfirm": "Sei sicuro di voler eliminare il tuo account? Questa azione non può essere annullata.",
   "@deleteAccountConfirm": {
     "description": "Localized string for deleteAccountConfirm"
   },
@@ -568,7 +568,7 @@
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
   },
-  "deleteCache": "Delete Cache",
+  "deleteCache": "Elimina Cache",
   "@deleteCache": {
     "description": "Localized string for deleteCache"
   },
@@ -576,43 +576,43 @@
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
-  "depressed": "Depressed",
+  "depressed": "Depresso",
   "@depressed": {
     "description": "Localized string for depressed"
   },
-  "describeError": "What is the problem?",
+  "describeError": "Qual è il problema?",
   "@describeError": {
     "description": "Localized string for describeError"
   },
-  "detailedReason": "Detailed reason",
+  "detailedReason": "Motivo dettagliato",
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
+  "developRelationshipStep": "3. Sviluppa Relazione: Costruisci intimità attraverso conversazioni e sviluppa relazioni speciali.",
   "@developRelationshipStep": {
     "description": "Localized string for developRelationshipStep"
   },
-  "dinner": "Dinner",
+  "dinner": "Cena",
   "@dinner": {
     "description": "Localized string for dinner"
   },
-  "discardGuestData": "Start Fresh",
+  "discardGuestData": "Inizia da capo",
   "@discardGuestData": {
     "description": "Localized string for discardGuestData"
   },
-  "discount20": "20% off",
+  "discount20": "20% di sconto",
   "@discount20": {
     "description": "Localized string for discount20"
   },
-  "discount30": "30% off",
+  "discount30": "30% di sconto",
   "@discount30": {
     "description": "Localized string for discount30"
   },
-  "discountAmount": "Save",
+  "discountAmount": "Risparmia",
   "@discountAmount": {
     "description": "Localized string for discountAmount"
   },
-  "discountAmountValue": "Save ₩{amount}",
+  "discountAmountValue": "Risparmia ₩{amount}",
   "@discountAmountValue": {
     "description": "Discount amount",
     "placeholders": {
@@ -625,7 +625,7 @@
   "@done": {
     "description": "Localized string for done"
   },
-  "downloadingPersonaImages": "Downloading new persona images",
+  "downloadingPersonaImages": "Downloading nuove immagini persona",
   "@downloadingPersonaImages": {
     "description": "Localized string for downloadingPersonaImages"
   },
@@ -633,15 +633,15 @@
   "@edit": {
     "description": "Localized string for edit"
   },
-  "editInfo": "Edit Info",
+  "editInfo": "Modifica Info",
   "@editInfo": {
     "description": "Localized string for editInfo"
   },
-  "editProfile": "Edit Profile",
+  "editProfile": "Modifica Profilo",
   "@editProfile": {
     "description": "Localized string for editProfile"
   },
-  "effectSound": "Sound Effects",
+  "effectSound": "Effetti Sonori",
   "@effectSound": {
     "description": "Localized string for effectSound"
   },
@@ -665,15 +665,15 @@
   "@emailRequired": {
     "description": "Localized string for emailRequired"
   },
-  "emotionAnalysis": "Emotion Analysis",
+  "emotionAnalysis": "Analisi delle Emozioni",
   "@emotionAnalysis": {
     "description": "Localized string for emotionAnalysis"
   },
-  "emotionAnalysisDesc": "Analyze emotions for empathetic responses",
+  "emotionAnalysisDesc": "Analizza le emozioni per risposte empatiche",
   "@emotionAnalysisDesc": {
     "description": "Localized string for emotionAnalysisDesc"
   },
-  "emotionAngry": "Angry",
+  "emotionAngry": "Arrabbiato",
   "@emotionAngry": {
     "description": "Localized string for emotionAngry"
   },
@@ -681,43 +681,43 @@
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
   },
-  "emotionCool": "Cool",
+  "emotionCool": "Figo",
   "@emotionCool": {
     "description": "Localized string for emotionCool"
   },
-  "emotionHappy": "Happy",
+  "emotionHappy": "Felice",
   "@emotionHappy": {
     "description": "Localized string for emotionHappy"
   },
-  "emotionLove": "Love",
+  "emotionLove": "Amore",
   "@emotionLove": {
     "description": "Localized string for emotionLove"
   },
-  "emotionSad": "Sad",
+  "emotionSad": "Triste",
   "@emotionSad": {
     "description": "Localized string for emotionSad"
   },
-  "emotionThinking": "Thinking",
+  "emotionThinking": "Pensando",
   "@emotionThinking": {
     "description": "Localized string for emotionThinking"
   },
-  "emotionalSupportDesc": "Share your concerns and receive warm comfort",
+  "emotionalSupportDesc": "Condividi le tue preoccupazioni e ricevi conforto caloroso",
   "@emotionalSupportDesc": {
     "description": "Localized string for emotionalSupportDesc"
   },
-  "endChat": "End Chat",
+  "endChat": "Termina chat",
   "@endChat": {
     "description": "Localized string for endChat"
   },
-  "endTutorial": "End Tutorial",
+  "endTutorial": "Termina tutorial",
   "@endTutorial": {
     "description": "Localized string for endTutorial"
   },
-  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
+  "endTutorialAndLogin": "Terminare il tutorial e accedere?",
   "@endTutorialAndLogin": {
     "description": "Localized string for endTutorialAndLogin"
   },
-  "endTutorialMessage": "Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.",
+  "endTutorialMessage": "Vuoi terminare il tutorial e accedere?",
   "@endTutorialMessage": {
     "description": "Localized string for endTutorialMessage"
   },
@@ -725,15 +725,15 @@
   "@english": {
     "description": "Localized string for english"
   },
-  "enterBasicInfo": "Please enter basic information to create an account",
+  "enterBasicInfo": "Si prega di inserire informazioni di base per creare un account",
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
-  "enterBasicInformation": "Please enter basic information",
+  "enterBasicInformation": "Si prega di inserire informazioni di base",
   "@enterBasicInformation": {
     "description": "Localized string for enterBasicInformation"
   },
-  "enterEmail": "Please enter email",
+  "enterEmail": "Si prega di inserire l'email",
   "@enterEmail": {
     "description": "Localized string for enterEmail"
   },
@@ -745,15 +745,15 @@
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
-  "entertainmentAndFunDesc": "Enjoy fun games and pleasant conversations",
+  "entertainmentAndFunDesc": "Goditi giochi divertenti e conversazioni piacevoli",
   "@entertainmentAndFunDesc": {
     "description": "Localized string for entertainmentAndFunDesc"
   },
-  "entertainmentDescription": "I want to have fun conversations and enjoy my time",
+  "entertainmentDescription": "Voglio avere conversazioni divertenti e godermi il mio tempo",
   "@entertainmentDescription": {
     "description": "Localized string for entertainmentDescription"
   },
-  "entertainmentFun": "Entertainment/Fun",
+  "entertainmentFun": "Intrattenimento/Divertimento",
   "@entertainmentFun": {
     "description": "Localized string for entertainmentFun"
   },
@@ -765,43 +765,43 @@
   "@errorDescription": {
     "description": "Localized string for errorDescription"
   },
-  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
+  "errorDescriptionHint": "ad es., Ha dato risposte strane, Ripete la stessa cosa, Fornisce risposte contestualmente inappropriate...",
   "@errorDescriptionHint": {
     "description": "Localized string for errorDescriptionHint"
   },
-  "errorDetails": "Error Details",
+  "errorDetails": "Dettagli dell'errore",
   "@errorDetails": {
     "description": "Localized string for errorDetails"
   },
-  "errorDetailsHint": "Please explain in detail what is wrong",
+  "errorDetailsHint": "Si prega di spiegare in dettaglio cosa c'è di sbagliato",
   "@errorDetailsHint": {
     "description": "Localized string for errorDetailsHint"
   },
-  "errorFrequency24h": "Error Frequency (Last 24 hours)",
+  "errorFrequency24h": "Frequenza degli errori (Ultime 24 ore)",
   "@errorFrequency24h": {
     "description": "Localized string for errorFrequency24h"
   },
-  "errorMessage": "Error Message:",
+  "errorMessage": "Messaggio di errore:",
   "@errorMessage": {
     "description": "Localized string for errorMessage"
   },
-  "errorOccurred": "An error occurred.",
+  "errorOccurred": "Si è verificato un errore.",
   "@errorOccurred": {
     "description": "Localized string for errorOccurred"
   },
-  "errorOccurredTryAgain": "An error occurred. Please try again.",
+  "errorOccurredTryAgain": "Si è verificato un errore. Si prega di riprovare.",
   "@errorOccurredTryAgain": {
     "description": "Localized string for errorOccurredTryAgain"
   },
-  "errorSendingFailed": "Failed to send error",
+  "errorSendingFailed": "Invio dell'errore non riuscito",
   "@errorSendingFailed": {
     "description": "Localized string for errorSendingFailed"
   },
-  "errorStats": "Error Statistics",
+  "errorStats": "Statistiche sugli errori",
   "@errorStats": {
     "description": "Localized string for errorStats"
   },
-  "errorWithMessage": "Error occurred: {error}",
+  "errorWithMessage": "Si è verificato un errore: {error}",
   "@errorWithMessage": {
     "description": "Error with message",
     "placeholders": {
@@ -810,43 +810,43 @@
       }
     }
   },
-  "evening": "Evening",
+  "evening": "Sera",
   "@evening": {
     "description": "Localized string for evening"
   },
-  "excited": "Excited",
+  "excited": "Eccitato",
   "@excited": {
     "description": "Localized string for excited"
   },
-  "exit": "Exit",
+  "exit": "Esci",
   "@exit": {
     "description": "Localized string for exit"
   },
-  "exitApp": "Exit App",
+  "exitApp": "Esci dall'app",
   "@exitApp": {
     "description": "Localized string for exitApp"
   },
-  "exitConfirmMessage": "Are you sure you want to exit the app?",
+  "exitConfirmMessage": "Sei sicuro di voler uscire dall'app?",
   "@exitConfirmMessage": {
     "description": "Localized string for exitConfirmMessage"
   },
-  "expertPersona": "Expert Persona",
+  "expertPersona": "Persona Esperta",
   "@expertPersona": {
     "description": "Localized string for expertPersona"
   },
-  "expertiseScore": "Expertise Score",
+  "expertiseScore": "Punteggio di Competenza",
   "@expertiseScore": {
     "description": "Localized string for expertiseScore"
   },
-  "expired": "Expired",
+  "expired": "Scaduto",
   "@expired": {
     "description": "Localized string for expired"
   },
-  "explainReportReason": "Please explain the report reason in detail",
+  "explainReportReason": "Si prega di spiegare il motivo del rapporto in dettaglio",
   "@explainReportReason": {
     "description": "Localized string for explainReportReason"
   },
-  "fashion": "Fashion",
+  "fashion": "Moda",
   "@fashion": {
     "description": "Localized string for fashion"
   },
@@ -854,19 +854,19 @@
   "@female": {
     "description": "Localized string for female"
   },
-  "filter": "Filter",
+  "filter": "Filtro",
   "@filter": {
     "description": "Localized string for filter"
   },
-  "firstOccurred": "First Occurred: ",
+  "firstOccurred": "Prima Occorrenza:",
   "@firstOccurred": {
     "description": "Localized string for firstOccurred"
   },
-  "followDeviceLanguage": "Follow device language settings",
+  "followDeviceLanguage": "Segui le impostazioni della lingua del dispositivo",
   "@followDeviceLanguage": {
     "description": "Localized string for followDeviceLanguage"
   },
-  "forenoon": "Forenoon",
+  "forenoon": "Mattina",
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
@@ -874,7 +874,7 @@
   "@forgotPassword": {
     "description": "Localized string for forgotPassword"
   },
-  "frequentlyAskedQuestions": "Frequently Asked Questions",
+  "frequentlyAskedQuestions": "Domande Frequenti",
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
@@ -922,19 +922,19 @@
   "@genderPreferenceDisabled": {
     "description": "Localized string for genderPreferenceDisabled"
   },
-  "genderPreferenceInactive": "Only opposite gender personas will be shown",
+  "genderPreferenceInactive": "Verranno mostrati solo i personaggi di genere opposto",
   "@genderPreferenceInactive": {
     "description": "Localized string for genderPreferenceInactive"
   },
-  "genderRequired": "Gender *",
+  "genderRequired": "Genere *",
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
+  "genderSelectionInfo": "Se non selezionato, puoi incontrare personaggi di tutti i generi",
   "@genderSelectionInfo": {
     "description": "Localized string for genderSelectionInfo"
   },
-  "generalPersona": "General Persona",
+  "generalPersona": "Persona Generale",
   "@generalPersona": {
     "description": "Localized string for generalPersona"
   },
@@ -942,11 +942,11 @@
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
-  "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
+  "googleLoginCanceled": "Il login con Google è stato annullato.",
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
   },
-  "googleLoginError": "Error occurred during Google login.",
+  "googleLoginError": "Si è verificato un errore durante il login con Google.",
   "@googleLoginError": {
     "description": "Localized string for googleLoginError"
   },
@@ -954,15 +954,15 @@
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "guest": "Guest",
+  "guest": "Ospite",
   "@guest": {
     "description": "Localized string for guest"
   },
-  "guestDataMigration": "Would you like to keep your current chat history when signing up?",
+  "guestDataMigration": "Vuoi mantenere la tua attuale cronologia chat durante la registrazione?",
   "@guestDataMigration": {
     "description": "Localized string for guestDataMigration"
   },
-  "guestLimitReached": "Guest trial ended.\nSign up for unlimited conversations!",
+  "guestLimitReached": "Prova per gli ospiti terminata.",
   "@guestLimitReached": {
     "description": "Localized string for guestLimitReached"
   },
@@ -970,11 +970,11 @@
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
-  "guestMessageExhausted": "Free messages exhausted",
+  "guestMessageExhausted": "Messaggi gratuiti esauriti",
   "@guestMessageExhausted": {
     "description": "Localized string for guestMessageExhausted"
   },
-  "guestMessageRemaining": "{count} guest messages remaining",
+  "guestMessageRemaining": "{count} messaggi per ospiti rimanenti",
   "@guestMessageRemaining": {
     "description": "Guest messages remaining",
     "placeholders": {
@@ -983,47 +983,47 @@
       }
     }
   },
-  "guestModeBanner": "Guest Mode",
+  "guestModeBanner": "Modalità Ospite",
   "@guestModeBanner": {
     "description": "Localized string for guestModeBanner"
   },
-  "guestModeDescription": "Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas",
+  "guestModeDescription": "Prova SONA senza registrarti",
   "@guestModeDescription": {
     "description": "Localized string for guestModeDescription"
   },
-  "guestModeFailedMessage": "Failed to start Guest Mode",
+  "guestModeFailedMessage": "Impossibile avviare la Modalità Ospite",
   "@guestModeFailedMessage": {
     "description": "Localized string for guestModeFailedMessage"
   },
-  "guestModeLimitation": "Some features are limited in Guest Mode",
+  "guestModeLimitation": "Alcune funzionalità sono limitate in Modalità Ospite",
   "@guestModeLimitation": {
     "description": "Localized string for guestModeLimitation"
   },
-  "guestModeTitle": "Try as Guest",
+  "guestModeTitle": "Prova come Ospite",
   "@guestModeTitle": {
     "description": "Localized string for guestModeTitle"
   },
-  "guestModeWarning": "Guest mode lasts for 24 hours,\nafter which data will be deleted.",
+  "guestModeWarning": "La modalità ospite dura 24 ore, dopo di che i dati verranno eliminati.",
   "@guestModeWarning": {
     "description": "Localized string for guestModeWarning"
   },
-  "guestModeWelcome": "Starting in Guest Mode",
+  "guestModeWelcome": "Inizio in modalità ospite",
   "@guestModeWelcome": {
     "description": "Localized string for guestModeWelcome"
   },
-  "happy": "Happy",
+  "happy": "Felice",
   "@happy": {
     "description": "Localized string for happy"
   },
-  "hapticFeedback": "Haptic Feedback",
+  "hapticFeedback": "Feedback aptico",
   "@hapticFeedback": {
     "description": "Localized string for hapticFeedback"
   },
-  "harassmentBullying": "Harassment/Bullying",
+  "harassmentBullying": "Molestie/Intimidazioni",
   "@harassmentBullying": {
     "description": "Localized string for harassmentBullying"
   },
-  "hateSpeech": "Hate speech",
+  "hateSpeech": "Discorso d'odio",
   "@hateSpeech": {
     "description": "Localized string for hateSpeech"
   },
@@ -1031,47 +1031,47 @@
   "@heartDescription": {
     "description": "Localized string for heartDescription"
   },
-  "heartInsufficient": "Not enough hearts",
+  "heartInsufficient": "Cuori insufficienti",
   "@heartInsufficient": {
     "description": "Localized string for heartInsufficient"
   },
-  "heartInsufficientPleaseCharge": "Not enough hearts. Please recharge hearts.",
+  "heartInsufficientPleaseCharge": "Cuori insufficienti. Si prega di ricaricare i cuori.",
   "@heartInsufficientPleaseCharge": {
     "description": "Localized string for heartInsufficientPleaseCharge"
   },
-  "heartRequired": "1 heart is required",
+  "heartRequired": "È richiesto 1 cuore",
   "@heartRequired": {
     "description": "Localized string for heartRequired"
   },
-  "heartUsageFailed": "Failed to use heart.",
+  "heartUsageFailed": "Impossibile utilizzare il cuore.",
   "@heartUsageFailed": {
     "description": "Localized string for heartUsageFailed"
   },
-  "hearts": "Hearts",
+  "hearts": "Cuori",
   "@hearts": {
     "description": "Localized string for hearts"
   },
-  "hearts10": "10 Hearts",
+  "hearts10": "10 Cuori",
   "@hearts10": {
     "description": "Localized string for hearts10"
   },
-  "hearts30": "30 Hearts",
+  "hearts30": "30 Cuori",
   "@hearts30": {
     "description": "Localized string for hearts30"
   },
-  "hearts30Discount": "SALE",
+  "hearts30Discount": "SALDI",
   "@hearts30Discount": {
     "description": "Localized string for hearts30Discount"
   },
-  "hearts50": "50 Hearts",
+  "hearts50": "50 Cuori",
   "@hearts50": {
     "description": "Localized string for hearts50"
   },
-  "hearts50Discount": "SALE",
+  "hearts50Discount": "SALDI",
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
-  "helloEmoji": "Hello! 😊",
+  "helloEmoji": "Ciao! 😊",
   "@helloEmoji": {
     "description": "Localized string for helloEmoji"
   },
@@ -1079,19 +1079,19 @@
   "@help": {
     "description": "Localized string for help"
   },
-  "hideOriginalText": "Hide Original",
+  "hideOriginalText": "Nascondi originale",
   "@hideOriginalText": {
     "description": "Localized string for hideOriginalText"
   },
-  "hobbySharing": "Hobby Sharing",
+  "hobbySharing": "Condivisione hobby",
   "@hobbySharing": {
     "description": "Localized string for hobbySharing"
   },
-  "hobbyTalk": "Hobby Talk",
+  "hobbyTalk": "Conversazione sugli hobby",
   "@hobbyTalk": {
     "description": "Localized string for hobbyTalk"
   },
-  "hours24Ago": "24 hours ago",
+  "hours24Ago": "24 ore fa",
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
@@ -1109,11 +1109,11 @@
       }
     }
   },
-  "howToUse": "How to use SONA",
+  "howToUse": "Come usare SONA",
   "@howToUse": {
     "description": "Localized string for howToUse"
   },
-  "imageCacheManagement": "Image Cache Management",
+  "imageCacheManagement": "Gestione della cache delle immagini",
   "@imageCacheManagement": {
     "description": "Localized string for imageCacheManagement"
   },
@@ -1121,7 +1121,7 @@
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
-  "incorrect": "incorrect",
+  "incorrect": "errato",
   "@incorrect": {
     "description": "Localized string for incorrect"
   },
@@ -1129,27 +1129,27 @@
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
   },
-  "indonesian": "Indonesian",
+  "indonesian": "Indonesiano",
   "@indonesian": {
     "description": "Localized string for indonesian"
   },
-  "inquiries": "Inquiries",
+  "inquiries": "Richieste",
   "@inquiries": {
     "description": "Localized string for inquiries"
   },
-  "insufficientHearts": "Insufficient hearts.",
+  "insufficientHearts": "Cuori insufficienti.",
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
-  "interestSharing": "Interest Sharing",
+  "interestSharing": "Condivisione degli interessi",
   "@interestSharing": {
     "description": "Localized string for interestSharing"
   },
-  "interestSharingDesc": "Discover and recommend shared interests",
+  "interestSharingDesc": "Scopri e raccomanda interessi condivisi",
   "@interestSharingDesc": {
     "description": "Localized string for interestSharingDesc"
   },
-  "interests": "Interests",
+  "interests": "Interessi",
   "@interests": {
     "description": "Localized string for interests"
   },
@@ -1161,7 +1161,7 @@
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
-  "isTyping": "{name} is typing...",
+  "isTyping": "{name} sta scrivendo...",
   "@isTyping": {
     "description": "Shows someone is typing",
     "placeholders": {
@@ -1170,11 +1170,11 @@
       }
     }
   },
-  "japanese": "Japanese",
+  "japanese": "Giapponese",
   "@japanese": {
     "description": "Localized string for japanese"
   },
-  "joinDate": "Join Date",
+  "joinDate": "Data di Iscrizione",
   "@joinDate": {
     "description": "Localized string for joinDate"
   },
@@ -1182,15 +1182,15 @@
   "@justNow": {
     "description": "Localized string for justNow"
   },
-  "keepGuestData": "Keep Chat History",
+  "keepGuestData": "Mantieni Cronologia Chat",
   "@keepGuestData": {
     "description": "Localized string for keepGuestData"
   },
-  "korean": "Korean",
+  "korean": "Coreano",
   "@korean": {
     "description": "Localized string for korean"
   },
-  "koreanLanguage": "Korean",
+  "koreanLanguage": "Coreano",
   "@koreanLanguage": {
     "description": "Localized string for koreanLanguage"
   },
@@ -1198,19 +1198,19 @@
   "@language": {
     "description": "Localized string for language"
   },
-  "languageDescription": "AI will respond in your selected language",
+  "languageDescription": "L'IA risponderà nella lingua selezionata",
   "@languageDescription": {
     "description": "Localized string for languageDescription"
   },
-  "languageIndicator": "Language",
+  "languageIndicator": "Lingua",
   "@languageIndicator": {
     "description": "Localized string for languageIndicator"
   },
-  "languageSettings": "Language Settings",
+  "languageSettings": "Impostazioni Lingua",
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "lastOccurred": "Last Occurred: ",
+  "lastOccurred": "Ultima Occorrenza:",
   "@lastOccurred": {
     "description": "Localized string for lastOccurred"
   },
@@ -1218,35 +1218,35 @@
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
   },
-  "lateNight": "Late night",
+  "lateNight": "Notte fonda",
   "@lateNight": {
     "description": "Localized string for lateNight"
   },
-  "later": "Later",
+  "later": "Più tardi",
   "@later": {
     "description": "Localized string for later"
   },
-  "laterButton": "Later",
+  "laterButton": "Più tardi",
   "@laterButton": {
     "description": "Localized string for laterButton"
   },
-  "leave": "Leave",
+  "leave": "Lascia",
   "@leave": {
     "description": "Localized string for leave"
   },
-  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
+  "leaveChatConfirm": "Vuoi lasciare questa chat?",
   "@leaveChatConfirm": {
     "description": "Localized string for leaveChatConfirm"
   },
-  "leaveChatRoom": "Leave Chat Room",
+  "leaveChatRoom": "Lascia la chat",
   "@leaveChatRoom": {
     "description": "Localized string for leaveChatRoom"
   },
-  "leaveChatTitle": "Leave Chat",
+  "leaveChatTitle": "Lascia chat",
   "@leaveChatTitle": {
     "description": "Localized string for leaveChatTitle"
   },
-  "lifeAdvice": "Life Advice",
+  "lifeAdvice": "Consigli di vita",
   "@lifeAdvice": {
     "description": "Localized string for lifeAdvice"
   },
@@ -1254,11 +1254,11 @@
   "@lightTalk": {
     "description": "Localized string for lightTalk"
   },
-  "lightTheme": "Light Mode",
+  "lightTheme": "Modalità Chiara",
   "@lightTheme": {
     "description": "Localized string for lightTheme"
   },
-  "lightThemeDesc": "Use bright theme",
+  "lightThemeDesc": "Usa tema chiaro",
   "@lightThemeDesc": {
     "description": "Localized string for lightThemeDesc"
   },
@@ -1266,7 +1266,7 @@
   "@loading": {
     "description": "Localized string for loading"
   },
-  "loadingData": "Loading data...",
+  "loadingData": "Caricamento dati...",
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
@@ -1274,7 +1274,7 @@
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
-  "loadingProfile": "Loading profile",
+  "loadingProfile": "Caricamento profilo",
   "@loadingProfile": {
     "description": "Localized string for loadingProfile"
   },
@@ -1282,11 +1282,11 @@
   "@login": {
     "description": "Localized string for login"
   },
-  "loginButton": "Login",
+  "loginButton": "Accedi",
   "@loginButton": {
     "description": "Localized string for loginButton"
   },
-  "loginCancelled": "Login cancelled",
+  "loginCancelled": "Accesso annullato",
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
@@ -1294,7 +1294,7 @@
   "@loginComplete": {
     "description": "Localized string for loginComplete"
   },
-  "loginError": "Login failed",
+  "loginError": "Accesso fallito",
   "@loginError": {
     "description": "Localized string for loginError"
   },
@@ -1306,11 +1306,11 @@
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
-  "loginRequired": "Login required",
+  "loginRequired": "Accesso richiesto",
   "@loginRequired": {
     "description": "Localized string for loginRequired"
   },
-  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
+  "loginRequiredForProfile": "Accesso richiesto per visualizzare il profilo",
   "@loginRequiredForProfile": {
     "description": "Localized string for loginRequiredForProfile"
   },
@@ -1318,19 +1318,19 @@
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
   },
-  "loginRequiredTitle": "Login Required",
+  "loginRequiredTitle": "Accesso Richiesto",
   "@loginRequiredTitle": {
     "description": "Localized string for loginRequiredTitle"
   },
-  "loginSignup": "Login/Sign Up",
+  "loginSignup": "Accesso/Registrati",
   "@loginSignup": {
     "description": "Localized string for loginSignup"
   },
-  "loginTab": "Login",
+  "loginTab": "Accesso",
   "@loginTab": {
     "description": "Localized string for loginTab"
   },
-  "loginTitle": "Login",
+  "loginTitle": "Accesso",
   "@loginTitle": {
     "description": "Localized string for loginTitle"
   },
@@ -1350,31 +1350,31 @@
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
   },
-  "lonelinessRelief": "Loneliness Relief",
+  "lonelinessRelief": "Sollievo dalla Solitudine",
   "@lonelinessRelief": {
     "description": "Localized string for lonelinessRelief"
   },
-  "lonely": "Lonely",
+  "lonely": "Solo",
   "@lonely": {
     "description": "Localized string for lonely"
   },
-  "lowQualityResponses": "Low Quality Responses",
+  "lowQualityResponses": "Risposte di bassa qualità",
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },
-  "lunch": "Lunch",
+  "lunch": "Pranzo",
   "@lunch": {
     "description": "Localized string for lunch"
   },
-  "lunchtime": "Lunchtime",
+  "lunchtime": "Ora di pranzo",
   "@lunchtime": {
     "description": "Localized string for lunchtime"
   },
-  "mainErrorType": "Main Error Type",
+  "mainErrorType": "Tipo di errore principale",
   "@mainErrorType": {
     "description": "Localized string for mainErrorType"
   },
-  "makeFriends": "Make Friends",
+  "makeFriends": "Fai amicizia",
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
@@ -1382,39 +1382,39 @@
   "@male": {
     "description": "Localized string for male"
   },
-  "manageBlockedAIs": "Manage Blocked AIs",
+  "manageBlockedAIs": "Gestisci AIs bloccati",
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "managePersonaImageCache": "Manage persona image cache",
+  "managePersonaImageCache": "Gestisci la cache delle immagini del profilo",
   "@managePersonaImageCache": {
     "description": "Localized string for managePersonaImageCache"
   },
-  "marketingAgree": "Agree to Marketing Information (Optional)",
+  "marketingAgree": "Accetta le informazioni di marketing (opzionale)",
   "@marketingAgree": {
     "description": "Localized string for marketingAgree"
   },
-  "marketingDescription": "You can receive event and benefit information",
+  "marketingDescription": "Puoi ricevere informazioni sugli eventi e sui benefici",
   "@marketingDescription": {
     "description": "Localized string for marketingDescription"
   },
-  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "matchPersonaStep": "1. Abbina le Personas: Scorri a sinistra o a destra per selezionare le tue AI personas preferite.",
   "@matchPersonaStep": {
     "description": "Localized string for matchPersonaStep"
   },
-  "matchedPersonas": "Matched Personas",
+  "matchedPersonas": "Personas abbinate",
   "@matchedPersonas": {
     "description": "Localized string for matchedPersonas"
   },
-  "matchedSona": "Matched Sona",
+  "matchedSona": "Sona abbinata",
   "@matchedSona": {
     "description": "Localized string for matchedSona"
   },
-  "matching": "Matching",
+  "matching": "Abbinamento",
   "@matching": {
     "description": "Localized string for matching"
   },
-  "matchingFailed": "Matching failed.",
+  "matchingFailed": "Abbinamento fallito.",
   "@matchingFailed": {
     "description": "Localized string for matchingFailed"
   },
@@ -1422,7 +1422,7 @@
   "@me": {
     "description": "Localized string for me"
   },
-  "meetAIPersonas": "Meet AI Personas",
+  "meetAIPersonas": "Incontra le AI Personas",
   "@meetAIPersonas": {
     "description": "Localized string for meetAIPersonas"
   },
@@ -1430,27 +1430,27 @@
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
-  "meetPersonas": "Meet Personas",
+  "meetPersonas": "Incontra le Personas",
   "@meetPersonas": {
     "description": "Localized string for meetPersonas"
   },
-  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "memberBenefits": "Ricevi oltre 100 messaggi e 10 cuori quando ti registri!",
   "@memberBenefits": {
     "description": "Localized string for memberBenefits"
   },
-  "memoryAlbum": "Memory Album",
+  "memoryAlbum": "Album dei Ricordi",
   "@memoryAlbum": {
     "description": "Localized string for memoryAlbum"
   },
-  "memoryAlbumDesc": "Automatically save and recall special moments",
+  "memoryAlbumDesc": "Salva e ricorda automaticamente momenti speciali",
   "@memoryAlbumDesc": {
     "description": "Localized string for memoryAlbumDesc"
   },
-  "messageCopied": "Message copied",
+  "messageCopied": "Messaggio copiato",
   "@messageCopied": {
     "description": "Localized string for messageCopied"
   },
-  "messageDeleted": "Message deleted",
+  "messageDeleted": "Messaggio eliminato",
   "@messageDeleted": {
     "description": "Localized string for messageDeleted"
   },
@@ -1458,11 +1458,11 @@
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
-  "messageSendFailed": "Failed to send message. Please try again.",
+  "messageSendFailed": "Invio del messaggio fallito. Per favore riprova.",
   "@messageSendFailed": {
     "description": "Localized string for messageSendFailed"
   },
-  "messagesRemaining": "Messages Remaining",
+  "messagesRemaining": "Messaggi rimanenti",
   "@messagesRemaining": {
     "description": "Label for messages remaining"
   },
@@ -1480,7 +1480,7 @@
       }
     }
   },
-  "missingTranslation": "Missing Translation",
+  "missingTranslation": "Traduzione mancante",
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
@@ -1528,11 +1528,11 @@
   "@music": {
     "description": "Localized string for music"
   },
-  "myGenderSection": "My Gender (Optional)",
+  "myGenderSection": "Il mio genere (Opzionale)",
   "@myGenderSection": {
     "description": "Localized string for myGenderSection"
   },
-  "networkErrorOccurred": "A network error occurred.",
+  "networkErrorOccurred": "Si è verificato un errore di rete.",
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
@@ -1540,7 +1540,7 @@
   "@newMessage": {
     "description": "Localized string for newMessage"
   },
-  "newMessageCount": "{count} new messages",
+  "newMessageCount": "{count} nuovi messaggi",
   "@newMessageCount": {
     "description": "Number of new messages",
     "placeholders": {
@@ -1553,11 +1553,11 @@
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
   },
-  "newMessages": "New messages",
+  "newMessages": "Nuovi messaggi",
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
-  "newYear": "New Year",
+  "newYear": "Nuovo Anno",
   "@newYear": {
     "description": "Localized string for newYear"
   },
@@ -1565,11 +1565,11 @@
   "@next": {
     "description": "Localized string for next"
   },
-  "niceToMeetYou": "Nice to meet you!",
+  "niceToMeetYou": "Piacere di conoscerti!",
   "@niceToMeetYou": {
     "description": "Localized string for niceToMeetYou"
   },
-  "nickname": "Nickname",
+  "nickname": "Soprannome",
   "@nickname": {
     "description": "Localized string for nickname"
   },
@@ -1581,7 +1581,7 @@
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
   },
-  "nicknameHint": "3-10 characters",
+  "nicknameHint": "3-10 caratteri",
   "@nicknameHint": {
     "description": "Localized string for nicknameHint"
   },
@@ -1589,7 +1589,7 @@
   "@nicknameInUse": {
     "description": "Localized string for nicknameInUse"
   },
-  "nicknameLabel": "Nickname",
+  "nicknameLabel": "Soprannome",
   "@nicknameLabel": {
     "description": "Localized string for nicknameLabel"
   },
@@ -1601,11 +1601,11 @@
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
-  "nicknameRequired": "Nickname *",
+  "nicknameRequired": "Soprannome *",
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
-  "night": "Night",
+  "night": "Notte",
   "@night": {
     "description": "Localized string for night"
   },
@@ -1613,11 +1613,11 @@
   "@no": {
     "description": "Localized string for no"
   },
-  "noBlockedAIs": "No blocked AIs",
+  "noBlockedAIs": "Nessuna IA bloccata",
   "@noBlockedAIs": {
     "description": "Localized string for noBlockedAIs"
   },
-  "noChatsYet": "No chats yet",
+  "noChatsYet": "Nessuna chat ancora",
   "@noChatsYet": {
     "description": "Localized string for noChatsYet"
   },
@@ -1625,11 +1625,11 @@
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
   },
-  "noErrorReports": "No error reports.",
+  "noErrorReports": "Nessun rapporto di errore.",
   "@noErrorReports": {
     "description": "Localized string for noErrorReports"
   },
-  "noImageAvailable": "No image available",
+  "noImageAvailable": "Immagine non disponibile",
   "@noImageAvailable": {
     "description": "Localized string for noImageAvailable"
   },
@@ -1637,23 +1637,23 @@
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
-  "noMatchedSonas": "No matched Sonas yet",
+  "noMatchedSonas": "Nessuna Sonas corrispondente ancora",
   "@noMatchedSonas": {
     "description": "Localized string for noMatchedSonas"
   },
-  "noPersonasAvailable": "No personas available. Please try again.",
+  "noPersonasAvailable": "Nessuna persona disponibile. Per favore riprova.",
   "@noPersonasAvailable": {
     "description": "Localized string for noPersonasAvailable"
   },
-  "noPersonasToSelect": "No personas available",
+  "noPersonasToSelect": "Nessuna persona disponibile",
   "@noPersonasToSelect": {
     "description": "Localized string for noPersonasToSelect"
   },
-  "noQualityIssues": "No quality issues in the last hour ✅",
+  "noQualityIssues": "Nessun problema di qualità nell'ultima ora ✅",
   "@noQualityIssues": {
     "description": "Localized string for noQualityIssues"
   },
-  "noQualityLogs": "No quality logs yet.",
+  "noQualityLogs": "Nessun registro di qualità ancora.",
   "@noQualityLogs": {
     "description": "Localized string for noQualityLogs"
   },
@@ -1661,11 +1661,11 @@
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
   },
-  "notEnoughHearts": "Not enough hearts",
+  "notEnoughHearts": "Non abbastanza cuori",
   "@notEnoughHearts": {
     "description": "Localized string for notEnoughHearts"
   },
-  "notEnoughHeartsCount": "Not enough hearts. (Current: {count})",
+  "notEnoughHeartsCount": "Non abbastanza cuori. (Attuale: {count})",
   "@notEnoughHeartsCount": {
     "description": "Not enough hearts message",
     "placeholders": {
@@ -1674,11 +1674,11 @@
       }
     }
   },
-  "notRegistered": "not registered",
+  "notRegistered": "non registrato",
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
-  "notSubscribed": "Not subscribed",
+  "notSubscribed": "Non iscritto",
   "@notSubscribed": {
     "description": "Localized string for notSubscribed"
   },
@@ -1698,23 +1698,23 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "occurrenceInfo": "Occurrence Info:",
+  "occurrenceInfo": "Informazioni sull'Occorrenza:",
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
-  "olderChats": "Older",
+  "olderChats": "Più Vecchi",
   "@olderChats": {
     "description": "Localized string for olderChats"
   },
-  "onlyOppositeGenderNote": "If unchecked, only opposite gender personas will be shown",
+  "onlyOppositeGenderNote": "Se non selezionato, verranno mostrati solo i personaggi di genere opposto",
   "@onlyOppositeGenderNote": {
     "description": "Localized string for onlyOppositeGenderNote"
   },
-  "openSettings": "Open Settings",
+  "openSettings": "Apri Impostazioni",
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Optional",
+  "optional": "Facoltativo",
   "@optional": {
     "description": "Localized string for optional"
   },
@@ -1722,11 +1722,11 @@
   "@or": {
     "description": "Localized string for or"
   },
-  "originalPrice": "Original",
+  "originalPrice": "Originale",
   "@originalPrice": {
     "description": "Localized string for originalPrice"
   },
-  "originalText": "Original",
+  "originalText": "Originale",
   "@originalText": {
     "description": "Localized string for originalText"
   },
@@ -1734,19 +1734,19 @@
   "@other": {
     "description": "Localized string for other"
   },
-  "otherError": "Other Error",
+  "otherError": "Altro Errore",
   "@otherError": {
     "description": "Localized string for otherError"
   },
-  "others": "Others",
+  "others": "Altri",
   "@others": {
     "description": "Localized string for others"
   },
-  "ownedHearts": "Owned Hearts",
+  "ownedHearts": "Cuori Posseduti",
   "@ownedHearts": {
     "description": "Localized string for ownedHearts"
   },
-  "parentsDay": "Parents' Day",
+  "parentsDay": "Giornata dei Genitori",
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
@@ -1758,11 +1758,11 @@
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
-  "passwordConfirmationDesc": "Please re-enter your password to delete account.",
+  "passwordConfirmationDesc": "Si prega di reinserire la password per eliminare l'account.",
   "@passwordConfirmationDesc": {
     "description": "Localized string for passwordConfirmationDesc"
   },
-  "passwordHint": "6 characters or more",
+  "passwordHint": "6 caratteri o più",
   "@passwordHint": {
     "description": "Localized string for passwordHint"
   },
@@ -1774,11 +1774,11 @@
   "@passwordRequired": {
     "description": "Localized string for passwordRequired"
   },
-  "passwordResetEmailPrompt": "Please enter your email to reset password",
+  "passwordResetEmailPrompt": "Per favore inserisci la tua email per reimpostare la password",
   "@passwordResetEmailPrompt": {
     "description": "Localized string for passwordResetEmailPrompt"
   },
-  "passwordResetEmailSent": "Password reset email has been sent. Please check your email.",
+  "passwordResetEmailSent": "L'email per la reimpostazione della password è stata inviata. Controlla la tua email.",
   "@passwordResetEmailSent": {
     "description": "Localized string for passwordResetEmailSent"
   },
@@ -1786,7 +1786,7 @@
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
-  "passwordTooShort": "Password must be at least 6 characters",
+  "passwordTooShort": "La password deve essere lunga almeno 6 caratteri",
   "@passwordTooShort": {
     "description": "Localized string for passwordTooShort"
   },
@@ -1794,7 +1794,7 @@
   "@permissionDenied": {
     "description": "Localized string for permissionDenied"
   },
-  "permissionDeniedMessage": "{permissionName} permission was denied.\\nPlease allow the permission in settings.",
+  "permissionDeniedMessage": "Il permesso {permissionName} è stato negato.\\nPer favore consenti il permesso nelle impostazioni.",
   "@permissionDeniedMessage": {
     "description": "Permission denied message",
     "placeholders": {
@@ -1803,7 +1803,7 @@
       }
     }
   },
-  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "permissionDeniedTryLater": "Permesso negato. Per favore riprova più tardi.",
   "@permissionDeniedTryLater": {
     "description": "Localized string for permissionDeniedTryLater"
   },
@@ -1811,11 +1811,11 @@
   "@permissionRequired": {
     "description": "Localized string for permissionRequired"
   },
-  "personaGenderSection": "Persona Gender Preference",
+  "personaGenderSection": "Preferenza di Genere della Persona",
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
-  "personaQualityStats": "Persona Quality Statistics",
+  "personaQualityStats": "Statistiche di Qualità della Persona",
   "@personaQualityStats": {
     "description": "Localized string for personaQualityStats"
   },
@@ -1855,19 +1855,19 @@
   "@preparingForSleep": {
     "description": "Localized string for preparingForSleep"
   },
-  "preparingNewMeeting": "Preparing new meeting",
+  "preparingNewMeeting": "Preparazione di una nuova riunione",
   "@preparingNewMeeting": {
     "description": "Localized string for preparingNewMeeting"
   },
-  "preparingPersonaImages": "Preparing persona images",
+  "preparingPersonaImages": "Preparazione delle immagini delle persone",
   "@preparingPersonaImages": {
     "description": "Localized string for preparingPersonaImages"
   },
-  "preparingPersonas": "Preparing personas",
+  "preparingPersonas": "Preparazione delle persone",
   "@preparingPersonas": {
     "description": "Localized string for preparingPersonas"
   },
-  "preview": "Preview",
+  "preview": "Anteprima",
   "@preview": {
     "description": "Localized string for preview"
   },
@@ -1887,87 +1887,87 @@
   "@privacyPolicyAgreement": {
     "description": "Localized string for privacyPolicyAgreement"
   },
-  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "privacySection1Content": "Ci impegniamo a proteggere la tua privacy. Questa Informativa sulla Privacy spiega come raccogliamo, utilizziamo e proteggiamo le tue informazioni quando utilizzi il nostro servizio.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
   },
-  "privacySection1Title": "1. Purpose of Collection and Use of Personal Information",
+  "privacySection1Title": "1. Scopo della raccolta e utilizzo delle informazioni personali",
   "@privacySection1Title": {
     "description": "Localized string for privacySection1Title"
   },
-  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "privacySection2Content": "Raccogliamo informazioni che ci fornisci direttamente, ad esempio quando crei un account, aggiorni il tuo profilo o utilizzi i nostri servizi.",
   "@privacySection2Content": {
     "description": "Localized string for privacySection2Content"
   },
-  "privacySection2Title": "Information We Collect",
+  "privacySection2Title": "Informazioni che raccogliamo",
   "@privacySection2Title": {
     "description": "Localized string for privacySection2Title"
   },
-  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "privacySection3Content": "Utilizziamo le informazioni che raccogliamo per fornire, mantenere e migliorare i nostri servizi e per comunicare con te.",
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
-  "privacySection3Title": "3. Retention and Use Period of Personal Information",
+  "privacySection3Title": "3. Periodo di Conservazione e Utilizzo delle Informazioni Personali",
   "@privacySection3Title": {
     "description": "Localized string for privacySection3Title"
   },
-  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "privacySection4Content": "Non vendiamo, scambiamo o trasferiamo in altro modo le tue informazioni personali a terzi senza il tuo consenso.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
   },
-  "privacySection4Title": "4. Provision of Personal Information to Third Parties",
+  "privacySection4Title": "4. Fornitura di Informazioni Personali a Terzi",
   "@privacySection4Title": {
     "description": "Localized string for privacySection4Title"
   },
-  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "privacySection5Content": "Implementiamo misure di sicurezza appropriate per proteggere le tue informazioni personali da accessi non autorizzati, alterazioni, divulgazioni o distruzioni.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
-  "privacySection5Title": "5. Technical Protection Measures for Personal Information",
+  "privacySection5Title": "5. Misure Tecniche di Protezione per le Informazioni Personali",
   "@privacySection5Title": {
     "description": "Localized string for privacySection5Title"
   },
-  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "privacySection6Content": "Conserviamo le informazioni personali per tutto il tempo necessario a fornire i nostri servizi e a rispettare gli obblighi legali.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
   },
-  "privacySection6Title": "6. User Rights",
+  "privacySection6Title": "6. Diritti degli Utenti",
   "@privacySection6Title": {
     "description": "Localized string for privacySection6Title"
   },
-  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "privacySection7Content": "Hai il diritto di accedere, aggiornare o eliminare le tue informazioni personali in qualsiasi momento tramite le impostazioni del tuo account.",
   "@privacySection7Content": {
     "description": "Localized string for privacySection7Content"
   },
-  "privacySection7Title": "Your Rights",
+  "privacySection7Title": "I Tuoi Diritti",
   "@privacySection7Title": {
     "description": "Localized string for privacySection7Title"
   },
-  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "privacySection8Content": "Se hai domande su questa Informativa sulla Privacy, ti preghiamo di contattarci a support@sona.com.",
   "@privacySection8Content": {
     "description": "Localized string for privacySection8Content"
   },
-  "privacySection8Title": "Contact Us",
+  "privacySection8Title": "Contattaci",
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
-  "privacySettings": "Privacy Settings",
+  "privacySettings": "Impostazioni sulla Privacy",
   "@privacySettings": {
     "description": "Localized string for privacySettings"
   },
-  "privacySettingsInfo": "Disabling individual features will make those services unavailable",
+  "privacySettingsInfo": "Disabilitare singole funzionalità renderà quei servizi non disponibili",
   "@privacySettingsInfo": {
     "description": "Localized string for privacySettingsInfo"
   },
-  "privacySettingsScreen": "Privacy Settings",
+  "privacySettingsScreen": "Impostazioni sulla Privacy",
   "@privacySettingsScreen": {
     "description": "Localized string for privacySettingsScreen"
   },
-  "problemMessage": "Problem",
+  "problemMessage": "Problema",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
   },
-  "problemOccurred": "Problem Occurred",
+  "problemOccurred": "Si è verificato un problema",
   "@problemOccurred": {
     "description": "Localized string for problemOccurred"
   },
@@ -1975,67 +1975,67 @@
   "@profile": {
     "description": "Localized string for profile"
   },
-  "profileEdit": "Edit Profile",
+  "profileEdit": "Modifica Profilo",
   "@profileEdit": {
     "description": "Localized string for profileEdit"
   },
-  "profileEditLoginRequiredMessage": "Login is required to edit your profile.\nWould you like to go to the login screen?",
+  "profileEditLoginRequiredMessage": "È necessario effettuare il login per modificare il tuo profilo.",
   "@profileEditLoginRequiredMessage": {
     "description": "Localized string for profileEditLoginRequiredMessage"
   },
-  "profileInfo": "Profile Information",
+  "profileInfo": "Informazioni sul Profilo",
   "@profileInfo": {
     "description": "Localized string for profileInfo"
   },
-  "profileInfoDescription": "Please enter your profile photo and basic information",
+  "profileInfoDescription": "Si prega di inserire la foto del profilo e le informazioni di base",
   "@profileInfoDescription": {
     "description": "Localized string for profileInfoDescription"
   },
-  "profileNav": "Profile",
+  "profileNav": "Profilo",
   "@profileNav": {
     "description": "Localized string for profileNav"
   },
-  "profilePhoto": "Profile Photo",
+  "profilePhoto": "Foto del Profilo",
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "profilePhotoAndInfo": "Si prega di inserire la foto del profilo e le informazioni di base",
   "@profilePhotoAndInfo": {
     "description": "Localized string for profilePhotoAndInfo"
   },
-  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "profilePhotoUpdateFailed": "Impossibile aggiornare la foto del profilo",
   "@profilePhotoUpdateFailed": {
     "description": "Localized string for profilePhotoUpdateFailed"
   },
-  "profilePhotoUpdated": "Profile photo updated",
+  "profilePhotoUpdated": "Foto del profilo aggiornata",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
   },
-  "profileSettings": "Profile Settings",
+  "profileSettings": "Impostazioni del profilo",
   "@profileSettings": {
     "description": "Localized string for profileSettings"
   },
-  "profileSetup": "Setting up profile",
+  "profileSetup": "Configurazione del profilo",
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
-  "profileUpdateFailed": "Failed to update profile",
+  "profileUpdateFailed": "Impossibile aggiornare il profilo",
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "Profile updated successfully",
+  "profileUpdated": "Profilo aggiornato con successo",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
-  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "purchaseAndRefundPolicy": "Politica di acquisto e rimborso",
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
-  "purchaseButton": "Purchase",
+  "purchaseButton": "Acquista",
   "@purchaseButton": {
     "description": "Localized string for purchaseButton"
   },
-  "purchaseConfirm": "Purchase Confirmation",
+  "purchaseConfirm": "Conferma di acquisto",
   "@purchaseConfirm": {
     "description": "Localized string for purchaseConfirm"
   },
@@ -2069,71 +2069,71 @@
       }
     }
   },
-  "purchaseFailed": "Purchase failed",
+  "purchaseFailed": "Acquisto non riuscito",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
-  "purchaseHeartsOnly": "Buy hearts",
+  "purchaseHeartsOnly": "Acquista cuori",
   "@purchaseHeartsOnly": {
     "description": "Localized string for purchaseHeartsOnly"
   },
-  "purchaseMoreHearts": "Purchase hearts to continue conversations",
+  "purchaseMoreHearts": "Acquista cuori per continuare le conversazioni",
   "@purchaseMoreHearts": {
     "description": "Localized string for purchaseMoreHearts"
   },
-  "purchasePending": "Purchase pending...",
+  "purchasePending": "Acquisto in sospeso...",
   "@purchasePending": {
     "description": "Localized string for purchasePending"
   },
-  "purchasePolicy": "Purchase Policy",
+  "purchasePolicy": "Politica di acquisto",
   "@purchasePolicy": {
     "description": "Localized string for purchasePolicy"
   },
-  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "purchaseSection1Content": "Accettiamo vari metodi di pagamento, tra cui carte di credito e portafogli digitali.",
   "@purchaseSection1Content": {
     "description": "Localized string for purchaseSection1Content"
   },
-  "purchaseSection1Title": "Payment Methods",
+  "purchaseSection1Title": "Metodi di pagamento",
   "@purchaseSection1Title": {
     "description": "Localized string for purchaseSection1Title"
   },
-  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "purchaseSection2Content": "I rimborsi sono disponibili entro 14 giorni dall'acquisto se non hai utilizzato gli articoli acquistati.",
   "@purchaseSection2Content": {
     "description": "Localized string for purchaseSection2Content"
   },
-  "purchaseSection2Title": "Refund Policy",
+  "purchaseSection2Title": "Politica di Rimborso",
   "@purchaseSection2Title": {
     "description": "Localized string for purchaseSection2Title"
   },
-  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "purchaseSection3Content": "Puoi annullare il tuo abbonamento in qualsiasi momento tramite le impostazioni del tuo account.",
   "@purchaseSection3Content": {
     "description": "Localized string for purchaseSection3Content"
   },
-  "purchaseSection3Title": "Cancellation",
+  "purchaseSection3Title": "Cancellazione",
   "@purchaseSection3Title": {
     "description": "Localized string for purchaseSection3Title"
   },
-  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "purchaseSection4Content": "Effettuando un acquisto, accetti i nostri termini di utilizzo e il contratto di servizio.",
   "@purchaseSection4Content": {
     "description": "Localized string for purchaseSection4Content"
   },
-  "purchaseSection4Title": "Terms of Use",
+  "purchaseSection4Title": "Termini di Utilizzo",
   "@purchaseSection4Title": {
     "description": "Localized string for purchaseSection4Title"
   },
-  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "purchaseSection5Content": "Per problemi relativi all'acquisto, ti preghiamo di contattare il nostro team di supporto.",
   "@purchaseSection5Content": {
     "description": "Localized string for purchaseSection5Content"
   },
-  "purchaseSection5Title": "Contact Support",
+  "purchaseSection5Title": "Contatta il Supporto",
   "@purchaseSection5Title": {
     "description": "Localized string for purchaseSection5Title"
   },
-  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "purchaseSection6Content": "Tutti gli acquisti sono soggetti ai nostri termini e condizioni standard.",
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
-  "purchaseSection6Title": "6. Inquiries",
+  "purchaseSection6Title": "6. Richieste",
   "@purchaseSection6Title": {
     "description": "Localized string for purchaseSection6Title"
   },
@@ -2141,39 +2141,39 @@
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
-  "reading": "Reading",
+  "reading": "Lettura",
   "@reading": {
     "description": "Localized string for reading"
   },
-  "realtimeQualityLog": "Real-time Quality Log",
+  "realtimeQualityLog": "Registro Qualità in Tempo Reale",
   "@realtimeQualityLog": {
     "description": "Localized string for realtimeQualityLog"
   },
-  "recentConversation": "Recent Conversation:",
+  "recentConversation": "Conversazione Recente:",
   "@recentConversation": {
     "description": "Localized string for recentConversation"
   },
-  "recentLoginRequired": "Please login again for security",
+  "recentLoginRequired": "Accedi di nuovo per motivi di sicurezza",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
   },
-  "referrerEmail": "Referrer Email",
+  "referrerEmail": "Email del Referente",
   "@referrerEmail": {
     "description": "Localized string for referrerEmail"
   },
-  "referrerEmailHelper": "Optional: Email of who referred you",
+  "referrerEmailHelper": "Facoltativo: Email di chi ti ha riferito",
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
-  "referrerEmailLabel": "Referrer Email (Optional)",
+  "referrerEmailLabel": "Email del referente (Opzionale)",
   "@referrerEmailLabel": {
     "description": "Localized string for referrerEmailLabel"
   },
-  "refresh": "Refresh",
+  "refresh": "Aggiorna",
   "@refresh": {
     "description": "Localized string for refresh"
   },
-  "refreshComplete": "Refresh complete! {count} matched personas",
+  "refreshComplete": "Aggiornamento completato! {count} persone corrispondenti",
   "@refreshComplete": {
     "description": "Refresh complete message",
     "placeholders": {
@@ -2182,47 +2182,47 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "Aggiornamento fallito",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "Aggiornamento della lista chat...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
-  "relatedFAQ": "Related FAQ",
+  "relatedFAQ": "FAQ correlate",
   "@relatedFAQ": {
     "description": "Localized string for relatedFAQ"
   },
-  "report": "Report",
+  "report": "Segnala",
   "@report": {
     "description": "Localized string for report"
   },
-  "reportAI": "Report",
+  "reportAI": "Segnala",
   "@reportAI": {
     "description": "Localized string for reportAI"
   },
-  "reportAIDescription": "If the AI made you uncomfortable, please describe the issue.",
+  "reportAIDescription": "Se l'AI ti ha messo a disagio, ti preghiamo di descrivere il problema.",
   "@reportAIDescription": {
     "description": "Localized string for reportAIDescription"
   },
-  "reportAITitle": "Report AI Conversation",
+  "reportAITitle": "Segnala Conversazione AI",
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "reportAndBlock": "Report & Block",
+  "reportAndBlock": "Segnala & Blocca",
   "@reportAndBlock": {
     "description": "Localized string for reportAndBlock"
   },
-  "reportAndBlockDescription": "You can report and block inappropriate behavior of this AI",
+  "reportAndBlockDescription": "Puoi segnalare e bloccare comportamenti inappropriati di questa AI",
   "@reportAndBlockDescription": {
     "description": "Localized string for reportAndBlockDescription"
   },
-  "reportChatError": "Report Chat Error",
+  "reportChatError": "Segnala Errore Chat",
   "@reportChatError": {
     "description": "Localized string for reportChatError"
   },
-  "reportError": "Error occurred while reporting: {error}",
+  "reportError": "Si è verificato un errore durante la segnalazione: {error}",
   "@reportError": {
     "description": "Report error message",
     "placeholders": {
@@ -2231,35 +2231,35 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "Segnalazione fallita",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
-  "reportSubmitted": "Report submitted. We will review and take action.",
+  "reportSubmitted": "Segnalazione inviata. La esamineremo e prenderemo provvedimenti.",
   "@reportSubmitted": {
     "description": "Localized string for reportSubmitted"
   },
-  "reportSubmittedSuccess": "Your report has been submitted. Thank you!",
+  "reportSubmittedSuccess": "Il tuo report è stato inviato. Grazie!",
   "@reportSubmittedSuccess": {
     "description": "Localized string for reportSubmittedSuccess"
   },
-  "requestLimit": "Request Limit",
+  "requestLimit": "Limite di Richiesta",
   "@requestLimit": {
     "description": "Localized string for requestLimit"
   },
-  "required": "[Required]",
+  "required": "[Obbligatorio]",
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "Per favore, accetta i termini",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
-  "restartConversation": "Restart Conversation",
+  "restartConversation": "Riavvia Conversazione",
   "@restartConversation": {
     "description": "Localized string for restartConversation"
   },
-  "restartConversationQuestion": "Would you like to restart the conversation with {name}?",
+  "restartConversationQuestion": "Vuoi riavviare la conversazione con {name}?",
   "@restartConversationQuestion": {
     "description": "Restart conversation question",
     "placeholders": {
@@ -2268,7 +2268,7 @@
       }
     }
   },
-  "restartConversationWithName": "Restarting conversation with {name}!",
+  "restartConversationWithName": "Riavviando la conversazione con {name}!",
   "@restartConversationWithName": {
     "description": "Restarting conversation message",
     "placeholders": {
@@ -2281,15 +2281,15 @@
   "@retry": {
     "description": "Localized string for retry"
   },
-  "retryButton": "Retry",
+  "retryButton": "Riprova",
   "@retryButton": {
     "description": "Localized string for retryButton"
   },
-  "sad": "Sad",
+  "sad": "Triste",
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "Sabato",
   "@saturday": {
     "description": "Localized string for saturday"
   },
@@ -2301,75 +2301,75 @@
   "@search": {
     "description": "Localized string for search"
   },
-  "searchFAQ": "Search FAQ...",
+  "searchFAQ": "Cerca FAQ...",
   "@searchFAQ": {
     "description": "Localized string for searchFAQ"
   },
-  "searchResults": "Search Results",
+  "searchResults": "Risultati della ricerca",
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
-  "selectEmotion": "Select Emotion",
+  "selectEmotion": "Seleziona Emozione",
   "@selectEmotion": {
     "description": "Localized string for selectEmotion"
   },
-  "selectErrorType": "Select error type",
+  "selectErrorType": "Seleziona tipo di errore",
   "@selectErrorType": {
     "description": "Localized string for selectErrorType"
   },
-  "selectFeeling": "Select Feeling",
+  "selectFeeling": "Seleziona Sensazione",
   "@selectFeeling": {
     "description": "Localized string for selectFeeling"
   },
-  "selectGender": "Please select gender",
+  "selectGender": "Seleziona genere",
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
-  "selectInterests": "Please select your interests (at least 1)",
+  "selectInterests": "Per favore seleziona i tuoi interessi (almeno 1)",
   "@selectInterests": {
     "description": "Localized string for selectInterests"
   },
-  "selectLanguage": "Select Language",
+  "selectLanguage": "Seleziona Lingua",
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "Seleziona una persona",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
-  "selectPersonaPlease": "Please select a persona.",
+  "selectPersonaPlease": "Per favore seleziona una persona.",
   "@selectPersonaPlease": {
     "description": "Localized string for selectPersonaPlease"
   },
-  "selectPreferredMbti": "If you prefer personas with specific MBTI types, please select",
+  "selectPreferredMbti": "Se preferisci persone con tipi MBTI specifici, per favore seleziona",
   "@selectPreferredMbti": {
     "description": "Localized string for selectPreferredMbti"
   },
-  "selectProblematicMessage": "Select the problematic message (optional)",
+  "selectProblematicMessage": "Seleziona il messaggio problematico (opzionale)",
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "Seleziona il motivo della segnalazione",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
-  "selectTheme": "Select Theme",
+  "selectTheme": "Seleziona Tema",
   "@selectTheme": {
     "description": "Localized string for selectTheme"
   },
-  "selectTranslationError": "Please select a message with translation error",
+  "selectTranslationError": "Si prega di selezionare un messaggio con errore di traduzione",
   "@selectTranslationError": {
     "description": "Localized string for selectTranslationError"
   },
-  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "selectUsagePurpose": "Si prega di selezionare il proprio scopo per utilizzare SONA",
   "@selectUsagePurpose": {
     "description": "Localized string for selectUsagePurpose"
   },
-  "selfIntroduction": "Introduction (Optional)",
+  "selfIntroduction": "Introduzione (Facoltativa)",
   "@selfIntroduction": {
     "description": "Localized string for selfIntroduction"
   },
-  "selfIntroductionHint": "Write a brief introduction about yourself",
+  "selfIntroductionHint": "Scrivi una breve introduzione su di te",
   "@selfIntroductionHint": {
     "description": "Localized string for selfIntroductionHint"
   },
@@ -2377,19 +2377,19 @@
   "@send": {
     "description": "Localized string for send"
   },
-  "sendChatError": "Send Chat Error",
+  "sendChatError": "Errore nell'invio della chat",
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "Invia il tuo primo messaggio",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
-  "sendReport": "Send Report",
+  "sendReport": "Invia rapporto",
   "@sendReport": {
     "description": "Localized string for sendReport"
   },
-  "sendingEmail": "Sending email...",
+  "sendingEmail": "Invio email...",
   "@sendingEmail": {
     "description": "Localized string for sendingEmail"
   },
@@ -2397,23 +2397,23 @@
   "@seoul": {
     "description": "Localized string for seoul"
   },
-  "serverErrorDashboard": "Server Error",
+  "serverErrorDashboard": "Errore del server",
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "Si prega di accettare i termini di servizio",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
-  "sessionExpired": "Session expired",
+  "sessionExpired": "Sessione scaduta",
   "@sessionExpired": {
     "description": "Localized string for sessionExpired"
   },
-  "setAppInterfaceLanguage": "Set app interface language",
+  "setAppInterfaceLanguage": "Imposta la lingua dell'interfaccia dell'app",
   "@setAppInterfaceLanguage": {
     "description": "Localized string for setAppInterfaceLanguage"
   },
-  "setNow": "Set Now",
+  "setNow": "Imposta ora",
   "@setNow": {
     "description": "Localized string for setNow"
   },
@@ -2421,7 +2421,7 @@
   "@settings": {
     "description": "Localized string for settings"
   },
-  "sexualContent": "Sexual content",
+  "sexualContent": "Contenuto sessuale",
   "@sexualContent": {
     "description": "Localized string for sexualContent"
   },
@@ -2429,15 +2429,15 @@
   "@showAllGenderPersonas": {
     "description": "Localized string for showAllGenderPersonas"
   },
-  "showAllGendersOption": "Show All Genders",
+  "showAllGendersOption": "Mostra tutte le opzioni di genere",
   "@showAllGendersOption": {
     "description": "Localized string for showAllGendersOption"
   },
-  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "showOppositeGenderOnly": "Se non selezionato, verranno mostrati solo i personaggi di genere opposto",
   "@showOppositeGenderOnly": {
     "description": "Localized string for showOppositeGenderOnly"
   },
-  "showOriginalText": "Show Original",
+  "showOriginalText": "Mostra originale",
   "@showOriginalText": {
     "description": "Localized string for showOriginalText"
   },
@@ -2445,7 +2445,7 @@
   "@signUp": {
     "description": "Localized string for signUp"
   },
-  "signUpFromGuest": "Sign up now to access all features!",
+  "signUpFromGuest": "Iscriviti ora per accedere a tutte le funzionalità!",
   "@signUpFromGuest": {
     "description": "Localized string for signUpFromGuest"
   },
@@ -2453,15 +2453,15 @@
   "@signup": {
     "description": "Localized string for signup"
   },
-  "signupComplete": "Sign Up Complete",
+  "signupComplete": "Iscrizione completata",
   "@signupComplete": {
     "description": "Localized string for signupComplete"
   },
-  "signupTab": "Sign Up",
+  "signupTab": "Iscriviti",
   "@signupTab": {
     "description": "Localized string for signupTab"
   },
-  "simpleInfoRequired": "Simple information is required\nfor matching with AI personas",
+  "simpleInfoRequired": "Sono richieste informazioni semplici",
   "@simpleInfoRequired": {
     "description": "Localized string for simpleInfoRequired"
   },
@@ -2469,35 +2469,35 @@
   "@skip": {
     "description": "Localized string for skip"
   },
-  "sonaFriend": "SONA Friend",
+  "sonaFriend": "Amico SONA",
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "Politica sulla privacy SONA",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "Politica di Acquisto SONA",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "Termini di Servizio SONA",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
-  "sonaUsagePurpose": "Please select your purpose for using SONA",
+  "sonaUsagePurpose": "Seleziona il tuo scopo per utilizzare SONA",
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "Ci dispiace, non è stato utile",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
-  "sort": "Sort",
+  "sort": "Ordina",
   "@sort": {
     "description": "Localized string for sort"
   },
-  "soundSettings": "Sound Settings",
+  "soundSettings": "Impostazioni Audio",
   "@soundSettings": {
     "description": "Localized string for soundSettings"
   },
@@ -2505,119 +2505,119 @@
   "@spamAdvertising": {
     "description": "Localized string for spamAdvertising"
   },
-  "spanish": "Spanish",
+  "spanish": "Spagnolo",
   "@spanish": {
     "description": "Localized string for spanish"
   },
-  "specialRelationshipDesc": "Understand each other and build deep bonds",
+  "specialRelationshipDesc": "Comprendersi e costruire legami profondi",
   "@specialRelationshipDesc": {
     "description": "Localized string for specialRelationshipDesc"
   },
-  "sports": "Sports",
+  "sports": "Sport",
   "@sports": {
     "description": "Localized string for sports"
   },
-  "spring": "Spring",
+  "spring": "Primavera",
   "@spring": {
     "description": "Localized string for spring"
   },
-  "startChat": "Start Chat",
+  "startChat": "Inizia Chat",
   "@startChat": {
     "description": "Localized string for startChat"
   },
-  "startChatButton": "Start Chat",
+  "startChatButton": "Inizia Chat",
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
-  "startConversation": "Start a conversation",
+  "startConversation": "Inizia una conversazione",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
-  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "startConversationLikeAFriend": "Inizia una conversazione con Sona come un amico",
   "@startConversationLikeAFriend": {
     "description": "Localized string for startConversationLikeAFriend"
   },
-  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "startConversationStep": "2. Inizia Conversazione: Chattare liberamente con le persone abbinate.",
   "@startConversationStep": {
     "description": "Localized string for startConversationStep"
   },
-  "startConversationWithSona": "Start chatting with Sona like a friend!",
+  "startConversationWithSona": "Inizia a chattare con Sona come un amico!",
   "@startConversationWithSona": {
     "description": "Localized string for startConversationWithSona"
   },
-  "startWithEmail": "Start with Email",
+  "startWithEmail": "Inizia con Email",
   "@startWithEmail": {
     "description": "Localized string for startWithEmail"
   },
-  "startWithGoogle": "Start with Google",
+  "startWithGoogle": "Inizia con Google",
   "@startWithGoogle": {
     "description": "Localized string for startWithGoogle"
   },
-  "startingApp": "Starting app",
+  "startingApp": "Avvio dell'app",
   "@startingApp": {
     "description": "Localized string for startingApp"
   },
-  "storageManagement": "Storage Management",
+  "storageManagement": "Gestione dello spazio di archiviazione",
   "@storageManagement": {
     "description": "Localized string for storageManagement"
   },
-  "store": "Store",
+  "store": "Negozio",
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "Impossibile connettersi al negozio",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
-  "storeLoginRequiredMessage": "Login is required to use the store.\nWould you like to go to the login screen?",
+  "storeLoginRequiredMessage": "È necessario effettuare il login per utilizzare il negozio. Vuoi andare alla schermata di login?",
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "Il negozio non è disponibile",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
-  "storyEvent": "Story Event",
+  "storyEvent": "Evento Storia",
   "@storyEvent": {
     "description": "Localized string for storyEvent"
   },
-  "stressed": "Stressed",
+  "stressed": "Stressato",
   "@stressed": {
     "description": "Localized string for stressed"
   },
-  "submitReport": "Submit Report",
+  "submitReport": "Invia Rapporto",
   "@submitReport": {
     "description": "Localized string for submitReport"
   },
-  "subscriptionStatus": "Subscription Status",
+  "subscriptionStatus": "Stato dell'abbonamento",
   "@subscriptionStatus": {
     "description": "Localized string for subscriptionStatus"
   },
-  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "subtleVibrationOnTouch": "Vibrazione sottile al tocco",
   "@subtleVibrationOnTouch": {
     "description": "Localized string for subtleVibrationOnTouch"
   },
-  "summer": "Summer",
+  "summer": "Estate",
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "Domenica",
   "@sunday": {
     "description": "Localized string for sunday"
   },
-  "swipeAnyDirection": "Swipe in any direction",
+  "swipeAnyDirection": "Scorri in qualsiasi direzione",
   "@swipeAnyDirection": {
     "description": "Localized string for swipeAnyDirection"
   },
-  "swipeDownToClose": "Swipe down to close",
+  "swipeDownToClose": "Scorri verso il basso per chiudere",
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
-  "systemTheme": "Follow System",
+  "systemTheme": "Segui il sistema",
   "@systemTheme": {
     "description": "Localized string for systemTheme"
   },
-  "systemThemeDesc": "Automatically changes based on device dark mode settings",
+  "systemThemeDesc": "Cambia automaticamente in base alle impostazioni della modalità scura del dispositivo",
   "@systemThemeDesc": {
     "description": "Localized string for systemThemeDesc"
   },
@@ -2625,19 +2625,19 @@
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
-  "tapForDetails": "Tap bottom area for details",
+  "tapForDetails": "Tocca l'area in basso per i dettagli",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "Tocca per scorrere le foto",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
-  "teachersDay": "Teachers' Day",
+  "teachersDay": "Giornata degli insegnanti",
   "@teachersDay": {
     "description": "Localized string for teachersDay"
   },
-  "technicalError": "Technical Error",
+  "technicalError": "Errore tecnico",
   "@technicalError": {
     "description": "Localized string for technicalError"
   },
@@ -2677,87 +2677,87 @@
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "Se una qualsiasi disposizione di questi termini viene ritenuta inapplicabile, le disposizioni rimanenti continueranno ad avere piena validità ed effetto.",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
-  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "termsSection12Title": "Articolo 12 (Raccolta e Utilizzo dei Dati)",
   "@termsSection12Title": {
     "description": "Localized string for termsSection12Title"
   },
-  "termsSection1Content": "These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.",
+  "termsSection1Content": "Questi termini e condizioni mirano a definire i diritti, gli obblighi e le responsabilità tra SONA (di seguito \"Azienda\") e gli utenti riguardo all'uso del servizio di corrispondenza delle conversazioni con persona AI (di seguito \"Servizio\") fornito dall'Azienda.",
   "@termsSection1Content": {
     "description": "Localized string for termsSection1Content"
   },
-  "termsSection1Title": "Article 1 (Purpose)",
+  "termsSection1Title": "Articolo 1 (Scopo)",
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "Utilizzando il nostro servizio, accetti di essere vincolato da questi Termini di Servizio e dalla nostra Informativa sulla Privacy.",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
-  "termsSection2Title": "Article 2 (Definitions)",
+  "termsSection2Title": "Articolo 2 (Definizioni)",
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "Devi avere almeno 13 anni per utilizzare il nostro servizio.",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
-  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "termsSection3Title": "Articolo 3 (Efficacia e Modifica dei Termini)",
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "Sei responsabile della riservatezza del tuo account e della tua password.",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
-  "termsSection4Title": "Article 4 (Provision of Service)",
+  "termsSection4Title": "Articolo 4 (Fornitura del Servizio)",
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "Accetti di non utilizzare il nostro servizio per scopi illegali o non autorizzati.",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
-  "termsSection5Title": "Article 5 (Membership Registration)",
+  "termsSection5Title": "Articolo 5 (Registrazione al Servizio)",
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "Ci riserviamo il diritto di terminare o sospendere il tuo account per violazione di questi termini.",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
-  "termsSection6Title": "Article 6 (User Obligations)",
+  "termsSection6Title": "Articolo 6 (Obblighi dell'Utente)",
   "@termsSection6Title": {
     "description": "Localized string for termsSection6Title"
   },
-  "termsSection7Content": "The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.",
+  "termsSection7Content": "La Società può gradualmente limitare l'uso del servizio attraverso avvisi, sospensione temporanea o sospensione permanente se gli utenti violano gli obblighi di questi termini o interferiscono con il normale funzionamento del servizio.",
   "@termsSection7Content": {
     "description": "Localized string for termsSection7Content"
   },
-  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "termsSection7Title": "Articolo 7 (Restrizioni all'Uso del Servizio)",
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "Non siamo responsabili per eventuali danni indiretti, incidentali o consequenziali derivanti dall'uso del nostro servizio.",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
-  "termsSection8Title": "Article 8 (Service Interruption)",
+  "termsSection8Title": "Articolo 8 (Interruzione del Servizio)",
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "Tutti i contenuti e i materiali disponibili sul nostro servizio sono protetti da diritti di proprietà intellettuale.",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
-  "termsSection9Title": "Article 9 (Disclaimer)",
+  "termsSection9Title": "Articolo 9 (Esclusione di Responsabilità)",
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "Termini Supplementari",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
@@ -2765,7 +2765,7 @@
   "@thai": {
     "description": "Localized string for thai"
   },
-  "thanksFeedback": "Thanks for your feedback!",
+  "thanksFeedback": "Grazie per il tuo feedback!",
   "@thanksFeedback": {
     "description": "Localized string for thanksFeedback"
   },
@@ -2773,15 +2773,15 @@
   "@theme": {
     "description": "Localized string for theme"
   },
-  "themeDescription": "You can customize the app appearance as you like",
+  "themeDescription": "Puoi personalizzare l'aspetto dell'app come preferisci.",
   "@themeDescription": {
     "description": "Localized string for themeDescription"
   },
-  "themeSettings": "Theme Settings",
+  "themeSettings": "Impostazioni del Tema",
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "Giovedì",
   "@thursday": {
     "description": "Localized string for thursday"
   },
@@ -2789,7 +2789,7 @@
   "@timeout": {
     "description": "Localized string for timeout"
   },
-  "tired": "Tired",
+  "tired": "Stanco",
   "@tired": {
     "description": "Localized string for tired"
   },
@@ -2797,79 +2797,79 @@
   "@today": {
     "description": "Localized string for today"
   },
-  "todayChats": "Today",
+  "todayChats": "Oggi",
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
-  "todayText": "Today",
+  "todayText": "Oggi",
   "@todayText": {
     "description": "Localized string for todayText"
   },
-  "tomorrowText": "Tomorrow",
+  "tomorrowText": "Domani",
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "totalConsultSessions": "Total Consultation Sessions",
+  "totalConsultSessions": "Totale Sessioni di Consultazione",
   "@totalConsultSessions": {
     "description": "Localized string for totalConsultSessions"
   },
-  "totalErrorCount": "Total Error Count",
+  "totalErrorCount": "Conteggio totale degli errori",
   "@totalErrorCount": {
     "description": "Localized string for totalErrorCount"
   },
-  "totalLikes": "Total Likes",
+  "totalLikes": "Mi piace totali",
   "@totalLikes": {
     "description": "Localized string for totalLikes"
   },
-  "totalOccurrences": "Total {count} occurrences",
+  "totalOccurrences": "Totale {count} occorrenze",
   "@totalOccurrences": {
     "description": "Localized string for totalOccurrences"
   },
-  "totalResponses": "Total Responses",
+  "totalResponses": "Risposte totali",
   "@totalResponses": {
     "description": "Localized string for totalResponses"
   },
-  "translatedFrom": "Translated",
+  "translatedFrom": "Tradotto",
   "@translatedFrom": {
     "description": "Localized string for translatedFrom"
   },
-  "translatedText": "Translation",
+  "translatedText": "Traduzione",
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "Errore di traduzione",
   "@translationError": {
     "description": "Localized string for translationError"
   },
-  "translationErrorDescription": "Please report incorrect translations or awkward expressions",
+  "translationErrorDescription": "Si prega di segnalare traduzioni errate o espressioni scomode",
   "@translationErrorDescription": {
     "description": "Localized string for translationErrorDescription"
   },
-  "translationErrorReported": "Translation error reported. Thank you!",
+  "translationErrorReported": "Errore di traduzione segnalato. Grazie!",
   "@translationErrorReported": {
     "description": "Localized string for translationErrorReported"
   },
-  "translationNote": "※ AI translation may not be perfect",
+  "translationNote": "※ La traduzione AI potrebbe non essere perfetta",
   "@translationNote": {
     "description": "Localized string for translationNote"
   },
-  "translationQuality": "Translation Quality",
+  "translationQuality": "Qualità della Traduzione",
   "@translationQuality": {
     "description": "Localized string for translationQuality"
   },
-  "translationSettings": "Translation Settings",
+  "translationSettings": "Impostazioni di Traduzione",
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
-  "travel": "Travel",
+  "travel": "Viaggio",
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "Martedì",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
-  "tutorialAccount": "Tutorial Account",
+  "tutorialAccount": "Account Tutorial",
   "@tutorialAccount": {
     "description": "Localized string for tutorialAccount"
   },
@@ -2881,19 +2881,19 @@
   "@tutorialWelcomeTitle": {
     "description": "Tutorial: Welcome title"
   },
-  "typeMessage": "Type a message...",
+  "typeMessage": "Digita un messaggio...",
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "unblock": "Unblock",
+  "unblock": "Sblocca",
   "@unblock": {
     "description": "Localized string for unblock"
   },
-  "unblockFailed": "Failed to unblock",
+  "unblockFailed": "Impossibile sbloccare",
   "@unblockFailed": {
     "description": "Localized string for unblockFailed"
   },
-  "unblockPersonaConfirm": "Unblock {name}?",
+  "unblockPersonaConfirm": "Sbloccare {name}?",
   "@unblockPersonaConfirm": {
     "description": "Unblock persona confirmation",
     "placeholders": {
@@ -2902,59 +2902,59 @@
       }
     }
   },
-  "unblockedSuccessfully": "Unblocked successfully",
+  "unblockedSuccessfully": "Sbloccato con successo",
   "@unblockedSuccessfully": {
     "description": "Localized string for unblockedSuccessfully"
   },
-  "unexpectedLoginError": "An unexpected error occurred during login",
+  "unexpectedLoginError": "Si è verificato un errore imprevisto durante il login",
   "@unexpectedLoginError": {
     "description": "Localized string for unexpectedLoginError"
   },
-  "unknown": "Unknown",
+  "unknown": "Sconosciuto",
   "@unknown": {
     "description": "Localized string for unknown"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "Si è verificato un errore sconosciuto",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },
-  "unlimitedMessages": "Unlimited",
+  "unlimitedMessages": "Illimitato",
   "@unlimitedMessages": {
     "description": "Localized string for unlimitedMessages"
   },
-  "unsendMessage": "Unsend message",
+  "unsendMessage": "Annulla messaggio",
   "@unsendMessage": {
     "description": "Localized string for unsendMessage"
   },
-  "usagePurpose": "Usage Purpose",
+  "usagePurpose": "Scopo d'uso",
   "@usagePurpose": {
     "description": "Localized string for usagePurpose"
   },
-  "useOneHeart": "Use 1 Heart",
+  "useOneHeart": "Usa 1 Cuore",
   "@useOneHeart": {
     "description": "Localized string for useOneHeart"
   },
-  "useSystemLanguage": "Use System Language",
+  "useSystemLanguage": "Usa Lingua di Sistema",
   "@useSystemLanguage": {
     "description": "Localized string for useSystemLanguage"
   },
-  "user": "User: ",
+  "user": "Utente:",
   "@user": {
     "description": "Localized string for user"
   },
-  "userMessage": "User Message:",
+  "userMessage": "Messaggio dell'utente:",
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
-  "userNotFound": "User not found",
+  "userNotFound": "Utente non trovato",
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
-  "valentinesDay": "Valentine's Day",
+  "valentinesDay": "San Valentino",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
-  "verifyingAuth": "Verifying authentication",
+  "verifyingAuth": "Verifica autenticazione",
   "@verifyingAuth": {
     "description": "Localized string for verifyingAuth"
   },
@@ -2962,19 +2962,19 @@
   "@version": {
     "description": "Localized string for version"
   },
-  "vietnamese": "Vietnamese",
+  "vietnamese": "Vietnamita",
   "@vietnamese": {
     "description": "Localized string for vietnamese"
   },
-  "violentContent": "Violent content",
+  "violentContent": "Contenuto violento",
   "@violentContent": {
     "description": "Localized string for violentContent"
   },
-  "voiceMessage": "🎤 Voice message",
+  "voiceMessage": "🎤 Messaggio vocale",
   "@voiceMessage": {
     "description": "Localized string for voiceMessage"
   },
-  "waitingForChat": "{name} is waiting to chat.",
+  "waitingForChat": "{name} sta aspettando di chattare.",
   "@waitingForChat": {
     "description": "Shows that a persona is waiting to chat",
     "placeholders": {
@@ -2983,43 +2983,43 @@
       }
     }
   },
-  "walk": "Walk",
+  "walk": "Cammina",
   "@walk": {
     "description": "Localized string for walk"
   },
-  "wasHelpful": "Was this helpful?",
+  "wasHelpful": "È stato utile?",
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
-  "weatherClear": "Clear",
+  "weatherClear": "Sereno",
   "@weatherClear": {
     "description": "Localized string for weatherClear"
   },
-  "weatherCloudy": "Cloudy",
+  "weatherCloudy": "Nuvoloso",
   "@weatherCloudy": {
     "description": "Localized string for weatherCloudy"
   },
-  "weatherContext": "Weather Context",
+  "weatherContext": "Contesto Meteo",
   "@weatherContext": {
     "description": "Localized string for weatherContext"
   },
-  "weatherContextDesc": "Provide conversation context based on weather",
+  "weatherContextDesc": "Fornisci contesto alla conversazione basato sul meteo",
   "@weatherContextDesc": {
     "description": "Localized string for weatherContextDesc"
   },
-  "weatherDrizzle": "Drizzle",
+  "weatherDrizzle": "Pioviggine",
   "@weatherDrizzle": {
     "description": "Localized string for weatherDrizzle"
   },
-  "weatherFog": "Fog",
+  "weatherFog": "Nebbia",
   "@weatherFog": {
     "description": "Localized string for weatherFog"
   },
-  "weatherMist": "Mist",
+  "weatherMist": "Foschia",
   "@weatherMist": {
     "description": "Localized string for weatherMist"
   },
-  "weatherRain": "Rain",
+  "weatherRain": "Pioggia",
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
@@ -3027,7 +3027,7 @@
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
-  "weatherSnow": "Snow",
+  "weatherSnow": "Neve",
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
@@ -3035,11 +3035,11 @@
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
-  "weatherThunderstorm": "Thunderstorm",
+  "weatherThunderstorm": "Temporale",
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "Mercoledì",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
@@ -3047,11 +3047,11 @@
   "@weekdays": {
     "description": "Localized string for weekdays"
   },
-  "welcomeMessage": "Welcome💕",
+  "welcomeMessage": "Benvenuto💕",
   "@welcomeMessage": {
     "description": "Localized string for welcomeMessage"
   },
-  "whatTopicsToTalk": "What topics would you like to talk about? (Optional)",
+  "whatTopicsToTalk": "Di quali argomenti ti piacerebbe parlare? (Facoltativo)",
   "@whatTopicsToTalk": {
     "description": "Localized string for whatTopicsToTalk"
   },
@@ -3059,19 +3059,19 @@
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "winter": "Winter",
+  "winter": "Inverno",
   "@winter": {
     "description": "Localized string for winter"
   },
-  "wrongTranslation": "Wrong Translation",
+  "wrongTranslation": "Traduzione Errata",
   "@wrongTranslation": {
     "description": "Localized string for wrongTranslation"
   },
-  "year": "Year",
+  "year": "Anno",
   "@year": {
     "description": "Localized string for year"
   },
-  "yearEnd": "Year End",
+  "yearEnd": "Fine anno",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },
@@ -3083,11 +3083,11 @@
   "@yesterday": {
     "description": "Localized string for yesterday"
   },
-  "yesterdayChats": "Yesterday",
+  "yesterdayChats": "Ieri",
   "@yesterdayChats": {
     "description": "Localized string for yesterdayChats"
   },
-  "you": "You",
+  "you": "Tu",
   "@you": {
     "description": "Localized string for you"
   }

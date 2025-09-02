@@ -653,7 +653,7 @@
   "@email": {
     "description": "Localized string for email"
   },
-  "emailHint": "example@email.com",
+  "emailHint": "예시@email.com",
   "@emailHint": {
     "description": "Localized string for emailHint"
   },
@@ -2182,11 +2182,11 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "새로 고침에 실패했습니다",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "채팅 목록을 새로 고치는 중...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
@@ -2231,7 +2231,7 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "신고에 실패했습니다",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
@@ -2251,7 +2251,7 @@
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "약관에 동의해 주세요",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
@@ -2333,7 +2333,7 @@
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "페르소나를 선택하세요",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
@@ -2349,7 +2349,7 @@
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "신고 사유를 선택하세요",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
@@ -2381,7 +2381,7 @@
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "첫 번째 메시지를 보내세요",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
@@ -2401,7 +2401,7 @@
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "서비스 약관에 동의해 주세요",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
@@ -2473,15 +2473,15 @@
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "SONA 개인정보 보호정책",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "SONA 구매 정책",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "SONA 서비스 약관",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
@@ -2489,7 +2489,7 @@
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "도움이 되지 않아 죄송합니다",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
@@ -2529,7 +2529,7 @@
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
-  "startConversation": "Start a conversation",
+  "startConversation": "대화를 시작하세요",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
@@ -2565,7 +2565,7 @@
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "스토에 연결할 수 없습니다",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
@@ -2573,7 +2573,7 @@
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "스토를 사용할 수 없습니다",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
@@ -2629,7 +2629,7 @@
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "사진을 넘기려면 탭하세요",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
@@ -2661,7 +2661,7 @@
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "termsSection10Content": "우리는 사용자에게 통지하고 언제든지 이 약관을 수정할 권리를 보유합니다.",
   "@termsSection10Content": {
     "description": "Localized string for termsSection10Content"
   },
@@ -2669,7 +2669,7 @@
   "@termsSection10Title": {
     "description": "Localized string for termsSection10Title"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "termsSection11Content": "이 약관은 우리가 운영하는 관할권의 법률에 따라 규율됩니다.",
   "@termsSection11Content": {
     "description": "Localized string for termsSection11Content"
   },
@@ -2677,7 +2677,7 @@
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "이 약관의 어떤 조항이 집행 불가능한 것으로 판단될 경우, 나머지 조항은 계속해서 완전한 효력을 유지합니다.",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
@@ -2693,7 +2693,7 @@
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "저희 서비스를 이용함으로써, 귀하는 이 서비스 약관 및 개인정보 처리방침에 동의하는 것입니다.",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
@@ -2701,7 +2701,7 @@
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "저희 서비스를 이용하려면 최소 13세 이상이어야 합니다.",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
@@ -2709,7 +2709,7 @@
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "귀하는 계정 및 비밀번호의 기밀을 유지할 책임이 있습니다.",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
@@ -2717,7 +2717,7 @@
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "귀하는 저희 서비스를 불법적이거나 무단의 목적으로 사용하지 않기로 동의합니다.",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
@@ -2725,7 +2725,7 @@
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "저희는 이러한 약관을 위반할 경우 귀하의 계정을 종료하거나 일시 중지할 권리를 보유합니다.",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
@@ -2741,7 +2741,7 @@
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "저희 서비스 이용으로 인해 발생하는 간접적, 우발적, 또는 결과적 손해에 대해서는 책임을 지지 않습니다.",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
@@ -2749,7 +2749,7 @@
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "저희 서비스에서 제공되는 모든 콘텐츠 및 자료는 지적 재산권에 의해 보호됩니다.",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
@@ -2757,7 +2757,7 @@
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "부가 약관",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
@@ -2837,7 +2837,7 @@
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "번역 오류",
   "@translationError": {
     "description": "Localized string for translationError"
   },

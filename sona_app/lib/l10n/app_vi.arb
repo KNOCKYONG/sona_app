@@ -934,7 +934,7 @@
   "@genderSelectionInfo": {
     "description": "Localized string for genderSelectionInfo"
   },
-  "generalPersona": "Persona chung",
+  "generalPersona": "Nhân vật tổng quát",
   "@generalPersona": {
     "description": "Localized string for generalPersona"
   },
@@ -1051,23 +1051,23 @@
   "@hearts": {
     "description": "Localized string for hearts"
   },
-  "hearts10": "10 Tim",
+  "hearts10": "10 Trái tim",
   "@hearts10": {
     "description": "Localized string for hearts10"
   },
-  "hearts30": "30 Tim",
+  "hearts30": "30 Trái tim",
   "@hearts30": {
     "description": "Localized string for hearts30"
   },
-  "hearts30Discount": "30 Tim (Giảm giá)",
+  "hearts30Discount": "30 Trái tim (Giảm giá)",
   "@hearts30Discount": {
     "description": "Localized string for hearts30Discount"
   },
-  "hearts50": "50 Tim",
+  "hearts50": "50 Trái tim",
   "@hearts50": {
     "description": "Localized string for hearts50"
   },
-  "hearts50Discount": "50 Tim (Giảm giá)",
+  "hearts50Discount": "50 Trái tim (Giảm giá)",
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
@@ -1362,19 +1362,19 @@
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },
-  "lunch": "Lunch",
+  "lunch": "Bữa trưa",
   "@lunch": {
     "description": "Localized string for lunch"
   },
-  "lunchtime": "Lunchtime",
+  "lunchtime": "Giờ ăn trưa",
   "@lunchtime": {
     "description": "Localized string for lunchtime"
   },
-  "mainErrorType": "Main Error Type",
+  "mainErrorType": "Loại lỗi chính",
   "@mainErrorType": {
     "description": "Localized string for mainErrorType"
   },
-  "makeFriends": "Make Friends",
+  "makeFriends": "Kết bạn",
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
@@ -1382,11 +1382,11 @@
   "@male": {
     "description": "Localized string for male"
   },
-  "manageBlockedAIs": "Manage Blocked AIs",
+  "manageBlockedAIs": "Quản lý AI bị chặn",
   "@manageBlockedAIs": {
     "description": "Localized string for manageBlockedAIs"
   },
-  "managePersonaImageCache": "Manage persona image cache",
+  "managePersonaImageCache": "Quản lý bộ nhớ hình ảnh persona",
   "@managePersonaImageCache": {
     "description": "Localized string for managePersonaImageCache"
   },
@@ -1398,7 +1398,7 @@
   "@marketingDescription": {
     "description": "Localized string for marketingDescription"
   },
-  "matchPersonaStep": "1. Match Personas: Swipe left or right to select your favorite AI personas.",
+  "matchPersonaStep": "1. Ghép Persona: Vuốt trái hoặc phải để chọn những persona AI yêu thích của bạn.",
   "@matchPersonaStep": {
     "description": "Localized string for matchPersonaStep"
   },
@@ -1406,11 +1406,11 @@
   "@matchedPersonas": {
     "description": "Localized string for matchedPersonas"
   },
-  "matchedSona": "Matched Sona",
+  "matchedSona": "Sona đã ghép",
   "@matchedSona": {
     "description": "Localized string for matchedSona"
   },
-  "matching": "Matching",
+  "matching": "Đang ghép",
   "@matching": {
     "description": "Localized string for matching"
   },
@@ -1426,7 +1426,7 @@
   "@meetAIPersonas": {
     "description": "Localized string for meetAIPersonas"
   },
-  "meetNewPersonas": "Meet New Personas",
+  "meetNewPersonas": "Gặp gỡ các Persona mới",
   "@meetNewPersonas": {
     "description": "Localized string for meetNewPersonas"
   },
@@ -1434,11 +1434,11 @@
   "@meetPersonas": {
     "description": "Localized string for meetPersonas"
   },
-  "memberBenefits": "Get 100+ messages and 10 hearts when you sign up!",
+  "memberBenefits": "Nhận 100+ tin nhắn và 10 trái tim khi bạn đăng ký!",
   "@memberBenefits": {
     "description": "Localized string for memberBenefits"
   },
-  "memoryAlbum": "Memory Album",
+  "memoryAlbum": "Album kỷ niệm",
   "@memoryAlbum": {
     "description": "Localized string for memoryAlbum"
   },
@@ -1454,11 +1454,11 @@
   "@messageDeleted": {
     "description": "Localized string for messageDeleted"
   },
-  "messageLimitReset": "Message limit will reset at midnight",
+  "messageLimitReset": "Giới hạn tin nhắn sẽ được đặt lại vào nửa đêm",
   "@messageLimitReset": {
     "description": "Localized string for messageLimitReset"
   },
-  "messageSendFailed": "Failed to send message. Please try again.",
+  "messageSendFailed": "Gửi tin nhắn không thành công. Vui lòng thử lại.",
   "@messageSendFailed": {
     "description": "Localized string for messageSendFailed"
   },
@@ -1480,11 +1480,11 @@
       }
     }
   },
-  "missingTranslation": "Missing Translation",
+  "missingTranslation": "Thiếu bản dịch",
   "@missingTranslation": {
     "description": "Localized string for missingTranslation"
   },
-  "monday": "Monday",
+  "monday": "Thứ Hai",
   "@monday": {
     "description": "Localized string for monday"
   },
@@ -1508,11 +1508,11 @@
   "@moreButton": {
     "description": "Localized string for moreButton"
   },
-  "morning": "Morning",
+  "morning": "Buổi sáng",
   "@morning": {
     "description": "Localized string for morning"
   },
-  "mostFrequentError": "Most Frequent Error",
+  "mostFrequentError": "Lỗi thường gặp nhất",
   "@mostFrequentError": {
     "description": "Localized string for mostFrequentError"
   },
@@ -1520,7 +1520,7 @@
   "@movies": {
     "description": "Localized string for movies"
   },
-  "multilingualChat": "Multilingual Chat",
+  "multilingualChat": "Trò chuyện đa ngôn ngữ",
   "@multilingualChat": {
     "description": "Localized string for multilingualChat"
   },
@@ -1532,7 +1532,7 @@
   "@myGenderSection": {
     "description": "Localized string for myGenderSection"
   },
-  "networkErrorOccurred": "A network error occurred.",
+  "networkErrorOccurred": "Đã xảy ra lỗi mạng.",
   "@networkErrorOccurred": {
     "description": "Localized string for networkErrorOccurred"
   },
@@ -1549,15 +1549,15 @@
       }
     }
   },
-  "newMessageNotification": "Notify me of new messages",
+  "newMessageNotification": "Thông báo cho tôi về tin nhắn mới",
   "@newMessageNotification": {
     "description": "Localized string for newMessageNotification"
   },
-  "newMessages": "New messages",
+  "newMessages": "Tin nhắn mới",
   "@newMessages": {
     "description": "Localized string for newMessages"
   },
-  "newYear": "New Year",
+  "newYear": "Năm mới",
   "@newYear": {
     "description": "Localized string for newYear"
   },
@@ -1565,7 +1565,7 @@
   "@next": {
     "description": "Localized string for next"
   },
-  "niceToMeetYou": "Nice to meet you!",
+  "niceToMeetYou": "Rất vui được gặp bạn!",
   "@niceToMeetYou": {
     "description": "Localized string for niceToMeetYou"
   },
@@ -1573,11 +1573,11 @@
   "@nickname": {
     "description": "Localized string for nickname"
   },
-  "nicknameAlreadyUsed": "This nickname is already in use",
+  "nicknameAlreadyUsed": "Biệt danh này đã được sử dụng",
   "@nicknameAlreadyUsed": {
     "description": "Localized string for nicknameAlreadyUsed"
   },
-  "nicknameHelperText": "3-10 characters",
+  "nicknameHelperText": "3-10 ký tự",
   "@nicknameHelperText": {
     "description": "Localized string for nicknameHelperText"
   },
@@ -1585,19 +1585,19 @@
   "@nicknameHint": {
     "description": "Localized string for nicknameHint"
   },
-  "nicknameInUse": "This nickname is already in use",
+  "nicknameInUse": "Biệt danh này đã được sử dụng",
   "@nicknameInUse": {
     "description": "Localized string for nicknameInUse"
   },
-  "nicknameLabel": "Nickname",
+  "nicknameLabel": "Biệt danh",
   "@nicknameLabel": {
     "description": "Localized string for nicknameLabel"
   },
-  "nicknameLengthError": "Nickname must be 3-10 characters",
+  "nicknameLengthError": "Biệt danh phải từ 3-10 ký tự",
   "@nicknameLengthError": {
     "description": "Localized string for nicknameLengthError"
   },
-  "nicknamePlaceholder": "Enter your nickname",
+  "nicknamePlaceholder": "Nhập biệt danh của bạn",
   "@nicknamePlaceholder": {
     "description": "Localized string for nicknamePlaceholder"
   },
@@ -1605,7 +1605,7 @@
   "@nicknameRequired": {
     "description": "Localized string for nicknameRequired"
   },
-  "night": "Night",
+  "night": "Đêm",
   "@night": {
     "description": "Localized string for night"
   },
@@ -1613,7 +1613,7 @@
   "@no": {
     "description": "Localized string for no"
   },
-  "noBlockedAIs": "No blocked AIs",
+  "noBlockedAIs": "Không có AI nào bị chặn",
   "@noBlockedAIs": {
     "description": "Localized string for noBlockedAIs"
   },
@@ -1621,23 +1621,23 @@
   "@noChatsYet": {
     "description": "Localized string for noChatsYet"
   },
-  "noConversationYet": "No conversation yet",
+  "noConversationYet": "Chưa có cuộc trò chuyện nào",
   "@noConversationYet": {
     "description": "Localized string for noConversationYet"
   },
-  "noErrorReports": "No error reports.",
+  "noErrorReports": "Không có báo cáo lỗi.",
   "@noErrorReports": {
     "description": "Localized string for noErrorReports"
   },
-  "noImageAvailable": "No image available",
+  "noImageAvailable": "Không có hình ảnh nào",
   "@noImageAvailable": {
     "description": "Localized string for noImageAvailable"
   },
-  "noMatchedPersonas": "No matched personas yet",
+  "noMatchedPersonas": "Chưa có nhân vật nào phù hợp",
   "@noMatchedPersonas": {
     "description": "Localized string for noMatchedPersonas"
   },
-  "noMatchedSonas": "No matched Sonas yet",
+  "noMatchedSonas": "Chưa có SONA nào phù hợp",
   "@noMatchedSonas": {
     "description": "Localized string for noMatchedSonas"
   },
@@ -1645,19 +1645,19 @@
   "@noPersonasAvailable": {
     "description": "Localized string for noPersonasAvailable"
   },
-  "noPersonasToSelect": "No personas available",
+  "noPersonasToSelect": "Không có nhân vật nào để chọn",
   "@noPersonasToSelect": {
     "description": "Localized string for noPersonasToSelect"
   },
-  "noQualityIssues": "No quality issues in the last hour ✅",
+  "noQualityIssues": "Không có vấn đề chất lượng trong giờ qua ✅",
   "@noQualityIssues": {
     "description": "Localized string for noQualityIssues"
   },
-  "noQualityLogs": "No quality logs yet.",
+  "noQualityLogs": "Chưa có nhật ký chất lượng nào.",
   "@noQualityLogs": {
     "description": "Localized string for noQualityLogs"
   },
-  "noTranslatedMessages": "No messages to translate",
+  "noTranslatedMessages": "Không có tin nhắn nào để dịch",
   "@noTranslatedMessages": {
     "description": "Localized string for noTranslatedMessages"
   },
@@ -1674,7 +1674,7 @@
       }
     }
   },
-  "notRegistered": "not registered",
+  "notRegistered": "chưa đăng ký",
   "@notRegistered": {
     "description": "Localized string for notRegistered"
   },
@@ -1686,11 +1686,11 @@
   "@notificationPermissionDesc": {
     "description": "Localized string for notificationPermissionDesc"
   },
-  "notificationPermissionRequired": "Notification permission required",
+  "notificationPermissionRequired": "Cần quyền thông báo",
   "@notificationPermissionRequired": {
     "description": "Localized string for notificationPermissionRequired"
   },
-  "notificationSettings": "Notification Settings",
+  "notificationSettings": "Cài đặt thông báo",
   "@notificationSettings": {
     "description": "Localized string for notificationSettings"
   },
@@ -1698,7 +1698,7 @@
   "@notifications": {
     "description": "Localized string for notifications"
   },
-  "occurrenceInfo": "Occurrence Info:",
+  "occurrenceInfo": "Thông tin sự kiện:",
   "@occurrenceInfo": {
     "description": "Localized string for occurrenceInfo"
   },
@@ -1726,7 +1726,7 @@
   "@originalPrice": {
     "description": "Localized string for originalPrice"
   },
-  "originalText": "Original",
+  "originalText": "Gốc",
   "@originalText": {
     "description": "Localized string for originalText"
   },
@@ -1734,7 +1734,7 @@
   "@other": {
     "description": "Localized string for other"
   },
-  "otherError": "Other Error",
+  "otherError": "Lỗi khác",
   "@otherError": {
     "description": "Localized string for otherError"
   },
@@ -1746,7 +1746,7 @@
   "@ownedHearts": {
     "description": "Localized string for ownedHearts"
   },
-  "parentsDay": "Parents' Day",
+  "parentsDay": "Ngày của Cha Mẹ",
   "@parentsDay": {
     "description": "Localized string for parentsDay"
   },
@@ -1754,7 +1754,7 @@
   "@password": {
     "description": "Localized string for password"
   },
-  "passwordConfirmation": "Enter password to confirm",
+  "passwordConfirmation": "Nhập mật khẩu để xác nhận",
   "@passwordConfirmation": {
     "description": "Localized string for passwordConfirmation"
   },
@@ -1782,7 +1782,7 @@
   "@passwordResetEmailSent": {
     "description": "Localized string for passwordResetEmailSent"
   },
-  "passwordText": "password",
+  "passwordText": "mật khẩu",
   "@passwordText": {
     "description": "Localized string for passwordText"
   },
@@ -1803,7 +1803,7 @@
       }
     }
   },
-  "permissionDeniedTryLater": "Permission denied. Please try again later.",
+  "permissionDeniedTryLater": "Quyền bị từ chối. Vui lòng thử lại sau.",
   "@permissionDeniedTryLater": {
     "description": "Localized string for permissionDeniedTryLater"
   },
@@ -1815,19 +1815,19 @@
   "@personaGenderSection": {
     "description": "Localized string for personaGenderSection"
   },
-  "personaQualityStats": "Persona Quality Statistics",
+  "personaQualityStats": "Thống kê chất lượng nhân vật",
   "@personaQualityStats": {
     "description": "Localized string for personaQualityStats"
   },
-  "personalInfoExposure": "Personal information exposure",
+  "personalInfoExposure": "Tiết lộ thông tin cá nhân",
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "Personality",
+  "personality": "Tính cách",
   "@personality": {
     "description": "Localized string for personality"
   },
-  "pets": "Pets",
+  "pets": "Thú cưng",
   "@pets": {
     "description": "Localized string for pets"
   },
@@ -1839,7 +1839,7 @@
   "@photography": {
     "description": "Localized string for photography"
   },
-  "picnic": "Picnic",
+  "picnic": "Dã ngoại",
   "@picnic": {
     "description": "Localized string for picnic"
   },
@@ -1847,27 +1847,27 @@
   "@preferenceSettings": {
     "description": "Localized string for preferenceSettings"
   },
-  "preferredLanguage": "Preferred Language",
+  "preferredLanguage": "Ngôn ngữ ưa thích",
   "@preferredLanguage": {
     "description": "Localized string for preferredLanguage"
   },
-  "preparingForSleep": "Preparing for sleep",
+  "preparingForSleep": "Chuẩn bị đi ngủ",
   "@preparingForSleep": {
     "description": "Localized string for preparingForSleep"
   },
-  "preparingNewMeeting": "Preparing new meeting",
+  "preparingNewMeeting": "Chuẩn bị cuộc họp mới",
   "@preparingNewMeeting": {
     "description": "Localized string for preparingNewMeeting"
   },
-  "preparingPersonaImages": "Preparing persona images",
+  "preparingPersonaImages": "Chuẩn bị hình ảnh nhân vật",
   "@preparingPersonaImages": {
     "description": "Localized string for preparingPersonaImages"
   },
-  "preparingPersonas": "Preparing personas",
+  "preparingPersonas": "Đang chuẩn bị personas",
   "@preparingPersonas": {
     "description": "Localized string for preparingPersonas"
   },
-  "preview": "Preview",
+  "preview": "Xem trước",
   "@preview": {
     "description": "Localized string for preview"
   },
@@ -1883,11 +1883,11 @@
   "@privacyPolicy": {
     "description": "Localized string for privacyPolicy"
   },
-  "privacyPolicyAgreement": "Please agree to the privacy policy",
+  "privacyPolicyAgreement": "Vui lòng đồng ý với chính sách bảo mật",
   "@privacyPolicyAgreement": {
     "description": "Localized string for privacyPolicyAgreement"
   },
-  "privacySection1Content": "We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.",
+  "privacySection1Content": "Chúng tôi cam kết bảo vệ quyền riêng tư của bạn. Chính sách Bảo mật này giải thích cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn khi bạn sử dụng dịch vụ của chúng tôi.",
   "@privacySection1Content": {
     "description": "Localized string for privacySection1Content"
   },
@@ -1895,15 +1895,15 @@
   "@privacySection1Title": {
     "description": "Localized string for privacySection1Title"
   },
-  "privacySection2Content": "We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.",
+  "privacySection2Content": "Chúng tôi thu thập thông tin bạn cung cấp trực tiếp cho chúng tôi, chẳng hạn như khi bạn tạo tài khoản, cập nhật hồ sơ hoặc sử dụng dịch vụ của chúng tôi.",
   "@privacySection2Content": {
     "description": "Localized string for privacySection2Content"
   },
-  "privacySection2Title": "Information We Collect",
+  "privacySection2Title": "Thông tin chúng tôi thu thập",
   "@privacySection2Title": {
     "description": "Localized string for privacySection2Title"
   },
-  "privacySection3Content": "We use the information we collect to provide, maintain, and improve our services, and to communicate with you.",
+  "privacySection3Content": "Chúng tôi sử dụng thông tin mà chúng tôi thu thập để cung cấp, duy trì và cải thiện dịch vụ của chúng tôi, cũng như để giao tiếp với bạn.",
   "@privacySection3Content": {
     "description": "Localized string for privacySection3Content"
   },
@@ -1911,7 +1911,7 @@
   "@privacySection3Title": {
     "description": "Localized string for privacySection3Title"
   },
-  "privacySection4Content": "We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.",
+  "privacySection4Content": "Chúng tôi không bán, trao đổi hoặc chuyển nhượng thông tin cá nhân của bạn cho bên thứ ba mà không có sự đồng ý của bạn.",
   "@privacySection4Content": {
     "description": "Localized string for privacySection4Content"
   },
@@ -1919,7 +1919,7 @@
   "@privacySection4Title": {
     "description": "Localized string for privacySection4Title"
   },
-  "privacySection5Content": "We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.",
+  "privacySection5Content": "Chúng tôi thực hiện các biện pháp bảo mật thích hợp để bảo vệ thông tin cá nhân của bạn khỏi việc truy cập, thay đổi, tiết lộ hoặc phá hủy trái phép.",
   "@privacySection5Content": {
     "description": "Localized string for privacySection5Content"
   },
@@ -1927,7 +1927,7 @@
   "@privacySection5Title": {
     "description": "Localized string for privacySection5Title"
   },
-  "privacySection6Content": "We retain personal information for as long as necessary to provide our services and comply with legal obligations.",
+  "privacySection6Content": "Chúng tôi giữ thông tin cá nhân trong thời gian cần thiết để cung cấp dịch vụ của chúng tôi và tuân thủ các nghĩa vụ pháp lý.",
   "@privacySection6Content": {
     "description": "Localized string for privacySection6Content"
   },
@@ -1935,19 +1935,19 @@
   "@privacySection6Title": {
     "description": "Localized string for privacySection6Title"
   },
-  "privacySection7Content": "You have the right to access, update, or delete your personal information at any time through your account settings.",
+  "privacySection7Content": "Bạn có quyền truy cập, cập nhật hoặc xóa thông tin cá nhân của mình bất cứ lúc nào thông qua cài đặt tài khoản của bạn.",
   "@privacySection7Content": {
     "description": "Localized string for privacySection7Content"
   },
-  "privacySection7Title": "Your Rights",
+  "privacySection7Title": "Quyền của bạn",
   "@privacySection7Title": {
     "description": "Localized string for privacySection7Title"
   },
-  "privacySection8Content": "If you have any questions about this Privacy Policy, please contact us at support@sona.com.",
+  "privacySection8Content": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi tại support@sona.com.",
   "@privacySection8Content": {
     "description": "Localized string for privacySection8Content"
   },
-  "privacySection8Title": "Contact Us",
+  "privacySection8Title": "Liên hệ với chúng tôi",
   "@privacySection8Title": {
     "description": "Localized string for privacySection8Title"
   },
@@ -1959,15 +1959,15 @@
   "@privacySettingsInfo": {
     "description": "Localized string for privacySettingsInfo"
   },
-  "privacySettingsScreen": "Privacy Settings",
+  "privacySettingsScreen": "Cài đặt quyền riêng tư",
   "@privacySettingsScreen": {
     "description": "Localized string for privacySettingsScreen"
   },
-  "problemMessage": "Problem",
+  "problemMessage": "Vấn đề",
   "@problemMessage": {
     "description": "Localized string for problemMessage"
   },
-  "problemOccurred": "Problem Occurred",
+  "problemOccurred": "Đã xảy ra vấn đề",
   "@problemOccurred": {
     "description": "Localized string for problemOccurred"
   },
@@ -1991,7 +1991,7 @@
   "@profileInfoDescription": {
     "description": "Localized string for profileInfoDescription"
   },
-  "profileNav": "Profile",
+  "profileNav": "Hồ sơ",
   "@profileNav": {
     "description": "Localized string for profileNav"
   },
@@ -1999,15 +1999,15 @@
   "@profilePhoto": {
     "description": "Localized string for profilePhoto"
   },
-  "profilePhotoAndInfo": "Please enter profile photo and basic information",
+  "profilePhotoAndInfo": "Vui lòng nhập ảnh hồ sơ và thông tin cơ bản",
   "@profilePhotoAndInfo": {
     "description": "Localized string for profilePhotoAndInfo"
   },
-  "profilePhotoUpdateFailed": "Failed to update profile photo",
+  "profilePhotoUpdateFailed": "Cập nhật ảnh hồ sơ không thành công",
   "@profilePhotoUpdateFailed": {
     "description": "Localized string for profilePhotoUpdateFailed"
   },
-  "profilePhotoUpdated": "Profile photo updated",
+  "profilePhotoUpdated": "Ảnh đại diện đã được cập nhật",
   "@profilePhotoUpdated": {
     "description": "Localized string for profilePhotoUpdated"
   },
@@ -2019,15 +2019,15 @@
   "@profileSetup": {
     "description": "Localized string for profileSetup"
   },
-  "profileUpdateFailed": "Failed to update profile",
+  "profileUpdateFailed": "Cập nhật hồ sơ không thành công",
   "@profileUpdateFailed": {
     "description": "Localized string for profileUpdateFailed"
   },
-  "profileUpdated": "Profile updated successfully",
+  "profileUpdated": "Hồ sơ đã được cập nhật thành công",
   "@profileUpdated": {
     "description": "Localized string for profileUpdated"
   },
-  "purchaseAndRefundPolicy": "Purchase & Refund Policy",
+  "purchaseAndRefundPolicy": "Chính sách Mua hàng & Hoàn tiền",
   "@purchaseAndRefundPolicy": {
     "description": "Localized string for purchaseAndRefundPolicy"
   },
@@ -2069,7 +2069,7 @@
       }
     }
   },
-  "purchaseFailed": "Purchase failed",
+  "purchaseFailed": "Mua hàng không thành công",
   "@purchaseFailed": {
     "description": "Localized string for purchaseFailed"
   },
@@ -2081,59 +2081,59 @@
   "@purchaseMoreHearts": {
     "description": "Localized string for purchaseMoreHearts"
   },
-  "purchasePending": "Purchase pending...",
+  "purchasePending": "Đang xử lý mua hàng...",
   "@purchasePending": {
     "description": "Localized string for purchasePending"
   },
-  "purchasePolicy": "Purchase Policy",
+  "purchasePolicy": "Chính sách Mua hàng",
   "@purchasePolicy": {
     "description": "Localized string for purchasePolicy"
   },
-  "purchaseSection1Content": "We accept various payment methods including credit cards and digital wallets.",
+  "purchaseSection1Content": "Chúng tôi chấp nhận nhiều phương thức thanh toán bao gồm thẻ tín dụng và ví điện tử.",
   "@purchaseSection1Content": {
     "description": "Localized string for purchaseSection1Content"
   },
-  "purchaseSection1Title": "Payment Methods",
+  "purchaseSection1Title": "Phương thức Thanh toán",
   "@purchaseSection1Title": {
     "description": "Localized string for purchaseSection1Title"
   },
-  "purchaseSection2Content": "Refunds are available within 14 days of purchase if you have not used the purchased items.",
+  "purchaseSection2Content": "Hoàn tiền có sẵn trong vòng 14 ngày kể từ ngày mua nếu bạn chưa sử dụng các mặt hàng đã mua.",
   "@purchaseSection2Content": {
     "description": "Localized string for purchaseSection2Content"
   },
-  "purchaseSection2Title": "Refund Policy",
+  "purchaseSection2Title": "Chính sách Hoàn tiền",
   "@purchaseSection2Title": {
     "description": "Localized string for purchaseSection2Title"
   },
-  "purchaseSection3Content": "You can cancel your subscription at any time through your account settings.",
+  "purchaseSection3Content": "Bạn có thể hủy đăng ký bất cứ lúc nào thông qua cài đặt tài khoản của bạn.",
   "@purchaseSection3Content": {
     "description": "Localized string for purchaseSection3Content"
   },
-  "purchaseSection3Title": "Cancellation",
+  "purchaseSection3Title": "Hủy bỏ",
   "@purchaseSection3Title": {
     "description": "Localized string for purchaseSection3Title"
   },
-  "purchaseSection4Content": "By making a purchase, you agree to our terms of use and service agreement.",
+  "purchaseSection4Content": "Bằng việc thực hiện giao dịch mua, bạn đồng ý với các điều khoản sử dụng và thỏa thuận dịch vụ của chúng tôi.",
   "@purchaseSection4Content": {
     "description": "Localized string for purchaseSection4Content"
   },
-  "purchaseSection4Title": "Terms of Use",
+  "purchaseSection4Title": "Điều khoản Sử dụng",
   "@purchaseSection4Title": {
     "description": "Localized string for purchaseSection4Title"
   },
-  "purchaseSection5Content": "For purchase-related issues, please contact our support team.",
+  "purchaseSection5Content": "Đối với các vấn đề liên quan đến mua hàng, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi.",
   "@purchaseSection5Content": {
     "description": "Localized string for purchaseSection5Content"
   },
-  "purchaseSection5Title": "Contact Support",
+  "purchaseSection5Title": "Liên hệ Hỗ trợ",
   "@purchaseSection5Title": {
     "description": "Localized string for purchaseSection5Title"
   },
-  "purchaseSection6Content": "All purchases are subject to our standard terms and conditions.",
+  "purchaseSection6Content": "Tất cả các giao dịch mua đều phải tuân theo các điều khoản và điều kiện tiêu chuẩn của chúng tôi.",
   "@purchaseSection6Content": {
     "description": "Localized string for purchaseSection6Content"
   },
-  "purchaseSection6Title": "6. Inquiries",
+  "purchaseSection6Title": "6. Thắc mắc",
   "@purchaseSection6Title": {
     "description": "Localized string for purchaseSection6Title"
   },
@@ -2141,27 +2141,27 @@
   "@pushNotifications": {
     "description": "Localized string for pushNotifications"
   },
-  "reading": "Reading",
+  "reading": "Đọc",
   "@reading": {
     "description": "Localized string for reading"
   },
-  "realtimeQualityLog": "Real-time Quality Log",
+  "realtimeQualityLog": "Nhật ký chất lượng thời gian thực",
   "@realtimeQualityLog": {
     "description": "Localized string for realtimeQualityLog"
   },
-  "recentConversation": "Recent Conversation:",
+  "recentConversation": "Cuộc trò chuyện gần đây:",
   "@recentConversation": {
     "description": "Localized string for recentConversation"
   },
-  "recentLoginRequired": "Please login again for security",
+  "recentLoginRequired": "Vui lòng đăng nhập lại để đảm bảo an toàn",
   "@recentLoginRequired": {
     "description": "Localized string for recentLoginRequired"
   },
-  "referrerEmail": "Referrer Email",
+  "referrerEmail": "Email người giới thiệu",
   "@referrerEmail": {
     "description": "Localized string for referrerEmail"
   },
-  "referrerEmailHelper": "Optional: Email of who referred you",
+  "referrerEmailHelper": "Tùy chọn: Email của người đã giới thiệu bạn",
   "@referrerEmailHelper": {
     "description": "Localized string for referrerEmailHelper"
   },
@@ -2182,11 +2182,11 @@
       }
     }
   },
-  "refreshFailed": "Refresh failed",
+  "refreshFailed": "Làm mới không thành công",
   "@refreshFailed": {
     "description": "Localized string for refreshFailed"
   },
-  "refreshingChatList": "Refreshing chat list...",
+  "refreshingChatList": "Đang làm mới danh sách trò chuyện...",
   "@refreshingChatList": {
     "description": "Localized string for refreshingChatList"
   },
@@ -2210,7 +2210,7 @@
   "@reportAITitle": {
     "description": "Localized string for reportAITitle"
   },
-  "reportAndBlock": "Report & Block",
+  "reportAndBlock": "Báo cáo & Chặn",
   "@reportAndBlock": {
     "description": "Localized string for reportAndBlock"
   },
@@ -2218,7 +2218,7 @@
   "@reportAndBlockDescription": {
     "description": "Localized string for reportAndBlockDescription"
   },
-  "reportChatError": "Report Chat Error",
+  "reportChatError": "Báo cáo lỗi trò chuyện",
   "@reportChatError": {
     "description": "Localized string for reportChatError"
   },
@@ -2231,7 +2231,7 @@
       }
     }
   },
-  "reportFailed": "Report failed",
+  "reportFailed": "Báo cáo không thành công",
   "@reportFailed": {
     "description": "Localized string for reportFailed"
   },
@@ -2243,7 +2243,7 @@
   "@reportSubmittedSuccess": {
     "description": "Localized string for reportSubmittedSuccess"
   },
-  "requestLimit": "Request Limit",
+  "requestLimit": "Giới hạn yêu cầu",
   "@requestLimit": {
     "description": "Localized string for requestLimit"
   },
@@ -2251,11 +2251,11 @@
   "@required": {
     "description": "Localized string for required"
   },
-  "requiredTermsAgreement": "Please agree to the terms",
+  "requiredTermsAgreement": "Vui lòng đồng ý với các điều khoản",
   "@requiredTermsAgreement": {
     "description": "Localized string for requiredTermsAgreement"
   },
-  "restartConversation": "Restart Conversation",
+  "restartConversation": "Khởi động lại cuộc trò chuyện",
   "@restartConversation": {
     "description": "Localized string for restartConversation"
   },
@@ -2289,7 +2289,7 @@
   "@sad": {
     "description": "Localized string for sad"
   },
-  "saturday": "Saturday",
+  "saturday": "Thứ Bảy",
   "@saturday": {
     "description": "Localized string for saturday"
   },
@@ -2309,11 +2309,11 @@
   "@searchResults": {
     "description": "Localized string for searchResults"
   },
-  "selectEmotion": "Select Emotion",
+  "selectEmotion": "Chọn cảm xúc",
   "@selectEmotion": {
     "description": "Localized string for selectEmotion"
   },
-  "selectErrorType": "Select error type",
+  "selectErrorType": "Chọn loại lỗi",
   "@selectErrorType": {
     "description": "Localized string for selectErrorType"
   },
@@ -2329,15 +2329,15 @@
   "@selectInterests": {
     "description": "Localized string for selectInterests"
   },
-  "selectLanguage": "Select Language",
+  "selectLanguage": "Chọn ngôn ngữ",
   "@selectLanguage": {
     "description": "Localized string for selectLanguage"
   },
-  "selectPersona": "Select a persona",
+  "selectPersona": "Chọn một nhân vật",
   "@selectPersona": {
     "description": "Localized string for selectPersona"
   },
-  "selectPersonaPlease": "Please select a persona.",
+  "selectPersonaPlease": "Vui lòng chọn một nhân vật.",
   "@selectPersonaPlease": {
     "description": "Localized string for selectPersonaPlease"
   },
@@ -2345,11 +2345,11 @@
   "@selectPreferredMbti": {
     "description": "Localized string for selectPreferredMbti"
   },
-  "selectProblematicMessage": "Select the problematic message (optional)",
+  "selectProblematicMessage": "Chọn tin nhắn có vấn đề (tùy chọn)",
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
-  "selectReportReason": "Select report reason",
+  "selectReportReason": "Chọn lý do báo cáo",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
   },
@@ -2361,7 +2361,7 @@
   "@selectTranslationError": {
     "description": "Localized string for selectTranslationError"
   },
-  "selectUsagePurpose": "Please select your purpose for using SONA",
+  "selectUsagePurpose": "Vui lòng chọn mục đích sử dụng SONA",
   "@selectUsagePurpose": {
     "description": "Localized string for selectUsagePurpose"
   },
@@ -2377,15 +2377,15 @@
   "@send": {
     "description": "Localized string for send"
   },
-  "sendChatError": "Send Chat Error",
+  "sendChatError": "Lỗi gửi chat",
   "@sendChatError": {
     "description": "Localized string for sendChatError"
   },
-  "sendFirstMessage": "Send your first message",
+  "sendFirstMessage": "Gửi tin nhắn đầu tiên của bạn",
   "@sendFirstMessage": {
     "description": "Localized string for sendFirstMessage"
   },
-  "sendReport": "Send Report",
+  "sendReport": "Gửi báo cáo",
   "@sendReport": {
     "description": "Localized string for sendReport"
   },
@@ -2397,11 +2397,11 @@
   "@seoul": {
     "description": "Localized string for seoul"
   },
-  "serverErrorDashboard": "Server Error",
+  "serverErrorDashboard": "Lỗi máy chủ",
   "@serverErrorDashboard": {
     "description": "Localized string for serverErrorDashboard"
   },
-  "serviceTermsAgreement": "Please agree to the terms of service",
+  "serviceTermsAgreement": "Vui lòng đồng ý với các điều khoản dịch vụ",
   "@serviceTermsAgreement": {
     "description": "Localized string for serviceTermsAgreement"
   },
@@ -2409,7 +2409,7 @@
   "@sessionExpired": {
     "description": "Localized string for sessionExpired"
   },
-  "setAppInterfaceLanguage": "Set app interface language",
+  "setAppInterfaceLanguage": "Đặt ngôn ngữ giao diện ứng dụng",
   "@setAppInterfaceLanguage": {
     "description": "Localized string for setAppInterfaceLanguage"
   },
@@ -2433,11 +2433,11 @@
   "@showAllGendersOption": {
     "description": "Localized string for showAllGendersOption"
   },
-  "showOppositeGenderOnly": "If unchecked, only opposite gender personas will be shown",
+  "showOppositeGenderOnly": "Nếu không chọn, chỉ hiển thị các nhân vật giới tính đối diện",
   "@showOppositeGenderOnly": {
     "description": "Localized string for showOppositeGenderOnly"
   },
-  "showOriginalText": "Show Original",
+  "showOriginalText": "Hiển thị gốc",
   "@showOriginalText": {
     "description": "Localized string for showOriginalText"
   },
@@ -2473,15 +2473,15 @@
   "@sonaFriend": {
     "description": "Localized string for sonaFriend"
   },
-  "sonaPrivacyPolicy": "SONA Privacy Policy",
+  "sonaPrivacyPolicy": "Chính sách bảo mật của SONA",
   "@sonaPrivacyPolicy": {
     "description": "Localized string for sonaPrivacyPolicy"
   },
-  "sonaPurchasePolicy": "SONA Purchase Policy",
+  "sonaPurchasePolicy": "Chính sách mua hàng của SONA",
   "@sonaPurchasePolicy": {
     "description": "Localized string for sonaPurchasePolicy"
   },
-  "sonaTermsOfService": "SONA Terms of Service",
+  "sonaTermsOfService": "Điều khoản dịch vụ của SONA",
   "@sonaTermsOfService": {
     "description": "Localized string for sonaTermsOfService"
   },
@@ -2489,7 +2489,7 @@
   "@sonaUsagePurpose": {
     "description": "Localized string for sonaUsagePurpose"
   },
-  "sorryNotHelpful": "Sorry this wasn't helpful",
+  "sorryNotHelpful": "Xin lỗi, điều này không hữu ích",
   "@sorryNotHelpful": {
     "description": "Localized string for sorryNotHelpful"
   },
@@ -2505,7 +2505,7 @@
   "@spamAdvertising": {
     "description": "Localized string for spamAdvertising"
   },
-  "spanish": "Spanish",
+  "spanish": "Tiếng Tây Ban Nha",
   "@spanish": {
     "description": "Localized string for spanish"
   },
@@ -2517,7 +2517,7 @@
   "@sports": {
     "description": "Localized string for sports"
   },
-  "spring": "Spring",
+  "spring": "Mùa xuân",
   "@spring": {
     "description": "Localized string for spring"
   },
@@ -2525,19 +2525,19 @@
   "@startChat": {
     "description": "Localized string for startChat"
   },
-  "startChatButton": "Start Chat",
+  "startChatButton": "Bắt đầu chat",
   "@startChatButton": {
     "description": "Localized string for startChatButton"
   },
-  "startConversation": "Start a conversation",
+  "startConversation": "Bắt đầu cuộc trò chuyện",
   "@startConversation": {
     "description": "Localized string for startConversation"
   },
-  "startConversationLikeAFriend": "Start a conversation with Sona like a friend",
+  "startConversationLikeAFriend": "Bắt đầu cuộc trò chuyện với SONA như một người bạn",
   "@startConversationLikeAFriend": {
     "description": "Localized string for startConversationLikeAFriend"
   },
-  "startConversationStep": "2. Start Conversation: Chat freely with matched personas.",
+  "startConversationStep": "2. Bắt đầu cuộc trò chuyện: Trò chuyện tự do với các nhân vật đã ghép nối.",
   "@startConversationStep": {
     "description": "Localized string for startConversationStep"
   },
@@ -2553,11 +2553,11 @@
   "@startWithGoogle": {
     "description": "Localized string for startWithGoogle"
   },
-  "startingApp": "Starting app",
+  "startingApp": "Đang khởi động ứng dụng",
   "@startingApp": {
     "description": "Localized string for startingApp"
   },
-  "storageManagement": "Storage Management",
+  "storageManagement": "Quản lý bộ nhớ",
   "@storageManagement": {
     "description": "Localized string for storageManagement"
   },
@@ -2565,7 +2565,7 @@
   "@store": {
     "description": "Localized string for store"
   },
-  "storeConnectionError": "Could not connect to store",
+  "storeConnectionError": "Không thể kết nối đến cửa hàng",
   "@storeConnectionError": {
     "description": "Localized string for storeConnectionError"
   },
@@ -2573,7 +2573,7 @@
   "@storeLoginRequiredMessage": {
     "description": "Localized string for storeLoginRequiredMessage"
   },
-  "storeNotAvailable": "Store is not available",
+  "storeNotAvailable": "Cửa hàng không khả dụng",
   "@storeNotAvailable": {
     "description": "Localized string for storeNotAvailable"
   },
@@ -2585,7 +2585,7 @@
   "@stressed": {
     "description": "Localized string for stressed"
   },
-  "submitReport": "Submit Report",
+  "submitReport": "Gửi báo cáo",
   "@submitReport": {
     "description": "Localized string for submitReport"
   },
@@ -2593,23 +2593,23 @@
   "@subscriptionStatus": {
     "description": "Localized string for subscriptionStatus"
   },
-  "subtleVibrationOnTouch": "Subtle vibration on touch",
+  "subtleVibrationOnTouch": "Rung nhẹ khi chạm",
   "@subtleVibrationOnTouch": {
     "description": "Localized string for subtleVibrationOnTouch"
   },
-  "summer": "Summer",
+  "summer": "Mùa hè",
   "@summer": {
     "description": "Localized string for summer"
   },
-  "sunday": "Sunday",
+  "sunday": "Chủ nhật",
   "@sunday": {
     "description": "Localized string for sunday"
   },
-  "swipeAnyDirection": "Swipe in any direction",
+  "swipeAnyDirection": "Vuốt theo bất kỳ hướng nào",
   "@swipeAnyDirection": {
     "description": "Localized string for swipeAnyDirection"
   },
-  "swipeDownToClose": "Swipe down to close",
+  "swipeDownToClose": "Vuốt xuống để đóng",
   "@swipeDownToClose": {
     "description": "Localized string for swipeDownToClose"
   },
@@ -2625,19 +2625,19 @@
   "@tapBottomForDetails": {
     "description": "Localized string for tapBottomForDetails"
   },
-  "tapForDetails": "Tap bottom area for details",
+  "tapForDetails": "Chạm vào khu vực dưới để xem chi tiết",
   "@tapForDetails": {
     "description": "Localized string for tapForDetails"
   },
-  "tapToSwipePhotos": "Tap to swipe photos",
+  "tapToSwipePhotos": "Chạm để vuốt ảnh",
   "@tapToSwipePhotos": {
     "description": "Localized string for tapToSwipePhotos"
   },
-  "teachersDay": "Teachers' Day",
+  "teachersDay": "Ngày Nhà giáo",
   "@teachersDay": {
     "description": "Localized string for teachersDay"
   },
-  "technicalError": "Technical Error",
+  "technicalError": "Lỗi kỹ thuật",
   "@technicalError": {
     "description": "Localized string for technicalError"
   },
@@ -2661,27 +2661,27 @@
   "@termsOfService": {
     "description": "Localized string for termsOfService"
   },
-  "termsSection10Content": "We reserve the right to modify these terms at any time with notice to users.",
+  "termsSection10Content": "Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào với thông báo cho người dùng.",
   "@termsSection10Content": {
     "description": "Localized string for termsSection10Content"
   },
-  "termsSection10Title": "Article 10 (Dispute Resolution)",
+  "termsSection10Title": "Điều 10 (Giải quyết tranh chấp)",
   "@termsSection10Title": {
     "description": "Localized string for termsSection10Title"
   },
-  "termsSection11Content": "These terms shall be governed by the laws of the jurisdiction in which we operate.",
+  "termsSection11Content": "Các điều khoản này sẽ được điều chỉnh bởi luật pháp của khu vực mà chúng tôi hoạt động.",
   "@termsSection11Content": {
     "description": "Localized string for termsSection11Content"
   },
-  "termsSection11Title": "Article 11 (AI Service Special Provisions)",
+  "termsSection11Title": "Điều 11 (Các quy định đặc biệt về dịch vụ AI)",
   "@termsSection11Title": {
     "description": "Localized string for termsSection11Title"
   },
-  "termsSection12Content": "If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.",
+  "termsSection12Content": "Nếu bất kỳ điều khoản nào trong các điều khoản này bị coi là không thể thi hành, các điều khoản còn lại sẽ tiếp tục có hiệu lực đầy đủ.",
   "@termsSection12Content": {
     "description": "Localized string for termsSection12Content"
   },
-  "termsSection12Title": "Article 12 (Data Collection and Usage)",
+  "termsSection12Title": "Điều 12 (Thu thập và Sử dụng Dữ liệu)",
   "@termsSection12Title": {
     "description": "Localized string for termsSection12Title"
   },
@@ -2689,47 +2689,47 @@
   "@termsSection1Content": {
     "description": "Localized string for termsSection1Content"
   },
-  "termsSection1Title": "Article 1 (Purpose)",
+  "termsSection1Title": "Điều 1 (Mục đích)",
   "@termsSection1Title": {
     "description": "Localized string for termsSection1Title"
   },
-  "termsSection2Content": "By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.",
+  "termsSection2Content": "Bằng cách sử dụng dịch vụ của chúng tôi, bạn đồng ý tuân thủ các Điều khoản Dịch vụ này và Chính sách Bảo mật của chúng tôi.",
   "@termsSection2Content": {
     "description": "Localized string for termsSection2Content"
   },
-  "termsSection2Title": "Article 2 (Definitions)",
+  "termsSection2Title": "Điều 2 (Định nghĩa)",
   "@termsSection2Title": {
     "description": "Localized string for termsSection2Title"
   },
-  "termsSection3Content": "You must be at least 13 years old to use our service.",
+  "termsSection3Content": "Bạn phải ít nhất 13 tuổi để sử dụng dịch vụ của chúng tôi.",
   "@termsSection3Content": {
     "description": "Localized string for termsSection3Content"
   },
-  "termsSection3Title": "Article 3 (Effect and Modification of Terms)",
+  "termsSection3Title": "Điều 3 (Hiệu lực và Sửa đổi Điều khoản)",
   "@termsSection3Title": {
     "description": "Localized string for termsSection3Title"
   },
-  "termsSection4Content": "You are responsible for maintaining the confidentiality of your account and password.",
+  "termsSection4Content": "Bạn có trách nhiệm bảo mật thông tin tài khoản và mật khẩu của mình.",
   "@termsSection4Content": {
     "description": "Localized string for termsSection4Content"
   },
-  "termsSection4Title": "Article 4 (Provision of Service)",
+  "termsSection4Title": "Điều 4 (Cung cấp Dịch vụ)",
   "@termsSection4Title": {
     "description": "Localized string for termsSection4Title"
   },
-  "termsSection5Content": "You agree not to use our service for any illegal or unauthorized purpose.",
+  "termsSection5Content": "Bạn đồng ý không sử dụng dịch vụ của chúng tôi cho bất kỳ mục đích bất hợp pháp hoặc không được phép.",
   "@termsSection5Content": {
     "description": "Localized string for termsSection5Content"
   },
-  "termsSection5Title": "Article 5 (Membership Registration)",
+  "termsSection5Title": "Điều 5 (Đăng ký Thành viên)",
   "@termsSection5Title": {
     "description": "Localized string for termsSection5Title"
   },
-  "termsSection6Content": "We reserve the right to terminate or suspend your account for violation of these terms.",
+  "termsSection6Content": "Chúng tôi có quyền chấm dứt hoặc tạm ngừng tài khoản của bạn nếu vi phạm các điều khoản này.",
   "@termsSection6Content": {
     "description": "Localized string for termsSection6Content"
   },
-  "termsSection6Title": "Article 6 (User Obligations)",
+  "termsSection6Title": "Điều 6 (Nghĩa vụ của Người dùng)",
   "@termsSection6Title": {
     "description": "Localized string for termsSection6Title"
   },
@@ -2737,31 +2737,31 @@
   "@termsSection7Content": {
     "description": "Localized string for termsSection7Content"
   },
-  "termsSection7Title": "Article 7 (Service Usage Restrictions)",
+  "termsSection7Title": "Điều 7 (Hạn chế Sử dụng Dịch vụ)",
   "@termsSection7Title": {
     "description": "Localized string for termsSection7Title"
   },
-  "termsSection8Content": "We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.",
+  "termsSection8Content": "Chúng tôi không chịu trách nhiệm về bất kỳ thiệt hại gián tiếp, ngẫu nhiên hoặc hậu quả nào phát sinh từ việc bạn sử dụng dịch vụ của chúng tôi.",
   "@termsSection8Content": {
     "description": "Localized string for termsSection8Content"
   },
-  "termsSection8Title": "Article 8 (Service Interruption)",
+  "termsSection8Title": "Điều 8 (Gián đoạn Dịch vụ)",
   "@termsSection8Title": {
     "description": "Localized string for termsSection8Title"
   },
-  "termsSection9Content": "All content and materials available on our service are protected by intellectual property rights.",
+  "termsSection9Content": "Tất cả nội dung và tài liệu có sẵn trên dịch vụ của chúng tôi đều được bảo vệ bởi quyền sở hữu trí tuệ.",
   "@termsSection9Content": {
     "description": "Localized string for termsSection9Content"
   },
-  "termsSection9Title": "Article 9 (Disclaimer)",
+  "termsSection9Title": "Điều 9 (Tuyên bố từ chối trách nhiệm)",
   "@termsSection9Title": {
     "description": "Localized string for termsSection9Title"
   },
-  "termsSupplementary": "Supplementary Terms",
+  "termsSupplementary": "Điều khoản bổ sung",
   "@termsSupplementary": {
     "description": "Localized string for termsSupplementary"
   },
-  "thai": "Thai",
+  "thai": "Thái",
   "@thai": {
     "description": "Localized string for thai"
   },
@@ -2781,11 +2781,11 @@
   "@themeSettings": {
     "description": "Localized string for themeSettings"
   },
-  "thursday": "Thursday",
+  "thursday": "Thứ Năm",
   "@thursday": {
     "description": "Localized string for thursday"
   },
-  "timeout": "Timeout",
+  "timeout": "Thời gian chờ",
   "@timeout": {
     "description": "Localized string for timeout"
   },
@@ -2801,19 +2801,19 @@
   "@todayChats": {
     "description": "Localized string for todayChats"
   },
-  "todayText": "Today",
+  "todayText": "Hôm nay",
   "@todayText": {
     "description": "Localized string for todayText"
   },
-  "tomorrowText": "Tomorrow",
+  "tomorrowText": "Ngày mai",
   "@tomorrowText": {
     "description": "Localized string for tomorrowText"
   },
-  "totalConsultSessions": "Total Consultation Sessions",
+  "totalConsultSessions": "Tổng số buổi tư vấn",
   "@totalConsultSessions": {
     "description": "Localized string for totalConsultSessions"
   },
-  "totalErrorCount": "Total Error Count",
+  "totalErrorCount": "Tổng số lỗi",
   "@totalErrorCount": {
     "description": "Localized string for totalErrorCount"
   },
@@ -2821,23 +2821,23 @@
   "@totalLikes": {
     "description": "Localized string for totalLikes"
   },
-  "totalOccurrences": "Total {count} occurrences",
+  "totalOccurrences": "Tổng cộng {count} lần xảy ra",
   "@totalOccurrences": {
     "description": "Localized string for totalOccurrences"
   },
-  "totalResponses": "Total Responses",
+  "totalResponses": "Tổng số phản hồi",
   "@totalResponses": {
     "description": "Localized string for totalResponses"
   },
-  "translatedFrom": "Translated",
+  "translatedFrom": "Đã dịch từ",
   "@translatedFrom": {
     "description": "Localized string for translatedFrom"
   },
-  "translatedText": "Translation",
+  "translatedText": "Bản dịch",
   "@translatedText": {
     "description": "Localized string for translatedText"
   },
-  "translationError": "Translation error",
+  "translationError": "Lỗi dịch",
   "@translationError": {
     "description": "Localized string for translationError"
   },
@@ -2853,11 +2853,11 @@
   "@translationNote": {
     "description": "Localized string for translationNote"
   },
-  "translationQuality": "Translation Quality",
+  "translationQuality": "Chất lượng dịch",
   "@translationQuality": {
     "description": "Localized string for translationQuality"
   },
-  "translationSettings": "Translation Settings",
+  "translationSettings": "Cài đặt dịch",
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
@@ -2865,7 +2865,7 @@
   "@travel": {
     "description": "Localized string for travel"
   },
-  "tuesday": "Tuesday",
+  "tuesday": "Thứ Ba",
   "@tuesday": {
     "description": "Localized string for tuesday"
   },
@@ -2885,11 +2885,11 @@
   "@typeMessage": {
     "description": "Localized string for typeMessage"
   },
-  "unblock": "Unblock",
+  "unblock": "Bỏ chặn",
   "@unblock": {
     "description": "Localized string for unblock"
   },
-  "unblockFailed": "Failed to unblock",
+  "unblockFailed": "Bỏ chặn không thành công",
   "@unblockFailed": {
     "description": "Localized string for unblockFailed"
   },
@@ -2902,7 +2902,7 @@
       }
     }
   },
-  "unblockedSuccessfully": "Unblocked successfully",
+  "unblockedSuccessfully": "Mở khóa thành công",
   "@unblockedSuccessfully": {
     "description": "Localized string for unblockedSuccessfully"
   },
@@ -2910,11 +2910,11 @@
   "@unexpectedLoginError": {
     "description": "Localized string for unexpectedLoginError"
   },
-  "unknown": "Unknown",
+  "unknown": "Không xác định",
   "@unknown": {
     "description": "Localized string for unknown"
   },
-  "unknownError": "An unknown error occurred",
+  "unknownError": "Đã xảy ra lỗi không xác định",
   "@unknownError": {
     "description": "Localized string for unknownError"
   },
@@ -2930,19 +2930,19 @@
   "@usagePurpose": {
     "description": "Localized string for usagePurpose"
   },
-  "useOneHeart": "Use 1 Heart",
+  "useOneHeart": "Sử dụng 1 Trái Tim",
   "@useOneHeart": {
     "description": "Localized string for useOneHeart"
   },
-  "useSystemLanguage": "Use System Language",
+  "useSystemLanguage": "Sử dụng Ngôn Ngữ Hệ Thống",
   "@useSystemLanguage": {
     "description": "Localized string for useSystemLanguage"
   },
-  "user": "User: ",
+  "user": "Người dùng:",
   "@user": {
     "description": "Localized string for user"
   },
-  "userMessage": "User Message:",
+  "userMessage": "Tin nhắn của người dùng:",
   "@userMessage": {
     "description": "Localized string for userMessage"
   },
@@ -2950,11 +2950,11 @@
   "@userNotFound": {
     "description": "Localized string for userNotFound"
   },
-  "valentinesDay": "Valentine's Day",
+  "valentinesDay": "Ngày Valentine",
   "@valentinesDay": {
     "description": "Localized string for valentinesDay"
   },
-  "verifyingAuth": "Verifying authentication",
+  "verifyingAuth": "Đang xác minh xác thực",
   "@verifyingAuth": {
     "description": "Localized string for verifyingAuth"
   },
@@ -2962,7 +2962,7 @@
   "@version": {
     "description": "Localized string for version"
   },
-  "vietnamese": "Vietnamese",
+  "vietnamese": "Tiếng Việt",
   "@vietnamese": {
     "description": "Localized string for vietnamese"
   },
@@ -2983,7 +2983,7 @@
       }
     }
   },
-  "walk": "Walk",
+  "walk": "Đi bộ",
   "@walk": {
     "description": "Localized string for walk"
   },
@@ -2991,15 +2991,15 @@
   "@wasHelpful": {
     "description": "Localized string for wasHelpful"
   },
-  "weatherClear": "Clear",
+  "weatherClear": "Trời quang",
   "@weatherClear": {
     "description": "Localized string for weatherClear"
   },
-  "weatherCloudy": "Cloudy",
+  "weatherCloudy": "Trời nhiều mây",
   "@weatherCloudy": {
     "description": "Localized string for weatherCloudy"
   },
-  "weatherContext": "Weather Context",
+  "weatherContext": "Bối cảnh thời tiết",
   "@weatherContext": {
     "description": "Localized string for weatherContext"
   },
@@ -3007,19 +3007,19 @@
   "@weatherContextDesc": {
     "description": "Localized string for weatherContextDesc"
   },
-  "weatherDrizzle": "Drizzle",
+  "weatherDrizzle": "Mưa phùn",
   "@weatherDrizzle": {
     "description": "Localized string for weatherDrizzle"
   },
-  "weatherFog": "Fog",
+  "weatherFog": "Sương mù",
   "@weatherFog": {
     "description": "Localized string for weatherFog"
   },
-  "weatherMist": "Mist",
+  "weatherMist": "Sương mù",
   "@weatherMist": {
     "description": "Localized string for weatherMist"
   },
-  "weatherRain": "Rain",
+  "weatherRain": "Mưa",
   "@weatherRain": {
     "description": "Localized string for weatherRain"
   },
@@ -3027,7 +3027,7 @@
   "@weatherRainy": {
     "description": "Localized string for weatherRainy"
   },
-  "weatherSnow": "Snow",
+  "weatherSnow": "Tuyết",
   "@weatherSnow": {
     "description": "Localized string for weatherSnow"
   },
@@ -3035,11 +3035,11 @@
   "@weatherSnowy": {
     "description": "Localized string for weatherSnowy"
   },
-  "weatherThunderstorm": "Thunderstorm",
+  "weatherThunderstorm": "Bão tố",
   "@weatherThunderstorm": {
     "description": "Localized string for weatherThunderstorm"
   },
-  "wednesday": "Wednesday",
+  "wednesday": "Thứ Tư",
   "@wednesday": {
     "description": "Localized string for wednesday"
   },
@@ -3055,15 +3055,15 @@
   "@whatTopicsToTalk": {
     "description": "Localized string for whatTopicsToTalk"
   },
-  "whiteDay": "White Day",
+  "whiteDay": "Ngày Trắng",
   "@whiteDay": {
     "description": "Localized string for whiteDay"
   },
-  "winter": "Winter",
+  "winter": "Mùa Đông",
   "@winter": {
     "description": "Localized string for winter"
   },
-  "wrongTranslation": "Wrong Translation",
+  "wrongTranslation": "Dịch Sai",
   "@wrongTranslation": {
     "description": "Localized string for wrongTranslation"
   },
@@ -3071,7 +3071,7 @@
   "@year": {
     "description": "Localized string for year"
   },
-  "yearEnd": "Year End",
+  "yearEnd": "Cuối Năm",
   "@yearEnd": {
     "description": "Localized string for yearEnd"
   },

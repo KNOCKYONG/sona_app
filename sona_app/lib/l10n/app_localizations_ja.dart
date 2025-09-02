@@ -48,10 +48,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get adaptiveConversationDesc => 'あなたの会話スタイルに合わせて適応します';
 
   @override
-  String get afternoon => 'Afternoon';
+  String get afternoon => '午後';
 
   @override
-  String get afternoonFatigue => 'Afternoon fatigue';
+  String get afternoonFatigue => '午後の疲れ';
 
   @override
   String get ageConfirmation => '私は14歳以上であり、上記を確認しました。';
@@ -109,7 +109,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get anxious => '不安';
 
   @override
-  String get apiKeyError => 'API Key Error';
+  String get apiKeyError => 'APIキーエラー';
 
   @override
   String get appName => 'SONA';
@@ -133,7 +133,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get autoTranslate => '自動翻訳';
 
   @override
-  String get autumn => 'Autumn';
+  String get autumn => '秋';
 
   @override
   String get averageQuality => '平均品質';
@@ -186,7 +186,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get blockedSuccessfully => 'ブロックしました';
 
   @override
-  String get breakfast => 'Breakfast';
+  String get breakfast => '朝食';
 
   @override
   String get byErrorType => 'エラータイプ別';
@@ -203,7 +203,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cacheDeleted => '画像キャッシュが削除されました';
 
   @override
-  String get cafeTerrace => 'Cafe terrace';
+  String get cafeTerrace => 'カフェテラス';
 
   @override
   String get calm => '穏やか';
@@ -256,7 +256,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get checkingUserInfo => 'ユーザー情報を確認中';
 
   @override
-  String get childrensDay => 'Children\'s Day';
+  String get childrensDay => '子供の日';
 
   @override
   String get chinese => '中国語';
@@ -265,7 +265,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get chooseOption => '選択してください：';
 
   @override
-  String get christmas => 'Christmas';
+  String get christmas => 'クリスマス';
 
   @override
   String get close => '閉じる';
@@ -330,7 +330,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get culturalIssue => '文化的な問題';
 
   @override
-  String get current => 'Current';
+  String get current => '現在';
 
   @override
   String get currentCacheSize => '現在のキャッシュサイズ';
@@ -339,7 +339,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get currentLanguage => '現在の言語';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => 'サイクリング';
 
   @override
   String get dailyCare => '日常ケア';
@@ -351,7 +351,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dailyChat => '日常会話';
 
   @override
-  String get dailyCheck => 'Daily check';
+  String get dailyCheck => '日次チェック';
 
   @override
   String get dailyConversation => '日常会話';
@@ -381,13 +381,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get datingDescription => '深い思いを共有し、誠実な会話をしたい';
 
   @override
-  String get dawn => 'Dawn';
+  String get dawn => '夜明け';
 
   @override
   String get day => '日';
 
   @override
-  String get dayAfterTomorrow => 'Day after tomorrow';
+  String get dayAfterTomorrow => '明後日';
 
   @override
   String daysAgo(int count, String formatted) {
@@ -433,7 +433,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get developRelationshipStep => '3. 関係を深める：会話を通じて親密度を築き、特別な関係を発展させる。';
 
   @override
-  String get dinner => 'Dinner';
+  String get dinner => '夕食';
 
   @override
   String get discardGuestData => '新しく始める';
@@ -492,25 +492,25 @@ class AppLocalizationsJa extends AppLocalizations {
   String get emotionAnalysisDesc => '共感的な応答のために感情を分析';
 
   @override
-  String get emotionAngry => 'Angry';
+  String get emotionAngry => '怒っている';
 
   @override
   String get emotionBasedEncounters => '感情に基づく出会い';
 
   @override
-  String get emotionCool => 'Cool';
+  String get emotionCool => 'クール';
 
   @override
-  String get emotionHappy => 'Happy';
+  String get emotionHappy => '幸せ';
 
   @override
-  String get emotionLove => 'Love';
+  String get emotionLove => '愛';
 
   @override
-  String get emotionSad => 'Sad';
+  String get emotionSad => '悲しい';
 
   @override
-  String get emotionThinking => 'Thinking';
+  String get emotionThinking => '考え中';
 
   @override
   String get emotionalSupportDesc => '悩みを共有し、温かい慰めを受ける';
@@ -572,10 +572,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get errorDetailsHint => '何が問題なのか詳しく説明してください';
 
   @override
-  String get errorFrequency24h => 'Error Frequency (Last 24 hours)';
+  String get errorFrequency24h => 'エラー頻度（過去24時間）';
 
   @override
-  String get errorMessage => 'Error Message:';
+  String get errorMessage => 'エラーメッセージ：';
 
   @override
   String get errorOccurred => 'エラーが発生しました。';
@@ -595,7 +595,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get evening => 'Evening';
+  String get evening => '夕方';
 
   @override
   String get excited => '興奮';
@@ -631,13 +631,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get filter => 'フィルター';
 
   @override
-  String get firstOccurred => 'First Occurred: ';
+  String get firstOccurred => '最初の発生：';
 
   @override
   String get followDeviceLanguage => 'デバイスの言語設定に従う';
 
   @override
-  String get forenoon => 'Forenoon';
+  String get forenoon => '午前';
 
   @override
   String get forgotPassword => 'パスワードをお忘れですか？';
@@ -646,7 +646,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get frequentlyAskedQuestions => 'よくある質問';
 
   @override
-  String get friday => 'Friday';
+  String get friday => '金曜日';
 
   @override
   String get friendshipDescription => '新しい友達に出会い、会話をしたい';
@@ -703,7 +703,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get grantPermission => '続ける';
 
   @override
-  String get guest => 'Guest';
+  String get guest => 'ゲスト';
 
   @override
   String get guestDataMigration => '登録時に現在のチャット履歴を保持しますか？';
@@ -805,7 +805,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get hobbyTalk => '趣味の話';
 
   @override
-  String get hours24Ago => '24 hours ago';
+  String get hours24Ago => '24時間前';
 
   @override
   String hoursAgo(int count, String formatted) {
@@ -822,7 +822,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get inappropriateContent => '不適切なコンテンツ';
 
   @override
-  String get incorrect => 'incorrect';
+  String get incorrect => '不正確';
 
   @override
   String get incorrectPassword => 'パスワードが正しくありません';
@@ -887,13 +887,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageSettings => '言語設定';
 
   @override
-  String get lastOccurred => 'Last Occurred: ';
+  String get lastOccurred => '最後の発生：';
 
   @override
   String get lastUpdated => '最終更新';
 
   @override
-  String get lateNight => 'Late night';
+  String get lateNight => '深夜';
 
   @override
   String get later => '後で';
@@ -1001,10 +1001,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get lowQualityResponses => '低品質レスポンス';
 
   @override
-  String get lunch => 'Lunch';
+  String get lunch => '昼食';
 
   @override
-  String get lunchtime => 'Lunchtime';
+  String get lunchtime => '昼食時間';
 
   @override
   String get mainErrorType => '主なエラータイプ';
@@ -1087,7 +1087,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get missingTranslation => '翻訳漏れ';
 
   @override
-  String get monday => 'Monday';
+  String get monday => '月曜日';
 
   @override
   String get month => '月';
@@ -1101,7 +1101,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get moreButton => 'もっと見る';
 
   @override
-  String get morning => 'Morning';
+  String get morning => '朝';
 
   @override
   String get mostFrequentError => '最も頻繁なエラー';
@@ -1136,7 +1136,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get newMessages => '新しいメッセージ';
 
   @override
-  String get newYear => 'New Year';
+  String get newYear => '新年';
 
   @override
   String get next => '次へ';
@@ -1172,7 +1172,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get nicknameRequired => 'ニックネーム *';
 
   @override
-  String get night => 'Night';
+  String get night => '夜';
 
   @override
   String get no => 'いいえ';
@@ -1222,7 +1222,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get notRegistered => 'not registered';
+  String get notRegistered => '未登録';
 
   @override
   String get notSubscribed => '未登録';
@@ -1240,7 +1240,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get notifications => '通知';
 
   @override
-  String get occurrenceInfo => 'Occurrence Info:';
+  String get occurrenceInfo => '発生情報：';
 
   @override
   String get olderChats => 'それ以前';
@@ -1276,7 +1276,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get ownedHearts => '所有ハート';
 
   @override
-  String get parentsDay => 'Parents\' Day';
+  String get parentsDay => '父母の日';
 
   @override
   String get password => 'パスワード';
@@ -1303,7 +1303,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get passwordResetEmailSent => 'パスワードリセットメールが送信されました。メールをご確認ください。';
 
   @override
-  String get passwordText => 'password';
+  String get passwordText => 'パスワード';
 
   @override
   String get passwordTooShort => 'パスワードは6文字以上である必要があります';
@@ -1326,34 +1326,50 @@ class AppLocalizationsJa extends AppLocalizations {
   String get personaGenderSection => 'ペルソナの性別設定';
 
   @override
-  String get personaQualityStats => 'ペルソナ品質統計';
+  String personaQualityStats(Object personaQualityStats) {
+    return 'ペルソナ品質統計';
+  }
 
   @override
-  String get personalInfoExposure => '個人情報の露出';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return '個人情報の露出';
+  }
 
   @override
-  String get personality => 'Personality';
+  String personality(Object personality) {
+    return '性格';
+  }
 
   @override
-  String get pets => 'ペット';
+  String pets(Object pets) {
+    return 'ペット';
+  }
 
   @override
   String get photo => '写真';
 
   @override
-  String get photography => '写真';
+  String photography(Object photography) {
+    return '写真';
+  }
 
   @override
-  String get picnic => 'Picnic';
+  String picnic(Object picnic) {
+    return 'ピクニック';
+  }
 
   @override
-  String get preferenceSettings => '設定';
+  String preferenceSettings(Object preferenceSettings) {
+    return '設定';
+  }
 
   @override
-  String get preferredLanguage => '優先言語';
+  String preferredLanguage(Object preferredLanguage) {
+    return '優先言語';
+  }
 
   @override
-  String get preparingForSleep => 'Preparing for sleep';
+  String get preparingForSleep => '就寝準備中';
 
   @override
   String get preparingNewMeeting => '新しい出会いを準備中';
@@ -1381,59 +1397,58 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get privacySection1Content =>
-      'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+      '私たちはあなたのプライバシーを保護することを約束します。このプライバシーポリシーでは、サービスを利用する際にどのように情報を収集、使用、保護するかを説明します。';
 
   @override
   String get privacySection1Title => '1. 個人情報の収集および利用目的';
 
   @override
   String get privacySection2Content =>
-      'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+      'アカウントを作成したり、プロフィールを更新したり、サービスを利用したりする際に、直接提供された情報を収集します。';
 
   @override
-  String get privacySection2Title => 'Information We Collect';
+  String get privacySection2Title => '収集する情報';
 
   @override
   String get privacySection3Content =>
-      'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+      '収集した情報を使用して、サービスを提供、維持、改善し、あなたとコミュニケーションを取ります。';
 
   @override
   String get privacySection3Title => '3. 個人情報の保有および利用期間';
 
   @override
   String get privacySection4Content =>
-      'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+      'あなたの同意なしに、個人情報を第三者に販売、取引、またはその他の方法で移転することはありません。';
 
   @override
   String get privacySection4Title => '4. 第三者への個人情報の提供';
 
   @override
   String get privacySection5Content =>
-      'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+      '不正アクセス、改ざん、開示、または破壊からあなたの個人情報を保護するために、適切なセキュリティ対策を実施しています。';
 
   @override
   String get privacySection5Title => '5. 個人情報の技術的保護措置';
 
   @override
-  String get privacySection6Content =>
-      'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+  String get privacySection6Content => 'サービスを提供し、法的義務を遵守するために必要な限り、個人情報を保持します。';
 
   @override
   String get privacySection6Title => '6. ユーザーの権利';
 
   @override
   String get privacySection7Content =>
-      'You have the right to access, update, or delete your personal information at any time through your account settings.';
+      'あなたは、アカウント設定を通じて、いつでも個人情報にアクセス、更新、または削除する権利があります。';
 
   @override
-  String get privacySection7Title => 'Your Rights';
+  String get privacySection7Title => 'あなたの権利';
 
   @override
   String get privacySection8Content =>
-      'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+      'このプライバシーポリシーについて質問がある場合は、support@sona.comまでご連絡ください。';
 
   @override
-  String get privacySection8Title => 'Contact Us';
+  String get privacySection8Title => 'お問い合わせ';
 
   @override
   String get privacySettings => 'プライバシー設定';
@@ -1445,7 +1460,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get privacySettingsScreen => 'プライバシー設定';
 
   @override
-  String get problemMessage => 'Problem';
+  String get problemMessage => '問題';
 
   @override
   String get problemOccurred => '問題が発生しました';
@@ -1476,10 +1491,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profilePhotoAndInfo => 'プロフィール写真と基本情報を入力してください';
 
   @override
-  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+  String get profilePhotoUpdateFailed => 'プロフィール写真の更新に失敗しました';
 
   @override
-  String get profilePhotoUpdated => 'Profile photo updated';
+  String get profilePhotoUpdated => 'プロフィール写真が更新されました';
 
   @override
   String get profileSettings => 'プロフィール設定';
@@ -1488,13 +1503,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get profileSetup => 'プロフィールをセットアップ中';
 
   @override
-  String get profileUpdateFailed => 'Failed to update profile';
+  String get profileUpdateFailed => 'プロフィールの更新に失敗しました';
 
   @override
-  String get profileUpdated => 'Profile updated successfully';
+  String get profileUpdated => 'プロフィールが正常に更新されました';
 
   @override
-  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+  String get purchaseAndRefundPolicy => '購入および返金ポリシー';
 
   @override
   String get purchaseButton => '購入';
@@ -1514,7 +1529,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get purchaseFailed => 'Purchase failed';
+  String get purchaseFailed => '購入に失敗しました';
 
   @override
   String get purchaseHeartsOnly => 'ハートを購入';
@@ -1523,49 +1538,44 @@ class AppLocalizationsJa extends AppLocalizations {
   String get purchaseMoreHearts => '会話を続けるためにハートを購入';
 
   @override
-  String get purchasePending => 'Purchase pending...';
+  String get purchasePending => '購入処理中...';
 
   @override
-  String get purchasePolicy => 'Purchase Policy';
+  String get purchasePolicy => '購入ポリシー';
 
   @override
   String get purchaseSection1Content =>
-      'We accept various payment methods including credit cards and digital wallets.';
+      'クレジットカードやデジタルウォレットなど、さまざまな支払い方法に対応しています。';
 
   @override
-  String get purchaseSection1Title => 'Payment Methods';
+  String get purchaseSection1Title => '支払い方法';
 
   @override
-  String get purchaseSection2Content =>
-      'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+  String get purchaseSection2Content => '購入したアイテムを使用していない場合、購入から14日以内に返金が可能です。';
 
   @override
-  String get purchaseSection2Title => 'Refund Policy';
+  String get purchaseSection2Title => '返金ポリシー';
 
   @override
-  String get purchaseSection3Content =>
-      'You can cancel your subscription at any time through your account settings.';
+  String get purchaseSection3Content => 'アカウント設定からいつでもサブスクリプションをキャンセルできます。';
 
   @override
-  String get purchaseSection3Title => 'Cancellation';
+  String get purchaseSection3Title => 'キャンセル';
 
   @override
-  String get purchaseSection4Content =>
-      'By making a purchase, you agree to our terms of use and service agreement.';
+  String get purchaseSection4Content => '購入を行うことで、利用規約およびサービス契約に同意したことになります。';
 
   @override
-  String get purchaseSection4Title => 'Terms of Use';
+  String get purchaseSection4Title => '利用規約';
 
   @override
-  String get purchaseSection5Content =>
-      'For purchase-related issues, please contact our support team.';
+  String get purchaseSection5Content => '購入に関する問題については、サポートチームにお問い合わせください。';
 
   @override
-  String get purchaseSection5Title => 'Contact Support';
+  String get purchaseSection5Title => 'サポートに連絡';
 
   @override
-  String get purchaseSection6Content =>
-      'All purchases are subject to our standard terms and conditions.';
+  String get purchaseSection6Content => 'すべての購入は、当社の標準利用規約および条件に従います。';
 
   @override
   String get purchaseSection6Title => '6. お問い合わせ';
@@ -1580,16 +1590,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get realtimeQualityLog => 'リアルタイム品質ログ';
 
   @override
-  String get recentConversation => 'Recent Conversation:';
+  String get recentConversation => '最近の会話:';
 
   @override
-  String get recentLoginRequired => 'Please login again for security';
+  String get recentLoginRequired => 'セキュリティのため再度ログインしてください';
 
   @override
-  String get referrerEmail => 'Referrer Email';
+  String get referrerEmail => '紹介者のメール';
 
   @override
-  String get referrerEmailHelper => 'Optional: Email of who referred you';
+  String get referrerEmailHelper => '任意: あなたを紹介した人のメールアドレス';
 
   @override
   String get referrerEmailLabel => '紹介者のメール（任意）';
@@ -1603,10 +1613,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => '更新に失敗しました';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => 'チャットリストを更新中です...';
 
   @override
   String get relatedFAQ => '関連FAQ';
@@ -1638,7 +1648,7 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => '通報に失敗しました';
 
   @override
   String get reportSubmitted => '報告が送信されました。レビューして対処します。';
@@ -1653,7 +1663,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get required => '[必須]';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => '利用規約に同意してください';
 
   @override
   String get restartConversation => '会話を再開';
@@ -1678,7 +1688,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sad => '悲しい';
 
   @override
-  String get saturday => 'Saturday';
+  String get saturday => '土曜日';
 
   @override
   String get save => '保存';
@@ -1693,7 +1703,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get searchResults => '検索結果';
 
   @override
-  String get selectEmotion => 'Select Emotion';
+  String get selectEmotion => '感情を選択してください';
 
   @override
   String get selectErrorType => 'エラータイプを選択';
@@ -1711,7 +1721,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get selectLanguage => '言語を選択';
 
   @override
-  String get selectPersona => 'Select a persona';
+  String get selectPersona => 'ペルソナを選択してください';
 
   @override
   String get selectPersonaPlease => 'ペルソナを選択してください。';
@@ -1723,7 +1733,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get selectProblematicMessage => '問題のあるメッセージを選択（任意）';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => '通報理由を選択してください';
 
   @override
   String get selectTheme => 'テーマを選択';
@@ -1747,7 +1757,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sendChatError => 'チャットエラーを送信';
 
   @override
-  String get sendFirstMessage => 'Send your first message';
+  String get sendFirstMessage => '最初のメッセージを送信してください';
 
   @override
   String get sendReport => '報告を送信';
@@ -1756,13 +1766,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sendingEmail => 'メール送信中...';
 
   @override
-  String get seoul => 'Seoul';
+  String get seoul => 'ソウル';
 
   @override
   String get serverErrorDashboard => 'サーバーエラー';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement => 'サービス利用規約に同意してください';
 
   @override
   String get sessionExpired => 'セッションの有効期限が切れました';
@@ -1816,19 +1826,19 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sonaFriend => 'SONAフレンド';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'SONA プライバシーポリシー';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'SONA 購入ポリシー';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'SONA 利用規約';
 
   @override
   String get sonaUsagePurpose => 'SONAの利用目的を選択してください';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => 'お役に立てず申し訳ありません';
 
   @override
   String get sort => '並び替え';
@@ -1849,7 +1859,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sports => 'スポーツ';
 
   @override
-  String get spring => 'Spring';
+  String get spring => '春';
 
   @override
   String get startChat => 'チャット開始';
@@ -1858,7 +1868,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get startChatButton => 'チャットを開始';
 
   @override
-  String get startConversation => 'Start a conversation';
+  String get startConversation => '会話を始める';
 
   @override
   String get startConversationLikeAFriend => 'Sonaと友達のように会話を始めよう';
@@ -1885,14 +1895,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get store => 'ストア';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => 'ストアに接続できませんでした';
 
   @override
   String get storeLoginRequiredMessage =>
       'ストアを利用するにはログインが必要です。\nログイン画面に移動しますか？';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => 'ストアは利用できません';
 
   @override
   String get storyEvent => 'ストーリーイベント';
@@ -1910,16 +1920,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get subtleVibrationOnTouch => 'タッチ時の微細な振動';
 
   @override
-  String get summer => 'Summer';
+  String get summer => '夏';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => '日曜日';
 
   @override
-  String get swipeAnyDirection => 'Swipe in any direction';
+  String get swipeAnyDirection => '任意の方向にスワイプ';
 
   @override
-  String get swipeDownToClose => 'Swipe down to close';
+  String get swipeDownToClose => '下にスワイプして閉じる';
 
   @override
   String get systemTheme => 'システム設定に従う';
@@ -1931,13 +1941,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get tapBottomForDetails => '詳細を見るには下部をタップ';
 
   @override
-  String get tapForDetails => 'Tap bottom area for details';
+  String get tapForDetails => '詳細を見るには下部をタップ';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => '写真をスワイプするにはタップ';
 
   @override
-  String get teachersDay => 'Teachers\' Day';
+  String get teachersDay => '教師の日';
 
   @override
   String get technicalError => '技術的エラー';
@@ -1958,22 +1968,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String get termsOfService => '利用規約';
 
   @override
-  String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+  String get termsSection10Content => '当社は、ユーザーに通知の上、これらの条件をいつでも変更する権利を留保します。';
 
   @override
   String get termsSection10Title => '第10条（紛争解決）';
 
   @override
-  String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+  String get termsSection11Content => 'これらの条件は、当社が運営する管轄区域の法律に準拠します。';
 
   @override
   String get termsSection11Title => '第11条（AIサービス特約）';
 
   @override
   String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+      'これらの条件のいずれかの条項が執行不可能と判断された場合でも、残りの条項は引き続き有効です。';
 
   @override
   String get termsSection12Title => '第12条（データ収集と利用）';
@@ -1987,35 +1995,32 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+      '当社のサービスを利用することにより、これらの利用規約およびプライバシーポリシーに従うことに同意したものとみなされます。';
 
   @override
   String get termsSection2Title => '第2条（定義）';
 
   @override
-  String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+  String get termsSection3Content => '当社のサービスを利用するには、13歳以上である必要があります。';
 
   @override
   String get termsSection3Title => '第3条（規約の効力と変更）';
 
   @override
-  String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+  String get termsSection4Content => 'アカウントとパスワードの機密性を維持する責任はあなたにあります。';
 
   @override
   String get termsSection4Title => '第4条（サービスの提供）';
 
   @override
-  String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+  String get termsSection5Content => 'あなたは、当社のサービスを違法または無許可の目的で使用しないことに同意します。';
 
   @override
   String get termsSection5Title => '第5条（会員登録）';
 
   @override
   String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+      '当社は、これらの条件に違反した場合、あなたのアカウントを終了または一時停止する権利を留保します。';
 
   @override
   String get termsSection6Title => '第6条（ユーザーの義務）';
@@ -2029,20 +2034,20 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+      '当社のサービスの利用に起因する間接的、偶発的、または結果的な損害について、当社は責任を負いません。';
 
   @override
   String get termsSection8Title => '第8条（サービスの中断）';
 
   @override
   String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+      '当社のサービスで利用可能なすべてのコンテンツおよび資料は、知的財産権によって保護されています。';
 
   @override
   String get termsSection9Title => '第9条（免責事項）';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => '補足条件';
 
   @override
   String get thai => 'タイ語';
@@ -2060,7 +2065,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get themeSettings => 'テーマ設定';
 
   @override
-  String get thursday => 'Thursday';
+  String get thursday => '木曜日';
 
   @override
   String get timeout => 'タイムアウト';
@@ -2075,10 +2080,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get todayChats => '今日';
 
   @override
-  String get todayText => 'Today';
+  String get todayText => '今日';
 
   @override
-  String get tomorrowText => 'Tomorrow';
+  String get tomorrowText => '明日';
 
   @override
   String get totalConsultSessions => '総相談セッション';
@@ -2091,7 +2096,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String totalOccurrences(Object count) {
-    return 'Total $count occurrences';
+    return '合計 $count 回の発生';
   }
 
   @override
@@ -2104,7 +2109,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get translatedText => '翻訳';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => '翻訳エラー';
 
   @override
   String get translationErrorDescription => '間違った翻訳や不自然な表現を報告してください';
@@ -2125,7 +2130,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get travel => '旅行';
 
   @override
-  String get tuesday => 'Tuesday';
+  String get tuesday => '火曜日';
 
   @override
   String get tutorialAccount => 'チュートリアルアカウント';
@@ -2160,7 +2165,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get unknown => '不明';
 
   @override
-  String get unknownError => 'An unknown error occurred';
+  String get unknownError => '不明なエラーが発生しました';
 
   @override
   String get unlimitedMessages => '無制限';
@@ -2178,16 +2183,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get useSystemLanguage => 'システム言語を使用';
 
   @override
-  String get user => 'User: ';
+  String get user => 'ユーザー:';
 
   @override
-  String get userMessage => 'User Message:';
+  String get userMessage => 'ユーザーメッセージ:';
 
   @override
   String get userNotFound => 'ユーザーが見つかりません';
 
   @override
-  String get valentinesDay => 'Valentine\'s Day';
+  String get valentinesDay => 'バレンタインデー';
 
   @override
   String get verifyingAuth => '認証を確認中';
@@ -2210,16 +2215,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get walk => 'Walk';
+  String get walk => '散歩';
 
   @override
   String get wasHelpful => '役に立ちましたか？';
 
   @override
-  String get weatherClear => 'Clear';
+  String get weatherClear => '晴れ';
 
   @override
-  String get weatherCloudy => 'Cloudy';
+  String get weatherCloudy => '曇り';
 
   @override
   String get weatherContext => '天気コンテキスト';
@@ -2228,31 +2233,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get weatherContextDesc => '天気に基づいた会話コンテキストを提供';
 
   @override
-  String get weatherDrizzle => 'Drizzle';
+  String get weatherDrizzle => '霧雨';
 
   @override
-  String get weatherFog => 'Fog';
+  String get weatherFog => '霧';
 
   @override
-  String get weatherMist => 'Mist';
+  String get weatherMist => 'ミスト';
 
   @override
-  String get weatherRain => 'Rain';
+  String get weatherRain => '雨';
 
   @override
   String get weatherRainy => '雨';
 
   @override
-  String get weatherSnow => 'Snow';
+  String get weatherSnow => '雪';
 
   @override
   String get weatherSnowy => '雪';
 
   @override
-  String get weatherThunderstorm => 'Thunderstorm';
+  String get weatherThunderstorm => '雷雨';
 
   @override
-  String get wednesday => 'Wednesday';
+  String get wednesday => '水曜日';
 
   @override
   String get weekdays => '日,月,火,水,木,金,土';
@@ -2264,10 +2269,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get whatTopicsToTalk => 'どんな話題について話したいですか？（任意）';
 
   @override
-  String get whiteDay => 'White Day';
+  String get whiteDay => 'ホワイトデー';
 
   @override
-  String get winter => 'Winter';
+  String get winter => '冬';
 
   @override
   String get wrongTranslation => '誤訳';
@@ -2276,7 +2281,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get year => '年';
 
   @override
-  String get yearEnd => 'Year End';
+  String get yearEnd => '年末';
 
   @override
   String get yes => 'はい';

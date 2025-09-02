@@ -12,23 +12,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get about => '关于';
 
   @override
-  String get accountAndProfile => 'Account & Profile Information';
+  String get accountAndProfile => '账户与个人信息';
 
   @override
   String get accountDeletedSuccess => '账户已成功删除';
 
   @override
-  String get accountDeletionContent =>
-      'Are you sure you want to delete your account?\nThis action cannot be undone.';
+  String get accountDeletionContent => '您确定要删除您的账户吗？';
 
   @override
-  String get accountDeletionError => 'Error occurred while deleting account.';
+  String get accountDeletionError => '删除账户时发生错误。';
 
   @override
   String get accountDeletionInfo => '账户删除信息';
 
   @override
-  String get accountDeletionTitle => 'Delete Account';
+  String get accountDeletionTitle => '删除账户';
 
   @override
   String get accountDeletionWarning1 => '警告：此操作无法撤消';
@@ -43,21 +42,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get accountDeletionWarning4 => '这包括所有购买的内容';
 
   @override
-  String get accountManagement => 'Account Management';
+  String get accountManagement => '账户管理';
 
   @override
-  String get adaptiveConversationDesc =>
-      'Adapts conversation style to match yours';
+  String get adaptiveConversationDesc => '根据您的风格调整对话方式';
 
   @override
-  String get afternoon => 'Afternoon';
+  String get afternoon => '下午';
 
   @override
-  String get afternoonFatigue => 'Afternoon fatigue';
+  String get afternoonFatigue => '下午疲劳';
 
   @override
-  String get ageConfirmation =>
-      'I am 14 years or older and have confirmed the above.';
+  String get ageConfirmation => '我已年满14岁并确认上述信息。';
 
   @override
   String ageRange(int min, int max) {
@@ -65,7 +62,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get ageUnit => 'years old';
+  String get ageUnit => '岁';
 
   @override
   String get agreeToTerms => '同意条款';
@@ -74,48 +71,45 @@ class AppLocalizationsZh extends AppLocalizations {
   String get aiDatingQuestion => '你会和AI谈恋爱吗？';
 
   @override
-  String get aiPersonaPreferenceDescription =>
-      'Please set your preferences for AI persona matching';
+  String get aiPersonaPreferenceDescription => '请设置您的AI角色匹配偏好';
 
   @override
   String get all => '全部';
 
   @override
-  String get allAgree => 'Agree to All';
+  String get allAgree => '同意所有';
 
   @override
-  String get allFeaturesRequired =>
-      '※ All features are required for service provision';
+  String get allFeaturesRequired => '※ 所有功能均为服务提供所需';
 
   @override
   String get allPersonas => '所有角色';
 
   @override
-  String get allPersonasMatched =>
-      'All personas matched! Start chatting with them.';
+  String get allPersonasMatched => '所有角色已匹配！开始与他们聊天吧。';
 
   @override
   String get allowPermission => '继续';
 
   @override
   String alreadyChattingWith(String name) {
-    return 'Already chatting with $name!';
+    return '已经在与$name聊天！';
   }
 
   @override
-  String get alsoBlockThisAI => 'Also block this AI';
+  String get alsoBlockThisAI => '也阻止这个AI';
 
   @override
   String get angry => '生气';
 
   @override
-  String get anonymousLogin => 'Anonymous login';
+  String get anonymousLogin => '匿名登录';
 
   @override
   String get anxious => '焦虑';
 
   @override
-  String get apiKeyError => 'API Key Error';
+  String get apiKeyError => 'API密钥错误';
 
   @override
   String get appName => 'SONA';
@@ -124,98 +118,95 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appTagline => '您的AI伴侣';
 
   @override
-  String get appleLoginCanceled =>
-      'Apple login was canceled.\nPlease try again.';
+  String get appleLoginCanceled => 'Apple登录已被取消。';
 
   @override
   String get appleLoginError => 'Apple登录失败';
 
   @override
-  String get art => 'Art';
+  String get art => '艺术';
 
   @override
-  String get authError => 'Authentication Error';
+  String get authError => '认证错误';
 
   @override
-  String get autoTranslate => 'Auto Translate';
+  String get autoTranslate => '自动翻译';
 
   @override
-  String get autumn => 'Autumn';
+  String get autumn => '秋天';
 
   @override
-  String get averageQuality => 'Average Quality';
+  String get averageQuality => '平均质量';
 
   @override
-  String get averageQualityScore => 'Average Quality Score';
+  String get averageQualityScore => '平均质量评分';
 
   @override
-  String get awkwardExpression => 'Awkward Expression';
+  String get awkwardExpression => '尴尬的表情';
 
   @override
-  String get backButton => 'Back';
+  String get backButton => '返回';
 
   @override
   String get basicInfo => '基本信息';
 
   @override
-  String get basicInfoDescription =>
-      'Please enter basic information to create an account';
+  String get basicInfoDescription => '请填写基本信息以创建账户';
 
   @override
   String get birthDate => '出生日期';
 
   @override
-  String get birthDateOptional => 'Birth Date (Optional)';
+  String get birthDateOptional => '出生日期（可选）';
 
   @override
-  String get birthDateRequired => 'Birth Date *';
+  String get birthDateRequired => '出生日期 *';
 
   @override
-  String get blockConfirm =>
-      'Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.';
+  String get blockConfirm => '您想要屏蔽这个AI吗？';
 
   @override
-  String get blockReason => 'Block reason';
+  String get blockReason => '屏蔽原因';
 
   @override
-  String get blockThisAI => 'Block this AI';
+  String get blockThisAI => '屏蔽这个AI';
 
   @override
   String blockedAICount(int count) {
-    return '$count blocked AIs';
+    return '$count 个已屏蔽的AI';
   }
 
   @override
-  String get blockedAIs => 'Blocked AIs';
+  String get blockedAIs => '已屏蔽的AI';
 
   @override
-  String get blockedAt => 'Blocked at';
+  String get blockedAt => '屏蔽于';
 
   @override
-  String get blockedSuccessfully => 'Blocked successfully';
+  String get blockedSuccessfully => '屏蔽成功';
 
   @override
-  String get breakfast => 'Breakfast';
+  String get breakfast => '早餐';
 
   @override
-  String get byErrorType => 'By Error Type';
+  String get byErrorType => '按错误类型';
 
   @override
-  String get byPersona => 'By Persona';
+  String get byPersona => '按角色';
 
   @override
   String cacheDeleteError(String error) {
-    return 'Error deleting cache: $error';
+    return '删除缓存时出错：$error';
   }
 
   @override
-  String get cacheDeleted => 'Image cache has been deleted';
+  String get cacheDeleted => '图片缓存已被删除';
 
   @override
-  String get cafeTerrace => 'Cafe terrace';
+  String get cafeTerrace => '咖啡馆露台';
 
   @override
-  String get calm => 'Calm';
+  String get calm => '冷静';
 
   @override
   String get cameraPermission => '相机权限';
@@ -224,11 +215,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cameraPermissionDesc => '需要相机权限来拍摄个人资料照片。';
 
   @override
-  String get canChangeInSettings => 'You can change this later in settings';
+  String get canChangeInSettings => '您可以在设置中稍后更改此项';
 
   @override
-  String get canMeetPreviousPersonas =>
-      'You can meet personas\nyou swiped before again!';
+  String get canMeetPreviousPersonas => '您可以再次遇到之前滑动过的角色！';
 
   @override
   String get cancel => '取消';
@@ -240,49 +230,48 @@ class AppLocalizationsZh extends AppLocalizations {
   String get chat => '聊天';
 
   @override
-  String get chatEndedMessage => 'Chat has ended';
+  String get chatEndedMessage => '聊天已结束';
 
   @override
-  String get chatErrorDashboard => 'Chat Error Dashboard';
+  String get chatErrorDashboard => '聊天错误仪表板';
 
   @override
-  String get chatErrorSentSuccessfully =>
-      'Chat error has been sent successfully.';
+  String get chatErrorSentSuccessfully => '聊天错误已成功发送。';
 
   @override
-  String get chatListTab => 'Chat List Tab';
+  String get chatListTab => '聊天列表标签';
 
   @override
-  String get chats => 'Chats';
+  String get chats => '聊天';
 
   @override
   String chattingWithPersonas(int count) {
-    return 'Chatting with $count personas';
+    return '正在与 $count 个角色聊天';
   }
 
   @override
   String get checkInternetConnection => '请检查网络连接';
 
   @override
-  String get checkingUserInfo => 'Checking user info';
+  String get checkingUserInfo => '正在检查用户信息';
 
   @override
-  String get childrensDay => 'Children\'s Day';
+  String get childrensDay => '儿童节';
 
   @override
-  String get chinese => 'Chinese';
+  String get chinese => '中文';
 
   @override
-  String get chooseOption => 'Please choose:';
+  String get chooseOption => '请选择：';
 
   @override
-  String get christmas => 'Christmas';
+  String get christmas => '圣诞节';
 
   @override
   String get close => '关闭';
 
   @override
-  String get complete => 'Done';
+  String get complete => '完成';
 
   @override
   String get completeSignup => '完成注册';
@@ -291,29 +280,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get confirm => '确认';
 
   @override
-  String get connectingToServer => 'Connecting to server';
+  String get connectingToServer => '正在连接到服务器';
 
   @override
-  String get consultQualityMonitoring => 'Consultation Quality Monitoring';
+  String get consultQualityMonitoring => '咨询质量监控';
 
   @override
-  String get continueAsGuest => 'Continue as Guest';
+  String get continueAsGuest => '以访客身份继续';
 
   @override
-  String get continueButton => 'Continue';
+  String get continueButton => '继续';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get continueWithApple => '使用 Apple 继续';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get continueWithGoogle => '使用 Google 继续';
 
   @override
-  String get conversationContinuity => 'Conversation Continuity';
+  String get conversationContinuity => '对话连续性';
 
   @override
-  String get conversationContinuityDesc =>
-      'Remember previous conversations and connect topics';
+  String get conversationContinuityDesc => '记住之前的对话并连接话题';
 
   @override
   String conversationWith(String name) {
@@ -321,10 +309,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get convertToMember => 'Sign Up';
+  String get convertToMember => '注册';
 
   @override
-  String get cooking => 'Cooking';
+  String get cooking => '烹饪';
 
   @override
   String get copyMessage => '复制消息';
@@ -333,40 +321,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get copyrightInfringement => '版权侵权';
 
   @override
-  String get creatingAccount => 'Creating account';
+  String get creatingAccount => '正在创建账户';
 
   @override
-  String get crisisDetected => 'Crisis Detected';
+  String get crisisDetected => '检测到危机';
 
   @override
-  String get culturalIssue => 'Cultural Issue';
+  String get culturalIssue => '文化问题';
 
   @override
-  String get current => 'Current';
+  String get current => '当前';
 
   @override
-  String get currentCacheSize => 'Current Cache Size';
+  String get currentCacheSize => '当前缓存大小';
 
   @override
   String get currentLanguage => '当前语言';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => '骑自行车';
 
   @override
-  String get dailyCare => 'Daily Care';
+  String get dailyCare => '日常关怀';
 
   @override
-  String get dailyCareDesc => 'Daily care messages for meals, sleep, health';
+  String get dailyCareDesc => '每日关怀消息，包括饮食、睡眠、健康';
 
   @override
-  String get dailyChat => 'Daily Chat';
+  String get dailyChat => '每日聊天';
 
   @override
-  String get dailyCheck => 'Daily check';
+  String get dailyCheck => '每日检查';
 
   @override
-  String get dailyConversation => 'Daily Conversation';
+  String get dailyConversation => '每日对话';
 
   @override
   String get dailyLimitDescription => '您已达到每日消息限制';
@@ -378,29 +366,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get darkMode => '深色模式';
 
   @override
-  String get darkTheme => 'Dark Mode';
+  String get darkTheme => '深色模式';
 
   @override
-  String get darkThemeDesc => 'Use dark theme';
+  String get darkThemeDesc => '使用深色主题';
 
   @override
-  String get dataCollection => 'Data Collection Settings';
+  String get dataCollection => '数据收集设置';
 
   @override
-  String get datingAdvice => 'Dating Advice';
+  String get datingAdvice => '约会建议';
 
   @override
-  String get datingDescription =>
-      'I want to share deep thoughts and have sincere conversations';
+  String get datingDescription => '我想分享深刻的想法，进行真诚的对话';
 
   @override
-  String get dawn => 'Dawn';
+  String get dawn => '黎明';
 
   @override
   String get day => '天';
 
   @override
-  String get dayAfterTomorrow => 'Day after tomorrow';
+  String get dayAfterTomorrow => '后天';
 
   @override
   String daysAgo(int count, String formatted) {
@@ -409,11 +396,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String daysRemaining(int days) {
-    return '$days days remaining';
+    return '剩余$days天';
   }
 
   @override
-  String get deepTalk => 'Deep Talk';
+  String get deepTalk => '深度交谈';
 
   @override
   String get delete => '删除';
@@ -428,61 +415,60 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteAccountWarning => '您确定要删除账户吗？';
 
   @override
-  String get deleteCache => 'Delete Cache';
+  String get deleteCache => '删除缓存';
 
   @override
   String get deletingAccount => '正在删除账户...';
 
   @override
-  String get depressed => 'Depressed';
+  String get depressed => '抑郁';
 
   @override
-  String get describeError => 'What is the problem?';
+  String get describeError => '出了什么问题？';
 
   @override
-  String get detailedReason => 'Detailed reason';
+  String get detailedReason => '详细原因';
 
   @override
-  String get developRelationshipStep =>
-      '3. Develop Relationship: Build intimacy through conversations and develop special relationships.';
+  String get developRelationshipStep => '3. 发展关系：通过对话建立亲密感，发展特殊关系。';
 
   @override
-  String get dinner => 'Dinner';
+  String get dinner => '晚餐';
 
   @override
-  String get discardGuestData => 'Start Fresh';
+  String get discardGuestData => '重新开始';
 
   @override
-  String get discount20 => '20% off';
+  String get discount20 => '享受20%优惠';
 
   @override
-  String get discount30 => '30% off';
+  String get discount30 => '享受30%优惠';
 
   @override
-  String get discountAmount => 'Save';
+  String get discountAmount => '节省';
 
   @override
   String discountAmountValue(String amount) {
-    return 'Save ₩$amount';
+    return '节省₩$amount';
   }
 
   @override
   String get done => '完成';
 
   @override
-  String get downloadingPersonaImages => 'Downloading new persona images';
+  String get downloadingPersonaImages => '正在下载新的人物形象';
 
   @override
   String get edit => '编辑';
 
   @override
-  String get editInfo => 'Edit Info';
+  String get editInfo => '编辑信息';
 
   @override
   String get editProfile => '编辑个人资料';
 
   @override
-  String get effectSound => 'Sound Effects';
+  String get effectSound => '音效';
 
   @override
   String get effectSoundDescription => '播放音效';
@@ -494,58 +480,55 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emailHint => 'example@email.com';
 
   @override
-  String get emailLabel => 'Email';
+  String get emailLabel => '电子邮件';
 
   @override
-  String get emailRequired => 'Email *';
+  String get emailRequired => '电子邮件 *';
 
   @override
-  String get emotionAnalysis => 'Emotion Analysis';
+  String get emotionAnalysis => '情感分析';
 
   @override
-  String get emotionAnalysisDesc => 'Analyze emotions for empathetic responses';
+  String get emotionAnalysisDesc => '分析情感以获得同理心回应';
 
   @override
-  String get emotionAngry => 'Angry';
+  String get emotionAngry => '生气';
 
   @override
   String get emotionBasedEncounters => '基于情绪的相遇';
 
   @override
-  String get emotionCool => 'Cool';
+  String get emotionCool => '酷';
 
   @override
-  String get emotionHappy => 'Happy';
+  String get emotionHappy => '快乐';
 
   @override
-  String get emotionLove => 'Love';
+  String get emotionLove => '爱';
 
   @override
-  String get emotionSad => 'Sad';
+  String get emotionSad => '悲伤';
 
   @override
-  String get emotionThinking => 'Thinking';
+  String get emotionThinking => '思考';
 
   @override
-  String get emotionalSupportDesc =>
-      'Share your concerns and receive warm comfort';
+  String get emotionalSupportDesc => '分享你的担忧，获得温暖的安慰';
 
   @override
   String get endChat => '结束聊天';
 
   @override
-  String get endTutorial => 'End Tutorial';
+  String get endTutorial => '结束教程';
 
   @override
-  String get endTutorialAndLogin =>
-      'End tutorial and login?\nLogin to save data and use all features.';
+  String get endTutorialAndLogin => '结束教程并登录？';
 
   @override
-  String get endTutorialMessage =>
-      'Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.';
+  String get endTutorialMessage => '你想结束教程并登录吗？';
 
   @override
-  String get english => 'English';
+  String get english => '英语';
 
   @override
   String get enterBasicInfo => '输入您的基本信息';
@@ -563,15 +546,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enterPassword => '请输入密码';
 
   @override
-  String get entertainmentAndFunDesc =>
-      'Enjoy fun games and pleasant conversations';
+  String get entertainmentAndFunDesc => '享受有趣的游戏和愉快的对话';
 
   @override
-  String get entertainmentDescription =>
-      'I want to have fun conversations and enjoy my time';
+  String get entertainmentDescription => '我想进行有趣的对话，享受我的时光';
 
   @override
-  String get entertainmentFun => 'Entertainment/Fun';
+  String get entertainmentFun => '娱乐/乐趣';
 
   @override
   String get error => '错误';
@@ -580,40 +561,39 @@ class AppLocalizationsZh extends AppLocalizations {
   String get errorDescription => '错误描述';
 
   @override
-  String get errorDescriptionHint =>
-      'e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...';
+  String get errorDescriptionHint => '例如，给出奇怪的回答，重复同样的事情，给出不合适的回应...';
 
   @override
-  String get errorDetails => 'Error Details';
+  String get errorDetails => '错误详情';
 
   @override
-  String get errorDetailsHint => 'Please explain in detail what is wrong';
+  String get errorDetailsHint => '请详细说明问题所在';
 
   @override
-  String get errorFrequency24h => 'Error Frequency (Last 24 hours)';
+  String get errorFrequency24h => '错误频率（过去24小时）';
 
   @override
-  String get errorMessage => 'Error Message:';
+  String get errorMessage => '错误信息：';
 
   @override
   String get errorOccurred => '发生错误';
 
   @override
-  String get errorOccurredTryAgain => 'An error occurred. Please try again.';
+  String get errorOccurredTryAgain => '发生错误。请再试一次。';
 
   @override
-  String get errorSendingFailed => 'Failed to send error';
+  String get errorSendingFailed => '发送错误失败';
 
   @override
-  String get errorStats => 'Error Statistics';
+  String get errorStats => '错误统计';
 
   @override
   String errorWithMessage(String error) {
-    return 'Error occurred: $error';
+    return '发生错误：$error';
   }
 
   @override
-  String get evening => 'Evening';
+  String get evening => '晚上';
 
   @override
   String get excited => '兴奋';
@@ -622,26 +602,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get exit => '退出';
 
   @override
-  String get exitApp => 'Exit App';
+  String get exitApp => '退出应用';
 
   @override
-  String get exitConfirmMessage => 'Are you sure you want to exit the app?';
+  String get exitConfirmMessage => '您确定要退出应用吗？';
 
   @override
-  String get expertPersona => 'Expert Persona';
+  String get expertPersona => '专家角色';
 
   @override
-  String get expertiseScore => 'Expertise Score';
+  String get expertiseScore => '专业评分';
 
   @override
-  String get expired => 'Expired';
+  String get expired => '已过期';
 
   @override
-  String get explainReportReason =>
-      'Please explain the report reason in detail';
+  String get explainReportReason => '请详细说明举报原因';
 
   @override
-  String get fashion => 'Fashion';
+  String get fashion => '时尚';
 
   @override
   String get female => '女';
@@ -650,29 +629,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get filter => '筛选';
 
   @override
-  String get firstOccurred => 'First Occurred: ';
+  String get firstOccurred => '首次发生：';
 
   @override
   String get followDeviceLanguage => '跟随设备语言设置';
 
   @override
-  String get forenoon => 'Forenoon';
+  String get forenoon => '上午';
 
   @override
   String get forgotPassword => '忘记密码？';
 
   @override
-  String get frequentlyAskedQuestions => 'Frequently Asked Questions';
+  String get frequentlyAskedQuestions => '常见问题';
 
   @override
-  String get friday => 'Friday';
+  String get friday => '星期五';
 
   @override
-  String get friendshipDescription =>
-      'I want to meet new friends and have conversations';
+  String get friendshipDescription => '我想结识新朋友并进行交流';
 
   @override
-  String get funChat => 'Fun Chat';
+  String get funChat => '有趣的聊天';
 
   @override
   String get galleryPermission => '相册权限';
@@ -681,45 +659,40 @@ class AppLocalizationsZh extends AppLocalizations {
   String get galleryPermissionDesc => '需要相册权限来选择个人资料照片。';
 
   @override
-  String get gaming => 'Gaming';
+  String get gaming => '游戏';
 
   @override
   String get gender => '性别';
 
   @override
-  String get genderNotSelectedInfo =>
-      'If gender is not selected, personas of all genders will be shown';
+  String get genderNotSelectedInfo => '如果未选择性别，将显示所有性别的角色';
 
   @override
-  String get genderOptional => 'Gender (Optional)';
+  String get genderOptional => '性别（可选）';
 
   @override
-  String get genderPreferenceActive => 'You can meet personas of all genders';
+  String get genderPreferenceActive => '您可以见到所有性别的角色';
 
   @override
-  String get genderPreferenceDisabled =>
-      'Select your gender to enable opposite gender only option';
+  String get genderPreferenceDisabled => '选择您的性别以启用仅对异性别选项';
 
   @override
-  String get genderPreferenceInactive =>
-      'Only opposite gender personas will be shown';
+  String get genderPreferenceInactive => '只会显示异性别角色';
 
   @override
-  String get genderRequired => 'Gender *';
+  String get genderRequired => '性别 *';
 
   @override
-  String get genderSelectionInfo =>
-      'If not selected, you can meet personas of all genders';
+  String get genderSelectionInfo => '如果未选择，您可以与所有性别的用户见面';
 
   @override
-  String get generalPersona => 'General Persona';
+  String get generalPersona => '一般用户';
 
   @override
   String get goToSettings => '前往设置';
 
   @override
-  String get googleLoginCanceled =>
-      'Google login was canceled.\nPlease try again.';
+  String get googleLoginCanceled => '谷歌登录已取消。';
 
   @override
   String get googleLoginError => 'Google登录失败';
@@ -728,113 +701,108 @@ class AppLocalizationsZh extends AppLocalizations {
   String get grantPermission => '继续';
 
   @override
-  String get guest => 'Guest';
+  String get guest => '游客';
 
   @override
-  String get guestDataMigration =>
-      'Would you like to keep your current chat history when signing up?';
+  String get guestDataMigration => '注册时您想保留当前聊天记录吗？';
 
   @override
-  String get guestLimitReached =>
-      'Guest trial ended.\nSign up for unlimited conversations!';
+  String get guestLimitReached => '游客试用已结束。';
 
   @override
   String get guestLoginPromptMessage => '登录以继续对话';
 
   @override
-  String get guestMessageExhausted => 'Free messages exhausted';
+  String get guestMessageExhausted => '免费消息用尽';
 
   @override
   String guestMessageRemaining(int count) {
-    return '$count guest messages remaining';
+    return '剩余 $count 条游客消息';
   }
 
   @override
-  String get guestModeBanner => 'Guest Mode';
+  String get guestModeBanner => '游客模式';
 
   @override
-  String get guestModeDescription =>
-      'Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas';
+  String get guestModeDescription => '在不注册的情况下尝试 SONA';
 
   @override
-  String get guestModeFailedMessage => 'Failed to start Guest Mode';
+  String get guestModeFailedMessage => '启动游客模式失败';
 
   @override
-  String get guestModeLimitation => 'Some features are limited in Guest Mode';
+  String get guestModeLimitation => '游客模式下某些功能受限';
 
   @override
-  String get guestModeTitle => 'Try as Guest';
+  String get guestModeTitle => '以游客身份尝试';
 
   @override
-  String get guestModeWarning =>
-      'Guest mode lasts for 24 hours,\nafter which data will be deleted.';
+  String get guestModeWarning => '游客模式持续 24 小时，';
 
   @override
-  String get guestModeWelcome => 'Starting in Guest Mode';
+  String get guestModeWelcome => '正在进入游客模式';
 
   @override
   String get happy => '开心';
 
   @override
-  String get hapticFeedback => 'Haptic Feedback';
+  String get hapticFeedback => '触觉反馈';
 
   @override
-  String get harassmentBullying => 'Harassment/Bullying';
+  String get harassmentBullying => '骚扰/欺凌';
 
   @override
-  String get hateSpeech => 'Hate speech';
+  String get hateSpeech => '仇恨言论';
 
   @override
   String get heartDescription => '获得更多消息的爱心';
 
   @override
-  String get heartInsufficient => 'Not enough hearts';
+  String get heartInsufficient => '心数不足';
 
   @override
-  String get heartInsufficientPleaseCharge =>
-      'Not enough hearts. Please recharge hearts.';
+  String get heartInsufficientPleaseCharge => '心数不足。请充值心。';
 
   @override
-  String get heartRequired => '1 heart is required';
+  String get heartRequired => '需要 1 个心';
 
   @override
-  String get heartUsageFailed => 'Failed to use heart.';
+  String get heartUsageFailed => '使用心失败。';
 
   @override
   String get hearts => '爱心';
 
   @override
-  String get hearts10 => '10 Hearts';
+  String get hearts10 => '10 个心';
 
   @override
-  String get hearts30 => '30 Hearts';
+  String get hearts30 => '30 个心';
 
   @override
-  String get hearts30Discount => 'SALE';
+  String get hearts30Discount => '特卖';
 
   @override
-  String get hearts50 => '50 Hearts';
+  String get hearts50 => '50颗心';
 
   @override
-  String get hearts50Discount => 'SALE';
+  String get hearts50Discount => '特卖';
 
   @override
-  String get helloEmoji => 'Hello! 😊';
+  String get helloEmoji => '你好！😊';
 
   @override
   String get help => '帮助';
 
   @override
-  String get hideOriginalText => 'Hide Original';
+  String get hideOriginalText => '隐藏原文';
 
   @override
-  String get hobbySharing => 'Hobby Sharing';
+  String get hobbySharing => '爱好分享';
 
   @override
-  String get hobbyTalk => 'Hobby Talk';
+  String get hobbyTalk => '爱好交流';
 
   @override
-  String get hours24Ago => '24 hours ago';
+  String get hours24Ago => '24小时前';
 
   @override
   String hoursAgo(int count, String formatted) {
@@ -842,34 +810,34 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get howToUse => 'How to use SONA';
+  String get howToUse => '如何使用SONA';
 
   @override
-  String get imageCacheManagement => 'Image Cache Management';
+  String get imageCacheManagement => '图片缓存管理';
 
   @override
   String get inappropriateContent => '不当内容';
 
   @override
-  String get incorrect => 'incorrect';
+  String get incorrect => '不正确';
 
   @override
   String get incorrectPassword => '密码错误';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => '印尼语';
 
   @override
-  String get inquiries => 'Inquiries';
+  String get inquiries => '查询';
 
   @override
   String get insufficientHearts => '爱心不足';
 
   @override
-  String get interestSharing => 'Interest Sharing';
+  String get interestSharing => '兴趣分享';
 
   @override
-  String get interestSharingDesc => 'Discover and recommend shared interests';
+  String get interestSharingDesc => '发现并推荐共同兴趣';
 
   @override
   String get interests => '兴趣';
@@ -882,23 +850,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String isTyping(String name) {
-    return '$name is typing...';
+    return '$name 正在输入...';
   }
 
   @override
-  String get japanese => 'Japanese';
+  String get japanese => '日语';
 
   @override
-  String get joinDate => 'Join Date';
+  String get joinDate => '加入日期';
 
   @override
   String get justNow => '刚刚';
 
   @override
-  String get keepGuestData => 'Keep Chat History';
+  String get keepGuestData => '保留聊天记录';
 
   @override
-  String get korean => 'Korean';
+  String get korean => '韩语';
 
   @override
   String get koreanLanguage => '韩语';
@@ -907,71 +875,70 @@ class AppLocalizationsZh extends AppLocalizations {
   String get language => '语言';
 
   @override
-  String get languageDescription => 'AI will respond in your selected language';
+  String get languageDescription => 'AI将以您选择的语言回复';
 
   @override
-  String get languageIndicator => 'Language';
+  String get languageIndicator => '语言';
 
   @override
   String get languageSettings => '语言设置';
 
   @override
-  String get lastOccurred => 'Last Occurred: ';
+  String get lastOccurred => '最近发生：';
 
   @override
   String get lastUpdated => '最后更新';
 
   @override
-  String get lateNight => 'Late night';
+  String get lateNight => '深夜';
 
   @override
-  String get later => 'Later';
+  String get later => '稍后';
 
   @override
-  String get laterButton => 'Later';
+  String get laterButton => '稍后';
 
   @override
-  String get leave => 'Leave';
+  String get leave => '离开';
 
   @override
-  String get leaveChatConfirm =>
-      'Leave this chat?\nIt will disappear from your chat list.';
+  String get leaveChatConfirm => '确认离开此聊天吗？';
 
   @override
-  String get leaveChatRoom => 'Leave Chat Room';
+  String get leaveChatRoom => '离开聊天室';
 
   @override
-  String get leaveChatTitle => 'Leave Chat';
+  String get leaveChatTitle => '离开聊天';
 
   @override
-  String get lifeAdvice => 'Life Advice';
+  String get lifeAdvice => '生活建议';
 
   @override
-  String get lightTalk => 'Light Talk';
+  String get lightTalk => '轻松聊天';
 
   @override
-  String get lightTheme => 'Light Mode';
+  String get lightTheme => '明亮模式';
 
   @override
-  String get lightThemeDesc => 'Use bright theme';
+  String get lightThemeDesc => '使用明亮主题';
 
   @override
   String get loading => '加载中...';
 
   @override
-  String get loadingData => 'Loading data...';
+  String get loadingData => '正在加载数据...';
 
   @override
   String get loadingProducts => '正在加载产品...';
 
   @override
-  String get loadingProfile => 'Loading profile';
+  String get loadingProfile => '正在加载个人资料';
 
   @override
   String get login => '登录';
 
   @override
-  String get loginButton => 'Login';
+  String get loginButton => '登录';
 
   @override
   String get loginCancelled => '登录已取消';
@@ -989,26 +956,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get loginFailedTryAgain => '登录失败。请重试。';
 
   @override
-  String get loginRequired => 'Login required';
+  String get loginRequired => '需要登录';
 
   @override
-  String get loginRequiredForProfile =>
-      'Login required to view profile\nand check records with SONA';
+  String get loginRequiredForProfile => '需要登录才能查看个人资料';
 
   @override
   String get loginRequiredService => '使用此服务需要登录';
 
   @override
-  String get loginRequiredTitle => 'Login Required';
+  String get loginRequiredTitle => '需要登录';
 
   @override
   String get loginSignup => '登录/注册';
 
   @override
-  String get loginTab => 'Login';
+  String get loginTab => '登录';
 
   @override
-  String get loginTitle => 'Login';
+  String get loginTitle => '登录';
 
   @override
   String get loginWithApple => '使用Apple登录';
@@ -1023,57 +989,55 @@ class AppLocalizationsZh extends AppLocalizations {
   String get logoutConfirm => '确定要退出吗？';
 
   @override
-  String get lonelinessRelief => 'Loneliness Relief';
+  String get lonelinessRelief => '缓解孤独';
 
   @override
-  String get lonely => 'Lonely';
+  String get lonely => '孤独';
 
   @override
-  String get lowQualityResponses => 'Low Quality Responses';
+  String get lowQualityResponses => '低质量回复';
 
   @override
-  String get lunch => 'Lunch';
+  String get lunch => '午餐';
 
   @override
-  String get lunchtime => 'Lunchtime';
+  String get lunchtime => '午餐时间';
 
   @override
-  String get mainErrorType => 'Main Error Type';
+  String get mainErrorType => '主要错误类型';
 
   @override
-  String get makeFriends => 'Make Friends';
+  String get makeFriends => '交朋友';
 
   @override
   String get male => '男';
 
   @override
-  String get manageBlockedAIs => 'Manage Blocked AIs';
+  String get manageBlockedAIs => '管理已屏蔽的AI';
 
   @override
-  String get managePersonaImageCache => 'Manage persona image cache';
+  String get managePersonaImageCache => '管理角色图像缓存';
 
   @override
-  String get marketingAgree => 'Agree to Marketing Information (Optional)';
+  String get marketingAgree => '同意接收营销信息（可选）';
 
   @override
-  String get marketingDescription =>
-      'You can receive event and benefit information';
+  String get marketingDescription => '您可以接收活动和优惠信息';
 
   @override
-  String get matchPersonaStep =>
-      '1. Match Personas: Swipe left or right to select your favorite AI personas.';
+  String get matchPersonaStep => '1. 匹配角色：向左或向右滑动选择您喜欢的AI角色。';
 
   @override
-  String get matchedPersonas => 'Matched Personas';
+  String get matchedPersonas => '匹配的角色';
 
   @override
-  String get matchedSona => 'Matched Sona';
+  String get matchedSona => '匹配的SONA';
 
   @override
   String get matching => '匹配';
 
   @override
-  String get matchingFailed => 'Matching failed.';
+  String get matchingFailed => '匹配失败。';
 
   @override
   String get me => 'Me';
@@ -1085,17 +1049,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get meetNewPersonas => '认识新的角色';
 
   @override
-  String get meetPersonas => 'Meet Personas';
+  String get meetPersonas => '认识角色';
 
   @override
-  String get memberBenefits =>
-      'Get 100+ messages and 10 hearts when you sign up!';
+  String get memberBenefits => '注册时获得100+条消息和10颗心！';
 
   @override
-  String get memoryAlbum => 'Memory Album';
+  String get memoryAlbum => '回忆相册';
 
   @override
-  String get memoryAlbumDesc => 'Automatically save and recall special moments';
+  String get memoryAlbumDesc => '自动保存和回忆特殊时刻';
 
   @override
   String get messageCopied => '消息已复制';
@@ -1107,7 +1070,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get messageLimitReset => '消息限制将在午夜重置';
 
   @override
-  String get messageSendFailed => 'Failed to send message. Please try again.';
+  String get messageSendFailed => '发送消息失败。请再试一次。';
 
   @override
   String get messagesRemaining => '剩余消息';
@@ -1118,10 +1081,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get missingTranslation => 'Missing Translation';
+  String get missingTranslation => '缺少翻译';
 
   @override
-  String get monday => 'Monday';
+  String get monday => '星期一';
 
   @override
   String get month => '月';
@@ -1132,51 +1095,51 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get moreButton => 'More';
+  String get moreButton => '更多';
 
   @override
-  String get morning => 'Morning';
+  String get morning => '早上';
 
   @override
-  String get mostFrequentError => 'Most Frequent Error';
+  String get mostFrequentError => '最常见的错误';
 
   @override
-  String get movies => 'Movies';
+  String get movies => '电影';
 
   @override
-  String get multilingualChat => 'Multilingual Chat';
+  String get multilingualChat => '多语言聊天';
 
   @override
-  String get music => 'Music';
+  String get music => '音乐';
 
   @override
-  String get myGenderSection => 'My Gender (Optional)';
+  String get myGenderSection => '我的性别（可选）';
 
   @override
-  String get networkErrorOccurred => 'A network error occurred.';
+  String get networkErrorOccurred => '网络错误发生。';
 
   @override
   String get newMessage => '新消息';
 
   @override
   String newMessageCount(int count) {
-    return '$count new messages';
+    return '$count 条新消息';
   }
 
   @override
   String get newMessageNotification => '新消息通知';
 
   @override
-  String get newMessages => 'New messages';
+  String get newMessages => '新消息';
 
   @override
-  String get newYear => 'New Year';
+  String get newYear => '新年';
 
   @override
   String get next => '下一步';
 
   @override
-  String get niceToMeetYou => 'Nice to meet you!';
+  String get niceToMeetYou => '很高兴认识你！';
 
   @override
   String get nickname => '昵称';
@@ -1203,63 +1166,63 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nicknamePlaceholder => '输入您的昵称';
 
   @override
-  String get nicknameRequired => 'Nickname *';
+  String get nicknameRequired => '昵称 *';
 
   @override
-  String get night => 'Night';
+  String get night => '晚安';
 
   @override
   String get no => '否';
 
   @override
-  String get noBlockedAIs => 'No blocked AIs';
+  String get noBlockedAIs => '没有被屏蔽的AI';
 
   @override
-  String get noChatsYet => 'No chats yet';
+  String get noChatsYet => '还没有聊天';
 
   @override
   String get noConversationYet => '还没有对话';
 
   @override
-  String get noErrorReports => 'No error reports.';
+  String get noErrorReports => '没有错误报告。';
 
   @override
-  String get noImageAvailable => 'No image available';
+  String get noImageAvailable => '没有可用的图片';
 
   @override
   String get noMatchedPersonas => '还没有匹配的角色';
 
   @override
-  String get noMatchedSonas => 'No matched Sonas yet';
+  String get noMatchedSonas => '还没有匹配的SONA';
 
   @override
-  String get noPersonasAvailable => 'No personas available. Please try again.';
+  String get noPersonasAvailable => '没有可用的人物。请再试一次。';
 
   @override
-  String get noPersonasToSelect => 'No personas available';
+  String get noPersonasToSelect => '没有人物可供选择';
 
   @override
-  String get noQualityIssues => 'No quality issues in the last hour ✅';
+  String get noQualityIssues => '在过去一小时内没有质量问题 ✅';
 
   @override
-  String get noQualityLogs => 'No quality logs yet.';
+  String get noQualityLogs => '还没有质量日志。';
 
   @override
   String get noTranslatedMessages => '没有要翻译的消息';
 
   @override
-  String get notEnoughHearts => 'Not enough hearts';
+  String get notEnoughHearts => '心数不足';
 
   @override
   String notEnoughHeartsCount(int count) {
-    return 'Not enough hearts. (Current: $count)';
+    return '心数不足。（当前: $count）';
   }
 
   @override
-  String get notRegistered => 'not registered';
+  String get notRegistered => '未注册';
 
   @override
-  String get notSubscribed => 'Not subscribed';
+  String get notSubscribed => '未订阅';
 
   @override
   String get notificationPermissionDesc => '需要通知权限来接收新消息。';
@@ -1274,17 +1237,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get notifications => '通知';
 
   @override
-  String get occurrenceInfo => 'Occurrence Info:';
+  String get occurrenceInfo => '事件信息：';
 
   @override
-  String get olderChats => 'Older';
+  String get olderChats => '较旧的';
 
   @override
-  String get onlyOppositeGenderNote =>
-      'If unchecked, only opposite gender personas will be shown';
+  String get onlyOppositeGenderNote => '如果未勾选，将只显示异性人物';
 
   @override
-  String get openSettings => 'Open Settings';
+  String get openSettings => '打开设置';
 
   @override
   String get optional => '可选';
@@ -1293,25 +1255,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get or => '或';
 
   @override
-  String get originalPrice => 'Original';
+  String get originalPrice => '原价';
 
   @override
-  String get originalText => 'Original';
+  String get originalText => '原文';
 
   @override
   String get other => '其他';
 
   @override
-  String get otherError => 'Other Error';
+  String get otherError => '其他错误';
 
   @override
-  String get others => 'Others';
+  String get others => '其他';
 
   @override
-  String get ownedHearts => 'Owned Hearts';
+  String get ownedHearts => '拥有的心数';
 
   @override
-  String get parentsDay => 'Parents\' Day';
+  String get parentsDay => '父母节';
 
   @override
   String get password => '密码';
@@ -1320,28 +1282,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get passwordConfirmation => '输入密码以确认';
 
   @override
-  String get passwordConfirmationDesc =>
-      'Please re-enter your password to delete account.';
+  String get passwordConfirmationDesc => '请重新输入您的密码以删除账户。';
 
   @override
   String get passwordHint => '输入密码（6位以上）';
 
   @override
-  String get passwordLabel => 'Password';
+  String get passwordLabel => '密码';
 
   @override
-  String get passwordRequired => 'Password *';
+  String get passwordRequired => '密码 *';
 
   @override
-  String get passwordResetEmailPrompt =>
-      'Please enter your email to reset password';
+  String get passwordResetEmailPrompt => '请输入您的电子邮件以重置密码';
 
   @override
-  String get passwordResetEmailSent =>
-      'Password reset email has been sent. Please check your email.';
+  String get passwordResetEmailSent => '密码重置邮件已发送。请检查您的电子邮件。';
 
   @override
-  String get passwordText => 'password';
+  String get passwordText => '密码';
 
   @override
   String get passwordTooShort => '密码太短';
@@ -1351,12 +1310,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String permissionDeniedMessage(String permissionName) {
-    return '$permissionName permission was denied.\\nPlease allow the permission in settings.';
+    return '$permissionName 权限被拒绝。\\n请在设置中允许该权限。';
   }
 
   @override
-  String get permissionDeniedTryLater =>
-      'Permission denied. Please try again later.';
+  String get permissionDeniedTryLater => '权限被拒绝。请稍后再试。';
 
   @override
   String get permissionRequired => '需要权限';
@@ -1365,46 +1323,62 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personaGenderSection => '角色性别偏好';
 
   @override
-  String get personaQualityStats => 'Persona Quality Statistics';
+  String personaQualityStats(Object personaQualityStats) {
+    return '个性质量统计';
+  }
 
   @override
-  String get personalInfoExposure => '个人信息暴露';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return '个人信息暴露';
+  }
 
   @override
-  String get personality => 'Personality';
+  String personality(Object personality) {
+    return '个性';
+  }
 
   @override
-  String get pets => 'Pets';
+  String pets(Object pets) {
+    return '宠物';
+  }
 
   @override
   String get photo => '照片';
 
   @override
-  String get photography => 'Photography';
+  String photography(Object photography) {
+    return '摄影';
+  }
 
   @override
-  String get picnic => 'Picnic';
+  String picnic(Object picnic) {
+    return '野餐';
+  }
 
   @override
-  String get preferenceSettings => 'Preference Settings';
+  String preferenceSettings(Object preferenceSettings) {
+    return '偏好设置';
+  }
 
   @override
-  String get preferredLanguage => 'Preferred Language';
+  String preferredLanguage(Object preferredLanguage) {
+    return '首选语言';
+  }
 
   @override
-  String get preparingForSleep => 'Preparing for sleep';
+  String get preparingForSleep => '准备睡觉';
 
   @override
-  String get preparingNewMeeting => 'Preparing new meeting';
+  String get preparingNewMeeting => '准备新会议';
 
   @override
-  String get preparingPersonaImages => 'Preparing persona images';
+  String get preparingPersonaImages => '准备个性图像';
 
   @override
-  String get preparingPersonas => 'Preparing personas';
+  String get preparingPersonas => '准备个性';
 
   @override
-  String get preview => 'Preview';
+  String get preview => '预览';
 
   @override
   String get previous => '上一步';
@@ -1420,133 +1394,121 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get privacySection1Content =>
-      'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+      '我们致力于保护您的隐私。本隐私政策解释了我们在您使用我们的服务时如何收集、使用和保护您的信息。';
 
   @override
-  String get privacySection1Title =>
-      '1. Purpose of Collection and Use of Personal Information';
+  String get privacySection1Title => '1. 个人信息的收集和使用目的';
 
   @override
   String get privacySection2Content =>
-      'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+      '我们收集您直接提供给我们的信息，例如当您创建账户、更新个人资料或使用我们的服务时。';
 
   @override
-  String get privacySection2Title => 'Information We Collect';
+  String get privacySection2Title => '我们收集的信息';
 
   @override
-  String get privacySection3Content =>
-      'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+  String get privacySection3Content => '我们使用收集的信息来提供、维护和改善我们的服务，并与您沟通。';
 
   @override
-  String get privacySection3Title =>
-      '3. Retention and Use Period of Personal Information';
+  String get privacySection3Title => '3. 个人信息的保留和使用期限';
 
   @override
-  String get privacySection4Content =>
-      'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+  String get privacySection4Content => '未经您的同意，我们不会将您的个人信息出售、交易或以其他方式转让给第三方。';
 
   @override
-  String get privacySection4Title =>
-      '4. Provision of Personal Information to Third Parties';
+  String get privacySection4Title => '4. 向第三方提供个人信息';
 
   @override
   String get privacySection5Content =>
-      'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+      '我们实施适当的安全措施，以保护您的个人信息免受未经授权的访问、修改、披露或销毁。';
 
   @override
-  String get privacySection5Title =>
-      '5. Technical Protection Measures for Personal Information';
+  String get privacySection5Title => '5. 个人信息的技术保护措施';
 
   @override
-  String get privacySection6Content =>
-      'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+  String get privacySection6Content => '我们会在提供服务和遵守法律义务所需的时间内保留个人信息。';
 
   @override
-  String get privacySection6Title => '6. User Rights';
+  String get privacySection6Title => '6. 用户权利';
 
   @override
-  String get privacySection7Content =>
-      'You have the right to access, update, or delete your personal information at any time through your account settings.';
+  String get privacySection7Content => '您有权随时通过账户设置访问、更新或删除您的个人信息。';
 
   @override
-  String get privacySection7Title => 'Your Rights';
+  String get privacySection7Title => '您的权利';
 
   @override
   String get privacySection8Content =>
-      'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+      '如果您对本隐私政策有任何疑问，请通过 support@sona.com 联系我们。';
 
   @override
-  String get privacySection8Title => 'Contact Us';
+  String get privacySection8Title => '联系我们';
 
   @override
   String get privacySettings => '隐私设置';
 
   @override
-  String get privacySettingsInfo =>
-      'Disabling individual features will make those services unavailable';
+  String get privacySettingsInfo => '禁用单个功能将使这些服务不可用';
 
   @override
-  String get privacySettingsScreen => 'Privacy Settings';
+  String get privacySettingsScreen => '隐私设置';
 
   @override
-  String get problemMessage => 'Problem';
+  String get problemMessage => '问题';
 
   @override
-  String get problemOccurred => 'Problem Occurred';
+  String get problemOccurred => '发生问题';
 
   @override
   String get profile => '个人资料';
 
   @override
-  String get profileEdit => 'Edit Profile';
+  String get profileEdit => '编辑个人资料';
 
   @override
-  String get profileEditLoginRequiredMessage =>
-      'Login is required to edit your profile.\nWould you like to go to the login screen?';
+  String get profileEditLoginRequiredMessage => '编辑个人资料需要登录。您想去登录界面吗？';
 
   @override
-  String get profileInfo => 'Profile Information';
+  String get profileInfo => '个人资料信息';
 
   @override
-  String get profileInfoDescription =>
-      'Please enter your profile photo and basic information';
+  String get profileInfoDescription => '请输入您的个人资料照片和基本信息';
 
   @override
-  String get profileNav => 'Profile';
+  String get profileNav => '个人资料';
 
   @override
   String get profilePhoto => '个人照片';
 
   @override
-  String get profilePhotoAndInfo =>
-      'Please enter profile photo and basic information';
+  String get profilePhotoAndInfo => '请输入个人资料照片和基本信息';
 
   @override
-  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+  String get profilePhotoUpdateFailed => '更新个人资料照片失败';
 
   @override
-  String get profilePhotoUpdated => 'Profile photo updated';
+  String get profilePhotoUpdated => '个人资料照片已更新';
 
   @override
-  String get profileSettings => 'Profile Settings';
+  String get profileSettings => '个人资料设置';
 
   @override
   String get profileSetup => '设置个人资料';
 
   @override
-  String get profileUpdateFailed => 'Failed to update profile';
+  String get profileUpdateFailed => '更新个人资料失败';
 
   @override
   String get profileUpdated => '个人资料已更新';
 
   @override
-  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+  String get purchaseAndRefundPolicy => '购买与退款政策';
 
   @override
-  String get purchaseButton => 'Purchase';
+  String get purchaseButton => '购买';
 
   @override
-  String get purchaseConfirm => 'Purchase Confirmation';
+  String get purchaseConfirm => '购买确认';
 
   @override
   String purchaseConfirmContent(String product, String price) {
@@ -1560,175 +1522,165 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get purchaseFailed => 'Purchase failed';
+  String get purchaseFailed => '购买失败';
 
   @override
-  String get purchaseHeartsOnly => 'Buy hearts';
+  String get purchaseHeartsOnly => '购买心心';
 
   @override
-  String get purchaseMoreHearts => 'Purchase hearts to continue conversations';
+  String get purchaseMoreHearts => '购买心心以继续对话';
 
   @override
-  String get purchasePending => 'Purchase pending...';
+  String get purchasePending => '购买待处理...';
 
   @override
-  String get purchasePolicy => 'Purchase Policy';
+  String get purchasePolicy => '购买政策';
 
   @override
-  String get purchaseSection1Content =>
-      'We accept various payment methods including credit cards and digital wallets.';
+  String get purchaseSection1Content => '我们接受多种支付方式，包括信用卡和数字钱包。';
 
   @override
-  String get purchaseSection1Title => 'Payment Methods';
+  String get purchaseSection1Title => '支付方式';
 
   @override
-  String get purchaseSection2Content =>
-      'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+  String get purchaseSection2Content => '如果您在购买后未使用所购项目，可以在14天内申请退款。';
 
   @override
-  String get purchaseSection2Title => 'Refund Policy';
+  String get purchaseSection2Title => '退款政策';
 
   @override
-  String get purchaseSection3Content =>
-      'You can cancel your subscription at any time through your account settings.';
+  String get purchaseSection3Content => '您可以随时通过账户设置取消订阅。';
 
   @override
-  String get purchaseSection3Title => 'Cancellation';
+  String get purchaseSection3Title => '取消';
 
   @override
-  String get purchaseSection4Content =>
-      'By making a purchase, you agree to our terms of use and service agreement.';
+  String get purchaseSection4Content => '通过购买，您同意我们的使用条款和服务协议。';
 
   @override
-  String get purchaseSection4Title => 'Terms of Use';
+  String get purchaseSection4Title => '使用条款';
 
   @override
-  String get purchaseSection5Content =>
-      'For purchase-related issues, please contact our support team.';
+  String get purchaseSection5Content => '如有与购买相关的问题，请联系支持团队。';
 
   @override
-  String get purchaseSection5Title => 'Contact Support';
+  String get purchaseSection5Title => '联系支持';
 
   @override
-  String get purchaseSection6Content =>
-      'All purchases are subject to our standard terms and conditions.';
+  String get purchaseSection6Content => '所有购买均受我们的标准条款和条件约束。';
 
   @override
-  String get purchaseSection6Title => '6. Inquiries';
+  String get purchaseSection6Title => '6. 查询';
 
   @override
   String get pushNotifications => '推送通知';
 
   @override
-  String get reading => 'Reading';
+  String get reading => '阅读';
 
   @override
-  String get realtimeQualityLog => 'Real-time Quality Log';
+  String get realtimeQualityLog => '实时质量日志';
 
   @override
-  String get recentConversation => 'Recent Conversation:';
+  String get recentConversation => '最近对话：';
 
   @override
-  String get recentLoginRequired => 'Please login again for security';
+  String get recentLoginRequired => '请重新登录以确保安全';
 
   @override
-  String get referrerEmail => 'Referrer Email';
+  String get referrerEmail => '推荐人邮箱';
 
   @override
-  String get referrerEmailHelper => 'Optional: Email of who referred you';
+  String get referrerEmailHelper => '可选：推荐您的人的邮箱';
 
   @override
-  String get referrerEmailLabel => 'Referrer Email (Optional)';
+  String get referrerEmailLabel => '推荐人邮箱（可选）';
 
   @override
   String get refresh => '刷新';
 
   @override
   String refreshComplete(int count) {
-    return 'Refresh complete! $count matched personas';
+    return '刷新完成！$count 个匹配的个性';
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => '刷新失败';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => '正在刷新聊天列表...';
 
   @override
-  String get relatedFAQ => 'Related FAQ';
+  String get relatedFAQ => '相关常见问题';
 
   @override
   String get report => '举报';
 
   @override
-  String get reportAI => 'Report';
+  String get reportAI => '举报';
 
   @override
-  String get reportAIDescription =>
-      'If the AI made you uncomfortable, please describe the issue.';
+  String get reportAIDescription => '如果AI让您感到不适，请描述问题。';
 
   @override
-  String get reportAITitle => 'Report AI Conversation';
+  String get reportAITitle => '举报AI对话';
 
   @override
-  String get reportAndBlock => 'Report & Block';
+  String get reportAndBlock => '举报与屏蔽';
 
   @override
-  String get reportAndBlockDescription =>
-      'You can report and block inappropriate behavior of this AI';
+  String get reportAndBlockDescription => '您可以举报并屏蔽该AI的不当行为';
 
   @override
-  String get reportChatError => 'Report Chat Error';
+  String get reportChatError => '举报聊天错误';
 
   @override
   String reportError(String error) {
-    return 'Error occurred while reporting: $error';
+    return '举报时发生错误：$error';
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => '举报失败';
 
   @override
-  String get reportSubmitted =>
-      'Report submitted. We will review and take action.';
+  String get reportSubmitted => '举报已提交。我们将进行审核并采取措施。';
 
   @override
-  String get reportSubmittedSuccess =>
-      'Your report has been submitted. Thank you!';
+  String get reportSubmittedSuccess => '您的举报已提交。谢谢！';
 
   @override
-  String get requestLimit => 'Request Limit';
+  String get requestLimit => '请求限制';
 
   @override
   String get required => '必需';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => '请同意条款';
 
   @override
-  String get restartConversation => 'Restart Conversation';
+  String get restartConversation => '重启对话';
 
   @override
   String restartConversationQuestion(String name) {
-    return 'Would you like to restart the conversation with $name?';
+    return '您想要与 $name 重启对话吗？';
   }
 
   @override
   String restartConversationWithName(String name) {
-    return 'Restarting conversation with $name!';
+    return '正在与 $name 重启对话！';
   }
 
   @override
   String get retry => '重试';
 
   @override
-  String get retryButton => 'Retry';
+  String get retryButton => '重试';
 
   @override
   String get sad => '难过';
 
   @override
-  String get saturday => 'Saturday';
+  String get saturday => '星期六';
 
   @override
   String get save => '保存';
@@ -1737,16 +1689,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get search => '搜索';
 
   @override
-  String get searchFAQ => 'Search FAQ...';
+  String get searchFAQ => '搜索常见问题...';
 
   @override
-  String get searchResults => 'Search Results';
+  String get searchResults => '搜索结果';
 
   @override
-  String get selectEmotion => 'Select Emotion';
+  String get selectEmotion => '选择情感';
 
   @override
-  String get selectErrorType => 'Select error type';
+  String get selectErrorType => '选择错误类型';
 
   @override
   String get selectFeeling => '选择心情';
@@ -1755,7 +1707,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selectGender => '选择性别';
 
   @override
-  String get selectInterests => 'Please select your interests (at least 1)';
+  String get selectInterests => '请选择您的兴趣（至少 1 个）';
 
   @override
   String get selectLanguage => '选择语言';
@@ -1764,31 +1716,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get selectPersona => '选择角色';
 
   @override
-  String get selectPersonaPlease => 'Please select a persona.';
+  String get selectPersonaPlease => '请选择一个角色。';
 
   @override
-  String get selectPreferredMbti =>
-      'If you prefer personas with specific MBTI types, please select';
+  String get selectPreferredMbti => '如果您偏好特定 MBTI 类型的角色，请选择';
 
   @override
-  String get selectProblematicMessage =>
-      'Select the problematic message (optional)';
+  String get selectProblematicMessage => '选择问题消息（可选）';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => '选择举报原因';
 
   @override
-  String get selectTheme => 'Select Theme';
+  String get selectTheme => '选择主题';
 
   @override
-  String get selectTranslationError =>
-      'Please select a message with translation error';
+  String get selectTranslationError => '请选择一条翻译错误的消息';
 
   @override
-  String get selectUsagePurpose => 'Please select your purpose for using SONA';
+  String get selectUsagePurpose => '请选择您使用 SONA 的目的';
 
   @override
-  String get selfIntroduction => 'Introduction (Optional)';
+  String get selfIntroduction => '自我介绍（可选）';
 
   @override
   String get selfIntroductionHint => '写一段关于你自己的简短介绍';
@@ -1797,25 +1746,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get send => '发送';
 
   @override
-  String get sendChatError => 'Send Chat Error';
+  String get sendChatError => '发送聊天错误';
 
   @override
   String get sendFirstMessage => '发送第一条消息';
 
   @override
-  String get sendReport => 'Send Report';
+  String get sendReport => '发送举报';
 
   @override
-  String get sendingEmail => 'Sending email...';
+  String get sendingEmail => '正在发送邮件...';
 
   @override
-  String get seoul => 'Seoul';
+  String get seoul => '首尔';
 
   @override
-  String get serverErrorDashboard => 'Server Error';
+  String get serverErrorDashboard => '服务器错误';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement => '请同意服务条款';
 
   @override
   String get sessionExpired => '会话已过期';
@@ -1830,7 +1779,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings => '设置';
 
   @override
-  String get sexualContent => 'Sexual content';
+  String get sexualContent => '性内容';
 
   @override
   String get showAllGenderPersonas => '显示所有性别角色';
@@ -1839,51 +1788,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get showAllGendersOption => '显示所有性别';
 
   @override
-  String get showOppositeGenderOnly =>
-      'If unchecked, only opposite gender personas will be shown';
+  String get showOppositeGenderOnly => '如果未勾选，则只显示异性角色';
 
   @override
-  String get showOriginalText => 'Show Original';
+  String get showOriginalText => '显示原文';
 
   @override
   String get signUp => '注册';
 
   @override
-  String get signUpFromGuest => 'Sign up now to access all features!';
+  String get signUpFromGuest => '立即注册以访问所有功能！';
 
   @override
   String get signup => '注册';
 
   @override
-  String get signupComplete => 'Sign Up Complete';
+  String get signupComplete => '注册完成';
 
   @override
-  String get signupTab => 'Sign Up';
+  String get signupTab => '注册';
 
   @override
-  String get simpleInfoRequired =>
-      'Simple information is required\nfor matching with AI personas';
+  String get simpleInfoRequired => '需要简单信息';
 
   @override
   String get skip => '跳过';
 
   @override
-  String get sonaFriend => 'SONA Friend';
+  String get sonaFriend => 'SONA 朋友';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'SONA 隐私政策';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'SONA 购买政策';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'SONA 服务条款';
 
   @override
-  String get sonaUsagePurpose => 'Please select your purpose for using SONA';
+  String get sonaUsagePurpose => '请选择您使用 SONA 的目的';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => '对不起，这没有帮助';
 
   @override
   String get sort => '排序';
@@ -1892,41 +1839,37 @@ class AppLocalizationsZh extends AppLocalizations {
   String get soundSettings => '声音设置';
 
   @override
-  String get spamAdvertising => 'Spam/Advertising';
+  String get spamAdvertising => '垃圾信息/广告';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => '西班牙语';
 
   @override
-  String get specialRelationshipDesc =>
-      'Understand each other and build deep bonds';
+  String get specialRelationshipDesc => '彼此理解，建立深厚的联系';
 
   @override
-  String get sports => 'Sports';
+  String get sports => '体育';
 
   @override
-  String get spring => 'Spring';
+  String get spring => '春天';
 
   @override
   String get startChat => '开始聊天';
 
   @override
-  String get startChatButton => 'Start Chat';
+  String get startChatButton => '开始聊天';
 
   @override
-  String get startConversation => 'Start a conversation';
+  String get startConversation => '开始对话';
 
   @override
-  String get startConversationLikeAFriend =>
-      'Start a conversation with Sona like a friend';
+  String get startConversationLikeAFriend => '像朋友一样与 Sona 开始对话';
 
   @override
-  String get startConversationStep =>
-      '2. Start Conversation: Chat freely with matched personas.';
+  String get startConversationStep => '2. 开始对话：与匹配的角色自由聊天。';
 
   @override
-  String get startConversationWithSona =>
-      'Start chatting with Sona like a friend!';
+  String get startConversationWithSona => '像朋友一样与 Sona 开始聊天！';
 
   @override
   String get startWithEmail => '使用邮箱开始';
@@ -1935,266 +1878,248 @@ class AppLocalizationsZh extends AppLocalizations {
   String get startWithGoogle => '使用Google开始';
 
   @override
-  String get startingApp => 'Starting app';
+  String get startingApp => '启动应用';
 
   @override
-  String get storageManagement => 'Storage Management';
+  String get storageManagement => '存储管理';
 
   @override
   String get store => '商店';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => '无法连接到商店';
 
   @override
-  String get storeLoginRequiredMessage =>
-      'Login is required to use the store.\nWould you like to go to the login screen?';
+  String get storeLoginRequiredMessage => '使用商店需要登录。您想去登录界面吗？';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => '商店不可用';
 
   @override
-  String get storyEvent => 'Story Event';
+  String get storyEvent => '故事事件';
 
   @override
-  String get stressed => 'Stressed';
+  String get stressed => '压力大';
 
   @override
-  String get submitReport => 'Submit Report';
+  String get submitReport => '提交报告';
 
   @override
-  String get subscriptionStatus => 'Subscription Status';
+  String get subscriptionStatus => '订阅状态';
 
   @override
-  String get subtleVibrationOnTouch => 'Subtle vibration on touch';
+  String get subtleVibrationOnTouch => '触摸时轻微震动';
 
   @override
-  String get summer => 'Summer';
+  String get summer => '夏天';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => '星期天';
 
   @override
-  String get swipeAnyDirection => 'Swipe in any direction';
+  String get swipeAnyDirection => '向任意方向滑动';
 
   @override
-  String get swipeDownToClose => 'Swipe down to close';
+  String get swipeDownToClose => '向下滑动以关闭';
 
   @override
-  String get systemTheme => 'Follow System';
+  String get systemTheme => '跟随系统';
 
   @override
-  String get systemThemeDesc =>
-      'Automatically changes based on device dark mode settings';
+  String get systemThemeDesc => '根据设备的深色模式设置自动更改';
 
   @override
   String get tapBottomForDetails => '点击底部查看详情';
 
   @override
-  String get tapForDetails => 'Tap bottom area for details';
+  String get tapForDetails => '点击底部区域查看详情';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => '点击以滑动照片';
 
   @override
-  String get teachersDay => 'Teachers\' Day';
+  String get teachersDay => '教师节';
 
   @override
-  String get technicalError => 'Technical Error';
+  String get technicalError => '技术错误';
 
   @override
-  String get technology => 'Technology';
+  String get technology => '技术';
 
   @override
-  String get terms => 'Terms of Service';
+  String get terms => '服务条款';
 
   @override
-  String get termsAgreement => 'Terms Agreement';
+  String get termsAgreement => '条款协议';
 
   @override
-  String get termsAgreementDescription =>
-      'Please agree to the terms for using the service';
+  String get termsAgreementDescription => '请同意使用服务的条款';
 
   @override
   String get termsOfService => '服务条款';
 
   @override
-  String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+  String get termsSection10Content => '我们保留随时修改这些条款的权利，并通知用户。';
 
   @override
-  String get termsSection10Title => 'Article 10 (Dispute Resolution)';
+  String get termsSection10Title => '第10条（争议解决）';
 
   @override
-  String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+  String get termsSection11Content => '这些条款应受我们运营所在司法管辖区的法律管辖。';
 
   @override
-  String get termsSection11Title =>
-      'Article 11 (AI Service Special Provisions)';
+  String get termsSection11Title => '第11条（人工智能服务特别条款）';
 
   @override
-  String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+  String get termsSection12Content => '如果这些条款的任何条款被认为不可执行，其余条款将继续有效。';
 
   @override
-  String get termsSection12Title => 'Article 12 (Data Collection and Usage)';
+  String get termsSection12Title => '第12条（数据收集与使用）';
 
   @override
   String get termsSection1Content =>
-      'These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.';
+      '本条款旨在定义SONA（以下简称“公司”）与用户之间关于使用公司提供的人工智能角色对话匹配服务（以下简称“服务”）的权利、义务和责任。';
 
   @override
-  String get termsSection1Title => 'Article 1 (Purpose)';
+  String get termsSection1Title => '第1条（目的）';
 
   @override
-  String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+  String get termsSection2Content => '使用我们的服务即表示您同意受这些服务条款和我们的隐私政策的约束。';
 
   @override
-  String get termsSection2Title => 'Article 2 (Definitions)';
+  String get termsSection2Title => '第2条（定义）';
 
   @override
-  String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+  String get termsSection3Content => '您必须年满 13 岁才能使用我们的服务。';
 
   @override
-  String get termsSection3Title =>
-      'Article 3 (Effect and Modification of Terms)';
+  String get termsSection3Title => '第三条（条款的生效与修改）';
 
   @override
-  String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+  String get termsSection4Content => '您有责任维护您的账户和密码的机密性。';
 
   @override
-  String get termsSection4Title => 'Article 4 (Provision of Service)';
+  String get termsSection4Title => '第四条（服务的提供）';
 
   @override
-  String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+  String get termsSection5Content => '您同意不将我们的服务用于任何非法或未经授权的目的。';
 
   @override
-  String get termsSection5Title => 'Article 5 (Membership Registration)';
+  String get termsSection5Title => '第五条（会员注册）';
 
   @override
-  String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+  String get termsSection6Content => '我们保留因违反这些条款而终止或暂停您的账户的权利。';
 
   @override
-  String get termsSection6Title => 'Article 6 (User Obligations)';
+  String get termsSection6Title => '第六条（用户义务）';
 
   @override
   String get termsSection7Content =>
-      'The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.';
+      '如果用户违反这些条款的义务或干扰正常的服务运营，公司可能会通过警告、临时暂停或永久暂停逐步限制服务使用。';
 
   @override
-  String get termsSection7Title => 'Article 7 (Service Usage Restrictions)';
+  String get termsSection7Title => '第七条（服务使用限制）';
 
   @override
-  String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+  String get termsSection8Content => '我们不对因您使用我们的服务而产生的任何间接、附带或后果性损害负责。';
 
   @override
-  String get termsSection8Title => 'Article 8 (Service Interruption)';
+  String get termsSection8Title => '第八条（服务中断）';
 
   @override
-  String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+  String get termsSection9Content => '我们服务中所有可用的内容和材料均受知识产权保护。';
 
   @override
-  String get termsSection9Title => 'Article 9 (Disclaimer)';
+  String get termsSection9Title => '第九条（免责声明）';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => '附加条款';
 
   @override
-  String get thai => 'Thai';
+  String get thai => '泰语';
 
   @override
-  String get thanksFeedback => 'Thanks for your feedback!';
+  String get thanksFeedback => '感谢您的反馈！';
 
   @override
   String get theme => '主题';
 
   @override
-  String get themeDescription =>
-      'You can customize the app appearance as you like';
+  String get themeDescription => '您可以根据自己的喜好自定义应用外观';
 
   @override
-  String get themeSettings => 'Theme Settings';
+  String get themeSettings => '主题设置';
 
   @override
-  String get thursday => 'Thursday';
+  String get thursday => '星期四';
 
   @override
   String get timeout => '超时';
 
   @override
-  String get tired => 'Tired';
+  String get tired => '疲惫';
 
   @override
   String get today => '今天';
 
   @override
-  String get todayChats => 'Today';
+  String get todayChats => '今天';
 
   @override
-  String get todayText => 'Today';
+  String get todayText => '今天';
 
   @override
-  String get tomorrowText => 'Tomorrow';
+  String get tomorrowText => '明天';
 
   @override
-  String get totalConsultSessions => 'Total Consultation Sessions';
+  String get totalConsultSessions => '总咨询会话数';
 
   @override
-  String get totalErrorCount => 'Total Error Count';
+  String get totalErrorCount => '总错误次数';
 
   @override
-  String get totalLikes => 'Total Likes';
+  String get totalLikes => '总点赞数';
 
   @override
   String totalOccurrences(Object count) {
-    return 'Total $count occurrences';
+    return '总计 $count 次';
   }
 
   @override
-  String get totalResponses => 'Total Responses';
+  String get totalResponses => '总回复数';
 
   @override
-  String get translatedFrom => 'Translated';
+  String get translatedFrom => '翻译自';
 
   @override
-  String get translatedText => 'Translation';
+  String get translatedText => '翻译';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => '翻译错误';
 
   @override
-  String get translationErrorDescription =>
-      'Please report incorrect translations or awkward expressions';
+  String get translationErrorDescription => '请报告不正确的翻译或生硬的表达';
 
   @override
-  String get translationErrorReported =>
-      'Translation error reported. Thank you!';
+  String get translationErrorReported => '翻译错误已报告。谢谢！';
 
   @override
-  String get translationNote => '※ AI translation may not be perfect';
+  String get translationNote => '※ AI 翻译可能不完美';
 
   @override
-  String get translationQuality => 'Translation Quality';
+  String get translationQuality => '翻译质量';
 
   @override
-  String get translationSettings => 'Translation Settings';
+  String get translationSettings => '翻译设置';
 
   @override
-  String get travel => 'Travel';
+  String get travel => '旅行';
 
   @override
-  String get tuesday => 'Tuesday';
+  String get tuesday => '星期二';
 
   @override
-  String get tutorialAccount => 'Tutorial Account';
+  String get tutorialAccount => '教程账户';
 
   @override
   String get tutorialWelcomeDescription => '与AI角色建立特殊关系。';
@@ -2209,22 +2134,21 @@ class AppLocalizationsZh extends AppLocalizations {
   String get unblock => '取消屏蔽';
 
   @override
-  String get unblockFailed => 'Failed to unblock';
+  String get unblockFailed => '解封失败';
 
   @override
   String unblockPersonaConfirm(String name) {
-    return 'Unblock $name?';
+    return '确认解封 $name？';
   }
 
   @override
-  String get unblockedSuccessfully => 'Unblocked successfully';
+  String get unblockedSuccessfully => '解封成功';
 
   @override
-  String get unexpectedLoginError =>
-      'An unexpected error occurred during login';
+  String get unexpectedLoginError => '登录时发生意外错误';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => '未知';
 
   @override
   String get unknownError => '未知错误';
@@ -2233,94 +2157,93 @@ class AppLocalizationsZh extends AppLocalizations {
   String get unlimitedMessages => '无限消息';
 
   @override
-  String get unsendMessage => 'Unsend message';
+  String get unsendMessage => '撤回消息';
 
   @override
   String get usagePurpose => '使用目的';
 
   @override
-  String get useOneHeart => 'Use 1 Heart';
+  String get useOneHeart => '使用 1 个心';
 
   @override
   String get useSystemLanguage => '使用系统语言';
 
   @override
-  String get user => 'User: ';
+  String get user => '用户：';
 
   @override
-  String get userMessage => 'User Message:';
+  String get userMessage => '用户消息：';
 
   @override
   String get userNotFound => '用户未找到';
 
   @override
-  String get valentinesDay => 'Valentine\'s Day';
+  String get valentinesDay => '情人节';
 
   @override
-  String get verifyingAuth => 'Verifying authentication';
+  String get verifyingAuth => '正在验证身份';
 
   @override
   String get version => '版本';
 
   @override
-  String get vietnamese => 'Vietnamese';
+  String get vietnamese => '越南语';
 
   @override
-  String get violentContent => 'Violent content';
+  String get violentContent => '暴力内容';
 
   @override
   String get voiceMessage => '语音消息';
 
   @override
   String waitingForChat(String name) {
-    return '$name is waiting to chat.';
+    return '$name 正在等待聊天。';
   }
 
   @override
-  String get walk => 'Walk';
+  String get walk => '散步';
 
   @override
-  String get wasHelpful => 'Was this helpful?';
+  String get wasHelpful => '这有帮助吗？';
 
   @override
-  String get weatherClear => 'Clear';
+  String get weatherClear => '晴天';
 
   @override
-  String get weatherCloudy => 'Cloudy';
+  String get weatherCloudy => '多云';
 
   @override
-  String get weatherContext => 'Weather Context';
+  String get weatherContext => '天气背景';
 
   @override
-  String get weatherContextDesc =>
-      'Provide conversation context based on weather';
+  String get weatherContextDesc => '根据天气提供对话背景';
 
   @override
-  String get weatherDrizzle => 'Drizzle';
+  String get weatherDrizzle => '毛毛雨';
 
   @override
-  String get weatherFog => 'Fog';
+  String get weatherFog => '雾';
 
   @override
-  String get weatherMist => 'Mist';
+  String get weatherMist => '霭';
 
   @override
-  String get weatherRain => 'Rain';
+  String get weatherRain => '雨';
 
   @override
   String get weatherRainy => '下雨';
 
   @override
-  String get weatherSnow => 'Snow';
+  String get weatherSnow => '雪';
 
   @override
   String get weatherSnowy => '下雪';
 
   @override
-  String get weatherThunderstorm => 'Thunderstorm';
+  String get weatherThunderstorm => '雷暴';
 
   @override
-  String get wednesday => 'Wednesday';
+  String get wednesday => '星期三';
 
   @override
   String get weekdays => '日,一,二,三,四,五,六';
@@ -2329,23 +2252,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get welcomeMessage => '欢迎💕';
 
   @override
-  String get whatTopicsToTalk =>
-      'What topics would you like to talk about? (Optional)';
+  String get whatTopicsToTalk => '你想聊些什么话题？（可选）';
 
   @override
-  String get whiteDay => 'White Day';
+  String get whiteDay => '白色情人节';
 
   @override
-  String get winter => 'Winter';
+  String get winter => '冬季';
 
   @override
-  String get wrongTranslation => 'Wrong Translation';
+  String get wrongTranslation => '错误翻译';
 
   @override
   String get year => '年';
 
   @override
-  String get yearEnd => 'Year End';
+  String get yearEnd => '年底';
 
   @override
   String get yes => '是';
@@ -2354,7 +2276,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get yesterday => '昨天';
 
   @override
-  String get yesterdayChats => 'Yesterday';
+  String get yesterdayChats => '昨天的聊天记录';
 
   @override
   String get you => '你';

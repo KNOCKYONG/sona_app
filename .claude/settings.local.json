@@ -15,7 +15,11 @@
       "Bash(flutter gen-l10n:*)",
       "Bash(git add:*)",
       "Bash(git pull:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(timeout 5 sleep 3)",
+      "Bash(timeout 300 tail -f /dev/null)",
+      "Bash(git commit:*)",
+      "Bash(git reset:*)"
     ],
     "deny": [],
     "ask": []

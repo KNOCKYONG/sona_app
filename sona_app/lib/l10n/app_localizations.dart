@@ -2696,25 +2696,25 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Persona Quality Statistics'**
-  String get personaQualityStats;
+  String personaQualityStats(Object personaQualityStats);
 
   /// Localized string for personalInfoExposure
   ///
   /// In en, this message translates to:
   /// **'Personal information exposure'**
-  String get personalInfoExposure;
+  String personalInfoExposure(Object personalInfoExposure);
 
   /// Localized string for personality
   ///
   /// In en, this message translates to:
   /// **'Personality'**
-  String get personality;
+  String personality(Object personality);
 
   /// Localized string for pets
   ///
   /// In en, this message translates to:
   /// **'Pets'**
-  String get pets;
+  String pets(Object pets);
 
   /// Localized string for photo
   ///
@@ -2726,25 +2726,25 @@ abstract class AppLocalizations {
   ///
   /// In en, this message translates to:
   /// **'Photography'**
-  String get photography;
+  String photography(Object photography);
 
   /// Localized string for picnic
   ///
   /// In en, this message translates to:
   /// **'Picnic'**
-  String get picnic;
+  String picnic(Object picnic);
 
   /// Localized string for preferenceSettings
   ///
   /// In en, this message translates to:
   /// **'Preference Settings'**
-  String get preferenceSettings;
+  String preferenceSettings(Object preferenceSettings);
 
   /// Localized string for preferredLanguage
   ///
   /// In en, this message translates to:
   /// **'Preferred Language'**
-  String get preferredLanguage;
+  String preferredLanguage(Object preferredLanguage);
 
   /// Localized string for preparingForSleep
   ///

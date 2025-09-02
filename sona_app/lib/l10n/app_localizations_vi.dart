@@ -50,13 +50,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get adaptiveConversationDesc =>
-      'Adapts conversation style to match yours';
+      'Điều chỉnh phong cách trò chuyện để phù hợp với bạn';
 
   @override
-  String get afternoon => 'Afternoon';
+  String get afternoon => 'Buổi chiều';
 
   @override
-  String get afternoonFatigue => 'Afternoon fatigue';
+  String get afternoonFatigue => 'Mệt mỏi buổi chiều';
 
   @override
   String get ageConfirmation => 'Xác nhận độ tuổi';
@@ -67,14 +67,13 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get ageUnit => 'years old';
+  String get ageUnit => 'tuổi';
 
   @override
   String get agreeToTerms => 'Tôi đồng ý với các điều khoản';
 
   @override
-  String get aiDatingQuestion =>
-      'A special daily life with AI\nMeet your own personas.';
+  String get aiDatingQuestion => 'Một cuộc sống đặc biệt hàng ngày với AI';
 
   @override
   String get aiPersonaPreferenceDescription => 'Sở thích nhân vật AI';
@@ -83,7 +82,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get all => 'Tất cả';
 
   @override
-  String get allAgree => 'Agree to All';
+  String get allAgree => 'Đồng ý tất cả';
 
   @override
   String get allFeaturesRequired => 'Cần tất cả tính năng';
@@ -103,19 +102,19 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get alsoBlockThisAI => 'Also block this AI';
+  String get alsoBlockThisAI => 'Cũng chặn AI này';
 
   @override
   String get angry => 'Tức giận';
 
   @override
-  String get anonymousLogin => 'Anonymous login';
+  String get anonymousLogin => 'Đăng nhập ẩn danh';
 
   @override
   String get anxious => 'Lo lắng';
 
   @override
-  String get apiKeyError => 'API Key Error';
+  String get apiKeyError => 'Lỗi API Key';
 
   @override
   String get appName => 'SONA';
@@ -127,28 +126,29 @@ class AppLocalizationsVi extends AppLocalizations {
   String get appleLoginCanceled => 'Đăng nhập Apple đã hủy';
 
   @override
-  String get appleLoginError => 'Error occurred during Apple login.';
+  String get appleLoginError =>
+      'Đã xảy ra lỗi trong quá trình đăng nhập Apple.';
 
   @override
   String get art => 'Nghệ thuật';
 
   @override
-  String get authError => 'Authentication Error';
+  String get authError => 'Lỗi xác thực';
 
   @override
-  String get autoTranslate => 'Auto Translate';
+  String get autoTranslate => 'Dịch tự động';
 
   @override
-  String get autumn => 'Autumn';
+  String get autumn => 'Mùa thu';
 
   @override
-  String get averageQuality => 'Average Quality';
+  String get averageQuality => 'Chất lượng trung bình';
 
   @override
-  String get averageQualityScore => 'Average Quality Score';
+  String get averageQualityScore => 'Điểm chất lượng trung bình';
 
   @override
-  String get awkwardExpression => 'Awkward Expression';
+  String get awkwardExpression => 'Biểu cảm ngượng ngùng';
 
   @override
   String get backButton => 'Quay lại';
@@ -172,10 +172,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get blockConfirm => 'Xác nhận chặn';
 
   @override
-  String get blockReason => 'Block reason';
+  String get blockReason => 'Lý do chặn';
 
   @override
-  String get blockThisAI => 'Block this AI';
+  String get blockThisAI => 'Chặn AI này';
 
   @override
   String blockedAICount(int count) {
@@ -183,22 +183,22 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get blockedAIs => 'Blocked AIs';
+  String get blockedAIs => 'Các AI đã bị chặn';
 
   @override
-  String get blockedAt => 'Blocked at';
+  String get blockedAt => 'Bị chặn tại';
 
   @override
-  String get blockedSuccessfully => 'Blocked successfully';
+  String get blockedSuccessfully => 'Đã chặn thành công';
 
   @override
-  String get breakfast => 'Breakfast';
+  String get breakfast => 'Bữa sáng';
 
   @override
-  String get byErrorType => 'By Error Type';
+  String get byErrorType => 'Theo loại lỗi';
 
   @override
-  String get byPersona => 'By Persona';
+  String get byPersona => 'Theo nhân vật';
 
   @override
   String cacheDeleteError(String error) {
@@ -206,10 +206,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get cacheDeleted => 'Image cache has been deleted';
+  String get cacheDeleted => 'Bộ nhớ hình ảnh đã được xóa';
 
   @override
-  String get cafeTerrace => 'Cafe terrace';
+  String get cafeTerrace => 'Sân thượng quán cà phê';
 
   @override
   String get calm => 'Bình tĩnh';
@@ -221,11 +221,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cameraPermissionDesc => 'Cần quyền máy ảnh để chụp ảnh';
 
   @override
-  String get canChangeInSettings => 'You can change this later in settings';
+  String get canChangeInSettings =>
+      'Bạn có thể thay đổi điều này sau trong cài đặt';
 
   @override
-  String get canMeetPreviousPersonas =>
-      'You can meet personas\nyou swiped before again!';
+  String get canMeetPreviousPersonas => 'Bạn có thể gặp lại các nhân vật';
 
   @override
   String get cancel => 'Hủy';
@@ -240,11 +240,11 @@ class AppLocalizationsVi extends AppLocalizations {
   String get chatEndedMessage => 'Cuộc trò chuyện đã kết thúc';
 
   @override
-  String get chatErrorDashboard => 'Chat Error Dashboard';
+  String get chatErrorDashboard => 'Bảng điều khiển lỗi trò chuyện';
 
   @override
   String get chatErrorSentSuccessfully =>
-      'Chat error has been sent successfully.';
+      'Lỗi trò chuyện đã được gửi thành công.';
 
   @override
   String get chatListTab => 'Danh sách chat';
@@ -261,19 +261,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get checkInternetConnection => 'Vui lòng kiểm tra kết nối internet';
 
   @override
-  String get checkingUserInfo => 'Checking user info';
+  String get checkingUserInfo => 'Đang kiểm tra thông tin người dùng';
 
   @override
-  String get childrensDay => 'Children\'s Day';
+  String get childrensDay => 'Ngày Quốc tế Thiếu nhi';
 
   @override
-  String get chinese => 'Chinese';
+  String get chinese => 'Tiếng Trung';
 
   @override
   String get chooseOption => 'Chọn một tùy chọn:';
 
   @override
-  String get christmas => 'Christmas';
+  String get christmas => 'Giáng sinh';
 
   @override
   String get close => 'Đóng';
@@ -288,13 +288,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get confirm => 'Xác nhận';
 
   @override
-  String get connectingToServer => 'Connecting to server';
+  String get connectingToServer => 'Đang kết nối đến máy chủ';
 
   @override
-  String get consultQualityMonitoring => 'Consultation Quality Monitoring';
+  String get consultQualityMonitoring => 'Giám sát chất lượng tư vấn';
 
   @override
-  String get continueAsGuest => 'Continue as Guest';
+  String get continueAsGuest => 'Tiếp tục với tư cách Khách';
 
   @override
   String get continueButton => 'Tiếp tục';
@@ -306,7 +306,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get continueWithGoogle => 'Tiếp tục với Google';
 
   @override
-  String get conversationContinuity => 'Conversation Continuity';
+  String get conversationContinuity => 'Tính liên tục của cuộc trò chuyện';
 
   @override
   String get conversationContinuityDesc => 'Liên tục cuộc trò chuyện';
@@ -317,7 +317,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get convertToMember => 'Sign Up';
+  String get convertToMember => 'Đăng ký';
 
   @override
   String get cooking => 'Nấu ăn';
@@ -329,40 +329,40 @@ class AppLocalizationsVi extends AppLocalizations {
   String get copyrightInfringement => 'Vi phạm bản quyền';
 
   @override
-  String get creatingAccount => 'Creating account';
+  String get creatingAccount => 'Tạo tài khoản';
 
   @override
-  String get crisisDetected => 'Crisis Detected';
+  String get crisisDetected => 'Đã phát hiện khủng hoảng';
 
   @override
-  String get culturalIssue => 'Cultural Issue';
+  String get culturalIssue => 'Vấn đề văn hóa';
 
   @override
-  String get current => 'Current';
+  String get current => 'Hiện tại';
 
   @override
-  String get currentCacheSize => 'Current Cache Size';
+  String get currentCacheSize => 'Kích thước bộ nhớ cache hiện tại';
 
   @override
   String get currentLanguage => 'Ngôn ngữ hiện tại';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => 'Đạp xe';
 
   @override
-  String get dailyCare => 'Daily Care';
+  String get dailyCare => 'Chăm sóc hàng ngày';
 
   @override
   String get dailyCareDesc => 'Chăm sóc hàng ngày';
 
   @override
-  String get dailyChat => 'Daily Chat';
+  String get dailyChat => 'Trò chuyện hàng ngày';
 
   @override
-  String get dailyCheck => 'Daily check';
+  String get dailyCheck => 'Kiểm tra hàng ngày';
 
   @override
-  String get dailyConversation => 'Daily Conversation';
+  String get dailyConversation => 'Cuộc trò chuyện hàng ngày';
 
   @override
   String get dailyLimitDescription => 'Bạn đã đạt giới hạn tin nhắn hàng ngày';
@@ -374,28 +374,28 @@ class AppLocalizationsVi extends AppLocalizations {
   String get darkMode => 'Chế độ tối';
 
   @override
-  String get darkTheme => 'Dark Mode';
+  String get darkTheme => 'Chế độ tối';
 
   @override
-  String get darkThemeDesc => 'Use dark theme';
+  String get darkThemeDesc => 'Sử dụng chế độ tối';
 
   @override
-  String get dataCollection => 'Data Collection Settings';
+  String get dataCollection => 'Cài đặt thu thập dữ liệu';
 
   @override
-  String get datingAdvice => 'Dating Advice';
+  String get datingAdvice => 'Lời khuyên hẹn hò';
 
   @override
   String get datingDescription => 'Tìm kiếm hẹn hò';
 
   @override
-  String get dawn => 'Dawn';
+  String get dawn => 'Bình minh';
 
   @override
   String get day => 'Ngày';
 
   @override
-  String get dayAfterTomorrow => 'Day after tomorrow';
+  String get dayAfterTomorrow => 'Ngày kia';
 
   @override
   String daysAgo(int count, String formatted) {
@@ -408,7 +408,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get deepTalk => 'Deep Talk';
+  String get deepTalk => 'Cuộc trò chuyện sâu sắc';
 
   @override
   String get delete => 'Xóa';
@@ -418,36 +418,36 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm =>
-      'Are you sure you want to delete your account? This action cannot be undone.';
+      'Bạn có chắc chắn muốn xóa tài khoản của mình không? Hành động này không thể hoàn tác.';
 
   @override
   String get deleteAccountWarning =>
-      'Are you sure you want to delete your account?';
+      'Bạn có chắc chắn muốn xóa tài khoản của mình không?';
 
   @override
-  String get deleteCache => 'Delete Cache';
+  String get deleteCache => 'Xóa bộ nhớ cache';
 
   @override
-  String get deletingAccount => 'Deleting account...';
+  String get deletingAccount => 'Đang xóa tài khoản...';
 
   @override
   String get depressed => 'Buồn chán';
 
   @override
-  String get describeError => 'What is the problem?';
+  String get describeError => 'Có vấn đề gì?';
 
   @override
   String get detailedReason => 'Lý do chi tiết';
 
   @override
   String get developRelationshipStep =>
-      '3. Develop Relationship: Build intimacy through conversations and develop special relationships.';
+      '3. Phát triển mối quan hệ: Xây dựng sự thân mật qua các cuộc trò chuyện và phát triển những mối quan hệ đặc biệt.';
 
   @override
-  String get dinner => 'Dinner';
+  String get dinner => 'Bữa tối';
 
   @override
-  String get discardGuestData => 'Start Fresh';
+  String get discardGuestData => 'Bắt đầu lại';
 
   @override
   String get discount20 => 'Giảm 20%';
@@ -467,7 +467,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get done => 'Hoàn thành';
 
   @override
-  String get downloadingPersonaImages => 'Downloading new persona images';
+  String get downloadingPersonaImages => 'Đang tải hình ảnh nhân vật mới';
 
   @override
   String get edit => 'Chỉnh sửa';
@@ -482,7 +482,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get effectSound => 'Hiệu ứng âm thanh';
 
   @override
-  String get effectSoundDescription => 'Play sound effects';
+  String get effectSoundDescription => 'Phát âm thanh hiệu ứng';
 
   @override
   String get email => 'Email';
@@ -497,31 +497,32 @@ class AppLocalizationsVi extends AppLocalizations {
   String get emailRequired => 'Vui lòng nhập email';
 
   @override
-  String get emotionAnalysis => 'Emotion Analysis';
+  String get emotionAnalysis => 'Phân tích cảm xúc';
 
   @override
   String get emotionAnalysisDesc => 'Phân tích cảm xúc';
 
   @override
-  String get emotionAngry => 'Angry';
+  String get emotionAngry => 'Giận dữ';
 
   @override
-  String get emotionBasedEncounters => 'Meet personas based on your emotions';
+  String get emotionBasedEncounters =>
+      'Gặp gỡ nhân vật dựa trên cảm xúc của bạn';
 
   @override
-  String get emotionCool => 'Cool';
+  String get emotionCool => 'Ngầu';
 
   @override
-  String get emotionHappy => 'Happy';
+  String get emotionHappy => 'Hạnh phúc';
 
   @override
-  String get emotionLove => 'Love';
+  String get emotionLove => 'Yêu';
 
   @override
-  String get emotionSad => 'Sad';
+  String get emotionSad => 'Buồn';
 
   @override
-  String get emotionThinking => 'Thinking';
+  String get emotionThinking => 'Đang suy nghĩ';
 
   @override
   String get emotionalSupportDesc => 'Nhận hỗ trợ tinh thần';
@@ -533,18 +534,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get endTutorial => 'Kết thúc hướng dẫn';
 
   @override
-  String get endTutorialAndLogin =>
-      'End tutorial and login?\nLogin to save data and use all features.';
+  String get endTutorialAndLogin => 'Kết thúc hướng dẫn và đăng nhập?';
 
   @override
   String get endTutorialMessage => 'Kết thúc hướng dẫn';
 
   @override
-  String get english => 'English';
+  String get english => 'Tiếng Anh';
 
   @override
   String get enterBasicInfo =>
-      'Please enter basic information to create an account';
+      'Vui lòng nhập thông tin cơ bản để tạo tài khoản';
 
   @override
   String get enterBasicInformation => 'Nhập thông tin cơ bản';
@@ -553,10 +553,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get enterEmail => 'Nhập email';
 
   @override
-  String get enterNickname => 'Please enter a nickname';
+  String get enterNickname => 'Vui lòng nhập một biệt danh';
 
   @override
-  String get enterPassword => 'Please enter a password';
+  String get enterPassword => 'Vui lòng nhập mật khẩu';
 
   @override
   String get entertainmentAndFunDesc => 'Giải trí và vui vẻ';
@@ -565,41 +565,41 @@ class AppLocalizationsVi extends AppLocalizations {
   String get entertainmentDescription => 'Giải trí';
 
   @override
-  String get entertainmentFun => 'Entertainment/Fun';
+  String get entertainmentFun => 'Giải trí/Vui chơi';
 
   @override
   String get error => 'Lỗi';
 
   @override
-  String get errorDescription => 'Error description';
+  String get errorDescription => 'Mô tả lỗi';
 
   @override
   String get errorDescriptionHint =>
-      'e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...';
+      'ví dụ, Đưa ra câu trả lời lạ, Lặp lại cùng một điều, Đưa ra phản hồi không phù hợp với ngữ cảnh...';
 
   @override
-  String get errorDetails => 'Error Details';
+  String get errorDetails => 'Chi tiết lỗi';
 
   @override
   String get errorDetailsHint => 'Mô tả chi tiết lỗi';
 
   @override
-  String get errorFrequency24h => 'Error Frequency (Last 24 hours)';
+  String get errorFrequency24h => 'Tần suất lỗi (24 giờ qua)';
 
   @override
-  String get errorMessage => 'Error Message:';
+  String get errorMessage => 'Thông báo lỗi:';
 
   @override
   String get errorOccurred => 'Đã xảy ra lỗi';
 
   @override
-  String get errorOccurredTryAgain => 'An error occurred. Please try again.';
+  String get errorOccurredTryAgain => 'Đã xảy ra lỗi. Vui lòng thử lại.';
 
   @override
-  String get errorSendingFailed => 'Failed to send error';
+  String get errorSendingFailed => 'Gửi lỗi không thành công';
 
   @override
-  String get errorStats => 'Error Statistics';
+  String get errorStats => 'Thống kê lỗi';
 
   @override
   String errorWithMessage(String error) {
@@ -607,25 +607,26 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get evening => 'Evening';
+  String get evening => 'Buổi tối';
 
   @override
   String get excited => 'Phấn khích';
 
   @override
-  String get exit => 'Exit';
+  String get exit => 'Thoát';
 
   @override
-  String get exitApp => 'Exit App';
+  String get exitApp => 'Thoát ứng dụng';
 
   @override
-  String get exitConfirmMessage => 'Are you sure you want to exit the app?';
+  String get exitConfirmMessage =>
+      'Bạn có chắc chắn muốn thoát ứng dụng không?';
 
   @override
   String get expertPersona => 'Persona chuyên gia';
 
   @override
-  String get expertiseScore => 'Expertise Score';
+  String get expertiseScore => 'Điểm chuyên môn';
 
   @override
   String get expired => 'Đã hết hạn';
@@ -643,13 +644,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get filter => 'Lọc';
 
   @override
-  String get firstOccurred => 'First Occurred: ';
+  String get firstOccurred => 'Lần đầu xảy ra:';
 
   @override
-  String get followDeviceLanguage => 'Follow device language settings';
+  String get followDeviceLanguage => 'Theo cài đặt ngôn ngữ của thiết bị';
 
   @override
-  String get forenoon => 'Forenoon';
+  String get forenoon => 'Buổi sáng';
 
   @override
   String get forgotPassword => 'Quên mật khẩu?';
@@ -658,13 +659,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get frequentlyAskedQuestions => 'Câu hỏi thường gặp';
 
   @override
-  String get friday => 'Friday';
+  String get friday => 'Thứ Sáu';
 
   @override
   String get friendshipDescription => 'Tìm kiếm tình bạn';
 
   @override
-  String get funChat => 'Fun Chat';
+  String get funChat => 'Trò Chuyện Vui';
 
   @override
   String get galleryPermission => 'Quyền truy cập thư viện';
@@ -680,31 +681,32 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get genderNotSelectedInfo =>
-      'If gender is not selected, personas of all genders will be shown';
+      'Nếu không chọn giới tính, bạn sẽ thấy các nhân vật của tất cả các giới tính';
 
   @override
   String get genderOptional => 'Giới tính (tùy chọn)';
 
   @override
-  String get genderPreferenceActive => 'You can meet personas of all genders';
+  String get genderPreferenceActive =>
+      'Bạn có thể gặp các nhân vật của tất cả các giới tính';
 
   @override
   String get genderPreferenceDisabled =>
-      'Select your gender to enable opposite gender only option';
+      'Chọn giới tính của bạn để kích hoạt tùy chọn chỉ giới tính đối diện';
 
   @override
   String get genderPreferenceInactive =>
-      'Only opposite gender personas will be shown';
+      'Chỉ các nhân vật giới tính đối diện sẽ được hiển thị';
 
   @override
   String get genderRequired => 'Vui lòng chọn giới tính';
 
   @override
   String get genderSelectionInfo =>
-      'If not selected, you can meet personas of all genders';
+      'Nếu không chọn, bạn có thể gặp các nhân vật của tất cả các giới tính';
 
   @override
-  String get generalPersona => 'Persona chung';
+  String get generalPersona => 'Nhân vật tổng quát';
 
   @override
   String get goToSettings => 'Đến cài đặt';
@@ -713,13 +715,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get googleLoginCanceled => 'Đăng nhập Google đã hủy';
 
   @override
-  String get googleLoginError => 'Error occurred during Google login.';
+  String get googleLoginError =>
+      'Đã xảy ra lỗi trong quá trình đăng nhập Google.';
 
   @override
   String get grantPermission => 'Tiếp tục';
 
   @override
-  String get guest => 'Guest';
+  String get guest => 'Khách';
 
   @override
   String get guestDataMigration => 'Chuyển dữ liệu khách';
@@ -728,10 +731,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get guestLimitReached => 'Đã đạt giới hạn khách';
 
   @override
-  String get guestLoginPromptMessage => 'Login to continue the conversation';
+  String get guestLoginPromptMessage => 'Đăng nhập để tiếp tục cuộc trò chuyện';
 
   @override
-  String get guestMessageExhausted => 'Free messages exhausted';
+  String get guestMessageExhausted => 'Tin nhắn miễn phí đã hết';
 
   @override
   String guestMessageRemaining(int count) {
@@ -739,25 +742,26 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get guestModeBanner => 'Guest Mode';
+  String get guestModeBanner => 'Chế độ Khách';
 
   @override
   String get guestModeDescription => 'Chế độ khách';
 
   @override
-  String get guestModeFailedMessage => 'Failed to start Guest Mode';
+  String get guestModeFailedMessage =>
+      'Khởi động Chế độ Khách không thành công';
 
   @override
   String get guestModeLimitation => 'Giới hạn chế độ khách';
 
   @override
-  String get guestModeTitle => 'Try as Guest';
+  String get guestModeTitle => 'Thử nghiệm với tư cách Khách';
 
   @override
   String get guestModeWarning => 'Cảnh báo chế độ khách';
 
   @override
-  String get guestModeWelcome => 'Starting in Guest Mode';
+  String get guestModeWelcome => 'Bắt đầu ở Chế độ Khách';
 
   @override
   String get happy => 'Vui vẻ';
@@ -772,7 +776,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hateSpeech => 'Ngôn từ thù ghét';
 
   @override
-  String get heartDescription => 'Hearts for more messages';
+  String get heartDescription => 'Tim để gửi thêm tin nhắn';
 
   @override
   String get heartInsufficient => 'Không đủ tim';
@@ -782,46 +786,46 @@ class AppLocalizationsVi extends AppLocalizations {
       'Không đủ tim. Vui lòng nạp thêm!';
 
   @override
-  String get heartRequired => '1 heart is required';
+  String get heartRequired => 'Cần 1 trái tim';
 
   @override
-  String get heartUsageFailed => 'Failed to use heart.';
+  String get heartUsageFailed => 'Sử dụng trái tim không thành công.';
 
   @override
   String get hearts => 'Tim';
 
   @override
-  String get hearts10 => '10 Tim';
+  String get hearts10 => '10 Trái tim';
 
   @override
-  String get hearts30 => '30 Tim';
+  String get hearts30 => '30 Trái tim';
 
   @override
-  String get hearts30Discount => '30 Tim (Giảm giá)';
+  String get hearts30Discount => '30 Trái tim (Giảm giá)';
 
   @override
-  String get hearts50 => '50 Tim';
+  String get hearts50 => '50 Trái tim';
 
   @override
-  String get hearts50Discount => '50 Tim (Giảm giá)';
+  String get hearts50Discount => '50 Trái tim (Giảm giá)';
 
   @override
-  String get helloEmoji => 'Hello! 😊';
+  String get helloEmoji => 'Xin chào! 😊';
 
   @override
   String get help => 'Trợ giúp';
 
   @override
-  String get hideOriginalText => 'Hide Original';
+  String get hideOriginalText => 'Ẩn văn bản gốc';
 
   @override
-  String get hobbySharing => 'Hobby Sharing';
+  String get hobbySharing => 'Chia sẻ sở thích';
 
   @override
-  String get hobbyTalk => 'Hobby Talk';
+  String get hobbyTalk => 'Nói chuyện về sở thích';
 
   @override
-  String get hours24Ago => '24 hours ago';
+  String get hours24Ago => '24 giờ trước';
 
   @override
   String hoursAgo(int count, String formatted) {
@@ -832,19 +836,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get howToUse => 'Cách sử dụng';
 
   @override
-  String get imageCacheManagement => 'Image Cache Management';
+  String get imageCacheManagement => 'Quản lý bộ nhớ cache hình ảnh';
 
   @override
-  String get inappropriateContent => 'Inappropriate content';
+  String get inappropriateContent => 'Nội dung không phù hợp';
 
   @override
-  String get incorrect => 'incorrect';
+  String get incorrect => 'không chính xác';
 
   @override
-  String get incorrectPassword => 'Incorrect password';
+  String get incorrectPassword => 'Mật khẩu không chính xác';
 
   @override
-  String get indonesian => 'Indonesian';
+  String get indonesian => 'Tiếng Indonesia';
 
   @override
   String get inquiries => 'Thắc mắc';
@@ -853,7 +857,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get insufficientHearts => 'Không đủ tim';
 
   @override
-  String get interestSharing => 'Interest Sharing';
+  String get interestSharing => 'Chia sẻ sở thích';
 
   @override
   String get interestSharingDesc => 'Chia sẻ sở thích';
@@ -862,10 +866,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get interests => 'Sở thích';
 
   @override
-  String get invalidEmailFormat => 'Invalid email format';
+  String get invalidEmailFormat => 'Định dạng email không hợp lệ';
 
   @override
-  String get invalidEmailFormatError => 'Please enter a valid email address';
+  String get invalidEmailFormatError => 'Vui lòng nhập địa chỉ email hợp lệ';
 
   @override
   String isTyping(String name) {
@@ -873,7 +877,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get japanese => 'Japanese';
+  String get japanese => 'Tiếng Nhật';
 
   @override
   String get joinDate => 'Ngày tham gia';
@@ -882,13 +886,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get justNow => 'Vừa xong';
 
   @override
-  String get keepGuestData => 'Keep Chat History';
+  String get keepGuestData => 'Lưu lịch sử trò chuyện';
 
   @override
-  String get korean => 'Korean';
+  String get korean => 'Tiếng Hàn';
 
   @override
-  String get koreanLanguage => 'Korean';
+  String get koreanLanguage => 'Tiếng Hàn';
 
   @override
   String get language => 'Ngôn ngữ';
@@ -897,32 +901,32 @@ class AppLocalizationsVi extends AppLocalizations {
   String get languageDescription => 'Chọn ngôn ngữ hiển thị';
 
   @override
-  String get languageIndicator => 'Language';
+  String get languageIndicator => 'Ngôn ngữ';
 
   @override
   String get languageSettings => 'Cài đặt ngôn ngữ';
 
   @override
-  String get lastOccurred => 'Last Occurred: ';
+  String get lastOccurred => 'Lần cuối xảy ra:';
 
   @override
-  String get lastUpdated => 'Last Updated';
+  String get lastUpdated => 'Cập nhật lần cuối';
 
   @override
-  String get lateNight => 'Late night';
+  String get lateNight => 'Đêm muộn';
 
   @override
   String get later => 'Sau này';
 
   @override
-  String get laterButton => 'Later';
+  String get laterButton => 'Sau';
 
   @override
   String get leave => 'Rời đi';
 
   @override
   String get leaveChatConfirm =>
-      'Leave this chat?\nIt will disappear from your chat list.';
+      'Bạn có chắc chắn muốn rời khỏi cuộc trò chuyện này không? Nó sẽ biến mất khỏi danh sách trò chuyện của bạn.';
 
   @override
   String get leaveChatRoom => 'Rời khỏi phòng chat';
@@ -931,16 +935,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get leaveChatTitle => 'Rời khỏi cuộc trò chuyện';
 
   @override
-  String get lifeAdvice => 'Life Advice';
+  String get lifeAdvice => 'Lời Khuyên Cuộc Sống';
 
   @override
-  String get lightTalk => 'Light Talk';
+  String get lightTalk => 'Trò Chuyện Nhẹ Nhàng';
 
   @override
-  String get lightTheme => 'Light Mode';
+  String get lightTheme => 'Chế Độ Sáng';
 
   @override
-  String get lightThemeDesc => 'Use bright theme';
+  String get lightThemeDesc => 'Sử dụng giao diện sáng';
 
   @override
   String get loading => 'Đang tải...';
@@ -949,44 +953,44 @@ class AppLocalizationsVi extends AppLocalizations {
   String get loadingData => 'Đang tải dữ liệu...';
 
   @override
-  String get loadingProducts => 'Loading products...';
+  String get loadingProducts => 'Đang tải sản phẩm...';
 
   @override
-  String get loadingProfile => 'Loading profile';
+  String get loadingProfile => 'Đang tải hồ sơ';
 
   @override
   String get login => 'Đăng nhập';
 
   @override
-  String get loginButton => 'Login';
+  String get loginButton => 'Đăng nhập';
 
   @override
   String get loginCancelled => 'Đăng nhập đã hủy';
 
   @override
-  String get loginComplete => 'Login complete';
+  String get loginComplete => 'Đăng nhập thành công';
 
   @override
   String get loginError => 'Lỗi đăng nhập';
 
   @override
-  String get loginFailed => 'Login failed';
+  String get loginFailed => 'Đăng nhập thất bại';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Please try again.';
+  String get loginFailedTryAgain => 'Đăng nhập thất bại. Vui lòng thử lại.';
 
   @override
   String get loginRequired => 'Cần đăng nhập';
 
   @override
   String get loginRequiredForProfile =>
-      'Login required to view profile\nand check records with SONA';
+      'Cần đăng nhập để xem hồ sơ và kiểm tra các bản ghi với SONA';
 
   @override
-  String get loginRequiredService => 'Login required to use this service';
+  String get loginRequiredService => 'Cần đăng nhập để sử dụng dịch vụ này';
 
   @override
-  String get loginRequiredTitle => 'Login Required';
+  String get loginRequiredTitle => 'Cần Đăng Nhập';
 
   @override
   String get loginSignup => 'Đăng nhập/Đăng ký';
@@ -995,49 +999,49 @@ class AppLocalizationsVi extends AppLocalizations {
   String get loginTab => 'Đăng nhập';
 
   @override
-  String get loginTitle => 'Login';
+  String get loginTitle => 'Đăng Nhập';
 
   @override
-  String get loginWithApple => 'Login with Apple';
+  String get loginWithApple => 'Đăng nhập bằng Apple';
 
   @override
-  String get loginWithGoogle => 'Login with Google';
+  String get loginWithGoogle => 'Đăng nhập bằng Google';
 
   @override
   String get logout => 'Đăng xuất';
 
   @override
-  String get logoutConfirm => 'Are you sure you want to logout?';
+  String get logoutConfirm => 'Bạn có chắc chắn muốn đăng xuất không?';
 
   @override
-  String get lonelinessRelief => 'Loneliness Relief';
+  String get lonelinessRelief => 'Giảm Cảm Giác Cô Đơn';
 
   @override
   String get lonely => 'Cô đơn';
 
   @override
-  String get lowQualityResponses => 'Low Quality Responses';
+  String get lowQualityResponses => 'Phản Hồi Chất Lượng Thấp';
 
   @override
-  String get lunch => 'Lunch';
+  String get lunch => 'Bữa trưa';
 
   @override
-  String get lunchtime => 'Lunchtime';
+  String get lunchtime => 'Giờ ăn trưa';
 
   @override
-  String get mainErrorType => 'Main Error Type';
+  String get mainErrorType => 'Loại lỗi chính';
 
   @override
-  String get makeFriends => 'Make Friends';
+  String get makeFriends => 'Kết bạn';
 
   @override
   String get male => 'Nam';
 
   @override
-  String get manageBlockedAIs => 'Manage Blocked AIs';
+  String get manageBlockedAIs => 'Quản lý AI bị chặn';
 
   @override
-  String get managePersonaImageCache => 'Manage persona image cache';
+  String get managePersonaImageCache => 'Quản lý bộ nhớ hình ảnh persona';
 
   @override
   String get marketingAgree => 'Đồng ý nhận marketing';
@@ -1047,16 +1051,16 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get matchPersonaStep =>
-      '1. Match Personas: Swipe left or right to select your favorite AI personas.';
+      '1. Ghép Persona: Vuốt trái hoặc phải để chọn những persona AI yêu thích của bạn.';
 
   @override
   String get matchedPersonas => 'Personas đã ghép đôi';
 
   @override
-  String get matchedSona => 'Matched Sona';
+  String get matchedSona => 'Sona đã ghép';
 
   @override
-  String get matching => 'Matching';
+  String get matching => 'Đang ghép';
 
   @override
   String get matchingFailed => 'Ghép đôi thất bại';
@@ -1068,17 +1072,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get meetAIPersonas => 'Gặp gỡ các nhân vật AI';
 
   @override
-  String get meetNewPersonas => 'Meet New Personas';
+  String get meetNewPersonas => 'Gặp gỡ các Persona mới';
 
   @override
   String get meetPersonas => 'Gặp gỡ nhân vật';
 
   @override
   String get memberBenefits =>
-      'Get 100+ messages and 10 hearts when you sign up!';
+      'Nhận 100+ tin nhắn và 10 trái tim khi bạn đăng ký!';
 
   @override
-  String get memoryAlbum => 'Memory Album';
+  String get memoryAlbum => 'Album kỷ niệm';
 
   @override
   String get memoryAlbumDesc => 'Album kỷ niệm';
@@ -1090,10 +1094,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get messageDeleted => 'Tin nhắn đã xóa';
 
   @override
-  String get messageLimitReset => 'Message limit will reset at midnight';
+  String get messageLimitReset =>
+      'Giới hạn tin nhắn sẽ được đặt lại vào nửa đêm';
 
   @override
-  String get messageSendFailed => 'Failed to send message. Please try again.';
+  String get messageSendFailed =>
+      'Gửi tin nhắn không thành công. Vui lòng thử lại.';
 
   @override
   String get messagesRemaining => 'Tin nhắn còn lại';
@@ -1104,10 +1110,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get missingTranslation => 'Missing Translation';
+  String get missingTranslation => 'Thiếu bản dịch';
 
   @override
-  String get monday => 'Monday';
+  String get monday => 'Thứ Hai';
 
   @override
   String get month => 'Tháng';
@@ -1121,16 +1127,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get moreButton => 'Xem thêm';
 
   @override
-  String get morning => 'Morning';
+  String get morning => 'Buổi sáng';
 
   @override
-  String get mostFrequentError => 'Most Frequent Error';
+  String get mostFrequentError => 'Lỗi thường gặp nhất';
 
   @override
   String get movies => 'Phim ảnh';
 
   @override
-  String get multilingualChat => 'Multilingual Chat';
+  String get multilingualChat => 'Trò chuyện đa ngôn ngữ';
 
   @override
   String get music => 'Âm nhạc';
@@ -1139,7 +1145,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get myGenderSection => 'Giới tính của tôi';
 
   @override
-  String get networkErrorOccurred => 'A network error occurred.';
+  String get networkErrorOccurred => 'Đã xảy ra lỗi mạng.';
 
   @override
   String get newMessage => 'Tin nhắn mới';
@@ -1150,88 +1156,88 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get newMessageNotification => 'Notify me of new messages';
+  String get newMessageNotification => 'Thông báo cho tôi về tin nhắn mới';
 
   @override
-  String get newMessages => 'New messages';
+  String get newMessages => 'Tin nhắn mới';
 
   @override
-  String get newYear => 'New Year';
+  String get newYear => 'Năm mới';
 
   @override
   String get next => 'Tiếp theo';
 
   @override
-  String get niceToMeetYou => 'Nice to meet you!';
+  String get niceToMeetYou => 'Rất vui được gặp bạn!';
 
   @override
   String get nickname => 'Biệt danh';
 
   @override
-  String get nicknameAlreadyUsed => 'This nickname is already in use';
+  String get nicknameAlreadyUsed => 'Biệt danh này đã được sử dụng';
 
   @override
-  String get nicknameHelperText => '3-10 characters';
+  String get nicknameHelperText => '3-10 ký tự';
 
   @override
   String get nicknameHint => 'Nhập biệt danh';
 
   @override
-  String get nicknameInUse => 'This nickname is already in use';
+  String get nicknameInUse => 'Biệt danh này đã được sử dụng';
 
   @override
-  String get nicknameLabel => 'Nickname';
+  String get nicknameLabel => 'Biệt danh';
 
   @override
-  String get nicknameLengthError => 'Nickname must be 3-10 characters';
+  String get nicknameLengthError => 'Biệt danh phải từ 3-10 ký tự';
 
   @override
-  String get nicknamePlaceholder => 'Enter your nickname';
+  String get nicknamePlaceholder => 'Nhập biệt danh của bạn';
 
   @override
   String get nicknameRequired => 'Vui lòng nhập biệt danh';
 
   @override
-  String get night => 'Night';
+  String get night => 'Đêm';
 
   @override
   String get no => 'Không';
 
   @override
-  String get noBlockedAIs => 'No blocked AIs';
+  String get noBlockedAIs => 'Không có AI nào bị chặn';
 
   @override
   String get noChatsYet => 'Chưa có cuộc trò chuyện nào';
 
   @override
-  String get noConversationYet => 'No conversation yet';
+  String get noConversationYet => 'Chưa có cuộc trò chuyện nào';
 
   @override
-  String get noErrorReports => 'No error reports.';
+  String get noErrorReports => 'Không có báo cáo lỗi.';
 
   @override
-  String get noImageAvailable => 'No image available';
+  String get noImageAvailable => 'Không có hình ảnh nào';
 
   @override
-  String get noMatchedPersonas => 'No matched personas yet';
+  String get noMatchedPersonas => 'Chưa có nhân vật nào phù hợp';
 
   @override
-  String get noMatchedSonas => 'No matched Sonas yet';
+  String get noMatchedSonas => 'Chưa có SONA nào phù hợp';
 
   @override
   String get noPersonasAvailable => 'Không có nhân vật nào';
 
   @override
-  String get noPersonasToSelect => 'No personas available';
+  String get noPersonasToSelect => 'Không có nhân vật nào để chọn';
 
   @override
-  String get noQualityIssues => 'No quality issues in the last hour ✅';
+  String get noQualityIssues => 'Không có vấn đề chất lượng trong giờ qua ✅';
 
   @override
-  String get noQualityLogs => 'No quality logs yet.';
+  String get noQualityLogs => 'Chưa có nhật ký chất lượng nào.';
 
   @override
-  String get noTranslatedMessages => 'No messages to translate';
+  String get noTranslatedMessages => 'Không có tin nhắn nào để dịch';
 
   @override
   String get notEnoughHearts => 'Không đủ trái tim';
@@ -1242,7 +1248,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get notRegistered => 'not registered';
+  String get notRegistered => 'chưa đăng ký';
 
   @override
   String get notSubscribed => 'Chưa đăng ký';
@@ -1252,17 +1258,16 @@ class AppLocalizationsVi extends AppLocalizations {
       'Cho phép thông báo để nhận tin nhắn';
 
   @override
-  String get notificationPermissionRequired =>
-      'Notification permission required';
+  String get notificationPermissionRequired => 'Cần quyền thông báo';
 
   @override
-  String get notificationSettings => 'Notification Settings';
+  String get notificationSettings => 'Cài đặt thông báo';
 
   @override
   String get notifications => 'Thông báo';
 
   @override
-  String get occurrenceInfo => 'Occurrence Info:';
+  String get occurrenceInfo => 'Thông tin sự kiện:';
 
   @override
   String get olderChats => 'Cũ hơn';
@@ -1283,13 +1288,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get originalPrice => 'Giá gốc';
 
   @override
-  String get originalText => 'Original';
+  String get originalText => 'Gốc';
 
   @override
   String get other => 'Khác';
 
   @override
-  String get otherError => 'Other Error';
+  String get otherError => 'Lỗi khác';
 
   @override
   String get others => 'Khác';
@@ -1298,13 +1303,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get ownedHearts => 'Trái tim sở hữu';
 
   @override
-  String get parentsDay => 'Parents\' Day';
+  String get parentsDay => 'Ngày của Cha Mẹ';
 
   @override
   String get password => 'Mật khẩu';
 
   @override
-  String get passwordConfirmation => 'Enter password to confirm';
+  String get passwordConfirmation => 'Nhập mật khẩu để xác nhận';
 
   @override
   String get passwordConfirmationDesc => 'Xác nhận mật khẩu để tiếp tục';
@@ -1325,7 +1330,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get passwordResetEmailSent => 'Email đặt lại mật khẩu đã gửi';
 
   @override
-  String get passwordText => 'password';
+  String get passwordText => 'mật khẩu';
 
   @override
   String get passwordTooShort => 'Mật khẩu phải có ít nhất 6 ký tự';
@@ -1340,7 +1345,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get permissionDeniedTryLater =>
-      'Permission denied. Please try again later.';
+      'Quyền bị từ chối. Vui lòng thử lại sau.';
 
   @override
   String get permissionRequired => 'Yêu cầu quyền truy cập';
@@ -1349,46 +1354,62 @@ class AppLocalizationsVi extends AppLocalizations {
   String get personaGenderSection => 'Giới tính nhân vật';
 
   @override
-  String get personaQualityStats => 'Persona Quality Statistics';
+  String personaQualityStats(Object personaQualityStats) {
+    return 'Thống kê chất lượng nhân vật';
+  }
 
   @override
-  String get personalInfoExposure => 'Personal information exposure';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return 'Tiết lộ thông tin cá nhân';
+  }
 
   @override
-  String get personality => 'Personality';
+  String personality(Object personality) {
+    return 'Tính cách';
+  }
 
   @override
-  String get pets => 'Pets';
+  String pets(Object pets) {
+    return 'Thú cưng';
+  }
 
   @override
   String get photo => 'Ảnh';
 
   @override
-  String get photography => 'Nhiếp ảnh';
+  String photography(Object photography) {
+    return 'Nhiếp ảnh';
+  }
 
   @override
-  String get picnic => 'Picnic';
+  String picnic(Object picnic) {
+    return 'Dã ngoại';
+  }
 
   @override
-  String get preferenceSettings => 'Cài đặt ưu tiên';
+  String preferenceSettings(Object preferenceSettings) {
+    return 'Cài đặt ưu tiên';
+  }
 
   @override
-  String get preferredLanguage => 'Preferred Language';
+  String preferredLanguage(Object preferredLanguage) {
+    return 'Ngôn ngữ ưa thích';
+  }
 
   @override
-  String get preparingForSleep => 'Preparing for sleep';
+  String get preparingForSleep => 'Chuẩn bị đi ngủ';
 
   @override
-  String get preparingNewMeeting => 'Preparing new meeting';
+  String get preparingNewMeeting => 'Chuẩn bị cuộc họp mới';
 
   @override
-  String get preparingPersonaImages => 'Preparing persona images';
+  String get preparingPersonaImages => 'Chuẩn bị hình ảnh nhân vật';
 
   @override
-  String get preparingPersonas => 'Preparing personas';
+  String get preparingPersonas => 'Đang chuẩn bị personas';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Xem trước';
 
   @override
   String get previous => 'Trước';
@@ -1400,63 +1421,63 @@ class AppLocalizationsVi extends AppLocalizations {
   String get privacyPolicy => 'Chính sách bảo mật';
 
   @override
-  String get privacyPolicyAgreement => 'Please agree to the privacy policy';
+  String get privacyPolicyAgreement => 'Vui lòng đồng ý với chính sách bảo mật';
 
   @override
   String get privacySection1Content =>
-      'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+      'Chúng tôi cam kết bảo vệ quyền riêng tư của bạn. Chính sách Bảo mật này giải thích cách chúng tôi thu thập, sử dụng và bảo vệ thông tin của bạn khi bạn sử dụng dịch vụ của chúng tôi.';
 
   @override
   String get privacySection1Title => 'Thu thập thông tin';
 
   @override
   String get privacySection2Content =>
-      'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+      'Chúng tôi thu thập thông tin bạn cung cấp trực tiếp cho chúng tôi, chẳng hạn như khi bạn tạo tài khoản, cập nhật hồ sơ hoặc sử dụng dịch vụ của chúng tôi.';
 
   @override
-  String get privacySection2Title => 'Information We Collect';
+  String get privacySection2Title => 'Thông tin chúng tôi thu thập';
 
   @override
   String get privacySection3Content =>
-      'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+      'Chúng tôi sử dụng thông tin mà chúng tôi thu thập để cung cấp, duy trì và cải thiện dịch vụ của chúng tôi, cũng như để giao tiếp với bạn.';
 
   @override
   String get privacySection3Title => 'Chia sẻ thông tin';
 
   @override
   String get privacySection4Content =>
-      'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+      'Chúng tôi không bán, trao đổi hoặc chuyển nhượng thông tin cá nhân của bạn cho bên thứ ba mà không có sự đồng ý của bạn.';
 
   @override
   String get privacySection4Title => 'Bảo mật thông tin';
 
   @override
   String get privacySection5Content =>
-      'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+      'Chúng tôi thực hiện các biện pháp bảo mật thích hợp để bảo vệ thông tin cá nhân của bạn khỏi việc truy cập, thay đổi, tiết lộ hoặc phá hủy trái phép.';
 
   @override
   String get privacySection5Title => 'Quyền của người dùng';
 
   @override
   String get privacySection6Content =>
-      'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+      'Chúng tôi giữ thông tin cá nhân trong thời gian cần thiết để cung cấp dịch vụ của chúng tôi và tuân thủ các nghĩa vụ pháp lý.';
 
   @override
   String get privacySection6Title => '6. Quyền của người dùng';
 
   @override
   String get privacySection7Content =>
-      'You have the right to access, update, or delete your personal information at any time through your account settings.';
+      'Bạn có quyền truy cập, cập nhật hoặc xóa thông tin cá nhân của mình bất cứ lúc nào thông qua cài đặt tài khoản của bạn.';
 
   @override
-  String get privacySection7Title => 'Your Rights';
+  String get privacySection7Title => 'Quyền của bạn';
 
   @override
   String get privacySection8Content =>
-      'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+      'Nếu bạn có bất kỳ câu hỏi nào về Chính sách Bảo mật này, vui lòng liên hệ với chúng tôi tại support@sona.com.';
 
   @override
-  String get privacySection8Title => 'Contact Us';
+  String get privacySection8Title => 'Liên hệ với chúng tôi';
 
   @override
   String get privacySettings => 'Cài đặt quyền riêng tư';
@@ -1465,13 +1486,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get privacySettingsInfo => 'Thông tin cài đặt riêng tư';
 
   @override
-  String get privacySettingsScreen => 'Privacy Settings';
+  String get privacySettingsScreen => 'Cài đặt quyền riêng tư';
 
   @override
-  String get problemMessage => 'Problem';
+  String get problemMessage => 'Vấn đề';
 
   @override
-  String get problemOccurred => 'Problem Occurred';
+  String get problemOccurred => 'Đã xảy ra vấn đề';
 
   @override
   String get profile => 'Hồ sơ';
@@ -1489,20 +1510,20 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileInfoDescription => 'Thông tin hồ sơ';
 
   @override
-  String get profileNav => 'Profile';
+  String get profileNav => 'Hồ sơ';
 
   @override
   String get profilePhoto => 'Ảnh hồ sơ';
 
   @override
   String get profilePhotoAndInfo =>
-      'Please enter profile photo and basic information';
+      'Vui lòng nhập ảnh hồ sơ và thông tin cơ bản';
 
   @override
-  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+  String get profilePhotoUpdateFailed => 'Cập nhật ảnh hồ sơ không thành công';
 
   @override
-  String get profilePhotoUpdated => 'Profile photo updated';
+  String get profilePhotoUpdated => 'Ảnh đại diện đã được cập nhật';
 
   @override
   String get profileSettings => 'Cài đặt hồ sơ';
@@ -1511,13 +1532,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get profileSetup => 'Đang thiết lập hồ sơ';
 
   @override
-  String get profileUpdateFailed => 'Failed to update profile';
+  String get profileUpdateFailed => 'Cập nhật hồ sơ không thành công';
 
   @override
-  String get profileUpdated => 'Profile updated successfully';
+  String get profileUpdated => 'Hồ sơ đã được cập nhật thành công';
 
   @override
-  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+  String get purchaseAndRefundPolicy => 'Chính sách Mua hàng & Hoàn tiền';
 
   @override
   String get purchaseButton => 'Mua ngay';
@@ -1537,7 +1558,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get purchaseFailed => 'Purchase failed';
+  String get purchaseFailed => 'Mua hàng không thành công';
 
   @override
   String get purchaseHeartsOnly => 'Chỉ mua tim';
@@ -1546,73 +1567,74 @@ class AppLocalizationsVi extends AppLocalizations {
   String get purchaseMoreHearts => 'Mua thêm tim';
 
   @override
-  String get purchasePending => 'Purchase pending...';
+  String get purchasePending => 'Đang xử lý mua hàng...';
 
   @override
-  String get purchasePolicy => 'Purchase Policy';
+  String get purchasePolicy => 'Chính sách Mua hàng';
 
   @override
   String get purchaseSection1Content =>
-      'We accept various payment methods including credit cards and digital wallets.';
+      'Chúng tôi chấp nhận nhiều phương thức thanh toán bao gồm thẻ tín dụng và ví điện tử.';
 
   @override
-  String get purchaseSection1Title => 'Payment Methods';
+  String get purchaseSection1Title => 'Phương thức Thanh toán';
 
   @override
   String get purchaseSection2Content =>
-      'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+      'Hoàn tiền có sẵn trong vòng 14 ngày kể từ ngày mua nếu bạn chưa sử dụng các mặt hàng đã mua.';
 
   @override
-  String get purchaseSection2Title => 'Refund Policy';
+  String get purchaseSection2Title => 'Chính sách Hoàn tiền';
 
   @override
   String get purchaseSection3Content =>
-      'You can cancel your subscription at any time through your account settings.';
+      'Bạn có thể hủy đăng ký bất cứ lúc nào thông qua cài đặt tài khoản của bạn.';
 
   @override
-  String get purchaseSection3Title => 'Cancellation';
+  String get purchaseSection3Title => 'Hủy bỏ';
 
   @override
   String get purchaseSection4Content =>
-      'By making a purchase, you agree to our terms of use and service agreement.';
+      'Bằng việc thực hiện giao dịch mua, bạn đồng ý với các điều khoản sử dụng và thỏa thuận dịch vụ của chúng tôi.';
 
   @override
-  String get purchaseSection4Title => 'Terms of Use';
+  String get purchaseSection4Title => 'Điều khoản Sử dụng';
 
   @override
   String get purchaseSection5Content =>
-      'For purchase-related issues, please contact our support team.';
+      'Đối với các vấn đề liên quan đến mua hàng, vui lòng liên hệ với đội ngũ hỗ trợ của chúng tôi.';
 
   @override
-  String get purchaseSection5Title => 'Contact Support';
+  String get purchaseSection5Title => 'Liên hệ Hỗ trợ';
 
   @override
   String get purchaseSection6Content =>
-      'All purchases are subject to our standard terms and conditions.';
+      'Tất cả các giao dịch mua đều phải tuân theo các điều khoản và điều kiện tiêu chuẩn của chúng tôi.';
 
   @override
-  String get purchaseSection6Title => '6. Inquiries';
+  String get purchaseSection6Title => '6. Thắc mắc';
 
   @override
   String get pushNotifications => 'Thông báo đẩy';
 
   @override
-  String get reading => 'Reading';
+  String get reading => 'Đọc';
 
   @override
-  String get realtimeQualityLog => 'Real-time Quality Log';
+  String get realtimeQualityLog => 'Nhật ký chất lượng thời gian thực';
 
   @override
-  String get recentConversation => 'Recent Conversation:';
+  String get recentConversation => 'Cuộc trò chuyện gần đây:';
 
   @override
-  String get recentLoginRequired => 'Please login again for security';
+  String get recentLoginRequired => 'Vui lòng đăng nhập lại để đảm bảo an toàn';
 
   @override
-  String get referrerEmail => 'Referrer Email';
+  String get referrerEmail => 'Email người giới thiệu';
 
   @override
-  String get referrerEmailHelper => 'Optional: Email of who referred you';
+  String get referrerEmailHelper =>
+      'Tùy chọn: Email của người đã giới thiệu bạn';
 
   @override
   String get referrerEmailLabel => 'Email người giới thiệu';
@@ -1626,10 +1648,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => 'Làm mới không thành công';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => 'Đang làm mới danh sách trò chuyện...';
 
   @override
   String get relatedFAQ => 'FAQ liên quan';
@@ -1647,13 +1669,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reportAITitle => 'Báo cáo cuộc trò chuyện AI';
 
   @override
-  String get reportAndBlock => 'Report & Block';
+  String get reportAndBlock => 'Báo cáo & Chặn';
 
   @override
   String get reportAndBlockDescription => 'Báo cáo và chặn';
 
   @override
-  String get reportChatError => 'Report Chat Error';
+  String get reportChatError => 'Báo cáo lỗi trò chuyện';
 
   @override
   String reportError(String error) {
@@ -1661,7 +1683,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => 'Báo cáo không thành công';
 
   @override
   String get reportSubmitted => 'Đã gửi báo cáo';
@@ -1670,16 +1692,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get reportSubmittedSuccess => 'Báo cáo thành công';
 
   @override
-  String get requestLimit => 'Request Limit';
+  String get requestLimit => 'Giới hạn yêu cầu';
 
   @override
   String get required => 'Bắt buộc';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => 'Vui lòng đồng ý với các điều khoản';
 
   @override
-  String get restartConversation => 'Restart Conversation';
+  String get restartConversation => 'Khởi động lại cuộc trò chuyện';
 
   @override
   String restartConversationQuestion(String name) {
@@ -1701,7 +1723,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sad => 'Buồn';
 
   @override
-  String get saturday => 'Saturday';
+  String get saturday => 'Thứ Bảy';
 
   @override
   String get save => 'Lưu';
@@ -1716,10 +1738,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get searchResults => 'Kết quả tìm kiếm';
 
   @override
-  String get selectEmotion => 'Select Emotion';
+  String get selectEmotion => 'Chọn cảm xúc';
 
   @override
-  String get selectErrorType => 'Select error type';
+  String get selectErrorType => 'Chọn loại lỗi';
 
   @override
   String get selectFeeling => 'Bạn cảm thấy thế nào?';
@@ -1731,23 +1753,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get selectInterests => 'Chọn sở thích';
 
   @override
-  String get selectLanguage => 'Select Language';
+  String get selectLanguage => 'Chọn ngôn ngữ';
 
   @override
-  String get selectPersona => 'Select a persona';
+  String get selectPersona => 'Chọn một nhân vật';
 
   @override
-  String get selectPersonaPlease => 'Please select a persona.';
+  String get selectPersonaPlease => 'Vui lòng chọn một nhân vật.';
 
   @override
   String get selectPreferredMbti => 'Chọn MBTI ưa thích';
 
   @override
-  String get selectProblematicMessage =>
-      'Select the problematic message (optional)';
+  String get selectProblematicMessage => 'Chọn tin nhắn có vấn đề (tùy chọn)';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => 'Chọn lý do báo cáo';
 
   @override
   String get selectTheme => 'Chọn giao diện';
@@ -1756,7 +1777,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get selectTranslationError => 'Chọn lỗi dịch thuật';
 
   @override
-  String get selectUsagePurpose => 'Please select your purpose for using SONA';
+  String get selectUsagePurpose => 'Vui lòng chọn mục đích sử dụng SONA';
 
   @override
   String get selfIntroduction => 'Giới thiệu bản thân';
@@ -1768,13 +1789,13 @@ class AppLocalizationsVi extends AppLocalizations {
   String get send => 'Gửi';
 
   @override
-  String get sendChatError => 'Send Chat Error';
+  String get sendChatError => 'Lỗi gửi chat';
 
   @override
-  String get sendFirstMessage => 'Send your first message';
+  String get sendFirstMessage => 'Gửi tin nhắn đầu tiên của bạn';
 
   @override
-  String get sendReport => 'Send Report';
+  String get sendReport => 'Gửi báo cáo';
 
   @override
   String get sendingEmail => 'Đang gửi email...';
@@ -1783,16 +1804,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get seoul => 'Seoul';
 
   @override
-  String get serverErrorDashboard => 'Server Error';
+  String get serverErrorDashboard => 'Lỗi máy chủ';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement =>
+      'Vui lòng đồng ý với các điều khoản dịch vụ';
 
   @override
   String get sessionExpired => 'Phiên đã hết hạn';
 
   @override
-  String get setAppInterfaceLanguage => 'Set app interface language';
+  String get setAppInterfaceLanguage => 'Đặt ngôn ngữ giao diện ứng dụng';
 
   @override
   String get setNow => 'Thiết lập ngay';
@@ -1811,10 +1833,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get showOppositeGenderOnly =>
-      'If unchecked, only opposite gender personas will be shown';
+      'Nếu không chọn, chỉ hiển thị các nhân vật giới tính đối diện';
 
   @override
-  String get showOriginalText => 'Show Original';
+  String get showOriginalText => 'Hiển thị gốc';
 
   @override
   String get signUp => 'Đăng ký';
@@ -1841,19 +1863,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sonaFriend => 'Bạn SONA';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'Chính sách bảo mật của SONA';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'Chính sách mua hàng của SONA';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'Điều khoản dịch vụ của SONA';
 
   @override
   String get sonaUsagePurpose => 'Mục đích sử dụng SONA';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => 'Xin lỗi, điều này không hữu ích';
 
   @override
   String get sort => 'Sắp xếp';
@@ -1865,7 +1887,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get spamAdvertising => 'Spam/Quảng cáo';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'Tiếng Tây Ban Nha';
 
   @override
   String get specialRelationshipDesc => 'Xây dựng mối quan hệ đặc biệt';
@@ -1874,24 +1896,24 @@ class AppLocalizationsVi extends AppLocalizations {
   String get sports => 'Thể thao';
 
   @override
-  String get spring => 'Spring';
+  String get spring => 'Mùa xuân';
 
   @override
   String get startChat => 'Bắt đầu trò chuyện';
 
   @override
-  String get startChatButton => 'Start Chat';
+  String get startChatButton => 'Bắt đầu chat';
 
   @override
-  String get startConversation => 'Start a conversation';
+  String get startConversation => 'Bắt đầu cuộc trò chuyện';
 
   @override
   String get startConversationLikeAFriend =>
-      'Start a conversation with Sona like a friend';
+      'Bắt đầu cuộc trò chuyện với SONA như một người bạn';
 
   @override
   String get startConversationStep =>
-      '2. Start Conversation: Chat freely with matched personas.';
+      '2. Bắt đầu cuộc trò chuyện: Trò chuyện tự do với các nhân vật đã ghép nối.';
 
   @override
   String get startConversationWithSona => 'Bắt đầu trò chuyện với SONA';
@@ -1903,22 +1925,22 @@ class AppLocalizationsVi extends AppLocalizations {
   String get startWithGoogle => 'Bắt đầu với Google';
 
   @override
-  String get startingApp => 'Starting app';
+  String get startingApp => 'Đang khởi động ứng dụng';
 
   @override
-  String get storageManagement => 'Storage Management';
+  String get storageManagement => 'Quản lý bộ nhớ';
 
   @override
   String get store => 'Cửa hàng';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => 'Không thể kết nối đến cửa hàng';
 
   @override
   String get storeLoginRequiredMessage => 'Cần đăng nhập để vào cửa hàng';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => 'Cửa hàng không khả dụng';
 
   @override
   String get storyEvent => 'Sự kiện câu chuyện';
@@ -1927,25 +1949,25 @@ class AppLocalizationsVi extends AppLocalizations {
   String get stressed => 'Căng thẳng';
 
   @override
-  String get submitReport => 'Submit Report';
+  String get submitReport => 'Gửi báo cáo';
 
   @override
   String get subscriptionStatus => 'Trạng thái đăng ký';
 
   @override
-  String get subtleVibrationOnTouch => 'Subtle vibration on touch';
+  String get subtleVibrationOnTouch => 'Rung nhẹ khi chạm';
 
   @override
-  String get summer => 'Summer';
+  String get summer => 'Mùa hè';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => 'Chủ nhật';
 
   @override
-  String get swipeAnyDirection => 'Swipe in any direction';
+  String get swipeAnyDirection => 'Vuốt theo bất kỳ hướng nào';
 
   @override
-  String get swipeDownToClose => 'Swipe down to close';
+  String get swipeDownToClose => 'Vuốt xuống để đóng';
 
   @override
   String get systemTheme => 'Theo hệ thống';
@@ -1957,16 +1979,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get tapBottomForDetails => 'Chạm phía dưới để xem chi tiết';
 
   @override
-  String get tapForDetails => 'Tap bottom area for details';
+  String get tapForDetails => 'Chạm vào khu vực dưới để xem chi tiết';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => 'Chạm để vuốt ảnh';
 
   @override
-  String get teachersDay => 'Teachers\' Day';
+  String get teachersDay => 'Ngày Nhà giáo';
 
   @override
-  String get technicalError => 'Technical Error';
+  String get technicalError => 'Lỗi kỹ thuật';
 
   @override
   String get technology => 'Công nghệ';
@@ -1985,93 +2007,92 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+      'Chúng tôi có quyền sửa đổi các điều khoản này bất cứ lúc nào với thông báo cho người dùng.';
 
   @override
-  String get termsSection10Title => 'Article 10 (Dispute Resolution)';
+  String get termsSection10Title => 'Điều 10 (Giải quyết tranh chấp)';
 
   @override
   String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+      'Các điều khoản này sẽ được điều chỉnh bởi luật pháp của khu vực mà chúng tôi hoạt động.';
 
   @override
   String get termsSection11Title =>
-      'Article 11 (AI Service Special Provisions)';
+      'Điều 11 (Các quy định đặc biệt về dịch vụ AI)';
 
   @override
   String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+      'Nếu bất kỳ điều khoản nào trong các điều khoản này bị coi là không thể thi hành, các điều khoản còn lại sẽ tiếp tục có hiệu lực đầy đủ.';
 
   @override
-  String get termsSection12Title => 'Article 12 (Data Collection and Usage)';
+  String get termsSection12Title => 'Điều 12 (Thu thập và Sử dụng Dữ liệu)';
 
   @override
   String get termsSection1Content => 'Nội dung điều khoản 1';
 
   @override
-  String get termsSection1Title => 'Article 1 (Purpose)';
+  String get termsSection1Title => 'Điều 1 (Mục đích)';
 
   @override
   String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+      'Bằng cách sử dụng dịch vụ của chúng tôi, bạn đồng ý tuân thủ các Điều khoản Dịch vụ này và Chính sách Bảo mật của chúng tôi.';
 
   @override
-  String get termsSection2Title => 'Article 2 (Definitions)';
+  String get termsSection2Title => 'Điều 2 (Định nghĩa)';
 
   @override
   String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+      'Bạn phải ít nhất 13 tuổi để sử dụng dịch vụ của chúng tôi.';
 
   @override
-  String get termsSection3Title =>
-      'Article 3 (Effect and Modification of Terms)';
+  String get termsSection3Title => 'Điều 3 (Hiệu lực và Sửa đổi Điều khoản)';
 
   @override
   String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+      'Bạn có trách nhiệm bảo mật thông tin tài khoản và mật khẩu của mình.';
 
   @override
-  String get termsSection4Title => 'Article 4 (Provision of Service)';
+  String get termsSection4Title => 'Điều 4 (Cung cấp Dịch vụ)';
 
   @override
   String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+      'Bạn đồng ý không sử dụng dịch vụ của chúng tôi cho bất kỳ mục đích bất hợp pháp hoặc không được phép.';
 
   @override
-  String get termsSection5Title => 'Article 5 (Membership Registration)';
+  String get termsSection5Title => 'Điều 5 (Đăng ký Thành viên)';
 
   @override
   String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+      'Chúng tôi có quyền chấm dứt hoặc tạm ngừng tài khoản của bạn nếu vi phạm các điều khoản này.';
 
   @override
-  String get termsSection6Title => 'Article 6 (User Obligations)';
+  String get termsSection6Title => 'Điều 6 (Nghĩa vụ của Người dùng)';
 
   @override
   String get termsSection7Content => 'Nội dung điều khoản 7';
 
   @override
-  String get termsSection7Title => 'Article 7 (Service Usage Restrictions)';
+  String get termsSection7Title => 'Điều 7 (Hạn chế Sử dụng Dịch vụ)';
 
   @override
   String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+      'Chúng tôi không chịu trách nhiệm về bất kỳ thiệt hại gián tiếp, ngẫu nhiên hoặc hậu quả nào phát sinh từ việc bạn sử dụng dịch vụ của chúng tôi.';
 
   @override
-  String get termsSection8Title => 'Article 8 (Service Interruption)';
+  String get termsSection8Title => 'Điều 8 (Gián đoạn Dịch vụ)';
 
   @override
   String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+      'Tất cả nội dung và tài liệu có sẵn trên dịch vụ của chúng tôi đều được bảo vệ bởi quyền sở hữu trí tuệ.';
 
   @override
-  String get termsSection9Title => 'Article 9 (Disclaimer)';
+  String get termsSection9Title => 'Điều 9 (Tuyên bố từ chối trách nhiệm)';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => 'Điều khoản bổ sung';
 
   @override
-  String get thai => 'Thai';
+  String get thai => 'Thái';
 
   @override
   String get thanksFeedback => 'Cảm ơn phản hồi của bạn';
@@ -2086,10 +2107,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get themeSettings => 'Cài đặt giao diện';
 
   @override
-  String get thursday => 'Thursday';
+  String get thursday => 'Thứ Năm';
 
   @override
-  String get timeout => 'Timeout';
+  String get timeout => 'Thời gian chờ';
 
   @override
   String get tired => 'Mệt mỏi';
@@ -2101,36 +2122,36 @@ class AppLocalizationsVi extends AppLocalizations {
   String get todayChats => 'Hôm nay';
 
   @override
-  String get todayText => 'Today';
+  String get todayText => 'Hôm nay';
 
   @override
-  String get tomorrowText => 'Tomorrow';
+  String get tomorrowText => 'Ngày mai';
 
   @override
-  String get totalConsultSessions => 'Total Consultation Sessions';
+  String get totalConsultSessions => 'Tổng số buổi tư vấn';
 
   @override
-  String get totalErrorCount => 'Total Error Count';
+  String get totalErrorCount => 'Tổng số lỗi';
 
   @override
   String get totalLikes => 'Tổng số lượt thích';
 
   @override
   String totalOccurrences(Object count) {
-    return 'Total $count occurrences';
+    return 'Tổng cộng $count lần xảy ra';
   }
 
   @override
-  String get totalResponses => 'Total Responses';
+  String get totalResponses => 'Tổng số phản hồi';
 
   @override
-  String get translatedFrom => 'Translated';
+  String get translatedFrom => 'Đã dịch từ';
 
   @override
-  String get translatedText => 'Translation';
+  String get translatedText => 'Bản dịch';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => 'Lỗi dịch';
 
   @override
   String get translationErrorDescription => 'Báo lỗi dịch thuật';
@@ -2142,16 +2163,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get translationNote => 'Lưu ý về dịch thuật';
 
   @override
-  String get translationQuality => 'Translation Quality';
+  String get translationQuality => 'Chất lượng dịch';
 
   @override
-  String get translationSettings => 'Translation Settings';
+  String get translationSettings => 'Cài đặt dịch';
 
   @override
   String get travel => 'Du lịch';
 
   @override
-  String get tuesday => 'Tuesday';
+  String get tuesday => 'Thứ Ba';
 
   @override
   String get tutorialAccount => 'Tài khoản hướng dẫn';
@@ -2167,10 +2188,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get typeMessage => 'Nhập tin nhắn...';
 
   @override
-  String get unblock => 'Unblock';
+  String get unblock => 'Bỏ chặn';
 
   @override
-  String get unblockFailed => 'Failed to unblock';
+  String get unblockFailed => 'Bỏ chặn không thành công';
 
   @override
   String unblockPersonaConfirm(String name) {
@@ -2178,16 +2199,16 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get unblockedSuccessfully => 'Unblocked successfully';
+  String get unblockedSuccessfully => 'Mở khóa thành công';
 
   @override
   String get unexpectedLoginError => 'Lỗi đăng nhập không mong đợi';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Không xác định';
 
   @override
-  String get unknownError => 'An unknown error occurred';
+  String get unknownError => 'Đã xảy ra lỗi không xác định';
 
   @override
   String get unlimitedMessages => 'Không giới hạn';
@@ -2199,31 +2220,31 @@ class AppLocalizationsVi extends AppLocalizations {
   String get usagePurpose => 'Mục đích sử dụng';
 
   @override
-  String get useOneHeart => 'Use 1 Heart';
+  String get useOneHeart => 'Sử dụng 1 Trái Tim';
 
   @override
-  String get useSystemLanguage => 'Use System Language';
+  String get useSystemLanguage => 'Sử dụng Ngôn Ngữ Hệ Thống';
 
   @override
-  String get user => 'User: ';
+  String get user => 'Người dùng:';
 
   @override
-  String get userMessage => 'User Message:';
+  String get userMessage => 'Tin nhắn của người dùng:';
 
   @override
   String get userNotFound => 'Không tìm thấy người dùng';
 
   @override
-  String get valentinesDay => 'Valentine\'s Day';
+  String get valentinesDay => 'Ngày Valentine';
 
   @override
-  String get verifyingAuth => 'Verifying authentication';
+  String get verifyingAuth => 'Đang xác minh xác thực';
 
   @override
   String get version => 'Phiên bản';
 
   @override
-  String get vietnamese => 'Vietnamese';
+  String get vietnamese => 'Tiếng Việt';
 
   @override
   String get violentContent => 'Nội dung bạo lực';
@@ -2237,49 +2258,49 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get walk => 'Walk';
+  String get walk => 'Đi bộ';
 
   @override
   String get wasHelpful => 'Có hữu ích không?';
 
   @override
-  String get weatherClear => 'Clear';
+  String get weatherClear => 'Trời quang';
 
   @override
-  String get weatherCloudy => 'Cloudy';
+  String get weatherCloudy => 'Trời nhiều mây';
 
   @override
-  String get weatherContext => 'Weather Context';
+  String get weatherContext => 'Bối cảnh thời tiết';
 
   @override
   String get weatherContextDesc => 'Ngữ cảnh thời tiết';
 
   @override
-  String get weatherDrizzle => 'Drizzle';
+  String get weatherDrizzle => 'Mưa phùn';
 
   @override
-  String get weatherFog => 'Fog';
+  String get weatherFog => 'Sương mù';
 
   @override
-  String get weatherMist => 'Mist';
+  String get weatherMist => 'Sương mù';
 
   @override
-  String get weatherRain => 'Rain';
+  String get weatherRain => 'Mưa';
 
   @override
   String get weatherRainy => 'Mưa';
 
   @override
-  String get weatherSnow => 'Snow';
+  String get weatherSnow => 'Tuyết';
 
   @override
   String get weatherSnowy => 'Tuyết';
 
   @override
-  String get weatherThunderstorm => 'Thunderstorm';
+  String get weatherThunderstorm => 'Bão tố';
 
   @override
-  String get wednesday => 'Wednesday';
+  String get wednesday => 'Thứ Tư';
 
   @override
   String get weekdays => 'CN,T2,T3,T4,T5,T6,T7';
@@ -2291,19 +2312,19 @@ class AppLocalizationsVi extends AppLocalizations {
   String get whatTopicsToTalk => 'Bạn muốn nói về chủ đề gì?';
 
   @override
-  String get whiteDay => 'White Day';
+  String get whiteDay => 'Ngày Trắng';
 
   @override
-  String get winter => 'Winter';
+  String get winter => 'Mùa Đông';
 
   @override
-  String get wrongTranslation => 'Wrong Translation';
+  String get wrongTranslation => 'Dịch Sai';
 
   @override
   String get year => 'Năm';
 
   @override
-  String get yearEnd => 'Year End';
+  String get yearEnd => 'Cuối Năm';
 
   @override
   String get yes => 'Có';

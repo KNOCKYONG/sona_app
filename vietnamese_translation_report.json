@@ -1,0 +1,43 @@
+{
+  "total_keys": 732,
+  "same_as_english": [
+    {
+      "key": "appName",
+      "value": "SONA",
+      "ko_value": "SONA"
+    },
+    {
+      "key": "conversationWith",
+      "value": "{name}",
+      "ko_value": "{name}"
+    },
+    {
+      "key": "email",
+      "value": "Email",
+      "ko_value": "이메일"
+    },
+    {
+      "key": "emailHint",
+      "value": "example@email.com",
+      "ko_value": "예시@email.com"
+    },
+    {
+      "key": "emailLabel",
+      "value": "Email",
+      "ko_value": "이메일"
+    },
+    {
+      "key": "seoul",
+      "value": "Seoul",
+      "ko_value": "서울"
+    }
+  ],
+  "likely_untranslated": [
+    {
+      "key": "purchaseButton",
+      "value": "Mua ngay",
+      "en_value": "Purchase",
+      "ko_value": "구매하기"
+    }
+  ]
+}

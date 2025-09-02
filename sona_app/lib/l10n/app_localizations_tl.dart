@@ -12,213 +12,215 @@ class AppLocalizationsTl extends AppLocalizations {
   String get about => 'Tungkol';
 
   @override
-  String get accountAndProfile => 'Account & Profile Information';
+  String get accountAndProfile => 'Impormasyon sa Account at Profile';
 
   @override
-  String get accountDeletedSuccess => 'Account deleted successfully';
+  String get accountDeletedSuccess => 'Matagumpay na na-delete ang account';
 
   @override
   String get accountDeletionContent =>
-      'Are you sure you want to delete your account?\nThis action cannot be undone.';
+      'Sigurado ka bang nais mong i-delete ang iyong account?';
 
   @override
-  String get accountDeletionError => 'Error occurred while deleting account.';
+  String get accountDeletionError =>
+      'Nagkaroon ng error habang nagde-delete ng account.';
 
   @override
-  String get accountDeletionInfo => 'Account deletion information';
+  String get accountDeletionInfo => 'Impormasyon sa Pag-delete ng Account';
 
   @override
-  String get accountDeletionTitle => 'Delete Account';
+  String get accountDeletionTitle => 'I-delete ang Account';
 
   @override
-  String get accountDeletionWarning1 => 'Warning: This action cannot be undone';
+  String get accountDeletionWarning1 =>
+      'Babala: Ang aksyong ito ay hindi maibabalik';
 
   @override
   String get accountDeletionWarning2 =>
-      'All your data will be permanently deleted';
+      'Lahat ng iyong data ay permanenteng mabubura';
 
   @override
   String get accountDeletionWarning3 =>
-      'You will lose access to all conversations';
+      'Mawawalan ka ng access sa lahat ng pag-uusap';
 
   @override
-  String get accountDeletionWarning4 => 'This includes all purchased content';
+  String get accountDeletionWarning4 =>
+      'Kasama dito ang lahat ng biniling nilalaman';
 
   @override
-  String get accountManagement => 'Account Management';
+  String get accountManagement => 'Pamamahala ng Account';
 
   @override
   String get adaptiveConversationDesc =>
-      'Adapts conversation style to match yours';
+      'Inaangkop ang estilo ng pag-uusap upang umangkop sa iyo';
 
   @override
-  String get afternoon => 'Afternoon';
+  String get afternoon => 'Hapon';
 
   @override
-  String get afternoonFatigue => 'Afternoon fatigue';
+  String get afternoonFatigue => 'Pagkapagod sa Hapon';
 
   @override
   String get ageConfirmation =>
-      'I am 14 years or older and have confirmed the above.';
+      'Ako ay 14 na taong gulang o mas matanda at nakumpirma ang nasa itaas.';
 
   @override
   String ageRange(int min, int max) {
-    return '$min-$max years old';
+    return '$min-$max taong gulang';
   }
 
   @override
-  String get ageUnit => 'years old';
+  String get ageUnit => 'taong gulang';
 
   @override
-  String get agreeToTerms => 'I agree to the terms';
+  String get agreeToTerms => 'Sumasang-ayon ako sa mga tuntunin';
 
   @override
   String get aiDatingQuestion =>
-      'A special daily life with AI\nMeet your own personas.';
+      'Isang espesyal na pang-araw-araw na buhay kasama ang AI';
 
   @override
   String get aiPersonaPreferenceDescription =>
-      'Please set your preferences for AI persona matching';
+      'Mangyaring itakda ang iyong mga kagustuhan para sa pagtutugma ng AI persona';
 
   @override
-  String get all => 'All';
+  String get all => 'Lahat';
 
   @override
-  String get allAgree => 'Agree to All';
+  String get allAgree => 'Sumasang-ayon sa Lahat';
 
   @override
   String get allFeaturesRequired =>
-      '※ All features are required for service provision';
+      '※ Lahat ng tampok ay kinakailangan para sa pagbibigay ng serbisyo';
 
   @override
-  String get allPersonas => 'All Personas';
+  String get allPersonas => 'Lahat ng Persona';
 
   @override
   String get allPersonasMatched =>
-      'All personas matched! Start chatting with them.';
+      'Lahat ng persona ay naitugma! Simulan ang pakikipag-chat sa kanila.';
 
   @override
   String get allowPermission => 'Magpatuloy';
 
   @override
   String alreadyChattingWith(String name) {
-    return 'Already chatting with $name!';
+    return 'Nakikipag-chat na kay $name!';
   }
 
   @override
-  String get alsoBlockThisAI => 'Also block this AI';
+  String get alsoBlockThisAI => 'I-block din ang AI na ito';
 
   @override
-  String get angry => 'Angry';
+  String get angry => 'Galit';
 
   @override
-  String get anonymousLogin => 'Anonymous login';
+  String get anonymousLogin => 'Walang pangalan na pag-login';
 
   @override
-  String get anxious => 'Anxious';
+  String get anxious => 'Nababalisa';
 
   @override
-  String get apiKeyError => 'API Key Error';
+  String get apiKeyError => 'Error sa API Key';
 
   @override
   String get appName => 'SONA';
 
   @override
-  String get appTagline => 'Your AI companions';
+  String get appTagline => 'Ang iyong mga AI kasama';
 
   @override
   String get appleLoginCanceled =>
-      'Apple login was canceled.\nPlease try again.';
+      'Nakansela ang pag-login sa Apple. Pakisubukan muli.';
 
   @override
-  String get appleLoginError => 'Error occurred during Apple login.';
+  String get appleLoginError => 'Nagkaroon ng error sa pag-login sa Apple.';
 
   @override
-  String get art => 'Art';
+  String get art => 'Sining';
 
   @override
-  String get authError => 'Authentication Error';
+  String get authError => 'Error sa Pagpapatotoo';
 
   @override
-  String get autoTranslate => 'Auto Translate';
+  String get autoTranslate => 'Awtomatikong Isasalin';
 
   @override
-  String get autumn => 'Autumn';
+  String get autumn => 'Taglagas';
 
   @override
-  String get averageQuality => 'Average Quality';
+  String get averageQuality => 'Karaniwang Kalidad';
 
   @override
-  String get averageQualityScore => 'Average Quality Score';
+  String get averageQualityScore => 'Karaniwang Iskor ng Kalidad';
 
   @override
   String get awkwardExpression => 'Awkward Expression';
 
   @override
-  String get backButton => 'Back';
+  String get backButton => 'Bumalik';
 
   @override
-  String get basicInfo => 'Basic Information';
+  String get basicInfo => 'Pangunahing Impormasyon';
 
   @override
   String get basicInfoDescription =>
-      'Please enter basic information to create an account';
+      'Pakisok ang pangunahing impormasyon upang makagawa ng account';
 
   @override
-  String get birthDate => 'Birth Date';
+  String get birthDate => 'Petsa ng Kapanganakan';
 
   @override
-  String get birthDateOptional => 'Birth Date (Optional)';
+  String get birthDateOptional => 'Petsa ng Kapanganakan (Opsyonal)';
 
   @override
-  String get birthDateRequired => 'Birth Date *';
+  String get birthDateRequired => 'Petsa ng Kapanganakan *';
 
   @override
-  String get blockConfirm =>
-      'Do you want to block this AI?\nBlocked AIs will be excluded from matching and chat list.';
+  String get blockConfirm => 'Gusto mo bang i-block ang AI na ito?';
 
   @override
-  String get blockReason => 'Block reason';
+  String get blockReason => 'Dahilan ng pag-block';
 
   @override
-  String get blockThisAI => 'Block this AI';
+  String get blockThisAI => 'I-block ang AI na ito';
 
   @override
   String blockedAICount(int count) {
-    return '$count blocked AIs';
+    return '$count na naka-block na AIs';
   }
 
   @override
-  String get blockedAIs => 'Blocked AIs';
+  String get blockedAIs => 'Naka-block na AIs';
 
   @override
-  String get blockedAt => 'Blocked at';
+  String get blockedAt => 'Naka-block sa';
 
   @override
-  String get blockedSuccessfully => 'Blocked successfully';
+  String get blockedSuccessfully => 'Matagumpay na naka-block';
 
   @override
-  String get breakfast => 'Breakfast';
+  String get breakfast => 'Almusal';
 
   @override
-  String get byErrorType => 'By Error Type';
+  String get byErrorType => 'Ayon sa Uri ng Error';
 
   @override
-  String get byPersona => 'By Persona';
+  String get byPersona => 'Ayon sa Persona';
 
   @override
   String cacheDeleteError(String error) {
-    return 'Error deleting cache: $error';
+    return 'Error sa pagtanggal ng cache: $error';
   }
 
   @override
-  String get cacheDeleted => 'Image cache has been deleted';
+  String get cacheDeleted => 'Na-delete na ang image cache';
 
   @override
-  String get cafeTerrace => 'Cafe terrace';
+  String get cafeTerrace => 'Terrace ng cafe';
 
   @override
-  String get calm => 'Calm';
+  String get calm => 'Kalma';
 
   @override
   String get cameraPermission => 'Pahintulot sa Camera';
@@ -228,96 +230,98 @@ class AppLocalizationsTl extends AppLocalizations {
       'Kailangan namin ng pahintulot sa camera para kumuha ng larawan.';
 
   @override
-  String get canChangeInSettings => 'You can change this later in settings';
+  String get canChangeInSettings =>
+      'Maaari mo itong baguhin sa mga setting mamaya';
 
   @override
   String get canMeetPreviousPersonas =>
-      'You can meet personas\nyou swiped before again!';
+      'Maaari mong makilala muli ang mga persona na iyong na-swipe dati!';
 
   @override
   String get cancel => 'Kanselahin';
 
   @override
-  String get changeProfilePhoto => 'Change Profile Photo';
+  String get changeProfilePhoto => 'Palitan ang Larawan ng Profile';
 
   @override
-  String get chat => 'Chat';
+  String get chat => 'Usapan';
 
   @override
-  String get chatEndedMessage => 'Chat has ended';
+  String get chatEndedMessage => 'Natapos na ang usapan';
 
   @override
-  String get chatErrorDashboard => 'Chat Error Dashboard';
+  String get chatErrorDashboard => 'Dashboard ng Error sa Usapan';
 
   @override
   String get chatErrorSentSuccessfully =>
-      'Chat error has been sent successfully.';
+      'Matagumpay na naipadala ang error sa usapan.';
 
   @override
-  String get chatListTab => 'Chat List Tab';
+  String get chatListTab => 'Tab ng Listahan ng Usapan';
 
   @override
-  String get chats => 'Chats';
+  String get chats => 'Mga Usapan';
 
   @override
   String chattingWithPersonas(int count) {
-    return 'Chatting with $count personas';
+    return 'Nakikipag-chat sa $count persona';
   }
 
   @override
-  String get checkInternetConnection => 'Please check your internet connection';
+  String get checkInternetConnection =>
+      'Pakisuri ang iyong koneksyon sa internet';
 
   @override
-  String get checkingUserInfo => 'Checking user info';
+  String get checkingUserInfo => 'Sinusuri ang impormasyon ng gumagamit';
 
   @override
-  String get childrensDay => 'Children\'s Day';
+  String get childrensDay => 'Araw ng mga Bata';
 
   @override
-  String get chinese => 'Chinese';
+  String get chinese => 'Tsino';
 
   @override
-  String get chooseOption => 'Please choose:';
+  String get chooseOption => 'Pakipili:';
 
   @override
-  String get christmas => 'Christmas';
+  String get christmas => 'Pasko';
 
   @override
-  String get close => 'Close';
+  String get close => 'Isara';
 
   @override
-  String get complete => 'Done';
+  String get complete => 'Tapos na';
 
   @override
-  String get completeSignup => 'Complete Sign Up';
+  String get completeSignup => 'Kumpletuhin ang Pag-sign Up';
 
   @override
   String get confirm => 'Kumpirmahin';
 
   @override
-  String get connectingToServer => 'Connecting to server';
+  String get connectingToServer => 'Kumokonekta sa server';
 
   @override
-  String get consultQualityMonitoring => 'Consultation Quality Monitoring';
+  String get consultQualityMonitoring => 'Pagsusuri ng Kalidad ng Konsultasyon';
 
   @override
-  String get continueAsGuest => 'Continue as Guest';
+  String get continueAsGuest => 'Magpatuloy bilang Bisita';
 
   @override
-  String get continueButton => 'Continue';
+  String get continueButton => 'Magpatuloy';
 
   @override
-  String get continueWithApple => 'Continue with Apple';
+  String get continueWithApple => 'Magpatuloy gamit ang Apple';
 
   @override
-  String get continueWithGoogle => 'Continue with Google';
+  String get continueWithGoogle => 'Magpatuloy gamit ang Google';
 
   @override
-  String get conversationContinuity => 'Conversation Continuity';
+  String get conversationContinuity => 'Pagpapatuloy ng Usapan';
 
   @override
   String get conversationContinuityDesc =>
-      'Remember previous conversations and connect topics';
+      'Tandaan ang mga nakaraang usapan at ikonekta ang mga paksa';
 
   @override
   String conversationWith(String name) {
@@ -325,87 +329,88 @@ class AppLocalizationsTl extends AppLocalizations {
   }
 
   @override
-  String get convertToMember => 'Sign Up';
+  String get convertToMember => 'Mag-sign Up';
 
   @override
-  String get cooking => 'Cooking';
+  String get cooking => 'Pagluluto';
 
   @override
-  String get copyMessage => 'Copy message';
+  String get copyMessage => 'Kopyahin ang mensahe';
 
   @override
-  String get copyrightInfringement => 'Copyright infringement';
+  String get copyrightInfringement => 'Paglabag sa Copyright';
 
   @override
-  String get creatingAccount => 'Creating account';
+  String get creatingAccount => 'Gumagawa ng account';
 
   @override
-  String get crisisDetected => 'Crisis Detected';
+  String get crisisDetected => 'Nakatagpo ng Krisis';
 
   @override
-  String get culturalIssue => 'Cultural Issue';
+  String get culturalIssue => 'Isyu sa Kultura';
 
   @override
-  String get current => 'Current';
+  String get current => 'Kasalukuyan';
 
   @override
-  String get currentCacheSize => 'Current Cache Size';
+  String get currentCacheSize => 'Kasalukuyang Sukat ng Cache';
 
   @override
-  String get currentLanguage => 'Current Language';
+  String get currentLanguage => 'Kasalukuyang Wika';
 
   @override
-  String get cycling => 'Cycling';
+  String get cycling => 'Pagbibisikleta';
 
   @override
-  String get dailyCare => 'Daily Care';
+  String get dailyCare => 'Araw-araw na Pangangalaga';
 
   @override
-  String get dailyCareDesc => 'Daily care messages for meals, sleep, health';
+  String get dailyCareDesc =>
+      'Mga mensahe para sa pang-araw-araw na pangangalaga sa pagkain, tulog, at kalusugan';
 
   @override
-  String get dailyChat => 'Daily Chat';
+  String get dailyChat => 'Pang-araw-araw na Usapan';
 
   @override
-  String get dailyCheck => 'Daily check';
+  String get dailyCheck => 'Pang-araw-araw na Suri';
 
   @override
-  String get dailyConversation => 'Daily Conversation';
+  String get dailyConversation => 'Pang-araw-araw na Pag-uusap';
 
   @override
   String get dailyLimitDescription =>
-      'You have reached your daily message limit';
+      'Naabot mo na ang iyong pang-araw-araw na limitasyon sa mensahe';
 
   @override
-  String get dailyLimitTitle => 'Daily Limit Reached';
+  String get dailyLimitTitle => 'Naabot na ang Pang-araw-araw na Limit';
 
   @override
-  String get darkMode => 'Dark Mode';
+  String get darkMode => 'Madilim na Mode';
 
   @override
-  String get darkTheme => 'Dark Mode';
+  String get darkTheme => 'Madilim na Tema';
 
   @override
-  String get darkThemeDesc => 'Use dark theme';
+  String get darkThemeDesc => 'Gumamit ng madilim na tema';
 
   @override
-  String get dataCollection => 'Data Collection Settings';
+  String get dataCollection => 'Mga Setting ng Pagkolekta ng Data';
 
   @override
-  String get datingAdvice => 'Dating Advice';
+  String get datingAdvice => 'Payo sa Pakikipag-date';
 
   @override
   String get datingDescription =>
-      'I want to share deep thoughts and have sincere conversations';
+      'Nais kong magbahagi ng malalalim na kaisipan at magkaroon ng tapat na pag-uusap';
 
   @override
-  String get dawn => 'Dawn';
+  String get dawn => 'Bukang-liwayway';
 
   @override
-  String get day => 'Day';
+  String get day => 'Araw';
 
   @override
-  String get dayAfterTomorrow => 'Day after tomorrow';
+  String get dayAfterTomorrow => 'Araw pagkatapos ng bukas';
 
   @override
   String daysAgo(int count, String formatted) {
@@ -414,11 +419,11 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String daysRemaining(int days) {
-    return '$days days remaining';
+    return '$days natitirang araw';
   }
 
   @override
-  String get deepTalk => 'Deep Talk';
+  String get deepTalk => 'Malalim na Usapan';
 
   @override
   String get delete => 'Tanggalin';
@@ -428,77 +433,78 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get deleteAccountConfirm =>
-      'Are you sure you want to delete your account? This action cannot be undone.';
+      'Sigurado ka bang nais mong tanggalin ang iyong account? Ang hakbang na ito ay hindi maibabalik.';
 
   @override
   String get deleteAccountWarning =>
-      'Are you sure you want to delete your account?';
+      'Sigurado ka bang nais mong tanggalin ang iyong account?';
 
   @override
-  String get deleteCache => 'Delete Cache';
+  String get deleteCache => 'Tanggalin ang Cache';
 
   @override
-  String get deletingAccount => 'Deleting account...';
+  String get deletingAccount => 'Binubura ang account...';
 
   @override
-  String get depressed => 'Depressed';
+  String get depressed => 'Nalulumbay';
 
   @override
-  String get describeError => 'What is the problem?';
+  String get describeError => 'Ano ang problema?';
 
   @override
-  String get detailedReason => 'Detailed reason';
+  String get detailedReason => 'Detalyadong dahilan';
 
   @override
   String get developRelationshipStep =>
-      '3. Develop Relationship: Build intimacy through conversations and develop special relationships.';
+      '3. Paunlarin ang Relasyon: Magtayo ng pagkakaintindihan sa pamamagitan ng mga pag-uusap at paunlarin ang mga espesyal na relasyon.';
 
   @override
-  String get dinner => 'Dinner';
+  String get dinner => 'Hapunan';
 
   @override
-  String get discardGuestData => 'Start Fresh';
+  String get discardGuestData => 'Magsimula Muli';
 
   @override
-  String get discount20 => '20% off';
+  String get discount20 => '20% diskwento';
 
   @override
-  String get discount30 => '30% off';
+  String get discount30 => '30% diskwento';
 
   @override
-  String get discountAmount => 'Save';
+  String get discountAmount => 'Magtipid';
 
   @override
   String discountAmountValue(String amount) {
-    return 'Save ₩$amount';
+    return 'I-save ₩$amount';
   }
 
   @override
   String get done => 'Tapos na';
 
   @override
-  String get downloadingPersonaImages => 'Downloading new persona images';
+  String get downloadingPersonaImages =>
+      'Nagda-download ng mga bagong larawan ng persona';
 
   @override
   String get edit => 'I-edit';
 
   @override
-  String get editInfo => 'Edit Info';
+  String get editInfo => 'I-edit ang Impormasyon';
 
   @override
-  String get editProfile => 'Edit Profile';
+  String get editProfile => 'I-edit ang Profile';
 
   @override
-  String get effectSound => 'Sound Effects';
+  String get effectSound => 'Mga Epekto ng Tunog';
 
   @override
-  String get effectSoundDescription => 'Play sound effects';
+  String get effectSoundDescription => 'Mag-play ng mga epekto ng tunog';
 
   @override
   String get email => 'Email';
 
   @override
-  String get emailHint => 'example@email.com';
+  String get emailHint => 'halimbawa@email.com';
 
   @override
   String get emailLabel => 'Email';
@@ -507,149 +513,150 @@ class AppLocalizationsTl extends AppLocalizations {
   String get emailRequired => 'Email *';
 
   @override
-  String get emotionAnalysis => 'Emotion Analysis';
+  String get emotionAnalysis => 'Pagsusuri ng Emosyon';
 
   @override
-  String get emotionAnalysisDesc => 'Analyze emotions for empathetic responses';
+  String get emotionAnalysisDesc =>
+      'Suriin ang mga emosyon para sa mga empatikong tugon';
 
   @override
-  String get emotionAngry => 'Angry';
+  String get emotionAngry => 'Galit';
 
   @override
-  String get emotionBasedEncounters => 'Meet personas based on your emotions';
+  String get emotionBasedEncounters =>
+      'Makipagkita sa mga persona batay sa iyong emosyon';
 
   @override
-  String get emotionCool => 'Cool';
+  String get emotionCool => 'Astig';
 
   @override
-  String get emotionHappy => 'Happy';
+  String get emotionHappy => 'Masaya';
 
   @override
-  String get emotionLove => 'Love';
+  String get emotionLove => 'Pag-ibig';
 
   @override
-  String get emotionSad => 'Sad';
+  String get emotionSad => 'Malungkot';
 
   @override
-  String get emotionThinking => 'Thinking';
+  String get emotionThinking => 'Nag-iisip';
 
   @override
   String get emotionalSupportDesc =>
-      'Share your concerns and receive warm comfort';
+      'Ibahagi ang iyong mga alalahanin at tumanggap ng mainit na aliw';
 
   @override
-  String get endChat => 'End Chat';
+  String get endChat => 'Tapusin ang Usapan';
 
   @override
-  String get endTutorial => 'End Tutorial';
+  String get endTutorial => 'Tapusin ang Tutorial';
 
   @override
-  String get endTutorialAndLogin =>
-      'End tutorial and login?\nLogin to save data and use all features.';
+  String get endTutorialAndLogin => 'Tatapusin ba ang tutorial at mag-login?';
 
   @override
   String get endTutorialMessage =>
-      'Do you want to end the tutorial and login?\nBy logging in, your data will be saved and you can use all features.';
+      'Gusto mo bang tapusin ang tutorial at mag-login?';
 
   @override
-  String get english => 'English';
+  String get english => 'Ingles';
 
   @override
   String get enterBasicInfo =>
-      'Please enter basic information to create an account';
+      'Pakisagutan ang pangunahing impormasyon upang makagawa ng account';
 
   @override
-  String get enterBasicInformation => 'Please enter basic information';
+  String get enterBasicInformation => 'Pakisagutan ang pangunahing impormasyon';
 
   @override
   String get enterEmail => 'Ilagay ang Email';
 
   @override
-  String get enterNickname => 'Please enter a nickname';
+  String get enterNickname => 'Pakisagutan ang palayaw';
 
   @override
   String get enterPassword => 'Ilagay ang Password';
 
   @override
   String get entertainmentAndFunDesc =>
-      'Enjoy fun games and pleasant conversations';
+      'Mag-enjoy sa mga masayang laro at kaaya-ayang usapan';
 
   @override
   String get entertainmentDescription =>
-      'I want to have fun conversations and enjoy my time';
+      'Gusto kong magkaroon ng masayang usapan at mag-enjoy sa aking oras';
 
   @override
-  String get entertainmentFun => 'Entertainment/Fun';
+  String get entertainmentFun => 'Libangan/Saya';
 
   @override
   String get error => 'Error';
 
   @override
-  String get errorDescription => 'Error description';
+  String get errorDescription => 'Paglalarawan ng error';
 
   @override
   String get errorDescriptionHint =>
-      'e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...';
+      'halimbawa, Nagbigay ng kakaibang sagot, Paulit-ulit ang parehong bagay, Nagbibigay ng hindi angkop na mga tugon sa konteksto...';
 
   @override
-  String get errorDetails => 'Error Details';
+  String get errorDetails => 'Mga Detalye ng Error';
 
   @override
-  String get errorDetailsHint => 'Please explain in detail what is wrong';
+  String get errorDetailsHint => 'Pakisabihin nang detalyado kung ano ang mali';
 
   @override
-  String get errorFrequency24h => 'Error Frequency (Last 24 hours)';
+  String get errorFrequency24h => 'Dalas ng Error (Huling 24 na oras)';
 
   @override
-  String get errorMessage => 'Error Message:';
+  String get errorMessage => 'Mensahe ng Error:';
 
   @override
-  String get errorOccurred => 'An error occurred.';
+  String get errorOccurred => 'Nagkaroon ng error.';
 
   @override
-  String get errorOccurredTryAgain => 'An error occurred. Please try again.';
+  String get errorOccurredTryAgain => 'Nagkaroon ng error. Pakisubukan muli.';
 
   @override
-  String get errorSendingFailed => 'Failed to send error';
+  String get errorSendingFailed => 'Nabigong magpadala ng error';
 
   @override
-  String get errorStats => 'Error Statistics';
+  String get errorStats => 'Estadistika ng Error';
 
   @override
   String errorWithMessage(String error) {
-    return 'Error occurred: $error';
+    return 'Naganap ang error: $error';
   }
 
   @override
-  String get evening => 'Evening';
+  String get evening => 'Gabi';
 
   @override
-  String get excited => 'Excited';
+  String get excited => 'Nasasabik';
 
   @override
-  String get exit => 'Exit';
+  String get exit => 'Lumabas';
 
   @override
-  String get exitApp => 'Exit App';
+  String get exitApp => 'Lumabas sa App';
 
   @override
-  String get exitConfirmMessage => 'Are you sure you want to exit the app?';
+  String get exitConfirmMessage => 'Sigurado ka bang nais mong lumabas sa app?';
 
   @override
-  String get expertPersona => 'Expert Persona';
+  String get expertPersona => 'Ekspertong Persona';
 
   @override
-  String get expertiseScore => 'Expertise Score';
+  String get expertiseScore => 'Iskor ng Kasanayan';
 
   @override
-  String get expired => 'Expired';
+  String get expired => 'Nag-expire';
 
   @override
   String get explainReportReason =>
-      'Please explain the report reason in detail';
+      'Mangyaring ipaliwanag ang dahilan ng ulat nang detalyado';
 
   @override
-  String get fashion => 'Fashion';
+  String get fashion => 'Moda';
 
   @override
   String get female => 'Babae';
@@ -658,29 +665,30 @@ class AppLocalizationsTl extends AppLocalizations {
   String get filter => 'I-filter';
 
   @override
-  String get firstOccurred => 'First Occurred: ';
+  String get firstOccurred => 'Unang Nangyari:';
 
   @override
-  String get followDeviceLanguage => 'Follow device language settings';
+  String get followDeviceLanguage =>
+      'Sundin ang mga setting ng wika ng aparato';
 
   @override
-  String get forenoon => 'Forenoon';
+  String get forenoon => 'Umaga';
 
   @override
   String get forgotPassword => 'Nakalimutan ang Password?';
 
   @override
-  String get frequentlyAskedQuestions => 'Frequently Asked Questions';
+  String get frequentlyAskedQuestions => 'Madalas na Itinataas na mga Tanong';
 
   @override
-  String get friday => 'Friday';
+  String get friday => 'Biyernes';
 
   @override
   String get friendshipDescription =>
-      'I want to meet new friends and have conversations';
+      'Gusto kong makilala ang mga bagong kaibigan at makipag-usap';
 
   @override
-  String get funChat => 'Fun Chat';
+  String get funChat => 'Masayang Usapan';
 
   @override
   String get galleryPermission => 'Pahintulot sa Gallery';
@@ -697,153 +705,154 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get genderNotSelectedInfo =>
-      'If gender is not selected, personas of all genders will be shown';
+      'Kung hindi napili ang kasarian, ipapakita ang mga persona ng lahat ng kasarian';
 
   @override
-  String get genderOptional => 'Gender (Optional)';
+  String get genderOptional => 'Kasarian (Opsyonal)';
 
   @override
-  String get genderPreferenceActive => 'You can meet personas of all genders';
+  String get genderPreferenceActive =>
+      'Maaari kang makilala ng mga persona ng lahat ng kasarian';
 
   @override
   String get genderPreferenceDisabled =>
-      'Select your gender to enable opposite gender only option';
+      'Pumili ng iyong kasarian upang paganahin ang opsyon na tanging kabaligtaran ng kasarian lamang';
 
   @override
   String get genderPreferenceInactive =>
-      'Only opposite gender personas will be shown';
+      'Tanging mga persona ng kabaligtaran ng kasarian ang ipapakita';
 
   @override
-  String get genderRequired => 'Gender *';
+  String get genderRequired => 'Kasarian *';
 
   @override
   String get genderSelectionInfo =>
-      'If not selected, you can meet personas of all genders';
+      'Kung hindi napili, maaari kang makilala ng mga persona ng lahat ng kasarian';
 
   @override
-  String get generalPersona => 'General Persona';
+  String get generalPersona => 'Pangkalahatang Persona';
 
   @override
   String get goToSettings => 'Pumunta sa Settings';
 
   @override
-  String get googleLoginCanceled =>
-      'Google login was canceled.\nPlease try again.';
+  String get googleLoginCanceled => 'Nakansela ang pag-login sa Google.';
 
   @override
-  String get googleLoginError => 'Error occurred during Google login.';
+  String get googleLoginError =>
+      'Nagkaroon ng error sa pag-login gamit ang Google.';
 
   @override
   String get grantPermission => 'Magpatuloy';
 
   @override
-  String get guest => 'Guest';
+  String get guest => 'Bisita';
 
   @override
   String get guestDataMigration =>
-      'Would you like to keep your current chat history when signing up?';
+      'Gusto mo bang panatilihin ang iyong kasalukuyang kasaysayan ng chat kapag nag-sign up?';
 
   @override
-  String get guestLimitReached =>
-      'Guest trial ended.\nSign up for unlimited conversations!';
+  String get guestLimitReached => 'Natapos na ang trial ng bisita.';
 
   @override
-  String get guestLoginPromptMessage => 'Login to continue the conversation';
+  String get guestLoginPromptMessage =>
+      'Mag-login upang ipagpatuloy ang pag-uusap';
 
   @override
-  String get guestMessageExhausted => 'Free messages exhausted';
+  String get guestMessageExhausted => 'Naubos na ang mga libreng mensahe';
 
   @override
   String guestMessageRemaining(int count) {
-    return '$count guest messages remaining';
+    return '$count natitirang mensahe ng bisita';
   }
 
   @override
-  String get guestModeBanner => 'Guest Mode';
+  String get guestModeBanner => 'Mode ng Bisita';
 
   @override
-  String get guestModeDescription =>
-      'Try SONA without signing up\n• 20 message limit\n• 1 heart provided\n• View all personas';
+  String get guestModeDescription => 'Subukan ang SONA nang hindi nag-sign up';
 
   @override
-  String get guestModeFailedMessage => 'Failed to start Guest Mode';
+  String get guestModeFailedMessage => 'Nabigong simulan ang Mode ng Bisita';
 
   @override
-  String get guestModeLimitation => 'Some features are limited in Guest Mode';
+  String get guestModeLimitation =>
+      'Ang ilang mga tampok ay limitado sa Guest Mode';
 
   @override
-  String get guestModeTitle => 'Try as Guest';
+  String get guestModeTitle => 'Subukan bilang Bisita';
 
   @override
   String get guestModeWarning =>
-      'Guest mode lasts for 24 hours,\nafter which data will be deleted.';
+      'Ang Guest mode ay tumatagal ng 24 na oras, pagkatapos nito ay mabubura ang data.';
 
   @override
-  String get guestModeWelcome => 'Starting in Guest Mode';
+  String get guestModeWelcome => 'Nagsisimula sa Guest Mode';
 
   @override
-  String get happy => 'Happy';
+  String get happy => 'Masaya';
 
   @override
   String get hapticFeedback => 'Haptic Feedback';
 
   @override
-  String get harassmentBullying => 'Harassment/Bullying';
+  String get harassmentBullying => 'Pang-aabuso/Pang-bu-bully';
 
   @override
-  String get hateSpeech => 'Hate speech';
+  String get hateSpeech => 'Pananalita ng poot';
 
   @override
-  String get heartDescription => 'Hearts for more messages';
+  String get heartDescription => 'Mga puso para sa higit pang mga mensahe';
 
   @override
-  String get heartInsufficient => 'Not enough hearts';
+  String get heartInsufficient => 'Hindi sapat na mga puso';
 
   @override
   String get heartInsufficientPleaseCharge =>
-      'Not enough hearts. Please recharge hearts.';
+      'Hindi sapat ang mga puso. Mangyaring mag-recharge ng mga puso.';
 
   @override
-  String get heartRequired => '1 heart is required';
+  String get heartRequired => '1 puso ang kinakailangan';
 
   @override
-  String get heartUsageFailed => 'Failed to use heart.';
+  String get heartUsageFailed => 'Nabigong gamitin ang puso.';
 
   @override
-  String get hearts => 'Hearts';
+  String get hearts => 'Mga Puso';
 
   @override
-  String get hearts10 => '10 Hearts';
+  String get hearts10 => '10 Mga Puso';
 
   @override
-  String get hearts30 => '30 Hearts';
+  String get hearts30 => '30 Mga Puso';
 
   @override
   String get hearts30Discount => 'SALE';
 
   @override
-  String get hearts50 => '50 Hearts';
+  String get hearts50 => '50 Mga Puso';
 
   @override
-  String get hearts50Discount => 'SALE';
+  String get hearts50Discount => 'BENTA';
 
   @override
-  String get helloEmoji => 'Hello! 😊';
+  String get helloEmoji => 'Kamusta! 😊';
 
   @override
   String get help => 'Tulong';
 
   @override
-  String get hideOriginalText => 'Hide Original';
+  String get hideOriginalText => 'Itago ang Orihinal';
 
   @override
-  String get hobbySharing => 'Hobby Sharing';
+  String get hobbySharing => 'Pagbabahagi ng Libangan';
 
   @override
-  String get hobbyTalk => 'Hobby Talk';
+  String get hobbyTalk => 'Usapang Libangan';
 
   @override
-  String get hours24Ago => '24 hours ago';
+  String get hours24Ago => '24 oras na ang nakalipas';
 
   @override
   String hoursAgo(int count, String formatted) {
@@ -851,275 +860,282 @@ class AppLocalizationsTl extends AppLocalizations {
   }
 
   @override
-  String get howToUse => 'How to use SONA';
+  String get howToUse => 'Paano gamitin ang SONA';
 
   @override
-  String get imageCacheManagement => 'Image Cache Management';
+  String get imageCacheManagement => 'Pamamahala ng Image Cache';
 
   @override
-  String get inappropriateContent => 'Inappropriate content';
+  String get inappropriateContent => 'Hindi angkop na nilalaman';
 
   @override
-  String get incorrect => 'incorrect';
+  String get incorrect => 'mali';
 
   @override
-  String get incorrectPassword => 'Incorrect password';
+  String get incorrectPassword => 'Mali ang password';
 
   @override
   String get indonesian => 'Indonesian';
 
   @override
-  String get inquiries => 'Inquiries';
+  String get inquiries => 'Mga Katanungan';
 
   @override
-  String get insufficientHearts => 'Insufficient hearts.';
+  String get insufficientHearts => 'Hindi sapat na puso.';
 
   @override
-  String get interestSharing => 'Interest Sharing';
+  String get interestSharing => 'Pagsasalo ng Interes';
 
   @override
-  String get interestSharingDesc => 'Discover and recommend shared interests';
+  String get interestSharingDesc =>
+      'Tuklasin at irekomenda ang mga ibinahaging interes';
 
   @override
-  String get interests => 'Interests';
+  String get interests => 'Mga Interes';
 
   @override
-  String get invalidEmailFormat => 'Invalid email format';
+  String get invalidEmailFormat => 'Di-wastong format ng email';
 
   @override
-  String get invalidEmailFormatError => 'Please enter a valid email address';
+  String get invalidEmailFormatError =>
+      'Mangyaring maglagay ng wastong address ng email';
 
   @override
   String isTyping(String name) {
-    return '$name is typing...';
+    return 'Nagtatype si $name...';
   }
 
   @override
-  String get japanese => 'Japanese';
+  String get japanese => 'Hapon';
 
   @override
-  String get joinDate => 'Join Date';
+  String get joinDate => 'Petsa ng Pagsali';
 
   @override
   String get justNow => 'Ngayon lang';
 
   @override
-  String get keepGuestData => 'Keep Chat History';
+  String get keepGuestData => 'Panatilihin ang Kasaysayan ng Chat';
 
   @override
-  String get korean => 'Korean';
+  String get korean => 'Koreano';
 
   @override
-  String get koreanLanguage => 'Korean';
+  String get koreanLanguage => 'Koreano';
 
   @override
   String get language => 'Wika';
 
   @override
-  String get languageDescription => 'AI will respond in your selected language';
+  String get languageDescription => 'Ang AI ay tutugon sa iyong napiling wika';
 
   @override
-  String get languageIndicator => 'Language';
+  String get languageIndicator => 'Wika';
 
   @override
-  String get languageSettings => 'Language Settings';
+  String get languageSettings => 'Mga Setting ng Wika';
 
   @override
-  String get lastOccurred => 'Last Occurred: ';
+  String get lastOccurred => 'Huling Nangyari:';
 
   @override
-  String get lastUpdated => 'Last Updated';
+  String get lastUpdated => 'Huling Na-update';
 
   @override
-  String get lateNight => 'Late night';
+  String get lateNight => 'Hatingabi';
 
   @override
-  String get later => 'Later';
+  String get later => 'Mamaya';
 
   @override
-  String get laterButton => 'Later';
+  String get laterButton => 'Mamaya';
 
   @override
-  String get leave => 'Leave';
+  String get leave => 'Umalis';
 
   @override
-  String get leaveChatConfirm =>
-      'Leave this chat?\nIt will disappear from your chat list.';
+  String get leaveChatConfirm => 'Umalis sa chat na ito?';
 
   @override
-  String get leaveChatRoom => 'Leave Chat Room';
+  String get leaveChatRoom => 'Umalis sa Chat Room';
 
   @override
-  String get leaveChatTitle => 'Leave Chat';
+  String get leaveChatTitle => 'Umalis sa Chat';
 
   @override
-  String get lifeAdvice => 'Life Advice';
+  String get lifeAdvice => 'Payo sa Buhay';
 
   @override
-  String get lightTalk => 'Light Talk';
+  String get lightTalk => 'Magaan na Usapan';
 
   @override
-  String get lightTheme => 'Light Mode';
+  String get lightTheme => 'Maliwanag na Tema';
 
   @override
-  String get lightThemeDesc => 'Use bright theme';
+  String get lightThemeDesc => 'Gumamit ng maliwanag na tema';
 
   @override
   String get loading => 'Nag-load...';
 
   @override
-  String get loadingData => 'Loading data...';
+  String get loadingData => 'Naglo-load ng data...';
 
   @override
-  String get loadingProducts => 'Loading products...';
+  String get loadingProducts => 'Naglo-load ng mga produkto...';
 
   @override
-  String get loadingProfile => 'Loading profile';
+  String get loadingProfile => 'Naglo-load ng profile';
 
   @override
   String get login => 'Mag-login';
 
   @override
-  String get loginButton => 'Login';
+  String get loginButton => 'Mag-login';
 
   @override
-  String get loginCancelled => 'Login cancelled';
+  String get loginCancelled => 'Nakansela ang pag-login';
 
   @override
-  String get loginComplete => 'Login complete';
+  String get loginComplete => 'Kumpleto ang pag-login';
 
   @override
-  String get loginError => 'Login failed';
+  String get loginError => 'Nabigong mag-login';
 
   @override
-  String get loginFailed => 'Login failed';
+  String get loginFailed => 'Nabigong mag-login';
 
   @override
-  String get loginFailedTryAgain => 'Login failed. Please try again.';
+  String get loginFailedTryAgain => 'Nabigong mag-login. Pakisubukan muli.';
 
   @override
-  String get loginRequired => 'Login required';
+  String get loginRequired => 'Kinakailangan ang pag-login';
 
   @override
   String get loginRequiredForProfile =>
-      'Login required to view profile\nand check records with SONA';
+      'Kinakailangan ang pag-login upang makita ang profile';
 
   @override
-  String get loginRequiredService => 'Login required to use this service';
+  String get loginRequiredService =>
+      'Kinakailangan ang pag-login upang magamit ang serbisyong ito';
 
   @override
-  String get loginRequiredTitle => 'Login Required';
+  String get loginRequiredTitle => 'Kinakailangan ang Pag-login';
 
   @override
-  String get loginSignup => 'Login/Sign Up';
+  String get loginSignup => 'Mag-login/Mag-sign Up';
 
   @override
-  String get loginTab => 'Login';
+  String get loginTab => 'Mag-login';
 
   @override
-  String get loginTitle => 'Login';
+  String get loginTitle => 'Mag-login';
 
   @override
-  String get loginWithApple => 'Login with Apple';
+  String get loginWithApple => 'Mag-login gamit ang Apple';
 
   @override
-  String get loginWithGoogle => 'Login with Google';
+  String get loginWithGoogle => 'Mag-login gamit ang Google';
 
   @override
   String get logout => 'Mag-logout';
 
   @override
-  String get logoutConfirm => 'Are you sure you want to logout?';
+  String get logoutConfirm => 'Sigurado ka bang nais mong mag-logout?';
 
   @override
-  String get lonelinessRelief => 'Loneliness Relief';
+  String get lonelinessRelief => 'Pagbawas ng Kalungkutan';
 
   @override
-  String get lonely => 'Lonely';
+  String get lonely => 'Nag-iisa';
 
   @override
-  String get lowQualityResponses => 'Low Quality Responses';
+  String get lowQualityResponses => 'Mababang Kalidad ng Mga Tugon';
 
   @override
-  String get lunch => 'Lunch';
+  String get lunch => 'Tanghalian';
 
   @override
-  String get lunchtime => 'Lunchtime';
+  String get lunchtime => 'Oras ng Tanghalian';
 
   @override
-  String get mainErrorType => 'Main Error Type';
+  String get mainErrorType => 'Pangunahing Uri ng Error';
 
   @override
-  String get makeFriends => 'Make Friends';
+  String get makeFriends => 'Gumawa ng Mga Kaibigan';
 
   @override
   String get male => 'Lalaki';
 
   @override
-  String get manageBlockedAIs => 'Manage Blocked AIs';
+  String get manageBlockedAIs => 'Pamahalaan ang Mga Naharang na AI';
 
   @override
-  String get managePersonaImageCache => 'Manage persona image cache';
+  String get managePersonaImageCache =>
+      'Pamahalaan ang cache ng larawan ng persona';
 
   @override
-  String get marketingAgree => 'Agree to Marketing Information (Optional)';
+  String get marketingAgree =>
+      'Sumang-ayon sa Impormasyon sa Marketing (Opsyonal)';
 
   @override
   String get marketingDescription =>
-      'You can receive event and benefit information';
+      'Maaari kang makatanggap ng impormasyon tungkol sa mga kaganapan at benepisyo';
 
   @override
   String get matchPersonaStep =>
-      '1. Match Personas: Swipe left or right to select your favorite AI personas.';
+      '1. Itugma ang Mga Persona: Mag-swipe pakaliwa o pakanan upang piliin ang iyong paboritong AI persona.';
 
   @override
-  String get matchedPersonas => 'Matched Personas';
+  String get matchedPersonas => 'Nakatugmang Personas';
 
   @override
-  String get matchedSona => 'Matched Sona';
+  String get matchedSona => 'Nakatugmang Sona';
 
   @override
-  String get matching => 'Matching';
+  String get matching => 'Nagtutugma';
 
   @override
-  String get matchingFailed => 'Matching failed.';
+  String get matchingFailed => 'Nabigo ang pagtutugma.';
 
   @override
   String get me => 'Me';
 
   @override
-  String get meetAIPersonas => 'Meet AI Personas';
+  String get meetAIPersonas => 'Kilalanin ang AI Personas';
 
   @override
-  String get meetNewPersonas => 'Meet New Personas';
+  String get meetNewPersonas => 'Kilalanin ang Mga Bagong Personas';
 
   @override
-  String get meetPersonas => 'Meet Personas';
+  String get meetPersonas => 'Kilalanin ang Mga Personas';
 
   @override
   String get memberBenefits =>
-      'Get 100+ messages and 10 hearts when you sign up!';
+      'Makakuha ng 100+ mensahe at 10 puso kapag nag-sign up ka!';
 
   @override
-  String get memoryAlbum => 'Memory Album';
+  String get memoryAlbum => 'Album ng Alaala';
 
   @override
-  String get memoryAlbumDesc => 'Automatically save and recall special moments';
+  String get memoryAlbumDesc =>
+      'Awtomatikong i-save at alalahanin ang mga espesyal na sandali';
 
   @override
-  String get messageCopied => 'Message copied';
+  String get messageCopied => 'Mensahe na kopya';
 
   @override
-  String get messageDeleted => 'Message deleted';
+  String get messageDeleted => 'Mensahe na tanggal';
 
   @override
-  String get messageLimitReset => 'Message limit will reset at midnight';
+  String get messageLimitReset =>
+      'Magre-reset ang limit ng mensahe sa hatingabi';
 
   @override
-  String get messageSendFailed => 'Failed to send message. Please try again.';
+  String get messageSendFailed =>
+      'Nabigong magpadala ng mensahe. Pakisubukan muli.';
 
   @override
-  String get messagesRemaining => 'Messages Remaining';
+  String get messagesRemaining => 'Natitirang Mensahe';
 
   @override
   String minutesAgo(int count, String formatted) {
@@ -1127,13 +1143,13 @@ class AppLocalizationsTl extends AppLocalizations {
   }
 
   @override
-  String get missingTranslation => 'Missing Translation';
+  String get missingTranslation => 'Nawawalang Pagsasalin';
 
   @override
-  String get monday => 'Monday';
+  String get monday => 'Lunes';
 
   @override
-  String get month => 'Month';
+  String get month => 'Buwan';
 
   @override
   String monthDay(String month, int day) {
@@ -1141,134 +1157,136 @@ class AppLocalizationsTl extends AppLocalizations {
   }
 
   @override
-  String get moreButton => 'More';
+  String get moreButton => 'Higit Pa';
 
   @override
-  String get morning => 'Morning';
+  String get morning => 'Umaga';
 
   @override
-  String get mostFrequentError => 'Most Frequent Error';
+  String get mostFrequentError => 'Pinakamadalas na Error';
 
   @override
-  String get movies => 'Movies';
+  String get movies => 'Mga Pelikula';
 
   @override
-  String get multilingualChat => 'Multilingual Chat';
+  String get multilingualChat => 'Multilinggwal na Chat';
 
   @override
-  String get music => 'Music';
+  String get music => 'Musika';
 
   @override
-  String get myGenderSection => 'My Gender (Optional)';
+  String get myGenderSection => 'Ang Aking Kasarian (Opsyonal)';
 
   @override
-  String get networkErrorOccurred => 'A network error occurred.';
+  String get networkErrorOccurred => 'Nagkaroon ng error sa network.';
 
   @override
   String get newMessage => 'Bagong Mensahe';
 
   @override
   String newMessageCount(int count) {
-    return '$count new messages';
+    return '$count bagong mensahe';
   }
 
   @override
-  String get newMessageNotification => 'Notify me of new messages';
+  String get newMessageNotification =>
+      'Ipaalam sa akin ang tungkol sa mga bagong mensahe';
 
   @override
-  String get newMessages => 'New messages';
+  String get newMessages => 'Mga bagong mensahe';
 
   @override
-  String get newYear => 'New Year';
+  String get newYear => 'Bagong Taon';
 
   @override
   String get next => 'Susunod';
 
   @override
-  String get niceToMeetYou => 'Nice to meet you!';
+  String get niceToMeetYou => 'Ikaw ay ikinagagalak kong makilala!';
 
   @override
-  String get nickname => 'Nickname';
+  String get nickname => 'Palayaw';
 
   @override
-  String get nicknameAlreadyUsed => 'This nickname is already in use';
+  String get nicknameAlreadyUsed => 'Ang palayaw na ito ay ginagamit na';
 
   @override
-  String get nicknameHelperText => '3-10 characters';
+  String get nicknameHelperText => '3-10 na karakter';
 
   @override
-  String get nicknameHint => '3-10 characters';
+  String get nicknameHint => '3-10 na karakter';
 
   @override
-  String get nicknameInUse => 'This nickname is already in use';
+  String get nicknameInUse => 'Ang palayaw na ito ay ginagamit na';
 
   @override
-  String get nicknameLabel => 'Nickname';
+  String get nicknameLabel => 'Palayaw';
 
   @override
-  String get nicknameLengthError => 'Nickname must be 3-10 characters';
+  String get nicknameLengthError => 'Ang palayaw ay dapat na 3-10 na karakter';
 
   @override
-  String get nicknamePlaceholder => 'Enter your nickname';
+  String get nicknamePlaceholder => 'Ipasok ang iyong palayaw';
 
   @override
-  String get nicknameRequired => 'Nickname *';
+  String get nicknameRequired => 'Palayaw *';
 
   @override
-  String get night => 'Night';
+  String get night => 'Gabi';
 
   @override
   String get no => 'Hindi';
 
   @override
-  String get noBlockedAIs => 'No blocked AIs';
+  String get noBlockedAIs => 'Walang naka-block na AIs';
 
   @override
-  String get noChatsYet => 'No chats yet';
+  String get noChatsYet => 'Wala pang mga chat';
 
   @override
-  String get noConversationYet => 'No conversation yet';
+  String get noConversationYet => 'Wala pang pag-uusap';
 
   @override
-  String get noErrorReports => 'No error reports.';
+  String get noErrorReports => 'Walang ulat ng error.';
 
   @override
-  String get noImageAvailable => 'No image available';
+  String get noImageAvailable => 'Walang magagamit na larawan';
 
   @override
-  String get noMatchedPersonas => 'No matched personas yet';
+  String get noMatchedPersonas => 'Walang na-match na personas pa';
 
   @override
-  String get noMatchedSonas => 'No matched Sonas yet';
+  String get noMatchedSonas => 'Walang na-match na Sonas pa';
 
   @override
-  String get noPersonasAvailable => 'No personas available. Please try again.';
+  String get noPersonasAvailable =>
+      'Walang magagamit na personas. Pakisubukan muli.';
 
   @override
-  String get noPersonasToSelect => 'No personas available';
+  String get noPersonasToSelect => 'Walang magagamit na personas';
 
   @override
-  String get noQualityIssues => 'No quality issues in the last hour ✅';
+  String get noQualityIssues => 'Walang isyu sa kalidad sa nakaraang oras ✅';
 
   @override
-  String get noQualityLogs => 'No quality logs yet.';
+  String get noQualityLogs => 'Wala pang mga tala ng kalidad.';
 
   @override
-  String get noTranslatedMessages => 'No messages to translate';
+  String get noTranslatedMessages => 'Walang mensahe na isasalin';
 
   @override
-  String get notEnoughHearts => 'Not enough hearts';
+  String get notEnoughHearts => 'Hindi sapat ang mga puso';
 
   @override
   String notEnoughHeartsCount(int count) {
-    return 'Not enough hearts. (Current: $count)';
+    return 'Hindi sapat ang mga puso. (Kasalukuyan: $count)';
   }
 
   @override
-  String get notRegistered => 'not registered';
+  String get notRegistered => 'hindi nakarehistro';
 
   @override
-  String get notSubscribed => 'Not subscribed';
+  String get notSubscribed => 'Hindi nakasubscribe';
 
   @override
   String get notificationPermissionDesc =>
@@ -1285,57 +1303,57 @@ class AppLocalizationsTl extends AppLocalizations {
   String get notifications => 'Mga Abiso';
 
   @override
-  String get occurrenceInfo => 'Occurrence Info:';
+  String get occurrenceInfo => 'Impormasyon sa Pagkakataon:';
 
   @override
-  String get olderChats => 'Older';
+  String get olderChats => 'Mas matanda';
 
   @override
   String get onlyOppositeGenderNote =>
-      'If unchecked, only opposite gender personas will be shown';
+      'Kung hindi naka-check, tanging mga persona ng kabaligtarang kasarian lamang ang ipapakita';
 
   @override
-  String get openSettings => 'Open Settings';
+  String get openSettings => 'Buksan ang Mga Setting';
 
   @override
-  String get optional => 'Optional';
+  String get optional => 'Opsyonal';
 
   @override
   String get or => 'or';
 
   @override
-  String get originalPrice => 'Original';
+  String get originalPrice => 'Orihinal';
 
   @override
-  String get originalText => 'Original';
+  String get originalText => 'Orihinal';
 
   @override
   String get other => 'Iba pa';
 
   @override
-  String get otherError => 'Other Error';
+  String get otherError => 'Ibang Error';
 
   @override
-  String get others => 'Others';
+  String get others => 'Iba pa';
 
   @override
-  String get ownedHearts => 'Owned Hearts';
+  String get ownedHearts => 'Nabiling Puso';
 
   @override
-  String get parentsDay => 'Parents\' Day';
+  String get parentsDay => 'Araw ng mga Magulang';
 
   @override
   String get password => 'Password';
 
   @override
-  String get passwordConfirmation => 'Enter password to confirm';
+  String get passwordConfirmation => 'Ipasok ang password upang kumpirmahin';
 
   @override
   String get passwordConfirmationDesc =>
-      'Please re-enter your password to delete account.';
+      'Pakisulit ang iyong password upang tanggalin ang account.';
 
   @override
-  String get passwordHint => '6 characters or more';
+  String get passwordHint => '6 na karakter o higit pa';
 
   @override
   String get passwordLabel => 'Password';
@@ -1345,17 +1363,18 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get passwordResetEmailPrompt =>
-      'Please enter your email to reset password';
+      'Pakisulat ang iyong email upang i-reset ang password';
 
   @override
   String get passwordResetEmailSent =>
-      'Password reset email has been sent. Please check your email.';
+      'Ang email para sa pag-reset ng password ay naipadala na. Pakisuri ang iyong email.';
 
   @override
   String get passwordText => 'password';
 
   @override
-  String get passwordTooShort => 'Password must be at least 6 characters';
+  String get passwordTooShort =>
+      'Ang password ay dapat hindi bababa sa 6 na karakter';
 
   @override
   String get permissionDenied => 'Hindi Pinahintulutan';
@@ -1367,379 +1386,398 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get permissionDeniedTryLater =>
-      'Permission denied. Please try again later.';
+      'Tinanggihan ang pahintulot. Pakisubukan muli mamaya.';
 
   @override
   String get permissionRequired => 'Kailangan ng Pahintulot';
 
   @override
-  String get personaGenderSection => 'Persona Gender Preference';
+  String get personaGenderSection => 'Kagustuhan sa Kasarian ng Persona';
 
   @override
-  String get personaQualityStats => 'Persona Quality Statistics';
+  String personaQualityStats(Object personaQualityStats) {
+    return 'Estadistika ng Kalidad ng Persona';
+  }
 
   @override
-  String get personalInfoExposure => 'Personal information exposure';
+  String personalInfoExposure(Object personalInfoExposure) {
+    return 'Pagbubunyag ng Personal na Impormasyon';
+  }
 
   @override
-  String get personality => 'Personality';
+  String personality(Object personality) {
+    return 'Personalidad';
+  }
 
   @override
-  String get pets => 'Pets';
+  String pets(Object pets) {
+    return 'Mga Alagang Hayop';
+  }
 
   @override
   String get photo => 'Larawan';
 
   @override
-  String get photography => 'Photography';
+  String photography(Object photography) {
+    return 'Potograpiya';
+  }
 
   @override
-  String get picnic => 'Picnic';
+  String picnic(Object picnic) {
+    return 'Piknik';
+  }
 
   @override
-  String get preferenceSettings => 'Preference Settings';
+  String preferenceSettings(Object preferenceSettings) {
+    return 'Mga Setting ng Kagustuhan';
+  }
 
   @override
-  String get preferredLanguage => 'Preferred Language';
+  String preferredLanguage(Object preferredLanguage) {
+    return 'Piniling Wika';
+  }
 
   @override
-  String get preparingForSleep => 'Preparing for sleep';
+  String get preparingForSleep => 'Naghahanda para sa Pagtulog';
 
   @override
-  String get preparingNewMeeting => 'Preparing new meeting';
+  String get preparingNewMeeting => 'Naghahanda ng Bagong Pulong';
 
   @override
-  String get preparingPersonaImages => 'Preparing persona images';
+  String get preparingPersonaImages => 'Naghahanda ng mga larawan ng persona';
 
   @override
-  String get preparingPersonas => 'Preparing personas';
+  String get preparingPersonas => 'Naghahanda ng mga persona';
 
   @override
-  String get preview => 'Preview';
+  String get preview => 'Pagsusuri';
 
   @override
-  String get previous => 'Previous';
+  String get previous => 'Nakaraan';
 
   @override
-  String get privacy => 'Privacy Policy';
+  String get privacy => 'Patakaran sa Privacy';
 
   @override
   String get privacyPolicy => 'Patakaran sa Privacy';
 
   @override
-  String get privacyPolicyAgreement => 'Please agree to the privacy policy';
+  String get privacyPolicyAgreement =>
+      'Pakisuyo, sumang-ayon sa patakaran sa privacy';
 
   @override
   String get privacySection1Content =>
-      'We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our service.';
+      'Kami ay nakatuon sa pagprotekta sa iyong privacy. Ang Patakaran sa Privacy na ito ay nagpapaliwanag kung paano namin kinokolekta, ginagamit, at pinangangalagaan ang iyong impormasyon kapag ginagamit mo ang aming serbisyo.';
 
   @override
   String get privacySection1Title =>
-      '1. Purpose of Collection and Use of Personal Information';
+      '1. Layunin ng Pagkolekta at Paggamit ng Personal na Impormasyon';
 
   @override
   String get privacySection2Content =>
-      'We collect information you provide directly to us, such as when you create an account, update your profile, or use our services.';
+      'Kinokolekta namin ang impormasyong ibinibigay mo nang direkta sa amin, tulad ng kapag lumikha ka ng isang account, nag-update ng iyong profile, o gumamit ng aming mga serbisyo.';
 
   @override
-  String get privacySection2Title => 'Information We Collect';
+  String get privacySection2Title => 'Impormasyon na Kinokolekta Namin';
 
   @override
   String get privacySection3Content =>
-      'We use the information we collect to provide, maintain, and improve our services, and to communicate with you.';
+      'Ginagamit namin ang impormasyong aming kinokolekta upang magbigay, magpanatili, at magpabuti ng aming mga serbisyo, at upang makipag-ugnayan sa iyo.';
 
   @override
   String get privacySection3Title =>
-      '3. Retention and Use Period of Personal Information';
+      '3. Panahon ng Pag-iingat at Paggamit ng Personal na Impormasyon';
 
   @override
   String get privacySection4Content =>
-      'We do not sell, trade, or otherwise transfer your personal information to third parties without your consent.';
+      'Hindi namin ibinibenta, ipinagpapalit, o sa ibang paraan ay inililipat ang iyong personal na impormasyon sa mga ikatlong partido nang walang iyong pahintulot.';
 
   @override
   String get privacySection4Title =>
-      '4. Provision of Personal Information to Third Parties';
+      '4. Pagbibigay ng Personal na Impormasyon sa mga Ikatlong Partido';
 
   @override
   String get privacySection5Content =>
-      'We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.';
+      'Nagpapatupad kami ng angkop na mga hakbang sa seguridad upang protektahan ang iyong personal na impormasyon laban sa hindi awtorisadong pag-access, pagbabago, pagsisiwalat, o pagkasira.';
 
   @override
   String get privacySection5Title =>
-      '5. Technical Protection Measures for Personal Information';
+      '5. Mga Teknikal na Hakbang sa Proteksyon para sa Personal na Impormasyon';
 
   @override
   String get privacySection6Content =>
-      'We retain personal information for as long as necessary to provide our services and comply with legal obligations.';
+      'Nananatili kami ng personal na impormasyon hangga\'t kinakailangan upang maibigay ang aming mga serbisyo at sumunod sa mga legal na obligasyon.';
 
   @override
-  String get privacySection6Title => '6. User Rights';
+  String get privacySection6Title => '6. Mga Karapatan ng Gumagamit';
 
   @override
   String get privacySection7Content =>
-      'You have the right to access, update, or delete your personal information at any time through your account settings.';
+      'May karapatan kang ma-access, i-update, o tanggalin ang iyong personal na impormasyon anumang oras sa pamamagitan ng iyong mga setting ng account.';
 
   @override
-  String get privacySection7Title => 'Your Rights';
+  String get privacySection7Title => 'Ang Iyong Mga Karapatan';
 
   @override
   String get privacySection8Content =>
-      'If you have any questions about this Privacy Policy, please contact us at support@sona.com.';
+      'Kung mayroon kang anumang katanungan tungkol sa Patakarang ito sa Privacy, mangyaring makipag-ugnayan sa amin sa support@sona.com.';
 
   @override
-  String get privacySection8Title => 'Contact Us';
+  String get privacySection8Title => 'Makipag-ugnayan sa Amin';
 
   @override
-  String get privacySettings => 'Privacy Settings';
+  String get privacySettings => 'Mga Setting ng Privacy';
 
   @override
   String get privacySettingsInfo =>
-      'Disabling individual features will make those services unavailable';
+      'Ang pag-disable ng mga indibidwal na tampok ay magpapawalang-bisa sa mga serbisyong iyon';
 
   @override
-  String get privacySettingsScreen => 'Privacy Settings';
+  String get privacySettingsScreen => 'Mga Setting ng Privacy';
 
   @override
-  String get problemMessage => 'Problem';
+  String get problemMessage => 'Problema';
 
   @override
-  String get problemOccurred => 'Problem Occurred';
+  String get problemOccurred => 'Naganap ang Problema';
 
   @override
   String get profile => 'Profile';
 
   @override
-  String get profileEdit => 'Edit Profile';
+  String get profileEdit => 'I-edit ang Profile';
 
   @override
   String get profileEditLoginRequiredMessage =>
-      'Login is required to edit your profile.\nWould you like to go to the login screen?';
+      'Kinakailangan ang pag-login upang i-edit ang iyong profile.';
 
   @override
-  String get profileInfo => 'Profile Information';
+  String get profileInfo => 'Impormasyon sa Profile';
 
   @override
   String get profileInfoDescription =>
-      'Please enter your profile photo and basic information';
+      'Pakisuyong ilagay ang iyong larawan sa profile at pangunahing impormasyon';
 
   @override
   String get profileNav => 'Profile';
 
   @override
-  String get profilePhoto => 'Profile Photo';
+  String get profilePhoto => 'Larawan sa Profile';
 
   @override
   String get profilePhotoAndInfo =>
-      'Please enter profile photo and basic information';
+      'Pakisuyong ilagay ang larawan sa profile at pangunahing impormasyon';
 
   @override
-  String get profilePhotoUpdateFailed => 'Failed to update profile photo';
+  String get profilePhotoUpdateFailed =>
+      'Nabigong i-update ang larawan sa profile';
 
   @override
-  String get profilePhotoUpdated => 'Profile photo updated';
+  String get profilePhotoUpdated => 'Na-update ang larawan sa profile';
 
   @override
-  String get profileSettings => 'Profile Settings';
+  String get profileSettings => 'Mga Setting ng Profile';
 
   @override
   String get profileSetup => 'Profile Setup';
 
   @override
-  String get profileUpdateFailed => 'Failed to update profile';
+  String get profileUpdateFailed => 'Nabigong i-update ang profile';
 
   @override
-  String get profileUpdated => 'Profile updated successfully';
+  String get profileUpdated => 'Matagumpay na na-update ang profile';
 
   @override
-  String get purchaseAndRefundPolicy => 'Purchase & Refund Policy';
+  String get purchaseAndRefundPolicy => 'Patakaran sa Pagbili at Pagbabalik';
 
   @override
-  String get purchaseButton => 'Purchase';
+  String get purchaseButton => 'Bumili';
 
   @override
-  String get purchaseConfirm => 'Purchase Confirmation';
+  String get purchaseConfirm => 'Kumpirmasyon ng Pagbili';
 
   @override
   String purchaseConfirmContent(String product, String price) {
-    return 'Purchase $product for $price?';
+    return 'Bibilhin ang $product para sa $price?';
   }
 
   @override
   String purchaseConfirmMessage(
       String title, String price, String description) {
-    return 'Confirm purchase of $title for $price? $description';
+    return 'Kumpirmahin ang pagbili ng $title para sa $price? $description';
   }
 
   @override
-  String get purchaseFailed => 'Purchase failed';
+  String get purchaseFailed => 'Nabigo ang pagbili';
 
   @override
-  String get purchaseHeartsOnly => 'Buy hearts';
+  String get purchaseHeartsOnly => 'Bumili ng mga puso';
 
   @override
-  String get purchaseMoreHearts => 'Purchase hearts to continue conversations';
+  String get purchaseMoreHearts =>
+      'Bumili ng mga puso upang ipagpatuloy ang mga pag-uusap';
 
   @override
-  String get purchasePending => 'Purchase pending...';
+  String get purchasePending => 'Naghihintay ng pagbili...';
 
   @override
-  String get purchasePolicy => 'Purchase Policy';
+  String get purchasePolicy => 'Patakaran sa Pagbili';
 
   @override
   String get purchaseSection1Content =>
-      'We accept various payment methods including credit cards and digital wallets.';
+      'Tumatanggap kami ng iba\'t ibang paraan ng pagbabayad kabilang ang mga credit card at digital wallets.';
 
   @override
-  String get purchaseSection1Title => 'Payment Methods';
+  String get purchaseSection1Title => 'Mga Paraan ng Pagbabayad';
 
   @override
   String get purchaseSection2Content =>
-      'Refunds are available within 14 days of purchase if you have not used the purchased items.';
+      'Ang mga refund ay available sa loob ng 14 na araw mula sa pagbili kung hindi mo pa nagamit ang mga biniling item.';
 
   @override
-  String get purchaseSection2Title => 'Refund Policy';
+  String get purchaseSection2Title => 'Patakaran sa Refund';
 
   @override
   String get purchaseSection3Content =>
-      'You can cancel your subscription at any time through your account settings.';
+      'Maaari mong kanselahin ang iyong subscription anumang oras sa pamamagitan ng iyong account settings.';
 
   @override
-  String get purchaseSection3Title => 'Cancellation';
+  String get purchaseSection3Title => 'Kanselasyon';
 
   @override
   String get purchaseSection4Content =>
-      'By making a purchase, you agree to our terms of use and service agreement.';
+      'Sa paggawa ng pagbili, sumasang-ayon ka sa aming mga tuntunin ng paggamit at kasunduan sa serbisyo.';
 
   @override
-  String get purchaseSection4Title => 'Terms of Use';
+  String get purchaseSection4Title => 'Mga Tuntunin ng Paggamit';
 
   @override
   String get purchaseSection5Content =>
-      'For purchase-related issues, please contact our support team.';
+      'Para sa mga isyu na may kaugnayan sa pagbili, mangyaring makipag-ugnayan sa aming support team.';
 
   @override
-  String get purchaseSection5Title => 'Contact Support';
+  String get purchaseSection5Title => 'Makipag-ugnayan sa Suporta';
 
   @override
   String get purchaseSection6Content =>
-      'All purchases are subject to our standard terms and conditions.';
+      'Ang lahat ng pagbili ay napapailalim sa aming mga karaniwang tuntunin at kundisyon.';
 
   @override
-  String get purchaseSection6Title => '6. Inquiries';
+  String get purchaseSection6Title => '6. Mga Katanungan';
 
   @override
-  String get pushNotifications => 'Push Notifications';
+  String get pushNotifications => 'Mga Push Notification';
 
   @override
-  String get reading => 'Reading';
+  String get reading => 'Pagbasa';
 
   @override
-  String get realtimeQualityLog => 'Real-time Quality Log';
+  String get realtimeQualityLog => 'Real-time na Quality Log';
 
   @override
-  String get recentConversation => 'Recent Conversation:';
+  String get recentConversation => 'Kamakailang Usapan:';
 
   @override
-  String get recentLoginRequired => 'Please login again for security';
+  String get recentLoginRequired =>
+      'Mangyaring mag-login muli para sa seguridad';
 
   @override
-  String get referrerEmail => 'Referrer Email';
+  String get referrerEmail => 'Email ng Nag-refer';
 
   @override
-  String get referrerEmailHelper => 'Optional: Email of who referred you';
+  String get referrerEmailHelper => 'Opsyonal: Email ng nag-refer sa iyo';
 
   @override
-  String get referrerEmailLabel => 'Referrer Email (Optional)';
+  String get referrerEmailLabel => 'Email ng Nag-refer (Opsyonal)';
 
   @override
   String get refresh => 'I-refresh';
 
   @override
   String refreshComplete(int count) {
-    return 'Refresh complete! $count matched personas';
+    return 'Natapos ang pag-refresh! $count na tugmang persona';
   }
 
   @override
-  String get refreshFailed => 'Refresh failed';
+  String get refreshFailed => 'Nabigo ang pag-refresh';
 
   @override
-  String get refreshingChatList => 'Refreshing chat list...';
+  String get refreshingChatList => 'Nagre-refresh ng listahan ng chat...';
 
   @override
-  String get relatedFAQ => 'Related FAQ';
+  String get relatedFAQ => 'Kaugnay na FAQ';
 
   @override
   String get report => 'I-report';
 
   @override
-  String get reportAI => 'Report';
+  String get reportAI => 'Iulat';
 
   @override
   String get reportAIDescription =>
-      'If the AI made you uncomfortable, please describe the issue.';
+      'Kung ang AI ay nagdulot sa iyo ng hindi komportable, mangyaring ilarawan ang isyu.';
 
   @override
-  String get reportAITitle => 'Report AI Conversation';
+  String get reportAITitle => 'Iulat ang Usapan sa AI';
 
   @override
-  String get reportAndBlock => 'Report & Block';
+  String get reportAndBlock => 'Iulat at I-block';
 
   @override
   String get reportAndBlockDescription =>
-      'You can report and block inappropriate behavior of this AI';
+      'Maaari mong iulat at i-block ang hindi angkop na pag-uugali ng AI na ito';
 
   @override
-  String get reportChatError => 'Report Chat Error';
+  String get reportChatError => 'Iulat ang Error sa Chat';
 
   @override
   String reportError(String error) {
-    return 'Error occurred while reporting: $error';
+    return 'Nagkaroon ng error habang nag-uulat: $error';
   }
 
   @override
-  String get reportFailed => 'Report failed';
+  String get reportFailed => 'Nabigo ang ulat';
 
   @override
   String get reportSubmitted =>
-      'Report submitted. We will review and take action.';
+      'Naipasa na ang ulat. Susuriin namin ito at gagawa ng aksyon.';
 
   @override
-  String get reportSubmittedSuccess =>
-      'Your report has been submitted. Thank you!';
+  String get reportSubmittedSuccess => 'Naipasa na ang iyong ulat. Salamat!';
 
   @override
-  String get requestLimit => 'Request Limit';
+  String get requestLimit => 'Limit ng Kahilingan';
 
   @override
-  String get required => '[Required]';
+  String get required => '[Kailangan]';
 
   @override
-  String get requiredTermsAgreement => 'Please agree to the terms';
+  String get requiredTermsAgreement => 'Pakisundin ang mga tuntunin';
 
   @override
-  String get restartConversation => 'Restart Conversation';
+  String get restartConversation => 'I-restart ang Usapan';
 
   @override
   String restartConversationQuestion(String name) {
-    return 'Would you like to restart the conversation with $name?';
+    return 'Gusto mo bang i-restart ang usapan kasama si $name?';
   }
 
   @override
   String restartConversationWithName(String name) {
-    return 'Restarting conversation with $name!';
+    return 'I-rerestart ang usapan kasama si $name!';
   }
 
   @override
   String get retry => 'Subukang muli';
 
   @override
-  String get retryButton => 'Retry';
+  String get retryButton => 'Subukan Muli';
 
   @override
-  String get sad => 'Sad';
+  String get sad => 'Malungkot';
 
   @override
-  String get saturday => 'Saturday';
+  String get saturday => 'Sabado';
 
   @override
   String get save => 'I-save';
@@ -1748,617 +1786,625 @@ class AppLocalizationsTl extends AppLocalizations {
   String get search => 'Maghanap';
 
   @override
-  String get searchFAQ => 'Search FAQ...';
+  String get searchFAQ => 'Maghanap ng FAQ...';
 
   @override
   String get searchResults => 'Mga Resulta ng Paghahanap';
 
   @override
-  String get selectEmotion => 'Select Emotion';
+  String get selectEmotion => 'Pumili ng Emosyon';
 
   @override
-  String get selectErrorType => 'Select error type';
+  String get selectErrorType => 'Pumili ng uri ng error';
 
   @override
-  String get selectFeeling => 'Select Feeling';
+  String get selectFeeling => 'Pumili ng Pakiramdam';
 
   @override
   String get selectGender => 'Piliin ang Kasarian';
 
   @override
-  String get selectInterests => 'Please select your interests (at least 1)';
+  String get selectInterests =>
+      'Mangyaring pumili ng iyong mga interes (higit sa 1)';
 
   @override
   String get selectLanguage => 'Piliin ang Wika';
 
   @override
-  String get selectPersona => 'Select a persona';
+  String get selectPersona => 'Pumili ng persona';
 
   @override
-  String get selectPersonaPlease => 'Please select a persona.';
+  String get selectPersonaPlease => 'Mangyaring pumili ng isang persona.';
 
   @override
   String get selectPreferredMbti =>
-      'If you prefer personas with specific MBTI types, please select';
+      'Kung mas gusto mo ang mga persona na may tiyak na uri ng MBTI, mangyaring pumili';
 
   @override
   String get selectProblematicMessage =>
-      'Select the problematic message (optional)';
+      'Pumili ng problemadong mensahe (opsyonal)';
 
   @override
-  String get selectReportReason => 'Select report reason';
+  String get selectReportReason => 'Pumili ng dahilan ng ulat';
 
   @override
   String get selectTheme => 'Piliin ang Tema';
 
   @override
   String get selectTranslationError =>
-      'Please select a message with translation error';
+      'Mangyaring pumili ng mensahe na may pagkakamali sa pagsasalin';
 
   @override
-  String get selectUsagePurpose => 'Please select your purpose for using SONA';
+  String get selectUsagePurpose =>
+      'Mangyaring pumili ng iyong layunin sa paggamit ng SONA';
 
   @override
-  String get selfIntroduction => 'Introduction (Optional)';
+  String get selfIntroduction => 'Panimula (Opsyonal)';
 
   @override
   String get selfIntroductionHint =>
-      'Write a brief introduction about yourself';
+      'Isulat ang isang maikling panimula tungkol sa iyong sarili';
 
   @override
   String get send => 'Ipadala';
 
   @override
-  String get sendChatError => 'Send Chat Error';
+  String get sendChatError => 'Nagkaroon ng error sa pagpapadala ng chat';
 
   @override
-  String get sendFirstMessage => 'Send your first message';
+  String get sendFirstMessage => 'Ipadala ang iyong unang mensahe';
 
   @override
-  String get sendReport => 'Send Report';
+  String get sendReport => 'Ipadala ang Ulat';
 
   @override
-  String get sendingEmail => 'Sending email...';
+  String get sendingEmail => 'Nagpapadala ng email...';
 
   @override
   String get seoul => 'Seoul';
 
   @override
-  String get serverErrorDashboard => 'Server Error';
+  String get serverErrorDashboard => 'Error sa Server';
 
   @override
-  String get serviceTermsAgreement => 'Please agree to the terms of service';
+  String get serviceTermsAgreement => 'Pakisundin ang mga tuntunin ng serbisyo';
 
   @override
-  String get sessionExpired => 'Session expired';
+  String get sessionExpired => 'Nawala ang session';
 
   @override
-  String get setAppInterfaceLanguage => 'Set app interface language';
+  String get setAppInterfaceLanguage => 'Itakda ang wika ng interface ng app';
 
   @override
-  String get setNow => 'Set Now';
+  String get setNow => 'Itakda Ngayon';
 
   @override
   String get settings => 'Mga Setting';
 
   @override
-  String get sexualContent => 'Sexual content';
+  String get sexualContent => 'Nilalaman na Sekswal';
 
   @override
-  String get showAllGenderPersonas => 'Show All Gender Personas';
+  String get showAllGenderPersonas => 'Ipakita ang Lahat ng Gender Personas';
 
   @override
-  String get showAllGendersOption => 'Show All Genders';
+  String get showAllGendersOption => 'Ipakita ang Lahat ng Kasarian';
 
   @override
   String get showOppositeGenderOnly =>
-      'If unchecked, only opposite gender personas will be shown';
+      'Kung hindi naka-check, tanging mga persona ng kabaligtarang kasarian lamang ang ipapakita';
 
   @override
-  String get showOriginalText => 'Show Original';
+  String get showOriginalText => 'Ipakita ang Orihinal';
 
   @override
   String get signUp => 'Mag-sign up';
 
   @override
-  String get signUpFromGuest => 'Sign up now to access all features!';
+  String get signUpFromGuest =>
+      'Mag-sign up ngayon upang ma-access ang lahat ng mga tampok!';
 
   @override
-  String get signup => 'Sign Up';
+  String get signup => 'Mag-sign Up';
 
   @override
-  String get signupComplete => 'Sign Up Complete';
+  String get signupComplete => 'Kumpleto na ang Pag-sign Up';
 
   @override
-  String get signupTab => 'Sign Up';
+  String get signupTab => 'Mag-sign Up';
 
   @override
-  String get simpleInfoRequired =>
-      'Simple information is required\nfor matching with AI personas';
+  String get simpleInfoRequired => 'Kinakailangan ang simpleng impormasyon';
 
   @override
   String get skip => 'Laktawan';
 
   @override
-  String get sonaFriend => 'SONA Friend';
+  String get sonaFriend => 'SONA Kaibigan';
 
   @override
-  String get sonaPrivacyPolicy => 'SONA Privacy Policy';
+  String get sonaPrivacyPolicy => 'Patakaran sa Privacy ng SONA';
 
   @override
-  String get sonaPurchasePolicy => 'SONA Purchase Policy';
+  String get sonaPurchasePolicy => 'Patakaran sa Pagbili ng SONA';
 
   @override
-  String get sonaTermsOfService => 'SONA Terms of Service';
+  String get sonaTermsOfService => 'Mga Tuntunin ng Serbisyo ng SONA';
 
   @override
-  String get sonaUsagePurpose => 'Please select your purpose for using SONA';
+  String get sonaUsagePurpose =>
+      'Pakisuyong piliin ang iyong layunin sa paggamit ng SONA';
 
   @override
-  String get sorryNotHelpful => 'Sorry this wasn\'t helpful';
+  String get sorryNotHelpful => 'Paumanhin, hindi ito nakatulong';
 
   @override
   String get sort => 'Ayusin';
 
   @override
-  String get soundSettings => 'Sound Settings';
+  String get soundSettings => 'Mga Setting ng Tunog';
 
   @override
-  String get spamAdvertising => 'Spam/Advertising';
+  String get spamAdvertising => 'Spam/Pag-aanunsyo';
 
   @override
-  String get spanish => 'Spanish';
+  String get spanish => 'Espanyol';
 
   @override
   String get specialRelationshipDesc =>
-      'Understand each other and build deep bonds';
+      'Magkaintindihan at bumuo ng malalim na ugnayan';
 
   @override
-  String get sports => 'Sports';
+  String get sports => 'Isports';
 
   @override
-  String get spring => 'Spring';
+  String get spring => 'Tagsibol';
 
   @override
-  String get startChat => 'Start Chat';
+  String get startChat => 'Simulan ang Usapan';
 
   @override
-  String get startChatButton => 'Start Chat';
+  String get startChatButton => 'Simulan ang Usapan';
 
   @override
   String get startConversation => 'Simulan ang pag-uusap';
 
   @override
   String get startConversationLikeAFriend =>
-      'Start a conversation with Sona like a friend';
+      'Simulan ang usapan kay Sona na parang kaibigan';
 
   @override
   String get startConversationStep =>
-      '2. Start Conversation: Chat freely with matched personas.';
+      '2. Simulan ang Usapan: Makipag-chat nang malaya sa mga katugmang persona.';
 
   @override
   String get startConversationWithSona =>
-      'Start chatting with Sona like a friend!';
+      'Simulan ang pakikipag-chat kay Sona na parang kaibigan!';
 
   @override
-  String get startWithEmail => 'Start with Email';
+  String get startWithEmail => 'Simulan gamit ang Email';
 
   @override
-  String get startWithGoogle => 'Start with Google';
+  String get startWithGoogle => 'Simulan gamit ang Google';
 
   @override
-  String get startingApp => 'Starting app';
+  String get startingApp => 'Sinisimulan ang app';
 
   @override
-  String get storageManagement => 'Storage Management';
+  String get storageManagement => 'Pamamahala ng Imbakan';
 
   @override
-  String get store => 'Store';
+  String get store => 'Tindahan';
 
   @override
-  String get storeConnectionError => 'Could not connect to store';
+  String get storeConnectionError => 'Hindi makakonekta sa tindahan';
 
   @override
   String get storeLoginRequiredMessage =>
-      'Login is required to use the store.\nWould you like to go to the login screen?';
+      'Kinakailangan ang pag-login upang magamit ang tindahan.';
 
   @override
-  String get storeNotAvailable => 'Store is not available';
+  String get storeNotAvailable => 'Hindi available ang tindahan';
 
   @override
-  String get storyEvent => 'Story Event';
+  String get storyEvent => 'Kaganapan ng Kwento';
 
   @override
-  String get stressed => 'Stressed';
+  String get stressed => 'Na-stress';
 
   @override
-  String get submitReport => 'Submit Report';
+  String get submitReport => 'Isumite ang Ulat';
 
   @override
-  String get subscriptionStatus => 'Subscription Status';
+  String get subscriptionStatus => 'Katayuan ng Subscription';
 
   @override
-  String get subtleVibrationOnTouch => 'Subtle vibration on touch';
+  String get subtleVibrationOnTouch => 'Banayad na panginginig sa pagdampi';
 
   @override
-  String get summer => 'Summer';
+  String get summer => 'Tag-init';
 
   @override
-  String get sunday => 'Sunday';
+  String get sunday => 'Linggo';
 
   @override
-  String get swipeAnyDirection => 'Swipe in any direction';
+  String get swipeAnyDirection => 'Mag-swipe sa anumang direksyon';
 
   @override
-  String get swipeDownToClose => 'Swipe down to close';
+  String get swipeDownToClose => 'I-swipe pababa upang isara';
 
   @override
-  String get systemTheme => 'Follow System';
+  String get systemTheme => 'Sundin ang Sistema';
 
   @override
   String get systemThemeDesc =>
-      'Automatically changes based on device dark mode settings';
+      'Awtomatikong nagbabago batay sa mga setting ng madilim na mode ng aparato';
 
   @override
-  String get tapBottomForDetails => 'Tap bottom area to see details';
+  String get tapBottomForDetails =>
+      'I-tap ang ibabang bahagi upang makita ang mga detalye';
 
   @override
-  String get tapForDetails => 'Tap bottom area for details';
+  String get tapForDetails => 'I-tap ang ibabang bahagi para sa mga detalye';
 
   @override
-  String get tapToSwipePhotos => 'Tap to swipe photos';
+  String get tapToSwipePhotos => 'I-tap upang i-swipe ang mga larawan';
 
   @override
-  String get teachersDay => 'Teachers\' Day';
+  String get teachersDay => 'Araw ng mga Guro';
 
   @override
-  String get technicalError => 'Technical Error';
+  String get technicalError => 'Teknikal na Error';
 
   @override
-  String get technology => 'Technology';
+  String get technology => 'Teknolohiya';
 
   @override
-  String get terms => 'Terms of Service';
+  String get terms => 'Mga Tuntunin ng Serbisyo';
 
   @override
-  String get termsAgreement => 'Terms Agreement';
+  String get termsAgreement => 'Kasunduan ng mga Tuntunin';
 
   @override
   String get termsAgreementDescription =>
-      'Please agree to the terms for using the service';
+      'Mangyaring sumang-ayon sa mga tuntunin para sa paggamit ng serbisyo';
 
   @override
   String get termsOfService => 'Mga Tuntunin ng Serbisyo';
 
   @override
   String get termsSection10Content =>
-      'We reserve the right to modify these terms at any time with notice to users.';
+      'Nananatili ang karapatan naming baguhin ang mga tuntuning ito anumang oras na may abiso sa mga gumagamit.';
 
   @override
-  String get termsSection10Title => 'Article 10 (Dispute Resolution)';
+  String get termsSection10Title => 'Artikulo 10 (Pagsusuri ng Alitan)';
 
   @override
   String get termsSection11Content =>
-      'These terms shall be governed by the laws of the jurisdiction in which we operate.';
+      'Ang mga tuntuning ito ay pamamahalaan ng mga batas ng hurisdiksyon kung saan kami nagpapatakbo.';
 
   @override
   String get termsSection11Title =>
-      'Article 11 (AI Service Special Provisions)';
+      'Artikulo 11 (Mga Espesyal na Probisyon ng Serbisyo ng AI)';
 
   @override
   String get termsSection12Content =>
-      'If any provision of these terms is found to be unenforceable, the remaining provisions shall continue in full force and effect.';
+      'Kung ang anumang probisyon ng mga tuntuning ito ay natagpuang hindi maipatutupad, ang mga natitirang probisyon ay mananatiling may buong bisa at epekto.';
 
   @override
-  String get termsSection12Title => 'Article 12 (Data Collection and Usage)';
+  String get termsSection12Title =>
+      'Artikulo 12 (Pagkolekta at Paggamit ng Data)';
 
   @override
   String get termsSection1Content =>
-      'These terms and conditions aim to define the rights, obligations, and responsibilities between SONA (hereinafter \"Company\") and users regarding the use of the AI persona conversation matching service (hereinafter \"Service\") provided by the Company.';
+      'Layunin ng mga tuntunin at kundisyong ito na tukuyin ang mga karapatan, obligasyon, at responsibilidad sa pagitan ng SONA (na tinutukoy dito bilang \"Kompanya\") at mga gumagamit kaugnay ng paggamit ng serbisyo ng pag-uusap na tumutugma sa AI persona (na tinutukoy dito bilang \"Serbisyo\") na ibinibigay ng Kompanya.';
 
   @override
-  String get termsSection1Title => 'Article 1 (Purpose)';
+  String get termsSection1Title => 'Artikulo 1 (Layunin)';
 
   @override
   String get termsSection2Content =>
-      'By using our service, you agree to be bound by these Terms of Service and our Privacy Policy.';
+      'Sa paggamit ng aming serbisyo, sumasang-ayon ka na sumunod sa mga Tuntunin ng Serbisyo na ito at sa aming Patakaran sa Privacy.';
 
   @override
-  String get termsSection2Title => 'Article 2 (Definitions)';
+  String get termsSection2Title => 'Artikulo 2 (Mga Kahulugan)';
 
   @override
   String get termsSection3Content =>
-      'You must be at least 13 years old to use our service.';
+      'Dapat kang hindi bababa sa 13 taong gulang upang magamit ang aming serbisyo.';
 
   @override
   String get termsSection3Title =>
-      'Article 3 (Effect and Modification of Terms)';
+      'Artikulo 3 (Epekto at Pagbabago ng mga Tuntunin)';
 
   @override
   String get termsSection4Content =>
-      'You are responsible for maintaining the confidentiality of your account and password.';
+      'Ikaw ang may pananagutan sa pagpapanatili ng pagiging kompidensyal ng iyong account at password.';
 
   @override
-  String get termsSection4Title => 'Article 4 (Provision of Service)';
+  String get termsSection4Title => 'Artikulo 4 (Pagbibigay ng Serbisyo)';
 
   @override
   String get termsSection5Content =>
-      'You agree not to use our service for any illegal or unauthorized purpose.';
+      'Sumasang-ayon kang hindi gamitin ang aming serbisyo para sa anumang ilegal o hindi awtorisadong layunin.';
 
   @override
-  String get termsSection5Title => 'Article 5 (Membership Registration)';
+  String get termsSection5Title => 'Artikulo 5 (Rehistrasyon ng Miyembro)';
 
   @override
   String get termsSection6Content =>
-      'We reserve the right to terminate or suspend your account for violation of these terms.';
+      'Inilalaan namin ang karapatan na wakasan o suspindihin ang iyong account dahil sa paglabag sa mga tuntuning ito.';
 
   @override
-  String get termsSection6Title => 'Article 6 (User Obligations)';
+  String get termsSection6Title => 'Artikulo 6 (Mga Obligasyon ng Gumagamit)';
 
   @override
   String get termsSection7Content =>
-      'The Company may gradually restrict service usage through warnings, temporary suspension, or permanent suspension if users violate the obligations of these terms or interfere with normal service operations.';
+      'Maaaring unti-unting limitahan ng Kumpanya ang paggamit ng serbisyo sa pamamagitan ng mga babala, pansamantalang pagsuspinde, o permanenteng pagsuspinde kung ang mga gumagamit ay lumalabag sa mga obligasyon ng mga terminong ito o nakikialam sa normal na operasyon ng serbisyo.';
 
   @override
-  String get termsSection7Title => 'Article 7 (Service Usage Restrictions)';
+  String get termsSection7Title =>
+      'Artikulo 7 (Mga Paghihigpit sa Paggamit ng Serbisyo)';
 
   @override
   String get termsSection8Content =>
-      'We are not liable for any indirect, incidental, or consequential damages arising from your use of our service.';
+      'Wala kaming pananagutan para sa anumang di-tuwirang, incidental, o consequential na pinsala na nagmumula sa iyong paggamit ng aming serbisyo.';
 
   @override
-  String get termsSection8Title => 'Article 8 (Service Interruption)';
+  String get termsSection8Title => 'Artikulo 8 (Pagkakasuspinde ng Serbisyo)';
 
   @override
   String get termsSection9Content =>
-      'All content and materials available on our service are protected by intellectual property rights.';
+      'Lahat ng nilalaman at materyales na available sa aming serbisyo ay protektado ng mga karapatan sa intelektwal na ari-arian.';
 
   @override
-  String get termsSection9Title => 'Article 9 (Disclaimer)';
+  String get termsSection9Title => 'Artikulo 9 (Pagtatanggi)';
 
   @override
-  String get termsSupplementary => 'Supplementary Terms';
+  String get termsSupplementary => 'Mga Karagdagang Tuntunin';
 
   @override
   String get thai => 'Thai';
 
   @override
-  String get thanksFeedback => 'Thanks for your feedback!';
+  String get thanksFeedback => 'Salamat sa iyong feedback!';
 
   @override
   String get theme => 'Tema';
 
   @override
   String get themeDescription =>
-      'You can customize the app appearance as you like';
+      'Maaari mong i-customize ang hitsura ng app ayon sa iyong gusto.';
 
   @override
-  String get themeSettings => 'Theme Settings';
+  String get themeSettings => 'Mga Setting ng Tema';
 
   @override
-  String get thursday => 'Thursday';
+  String get thursday => 'Huwebes';
 
   @override
-  String get timeout => 'Timeout';
+  String get timeout => 'Oras ng Pagtigil';
 
   @override
-  String get tired => 'Tired';
+  String get tired => 'Pagod';
 
   @override
   String get today => 'Ngayon';
 
   @override
-  String get todayChats => 'Today';
+  String get todayChats => 'Ngayon';
 
   @override
-  String get todayText => 'Today';
+  String get todayText => 'Ngayon';
 
   @override
-  String get tomorrowText => 'Tomorrow';
+  String get tomorrowText => 'Bukas';
 
   @override
-  String get totalConsultSessions => 'Total Consultation Sessions';
+  String get totalConsultSessions => 'Kabuuang Sesyon ng Konsultasyon';
 
   @override
-  String get totalErrorCount => 'Total Error Count';
+  String get totalErrorCount => 'Kabuuang Bilang ng Error';
 
   @override
-  String get totalLikes => 'Total Likes';
+  String get totalLikes => 'Kabuuang Likes';
 
   @override
   String totalOccurrences(Object count) {
-    return 'Total $count occurrences';
+    return 'Kabuuang $count na mga pagkakataon';
   }
 
   @override
-  String get totalResponses => 'Total Responses';
+  String get totalResponses => 'Kabuuang Tugon';
 
   @override
-  String get translatedFrom => 'Translated';
+  String get translatedFrom => 'Isinalin mula';
 
   @override
-  String get translatedText => 'Translation';
+  String get translatedText => 'Pagsasalin';
 
   @override
-  String get translationError => 'Translation error';
+  String get translationError => 'Kamalian sa pagsasalin';
 
   @override
   String get translationErrorDescription =>
-      'Please report incorrect translations or awkward expressions';
+      'Pakisabi ang mga maling pagsasalin o hindi natural na mga ekspresyon';
 
   @override
   String get translationErrorReported =>
-      'Translation error reported. Thank you!';
+      'Naiulat ang kamalian sa pagsasalin. Salamat!';
 
   @override
-  String get translationNote => '※ AI translation may not be perfect';
+  String get translationNote =>
+      '※ Maaaring hindi perpekto ang pagsasalin ng AI';
 
   @override
-  String get translationQuality => 'Translation Quality';
+  String get translationQuality => 'Kalidad ng Pagsasalin';
 
   @override
-  String get translationSettings => 'Translation Settings';
+  String get translationSettings => 'Mga Setting ng Pagsasalin';
 
   @override
-  String get travel => 'Travel';
+  String get travel => 'Maglakbay';
 
   @override
-  String get tuesday => 'Tuesday';
+  String get tuesday => 'Martes';
 
   @override
-  String get tutorialAccount => 'Tutorial Account';
+  String get tutorialAccount => 'Tutorial na Account';
 
   @override
   String get tutorialWelcomeDescription =>
-      'Create special relationships with AI personas.';
+      'Lumikha ng espesyal na ugnayan sa mga AI persona.';
 
   @override
-  String get tutorialWelcomeTitle => 'Welcome to SONA!';
+  String get tutorialWelcomeTitle => 'Maligayang pagdating sa SONA!';
 
   @override
-  String get typeMessage => 'Type a message...';
+  String get typeMessage => 'Mag-type ng mensahe...';
 
   @override
   String get unblock => 'I-unblock';
 
   @override
-  String get unblockFailed => 'Failed to unblock';
+  String get unblockFailed => 'Nabigong i-unblock';
 
   @override
   String unblockPersonaConfirm(String name) {
-    return 'Unblock $name?';
+    return 'I-unblock si $name?';
   }
 
   @override
-  String get unblockedSuccessfully => 'Unblocked successfully';
+  String get unblockedSuccessfully => 'Matagumpay na na-unblock';
 
   @override
   String get unexpectedLoginError =>
-      'An unexpected error occurred during login';
+      'Isang hindi inaasahang error ang nangyari sa pag-login';
 
   @override
-  String get unknown => 'Unknown';
+  String get unknown => 'Hindi Kilala';
 
   @override
   String get unknownError => 'Hindi kilalang Error';
 
   @override
-  String get unlimitedMessages => 'Unlimited';
+  String get unlimitedMessages => 'Walang Hanggang Mensahe';
 
   @override
-  String get unsendMessage => 'Unsend message';
+  String get unsendMessage => 'I-undo ang mensahe';
 
   @override
-  String get usagePurpose => 'Usage Purpose';
+  String get usagePurpose => 'Layunin ng Paggamit';
 
   @override
-  String get useOneHeart => 'Use 1 Heart';
+  String get useOneHeart => 'Gumamit ng 1 Puso';
 
   @override
-  String get useSystemLanguage => 'Use System Language';
+  String get useSystemLanguage => 'Gamitin ang Wika ng Sistema';
 
   @override
-  String get user => 'User: ';
+  String get user => 'Gumagamit:';
 
   @override
-  String get userMessage => 'User Message:';
+  String get userMessage => 'Mensahe ng Gumagamit:';
 
   @override
-  String get userNotFound => 'User not found';
+  String get userNotFound => 'Hindi natagpuan ang gumagamit';
 
   @override
-  String get valentinesDay => 'Valentine\'s Day';
+  String get valentinesDay => 'Araw ng mga Puso';
 
   @override
-  String get verifyingAuth => 'Verifying authentication';
+  String get verifyingAuth => 'Nagsasagawa ng pagpapatunay ng awtorisasyon';
 
   @override
-  String get version => 'Version';
+  String get version => 'Bersyon';
 
   @override
   String get vietnamese => 'Vietnamese';
 
   @override
-  String get violentContent => 'Violent content';
+  String get violentContent => 'Marahas na nilalaman';
 
   @override
-  String get voiceMessage => '🎤 Voice message';
+  String get voiceMessage => '🎤 Mensahe ng boses';
 
   @override
   String waitingForChat(String name) {
-    return '$name is waiting to chat.';
+    return 'Naghihintay si $name na makipag-chat.';
   }
 
   @override
-  String get walk => 'Walk';
+  String get walk => 'Maglakad';
 
   @override
-  String get wasHelpful => 'Was this helpful?';
+  String get wasHelpful => 'Nakakatulong ba ito?';
 
   @override
-  String get weatherClear => 'Clear';
+  String get weatherClear => 'Maliwanag';
 
   @override
-  String get weatherCloudy => 'Cloudy';
+  String get weatherCloudy => 'Maulap';
 
   @override
-  String get weatherContext => 'Weather Context';
+  String get weatherContext => 'Konteksto ng Panahon';
 
   @override
   String get weatherContextDesc =>
-      'Provide conversation context based on weather';
+      'Magbigay ng konteksto ng pag-uusap batay sa panahon';
 
   @override
-  String get weatherDrizzle => 'Drizzle';
+  String get weatherDrizzle => 'Ambon';
 
   @override
-  String get weatherFog => 'Fog';
+  String get weatherFog => 'Hamog';
 
   @override
-  String get weatherMist => 'Mist';
+  String get weatherMist => 'Ulap';
 
   @override
-  String get weatherRain => 'Rain';
+  String get weatherRain => 'Ulan';
 
   @override
-  String get weatherRainy => 'Rainy';
+  String get weatherRainy => 'Maulan';
 
   @override
-  String get weatherSnow => 'Snow';
+  String get weatherSnow => 'Niyeber';
 
   @override
-  String get weatherSnowy => 'Snowy';
+  String get weatherSnowy => 'Niyebe';
 
   @override
-  String get weatherThunderstorm => 'Thunderstorm';
+  String get weatherThunderstorm => 'Bagyo ng Kidlat';
 
   @override
-  String get wednesday => 'Wednesday';
+  String get wednesday => 'Miyerkules';
 
   @override
-  String get weekdays => 'Sun,Mon,Tue,Wed,Thu,Fri,Sat';
+  String get weekdays =>
+      'Linggo,Lunes,Martes,Miyerkules,Huwebes,Biyernes,Sabado';
 
   @override
-  String get welcomeMessage => 'Welcome💕';
+  String get welcomeMessage => 'Maligayang pagdating💕';
 
   @override
   String get whatTopicsToTalk =>
-      'What topics would you like to talk about? (Optional)';
+      'Anong mga paksa ang nais mong pag-usapan? (Opsyonal)';
 
   @override
-  String get whiteDay => 'White Day';
+  String get whiteDay => 'Araw ng mga Puti';
 
   @override
-  String get winter => 'Winter';
+  String get winter => 'Taglamig';
 
   @override
-  String get wrongTranslation => 'Wrong Translation';
+  String get wrongTranslation => 'Mali ang Pagsasalin';
 
   @override
-  String get year => 'Year';
+  String get year => 'Taon';
 
   @override
-  String get yearEnd => 'Year End';
+  String get yearEnd => 'Pagtatapos ng Taon';
 
   @override
   String get yes => 'Oo';
@@ -2367,8 +2413,8 @@ class AppLocalizationsTl extends AppLocalizations {
   String get yesterday => 'Kahapon';
 
   @override
-  String get yesterdayChats => 'Yesterday';
+  String get yesterdayChats => 'Kahapon';
 
   @override
-  String get you => 'You';
+  String get you => 'Ikaw';
 }

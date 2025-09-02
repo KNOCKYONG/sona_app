@@ -773,12 +773,20 @@ class ChatOrchestrator {
       _progressEmotionState(trackerId);
       
       // 5단계: API 호출
-      // 영어 입력은 원본 그대로 전달하고, targetLanguage 파라미터 추가
+      // 다국어 입력 처리 - 모든 비한국어 언어에 대해 번역 활성화
       
-      // 영어 입력 시 특별 컨텍스트 힌트 추가  
+      // 다국어 입력 시 특별 컨텍스트 힌트 추가  
       String? enhancedContextHint = contextHint;
-      if (userLanguage == 'en') {
-        final englishHint = '''
+      if (userLanguage != null && userLanguage != 'ko') {
+        // 언어별 이름 가져오기
+        final languageName = _getLanguageFullName(userLanguage);
+        final langCodeUpper = userLanguage.toUpperCase();
+        
+        String languageHint = '';
+        
+        // 영어는 기존 상세 힌트 사용
+        if (userLanguage == 'en') {
+          languageHint = '''
 ## 🌍 CRITICAL: English Input - RESPOND IN KOREAN WITH TRANSLATION:
 - User's message in English: "$userMessage"
 - YOU MUST RESPOND IN KOREAN (not "무슨 말씀이신지 모르겠어요")
@@ -798,9 +806,27 @@ class ChatOrchestrator {
 - NEVER say "무슨 말씀이신지 잘 모르겠어요" for English
 - NEVER say "영어로 말하니까 신기하네" repeatedly
 ''';
+        } else {
+          // 다른 모든 언어에 대한 범용 힌트
+          languageHint = '''
+## 🌍 CRITICAL: $languageName Input - RESPOND IN KOREAN WITH TRANSLATION:
+- User's message in $languageName: "$userMessage"
+- YOU MUST RESPOND IN KOREAN
+- YOU MUST START YOUR RESPONSE WITH [KO] TAG
+- YOU MUST INCLUDE [$langCodeUpper] TAG WITH $languageName TRANSLATION
+- Example format:
+  [KO] 한국어 응답
+  [$langCodeUpper] $languageName translation
+  
+- ALWAYS understand and respond appropriately in Korean
+- Provide natural, conversational response
+- Match the emotional tone of the user's message
+''';
+        }
+        
         enhancedContextHint = enhancedContextHint != null 
-            ? '$enhancedContextHint\n\n$englishHint'
-            : englishHint;
+            ? '$enhancedContextHint\n\n$languageHint'
+            : languageHint;
       }
       
       // 🧠 실시간 학습: 사용자 선호 기반 프롬프트 조정
@@ -6315,6 +6341,35 @@ ${contextHint ?? ''}''';
     
     // Jaccard 유사도 계산
     return commonKeywords.length / totalUniqueKeywords;
+  }
+  
+  /// 언어 코드를 전체 언어 이름으로 변환하는 헬퍼 함수
+  String _getLanguageFullName(String code) {
+    switch (code) {
+      case 'en': return 'English';
+      case 'ko': return 'Korean';
+      case 'ja': return 'Japanese';
+      case 'zh': return 'Chinese';
+      case 'es': return 'Spanish';
+      case 'fr': return 'French';
+      case 'de': return 'German';
+      case 'it': return 'Italian';
+      case 'pt': return 'Portuguese';
+      case 'ru': return 'Russian';
+      case 'ar': return 'Arabic';
+      case 'hi': return 'Hindi';
+      case 'vi': return 'Vietnamese';
+      case 'th': return 'Thai';
+      case 'id': return 'Indonesian';
+      case 'ms': return 'Malay';
+      case 'nl': return 'Dutch';
+      case 'pl': return 'Polish';
+      case 'sv': return 'Swedish';
+      case 'tl': return 'Tagalog';
+      case 'tr': return 'Turkish';
+      case 'ur': return 'Urdu';
+      default: return 'Unknown Language';
+    }
   }
   
   /// 캐시 업데이트 - 문제 패턴 감지 강화

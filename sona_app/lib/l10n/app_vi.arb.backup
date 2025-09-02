@@ -48,15 +48,15 @@
   "@accountManagement": {
     "description": "Localized string for accountManagement"
   },
-  "adaptiveConversationDesc": "Điều chỉnh phong cách trò chuyện để phù hợp với bạn",
+  "adaptiveConversationDesc": "Adapts conversation style to match yours",
   "@adaptiveConversationDesc": {
     "description": "Localized string for adaptiveConversationDesc"
   },
-  "afternoon": "Buổi chiều",
+  "afternoon": "Afternoon",
   "@afternoon": {
     "description": "Localized string for afternoon"
   },
-  "afternoonFatigue": "Mệt mỏi buổi chiều",
+  "afternoonFatigue": "Afternoon fatigue",
   "@afternoonFatigue": {
     "description": "Localized string for afternoonFatigue"
   },
@@ -76,7 +76,7 @@
       }
     }
   },
-  "ageUnit": "tuổi",
+  "ageUnit": "years old",
   "@ageUnit": {
     "description": "Localized string for ageUnit"
   },
@@ -84,7 +84,7 @@
   "@agreeToTerms": {
     "description": "Localized string for agreeToTerms"
   },
-  "aiDatingQuestion": "Một cuộc sống đặc biệt hàng ngày với AI",
+  "aiDatingQuestion": "A special daily life with AI\nMeet your own personas.",
   "@aiDatingQuestion": {
     "description": "Localized string for aiDatingQuestion"
   },
@@ -96,7 +96,7 @@
   "@all": {
     "description": "Localized string for all"
   },
-  "allAgree": "Đồng ý tất cả",
+  "allAgree": "Agree to All",
   "@allAgree": {
     "description": "Localized string for allAgree"
   },
@@ -125,7 +125,7 @@
       }
     }
   },
-  "alsoBlockThisAI": "Cũng chặn AI này",
+  "alsoBlockThisAI": "Also block this AI",
   "@alsoBlockThisAI": {
     "description": "Localized string for alsoBlockThisAI"
   },
@@ -133,7 +133,7 @@
   "@angry": {
     "description": "Localized string for angry"
   },
-  "anonymousLogin": "Đăng nhập ẩn danh",
+  "anonymousLogin": "Anonymous login",
   "@anonymousLogin": {
     "description": "Localized string for anonymousLogin"
   },
@@ -141,7 +141,7 @@
   "@anxious": {
     "description": "Localized string for anxious"
   },
-  "apiKeyError": "Lỗi API Key",
+  "apiKeyError": "API Key Error",
   "@apiKeyError": {
     "description": "Localized string for apiKeyError"
   },
@@ -157,7 +157,7 @@
   "@appleLoginCanceled": {
     "description": "Localized string for appleLoginCanceled"
   },
-  "appleLoginError": "Đã xảy ra lỗi trong quá trình đăng nhập Apple.",
+  "appleLoginError": "Error occurred during Apple login.",
   "@appleLoginError": {
     "description": "Localized string for appleLoginError"
   },
@@ -165,27 +165,27 @@
   "@art": {
     "description": "Localized string for art"
   },
-  "authError": "Lỗi xác thực",
+  "authError": "Authentication Error",
   "@authError": {
     "description": "Localized string for authError"
   },
-  "autoTranslate": "Dịch tự động",
+  "autoTranslate": "Auto Translate",
   "@autoTranslate": {
     "description": "Localized string for autoTranslate"
   },
-  "autumn": "Mùa thu",
+  "autumn": "Autumn",
   "@autumn": {
     "description": "Localized string for autumn"
   },
-  "averageQuality": "Chất lượng trung bình",
+  "averageQuality": "Average Quality",
   "@averageQuality": {
     "description": "Localized string for averageQuality"
   },
-  "averageQualityScore": "Điểm chất lượng trung bình",
+  "averageQualityScore": "Average Quality Score",
   "@averageQualityScore": {
     "description": "Localized string for averageQualityScore"
   },
-  "awkwardExpression": "Biểu cảm ngượng ngùng",
+  "awkwardExpression": "Awkward Expression",
   "@awkwardExpression": {
     "description": "Localized string for awkwardExpression"
   },
@@ -217,11 +217,11 @@
   "@blockConfirm": {
     "description": "Localized string for blockConfirm"
   },
-  "blockReason": "Lý do chặn",
+  "blockReason": "Block reason",
   "@blockReason": {
     "description": "Localized string for blockReason"
   },
-  "blockThisAI": "Chặn AI này",
+  "blockThisAI": "Block this AI",
   "@blockThisAI": {
     "description": "Localized string for blockThisAI"
   },
@@ -234,27 +234,27 @@
       }
     }
   },
-  "blockedAIs": "Các AI đã bị chặn",
+  "blockedAIs": "Blocked AIs",
   "@blockedAIs": {
     "description": "Localized string for blockedAIs"
   },
-  "blockedAt": "Bị chặn tại",
+  "blockedAt": "Blocked at",
   "@blockedAt": {
     "description": "Localized string for blockedAt"
   },
-  "blockedSuccessfully": "Đã chặn thành công",
+  "blockedSuccessfully": "Blocked successfully",
   "@blockedSuccessfully": {
     "description": "Localized string for blockedSuccessfully"
   },
-  "breakfast": "Bữa sáng",
+  "breakfast": "Breakfast",
   "@breakfast": {
     "description": "Localized string for breakfast"
   },
-  "byErrorType": "Theo loại lỗi",
+  "byErrorType": "By Error Type",
   "@byErrorType": {
     "description": "Localized string for byErrorType"
   },
-  "byPersona": "Theo nhân vật",
+  "byPersona": "By Persona",
   "@byPersona": {
     "description": "Localized string for byPersona"
   },
@@ -267,11 +267,11 @@
       }
     }
   },
-  "cacheDeleted": "Bộ nhớ hình ảnh đã được xóa",
+  "cacheDeleted": "Image cache has been deleted",
   "@cacheDeleted": {
     "description": "Localized string for cacheDeleted"
   },
-  "cafeTerrace": "Sân thượng quán cà phê",
+  "cafeTerrace": "Cafe terrace",
   "@cafeTerrace": {
     "description": "Localized string for cafeTerrace"
   },
@@ -287,11 +287,11 @@
   "@cameraPermissionDesc": {
     "description": "Localized string for cameraPermissionDesc"
   },
-  "canChangeInSettings": "Bạn có thể thay đổi điều này sau trong cài đặt",
+  "canChangeInSettings": "You can change this later in settings",
   "@canChangeInSettings": {
     "description": "Localized string for canChangeInSettings"
   },
-  "canMeetPreviousPersonas": "Bạn có thể gặp lại các nhân vật",
+  "canMeetPreviousPersonas": "You can meet personas\nyou swiped before again!",
   "@canMeetPreviousPersonas": {
     "description": "Localized string for canMeetPreviousPersonas"
   },
@@ -311,11 +311,11 @@
   "@chatEndedMessage": {
     "description": "Localized string for chatEndedMessage"
   },
-  "chatErrorDashboard": "Bảng điều khiển lỗi trò chuyện",
+  "chatErrorDashboard": "Chat Error Dashboard",
   "@chatErrorDashboard": {
     "description": "Localized string for chatErrorDashboard"
   },
-  "chatErrorSentSuccessfully": "Lỗi trò chuyện đã được gửi thành công.",
+  "chatErrorSentSuccessfully": "Chat error has been sent successfully.",
   "@chatErrorSentSuccessfully": {
     "description": "Localized string for chatErrorSentSuccessfully"
   },
@@ -340,15 +340,15 @@
   "@checkInternetConnection": {
     "description": "Localized string for checkInternetConnection"
   },
-  "checkingUserInfo": "Đang kiểm tra thông tin người dùng",
+  "checkingUserInfo": "Checking user info",
   "@checkingUserInfo": {
     "description": "Localized string for checkingUserInfo"
   },
-  "childrensDay": "Ngày Quốc tế Thiếu nhi",
+  "childrensDay": "Children's Day",
   "@childrensDay": {
     "description": "Localized string for childrensDay"
   },
-  "chinese": "Tiếng Trung",
+  "chinese": "Chinese",
   "@chinese": {
     "description": "Localized string for chinese"
   },
@@ -356,7 +356,7 @@
   "@chooseOption": {
     "description": "Localized string for chooseOption"
   },
-  "christmas": "Giáng sinh",
+  "christmas": "Christmas",
   "@christmas": {
     "description": "Localized string for christmas"
   },
@@ -376,15 +376,15 @@
   "@confirm": {
     "description": "Localized string for confirm"
   },
-  "connectingToServer": "Đang kết nối đến máy chủ",
+  "connectingToServer": "Connecting to server",
   "@connectingToServer": {
     "description": "Localized string for connectingToServer"
   },
-  "consultQualityMonitoring": "Giám sát chất lượng tư vấn",
+  "consultQualityMonitoring": "Consultation Quality Monitoring",
   "@consultQualityMonitoring": {
     "description": "Localized string for consultQualityMonitoring"
   },
-  "continueAsGuest": "Tiếp tục với tư cách Khách",
+  "continueAsGuest": "Continue as Guest",
   "@continueAsGuest": {
     "description": "Localized string for continueAsGuest"
   },
@@ -400,7 +400,7 @@
   "@continueWithGoogle": {
     "description": "Localized string for continueWithGoogle"
   },
-  "conversationContinuity": "Tính liên tục của cuộc trò chuyện",
+  "conversationContinuity": "Conversation Continuity",
   "@conversationContinuity": {
     "description": "Localized string for conversationContinuity"
   },
@@ -417,7 +417,7 @@
       }
     }
   },
-  "convertToMember": "Đăng ký",
+  "convertToMember": "Sign Up",
   "@convertToMember": {
     "description": "Localized string for convertToMember"
   },
@@ -433,23 +433,23 @@
   "@copyrightInfringement": {
     "description": "Localized string for copyrightInfringement"
   },
-  "creatingAccount": "Tạo tài khoản",
+  "creatingAccount": "Creating account",
   "@creatingAccount": {
     "description": "Localized string for creatingAccount"
   },
-  "crisisDetected": "Đã phát hiện khủng hoảng",
+  "crisisDetected": "Crisis Detected",
   "@crisisDetected": {
     "description": "Localized string for crisisDetected"
   },
-  "culturalIssue": "Vấn đề văn hóa",
+  "culturalIssue": "Cultural Issue",
   "@culturalIssue": {
     "description": "Localized string for culturalIssue"
   },
-  "current": "Hiện tại",
+  "current": "Current",
   "@current": {
     "description": "Localized string for current"
   },
-  "currentCacheSize": "Kích thước bộ nhớ cache hiện tại",
+  "currentCacheSize": "Current Cache Size",
   "@currentCacheSize": {
     "description": "Localized string for currentCacheSize"
   },
@@ -457,11 +457,11 @@
   "@currentLanguage": {
     "description": "Localized string for currentLanguage"
   },
-  "cycling": "Đạp xe",
+  "cycling": "Cycling",
   "@cycling": {
     "description": "Localized string for cycling"
   },
-  "dailyCare": "Chăm sóc hàng ngày",
+  "dailyCare": "Daily Care",
   "@dailyCare": {
     "description": "Localized string for dailyCare"
   },
@@ -469,15 +469,15 @@
   "@dailyCareDesc": {
     "description": "Localized string for dailyCareDesc"
   },
-  "dailyChat": "Trò chuyện hàng ngày",
+  "dailyChat": "Daily Chat",
   "@dailyChat": {
     "description": "Localized string for dailyChat"
   },
-  "dailyCheck": "Kiểm tra hàng ngày",
+  "dailyCheck": "Daily check",
   "@dailyCheck": {
     "description": "Localized string for dailyCheck"
   },
-  "dailyConversation": "Cuộc trò chuyện hàng ngày",
+  "dailyConversation": "Daily Conversation",
   "@dailyConversation": {
     "description": "Localized string for dailyConversation"
   },
@@ -493,19 +493,19 @@
   "@darkMode": {
     "description": "Localized string for darkMode"
   },
-  "darkTheme": "Chế độ tối",
+  "darkTheme": "Dark Mode",
   "@darkTheme": {
     "description": "Localized string for darkTheme"
   },
-  "darkThemeDesc": "Sử dụng chế độ tối",
+  "darkThemeDesc": "Use dark theme",
   "@darkThemeDesc": {
     "description": "Localized string for darkThemeDesc"
   },
-  "dataCollection": "Cài đặt thu thập dữ liệu",
+  "dataCollection": "Data Collection Settings",
   "@dataCollection": {
     "description": "Localized string for dataCollection"
   },
-  "datingAdvice": "Lời khuyên hẹn hò",
+  "datingAdvice": "Dating Advice",
   "@datingAdvice": {
     "description": "Localized string for datingAdvice"
   },
@@ -513,7 +513,7 @@
   "@datingDescription": {
     "description": "Localized string for datingDescription"
   },
-  "dawn": "Bình minh",
+  "dawn": "Dawn",
   "@dawn": {
     "description": "Localized string for dawn"
   },
@@ -521,7 +521,7 @@
   "@day": {
     "description": "Localized string for day"
   },
-  "dayAfterTomorrow": "Ngày kia",
+  "dayAfterTomorrow": "Day after tomorrow",
   "@dayAfterTomorrow": {
     "description": "Localized string for dayAfterTomorrow"
   },
@@ -548,7 +548,7 @@
       }
     }
   },
-  "deepTalk": "Cuộc trò chuyện sâu sắc",
+  "deepTalk": "Deep Talk",
   "@deepTalk": {
     "description": "Localized string for deepTalk"
   },
@@ -560,19 +560,19 @@
   "@deleteAccount": {
     "description": "Localized string for deleteAccount"
   },
-  "deleteAccountConfirm": "Bạn có chắc chắn muốn xóa tài khoản của mình không? Hành động này không thể hoàn tác.",
+  "deleteAccountConfirm": "Are you sure you want to delete your account? This action cannot be undone.",
   "@deleteAccountConfirm": {
     "description": "Localized string for deleteAccountConfirm"
   },
-  "deleteAccountWarning": "Bạn có chắc chắn muốn xóa tài khoản của mình không?",
+  "deleteAccountWarning": "Are you sure you want to delete your account?",
   "@deleteAccountWarning": {
     "description": "Localized string for deleteAccountWarning"
   },
-  "deleteCache": "Xóa bộ nhớ cache",
+  "deleteCache": "Delete Cache",
   "@deleteCache": {
     "description": "Localized string for deleteCache"
   },
-  "deletingAccount": "Đang xóa tài khoản...",
+  "deletingAccount": "Deleting account...",
   "@deletingAccount": {
     "description": "Localized string for deletingAccount"
   },
@@ -580,7 +580,7 @@
   "@depressed": {
     "description": "Localized string for depressed"
   },
-  "describeError": "Có vấn đề gì?",
+  "describeError": "What is the problem?",
   "@describeError": {
     "description": "Localized string for describeError"
   },
@@ -588,15 +588,15 @@
   "@detailedReason": {
     "description": "Localized string for detailedReason"
   },
-  "developRelationshipStep": "3. Phát triển mối quan hệ: Xây dựng sự thân mật qua các cuộc trò chuyện và phát triển những mối quan hệ đặc biệt.",
+  "developRelationshipStep": "3. Develop Relationship: Build intimacy through conversations and develop special relationships.",
   "@developRelationshipStep": {
     "description": "Localized string for developRelationshipStep"
   },
-  "dinner": "Bữa tối",
+  "dinner": "Dinner",
   "@dinner": {
     "description": "Localized string for dinner"
   },
-  "discardGuestData": "Bắt đầu lại",
+  "discardGuestData": "Start Fresh",
   "@discardGuestData": {
     "description": "Localized string for discardGuestData"
   },
@@ -625,7 +625,7 @@
   "@done": {
     "description": "Localized string for done"
   },
-  "downloadingPersonaImages": "Đang tải hình ảnh nhân vật mới",
+  "downloadingPersonaImages": "Downloading new persona images",
   "@downloadingPersonaImages": {
     "description": "Localized string for downloadingPersonaImages"
   },
@@ -645,7 +645,7 @@
   "@effectSound": {
     "description": "Localized string for effectSound"
   },
-  "effectSoundDescription": "Phát âm thanh hiệu ứng",
+  "effectSoundDescription": "Play sound effects",
   "@effectSoundDescription": {
     "description": "Localized string for effectSoundDescription"
   },
@@ -665,7 +665,7 @@
   "@emailRequired": {
     "description": "Localized string for emailRequired"
   },
-  "emotionAnalysis": "Phân tích cảm xúc",
+  "emotionAnalysis": "Emotion Analysis",
   "@emotionAnalysis": {
     "description": "Localized string for emotionAnalysis"
   },
@@ -673,31 +673,31 @@
   "@emotionAnalysisDesc": {
     "description": "Localized string for emotionAnalysisDesc"
   },
-  "emotionAngry": "Giận dữ",
+  "emotionAngry": "Angry",
   "@emotionAngry": {
     "description": "Localized string for emotionAngry"
   },
-  "emotionBasedEncounters": "Gặp gỡ nhân vật dựa trên cảm xúc của bạn",
+  "emotionBasedEncounters": "Meet personas based on your emotions",
   "@emotionBasedEncounters": {
     "description": "Localized string for emotionBasedEncounters"
   },
-  "emotionCool": "Ngầu",
+  "emotionCool": "Cool",
   "@emotionCool": {
     "description": "Localized string for emotionCool"
   },
-  "emotionHappy": "Hạnh phúc",
+  "emotionHappy": "Happy",
   "@emotionHappy": {
     "description": "Localized string for emotionHappy"
   },
-  "emotionLove": "Yêu",
+  "emotionLove": "Love",
   "@emotionLove": {
     "description": "Localized string for emotionLove"
   },
-  "emotionSad": "Buồn",
+  "emotionSad": "Sad",
   "@emotionSad": {
     "description": "Localized string for emotionSad"
   },
-  "emotionThinking": "Đang suy nghĩ",
+  "emotionThinking": "Thinking",
   "@emotionThinking": {
     "description": "Localized string for emotionThinking"
   },
@@ -713,7 +713,7 @@
   "@endTutorial": {
     "description": "Localized string for endTutorial"
   },
-  "endTutorialAndLogin": "Kết thúc hướng dẫn và đăng nhập?",
+  "endTutorialAndLogin": "End tutorial and login?\nLogin to save data and use all features.",
   "@endTutorialAndLogin": {
     "description": "Localized string for endTutorialAndLogin"
   },
@@ -721,11 +721,11 @@
   "@endTutorialMessage": {
     "description": "Localized string for endTutorialMessage"
   },
-  "english": "Tiếng Anh",
+  "english": "English",
   "@english": {
     "description": "Localized string for english"
   },
-  "enterBasicInfo": "Vui lòng nhập thông tin cơ bản để tạo tài khoản",
+  "enterBasicInfo": "Please enter basic information to create an account",
   "@enterBasicInfo": {
     "description": "Localized string for enterBasicInfo"
   },
@@ -737,11 +737,11 @@
   "@enterEmail": {
     "description": "Localized string for enterEmail"
   },
-  "enterNickname": "Vui lòng nhập một biệt danh",
+  "enterNickname": "Please enter a nickname",
   "@enterNickname": {
     "description": "Localized string for enterNickname"
   },
-  "enterPassword": "Vui lòng nhập mật khẩu",
+  "enterPassword": "Please enter a password",
   "@enterPassword": {
     "description": "Localized string for enterPassword"
   },
@@ -753,7 +753,7 @@
   "@entertainmentDescription": {
     "description": "Localized string for entertainmentDescription"
   },
-  "entertainmentFun": "Giải trí/Vui chơi",
+  "entertainmentFun": "Entertainment/Fun",
   "@entertainmentFun": {
     "description": "Localized string for entertainmentFun"
   },
@@ -761,15 +761,15 @@
   "@error": {
     "description": "Localized string for error"
   },
-  "errorDescription": "Mô tả lỗi",
+  "errorDescription": "Error description",
   "@errorDescription": {
     "description": "Localized string for errorDescription"
   },
-  "errorDescriptionHint": "ví dụ, Đưa ra câu trả lời lạ, Lặp lại cùng một điều, Đưa ra phản hồi không phù hợp với ngữ cảnh...",
+  "errorDescriptionHint": "e.g., Gave strange answers, Repeats the same thing, Gives contextually inappropriate responses...",
   "@errorDescriptionHint": {
     "description": "Localized string for errorDescriptionHint"
   },
-  "errorDetails": "Chi tiết lỗi",
+  "errorDetails": "Error Details",
   "@errorDetails": {
     "description": "Localized string for errorDetails"
   },
@@ -777,11 +777,11 @@
   "@errorDetailsHint": {
     "description": "Localized string for errorDetailsHint"
   },
-  "errorFrequency24h": "Tần suất lỗi (24 giờ qua)",
+  "errorFrequency24h": "Error Frequency (Last 24 hours)",
   "@errorFrequency24h": {
     "description": "Localized string for errorFrequency24h"
   },
-  "errorMessage": "Thông báo lỗi:",
+  "errorMessage": "Error Message:",
   "@errorMessage": {
     "description": "Localized string for errorMessage"
   },
@@ -789,15 +789,15 @@
   "@errorOccurred": {
     "description": "Localized string for errorOccurred"
   },
-  "errorOccurredTryAgain": "Đã xảy ra lỗi. Vui lòng thử lại.",
+  "errorOccurredTryAgain": "An error occurred. Please try again.",
   "@errorOccurredTryAgain": {
     "description": "Localized string for errorOccurredTryAgain"
   },
-  "errorSendingFailed": "Gửi lỗi không thành công",
+  "errorSendingFailed": "Failed to send error",
   "@errorSendingFailed": {
     "description": "Localized string for errorSendingFailed"
   },
-  "errorStats": "Thống kê lỗi",
+  "errorStats": "Error Statistics",
   "@errorStats": {
     "description": "Localized string for errorStats"
   },
@@ -810,7 +810,7 @@
       }
     }
   },
-  "evening": "Buổi tối",
+  "evening": "Evening",
   "@evening": {
     "description": "Localized string for evening"
   },
@@ -818,15 +818,15 @@
   "@excited": {
     "description": "Localized string for excited"
   },
-  "exit": "Thoát",
+  "exit": "Exit",
   "@exit": {
     "description": "Localized string for exit"
   },
-  "exitApp": "Thoát ứng dụng",
+  "exitApp": "Exit App",
   "@exitApp": {
     "description": "Localized string for exitApp"
   },
-  "exitConfirmMessage": "Bạn có chắc chắn muốn thoát ứng dụng không?",
+  "exitConfirmMessage": "Are you sure you want to exit the app?",
   "@exitConfirmMessage": {
     "description": "Localized string for exitConfirmMessage"
   },
@@ -834,7 +834,7 @@
   "@expertPersona": {
     "description": "Localized string for expertPersona"
   },
-  "expertiseScore": "Điểm chuyên môn",
+  "expertiseScore": "Expertise Score",
   "@expertiseScore": {
     "description": "Localized string for expertiseScore"
   },
@@ -858,15 +858,15 @@
   "@filter": {
     "description": "Localized string for filter"
   },
-  "firstOccurred": "Lần đầu xảy ra:",
+  "firstOccurred": "First Occurred: ",
   "@firstOccurred": {
     "description": "Localized string for firstOccurred"
   },
-  "followDeviceLanguage": "Theo cài đặt ngôn ngữ của thiết bị",
+  "followDeviceLanguage": "Follow device language settings",
   "@followDeviceLanguage": {
     "description": "Localized string for followDeviceLanguage"
   },
-  "forenoon": "Buổi sáng",
+  "forenoon": "Forenoon",
   "@forenoon": {
     "description": "Localized string for forenoon"
   },
@@ -878,7 +878,7 @@
   "@frequentlyAskedQuestions": {
     "description": "Localized string for frequentlyAskedQuestions"
   },
-  "friday": "Thứ Sáu",
+  "friday": "Friday",
   "@friday": {
     "description": "Localized string for friday"
   },
@@ -886,7 +886,7 @@
   "@friendshipDescription": {
     "description": "Localized string for friendshipDescription"
   },
-  "funChat": "Trò Chuyện Vui",
+  "funChat": "Fun Chat",
   "@funChat": {
     "description": "Localized string for funChat"
   },
@@ -906,7 +906,7 @@
   "@gender": {
     "description": "Localized string for gender"
   },
-  "genderNotSelectedInfo": "Nếu không chọn giới tính, bạn sẽ thấy các nhân vật của tất cả các giới tính",
+  "genderNotSelectedInfo": "If gender is not selected, personas of all genders will be shown",
   "@genderNotSelectedInfo": {
     "description": "Localized string for genderNotSelectedInfo"
   },
@@ -914,15 +914,15 @@
   "@genderOptional": {
     "description": "Localized string for genderOptional"
   },
-  "genderPreferenceActive": "Bạn có thể gặp các nhân vật của tất cả các giới tính",
+  "genderPreferenceActive": "You can meet personas of all genders",
   "@genderPreferenceActive": {
     "description": "Localized string for genderPreferenceActive"
   },
-  "genderPreferenceDisabled": "Chọn giới tính của bạn để kích hoạt tùy chọn chỉ giới tính đối diện",
+  "genderPreferenceDisabled": "Select your gender to enable opposite gender only option",
   "@genderPreferenceDisabled": {
     "description": "Localized string for genderPreferenceDisabled"
   },
-  "genderPreferenceInactive": "Chỉ các nhân vật giới tính đối diện sẽ được hiển thị",
+  "genderPreferenceInactive": "Only opposite gender personas will be shown",
   "@genderPreferenceInactive": {
     "description": "Localized string for genderPreferenceInactive"
   },
@@ -930,7 +930,7 @@
   "@genderRequired": {
     "description": "Localized string for genderRequired"
   },
-  "genderSelectionInfo": "Nếu không chọn, bạn có thể gặp các nhân vật của tất cả các giới tính",
+  "genderSelectionInfo": "If not selected, you can meet personas of all genders",
   "@genderSelectionInfo": {
     "description": "Localized string for genderSelectionInfo"
   },
@@ -946,7 +946,7 @@
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
   },
-  "googleLoginError": "Đã xảy ra lỗi trong quá trình đăng nhập Google.",
+  "googleLoginError": "Error occurred during Google login.",
   "@googleLoginError": {
     "description": "Localized string for googleLoginError"
   },
@@ -954,7 +954,7 @@
   "@grantPermission": {
     "description": "Localized string for grantPermission"
   },
-  "guest": "Khách",
+  "guest": "Guest",
   "@guest": {
     "description": "Localized string for guest"
   },
@@ -966,11 +966,11 @@
   "@guestLimitReached": {
     "description": "Localized string for guestLimitReached"
   },
-  "guestLoginPromptMessage": "Đăng nhập để tiếp tục cuộc trò chuyện",
+  "guestLoginPromptMessage": "Login to continue the conversation",
   "@guestLoginPromptMessage": {
     "description": "Localized string for guestLoginPromptMessage"
   },
-  "guestMessageExhausted": "Tin nhắn miễn phí đã hết",
+  "guestMessageExhausted": "Free messages exhausted",
   "@guestMessageExhausted": {
     "description": "Localized string for guestMessageExhausted"
   },
@@ -983,7 +983,7 @@
       }
     }
   },
-  "guestModeBanner": "Chế độ Khách",
+  "guestModeBanner": "Guest Mode",
   "@guestModeBanner": {
     "description": "Localized string for guestModeBanner"
   },
@@ -991,7 +991,7 @@
   "@guestModeDescription": {
     "description": "Localized string for guestModeDescription"
   },
-  "guestModeFailedMessage": "Khởi động Chế độ Khách không thành công",
+  "guestModeFailedMessage": "Failed to start Guest Mode",
   "@guestModeFailedMessage": {
     "description": "Localized string for guestModeFailedMessage"
   },
@@ -999,7 +999,7 @@
   "@guestModeLimitation": {
     "description": "Localized string for guestModeLimitation"
   },
-  "guestModeTitle": "Thử nghiệm với tư cách Khách",
+  "guestModeTitle": "Try as Guest",
   "@guestModeTitle": {
     "description": "Localized string for guestModeTitle"
   },
@@ -1007,7 +1007,7 @@
   "@guestModeWarning": {
     "description": "Localized string for guestModeWarning"
   },
-  "guestModeWelcome": "Bắt đầu ở Chế độ Khách",
+  "guestModeWelcome": "Starting in Guest Mode",
   "@guestModeWelcome": {
     "description": "Localized string for guestModeWelcome"
   },
@@ -1027,7 +1027,7 @@
   "@hateSpeech": {
     "description": "Localized string for hateSpeech"
   },
-  "heartDescription": "Tim để gửi thêm tin nhắn",
+  "heartDescription": "Hearts for more messages",
   "@heartDescription": {
     "description": "Localized string for heartDescription"
   },
@@ -1039,11 +1039,11 @@
   "@heartInsufficientPleaseCharge": {
     "description": "Localized string for heartInsufficientPleaseCharge"
   },
-  "heartRequired": "Cần 1 trái tim",
+  "heartRequired": "1 heart is required",
   "@heartRequired": {
     "description": "Localized string for heartRequired"
   },
-  "heartUsageFailed": "Sử dụng trái tim không thành công.",
+  "heartUsageFailed": "Failed to use heart.",
   "@heartUsageFailed": {
     "description": "Localized string for heartUsageFailed"
   },
@@ -1071,7 +1071,7 @@
   "@hearts50Discount": {
     "description": "Localized string for hearts50Discount"
   },
-  "helloEmoji": "Xin chào! 😊",
+  "helloEmoji": "Hello! 😊",
   "@helloEmoji": {
     "description": "Localized string for helloEmoji"
   },
@@ -1079,19 +1079,19 @@
   "@help": {
     "description": "Localized string for help"
   },
-  "hideOriginalText": "Ẩn văn bản gốc",
+  "hideOriginalText": "Hide Original",
   "@hideOriginalText": {
     "description": "Localized string for hideOriginalText"
   },
-  "hobbySharing": "Chia sẻ sở thích",
+  "hobbySharing": "Hobby Sharing",
   "@hobbySharing": {
     "description": "Localized string for hobbySharing"
   },
-  "hobbyTalk": "Nói chuyện về sở thích",
+  "hobbyTalk": "Hobby Talk",
   "@hobbyTalk": {
     "description": "Localized string for hobbyTalk"
   },
-  "hours24Ago": "24 giờ trước",
+  "hours24Ago": "24 hours ago",
   "@hours24Ago": {
     "description": "Localized string for hours24Ago"
   },
@@ -1113,23 +1113,23 @@
   "@howToUse": {
     "description": "Localized string for howToUse"
   },
-  "imageCacheManagement": "Quản lý bộ nhớ cache hình ảnh",
+  "imageCacheManagement": "Image Cache Management",
   "@imageCacheManagement": {
     "description": "Localized string for imageCacheManagement"
   },
-  "inappropriateContent": "Nội dung không phù hợp",
+  "inappropriateContent": "Inappropriate content",
   "@inappropriateContent": {
     "description": "Localized string for inappropriateContent"
   },
-  "incorrect": "không chính xác",
+  "incorrect": "incorrect",
   "@incorrect": {
     "description": "Localized string for incorrect"
   },
-  "incorrectPassword": "Mật khẩu không chính xác",
+  "incorrectPassword": "Incorrect password",
   "@incorrectPassword": {
     "description": "Localized string for incorrectPassword"
   },
-  "indonesian": "Tiếng Indonesia",
+  "indonesian": "Indonesian",
   "@indonesian": {
     "description": "Localized string for indonesian"
   },
@@ -1141,7 +1141,7 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
-  "interestSharing": "Chia sẻ sở thích",
+  "interestSharing": "Interest Sharing",
   "@interestSharing": {
     "description": "Localized string for interestSharing"
   },
@@ -1153,11 +1153,11 @@
   "@interests": {
     "description": "Localized string for interests"
   },
-  "invalidEmailFormat": "Định dạng email không hợp lệ",
+  "invalidEmailFormat": "Invalid email format",
   "@invalidEmailFormat": {
     "description": "Localized string for invalidEmailFormat"
   },
-  "invalidEmailFormatError": "Vui lòng nhập địa chỉ email hợp lệ",
+  "invalidEmailFormatError": "Please enter a valid email address",
   "@invalidEmailFormatError": {
     "description": "Localized string for invalidEmailFormatError"
   },
@@ -1170,7 +1170,7 @@
       }
     }
   },
-  "japanese": "Tiếng Nhật",
+  "japanese": "Japanese",
   "@japanese": {
     "description": "Localized string for japanese"
   },
@@ -1182,15 +1182,15 @@
   "@justNow": {
     "description": "Localized string for justNow"
   },
-  "keepGuestData": "Lưu lịch sử trò chuyện",
+  "keepGuestData": "Keep Chat History",
   "@keepGuestData": {
     "description": "Localized string for keepGuestData"
   },
-  "korean": "Tiếng Hàn",
+  "korean": "Korean",
   "@korean": {
     "description": "Localized string for korean"
   },
-  "koreanLanguage": "Tiếng Hàn",
+  "koreanLanguage": "Korean",
   "@koreanLanguage": {
     "description": "Localized string for koreanLanguage"
   },
@@ -1202,7 +1202,7 @@
   "@languageDescription": {
     "description": "Localized string for languageDescription"
   },
-  "languageIndicator": "Ngôn ngữ",
+  "languageIndicator": "Language",
   "@languageIndicator": {
     "description": "Localized string for languageIndicator"
   },
@@ -1210,15 +1210,15 @@
   "@languageSettings": {
     "description": "Localized string for languageSettings"
   },
-  "lastOccurred": "Lần cuối xảy ra:",
+  "lastOccurred": "Last Occurred: ",
   "@lastOccurred": {
     "description": "Localized string for lastOccurred"
   },
-  "lastUpdated": "Cập nhật lần cuối",
+  "lastUpdated": "Last Updated",
   "@lastUpdated": {
     "description": "Localized string for lastUpdated"
   },
-  "lateNight": "Đêm muộn",
+  "lateNight": "Late night",
   "@lateNight": {
     "description": "Localized string for lateNight"
   },
@@ -1226,7 +1226,7 @@
   "@later": {
     "description": "Localized string for later"
   },
-  "laterButton": "Sau",
+  "laterButton": "Later",
   "@laterButton": {
     "description": "Localized string for laterButton"
   },
@@ -1234,7 +1234,7 @@
   "@leave": {
     "description": "Localized string for leave"
   },
-  "leaveChatConfirm": "Bạn có chắc chắn muốn rời khỏi cuộc trò chuyện này không? Nó sẽ biến mất khỏi danh sách trò chuyện của bạn.",
+  "leaveChatConfirm": "Leave this chat?\nIt will disappear from your chat list.",
   "@leaveChatConfirm": {
     "description": "Localized string for leaveChatConfirm"
   },
@@ -1246,19 +1246,19 @@
   "@leaveChatTitle": {
     "description": "Localized string for leaveChatTitle"
   },
-  "lifeAdvice": "Lời Khuyên Cuộc Sống",
+  "lifeAdvice": "Life Advice",
   "@lifeAdvice": {
     "description": "Localized string for lifeAdvice"
   },
-  "lightTalk": "Trò Chuyện Nhẹ Nhàng",
+  "lightTalk": "Light Talk",
   "@lightTalk": {
     "description": "Localized string for lightTalk"
   },
-  "lightTheme": "Chế Độ Sáng",
+  "lightTheme": "Light Mode",
   "@lightTheme": {
     "description": "Localized string for lightTheme"
   },
-  "lightThemeDesc": "Sử dụng giao diện sáng",
+  "lightThemeDesc": "Use bright theme",
   "@lightThemeDesc": {
     "description": "Localized string for lightThemeDesc"
   },
@@ -1270,11 +1270,11 @@
   "@loadingData": {
     "description": "Localized string for loadingData"
   },
-  "loadingProducts": "Đang tải sản phẩm...",
+  "loadingProducts": "Loading products...",
   "@loadingProducts": {
     "description": "Localized string for loadingProducts"
   },
-  "loadingProfile": "Đang tải hồ sơ",
+  "loadingProfile": "Loading profile",
   "@loadingProfile": {
     "description": "Localized string for loadingProfile"
   },
@@ -1282,7 +1282,7 @@
   "@login": {
     "description": "Localized string for login"
   },
-  "loginButton": "Đăng nhập",
+  "loginButton": "Login",
   "@loginButton": {
     "description": "Localized string for loginButton"
   },
@@ -1290,7 +1290,7 @@
   "@loginCancelled": {
     "description": "Localized string for loginCancelled"
   },
-  "loginComplete": "Đăng nhập thành công",
+  "loginComplete": "Login complete",
   "@loginComplete": {
     "description": "Localized string for loginComplete"
   },
@@ -1298,11 +1298,11 @@
   "@loginError": {
     "description": "Localized string for loginError"
   },
-  "loginFailed": "Đăng nhập thất bại",
+  "loginFailed": "Login failed",
   "@loginFailed": {
     "description": "Localized string for loginFailed"
   },
-  "loginFailedTryAgain": "Đăng nhập thất bại. Vui lòng thử lại.",
+  "loginFailedTryAgain": "Login failed. Please try again.",
   "@loginFailedTryAgain": {
     "description": "Localized string for loginFailedTryAgain"
   },
@@ -1310,15 +1310,15 @@
   "@loginRequired": {
     "description": "Localized string for loginRequired"
   },
-  "loginRequiredForProfile": "Cần đăng nhập để xem hồ sơ và kiểm tra các bản ghi với SONA",
+  "loginRequiredForProfile": "Login required to view profile\nand check records with SONA",
   "@loginRequiredForProfile": {
     "description": "Localized string for loginRequiredForProfile"
   },
-  "loginRequiredService": "Cần đăng nhập để sử dụng dịch vụ này",
+  "loginRequiredService": "Login required to use this service",
   "@loginRequiredService": {
     "description": "Localized string for loginRequiredService"
   },
-  "loginRequiredTitle": "Cần Đăng Nhập",
+  "loginRequiredTitle": "Login Required",
   "@loginRequiredTitle": {
     "description": "Localized string for loginRequiredTitle"
   },
@@ -1330,15 +1330,15 @@
   "@loginTab": {
     "description": "Localized string for loginTab"
   },
-  "loginTitle": "Đăng Nhập",
+  "loginTitle": "Login",
   "@loginTitle": {
     "description": "Localized string for loginTitle"
   },
-  "loginWithApple": "Đăng nhập bằng Apple",
+  "loginWithApple": "Login with Apple",
   "@loginWithApple": {
     "description": "Localized string for loginWithApple"
   },
-  "loginWithGoogle": "Đăng nhập bằng Google",
+  "loginWithGoogle": "Login with Google",
   "@loginWithGoogle": {
     "description": "Localized string for loginWithGoogle"
   },
@@ -1346,11 +1346,11 @@
   "@logout": {
     "description": "Localized string for logout"
   },
-  "logoutConfirm": "Bạn có chắc chắn muốn đăng xuất không?",
+  "logoutConfirm": "Are you sure you want to logout?",
   "@logoutConfirm": {
     "description": "Localized string for logoutConfirm"
   },
-  "lonelinessRelief": "Giảm Cảm Giác Cô Đơn",
+  "lonelinessRelief": "Loneliness Relief",
   "@lonelinessRelief": {
     "description": "Localized string for lonelinessRelief"
   },
@@ -1358,7 +1358,7 @@
   "@lonely": {
     "description": "Localized string for lonely"
   },
-  "lowQualityResponses": "Phản Hồi Chất Lượng Thấp",
+  "lowQualityResponses": "Low Quality Responses",
   "@lowQualityResponses": {
     "description": "Localized string for lowQualityResponses"
   },

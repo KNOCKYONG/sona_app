@@ -323,72 +323,15 @@ class ChatOrchestrator {
       bool currentSpeechMode = true; // 항상 반말 모드
 
       // 2.5단계: 다국어 입력 처리
-      // 영어 입력은 첫 인사만 특별 처리, 나머지는 API에서 직접 처리
+      // ⚠️ 모든 언어 입력은 OpenAI API로 처리 - 하드코딩 절대 금지
       if (userLanguage != null && userLanguage == 'en') {
-        // 첫 인사말만 특별 처리 (대화 시작을 부드럽게)
-        if (chatHistory.isEmpty || chatHistory.length <= 1) {
-          final specialResponse = _generateSpecialMultilingualResponse(
-            userLanguage,
-            userMessage,
-            completePersona,
-            chatHistory,
-          );
-          
-          if (specialResponse != null) {
-            debugPrint('🌍 Special greeting response generated: $specialResponse');
-            
-            // 다국어 응답도 감정 분석 및 점수 계산
-            final emotion = _analyzeEmotion(specialResponse);
-            final scoreChange = await _calculateScoreChange(
-              emotion: emotion,
-              userMessage: userMessage,
-              persona: completePersona,
-              chatHistory: chatHistory,
-            );
-            
-            return ChatResponse(
-              content: specialResponse,
-              emotion: emotion,
-              scoreChange: scoreChange,
-              metadata: {
-                'isMultilingual': true,
-                'detectedLanguage': userLanguage,
-              },
-            );
-          }
-        }
-        // 영어 입력은 이제 API에서 직접 처리하도록 계속 진행
+        // 영어 입력도 API로 처리
         debugPrint('🌍 English input detected, will be processed by API: $userMessage');
       } else if (userLanguage != null && userLanguage != 'ko') {
-        // 다른 언어는 기존 로직 유지
-        final multilingualResponse = _generateMultilingualResponse(
-          userLanguage,
-          userMessage,
-          completePersona,
-        );
-        
-        if (multilingualResponse != null) {
-          debugPrint('🌍 Multilingual response generated: $multilingualResponse');
-          
-          // 다국어 응답도 감정 분석 및 점수 계산
-          final emotion = _analyzeEmotion(multilingualResponse);
-          final scoreChange = await _calculateScoreChange(
-            emotion: emotion,
-            userMessage: userMessage,
-            persona: completePersona,
-            chatHistory: chatHistory,
-          );
-          
-          return ChatResponse(
-            content: multilingualResponse,
-            emotion: emotion,
-            scoreChange: scoreChange,
-            metadata: {
-              'isMultilingual': true,
-              'detectedLanguage': userLanguage,
-            },
-          );
-        }
+        // ⚠️ 외국어 입력도 OpenAI API로 처리
+        // 하드코딩된 응답 사용 금지
+        debugPrint('🌍 Foreign language detected ($userLanguage), will be processed by API: $userMessage');
+        // API로 처리하도록 계속 진행 (return하지 않음)
       }
       
       // 3단계: 간단한 반응 체크 -> 프롬프트 힌트 생성으로 변경
@@ -2859,53 +2802,11 @@ class ChatOrchestrator {
   }
   
   /// 다국어 입력에 대한 한국어 응답 생성 (영어 제외)
+  /// ⚠️ 하드코딩 제거 - 모든 응답은 OpenAI API를 통해서만 생성
   String? _generateMultilingualResponse(String language, String message, Persona persona) {
-    // 호감도에 따른 반응 차별화
-    final likes = persona.likes;
-    
-    switch (language) {
-      case 'en':
-        // 영어는 이제 _generateSpecialMultilingualResponse에서 처리
-        return null;
-        
-      case 'ja':
-        // 일본어 입력에 대한 한국어 응답 - 인사말만 처리
-        if (message.contains('こんにちは') || message.contains('おはよう')) {
-          return "안녕! 잘 지내! 일본어 할 줄 아는구나?";
-        }
-        // 일반 일본어 메시지도 응답 생성
-        return "일본어로 말하는구나! 무슨 얘기야?ㅎㅎ";
-        
-      case 'zh':
-        // 중국어 입력에 대한 한국어 응답 - 인사말만 처리
-        if (message.contains('你好') || message.contains('您好')) {
-          return "안녕! 잘 지내고 있어~ 중국어로 얘기하는구나ㅎㅎ";
-        }
-        // 일반 중국어 메시지도 응답 생성
-        return "중국어 할 줄 아는구나! 대단해ㅎㅎ";
-        
-      case 'es':
-        // 스페인어 입력에 대한 한국어 응답 - 인사말만 처리
-        if (message.toLowerCase().contains('hola')) {
-          return "안녕! 잘 지내~ 스페인어 멋지다!";
-        }
-        // 일반 스페인어 메시지도 응답 생성
-        return "스페인어로? 와 멋있다!";
-        
-      case 'fr':
-        // 프랑스어 입력에 대한 한국어 응답 - 특별한 경우만 처리
-        if (message.toLowerCase().contains('bonjour') || message.toLowerCase().contains('salut')) {
-          return "안녕! 프랑스어 로맨틱하네ㅎㅎ";
-        } else if (message.toLowerCase().contains("je t'aime")) {
-          return "헉... 나도 좋아해! 근데 갑자기 프랑스어로?ㅎㅎ";
-        }
-        // 일반 프랑스어 메시지도 응답 생성
-        return "프랑스어 로맨틱하다~ 무슨 뜻이야?";
-        
-      default:
-        // 기타 언어도 항상 응답 생성
-        return "외국어로 말하는구나! 신기해ㅎㅎ";
-    }
+    // ⚠️ 하드코딩된 응답 절대 금지
+    // 모든 대화 응답은 OpenAI API를 통해서만 생성되어야 함
+    return null;
   }
   
   // 언어 코드를 언어 이름으로 변환

@@ -352,13 +352,19 @@ class _TextMessageState extends State<_TextMessage> {
                               });
                             },
                             child: AnimatedSize(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeOutCubic,
+                              duration: const Duration(milliseconds: 250),
+                              curve: Curves.easeInOutCubic,
                               alignment: Alignment.topLeft,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
+                              clipBehavior: Clip.none,
+                              child: AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 200),
+                                switchInCurve: Curves.easeIn,
+                                switchOutCurve: Curves.easeOut,
+                                child: Column(
+                                  key: ValueKey(_showTranslation),
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
                                   // 한국어 원문 (토글 상태와 관계없이 항상 일반 스타일)
                                   if (!_showTranslation) ...[
                                     Stack(
@@ -444,6 +450,7 @@ class _TextMessageState extends State<_TextMessage> {
                                     ),
                                   ],
                                 ],
+                                ),
                               ),
                             ),
                           ),

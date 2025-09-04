@@ -83,7 +83,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get allFeaturesRequired => '※ 所有功能均为服务提供所需';
 
   @override
-  String get allPersonas => '所有角色';
+  String get allPersonas => '全部';
 
   @override
   String get allPersonasMatched => '所有角色已匹配！开始与他们聊天吧。';
@@ -623,7 +623,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get fashion => '时尚';
 
   @override
-  String get female => '女';
+  String get female => '女性';
 
   @override
   String get filter => '筛选';
@@ -690,6 +690,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get goToSettings => '前往设置';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled => '谷歌登录已取消。';
@@ -1010,7 +1018,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get makeFriends => '交朋友';
 
   @override
-  String get male => '男';
+  String get male => '男性';
 
   @override
   String get manageBlockedAIs => '管理已屏蔽的AI';
@@ -1329,7 +1337,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personalInfoExposure => '个人信息暴露';
 
   @override
-  String get personality => '个性';
+  String get personality => '性格';
 
   @override
   String get pets => '宠物';
@@ -1707,6 +1715,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get selectProblematicMessage => '选择问题消息（可选）';
+
+  @override
+  String get chatErrorAnalysisInfo => '正在分析最近10条对话。';
+
+  @override
+  String get whatWasAwkward => '哪些地方让您感到不自然？';
+
+  @override
+  String get errorExampleHint => '例如：不自然的说话方式（~喵的语尾）...';
 
   @override
   String get selectReportReason => '选择举报原因';
@@ -2288,4 +2305,155 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get darkThemeName => '深色';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo => '我们将分析所选消息及其翻译。';
+
+  @override
+  String get whatWasWrongWithTranslation => '翻译哪里出错了？';
+
+  @override
+  String get translationErrorHint => '例如：意思错误、表达不自然、上下文错误...';
+
+  @override
+  String get pleaseSelectMessage => '请先选择一条消息';
+
+  @override
+  String get myPersonas => '我的角色';
+
+  @override
+  String get createPersona => '创建角色';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => '性格问题';
+
+  @override
+  String get mbtiComplete => '性格测试完成！';
+
+  @override
+  String get mbtiTest => 'MBTI测试';
+
+  @override
+  String get mbtiStepDescription => '您希望角色拥有什么样的性格？请回答问题来决定角色的性格。';
+
+  @override
+  String get startTest => '开始测试';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => '说话风格';
+
+  @override
+  String get conversationStyle => '对话风格';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription => '批准后，其他用户也可以使用这个角色';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval => 'Will be shared after admin approval';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => 'Persona created successfully!';
+
+  @override
+  String get createFailed => 'Failed to create persona';
+
+  @override
+  String get pendingApproval => '待审核';
+
+  @override
+  String get approved => '已批准';
+
+  @override
+  String get privatePersona => 'Private';
+
+  @override
+  String get noPersonasYet => 'No Personas Yet';
+
+  @override
+  String get createYourFirstPersona =>
+      'Create your first persona and start your journey';
+
+  @override
+  String get deletePersona => '删除角色';
+
+  @override
+  String get deletePersonaConfirm => '确定要删除这个角色吗？';
+
+  @override
+  String get personaDeleted => '角色已删除';
+
+  @override
+  String get deleteFailed => '删除失败';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => '名字';
+
+  @override
+  String get personaAge => '年龄';
+
+  @override
+  String get personaDescription => '介绍';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

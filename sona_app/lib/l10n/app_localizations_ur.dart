@@ -79,7 +79,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'براہ کرم AI کردار کے میچنگ کے لیے اپنی ترجیحات طے کریں';
 
   @override
-  String get all => 'سب';
+  String get all => 'تمام';
 
   @override
   String get allAgree => 'سب سے متفق ہوں';
@@ -725,6 +725,14 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get goToSettings => 'سیٹنگز پر جائیں';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled => 'گوگل لاگ ان منسوخ کر دیا گیا۔';
@@ -1788,6 +1796,15 @@ class AppLocalizationsUr extends AppLocalizations {
   String get selectProblematicMessage => 'مسئلہ دار پیغام منتخب کریں (اختیاری)';
 
   @override
+  String get chatErrorAnalysisInfo => 'آخری 10 گفتگو کا تجزیہ کیا جا رہا ہے۔';
+
+  @override
+  String get whatWasAwkward => 'کیا چیز عجیب لگی؟';
+
+  @override
+  String get errorExampleHint => 'مثال: بولنے کا عجیب انداز (~nya اختتام)...';
+
+  @override
   String get selectReportReason => 'رپورٹ کرنے کی وجہ منتخب کریں';
 
   @override
@@ -2396,4 +2413,160 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get darkThemeName => 'ڈارک';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'ہم منتخب پیغام اور اس کے ترجمے کا تجزیہ کریں گے۔';
+
+  @override
+  String get whatWasWrongWithTranslation => 'ترجمے میں کیا غلط تھا؟';
+
+  @override
+  String get translationErrorHint =>
+      'مثال: غلط معنی، غیر فطری اظہار، غلط سیاق و سباق...';
+
+  @override
+  String get pleaseSelectMessage => 'پہلے ایک پیغام منتخب کریں';
+
+  @override
+  String get myPersonas => 'میرے کردار';
+
+  @override
+  String get createPersona => 'کردار بنائیں';
+
+  @override
+  String get tellUsAboutYourPersona => 'اپنے کردار کے بارے میں بتائیں';
+
+  @override
+  String get enterPersonaName => 'کردار کا نام درج کریں';
+
+  @override
+  String get describeYourPersona => 'اپنے کردار کا مختصر بیان کریں';
+
+  @override
+  String get profileImage => 'پروفائل تصویر';
+
+  @override
+  String get uploadPersonaImages => 'اپنے کردار کے لیے تصاویر اپ لوڈ کریں';
+
+  @override
+  String get mainImage => 'اصل تصویر';
+
+  @override
+  String get tapToUpload => 'اپ لوڈ کرنے کے لیے ٹیپ کریں';
+
+  @override
+  String get additionalImages => 'اضافی تصاویر';
+
+  @override
+  String get addImage => 'تصویر شامل کریں';
+
+  @override
+  String get mbtiQuestion => 'شخصیت کا سوال';
+
+  @override
+  String get mbtiComplete => 'شخصیت کا ٹیسٹ مکمل!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'شخصیت کی ترتیبات';
+
+  @override
+  String get speechStyle => 'بات چیت کا انداز';
+
+  @override
+  String get conversationStyle => 'گفتگو کا انداز';
+
+  @override
+  String get shareWithCommunity => 'کمیونٹی کے ساتھ شیئر کریں';
+
+  @override
+  String get shareDescription =>
+      'آپ کا کردار منظوری کے بعد دوسرے صارفین کے ساتھ شیئر ہوگا';
+
+  @override
+  String get sharePersona => 'کردار شیئر کریں';
+
+  @override
+  String get willBeSharedAfterApproval => 'ایڈمن کی منظوری کے بعد شیئر ہوگا';
+
+  @override
+  String get privatePersonaDescription => 'صرف آپ اس کردار کو دیکھ سکتے ہیں';
+
+  @override
+  String get create => 'بنائیں';
+
+  @override
+  String get personaCreated => 'کردار کامیابی سے بنایا گیا!';
+
+  @override
+  String get createFailed => 'کردار بنانے میں ناکامی';
+
+  @override
+  String get pendingApproval => 'منظوری کا انتظار';
+
+  @override
+  String get approved => 'منظور شدہ';
+
+  @override
+  String get privatePersona => 'نجی';
+
+  @override
+  String get noPersonasYet => 'ابھی کوئی کردار نہیں';
+
+  @override
+  String get createYourFirstPersona =>
+      'اپنا پہلا کردار بنائیں اور اپنا سفر شروع کریں';
+
+  @override
+  String get deletePersona => 'کردار ڈیلیٹ کریں';
+
+  @override
+  String get deletePersonaConfirm =>
+      'کیا آپ واقعی اس کردار کو ڈیلیٹ کرنا چاہتے ہیں؟';
+
+  @override
+  String get personaDeleted => 'کردار کامیابی سے ڈیلیٹ ہوگیا';
+
+  @override
+  String get deleteFailed => 'ڈیلیٹ کرنے میں ناکامی';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

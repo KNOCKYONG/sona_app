@@ -13,6 +13,7 @@ import '../services/chat/core/chat_service.dart';
 import '../services/purchase/purchase_service.dart';
 import '../services/ui/haptic_service.dart';
 import 'matched_personas_screen.dart';
+import 'my_personas_screen.dart';
 import 'profile_edit_screen.dart';
 import '../l10n/app_localizations.dart';
 import '../utils/localization_helper.dart';
@@ -388,6 +389,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           builder: (context) => const MatchedPersonasScreen(),
                         ),
                       );
+                    },
+                  ),
+                  _buildMenuItem(
+                    icon: Icons.person_add,
+                    title: AppLocalizations.of(context)!.myPersonas,
+                    subtitle: AppLocalizations.of(context)!.createYourFirstPersona,
+                    onTap: () async {
+                      // Check if user is guest
+                      final userService = Provider.of<UserService>(context, listen: false);
+                      final isGuest = await userService.isGuestUser;
+                      
+                      if (isGuest) {
+                        // Show login required dialog for guest users
+                        final shouldNavigate = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(AppLocalizations.of(context)!.loginRequiredTitle),
+                            content: Text(AppLocalizations.of(context)!.loginRequiredContent),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: Text(AppLocalizations.of(context)!.cancel),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: Text(AppLocalizations.of(context)!.loginButton),
+                              ),
+                            ],
+                          ),
+                        );
+                        
+                        // Navigate to login screen if user confirmed
+                        if (shouldNavigate == true && mounted) {
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/login',
+                            (route) => false,
+                          );
+                        }
+                      } else {
+                        // Regular users can create personas
+                        await HapticService.selectionClick();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyPersonasScreen(),
+                          ),
+                        );
+                      }
                     },
                   ),
                   _buildMenuItem(

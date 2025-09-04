@@ -22,6 +22,14 @@ class Persona {
   // R2 이미지 유효성 캐싱 필드
   final bool? hasValidR2Image; // Firebase에 저장된 R2 이미지 유효성
 
+  // 사용자 생성 페르소나 필드
+  final String? createdBy; // 생성자 userId
+  final bool isCustom; // 커스텀 페르소나 여부
+  final bool isShare; // 공유 의사 (다른 사용자에게 공개)
+  final bool isConfirm; // 관리자 승인 상태
+  final DateTime? confirmedAt; // 승인 일시
+  final String? reviewedBy; // 승인한 관리자 ID
+
   Persona({
     required this.id,
     required this.name,
@@ -39,7 +47,16 @@ class Persona {
     this.topics, // 주제들
     this.keywords, // 키워드들
     this.hasValidR2Image, // R2 이미지 유효성
+    this.createdBy, // 생성자
+    this.isCustom = false, // 기본값: 시스템 페르소나
+    this.isShare = false, // 기본값: 공유 안함
+    this.isConfirm = false, // 기본값: 미승인
+    this.confirmedAt, // 승인 일시
+    this.reviewedBy, // 승인자
   }) : createdAt = createdAt ?? DateTime.now();
+
+  // 공유 가능 여부 확인
+  bool get isPubliclyAvailable => isCustom && isShare && isConfirm;
 
   // 관계 상태 확인 메서드
 
@@ -232,6 +249,13 @@ class Persona {
       'hasValidR2Image': hasValidR2Image,
       // Store matchedAt as Timestamp for Firebase or ISO string for local storage
       if (matchedAt != null) 'matchedAt': matchedAt!.toIso8601String(),
+      // 사용자 생성 페르소나 필드
+      'createdBy': createdBy,
+      'isCustom': isCustom,
+      'isShare': isShare,
+      'isConfirm': isConfirm,
+      if (confirmedAt != null) 'confirmedAt': confirmedAt!.toIso8601String(),
+      'reviewedBy': reviewedBy,
     };
   }
 
@@ -297,6 +321,15 @@ class Persona {
           json['keywords'] != null ? List<String>.from(json['keywords']) : null,
       matchedAt: _parseMatchedAt(json['matchedAt']),
       hasValidR2Image: json['hasValidR2Image'] ?? null,
+      // 사용자 생성 페르소나 필드
+      createdBy: json['createdBy'],
+      isCustom: json['isCustom'] ?? false,
+      isShare: json['isShare'] ?? false,
+      isConfirm: json['isConfirm'] ?? false,
+      confirmedAt: json['confirmedAt'] != null 
+          ? DateTime.parse(json['confirmedAt']) 
+          : null,
+      reviewedBy: json['reviewedBy'],
     );
   }
 
@@ -315,6 +348,12 @@ class Persona {
     List<String>? keywords,
     DateTime? matchedAt,
     bool? hasValidR2Image,
+    String? createdBy,
+    bool? isCustom,
+    bool? isShare,
+    bool? isConfirm,
+    DateTime? confirmedAt,
+    String? reviewedBy,
   }) {
     return Persona(
       id: id,
@@ -333,6 +372,12 @@ class Persona {
       topics: topics ?? this.topics,
       keywords: keywords ?? this.keywords,
       hasValidR2Image: hasValidR2Image ?? this.hasValidR2Image,
+      createdBy: createdBy ?? this.createdBy,
+      isCustom: isCustom ?? this.isCustom,
+      isShare: isShare ?? this.isShare,
+      isConfirm: isConfirm ?? this.isConfirm,
+      confirmedAt: confirmedAt ?? this.confirmedAt,
+      reviewedBy: reviewedBy ?? this.reviewedBy,
     );
   }
 }

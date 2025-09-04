@@ -3122,5 +3122,185 @@
   "darkThemeName": "Tối",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Đang phân tích 10 cuộc trò chuyện gần nhất.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Giải thích việc phân tích các cuộc trò chuyện gần đây trong hộp thoại báo lỗi trò chuyện"
+  },
+  "whatWasAwkward": "Điều gì khiến bạn thấy không tự nhiên?",
+  "@whatWasAwkward": {
+    "description": "Nhãn hỏi người dùng về phần không tự nhiên"
+  },
+  "errorExampleHint": "Ví dụ: Cách nói chuyện không tự nhiên (đuôi ~nya)...",
+  "@errorExampleHint": {
+    "description": "Văn bản gợi ý cho trường nhập mô tả lỗi"
+  },
+  "translationErrorAnalysisInfo": "Chúng tôi sẽ phân tích tin nhắn và bản dịch đã chọn.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Bản dịch có vấn đề gì?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Ví dụ: Ý nghĩa sai, cách diễn đạt không tự nhiên, ngữ cảnh sai...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Vui lòng chọn tin nhắn trước",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Persona Của Tôi",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Tạo Persona",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Thông Tin Cơ Bản",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Hãy cho chúng tôi biết về persona của bạn",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Nhập tên persona",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Khác",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Mô tả ngắn gọn persona của bạn",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Ảnh Đại Diện",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Tải lên hình ảnh cho persona của bạn",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Ảnh Chính",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Chạm để tải lên",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Ảnh Bổ Sung",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Thêm Ảnh",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Câu Hỏi Tính Cách",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Bài Kiểm Tra Tính Cách Hoàn Thành!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Cài Đặt Tính Cách",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Phong Cách Nói",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Phong Cách Đối Thoại",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Sở Thích",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Chia Sẻ Với Cộng Đồng",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Persona của bạn sẽ được chia sẻ với người dùng khác sau khi được phê duyệt",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Chia Sẻ Persona",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Sẽ được chia sẻ sau khi quản trị viên phê duyệt",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Chỉ bạn mới có thể nhìn thấy persona này",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Trước",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Tạo",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Tạo persona thành công!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Tạo persona thất bại",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Tất Cả",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Chờ Phê Duyệt",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Đã Phê Duyệt",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Riêng Tư",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Chưa Có Persona",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Tạo persona đầu tiên của bạn và bắt đầu hành trình",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Xóa Persona",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Bạn có chắc chắn muốn xóa persona này không?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Xóa persona thành công",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Xóa thất bại",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

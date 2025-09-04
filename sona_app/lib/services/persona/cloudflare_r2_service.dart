@@ -13,6 +13,9 @@ class CloudflareR2Service {
       dotenv.env['R2_BUCKET_NAME'] ?? 'sona-personas';
   static String get publicUrl => dotenv.env['R2_PUBLIC_URL'] ?? '';
   static String get accountId => dotenv.env['CLOUDFLARE_ACCOUNT_ID'] ?? '';
+  static String get apiToken => dotenv.env['CLOUDFLARE_API_TOKEN'] ?? '';
+  static String get accessKeyId => dotenv.env['R2_ACCESS_KEY_ID'] ?? '';
+  static String get secretAccessKey => dotenv.env['R2_SECRET_ACCESS_KEY'] ?? '';
 
   // 이미지 URL 구조
   // https://pub-{hash}.r2.dev/{bucket}/personas/{personaId}/{size}.webp
@@ -43,10 +46,14 @@ class CloudflareR2Service {
 
         final path = 'personas/$personaId/main_${size.suffix}.jpg';
 
-        // TODO: MCP를 통한 실제 업로드
-        // 현재는 가상의 URL 생성
-        final url = _generatePublicUrl(path);
-        mainUrls[size] = url;
+        // R2 API를 통한 업로드
+        final uploadSuccess = await uploadToR2(path, imageData);
+        if (uploadSuccess) {
+          final url = generatePublicUrl(path);
+          mainUrls[size] = url;
+        } else {
+          debugPrint('❌ Failed to upload main image ${size.suffix}');
+        }
 
         debugPrint(
             '📤 Uploaded main ${size.suffix}: ${ImageOptimizationService.formatBytes(mainOptimized.fileSizes[size]!)}');
@@ -70,8 +77,13 @@ class CloudflareR2Service {
 
             final path = 'personas/$personaId/sub${i}_${size.suffix}.jpg';
 
-            // TODO: MCP를 통한 실제 업로드
-            final url = _generatePublicUrl(path);
+            // R2 API를 통한 업로드
+            final uploadSuccess = await uploadToR2(path, imageData);
+            if (!uploadSuccess) {
+              debugPrint('❌ Failed to upload additional image $i ${size.suffix}');
+              continue;
+            }
+            final url = generatePublicUrl(path);
             urls[size] = url;
           }
 
@@ -97,11 +109,11 @@ class CloudflareR2Service {
       {bool isMain = true, int? index}) {
     final prefix = isMain ? 'main' : 'sub$index';
     final path = 'personas/$personaId/${prefix}_${size.suffix}.jpg';
-    return _generatePublicUrl(path);
+    return generatePublicUrl(path);
   }
 
   /// Public URL 생성
-  static String _generatePublicUrl(String path) {
+  static String generatePublicUrl(String path) {
     // 실제 R2 Public URL 형식
     // 예: https://pub-abc123.r2.dev/sona-personas/personas/...
     if (publicUrl.isNotEmpty) {
@@ -148,6 +160,40 @@ class CloudflareR2Service {
       return true;
     } catch (e) {
       debugPrint('❌ Error deleting persona images: $e');
+      return false;
+    }
+  }
+
+  /// R2에 실제 파일 업로드 (Workers API 사용)
+  static Future<bool> uploadToR2(String path, Uint8List data) async {
+    try {
+      // Cloudflare Workers API 엔드포인트
+      // 실제로는 Workers를 통한 프록시 API를 만들어야 함
+      final workersUrl = dotenv.env['CLOUDFLARE_WORKERS_UPLOAD_URL'] ?? 
+                         'https://r2-upload.your-domain.workers.dev';
+      
+      final request = http.MultipartRequest('POST', Uri.parse(workersUrl))
+        ..headers['Authorization'] = 'Bearer ${dotenv.env['WORKERS_API_KEY'] ?? ''}'
+        ..fields['path'] = path
+        ..fields['bucket'] = bucketName
+        ..files.add(http.MultipartFile.fromBytes(
+          'file',
+          data,
+          filename: path.split('/').last,
+        ));
+
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      
+      if (response.statusCode == 200) {
+        debugPrint('✅ Successfully uploaded to R2: $path');
+        return true;
+      } else {
+        debugPrint('❌ R2 upload failed: $responseBody');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('❌ Error uploading to R2: $e');
       return false;
     }
   }

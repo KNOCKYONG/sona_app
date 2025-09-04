@@ -3122,5 +3122,217 @@
   "darkThemeName": "深色",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "正在分析最近10条对话。",
+  "@chatErrorAnalysisInfo": {
+    "description": "聊天错误报告对话框中说明正在分析最近的对话"
+  },
+  "whatWasAwkward": "哪些地方让您感到不自然？",
+  "@whatWasAwkward": {
+    "description": "询问用户感到不自然部分的标签"
+  },
+  "errorExampleHint": "例如：不自然的说话方式（~喵的语尾）...",
+  "@errorExampleHint": {
+    "description": "错误说明输入字段的提示文本"
+  },
+  "translationErrorAnalysisInfo": "我们将分析所选消息及其翻译。",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "翻译哪里出错了？",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "例如：意思错误、表达不自然、上下文错误...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "请先选择一条消息",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "我的角色",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "创建角色",
+  "@createPersona": {
+    "description": "Create persona button"
+  },
+  "personaName": "名字",
+  "@personaName": {
+    "description": "Persona name label"
+  },
+  "personaAge": "年龄",
+  "@personaAge": {
+    "description": "Persona age label"
+  },
+  "personaGender": "性别",
+  "@personaGender": {
+    "description": "Persona gender label"
+  },
+  "personaDescription": "介绍",
+  "@personaDescription": {
+    "description": "Persona description label"
+  },
+  "male": "男性",
+  "@male": {
+    "description": "Male gender option"
+  },
+  "female": "女性",
+  "@female": {
+    "description": "Female gender option"
+  },
+  "other": "其他",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "selectGender": "选择性别",
+  "@selectGender": {
+    "description": "Select gender prompt"
+  },
+  "basicInfo": "基本信息",
+  "@basicInfo": {
+    "description": "Basic info step"
+  },
+  "photos": "照片",
+  "@photos": {
+    "description": "Photos step"
+  },
+  "mbtiTest": "MBTI测试",
+  "@mbtiTest": {
+    "description": "MBTI test step"
+  },
+  "mbtiQuestion": "性格问题",
+  "@mbtiQuestion": {
+    "description": "MBTI question label"
+  },
+  "mbtiComplete": "性格测试完成！",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "mbtiStepDescription": "您希望角色拥有什么样的性格？请回答问题来决定角色的性格。",
+  "@mbtiStepDescription": {
+    "description": "Description explaining that MBTI is for the persona's personality, not the user's"
+  },
+  "startTest": "开始测试",
+  "@startTest": {
+    "description": "Button text to start the MBTI test"
+  },
+  "personality": "性格",
+  "@personality": {
+    "description": "Personality step"
+  },
+  "speechStyle": "说话风格",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "shareSettings": "分享设置",
+  "@shareSettings": {
+    "description": "Share settings step"
+  },
+  "mainPhoto": "主照片",
+  "@mainPhoto": {
+    "description": "Main photo label"
+  },
+  "additionalPhotos": "其他照片",
+  "@additionalPhotos": {
+    "description": "Additional photos label"
+  },
+  "friendly": "友善",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "礼貌",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "时尚",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "活泼",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "对话风格",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "健谈",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "安静",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "共情",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "逻辑",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "兴趣",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithOthers": "与其他用户分享",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "shareDescription": "批准后，其他用户也可以使用这个角色",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "creating": "创建中...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "uploadingImages": "上传图片中...",
+  "@uploadingImages": {
+    "description": "Uploading images status"
+  },
+  "allPersonas": "全部",
+  "@allPersonas": {
+    "description": "All personas tab"
+  },
+  "pendingApproval": "待审核",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "已批准",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "noPersonasFound": "没有角色",
+  "@noPersonasFound": {
+    "description": "No personas found message"
+  },
+  "edit": "编辑",
+  "@edit": {
+    "description": "Edit action"
+  },
+  "delete": "删除",
+  "@delete": {
+    "description": "Delete action"
+  },
+  "deletePersona": "删除角色",
+  "@deletePersona": {
+    "description": "Delete persona title"
+  },
+  "deletePersonaConfirm": "确定要删除这个角色吗？",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation"
+  },
+  "personaDeleted": "角色已删除",
+  "@personaDeleted": {
+    "description": "Persona deleted message"
+  },
+  "deleteFailed": "删除失败",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

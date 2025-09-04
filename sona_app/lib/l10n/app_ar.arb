@@ -3122,5 +3122,185 @@
   "darkThemeName": "داكن",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "جاري تحليل آخر 10 محادثات.",
+  "@chatErrorAnalysisInfo": {
+    "description": "يوضح تحليل المحادثات الأخيرة في مربع حوار تقرير خطأ الدردشة"
+  },
+  "whatWasAwkward": "ما الذي بدا غريباً؟",
+  "@whatWasAwkward": {
+    "description": "تسمية تسأل المستخدم عن الجزء الغريب"
+  },
+  "errorExampleHint": "مثال: طريقة كلام غريبة (نهايات ~nya)...",
+  "@errorExampleHint": {
+    "description": "نص تلميح لحقل إدخال وصف الخطأ"
+  },
+  "translationErrorAnalysisInfo": "سنقوم بتحليل الرسالة المختارة وترجمتها.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "ما الخطأ في الترجمة؟",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "مثال: معنى خاطئ، تعبير غير طبيعي، سياق خاطئ...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "الرجاء اختيار رسالة أولاً",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "شخصياتي",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "إنشاء شخصية",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "المعلومات الأساسية",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "أخبرنا عن شخصيتك",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "أدخل اسم الشخصية",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "آخر",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "اوصف شخصيتك بإيجاز",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "صورة الملف الشخصي",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "ارفع صوراً لشخصيتك",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "الصورة الرئيسية",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "اضغط للرفع",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "صور إضافية",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "إضافة صورة",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "سؤال الشخصية",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "اكتمل اختبار الشخصية!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "إعدادات الشخصية",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "أسلوب الكلام",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "أسلوب المحادثة",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "الاهتمامات",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "مشاركة مع المجتمع",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "ستتم مشاركة شخصيتك مع المستخدمين الآخرين بعد الموافقة",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "مشاركة الشخصية",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "ستتم المشاركة بعد موافقة المشرف",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "يمكنك فقط رؤية هذه الشخصية",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "السابق",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "إنشاء",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "تم إنشاء الشخصية بنجاح!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "فشل في إنشاء الشخصية",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "الكل",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "في انتظار الموافقة",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "موافق عليها",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "خاصة",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "لا توجد شخصيات بعد",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "أنشئ شخصيتك الأولى وابدأ رحلتك",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "حذف الشخصية",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "هل أنت متأكد من أنك تريد حذف هذه الشخصية؟",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "تم حذف الشخصية بنجاح",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "فشل في الحذف",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

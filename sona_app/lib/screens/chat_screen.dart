@@ -25,6 +25,7 @@ import '../widgets/common/heart_usage_dialog.dart';
 import '../theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../core/constants.dart';
+import '../core/preferences_manager.dart';
 
 /// Optimized ChatScreen with performance improvements:
 /// - Uses ListView.builder for efficient message list
@@ -54,6 +55,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   // Track welcome messages per persona to prevent repetition
   final Map<String, bool> _hasShownWelcomePerPersona = {};
   // _showMoreMenu 제거됨 - PopupMenuButton으로 대체
+  bool _alwaysShowTranslation = false; // 번역 항상 표시 설정
   
   // Reply functionality
   Message? _replyingToMessage;
@@ -83,9 +85,20 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     _setupScrollListener();
     _setupKeyboardListener();
+    // Load translation preference
+    _loadTranslationPreference();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeChat();
     });
+  }
+  
+  Future<void> _loadTranslationPreference() async {
+    final alwaysShow = await PreferencesManager.getBool('always_show_translation') ?? false;
+    if (mounted) {
+      setState(() {
+        _alwaysShowTranslation = alwaysShow;
+      });
+    }
   }
 
   bool _isLoadingMore = false;
@@ -1086,6 +1099,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                     SwipeableMessageBubble(
                                       key: ValueKey(message.id),
                                       message: message,
+                                      alwaysShowTranslation: _alwaysShowTranslation,
                                       onScoreChange: () {
                                         // Handle score change if needed
                                       },
@@ -1503,15 +1517,19 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         '🔍 currentPersona: ${currentPersona?.id} - ${currentPersona?.name}');
 
     if (userId.isNotEmpty && currentPersona != null) {
-      // Show error description dialog
+      // Get last 10 messages instead of 3
       final messages = chatService.getMessages(currentPersona.id);
-      final recentMessages = messages.length > 3
-          ? messages.sublist(messages.length - 3)
+      final recentMessages = messages.length > 10
+          ? messages.sublist(messages.length - 10)
           : messages;
       
-      String? errorDescription;
-      String? problemMessage;
+      // Directly send error report without dialog
+      // 다이얼로그 없이 바로 전송
+      String? errorDescription = 'User reported chat error';
+      String? problemMessage = null;
       
+      // Skip dialog and directly send report
+      /*
       final result = await showDialog<Map<String, String>>(
         context: context,
         builder: (context) {
@@ -1527,6 +1545,31 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // 설명 추가
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.info_outline, color: Colors.blue[700], size: 20),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                AppLocalizations.of(context)!.chatErrorAnalysisInfo,
+                                style: TextStyle(
+                                  color: Colors.blue[700],
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
                       Text(
                         AppLocalizations.of(context)!.selectProblematicMessage,
                         style: const TextStyle(fontWeight: FontWeight.bold),
@@ -1590,13 +1633,13 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        AppLocalizations.of(context)!.describeError,
+                        AppLocalizations.of(context)!.whatWasAwkward,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       TextField(
                         decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)!.errorDescriptionHint,
+                          hintText: AppLocalizations.of(context)!.errorExampleHint,
                           border: const OutlineInputBorder(),
                         ),
                         maxLines: 3,
@@ -1631,10 +1674,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       if (result != null) {
         errorDescription = result['description'];
         problemMessage = result['message'];
+      }
+      */
         
-        debugPrint('🔍 Conditions met, showing loading dialog');
-        debugPrint('🔍 Error description: $errorDescription');
-        debugPrint('🔍 Problem message: $problemMessage');
+        debugPrint('🔍 Sending error report directly with 10 messages');
+        debugPrint('🔍 Messages count: ${recentMessages.length}');
 
         // Store context before async operation
         final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -1692,7 +1736,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             ),
           );
         }
-      }
+      // Closing brace for the main if condition
     } else {
       debugPrint(
           '🔍 Conditions not met - userId: $userId, currentPersona: $currentPersona');
@@ -1929,88 +1973,161 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       }
 
       // Show dialog to select which message has translation error
-      final selectedMessage = await showDialog<Message>(
+      Message? selectedMessage;
+      String userDescription = '';
+      
+      final result = await showDialog<Map<String, dynamic>>(
         context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Row(
-            children: [
-              const Icon(Icons.translate, color: Color(0xFFFF6B9D)),
-              const SizedBox(width: 8),
-              Text(AppLocalizations.of(context)!.translationError),
-            ],
-          ),
-          content: SizedBox(
-            width: double.maxFinite,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
+        builder: (dialogContext) {
+          final descriptionController = TextEditingController();
+          return AlertDialog(
+            title: Row(
               children: [
-                Text(
-                  AppLocalizations.of(context)!.selectTranslationError,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-                const SizedBox(height: 16),
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: translatedMessages.length
-                        .clamp(0, 5), // Show max 5 recent translated messages
-                    itemBuilder: (context, index) {
-                      final msg = translatedMessages[index];
-                      return Card(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        child: InkWell(
-                          onTap: () => Navigator.of(dialogContext).pop(msg),
-                          borderRadius: BorderRadius.circular(8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${currentPersona.name}: ${msg.content}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Icon(Icons.translate,
-                                        size: 14, color: Colors.grey[600]),
-                                    const SizedBox(width: 4),
-                                    Expanded(
-                                      child: Text(
-                                        msg.translatedContent ?? '',
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey[700]),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                const Icon(Icons.translate, color: Color(0xFFFF6B9D)),
+                const SizedBox(width: 8),
+                Text(AppLocalizations.of(context)!.translationError),
+              ],
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 설명 추가
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info_outline, size: 16, color: Colors.blue[700]),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            AppLocalizations.of(context)!.translationErrorAnalysisInfo,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.blue[700],
                             ),
                           ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 12),
+                  Text(
+                    AppLocalizations.of(context)!.selectTranslationError,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 12),
+                  Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: translatedMessages.length
+                          .clamp(0, 5), // Show max 5 recent translated messages
+                      itemBuilder: (context, index) {
+                        final msg = translatedMessages[index];
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 8),
+                          child: InkWell(
+                            onTap: () {
+                              selectedMessage = msg;
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${currentPersona.name}: ${msg.content}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.translate,
+                                          size: 14, color: Colors.grey[600]),
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        child: Text(
+                                          msg.translatedContent ?? '',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: Colors.grey[700]),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  // 사용자 설명 입력 필드
+                  Text(
+                    AppLocalizations.of(context)!.whatWasWrongWithTranslation,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: descriptionController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.translationErrorHint,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      contentPadding: const EdgeInsets.all(12),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: Text(AppLocalizations.of(context)!.cancel),
-            ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: Text(AppLocalizations.of(context)!.cancel),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (selectedMessage != null) {
+                    Navigator.of(dialogContext).pop({
+                      'message': selectedMessage,
+                      'description': descriptionController.text,
+                    });
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.pleaseSelectMessage),
+                        backgroundColor: Colors.orange,
+                      ),
+                    );
+                  }
+                },
+                child: Text(AppLocalizations.of(context)!.reportErrorButton),
+              ),
+            ],
+          );
+        },
       );
+
+      if (result != null && result['message'] != null) {
+        selectedMessage = result['message'] as Message;
+        userDescription = result['description'] as String? ?? '';
+      }
 
       if (selectedMessage != null) {
         // Show loading
@@ -2028,11 +2145,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             'userId': userId,
             'personaId': currentPersona.id,
             'personaName': currentPersona.name,
-            'messageId': selectedMessage.id,
-            'originalContent': selectedMessage.content,
-            'translatedContent': selectedMessage.translatedContent,
-            'targetLanguage': selectedMessage.targetLanguage,
+            'messageId': selectedMessage?.id ?? '',
+            'originalContent': selectedMessage?.content ?? '',
+            'translatedContent': selectedMessage?.translatedContent ?? '',
+            'targetLanguage': selectedMessage?.targetLanguage ?? '',
             'userLanguage': currentUser?.preferredLanguage ?? 'ko',
+            'userDescription': userDescription, // 사용자가 입력한 설명 추가
             'timestamp': DateTime.now().toIso8601String(),
             'errorType': 'translation',
           };
@@ -2381,6 +2499,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   await _handleRestartChat();
                 } else if (value == 'leave_chat') {
                   await _handleLeaveChat();
+                } else if (value == 'translation_toggle') {
+                  setState(() {
+                    _alwaysShowTranslation = !_alwaysShowTranslation;
+                  });
+                  // Save preference
+                  await PreferencesManager.setBool('always_show_translation', _alwaysShowTranslation);
                 }
               },
               itemBuilder: (BuildContext context) {
@@ -2443,6 +2567,30 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         const SizedBox(width: 12),
                         Text(
                           AppLocalizations.of(context)!.translationError,
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuDivider(),
+                  // 번역 항상 표시 토글
+                  PopupMenuItem<String>(
+                    value: 'translation_toggle',
+                    child: Row(
+                      children: [
+                        Icon(
+                          _alwaysShowTranslation ? Icons.translate : Icons.translate_outlined,
+                          color: _alwaysShowTranslation ? Colors.blue : Theme.of(context).textTheme.bodyLarge?.color,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 12),
+                        Text(
+                          _alwaysShowTranslation 
+                              ? AppLocalizations.of(context)!.alwaysShowTranslationOff
+                              : AppLocalizations.of(context)!.alwaysShowTranslationOn,
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge?.color,
                             fontWeight: FontWeight.w500,

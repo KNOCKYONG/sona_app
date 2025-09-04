@@ -92,7 +92,7 @@ class AppLocalizationsFr extends AppLocalizations {
       '※ Toutes les fonctionnalités sont requises pour la fourniture du service';
 
   @override
-  String get allPersonas => 'Tous les personas';
+  String get allPersonas => 'Tous les Personas';
 
   @override
   String get allPersonasMatched =>
@@ -160,7 +160,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get backButton => 'Retour';
 
   @override
-  String get basicInfo => 'Informations de base';
+  String get basicInfo => 'Informations de Base';
 
   @override
   String get basicInfoDescription =>
@@ -737,6 +737,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get goToSettings => 'Aller aux paramètres';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled =>
@@ -1405,7 +1413,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get personalInfoExposure => 'Exposition d\'informations personnelles';
 
   @override
-  String get personality => 'Personnalité';
+  String get personality => 'Paramètres de Personnalité';
 
   @override
   String get pets => 'Animaux de compagnie';
@@ -1795,8 +1803,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get selectGender => 'Veuillez sélectionner un genre';
 
   @override
-  String get selectInterests =>
-      'Veuillez sélectionner vos intérêts (au moins 1)';
+  String get selectInterests => 'Sélectionnez vos intérêts';
 
   @override
   String get selectLanguage => 'Sélectionner une langue';
@@ -1814,6 +1821,16 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get selectProblematicMessage =>
       'Sélectionner le message problématique (optionnel)';
+
+  @override
+  String get chatErrorAnalysisInfo => 'Analyse des 10 dernières conversations.';
+
+  @override
+  String get whatWasAwkward => 'Qu\'est-ce qui vous a semblé étrange ?';
+
+  @override
+  String get errorExampleHint =>
+      'Ex : Façon de parler étrange (terminaisons ~nya)...';
 
   @override
   String get selectReportReason => 'Sélectionner le motif du rapport';
@@ -2436,4 +2453,162 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Sombre';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Nous analyserons le message sélectionné et sa traduction.';
+
+  @override
+  String get whatWasWrongWithTranslation =>
+      'Qu\'est-ce qui n\'allait pas avec la traduction ?';
+
+  @override
+  String get translationErrorHint =>
+      'Ex : Sens incorrect, expression non naturelle, contexte erroné...';
+
+  @override
+  String get pleaseSelectMessage => 'Veuillez d\'abord sélectionner un message';
+
+  @override
+  String get myPersonas => 'Mes Personas';
+
+  @override
+  String get createPersona => 'Créer un Persona';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => 'Personality Question';
+
+  @override
+  String get mbtiComplete => 'Personality Test Complete!';
+
+  @override
+  String get mbtiTest => 'Test MBTI';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => 'Style de Parole';
+
+  @override
+  String get conversationStyle => 'Style de Conversation';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription =>
+      'Your persona can be shared with other users after approval';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Sera partagé après approbation de l\'administrateur';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => 'Persona créé avec succès';
+
+  @override
+  String get createFailed => 'Échec de la création';
+
+  @override
+  String get pendingApproval => 'En Attente d\'Approbation';
+
+  @override
+  String get approved => 'Approuvé';
+
+  @override
+  String get privatePersona => 'Private';
+
+  @override
+  String get noPersonasYet => 'No Personas Yet';
+
+  @override
+  String get createYourFirstPersona =>
+      'Create your first persona and start your journey';
+
+  @override
+  String get deletePersona => 'Supprimer le Persona';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Êtes-vous sûr de vouloir supprimer ce persona ? Cette action ne peut pas être annulée.';
+
+  @override
+  String get personaDeleted => 'Persona supprimé avec succès';
+
+  @override
+  String get deleteFailed => 'Échec de la suppression';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Nom du Persona';
+
+  @override
+  String get personaAge => 'Âge';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Ex : Emma, Lucas';
+
+  @override
+  String get personaDescriptionHint => 'Décrivez brièvement votre persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

@@ -274,11 +274,13 @@ class ChatOrchestrator {
   }) async {
     try {
       // 0단계: 우선순위 기반 언어 감지
-      debugPrint('🔍 Checking language for message: "$userMessage"');
-      debugPrint('🌐 System language: $systemLanguage, App language: $appLanguage');
+      // OpenAI가 직접 언어를 감지하도록 변경 (21개 언어 자동 감지)
+      debugPrint('🌍 OpenAI will auto-detect language from: "$userMessage"');
+      debugPrint('🌐 System info - System: $systemLanguage, App: $appLanguage');
       
-      if (userLanguage == null) {
-        // 우선순위 기반 언어 감지 사용
+      // 클라이언트 언어 감지는 비활성화 (OpenAI가 담당)
+      // targetLanguage는 null로 유지하여 OpenAI가 자유롭게 언어를 감지하도록 함
+      if (false) { // 비활성화됨
         final languageService = LanguageDetectionService();
         final detectedLang = languageService.detectLanguageWithPriority(
           userMessage,
@@ -289,9 +291,7 @@ class ChatOrchestrator {
         if (detectedLang != 'ko') {
           userLanguage = detectedLang;
           debugPrint(
-              '🌍 Language detected: $detectedLang (${_getLanguageName(detectedLang)})');
-        } else {
-          debugPrint('🔍 Korean detected or using Korean as default');
+              '🌍 Client detected: $detectedLang (${_getLanguageName(detectedLang)})');
         }
       }
 
@@ -849,6 +849,7 @@ class ChatOrchestrator {
           isCasualSpeech: true,
           contextHint: finalContextHint,
           targetLanguage: userLanguage,
+          systemLanguage: systemLanguage,  // 시스템 언어 전달
         );
       }
 
@@ -980,19 +981,10 @@ class ChatOrchestrator {
           targetLanguage: userLanguage ?? 'en',
         );
         
-        // 각 번역 메시지에 의문문 처리 추가
-        final lang = userLanguage;
-        if (lang != null) {
-          translatedContents = translatedContents.map((content) => 
-            _processQuestionMarksForTranslation(content, lang)
-          ).toList();
-        }
+        // 구두점 처리 제거 - 번역 그대로 사용
+        // 번역 API가 이미 적절한 구두점을 포함하므로 강제 추가 불필요
       } else if (translatedContent != null) {
-        // 단일 메시지에도 의문문 처리 적용
-        final lang = userLanguage;
-        if (lang != null) {
-          translatedContent = _processQuestionMarksForTranslation(translatedContent, lang);
-        }
+        // 단일 메시지 그대로 사용
         translatedContents = [translatedContent];
       }
 
@@ -1664,10 +1656,8 @@ class ChatOrchestrator {
           }
         }
         
-        // 구두점 동기화: 한글의 구두점을 영어 번역에도 맞춤
-        if (result['korean'] != null && result['translated'] != null) {
-          result['translated'] = _synchronizePunctuation(result['korean']!, result['translated']!);
-        }
+        // 구두점 동기화 제거 - 번역 그대로 사용
+        // 번역 API가 이미 적절한 구두점을 포함
         
         debugPrint('✅ Successfully parsed with index method:');
         debugPrint('   Korean: ${result['korean']}');
@@ -1818,13 +1808,10 @@ class ChatOrchestrator {
       }
     }
     
-    // 3. 구두점 동기화
-    result = _synchronizePunctuation(processedKorean, result);
+    // 3. 구두점 처리 제거 - 번역 그대로 사용
+    // 번역 API가 이미 적절한 구두점을 포함하므로 강제 변경하지 않음
     
-    // 4. 의문문 물음표 처리
-    result = _processQuestionMarksForTranslation(result, targetLanguage);
-    
-    // 5. 최종 검증 - 어색한 부분 수정
+    // 4. 최종 검증 - 어색한 부분만 수정
     result = _finalizeTranslation(result, targetLanguage);
     
     debugPrint('📝 Final synchronized translation: $result');
@@ -2960,18 +2947,14 @@ class ChatOrchestrator {
     return messages;
   }
 
-  /// 완전한 문장 단위로 분리할 수 있는 위치 찾기
+  /// 완전한 문장 단위로 분리할 수 있는 위치 찾기 (간소화)
   int _findCompleteSentenceSplitPoint(String text, int maxLength) {
-    // 한국어 문장 종결 패턴
+    // 간단한 구두점 기반 문장 종결 (. ? ! 만으로 판단)
     final sentenceEndings = [
-      // 종결 어미 + 구두점
-      RegExp(r'[다요어지까][\.!\?]'),
-      // 감정 표현이 문장 끝에 있는 경우
-      RegExp(r'[다요어지까][ㅋㅎㅠ]+[\.!\?]?'),
-      // 감탄사로 끝나는 문장
-      RegExp(r'[ㅋㅎㅠ]{2,}[\.!\?]'),
-      // 단독 구두점 (문장 끝을 명확히 표시)
-      RegExp(r'[\.!\?]\s'),
+      // 구두점으로 끝나는 경우
+      RegExp(r'[\.!\?]'),
+      // ㅋㅋ, ㅎㅎ, ㅠㅠ 등 감정표현으로 끝나는 경우
+      RegExp(r'[ㅋㅎㅠ]{2,}'),
     ];
 
     // maxLength 내에서 가장 뒤쪽의 완전한 문장 찾기
@@ -2992,24 +2975,6 @@ class ChatOrchestrator {
             if (endIndex > bestIndex) {
               bestIndex = endIndex;
             }
-          }
-        }
-      }
-    }
-
-    // 감정 표현 후 처리 (문장 끝에만)
-    if (bestIndex == -1) {
-      // ㅋㅋ, ㅎㅎ 등이 문장 끝에 있는 경우
-      final emotionPattern = RegExp(r'[ㅋㅎㅠ]{2,}$');
-      final searchText = text.substring(0, math.min(text.length, maxLength));
-      
-      for (int i = searchText.length - 1; i > maxLength * 0.5; i--) {
-        final testText = searchText.substring(0, i + 1);
-        if (emotionPattern.hasMatch(testText)) {
-          // 다음이 공백이거나 끝이면 여기서 분리
-          if (i + 1 >= text.length || text[i + 1] == ' ') {
-            bestIndex = i + 1;
-            break;
           }
         }
       }
@@ -3050,116 +3015,142 @@ class ChatOrchestrator {
     return bestIndex;
   }
   
-  /// 매핑 기반 번역 분할 - 한글 메시지와 번역을 1:1로 매핑
+  /// 매핑 기반 번역 분할 - 한글 메시지와 번역을 1:1로 매핑 (문장 개수 기반)
   List<String> _splitTranslationWithMapping({
     required List<String> koreanMessages,
     required String translatedContent,
     required String targetLanguage,
   }) {
-    debugPrint('🗺️ Mapping-based translation split');
+    debugPrint('🗺️ Sentence-based translation split');
     debugPrint('📝 Korean messages: ${koreanMessages.length}');
     debugPrint('📝 Korean content: ${koreanMessages.join(' | ')}');
     debugPrint('🌍 Target language: $targetLanguage');
     debugPrint('🌍 Translation content: $translatedContent');
-    debugPrint('🔢 Translation length: ${translatedContent.length} characters');
     
-    // 1. 전체 한글 텍스트 재구성 (분할 전 원본)
-    final fullKorean = koreanMessages.join(' ');
+    // 1. 각 한국어 메시지의 문장 개수 계산
+    List<int> koreanSentenceCounts = [];
+    List<List<String>> koreanMessageSentences = [];
     
-    // 2. 한글 문장들을 개별적으로 분석
-    final koreanSentences = _extractSentences(fullKorean, 'ko');
-    final translatedSentences = _extractSentences(translatedContent, targetLanguage);
-    
-    debugPrint('📊 Korean sentences: ${koreanSentences.length} - $koreanSentences');
-    debugPrint('📊 Translated sentences: ${translatedSentences.length} - $translatedSentences');
-    
-    // 3. 문장 수가 같으면 직접 매핑
-    if (koreanSentences.length == translatedSentences.length && 
-        koreanMessages.length == koreanSentences.length) {
-      debugPrint('✅ Perfect 1:1 mapping');
-      return translatedSentences;
+    for (final msg in koreanMessages) {
+      final sentences = _extractSentences(msg, 'ko');
+      koreanMessageSentences.add(sentences);
+      koreanSentenceCounts.add(sentences.length);
+      debugPrint('📊 Korean message: ${sentences.length} sentences - $sentences');
     }
     
-    // 4. 문장 수가 다르면 비율 기반 분할
-    final result = <String>[];
+    // 2. 번역된 전체 텍스트의 문장 추출
+    final translatedSentences = _extractSentences(translatedContent, targetLanguage);
+    debugPrint('📊 Total translated sentences: ${translatedSentences.length} - $translatedSentences');
     
+    // 3. 한국어 메시지가 하나면 전체 번역 반환
     if (koreanMessages.length == 1) {
-      // 단일 메시지면 그대로 반환
       return [translatedContent];
     }
     
-    // 5. 번역 문장이 한국어 메시지보다 적은 경우 (번역이 누락된 경우)
-    if (translatedSentences.isEmpty) {
-      debugPrint('⚠️ No translated sentences found, returning full content for each message');
-      // 번역이 비어있으면 전체 번역을 각 메시지에 복사 (임시 방안)
-      return List.filled(koreanMessages.length, translatedContent);
+    // 4. 문장 개수 비율대로 번역 문장 분배
+    final result = <String>[];
+    final totalKoreanSentences = koreanSentenceCounts.reduce((a, b) => a + b);
+    
+    if (totalKoreanSentences == 0) {
+      // 한국어 문장이 없으면 균등 분배
+      debugPrint('⚠️ No Korean sentences detected, distributing evenly');
+      final perMessage = translatedContent.length ~/ koreanMessages.length;
+      for (int i = 0; i < koreanMessages.length; i++) {
+        if (i == koreanMessages.length - 1) {
+          result.add(translatedContent.substring(i * perMessage));
+        } else {
+          result.add(translatedContent.substring(i * perMessage, (i + 1) * perMessage));
+        }
+      }
+      return result;
     }
     
-    // 6. 각 한글 메시지의 길이 비율 계산
-    final totalKoreanLength = fullKorean.length;
+    // 5. 문장 개수가 완벽히 일치하면 그대로 매핑
+    if (totalKoreanSentences == translatedSentences.length) {
+      debugPrint('✅ Perfect sentence count match');
+      int sentenceIndex = 0;
+      for (final count in koreanSentenceCounts) {
+        if (count == 0) {
+          result.add('');
+        } else {
+          final messageSentences = translatedSentences
+              .sublist(sentenceIndex, sentenceIndex + count);
+          result.add(messageSentences.join(' '));
+          sentenceIndex += count;
+        }
+      }
+      // 매핑 검증 로그
+      debugPrint('✅ Translation mapping validation:');
+      for (int i = 0; i < koreanMessages.length && i < result.length; i++) {
+        debugPrint('  📝 KO[$i]: ${koreanMessages[i]}');
+        debugPrint('  🌍 TR[$i]: ${result[i]}');
+      }
+      return result;
+    }
     
-    // 문장 단위가 아닌 문자 단위로 비율 계산하여 더 정확하게 분할
-    int currentTranslationIndex = 0;
-    final translationLength = translatedContent.length;
+    // 문장 개수 불일치 경고
+    if (totalKoreanSentences != translatedSentences.length) {
+      debugPrint('⚠️ Sentence count mismatch warning:');
+      debugPrint('  Korean sentences: $totalKoreanSentences');
+      debugPrint('  Translated sentences: ${translatedSentences.length}');
+      debugPrint('  Difference: ${(totalKoreanSentences - translatedSentences.length).abs()}');
+    }
+    
+    // 6. 문장 개수 비율로 분배
+    debugPrint('📐 Distributing by sentence count ratio');
+    int currentSentenceIndex = 0;
     
     for (int i = 0; i < koreanMessages.length; i++) {
-      final koreanMsg = koreanMessages[i];
-      final ratio = koreanMsg.length / totalKoreanLength;
+      final koreanSentenceCount = koreanSentenceCounts[i];
       
       if (i == koreanMessages.length - 1) {
-        // 마지막 메시지는 남은 모든 번역 포함
-        final remaining = translatedContent.substring(currentTranslationIndex).trim();
-        result.add(remaining.isNotEmpty ? remaining : translatedContent);
-        debugPrint('📌 Message ${i+1}: Remaining translation: $remaining');
+        // 마지막 메시지는 남은 모든 문장
+        final remaining = translatedSentences
+            .sublist(currentSentenceIndex)
+            .join(' ');
+        result.add(remaining.isNotEmpty ? remaining : '');
+        debugPrint('📌 Message ${i+1}: ${translatedSentences.length - currentSentenceIndex} sentences (remaining)');
       } else {
-        // 비율에 따른 문자 수 계산
-        final targetCharCount = (translationLength * ratio).round();
-        var endIndex = currentTranslationIndex + targetCharCount;
+        // 비율에 따른 문장 개수 계산
+        final ratio = koreanSentenceCount / totalKoreanSentences;
+        final targetSentenceCount = (translatedSentences.length * ratio).round();
         
-        // 문장 중간에 자르지 않도록 조정 (공백이나 구두점 위치 찾기)
-        if (endIndex < translationLength) {
-          // 가장 가까운 문장 끝 찾기 (. ! ? 등)
-          var bestEndIndex = endIndex;
-          final punctuations = ['. ', '! ', '? ', ', ', '; '];
-          
-          for (final punct in punctuations) {
-            final punctIndex = translatedContent.indexOf(punct, currentTranslationIndex);
-            if (punctIndex != -1 && punctIndex < endIndex + 50 && punctIndex > currentTranslationIndex) {
-              bestEndIndex = punctIndex + punct.length;
-              break;
-            }
-          }
-          
-          // 공백 위치로 조정 (문장 끝을 못 찾은 경우)
-          if (bestEndIndex == endIndex) {
-            final spaceIndex = translatedContent.lastIndexOf(' ', endIndex);
-            if (spaceIndex > currentTranslationIndex) {
-              bestEndIndex = spaceIndex;
-            }
-          }
-          
-          endIndex = bestEndIndex;
+        // 최소 1개 문장 보장 (한국어 문장이 있는 경우)
+        final actualCount = koreanSentenceCount > 0 
+            ? (targetSentenceCount > 0 ? targetSentenceCount : 1)
+            : 0;
+        
+        if (actualCount == 0 || currentSentenceIndex >= translatedSentences.length) {
+          result.add('');
         } else {
-          endIndex = translationLength;
+          final endIndex = (currentSentenceIndex + actualCount).clamp(
+              currentSentenceIndex, 
+              translatedSentences.length
+          );
+          final messageSentences = translatedSentences
+              .sublist(currentSentenceIndex, endIndex);
+          result.add(messageSentences.join(' '));
+          debugPrint('📌 Message ${i+1}: $actualCount sentences');
+          currentSentenceIndex = endIndex;
         }
-        
-        final translationPart = translatedContent.substring(currentTranslationIndex, endIndex).trim();
-        result.add(translationPart.isNotEmpty ? translationPart : translatedContent);
-        debugPrint('📌 Message ${i+1}: Translation part: $translationPart');
-        currentTranslationIndex = endIndex;
       }
     }
     
-    // 결과 검증 - 빈 번역이 있으면 전체 번역으로 대체
-    for (int i = 0; i < result.length; i++) {
-      if (result[i].isEmpty) {
-        debugPrint('⚠️ Empty translation at index $i, using full translation');
-        result[i] = translatedContent;
+    // 최종 매핑 결과 검증
+    debugPrint('📊 Final translation mapping validation:');
+    debugPrint('  Total Korean messages: ${koreanMessages.length}');
+    debugPrint('  Total translated parts: ${result.length}');
+    
+    if (koreanMessages.length == result.length) {
+      debugPrint('  ✅ Message count matches');
+      for (int i = 0; i < koreanMessages.length; i++) {
+        debugPrint('  [$i] KO(${koreanSentenceCounts[i]} sentences): ${koreanMessages[i].substring(0, math.min(30, koreanMessages[i].length))}...');
+        debugPrint('      TR: ${result[i].substring(0, math.min(30, result[i].length))}...');
       }
+    } else {
+      debugPrint('  ❌ Message count mismatch! Korean: ${koreanMessages.length}, Translated: ${result.length}');
     }
     
-    debugPrint('📦 Final translation split: ${result.length} messages');
-    debugPrint('📦 Split results: $result');
     return result;
   }
   
@@ -3167,59 +3158,52 @@ class ChatOrchestrator {
   List<String> _extractSentences(String text, String language) {
     List<String> sentences = [];
     
-    if (language == 'ko') {
-      // 한국어 문장 추출 (구두점 보존)
-      // 1. 물음표, 느낌표, 마침표로 끝나는 문장
-      final pattern = RegExp(r'[^.!?]+[.!?]+');
-      final matches = pattern.allMatches(text);
-      
-      for (final match in matches) {
-        final sentence = match.group(0)?.trim();
-        if (sentence != null && sentence.isNotEmpty) {
-          sentences.add(sentence);
-        }
-      }
-      
-      // 2. 마지막에 구두점 없는 부분
-      final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
-      if (lastIndex < text.length) {
-        final remaining = text.substring(lastIndex).trim();
-        if (remaining.isNotEmpty) {
-          sentences.add(remaining);
-        }
-      }
-      
-      // 3. ㅋㅋㅋ, ㅎㅎ 등으로만 끝나는 것도 처리
-      if (sentences.isEmpty && text.isNotEmpty) {
-        sentences.add(text);
-      }
-    } else if (language == 'en' || language == 'EN') {
-      // 영어 문장 추출 (구두점 보존)
-      final pattern = RegExp(r'[^.!?]+[.!?]+');
-      final matches = pattern.allMatches(text);
-      
-      for (final match in matches) {
-        final sentence = match.group(0)?.trim();
-        if (sentence != null && sentence.isNotEmpty) {
-          sentences.add(sentence);
-        }
-      }
-      
-      // 마지막에 구두점 없는 부분
-      final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
-      if (lastIndex < text.length) {
-        final remaining = text.substring(lastIndex).trim();
-        if (remaining.isNotEmpty) {
-          sentences.add(remaining);
-        }
-      }
-      
-      if (sentences.isEmpty && text.isNotEmpty) {
-        sentences.add(text);
-      }
+    // 언어별 구두점 패턴 정의
+    RegExp pattern;
+    
+    if (language == 'ja' || language == 'JA') {
+      // 일본어: 。！？
+      pattern = RegExp(r'[^。！？.!?]+[。！？.!?]+');
+    } else if (language == 'zh' || language == 'ZH') {
+      // 중국어: 。！？
+      pattern = RegExp(r'[^。！？.!?]+[。！？.!?]+');
+    } else if (language == 'ar' || language == 'AR') {
+      // 아랍어: ؟ ! . (RTL 고려)
+      pattern = RegExp(r'[^؟!.]+[؟!.]+');
+    } else if (language == 'th' || language == 'TH') {
+      // 태국어: 태국어는 공백이 없어서 특별 처리
+      // 일반 구두점 사용
+      pattern = RegExp(r'[^.!?]+[.!?]+');
+    } else if (language == 'hi' || language == 'HI' || language == 'ur' || language == 'UR') {
+      // 힌디어/우르두어: । (데반다리 구두점) 포함
+      pattern = RegExp(r'[^।.!?]+[।.!?]+');
     } else {
-      // 기타 언어
-      sentences = _splitIntoSentences(text);
+      // 한국어, 영어 및 기타 언어: 기본 구두점
+      pattern = RegExp(r'[^.!?]+[.!?]+');
+    }
+    
+    // 패턴 매칭으로 문장 추출
+    final matches = pattern.allMatches(text);
+    
+    for (final match in matches) {
+      final sentence = match.group(0)?.trim();
+      if (sentence != null && sentence.isNotEmpty) {
+        sentences.add(sentence);
+      }
+    }
+    
+    // 마지막에 구두점 없는 부분 처리
+    final lastIndex = matches.isNotEmpty ? matches.last.end : 0;
+    if (lastIndex < text.length) {
+      final remaining = text.substring(lastIndex).trim();
+      if (remaining.isNotEmpty) {
+        sentences.add(remaining);
+      }
+    }
+    
+    // 문장이 하나도 없으면 전체를 하나의 문장으로
+    if (sentences.isEmpty && text.isNotEmpty) {
+      sentences.add(text);
     }
     
     return sentences;

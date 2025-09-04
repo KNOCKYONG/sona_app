@@ -3122,5 +3122,185 @@
   "darkThemeName": "ڈارک",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "آخری 10 گفتگو کا تجزیہ کیا جا رہا ہے۔",
+  "@chatErrorAnalysisInfo": {
+    "description": "چیٹ ایرر رپورٹ ڈائیلاگ میں حالیہ گفتگو کے تجزیے کی وضاحت کرتا ہے"
+  },
+  "whatWasAwkward": "کیا چیز عجیب لگی؟",
+  "@whatWasAwkward": {
+    "description": "صارف سے عجیب حصے کے بارے میں پوچھنے والا لیبل"
+  },
+  "errorExampleHint": "مثال: بولنے کا عجیب انداز (~nya اختتام)...",
+  "@errorExampleHint": {
+    "description": "خرابی کی تفصیل ان پٹ فیلڈ کے لیے اشارہ متن"
+  },
+  "translationErrorAnalysisInfo": "ہم منتخب پیغام اور اس کے ترجمے کا تجزیہ کریں گے۔",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "ترجمے میں کیا غلط تھا؟",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "مثال: غلط معنی، غیر فطری اظہار، غلط سیاق و سباق...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "پہلے ایک پیغام منتخب کریں",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "میرے کردار",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "کردار بنائیں",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "بنیادی معلومات",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "اپنے کردار کے بارے میں بتائیں",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "کردار کا نام درج کریں",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "دیگر",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "اپنے کردار کا مختصر بیان کریں",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "پروفائل تصویر",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "اپنے کردار کے لیے تصاویر اپ لوڈ کریں",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "اصل تصویر",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "اپ لوڈ کرنے کے لیے ٹیپ کریں",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "اضافی تصاویر",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "تصویر شامل کریں",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "شخصیت کا سوال",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "شخصیت کا ٹیسٹ مکمل!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "شخصیت کی ترتیبات",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "بات چیت کا انداز",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "گفتگو کا انداز",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "دلچسپیاں",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "کمیونٹی کے ساتھ شیئر کریں",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "آپ کا کردار منظوری کے بعد دوسرے صارفین کے ساتھ شیئر ہوگا",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "کردار شیئر کریں",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "ایڈمن کی منظوری کے بعد شیئر ہوگا",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "صرف آپ اس کردار کو دیکھ سکتے ہیں",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "پچھلا",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "بنائیں",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "کردار کامیابی سے بنایا گیا!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "کردار بنانے میں ناکامی",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "تمام",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "منظوری کا انتظار",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "منظور شدہ",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "نجی",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "ابھی کوئی کردار نہیں",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "اپنا پہلا کردار بنائیں اور اپنا سفر شروع کریں",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "کردار ڈیلیٹ کریں",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "کیا آپ واقعی اس کردار کو ڈیلیٹ کرنا چاہتے ہیں؟",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "کردار کامیابی سے ڈیلیٹ ہوگیا",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "ڈیلیٹ کرنے میں ناکامی",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

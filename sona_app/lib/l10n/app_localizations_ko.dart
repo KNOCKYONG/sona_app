@@ -696,6 +696,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get goToSettings => '설정으로 이동';
 
   @override
+  String get permissionGuideAndroid => '설정 > 앱 > SONA > 권한에서\n사진 권한을 허용해주세요';
+
+  @override
+  String get permissionGuideIOS => '설정 > SONA > 사진에서\n사진 접근을 허용해주세요';
+
+  @override
   String get googleLoginCanceled => '구글 로그인이 취소되었습니다.\n다시 시도해주세요.';
 
   @override
@@ -1335,7 +1341,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get personalInfoExposure => '개인정보 노출';
 
   @override
-  String get personality => '성격';
+  String get personality => '성격 설정';
 
   @override
   String get pets => '반려동물';
@@ -1703,7 +1709,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get selectGender => '성별을 선택해주세요';
 
   @override
-  String get selectInterests => '관심사를 선택해주세요 (최소 1개)';
+  String get selectInterests => '관심사를 선택하세요';
 
   @override
   String get selectLanguage => '언어를 선택하세요';
@@ -1719,6 +1725,16 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get selectProblematicMessage => '문제가 있는 메시지를 선택해주세요 (선택사항)';
+
+  @override
+  String get chatErrorAnalysisInfo => '최근 10개 대화를 전송하여 분석합니다.';
+
+  @override
+  String get whatWasAwkward => '어떤 부분이 어색했나요?';
+
+  @override
+  String get errorExampleHint =>
+      '예: 말투가 이상해요 (~냐 같은 표현), 대답이 어색해요, 반복적인 답변을 해요 등';
 
   @override
   String get selectReportReason => '신고 사유를 선택하세요';
@@ -2308,4 +2324,156 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get darkThemeName => '다크 모드';
+
+  @override
+  String get alwaysShowTranslationOn => '번역 항상 표시';
+
+  @override
+  String get alwaysShowTranslationOff => '자동 번역 숨기기';
+
+  @override
+  String get translationErrorAnalysisInfo => '선택한 메시지와 번역 내용을 분석합니다.';
+
+  @override
+  String get whatWasWrongWithTranslation => '번역의 어떤 부분이 잘못되었나요?';
+
+  @override
+  String get translationErrorHint => '예: 잘못된 의미, 부자연스러운 표현, 맥락 오류...';
+
+  @override
+  String get pleaseSelectMessage => '먼저 메시지를 선택해주세요';
+
+  @override
+  String get myPersonas => '내 페르소나';
+
+  @override
+  String get createPersona => '페르소나 만들기';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => '성격 질문';
+
+  @override
+  String get mbtiComplete => '성격 테스트 완료!';
+
+  @override
+  String get mbtiTest => 'MBTI 테스트';
+
+  @override
+  String get mbtiStepDescription =>
+      '페르소나가 어떤 성격을 갖길 원하시나요? 질문에 답해 페르소나의 성격을 결정해주세요.';
+
+  @override
+  String get startTest => '테스트 시작';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => '말투';
+
+  @override
+  String get conversationStyle => '대화 스타일';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription =>
+      'Your persona can be shared with other users after approval';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval => '관리자 승인 후 공유됩니다';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => '페르소나가 생성되었습니다';
+
+  @override
+  String get createFailed => '생성에 실패했습니다';
+
+  @override
+  String get pendingApproval => '승인 대기';
+
+  @override
+  String get approved => '공개됨';
+
+  @override
+  String get privatePersona => '비공개';
+
+  @override
+  String get noPersonasYet => '아직 페르소나가 없어요';
+
+  @override
+  String get createYourFirstPersona => '나만의 특별한 페르소나를 만들어보세요';
+
+  @override
+  String get deletePersona => '페르소나 삭제';
+
+  @override
+  String get deletePersonaConfirm => '이 페르소나를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.';
+
+  @override
+  String get personaDeleted => '페르소나가 삭제되었습니다';
+
+  @override
+  String get deleteFailed => '삭제에 실패했습니다';
+
+  @override
+  String get personaLimitReached => '무료 사용자는 최대 3개의 페르소나를 만들 수 있습니다';
+
+  @override
+  String get personaName => '이름';
+
+  @override
+  String get personaAge => '나이';
+
+  @override
+  String get personaDescription => '소개';
+
+  @override
+  String get personaNameHint => '페르소나 이름을 입력하세요';
+
+  @override
+  String get personaDescriptionHint => '페르소나를 소개해주세요';
+
+  @override
+  String get loginRequiredContent => '계속하려면 로그인해주세요';
+
+  @override
+  String get reportErrorButton => '오류 신고';
 }

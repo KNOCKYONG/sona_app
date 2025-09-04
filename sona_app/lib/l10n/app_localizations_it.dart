@@ -734,6 +734,14 @@ class AppLocalizationsIt extends AppLocalizations {
   String get goToSettings => 'Vai alle impostazioni';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled => 'Il login con Google è stato annullato.';
 
   @override
@@ -1395,7 +1403,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get personalInfoExposure => 'Esposizione informazioni personali';
 
   @override
-  String get personality => 'Personality';
+  String get personality => 'Impostazioni di Personalità';
 
   @override
   String get pets => 'Pets';
@@ -1781,8 +1789,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get selectGender => 'Seleziona genere';
 
   @override
-  String get selectInterests =>
-      'Per favore seleziona i tuoi interessi (almeno 1)';
+  String get selectInterests => 'Seleziona i tuoi interessi';
 
   @override
   String get selectLanguage => 'Seleziona Lingua';
@@ -1800,6 +1807,16 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get selectProblematicMessage =>
       'Seleziona il messaggio problematico (opzionale)';
+
+  @override
+  String get chatErrorAnalysisInfo => 'Analizzando le ultime 10 conversazioni.';
+
+  @override
+  String get whatWasAwkward => 'Cosa ti è sembrato strano?';
+
+  @override
+  String get errorExampleHint =>
+      'Es: Modo di parlare strano (terminazioni ~nya)...';
 
   @override
   String get selectReportReason => 'Seleziona il motivo della segnalazione';
@@ -2417,4 +2434,162 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Scuro';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Analizzeremo il messaggio selezionato e la sua traduzione.';
+
+  @override
+  String get whatWasWrongWithTranslation =>
+      'Cosa c\'era di sbagliato nella traduzione?';
+
+  @override
+  String get translationErrorHint =>
+      'Es: Significato errato, espressione innaturale, contesto sbagliato...';
+
+  @override
+  String get pleaseSelectMessage => 'Seleziona prima un messaggio';
+
+  @override
+  String get myPersonas => 'Le Mie Personas';
+
+  @override
+  String get createPersona => 'Crea Persona';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => 'Personality Question';
+
+  @override
+  String get mbtiComplete => 'Personality Test Complete!';
+
+  @override
+  String get mbtiTest => 'Test MBTI';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => 'Stile di Parlare';
+
+  @override
+  String get conversationStyle => 'Stile di Conversazione';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription =>
+      'Your persona can be shared with other users after approval';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Sarà condiviso dopo l\'approvazione dell\'amministratore';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => 'Persona creata con successo';
+
+  @override
+  String get createFailed => 'Creazione fallita';
+
+  @override
+  String get pendingApproval => 'In Attesa di Approvazione';
+
+  @override
+  String get approved => 'Approvato';
+
+  @override
+  String get privatePersona => 'Private';
+
+  @override
+  String get noPersonasYet => 'No Personas Yet';
+
+  @override
+  String get createYourFirstPersona =>
+      'Create your first persona and start your journey';
+
+  @override
+  String get deletePersona => 'Elimina Persona';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Sei sicuro di voler eliminare questa persona? Questa azione non può essere annullata.';
+
+  @override
+  String get personaDeleted => 'Persona eliminata con successo';
+
+  @override
+  String get deleteFailed => 'Eliminazione fallita';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Nome Persona';
+
+  @override
+  String get personaAge => 'Età';
+
+  @override
+  String get personaDescription => 'Descrizione';
+
+  @override
+  String get personaNameHint => 'Es: Anna, Marco';
+
+  @override
+  String get personaDescriptionHint => 'Descrivi brevemente la tua persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

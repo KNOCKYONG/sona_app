@@ -3122,5 +3122,217 @@
   "darkThemeName": "ダーク",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "最近10件の会話を分析しています。",
+  "@chatErrorAnalysisInfo": {
+    "description": "チャットエラー報告ダイアログで最近の会話を分析することを説明"
+  },
+  "whatWasAwkward": "どんな点が違和感がありましたか？",
+  "@whatWasAwkward": {
+    "description": "ユーザーに違和感のある部分を尋ねるラベル"
+  },
+  "errorExampleHint": "例：不自然な話し方（〜にゃという語尾）...",
+  "@errorExampleHint": {
+    "description": "エラー説明入力フィールドのヒントテキスト"
+  },
+  "translationErrorAnalysisInfo": "選択したメッセージと翻訳を分析します。",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "翻訳のどこが間違っていましたか？",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "例：意味が違う、不自然な表現、文脈の誤り...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "最初にメッセージを選択してください",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "マイペルソナ",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "ペルソナを作成",
+  "@createPersona": {
+    "description": "Create persona button"
+  },
+  "personaName": "名前",
+  "@personaName": {
+    "description": "Persona name label"
+  },
+  "personaAge": "年齢",
+  "@personaAge": {
+    "description": "Persona age label"
+  },
+  "personaGender": "性別",
+  "@personaGender": {
+    "description": "Persona gender label"
+  },
+  "personaDescription": "紹介",
+  "@personaDescription": {
+    "description": "Persona description label"
+  },
+  "male": "男性",
+  "@male": {
+    "description": "Male gender option"
+  },
+  "female": "女性",
+  "@female": {
+    "description": "Female gender option"
+  },
+  "other": "その他",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "selectGender": "性別を選択",
+  "@selectGender": {
+    "description": "Select gender prompt"
+  },
+  "basicInfo": "基本情報",
+  "@basicInfo": {
+    "description": "Basic info step"
+  },
+  "photos": "写真",
+  "@photos": {
+    "description": "Photos step"
+  },
+  "mbtiTest": "MBTIテスト",
+  "@mbtiTest": {
+    "description": "MBTI test step"
+  },
+  "mbtiQuestion": "性格質問",
+  "@mbtiQuestion": {
+    "description": "MBTI question label"
+  },
+  "mbtiComplete": "性格テスト完了！",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "mbtiStepDescription": "ペルソナにどんな性格を持たせたいですか？質問に答えてペルソナの性格を決めてください。",
+  "@mbtiStepDescription": {
+    "description": "Description explaining that MBTI is for the persona's personality, not the user's"
+  },
+  "startTest": "テストを開始",
+  "@startTest": {
+    "description": "Button text to start the MBTI test"
+  },
+  "personality": "性格",
+  "@personality": {
+    "description": "Personality step"
+  },
+  "speechStyle": "話し方",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "shareSettings": "共有設定",
+  "@shareSettings": {
+    "description": "Share settings step"
+  },
+  "mainPhoto": "メイン写真",
+  "@mainPhoto": {
+    "description": "Main photo label"
+  },
+  "additionalPhotos": "追加写真",
+  "@additionalPhotos": {
+    "description": "Additional photos label"
+  },
+  "friendly": "親しみやすい",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "丁寧",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "シック",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "活発",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "会話スタイル",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "おしゃべり",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "無口",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "共感的",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "論理的",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "興味",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithOthers": "他のユーザーと共有",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "shareDescription": "承認後、他のユーザーもこのペルソナを使用できます",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "creating": "作成中...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "uploadingImages": "画像をアップロード中...",
+  "@uploadingImages": {
+    "description": "Uploading images status"
+  },
+  "allPersonas": "すべて",
+  "@allPersonas": {
+    "description": "All personas tab"
+  },
+  "pendingApproval": "承認待ち",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "承認済み",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "noPersonasFound": "ペルソナがありません",
+  "@noPersonasFound": {
+    "description": "No personas found message"
+  },
+  "edit": "編集",
+  "@edit": {
+    "description": "Edit action"
+  },
+  "delete": "削除",
+  "@delete": {
+    "description": "Delete action"
+  },
+  "deletePersona": "ペルソナを削除",
+  "@deletePersona": {
+    "description": "Delete persona title"
+  },
+  "deletePersonaConfirm": "このペルソナを削除してもよろしいですか？",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation"
+  },
+  "personaDeleted": "ペルソナが削除されました",
+  "@personaDeleted": {
+    "description": "Persona deleted message"
+  },
+  "deleteFailed": "削除に失敗しました",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

@@ -24,6 +24,7 @@ class UnifiedPromptService {
     bool hasAskedWellBeingToday = false,
     String? emotionalState, // 페르소나 감정 상태 추가
     String languageCode = 'ko', // 사용자 언어 코드 추가
+    String? systemLanguage,  // 시스템 언어 추가
   }) {
     final sections = <String>[];
     

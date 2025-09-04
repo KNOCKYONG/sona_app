@@ -736,6 +736,14 @@ class AppLocalizationsTl extends AppLocalizations {
   String get goToSettings => 'Pumunta sa Settings';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled => 'Nakansela ang pag-login sa Google.';
 
   @override
@@ -1809,6 +1817,16 @@ class AppLocalizationsTl extends AppLocalizations {
       'Pumili ng problemadong mensahe (opsyonal)';
 
   @override
+  String get chatErrorAnalysisInfo => 'Sinusuri ang huling 10 pag-uusap.';
+
+  @override
+  String get whatWasAwkward => 'Ano ang tila hindi natural?';
+
+  @override
+  String get errorExampleHint =>
+      'Halimbawa: Hindi natural na paraan ng pagsasalita (hulapi na ~nya)...';
+
+  @override
   String get selectReportReason => 'Pumili ng dahilan ng ulat';
 
   @override
@@ -2426,4 +2444,164 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Madilim';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Susuriin namin ang napiling mensahe at pagsasalin.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'Ano ang mali sa pagsasalin?';
+
+  @override
+  String get translationErrorHint =>
+      'Hal: Maling kahulugan, hindi natural na pagpapahayag, maling konteksto...';
+
+  @override
+  String get pleaseSelectMessage => 'Pumili muna ng mensahe';
+
+  @override
+  String get myPersonas => 'Aking mga Persona';
+
+  @override
+  String get createPersona => 'Gumawa ng Persona';
+
+  @override
+  String get tellUsAboutYourPersona =>
+      'Sabihin mo sa amin ang tungkol sa inyong persona';
+
+  @override
+  String get enterPersonaName => 'Ilagay ang pangalan ng persona';
+
+  @override
+  String get describeYourPersona => 'Ilarawan ang inyong persona nang maikli';
+
+  @override
+  String get profileImage => 'Larawan ng Profile';
+
+  @override
+  String get uploadPersonaImages =>
+      'Mag-upload ng mga larawan para sa inyong persona';
+
+  @override
+  String get mainImage => 'Pangunahing Larawan';
+
+  @override
+  String get tapToUpload => 'I-tap para mag-upload';
+
+  @override
+  String get additionalImages => 'Karagdagang mga Larawan';
+
+  @override
+  String get addImage => 'Magdagdag ng Larawan';
+
+  @override
+  String get mbtiQuestion => 'Tanong sa Personalidad';
+
+  @override
+  String get mbtiComplete => 'Pagsusulit sa Personalidad Tapos Na!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Mga Setting ng Personalidad';
+
+  @override
+  String get speechStyle => 'Estilo ng Pagsasalita';
+
+  @override
+  String get conversationStyle => 'Estilo ng Pag-uusap';
+
+  @override
+  String get shareWithCommunity => 'Ibahagi sa Komunidad';
+
+  @override
+  String get shareDescription =>
+      'Ang inyong persona ay maiibahagi sa ibang mga user pagkatapos ma-approve';
+
+  @override
+  String get sharePersona => 'Ibahagi ang Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Maiibahagi pagkatapos ng admin approval';
+
+  @override
+  String get privatePersonaDescription =>
+      'Ikaw lang ang makakakita sa persona na ito';
+
+  @override
+  String get create => 'Gumawa';
+
+  @override
+  String get personaCreated => 'Matagumpay na nagawa ang persona!';
+
+  @override
+  String get createFailed => 'Hindi nagawa ang persona';
+
+  @override
+  String get pendingApproval => 'Naghihintay ng Approval';
+
+  @override
+  String get approved => 'Na-approve';
+
+  @override
+  String get privatePersona => 'Pribado';
+
+  @override
+  String get noPersonasYet => 'Walang mga Persona Pa';
+
+  @override
+  String get createYourFirstPersona =>
+      'Gumawa ng inyong unang persona at simulan ang inyong paglalakbay';
+
+  @override
+  String get deletePersona => 'Tanggalin ang Persona';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Sigurado ba kayo na gusto ninyong tanggalin ang persona na ito?';
+
+  @override
+  String get personaDeleted => 'Matagumpay na natanggal ang persona';
+
+  @override
+  String get deleteFailed => 'Hindi natanggal';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

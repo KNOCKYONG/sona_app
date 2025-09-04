@@ -39,6 +39,7 @@ import 'core/preferences_manager.dart';
 import 'l10n/app_localizations.dart';
 import 'services/locale_service.dart';
 import 'services/app_info_service.dart';
+import 'services/retention/push_notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -121,6 +122,16 @@ void main() async {
     HapticService.initialize(),
     AppInfoService.instance.initialize(),
   ];
+  
+  // 푸시 알림 서비스 초기화 (웹이 아닌 경우만)
+  if (!kIsWeb) {
+    try {
+      await PushNotificationService().initialize();
+      debugPrint('🔔 Push notification service initialized');
+    } catch (e) {
+      debugPrint('❌ Failed to initialize push notifications: $e');
+    }
+  }
 
   // ThemeService와 LocaleService는 의존성이 있으므로 별도 처리
   final themeService = ThemeService();

@@ -3122,5 +3122,185 @@
   "darkThemeName": "Koyu",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Son 10 konuşma analiz ediliyor.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Sohbet hata raporu iletişim kutusunda son konuşmaların analizini açıklar"
+  },
+  "whatWasAwkward": "Size garip gelen neydi?",
+  "@whatWasAwkward": {
+    "description": "Kullanıcıya garip kısmı soran etiket"
+  },
+  "errorExampleHint": "Örn: Garip konuşma şekli (~nya sonları)...",
+  "@errorExampleHint": {
+    "description": "Hata açıklaması giriş alanı için ipucu metni"
+  },
+  "translationErrorAnalysisInfo": "Seçilen mesajı ve çevirisini analiz edeceğiz.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Çeviride ne yanlıştı?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Örn: Yanlış anlam, doğal olmayan ifade, yanlış bağlam...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Lütfen önce bir mesaj seçin",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Kişiliklerim",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Kişilik Oluştur",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Temel Bilgiler",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Kişiliğiniz hakkında bize bilgi verin",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Kişilik adını girin",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Diğer",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Kişiliğinizi kısaca tanımlayın",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Profil Resmi",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Kişiliğiniz için resimler yükleyin",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Ana Resim",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Yüklemek için dokunun",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Ek Resimler",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Resim Ekle",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Kişilik Sorusu",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Kişilik Testi Tamamlandı!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Kişilik Ayarları",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Konuşma Tarzı",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Sohbet Tarzı",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "İlgi Alanları",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Toplulukla Paylaş",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Kişiliğiniz onaylandıktan sonra diğer kullanıcılarla paylaşılacak",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Kişiliği Paylaş",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Yönetici onayından sonra paylaşılacak",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Bu kişiliği sadece siz görebilirsiniz",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Önceki",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Oluştur",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Kişilik başarıyla oluşturuldu!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Kişilik oluşturulamadı",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Tümü",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Onay Bekliyor",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Onaylandı",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Özel",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Henüz Kişilik Yok",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "İlk kişiliğinizi oluşturun ve yolculuğunuzu başlatın",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Kişiliği Sil",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Bu kişiliği silmek istediğinizden emin misiniz?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Kişilik başarıyla silindi",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Silme başarısız",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

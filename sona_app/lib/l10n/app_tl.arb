@@ -3122,5 +3122,185 @@
   "darkThemeName": "Madilim",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Sinusuri ang huling 10 pag-uusap.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Nagpapaliwanag ng pagsusuri ng mga kamakailang pag-uusap sa dialog ng ulat ng error sa chat"
+  },
+  "whatWasAwkward": "Ano ang tila hindi natural?",
+  "@whatWasAwkward": {
+    "description": "Label na nagtatanong sa user tungkol sa hindi natural na bahagi"
+  },
+  "errorExampleHint": "Halimbawa: Hindi natural na paraan ng pagsasalita (hulapi na ~nya)...",
+  "@errorExampleHint": {
+    "description": "Hint text para sa field ng paglalarawan ng error"
+  },
+  "translationErrorAnalysisInfo": "Susuriin namin ang napiling mensahe at pagsasalin.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Ano ang mali sa pagsasalin?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Hal: Maling kahulugan, hindi natural na pagpapahayag, maling konteksto...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Pumili muna ng mensahe",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Aking mga Persona",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Gumawa ng Persona",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Pangunahing Impormasyon",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Sabihin mo sa amin ang tungkol sa inyong persona",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Ilagay ang pangalan ng persona",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Iba pa",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Ilarawan ang inyong persona nang maikli",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Larawan ng Profile",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Mag-upload ng mga larawan para sa inyong persona",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Pangunahing Larawan",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "I-tap para mag-upload",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Karagdagang mga Larawan",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Magdagdag ng Larawan",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Tanong sa Personalidad",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Pagsusulit sa Personalidad Tapos Na!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Mga Setting ng Personalidad",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Estilo ng Pagsasalita",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Estilo ng Pag-uusap",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Mga Interes",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Ibahagi sa Komunidad",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Ang inyong persona ay maiibahagi sa ibang mga user pagkatapos ma-approve",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Ibahagi ang Persona",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Maiibahagi pagkatapos ng admin approval",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Ikaw lang ang makakakita sa persona na ito",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Nakaraan",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Gumawa",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Matagumpay na nagawa ang persona!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Hindi nagawa ang persona",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Lahat",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Naghihintay ng Approval",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Na-approve",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Pribado",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Walang mga Persona Pa",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Gumawa ng inyong unang persona at simulan ang inyong paglalakbay",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Tanggalin ang Persona",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Sigurado ba kayo na gusto ninyong tanggalin ang persona na ito?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Matagumpay na natanggal ang persona",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Hindi natanggal",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

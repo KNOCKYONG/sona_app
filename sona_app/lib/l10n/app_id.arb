@@ -3122,5 +3122,185 @@
   "darkThemeName": "Gelap",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Menganalisis 10 percakapan terakhir.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Menjelaskan analisis percakapan terbaru di dialog laporan kesalahan obrolan"
+  },
+  "whatWasAwkward": "Apa yang terasa tidak natural?",
+  "@whatWasAwkward": {
+    "description": "Label menanyakan pengguna tentang bagian yang tidak natural"
+  },
+  "errorExampleHint": "Contoh: Cara bicara yang tidak natural (akhiran ~nya)...",
+  "@errorExampleHint": {
+    "description": "Teks petunjuk untuk bidang input deskripsi kesalahan"
+  },
+  "translationErrorAnalysisInfo": "Kami akan menganalisis pesan dan terjemahan yang dipilih.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Apa yang salah dengan terjemahannya?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Contoh: Makna salah, ungkapan tidak alami, konteks salah...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Silakan pilih pesan terlebih dahulu",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Persona Saya",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Buat Persona",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Informasi Dasar",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Ceritakan tentang persona Anda",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Masukkan nama persona",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Lainnya",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Deskripsikan persona Anda secara singkat",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Gambar Profil",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Unggah gambar untuk persona Anda",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Gambar Utama",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Ketuk untuk mengunggah",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Gambar Tambahan",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Tambah Gambar",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Pertanyaan Kepribadian",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Tes Kepribadian Selesai!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Pengaturan Kepribadian",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Gaya Berbicara",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Gaya Percakapan",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Minat",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Bagikan dengan Komunitas",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Persona Anda akan dibagikan dengan pengguna lain setelah disetujui",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Bagikan Persona",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Akan dibagikan setelah admin menyetujui",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Hanya Anda yang dapat melihat persona ini",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Sebelumnya",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Buat",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Persona berhasil dibuat!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Gagal membuat persona",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Semua",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Menunggu Persetujuan",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Disetujui",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Pribadi",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Belum Ada Persona",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Buat persona pertama Anda dan mulai perjalanan",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Hapus Persona",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Apakah Anda yakin ingin menghapus persona ini?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona berhasil dihapus",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Gagal menghapus",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

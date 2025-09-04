@@ -3122,5 +3122,185 @@
   "darkThemeName": "Mörk",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Analyserar de senaste 10 konversationerna.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Förklarar analysen av senaste konversationer i chattfelrapportdialogen"
+  },
+  "whatWasAwkward": "Vad verkade konstigt?",
+  "@whatWasAwkward": {
+    "description": "Etikett som frågar användaren om den konstiga delen"
+  },
+  "errorExampleHint": "T.ex.: Konstigt sätt att tala (~nya ändelser)...",
+  "@errorExampleHint": {
+    "description": "Ledtext för felbeskrivningsinmatningsfältet"
+  },
+  "translationErrorAnalysisInfo": "Vi kommer att analysera det valda meddelandet och dess översättning.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Vad var fel med översättningen?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "T.ex: Felaktig betydelse, onaturligt uttryck, fel sammanhang...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Välj ett meddelande först",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Mina Personligheter",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Skapa Personlighet",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Grundläggande Information",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Berätta om din personlighet",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Ange personlighetsnamn",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Övrigt",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Beskriv din personlighet kort",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Profilbild",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Ladda upp bilder för din personlighet",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Huvudbild",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Tryck för att ladda upp",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Ytterligare Bilder",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Lägg Till Bild",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Personlighetsfråga",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Personlighetstest Klar!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Personlighetsinställningar",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Talstil",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Samtalsstil",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Intressen",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Dela med Gemenskap",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Din personlighet kommer att delas med andra användare efter godkännande",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Dela Personlighet",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Kommer att delas efter administratörsgodkännande",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Endast du kan se denna personlighet",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Föregående",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Skapa",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Personlighet skapad framgångsrikt!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Misslyckades med att skapa personlighet",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Alla",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Väntar på Godkännande",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Godkänd",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Privat",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Inga Personligheter Än",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Skapa din första personlighet och börja din resa",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Ta Bort Personlighet",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Är du säker på att du vill ta bort denna personlighet?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Personlighet borttagen framgångsrikt",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Borttagning misslyckades",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

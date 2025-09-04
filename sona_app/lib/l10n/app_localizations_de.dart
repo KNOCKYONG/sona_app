@@ -158,7 +158,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get backButton => 'Zurück';
 
   @override
-  String get basicInfo => 'Grundlegende Informationen';
+  String get basicInfo => 'Grundinformationen';
 
   @override
   String get basicInfoDescription =>
@@ -732,6 +732,14 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get goToSettings => 'Zu den Einstellungen';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled =>
@@ -1402,7 +1410,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get personalInfoExposure => 'Persönliche Informationen Exposition';
 
   @override
-  String get personality => 'Persönlichkeit';
+  String get personality => 'Persönlichkeitseinstellungen';
 
   @override
   String get pets => 'Haustiere';
@@ -1791,8 +1799,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get selectGender => 'Bitte Geschlecht auswählen';
 
   @override
-  String get selectInterests =>
-      'Bitte wählen Sie Ihre Interessen (mindestens 1)';
+  String get selectInterests => 'Wählen Sie Ihre Interessen';
 
   @override
   String get selectLanguage => 'Sprache auswählen';
@@ -1810,6 +1817,17 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get selectProblematicMessage =>
       'Wählen Sie die problematische Nachricht (optional)';
+
+  @override
+  String get chatErrorAnalysisInfo =>
+      'Die letzten 10 Gespräche werden analysiert.';
+
+  @override
+  String get whatWasAwkward => 'Was erschien Ihnen unnatürlich?';
+
+  @override
+  String get errorExampleHint =>
+      'Z.B.: Unnatürliche Sprechweise (~nya Endungen)...';
 
   @override
   String get selectReportReason => 'Wählen Sie den Grund für die Meldung';
@@ -2428,4 +2446,163 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Dunkel';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Wir werden die ausgewählte Nachricht und ihre Übersetzung analysieren.';
+
+  @override
+  String get whatWasWrongWithTranslation =>
+      'Was war falsch an der Übersetzung?';
+
+  @override
+  String get translationErrorHint =>
+      'Z.B.: Falsche Bedeutung, unnatürlicher Ausdruck, falscher Kontext...';
+
+  @override
+  String get pleaseSelectMessage =>
+      'Bitte wählen Sie zuerst eine Nachricht aus';
+
+  @override
+  String get myPersonas => 'Meine Personas';
+
+  @override
+  String get createPersona => 'Persona Erstellen';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => 'Personality Question';
+
+  @override
+  String get mbtiComplete => 'Personality Test Complete!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => 'Sprechstil';
+
+  @override
+  String get conversationStyle => 'Gesprächsstil';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription =>
+      'Your persona can be shared with other users after approval';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Wird nach Administrator-Genehmigung geteilt';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => 'Persona erfolgreich erstellt';
+
+  @override
+  String get createFailed => 'Erstellung fehlgeschlagen';
+
+  @override
+  String get pendingApproval => 'Wartend auf Genehmigung';
+
+  @override
+  String get approved => 'Genehmigt';
+
+  @override
+  String get privatePersona => 'Private';
+
+  @override
+  String get noPersonasYet => 'No Personas Yet';
+
+  @override
+  String get createYourFirstPersona =>
+      'Create your first persona and start your journey';
+
+  @override
+  String get deletePersona => 'Persona Löschen';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Sind Sie sicher, dass Sie dieses Persona löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.';
+
+  @override
+  String get personaDeleted => 'Persona erfolgreich gelöscht';
+
+  @override
+  String get deleteFailed => 'Löschen fehlgeschlagen';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Persona-Name';
+
+  @override
+  String get personaAge => 'Alter';
+
+  @override
+  String get personaDescription => 'Beschreibung';
+
+  @override
+  String get personaNameHint => 'Z.B.: Anna, Max';
+
+  @override
+  String get personaDescriptionHint => 'Beschreiben Sie Ihr Persona kurz';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

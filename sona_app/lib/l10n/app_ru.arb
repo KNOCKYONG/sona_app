@@ -3122,5 +3122,205 @@
   "darkThemeName": "Темная",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Анализ последних 10 разговоров.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Объясняет анализ недавних разговоров в диалоге отчета об ошибке чата"
+  },
+  "whatWasAwkward": "Что показалось странным?",
+  "@whatWasAwkward": {
+    "description": "Метка с вопросом пользователю о странной части"
+  },
+  "errorExampleHint": "Например: Странная манера речи (окончания ~nya)...",
+  "@errorExampleHint": {
+    "description": "Текст подсказки для поля ввода описания ошибки"
+  },
+  "translationErrorAnalysisInfo": "Мы проанализируем выбранное сообщение и его перевод.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Что было не так с переводом?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Например: Неверный смысл, неестественное выражение, неправильный контекст...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Пожалуйста, сначала выберите сообщение",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Мои Персоны",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Создать Персону",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Основная Информация",
+  "@basicInfo": {
+    "description": "Basic info step title"
+  },
+  "uploadPhoto": "Загрузить Фото",
+  "@uploadPhoto": {
+    "description": "Upload photo step title"
+  },
+  "mbtiTest": "Тест MBTI",
+  "@mbtiTest": {
+    "description": "MBTI test step title"
+  },
+  "personality": "Настройки Личности",
+  "@personality": {
+    "description": "Personality step title"
+  },
+  "shareSettings": "Настройки Общего Доступа",
+  "@shareSettings": {
+    "description": "Share settings step title"
+  },
+  "personaName": "Имя Персоны",
+  "@personaName": {
+    "description": "Persona name field label"
+  },
+  "personaNameHint": "Например: Анна, Максим",
+  "@personaNameHint": {
+    "description": "Persona name field hint"
+  },
+  "personaAge": "Возраст",
+  "@personaAge": {
+    "description": "Persona age field label"
+  },
+  "personaDescription": "Описание",
+  "@personaDescription": {
+    "description": "Persona description field label"
+  },
+  "personaDescriptionHint": "Кратко опишите вашу персону",
+  "@personaDescriptionHint": {
+    "description": "Persona description field hint"
+  },
+  "selectMainPhoto": "Выбрать Главное Фото",
+  "@selectMainPhoto": {
+    "description": "Select main photo button"
+  },
+  "addAdditionalPhotos": "Дополнительные Фото (максимум 4)",
+  "@addAdditionalPhotos": {
+    "description": "Add additional photos label"
+  },
+  "question": "Вопрос",
+  "@question": {
+    "description": "Question label"
+  },
+  "speechStyle": "Стиль Речи",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "friendly": "Дружелюбный",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "Вежливый",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "Элегантный",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "Живой",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "Стиль Разговора",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "Разговорчивый",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "Молчаливый",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "Эмпатичный",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "Логичный",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "Интересы",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "selectInterests": "Выберите ваши интересы",
+  "@selectInterests": {
+    "description": "Select interests instruction"
+  },
+  "shareWithOthers": "Поделиться с другими пользователями",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "willBeSharedAfterApproval": "Будет опубликовано после одобрения администратора",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval note"
+  },
+  "keepPrivate": "Сохранить приватным",
+  "@keepPrivate": {
+    "description": "Keep private option"
+  },
+  "creating": "Создание...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "personaCreated": "Персона успешно создана",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Не удалось создать",
+  "@createFailed": {
+    "description": "Create failed message"
+  },
+  "allPersonas": "Все Персоны",
+  "@allPersonas": {
+    "description": "All personas tab"
+  },
+  "pendingApproval": "Ожидает Одобрения",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Одобрено",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "noPersonasFound": "Персоны не найдены",
+  "@noPersonasFound": {
+    "description": "No personas found message"
+  },
+  "edit": "Редактировать",
+  "@edit": {
+    "description": "Edit button"
+  },
+  "delete": "Удалить",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "deletePersona": "Удалить Персону",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Вы уверены, что хотите удалить эту персону? Это действие нельзя отменить.",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Персона успешно удалена",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Не удалось удалить",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

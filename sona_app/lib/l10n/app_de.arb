@@ -3122,5 +3122,205 @@
   "darkThemeName": "Dunkel",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Die letzten 10 Gespräche werden analysiert.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Erklärt die Analyse der letzten Gespräche im Chat-Fehlerbericht-Dialog"
+  },
+  "whatWasAwkward": "Was erschien Ihnen unnatürlich?",
+  "@whatWasAwkward": {
+    "description": "Bezeichnung, die den Benutzer nach dem unnatürlichen Teil fragt"
+  },
+  "errorExampleHint": "Z.B.: Unnatürliche Sprechweise (~nya Endungen)...",
+  "@errorExampleHint": {
+    "description": "Hinweistext für das Fehlerbeschreibungs-Eingabefeld"
+  },
+  "translationErrorAnalysisInfo": "Wir werden die ausgewählte Nachricht und ihre Übersetzung analysieren.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Was war falsch an der Übersetzung?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Z.B.: Falsche Bedeutung, unnatürlicher Ausdruck, falscher Kontext...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Bitte wählen Sie zuerst eine Nachricht aus",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Meine Personas",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Persona Erstellen",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Grundinformationen",
+  "@basicInfo": {
+    "description": "Basic info step title"
+  },
+  "uploadPhoto": "Foto Hochladen",
+  "@uploadPhoto": {
+    "description": "Upload photo step title"
+  },
+  "mbtiTest": "MBTI Test",
+  "@mbtiTest": {
+    "description": "MBTI test step title"
+  },
+  "personality": "Persönlichkeitseinstellungen",
+  "@personality": {
+    "description": "Personality step title"
+  },
+  "shareSettings": "Freigabe-Einstellungen",
+  "@shareSettings": {
+    "description": "Share settings step title"
+  },
+  "personaName": "Persona-Name",
+  "@personaName": {
+    "description": "Persona name field label"
+  },
+  "personaNameHint": "Z.B.: Anna, Max",
+  "@personaNameHint": {
+    "description": "Persona name field hint"
+  },
+  "personaAge": "Alter",
+  "@personaAge": {
+    "description": "Persona age field label"
+  },
+  "personaDescription": "Beschreibung",
+  "@personaDescription": {
+    "description": "Persona description field label"
+  },
+  "personaDescriptionHint": "Beschreiben Sie Ihr Persona kurz",
+  "@personaDescriptionHint": {
+    "description": "Persona description field hint"
+  },
+  "selectMainPhoto": "Hauptfoto Auswählen",
+  "@selectMainPhoto": {
+    "description": "Select main photo button"
+  },
+  "addAdditionalPhotos": "Zusätzliche Fotos (maximal 4)",
+  "@addAdditionalPhotos": {
+    "description": "Add additional photos label"
+  },
+  "question": "Frage",
+  "@question": {
+    "description": "Question label"
+  },
+  "speechStyle": "Sprechstil",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "friendly": "Freundlich",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "Höflich",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "Schick",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "Lebhaft",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "Gesprächsstil",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "Gesprächig",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "Ruhig",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "Empathisch",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "Logisch",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "Interessen",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "selectInterests": "Wählen Sie Ihre Interessen",
+  "@selectInterests": {
+    "description": "Select interests instruction"
+  },
+  "shareWithOthers": "Mit anderen Benutzern teilen",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "willBeSharedAfterApproval": "Wird nach Administrator-Genehmigung geteilt",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval note"
+  },
+  "keepPrivate": "Privat halten",
+  "@keepPrivate": {
+    "description": "Keep private option"
+  },
+  "creating": "Wird erstellt...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "personaCreated": "Persona erfolgreich erstellt",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Erstellung fehlgeschlagen",
+  "@createFailed": {
+    "description": "Create failed message"
+  },
+  "allPersonas": "Alle Personas",
+  "@allPersonas": {
+    "description": "All personas tab"
+  },
+  "pendingApproval": "Wartend auf Genehmigung",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Genehmigt",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "noPersonasFound": "Keine Personas gefunden",
+  "@noPersonasFound": {
+    "description": "No personas found message"
+  },
+  "edit": "Bearbeiten",
+  "@edit": {
+    "description": "Edit button"
+  },
+  "delete": "Löschen",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "deletePersona": "Persona Löschen",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Sind Sie sicher, dass Sie dieses Persona löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona erfolgreich gelöscht",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Löschen fehlgeschlagen",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

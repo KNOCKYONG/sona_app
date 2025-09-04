@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'language_settings_screen.dart';
 import 'privacy_settings_screen.dart';
 import 'faq_screen.dart';
@@ -13,6 +14,8 @@ import '../services/theme/theme_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../services/cache/image_preload_service.dart';
 import '../services/block_service.dart';
+import '../services/persona/persona_service.dart';
+import '../services/retention/push_notification_service.dart';
 import '../config/custom_cache_manager.dart';
 import '../utils/account_deletion_dialog.dart';
 import '../l10n/app_localizations.dart';
@@ -291,6 +294,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _showCacheManagementDialog();
               },
             ),
+            
+            // 개발자 옵션 (디버그 모드에서만 표시)
+            if (kDebugMode) ...[
+              _buildSectionTitle('개발자 옵션'),
+              _buildMenuItem(
+                icon: Icons.bug_report_outlined,
+                title: '재참여 알림 테스트',
+                subtitle: '이탈 위험도별 알림 테스트',
+                onTap: () {
+                  _showReengagementTestDialog();
+                },
+              ),
+            ],
 
             // 계정 관리 - 게스트 모드일 때는 숨김
             FutureBuilder<bool>(
@@ -542,6 +558,86 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showReengagementTestDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text('재참여 알림 테스트'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('이탈 위험도를 선택하세요:'),
+            const SizedBox(height: 16),
+            _buildTestButton('7일 이상 미접속 (위험도 90%)', 0.9),
+            _buildTestButton('3일 미접속 (위험도 70%)', 0.7),
+            _buildTestButton('1일 미접속 (위험도 50%)', 0.5),
+            _buildTestButton('일반 알림 (위험도 30%)', 0.3),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('닫기'),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildTestButton(String label, double churnRisk) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: ElevatedButton(
+        onPressed: () async {
+          Navigator.pop(context);
+          
+          // 현재 페르소나 가져오기
+          final personaService = PersonaService();
+          
+          // 매칭된 페르소나 목록 가져오기
+          final matchedPersonas = personaService.matchedPersonas;
+          
+          if (matchedPersonas.isNotEmpty) {
+            // 첫 번째 매칭된 페르소나 사용
+            final persona = matchedPersonas.first;
+            
+            // 알림 보내기
+            await PushNotificationService().sendReengagementNotification(
+              persona: persona,
+              churnRisk: churnRisk,
+            );
+            
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${persona.name}님의 재참여 알림을 보냈습니다 (위험도: ${(churnRisk * 100).toInt()}%)'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            }
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('활성화된 페르소나가 없습니다'),
+                  backgroundColor: Colors.orange,
+                ),
+              );
+            }
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size(double.infinity, 45),
+        ),
+        child: Text(label),
       ),
     );
   }

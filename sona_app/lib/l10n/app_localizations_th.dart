@@ -711,6 +711,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get goToSettings => 'ไปที่การตั้งค่า';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled => 'การเข้าสู่ระบบ Google ถูกยกเลิก';
 
   @override
@@ -1758,6 +1766,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get selectProblematicMessage => 'เลือกข้อความที่มีปัญหา (ไม่บังคับ)';
 
   @override
+  String get chatErrorAnalysisInfo => 'กำลังวิเคราะห์บทสนทนา 10 รายการล่าสุด';
+
+  @override
+  String get whatWasAwkward => 'มีอะไรที่ทำให้คุณรู้สึกไม่เป็นธรรมชาติ?';
+
+  @override
+  String get errorExampleHint =>
+      'ตัวอย่าง: วิธีการพูดที่ไม่เป็นธรรมชาติ (คำลงท้าย ~nya)...';
+
+  @override
   String get selectReportReason => 'เลือกเหตุผลในการรายงาน';
 
   @override
@@ -2359,4 +2377,160 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get darkThemeName => 'มืด';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'เราจะวิเคราะห์ข้อความและการแปลที่เลือก';
+
+  @override
+  String get whatWasWrongWithTranslation => 'การแปลผิดพลาดตรงไหน?';
+
+  @override
+  String get translationErrorHint =>
+      'เช่น: ความหมายผิด, การแสดงออกไม่เป็นธรรมชาติ, บริบทผิด...';
+
+  @override
+  String get pleaseSelectMessage => 'กรุณาเลือกข้อความก่อน';
+
+  @override
+  String get myPersonas => 'เพอร์โซนาของฉัน';
+
+  @override
+  String get createPersona => 'สร้างเพอร์โซนา';
+
+  @override
+  String get tellUsAboutYourPersona => 'บอกเราเกี่ยวกับเพอร์โซนาของคุณ';
+
+  @override
+  String get enterPersonaName => 'ใส่ชื่อเพอร์โซนา';
+
+  @override
+  String get describeYourPersona => 'อธิบายเพอร์โซนาของคุณโดยย่อ';
+
+  @override
+  String get profileImage => 'รูปโปรไฟล์';
+
+  @override
+  String get uploadPersonaImages => 'อัปโลดรูปภาพสำหรับเพอร์โซนาของคุณ';
+
+  @override
+  String get mainImage => 'รูปภาพหลัก';
+
+  @override
+  String get tapToUpload => 'แตะเพื่ออัปโลด';
+
+  @override
+  String get additionalImages => 'รูปภาพเพิ่มเติม';
+
+  @override
+  String get addImage => 'เพิ่มรูปภาพ';
+
+  @override
+  String get mbtiQuestion => 'คำถามบุคลิกภาพ';
+
+  @override
+  String get mbtiComplete => 'แบบทดสอบบุคลิกภาพเสร็จสิ้น!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'การตั้งค่าบุคลิกภาพ';
+
+  @override
+  String get speechStyle => 'สไตล์การพูด';
+
+  @override
+  String get conversationStyle => 'สไตล์การสนทนา';
+
+  @override
+  String get shareWithCommunity => 'แชร์กับชุมชน';
+
+  @override
+  String get shareDescription =>
+      'เพอร์โซนาของคุณจะถูกแชร์กับผู้ใช้อื่นหลังจากได้รับอนุมัติ';
+
+  @override
+  String get sharePersona => 'แชร์เพอร์โซนา';
+
+  @override
+  String get willBeSharedAfterApproval => 'จะถูกแชร์หลังจากผ้านดูแลระบบอนุมัติ';
+
+  @override
+  String get privatePersonaDescription =>
+      'เฉพาะคุณเท่านั้นที่เห็นเพอร์โซนานี้ได้';
+
+  @override
+  String get create => 'สร้าง';
+
+  @override
+  String get personaCreated => 'สร้างเพอร์โซนาสำเร็จ!';
+
+  @override
+  String get createFailed => 'สร้างเพอร์โซนาไม่สำเร็จ';
+
+  @override
+  String get pendingApproval => 'รออนุมัติ';
+
+  @override
+  String get approved => 'อนุมัติแล้ว';
+
+  @override
+  String get privatePersona => 'ส่วนตัว';
+
+  @override
+  String get noPersonasYet => 'ยังไม่มีเพอร์โซนา';
+
+  @override
+  String get createYourFirstPersona =>
+      'สร้างเพอร์โซนาแรกของคุณและเริ่มต้นการเดินทาง';
+
+  @override
+  String get deletePersona => 'ลบเพอร์โซนา';
+
+  @override
+  String get deletePersonaConfirm => 'คุณแน่ใจหรือไม่ว่าต้องการลบเพอร์โซนานี้?';
+
+  @override
+  String get personaDeleted => 'ลบเพอร์โซนาสำเร็จ';
+
+  @override
+  String get deleteFailed => 'ลบไม่สำเร็จ';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

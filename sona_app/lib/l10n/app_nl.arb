@@ -3122,5 +3122,185 @@
   "darkThemeName": "Donker",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "De laatste 10 gesprekken worden geanalyseerd.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Verklaart de analyse van recente gesprekken in het chatfoutrapportdialoog"
+  },
+  "whatWasAwkward": "Wat leek er vreemd?",
+  "@whatWasAwkward": {
+    "description": "Label dat de gebruiker vraagt naar het vreemde deel"
+  },
+  "errorExampleHint": "Bijv.: Vreemde manier van spreken (~nya uitgangen)...",
+  "@errorExampleHint": {
+    "description": "Hint-tekst voor het invoerveld voor foutbeschrijving"
+  },
+  "translationErrorAnalysisInfo": "We zullen het geselecteerde bericht en de vertaling analyseren.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Wat was er mis met de vertaling?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Bijv: Onjuiste betekenis, onnatuurlijke uitdrukking, verkeerde context...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Selecteer eerst een bericht",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Mijn Persona's",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Persona Maken",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Basisinformatie",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Vertel ons over je persona",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Voer de persona naam in",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Anders",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Beschrijf je persona kort",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Profielafbeelding",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Upload afbeeldingen voor je persona",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Hoofdafbeelding",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Tik om te uploaden",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Extra Afbeeldingen",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Afbeelding Toevoegen",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Persoonlijkheidsvraag",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Persoonlijkheidstest Voltooid!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Persoonlijkheidsinstellingen",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Spreekstijl",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Gespreksstijl",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Interesses",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Delen met Gemeenschap",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Je persona wordt gedeeld met andere gebruikers na goedkeuring",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Persona Delen",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Wordt gedeeld na goedkeuring door beheerder",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Alleen jij kunt deze persona zien",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Vorige",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Maken",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Persona succesvol gemaakt!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Maken van persona mislukt",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Alle",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Wacht op Goedkeuring",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Goedgekeurd",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Privé",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Nog Geen Persona's",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Maak je eerste persona en begin je reis",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Persona Verwijderen",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Weet je zeker dat je deze persona wilt verwijderen?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona succesvol verwijderd",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Verwijderen mislukt",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

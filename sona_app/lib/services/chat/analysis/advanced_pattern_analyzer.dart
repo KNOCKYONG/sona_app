@@ -1272,46 +1272,39 @@ class AdvancedPatternAnalyzer {
     return result;
   }
 
-  /// 언어 감지
+  /// 언어 감지 (간소화 - OpenAI가 21개 언어 자동 감지)
   Map<String, dynamic> detectLanguagePattern(String message) {
     final result = <String, dynamic>{
-      'primaryLanguage': 'ko',
+      'primaryLanguage': 'auto', // OpenAI가 자동 감지
       'hasMultipleLanguages': false,
       'languages': <String>[],
-      'needsTranslation': false,
+      'needsTranslation': true, // 항상 true로 설정 (OpenAI가 판단)
     };
 
-    // 한국어 체크
-    if (RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message)) {
-      result['languages'].add('ko');
+    // 간단한 언어 존재 여부만 체크 (디버깅용)
+    final hasKorean = RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message);
+    final hasEnglish = RegExp(r'[a-zA-Z]').hasMatch(message);
+    final hasJapanese = RegExp(r'[\u3040-\u309F\u30A0-\u30FF]').hasMatch(message);
+    final hasChinese = RegExp(r'[\u4E00-\u9FFF]').hasMatch(message) &&
+        !RegExp(r'[\u3040-\u309F\u30A0-\u30FF]').hasMatch(message);
+    
+    // 디버깅용 언어 리스트
+    if (hasKorean) result['languages'].add('ko');
+    if (hasEnglish) result['languages'].add('en');
+    if (hasJapanese) result['languages'].add('ja');
+    if (hasChinese) result['languages'].add('zh');
+    
+    // 한국어만 있는 경우 번역 불필요
+    if (hasKorean && !hasEnglish && !hasJapanese && !hasChinese) {
+      result['needsTranslation'] = false;
+      result['primaryLanguage'] = 'ko';
     }
     
-    // 영어 체크
-    if (RegExp(r'[a-zA-Z]').hasMatch(message)) {
-      result['languages'].add('en');
-      
-      // 순수 영어 문장인지 체크
-      if (!RegExp(r'[가-힣ㄱ-ㅎㅏ-ㅣ]').hasMatch(message) && 
-          message.trim().split(' ').length >= 2) {
-        result['primaryLanguage'] = 'en';
-        result['needsTranslation'] = true;
-      }
-    }
-    
-    // 일본어 체크
-    if (RegExp(r'[\u3040-\u309F\u30A0-\u30FF]').hasMatch(message)) {
-      result['languages'].add('ja');
-      result['needsTranslation'] = true;
-    }
-    
-    // 중국어 체크
-    if (RegExp(r'[\u4E00-\u9FFF]').hasMatch(message) &&
-        !RegExp(r'[\u3040-\u309F\u30A0-\u30FF]').hasMatch(message)) {
-      result['languages'].add('zh');
-      result['needsTranslation'] = true;
-    }
-
+    // 여러 언어가 섞여있는지 체크
     result['hasMultipleLanguages'] = result['languages'].length > 1;
+    
+    // OpenAI가 21개 언어(베트남어, 태국어, 아랍어 등)를 모두 감지하므로
+    // 클라이언트는 최소한의 체크만 수행
     
     return result;
   }

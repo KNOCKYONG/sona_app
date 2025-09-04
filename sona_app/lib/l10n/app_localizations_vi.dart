@@ -79,7 +79,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get aiPersonaPreferenceDescription => 'Sở thích nhân vật AI';
 
   @override
-  String get all => 'Tất cả';
+  String get all => 'Tất Cả';
 
   @override
   String get allAgree => 'Đồng ý tất cả';
@@ -154,7 +154,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get backButton => 'Quay lại';
 
   @override
-  String get basicInfo => 'Thông tin cơ bản';
+  String get basicInfo => 'Thông Tin Cơ Bản';
 
   @override
   String get basicInfoDescription => 'Thông tin cơ bản của bạn';
@@ -712,6 +712,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get goToSettings => 'Đến cài đặt';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled => 'Đăng nhập Google đã hủy';
 
   @override
@@ -863,7 +871,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get interestSharingDesc => 'Chia sẻ sở thích';
 
   @override
-  String get interests => 'Sở thích';
+  String get interests => 'Sở Thích';
 
   @override
   String get invalidEmailFormat => 'Định dạng email không hợp lệ';
@@ -1752,6 +1760,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get selectProblematicMessage => 'Chọn tin nhắn có vấn đề (tùy chọn)';
 
   @override
+  String get chatErrorAnalysisInfo =>
+      'Đang phân tích 10 cuộc trò chuyện gần nhất.';
+
+  @override
+  String get whatWasAwkward => 'Điều gì khiến bạn thấy không tự nhiên?';
+
+  @override
+  String get errorExampleHint =>
+      'Ví dụ: Cách nói chuyện không tự nhiên (đuôi ~nya)...';
+
+  @override
   String get selectReportReason => 'Chọn lý do báo cáo';
 
   @override
@@ -2346,4 +2365,163 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Tối';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Chúng tôi sẽ phân tích tin nhắn và bản dịch đã chọn.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'Bản dịch có vấn đề gì?';
+
+  @override
+  String get translationErrorHint =>
+      'Ví dụ: Ý nghĩa sai, cách diễn đạt không tự nhiên, ngữ cảnh sai...';
+
+  @override
+  String get pleaseSelectMessage => 'Vui lòng chọn tin nhắn trước';
+
+  @override
+  String get myPersonas => 'Persona Của Tôi';
+
+  @override
+  String get createPersona => 'Tạo Persona';
+
+  @override
+  String get tellUsAboutYourPersona =>
+      'Hãy cho chúng tôi biết về persona của bạn';
+
+  @override
+  String get enterPersonaName => 'Nhập tên persona';
+
+  @override
+  String get describeYourPersona => 'Mô tả ngắn gọn persona của bạn';
+
+  @override
+  String get profileImage => 'Ảnh Đại Diện';
+
+  @override
+  String get uploadPersonaImages => 'Tải lên hình ảnh cho persona của bạn';
+
+  @override
+  String get mainImage => 'Ảnh Chính';
+
+  @override
+  String get tapToUpload => 'Chạm để tải lên';
+
+  @override
+  String get additionalImages => 'Ảnh Bổ Sung';
+
+  @override
+  String get addImage => 'Thêm Ảnh';
+
+  @override
+  String get mbtiQuestion => 'Câu Hỏi Tính Cách';
+
+  @override
+  String get mbtiComplete => 'Bài Kiểm Tra Tính Cách Hoàn Thành!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Cài Đặt Tính Cách';
+
+  @override
+  String get speechStyle => 'Phong Cách Nói';
+
+  @override
+  String get conversationStyle => 'Phong Cách Đối Thoại';
+
+  @override
+  String get shareWithCommunity => 'Chia Sẻ Với Cộng Đồng';
+
+  @override
+  String get shareDescription =>
+      'Persona của bạn sẽ được chia sẻ với người dùng khác sau khi được phê duyệt';
+
+  @override
+  String get sharePersona => 'Chia Sẻ Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Sẽ được chia sẻ sau khi quản trị viên phê duyệt';
+
+  @override
+  String get privatePersonaDescription =>
+      'Chỉ bạn mới có thể nhìn thấy persona này';
+
+  @override
+  String get create => 'Tạo';
+
+  @override
+  String get personaCreated => 'Tạo persona thành công!';
+
+  @override
+  String get createFailed => 'Tạo persona thất bại';
+
+  @override
+  String get pendingApproval => 'Chờ Phê Duyệt';
+
+  @override
+  String get approved => 'Đã Phê Duyệt';
+
+  @override
+  String get privatePersona => 'Riêng Tư';
+
+  @override
+  String get noPersonasYet => 'Chưa Có Persona';
+
+  @override
+  String get createYourFirstPersona =>
+      'Tạo persona đầu tiên của bạn và bắt đầu hành trình';
+
+  @override
+  String get deletePersona => 'Xóa Persona';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Bạn có chắc chắn muốn xóa persona này không?';
+
+  @override
+  String get personaDeleted => 'Xóa persona thành công';
+
+  @override
+  String get deleteFailed => 'Xóa thất bại';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

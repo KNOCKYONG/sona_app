@@ -216,7 +216,7 @@ SecurityFilterService (메인 필터)
 
 ### 🚨 i18n 핵심 원칙
 1. **절대 하드코딩 금지**: 모든 사용자 표시 텍스트는 ARB 파일 관리
-2. **13개 언어 동시 지원**: 새 텍스트 추가 시 모든 언어 파일 업데이트 필수
+2. **🔴 21개 언어 필수 지원**: 새 텍스트 추가 시 반드시 21개 언어 파일 모두 업데이트 필수
 3. **ARB 파일 기반**: Flutter의 공식 i18n 시스템 사용 (l10n.yaml 설정)
 4. **자동 코드 생성**: `flutter gen-l10n` 명령으로 Dart 코드 자동 생성
 
@@ -232,12 +232,20 @@ sona_app/
     ├── app_th.arb               # 태국어
     ├── app_vi.arb               # 베트남어
     ├── app_id.arb               # 인도네시아어
+    ├── app_tl.arb               # 타갈로그어 (필리핀)
     ├── app_es.arb               # 스페인어
     ├── app_fr.arb               # 프랑스어
     ├── app_de.arb               # 독일어
     ├── app_ru.arb               # 러시아어
     ├── app_pt.arb               # 포르투갈어
     ├── app_it.arb               # 이탈리아어
+    ├── app_nl.arb               # 네덜란드어
+    ├── app_sv.arb               # 스웨덴어
+    ├── app_pl.arb               # 폴란드어
+    ├── app_tr.arb               # 터키어
+    ├── app_ar.arb               # 아랍어
+    ├── app_hi.arb               # 힌디어
+    ├── app_ur.arb               # 우르두어
     └── app_localizations.dart   # 자동 생성됨 (수정 금지)
 ```
 
@@ -254,11 +262,16 @@ sona_app/
 }
 ```
 
-#### 2단계: 모든 언어 파일에 번역 추가
+#### 2단계: 🔴 반드시 21개 언어 파일 모두에 번역 추가 (필수!)
 ```bash
-# 자동 번역 스크립트 실행
+# 자동 번역 스크립트 실행 (21개 언어 동시 처리)
 python scripts/translate_new_keys.py
+
+# 또는 수동으로 21개 언어 파일 모두 업데이트
+# 언어 코드: en, ko, ja, zh, th, vi, id, tl, es, fr, de, ru, pt, it, nl, sv, pl, tr, ar, hi, ur
 ```
+
+⚠️ **중요**: 하나라도 누락시 빌드 실패!
 
 #### 3단계: 코드 생성
 ```bash
@@ -339,11 +352,24 @@ python scripts/check_translation_status.py
 
 ### ✅ 체크리스트
 
-#### 새 기능 개발 시
+#### 새 기능 개발 시 (🔴 21개 언어 필수!)
 - [ ] 모든 사용자 표시 텍스트를 ARB 파일에 추가했는가?
-- [ ] 13개 언어 모두에 번역을 추가했는가?
+- [ ] **🔴 21개 언어 모두**에 번역을 추가했는가? (en, ko, ja, zh, th, vi, id, tl, es, fr, de, ru, pt, it, nl, sv, pl, tr, ar, hi, ur)
 - [ ] `flutter gen-l10n` 실행했는가?
 - [ ] 하드코딩된 텍스트가 없는지 확인했는가?
+
+#### 21개 언어 체크리스트
+```bash
+# 필수 확인 - 21개 언어 파일 모두 존재하는지
+ls -la lib/l10n/*.arb | wc -l  # 결과가 21이어야 함
+
+# 새로 추가한 키가 모든 언어에 있는지 확인
+KEY_NAME="yourNewKey"
+for lang in en ko ja zh th vi id tl es fr de ru pt it nl sv pl tr ar hi ur; do
+  echo -n "app_$lang.arb: "
+  grep -c "\"$KEY_NAME\"" "lib/l10n/app_$lang.arb"
+done
+```
 
 #### 코드 리뷰 시
 ```bash
@@ -387,11 +413,11 @@ Text(isKorean ? '확인' : 'Confirm')
 Text(localizations.confirm)
 ```
 
-### 📊 현재 상태 (2025-01-31)
-- **지원 언어**: 13개
-- **총 번역 키**: 650개
-- **미번역 키**: 117개 (다른 언어들)
-- **컴파일 에러**: 33개 (파라미터 참조 문제)
+### 📊 현재 상태 (2025-02-01)
+- **지원 언어**: 🔴 **21개** (en, ko, ja, zh, th, vi, id, tl, es, fr, de, ru, pt, it, nl, sv, pl, tr, ar, hi, ur)
+- **총 번역 키**: 653개 (chatErrorAnalysisInfo, whatWasAwkward, errorExampleHint 추가됨)
+- **미번역 키**: 일부 언어에 2개씩 존재 (추가 번역 필요)
+- **최근 추가**: 대화 오류 보고 다이얼로그 텍스트 21개 언어 번역 완료
 
 ---
 

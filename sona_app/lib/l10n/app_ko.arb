@@ -942,6 +942,14 @@
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
+  "permissionGuideAndroid": "설정 > 앱 > SONA > 권한에서\n사진 권한을 허용해주세요",
+  "@permissionGuideAndroid": {
+    "description": "Guide text for Android permission settings"
+  },
+  "permissionGuideIOS": "설정 > SONA > 사진에서\n사진 접근을 허용해주세요",
+  "@permissionGuideIOS": {
+    "description": "Guide text for iOS permission settings"
+  },
   "googleLoginCanceled": "구글 로그인이 취소되었습니다.\n다시 시도해주세요.",
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
@@ -2349,6 +2357,18 @@
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
+  "chatErrorAnalysisInfo": "최근 10개 대화를 전송하여 분석합니다.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Information about chat error analysis"
+  },
+  "whatWasAwkward": "어떤 부분이 어색했나요?",
+  "@whatWasAwkward": {
+    "description": "Question asking what was awkward in the chat"
+  },
+  "errorExampleHint": "예: 말투가 이상해요 (~냐 같은 표현), 대답이 어색해요, 반복적인 답변을 해요 등",
+  "@errorExampleHint": {
+    "description": "Example hint for error description"
+  },
   "selectReportReason": "신고 사유를 선택하세요",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
@@ -3122,5 +3142,245 @@
   "darkThemeName": "다크 모드",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "alwaysShowTranslationOn": "번역 항상 표시",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "alwaysShowTranslationOff": "자동 번역 숨기기",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "translationErrorAnalysisInfo": "선택한 메시지와 번역 내용을 분석합니다.",
+  "@translationErrorAnalysisInfo": {
+    "description": "선택한 메시지와 번역이 분석될 것임을 설명하는 정보 텍스트"
+  },
+  "whatWasWrongWithTranslation": "번역의 어떤 부분이 잘못되었나요?",
+  "@whatWasWrongWithTranslation": {
+    "description": "사용자에게 번역 문제를 설명하도록 요청하는 라벨"
+  },
+  "translationErrorHint": "예: 잘못된 의미, 부자연스러운 표현, 맥락 오류...",
+  "@translationErrorHint": {
+    "description": "번역 오류 설명 입력 필드의 힌트 텍스트"
+  },
+  "pleaseSelectMessage": "먼저 메시지를 선택해주세요",
+  "@pleaseSelectMessage": {
+    "description": "메시지를 선택하지 않고 제출하려 할 때 표시되는 메시지"
+  },
+  "myPersonas": "내 페르소나",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "페르소나 만들기",
+  "@createPersona": {
+    "description": "Button text for creating a persona"
+  },
+  "pendingApproval": "승인 대기",
+  "@pendingApproval": {
+    "description": "Status for pending approval"
+  },
+  "approved": "공개됨",
+  "@approved": {
+    "description": "Status for approved"
+  },
+  "privatePersona": "비공개",
+  "@privatePersona": {
+    "description": "Status for private persona"
+  },
+  "noPersonasYet": "아직 페르소나가 없어요",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "나만의 특별한 페르소나를 만들어보세요",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "페르소나 삭제",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "이 페르소나를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "페르소나가 삭제되었습니다",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "삭제에 실패했습니다",
+  "@deleteFailed": {
+    "description": "Delete failed message"
+  },
+  "personaLimitReached": "무료 사용자는 최대 3개의 페르소나를 만들 수 있습니다",
+  "@personaLimitReached": {
+    "description": "Persona limit reached message"
+  },
+  "basicInfo": "기본 정보",
+  "@basicInfo": {
+    "description": "Basic info step title"
+  },
+  "uploadPhoto": "사진 업로드",
+  "@uploadPhoto": {
+    "description": "Upload photo step title"
+  },
+  "mbtiTest": "MBTI 테스트",
+  "@mbtiTest": {
+    "description": "MBTI test step title"
+  },
+  "mbtiQuestion": "성격 질문",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "성격 테스트 완료!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "mbtiStepDescription": "페르소나가 어떤 성격을 갖길 원하시나요? 질문에 답해 페르소나의 성격을 결정해주세요.",
+  "@mbtiStepDescription": {
+    "description": "Description explaining that MBTI is for the persona's personality, not the user's"
+  },
+  "startTest": "테스트 시작",
+  "@startTest": {
+    "description": "Button text to start the MBTI test"
+  },
+  "personality": "성격 설정",
+  "@personality": {
+    "description": "Personality step title"
+  },
+  "shareSettings": "공유 설정",
+  "@shareSettings": {
+    "description": "Share settings step title"
+  },
+  "personaName": "페르소나 이름",
+  "@personaName": {
+    "description": "Persona name field label"
+  },
+  "personaNameHint": "예: 서연, 민준",
+  "@personaNameHint": {
+    "description": "Persona name field hint"
+  },
+  "personaAge": "나이",
+  "@personaAge": {
+    "description": "Persona age field label"
+  },
+  "personaDescription": "소개",
+  "@personaDescription": {
+    "description": "Persona description field label"
+  },
+  "personaDescriptionHint": "페르소나를 소개해주세요",
+  "@personaDescriptionHint": {
+    "description": "Persona description field hint"
+  },
+  "selectMainPhoto": "메인 사진 선택",
+  "@selectMainPhoto": {
+    "description": "Select main photo button"
+  },
+  "addAdditionalPhotos": "추가 사진 (최대 4장)",
+  "@addAdditionalPhotos": {
+    "description": "Add additional photos label"
+  },
+  "question": "질문",
+  "@question": {
+    "description": "Question label"
+  },
+  "speechStyle": "말투",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "friendly": "친근한",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "정중한",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "시크한",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "활발한",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "대화 스타일",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "수다스러운",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "과묵한",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "공감적",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "논리적",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "관심사",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "selectInterests": "관심사를 선택하세요",
+  "@selectInterests": {
+    "description": "Select interests instruction"
+  },
+  "shareWithOthers": "다른 사용자와 공유하기",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "willBeSharedAfterApproval": "관리자 승인 후 공유됩니다",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval note"
+  },
+  "keepPrivate": "나만 사용하기",
+  "@keepPrivate": {
+    "description": "Keep private option"
+  },
+  "creating": "생성 중...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "personaCreated": "페르소나가 생성되었습니다",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "생성에 실패했습니다",
+  "@createFailed": {
+    "description": "Create failed message"
+  },
+  "personaName": "이름",
+  "@personaName": {
+    "description": "Persona name label"
+  },
+  "personaAge": "나이",
+  "@personaAge": {
+    "description": "Persona age label"
+  },
+  "personaDescription": "소개",
+  "@personaDescription": {
+    "description": "Persona description label"
+  },
+  "personaNameHint": "페르소나 이름을 입력하세요",
+  "@personaNameHint": {
+    "description": "Hint text for persona name input"
+  },
+  "personaDescriptionHint": "페르소나를 소개해주세요",
+  "@personaDescriptionHint": {
+    "description": "Hint text for persona description input"
+  },
+  "loginRequiredContent": "계속하려면 로그인해주세요",
+  "@loginRequiredContent": {
+    "description": "Content for login required dialog"
+  },
+  "reportErrorButton": "오류 신고",
+  "@reportErrorButton": {
+    "description": "Button text for report error"
   }
 }

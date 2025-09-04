@@ -23,6 +23,7 @@ import '../../utils/localization_helper.dart';
 class MessageBubble extends StatelessWidget {
   final Message message;
   final VoidCallback? onScoreChange;
+  final bool alwaysShowTranslation;
 
   // Removed static DateFormat - now using LocalizationHelper
 
@@ -35,6 +36,7 @@ class MessageBubble extends StatelessWidget {
     super.key,
     required this.message,
     this.onScoreChange,
+    this.alwaysShowTranslation = false,
   });
 
   @override
@@ -56,7 +58,10 @@ class MessageBubble extends StatelessWidget {
       case MessageType.emotion:
         return _EmotionMessage(message: message);
       default:
-        return _TextMessage(message: message);
+        return _TextMessage(
+          message: message,
+          alwaysShowTranslation: alwaysShowTranslation,
+        );
     }
   }
 }
@@ -64,6 +69,7 @@ class MessageBubble extends StatelessWidget {
 // Separate widget for text messages to avoid rebuilds
 class _TextMessage extends StatefulWidget {
   final Message message;
+  final bool alwaysShowTranslation;
 
   static const _userTextStyle = TextStyle(
     color: Colors.white,
@@ -79,6 +85,7 @@ class _TextMessage extends StatefulWidget {
 
   const _TextMessage({
     required this.message,
+    this.alwaysShowTranslation = false,
   });
 
   @override
@@ -88,10 +95,19 @@ class _TextMessage extends StatefulWidget {
 class _TextMessageState extends State<_TextMessage> {
   bool _showTranslation = false;
 
+  @override
+  void initState() {
+    super.initState();
+    // If alwaysShowTranslation is enabled and message has translation, show it by default
+    if (widget.alwaysShowTranslation && widget.message.translatedContent != null) {
+      _showTranslation = true;
+    }
+  }
+
   // 번역 컨텐츠에서 언어 태그 및 한글 제거
   String _extractTranslatedContent(String content) {
-    // [EN], [JA] 등의 태그가 있으면 태그 이후 부분만 추출
-    final tagPattern = RegExp(r'\[(EN|JA|ZH|ES|FR|DE|IT|PT|RU|AR|TH|ID|MS|VI)\]');
+    // 21개 언어 태그 모두 포함 (KO 제외)
+    final tagPattern = RegExp(r'\[(EN|JA|ZH|TH|VI|ID|TL|ES|FR|DE|IT|PT|RU|NL|SV|PL|TR|AR|HI|UR)\]');
     final match = tagPattern.firstMatch(content);
     if (match != null) {
       final tagEnd = match.end;
@@ -142,9 +158,13 @@ class _TextMessageState extends State<_TextMessage> {
       final koIndex = content.indexOf('[KO]');
       var koreanStart = koIndex + 4; // '[KO]'.length = 4
       
-      // 다른 언어 태그가 있으면 그 전까지만 추출
+      // 다른 언어 태그가 있으면 그 전까지만 추출 (21개 언어 모두 포함)
       var koreanEnd = content.length;
-      final possibleTags = ['[EN]', '[JA]', '[ZH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]', '[TH]', '[ID]', '[MS]', '[VI]'];
+      final possibleTags = [
+        '[EN]', '[JA]', '[ZH]', '[TH]', '[VI]', '[ID]', '[TL]',
+        '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]',
+        '[NL]', '[SV]', '[PL]', '[TR]', '[AR]', '[HI]', '[UR]'
+      ];
       for (final tag in possibleTags) {
         final tagIndex = content.indexOf(tag, koreanStart);
         if (tagIndex != -1 && tagIndex < koreanEnd) {

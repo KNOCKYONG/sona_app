@@ -3122,5 +3122,185 @@
   "darkThemeName": "มืด",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "กำลังวิเคราะห์บทสนทนา 10 รายการล่าสุด",
+  "@chatErrorAnalysisInfo": {
+    "description": "อธิบายการวิเคราะห์บทสนทนาล่าสุดในไดอะล็อกรายงานข้อผิดพลาดการแชท"
+  },
+  "whatWasAwkward": "มีอะไรที่ทำให้คุณรู้สึกไม่เป็นธรรมชาติ?",
+  "@whatWasAwkward": {
+    "description": "ป้ายถามผู้ใช้เกี่ยวกับส่วนที่ไม่เป็นธรรมชาติ"
+  },
+  "errorExampleHint": "ตัวอย่าง: วิธีการพูดที่ไม่เป็นธรรมชาติ (คำลงท้าย ~nya)...",
+  "@errorExampleHint": {
+    "description": "ข้อความแนะนำสำหรับฟิลด์ป้อนคำอธิบายข้อผิดพลาด"
+  },
+  "translationErrorAnalysisInfo": "เราจะวิเคราะห์ข้อความและการแปลที่เลือก",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "การแปลผิดพลาดตรงไหน?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "เช่น: ความหมายผิด, การแสดงออกไม่เป็นธรรมชาติ, บริบทผิด...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "กรุณาเลือกข้อความก่อน",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "เพอร์โซนาของฉัน",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "สร้างเพอร์โซนา",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "ข้อมูลพื้นฐาน",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "บอกเราเกี่ยวกับเพอร์โซนาของคุณ",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "ใส่ชื่อเพอร์โซนา",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "อื่นๆ",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "อธิบายเพอร์โซนาของคุณโดยย่อ",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "รูปโปรไฟล์",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "อัปโลดรูปภาพสำหรับเพอร์โซนาของคุณ",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "รูปภาพหลัก",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "แตะเพื่ออัปโลด",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "รูปภาพเพิ่มเติม",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "เพิ่มรูปภาพ",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "คำถามบุคลิกภาพ",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "แบบทดสอบบุคลิกภาพเสร็จสิ้น!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "การตั้งค่าบุคลิกภาพ",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "สไตล์การพูด",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "สไตล์การสนทนา",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "ความสนใจ",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "แชร์กับชุมชน",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "เพอร์โซนาของคุณจะถูกแชร์กับผู้ใช้อื่นหลังจากได้รับอนุมัติ",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "แชร์เพอร์โซนา",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "จะถูกแชร์หลังจากผ้านดูแลระบบอนุมัติ",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "เฉพาะคุณเท่านั้นที่เห็นเพอร์โซนานี้ได้",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "ก่อนหน้า",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "สร้าง",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "สร้างเพอร์โซนาสำเร็จ!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "สร้างเพอร์โซนาไม่สำเร็จ",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "ทั้งหมด",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "รออนุมัติ",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "อนุมัติแล้ว",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "ส่วนตัว",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "ยังไม่มีเพอร์โซนา",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "สร้างเพอร์โซนาแรกของคุณและเริ่มต้นการเดินทาง",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "ลบเพอร์โซนา",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "คุณแน่ใจหรือไม่ว่าต้องการลบเพอร์โซนานี้?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "ลบเพอร์โซนาสำเร็จ",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "ลบไม่สำเร็จ",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

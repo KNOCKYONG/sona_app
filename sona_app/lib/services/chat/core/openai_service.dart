@@ -59,6 +59,7 @@ class OpenAIService {
     bool isCasualSpeech = false,
     String? contextHint,
     String? targetLanguage, // 번역 언어 추가
+    String? systemLanguage, // 시스템 언어 추가
   }) async {
     // 대화 상태 관리
     if (conversationId != null && userId != null) {
@@ -90,6 +91,7 @@ class OpenAIService {
       isCasualSpeech: isCasualSpeech,
       contextHint: contextHint,
       targetLanguage: targetLanguage,
+      systemLanguage: systemLanguage,  // 시스템 언어 추가
       completer: Completer<String>(),
     );
 
@@ -247,6 +249,7 @@ class OpenAIService {
       isCasualSpeech: request.isCasualSpeech,
       contextHint: enhancedContextHint,
       targetLanguage: request.targetLanguage,
+      systemLanguage: request.systemLanguage,  // 시스템 언어 전달
       patternAnalysis: advancedAnalysis.basicAnalysis, // 기본 패턴 분석 결과 전달
       hasAskedWellBeingToday: hasAskedWellBeingToday,
     );
@@ -667,6 +670,7 @@ class _PendingRequest {
   final bool isCasualSpeech;
   final String? contextHint;
   final String? targetLanguage;
+  final String? systemLanguage;  // 시스템 언어 추가
   final Completer<String> completer;
 
   _PendingRequest({
@@ -681,6 +685,7 @@ class _PendingRequest {
     this.isCasualSpeech = false,
     this.contextHint,
     this.targetLanguage,
+    this.systemLanguage,  // 시스템 언어 추가
     required this.completer,
   });
 }

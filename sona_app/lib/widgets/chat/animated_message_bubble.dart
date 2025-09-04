@@ -13,6 +13,7 @@ class AnimatedMessageBubble extends StatefulWidget {
   final VoidCallback? onScoreChange;
   final bool isNewMessage;
   final int index;
+  final bool alwaysShowTranslation;
   
   const AnimatedMessageBubble({
     super.key,
@@ -20,6 +21,7 @@ class AnimatedMessageBubble extends StatefulWidget {
     this.onScoreChange,
     this.isNewMessage = false,
     this.index = 0,
+    this.alwaysShowTranslation = false,
   });
 
   @override
@@ -81,6 +83,7 @@ class _AnimatedMessageBubbleState extends State<AnimatedMessageBubble>
       return MessageBubble(
         message: widget.message,
         onScoreChange: widget.onScoreChange,
+        alwaysShowTranslation: widget.alwaysShowTranslation,
       );
     }
     
@@ -92,6 +95,7 @@ class _AnimatedMessageBubbleState extends State<AnimatedMessageBubble>
         child: MessageBubble(
           message: widget.message,
           onScoreChange: widget.onScoreChange,
+          alwaysShowTranslation: widget.alwaysShowTranslation,
         ),
       ),
     );
@@ -107,6 +111,7 @@ class SwipeableMessageBubble extends StatefulWidget {
   final Function(Message, String) onReaction;
   final bool isNewMessage;
   final int index;
+  final bool alwaysShowTranslation;
   
   const SwipeableMessageBubble({
     super.key,
@@ -116,6 +121,7 @@ class SwipeableMessageBubble extends StatefulWidget {
     required this.onReaction,
     this.isNewMessage = false,
     this.index = 0,
+    this.alwaysShowTranslation = false,
   });
   
   @override
@@ -271,6 +277,7 @@ class _SwipeableMessageBubbleState extends State<SwipeableMessageBubble>
                   onScoreChange: widget.onScoreChange,
                   isNewMessage: widget.isNewMessage,
                   index: widget.index,
+                  alwaysShowTranslation: widget.alwaysShowTranslation,
                 ),
               );
             },

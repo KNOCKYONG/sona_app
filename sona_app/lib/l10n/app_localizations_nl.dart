@@ -734,6 +734,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String get goToSettings => 'Ga naar Instellingen';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled =>
       'Google-inlog is geannuleerd. Probeer het opnieuw.';
 
@@ -1803,6 +1811,17 @@ class AppLocalizationsNl extends AppLocalizations {
       'Selecteer het problematische bericht (optioneel)';
 
   @override
+  String get chatErrorAnalysisInfo =>
+      'De laatste 10 gesprekken worden geanalyseerd.';
+
+  @override
+  String get whatWasAwkward => 'Wat leek er vreemd?';
+
+  @override
+  String get errorExampleHint =>
+      'Bijv.: Vreemde manier van spreken (~nya uitgangen)...';
+
+  @override
   String get selectReportReason => 'Selecteer rapportage reden';
 
   @override
@@ -2415,4 +2434,161 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Donker';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'We zullen het geselecteerde bericht en de vertaling analyseren.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'Wat was er mis met de vertaling?';
+
+  @override
+  String get translationErrorHint =>
+      'Bijv: Onjuiste betekenis, onnatuurlijke uitdrukking, verkeerde context...';
+
+  @override
+  String get pleaseSelectMessage => 'Selecteer eerst een bericht';
+
+  @override
+  String get myPersonas => 'Mijn Persona\'s';
+
+  @override
+  String get createPersona => 'Persona Maken';
+
+  @override
+  String get tellUsAboutYourPersona => 'Vertel ons over je persona';
+
+  @override
+  String get enterPersonaName => 'Voer de persona naam in';
+
+  @override
+  String get describeYourPersona => 'Beschrijf je persona kort';
+
+  @override
+  String get profileImage => 'Profielafbeelding';
+
+  @override
+  String get uploadPersonaImages => 'Upload afbeeldingen voor je persona';
+
+  @override
+  String get mainImage => 'Hoofdafbeelding';
+
+  @override
+  String get tapToUpload => 'Tik om te uploaden';
+
+  @override
+  String get additionalImages => 'Extra Afbeeldingen';
+
+  @override
+  String get addImage => 'Afbeelding Toevoegen';
+
+  @override
+  String get mbtiQuestion => 'Persoonlijkheidsvraag';
+
+  @override
+  String get mbtiComplete => 'Persoonlijkheidstest Voltooid!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Persoonlijkheidsinstellingen';
+
+  @override
+  String get speechStyle => 'Spreekstijl';
+
+  @override
+  String get conversationStyle => 'Gespreksstijl';
+
+  @override
+  String get shareWithCommunity => 'Delen met Gemeenschap';
+
+  @override
+  String get shareDescription =>
+      'Je persona wordt gedeeld met andere gebruikers na goedkeuring';
+
+  @override
+  String get sharePersona => 'Persona Delen';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Wordt gedeeld na goedkeuring door beheerder';
+
+  @override
+  String get privatePersonaDescription => 'Alleen jij kunt deze persona zien';
+
+  @override
+  String get create => 'Maken';
+
+  @override
+  String get personaCreated => 'Persona succesvol gemaakt!';
+
+  @override
+  String get createFailed => 'Maken van persona mislukt';
+
+  @override
+  String get pendingApproval => 'Wacht op Goedkeuring';
+
+  @override
+  String get approved => 'Goedgekeurd';
+
+  @override
+  String get privatePersona => 'Privé';
+
+  @override
+  String get noPersonasYet => 'Nog Geen Persona\'s';
+
+  @override
+  String get createYourFirstPersona =>
+      'Maak je eerste persona en begin je reis';
+
+  @override
+  String get deletePersona => 'Persona Verwijderen';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Weet je zeker dat je deze persona wilt verwijderen?';
+
+  @override
+  String get personaDeleted => 'Persona succesvol verwijderd';
+
+  @override
+  String get deleteFailed => 'Verwijderen mislukt';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

@@ -81,7 +81,7 @@ class AppLocalizationsTr extends AppLocalizations {
       'Lütfen AI kişilik eşleştirmesi için tercihlerinizi ayarlayın';
 
   @override
-  String get all => 'Hepsi';
+  String get all => 'Tümü';
 
   @override
   String get allAgree => 'Hepsini kabul et';
@@ -727,6 +727,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get goToSettings => 'Ayarlara Git';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled => 'Google girişi iptal edildi.';
@@ -1792,6 +1800,15 @@ class AppLocalizationsTr extends AppLocalizations {
   String get selectProblematicMessage => 'Sorunlu mesajı seçin (isteğe bağlı)';
 
   @override
+  String get chatErrorAnalysisInfo => 'Son 10 konuşma analiz ediliyor.';
+
+  @override
+  String get whatWasAwkward => 'Size garip gelen neydi?';
+
+  @override
+  String get errorExampleHint => 'Örn: Garip konuşma şekli (~nya sonları)...';
+
+  @override
   String get selectReportReason => 'Rapor nedeni seçin';
 
   @override
@@ -2399,4 +2416,162 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Koyu';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Seçilen mesajı ve çevirisini analiz edeceğiz.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'Çeviride ne yanlıştı?';
+
+  @override
+  String get translationErrorHint =>
+      'Örn: Yanlış anlam, doğal olmayan ifade, yanlış bağlam...';
+
+  @override
+  String get pleaseSelectMessage => 'Lütfen önce bir mesaj seçin';
+
+  @override
+  String get myPersonas => 'Kişiliklerim';
+
+  @override
+  String get createPersona => 'Kişilik Oluştur';
+
+  @override
+  String get tellUsAboutYourPersona => 'Kişiliğiniz hakkında bize bilgi verin';
+
+  @override
+  String get enterPersonaName => 'Kişilik adını girin';
+
+  @override
+  String get describeYourPersona => 'Kişiliğinizi kısaca tanımlayın';
+
+  @override
+  String get profileImage => 'Profil Resmi';
+
+  @override
+  String get uploadPersonaImages => 'Kişiliğiniz için resimler yükleyin';
+
+  @override
+  String get mainImage => 'Ana Resim';
+
+  @override
+  String get tapToUpload => 'Yüklemek için dokunun';
+
+  @override
+  String get additionalImages => 'Ek Resimler';
+
+  @override
+  String get addImage => 'Resim Ekle';
+
+  @override
+  String get mbtiQuestion => 'Kişilik Sorusu';
+
+  @override
+  String get mbtiComplete => 'Kişilik Testi Tamamlandı!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Kişilik Ayarları';
+
+  @override
+  String get speechStyle => 'Konuşma Tarzı';
+
+  @override
+  String get conversationStyle => 'Sohbet Tarzı';
+
+  @override
+  String get shareWithCommunity => 'Toplulukla Paylaş';
+
+  @override
+  String get shareDescription =>
+      'Kişiliğiniz onaylandıktan sonra diğer kullanıcılarla paylaşılacak';
+
+  @override
+  String get sharePersona => 'Kişiliği Paylaş';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Yönetici onayından sonra paylaşılacak';
+
+  @override
+  String get privatePersonaDescription =>
+      'Bu kişiliği sadece siz görebilirsiniz';
+
+  @override
+  String get create => 'Oluştur';
+
+  @override
+  String get personaCreated => 'Kişilik başarıyla oluşturuldu!';
+
+  @override
+  String get createFailed => 'Kişilik oluşturulamadı';
+
+  @override
+  String get pendingApproval => 'Onay Bekliyor';
+
+  @override
+  String get approved => 'Onaylandı';
+
+  @override
+  String get privatePersona => 'Özel';
+
+  @override
+  String get noPersonasYet => 'Henüz Kişilik Yok';
+
+  @override
+  String get createYourFirstPersona =>
+      'İlk kişiliğinizi oluşturun ve yolculuğunuzu başlatın';
+
+  @override
+  String get deletePersona => 'Kişiliği Sil';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Bu kişiliği silmek istediğinizden emin misiniz?';
+
+  @override
+  String get personaDeleted => 'Kişilik başarıyla silindi';
+
+  @override
+  String get deleteFailed => 'Silme başarısız';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

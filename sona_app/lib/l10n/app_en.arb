@@ -942,6 +942,14 @@
   "@goToSettings": {
     "description": "Localized string for goToSettings"
   },
+  "permissionGuideAndroid": "Settings > Apps > SONA > Permissions\nPlease allow photo permission",
+  "@permissionGuideAndroid": {
+    "description": "Guide text for Android permission settings"
+  },
+  "permissionGuideIOS": "Settings > SONA > Photos\nPlease allow photo access",
+  "@permissionGuideIOS": {
+    "description": "Guide text for iOS permission settings"
+  },
   "googleLoginCanceled": "Google login was canceled.\nPlease try again.",
   "@googleLoginCanceled": {
     "description": "Localized string for googleLoginCanceled"
@@ -2349,6 +2357,18 @@
   "@selectProblematicMessage": {
     "description": "Localized string for selectProblematicMessage"
   },
+  "chatErrorAnalysisInfo": "Analyzing the last 10 conversations.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Information about chat error analysis"
+  },
+  "whatWasAwkward": "What seemed awkward?",
+  "@whatWasAwkward": {
+    "description": "Question asking what was awkward in the chat"
+  },
+  "errorExampleHint": "e.g., Strange speech patterns (~nya expressions), awkward responses, repetitive answers, etc.",
+  "@errorExampleHint": {
+    "description": "Example hint for error description"
+  },
   "selectReportReason": "Select report reason",
   "@selectReportReason": {
     "description": "Localized string for selectReportReason"
@@ -3126,5 +3146,225 @@
   "darkThemeName": "Dark",
   "@darkThemeName": {
     "description": "Dark theme display name"
+  },
+  "alwaysShowTranslationOn": "Always Show Translation",
+  "@alwaysShowTranslationOn": {
+    "description": "Menu item to enable always showing translation"
+  },
+  "alwaysShowTranslationOff": "Hide Auto Translation",
+  "@alwaysShowTranslationOff": {
+    "description": "Menu item to disable always showing translation"
+  },
+  "translationErrorAnalysisInfo": "We will analyze the selected message and its translation.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "What was wrong with the translation?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "e.g., Incorrect meaning, unnatural expression, wrong context...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Please select a message first",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "My Personas",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Create Persona",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Basic Information",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Tell us about your persona",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Enter persona name",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Other",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Describe your persona briefly",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Profile Image",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Upload images for your persona",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Main Image",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Tap to upload",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Additional Images",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Add Image",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Personality Question",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Personality Test Complete!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "mbtiTest": "MBTI Test",
+  "@mbtiTest": {
+    "description": "MBTI test step title"
+  },
+  "mbtiStepDescription": "Let's determine what personality your persona should have. Answer questions to shape their character.",
+  "@mbtiStepDescription": {
+    "description": "Description explaining that MBTI is for the persona's personality, not the user's"
+  },
+  "startTest": "Start Test",
+  "@startTest": {
+    "description": "Button text to start the MBTI test"
+  },
+  "personalitySettings": "Personality Settings",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Speech Style",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Conversation Style",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Interests",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Share with Community",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Your persona can be shared with other users after approval",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Share Persona",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Will be shared after admin approval",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Only you can see this persona",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Previous",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Create",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Persona created successfully!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Failed to create persona",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "All",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Pending Approval",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Approved",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Private",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "No Personas Yet",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Create your first persona and start your journey",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Delete Persona",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Are you sure you want to delete this persona?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona deleted successfully",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Failed to delete persona",
+  "@deleteFailed": {
+    "description": "Delete failed error message"
+  },
+  "personaLimitReached": "You have reached the limit of 3 personas",
+  "@personaLimitReached": {
+    "description": "Persona limit reached message"
+  },
+  "personaName": "Name",
+  "@personaName": {
+    "description": "Persona name label"
+  },
+  "personaAge": "Age",
+  "@personaAge": {
+    "description": "Persona age label"
+  },
+  "personaDescription": "Description",
+  "@personaDescription": {
+    "description": "Persona description label"
+  },
+  "personaNameHint": "Enter persona name",
+  "@personaNameHint": {
+    "description": "Hint text for persona name input"
+  },
+  "personaDescriptionHint": "Describe the persona",
+  "@personaDescriptionHint": {
+    "description": "Hint text for persona description input"
+  },
+  "loginRequiredContent": "Please log in to continue",
+  "@loginRequiredContent": {
+    "description": "Content for login required dialog"
+  },
+  "reportErrorButton": "Report Error",
+  "@reportErrorButton": {
+    "description": "Button text for report error"
   }
 }

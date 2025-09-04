@@ -262,7 +262,7 @@ abstract class AppLocalizations {
   /// **'Please set your preferences for AI persona matching'**
   String get aiPersonaPreferenceDescription;
 
-  /// Localized string for all
+  /// All tab label
   ///
   /// In en, this message translates to:
   /// **'All'**
@@ -406,7 +406,7 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get backButton;
 
-  /// Localized string for basicInfo
+  /// Basic information step title
   ///
   /// In en, this message translates to:
   /// **'Basic Information'**
@@ -1462,6 +1462,18 @@ abstract class AppLocalizations {
   /// **'Go to Settings'**
   String get goToSettings;
 
+  /// Guide text for Android permission settings
+  ///
+  /// In en, this message translates to:
+  /// **'Settings > Apps > SONA > Permissions\nPlease allow photo permission'**
+  String get permissionGuideAndroid;
+
+  /// Guide text for iOS permission settings
+  ///
+  /// In en, this message translates to:
+  /// **'Settings > SONA > Photos\nPlease allow photo access'**
+  String get permissionGuideIOS;
+
   /// Localized string for googleLoginCanceled
   ///
   /// In en, this message translates to:
@@ -1750,7 +1762,7 @@ abstract class AppLocalizations {
   /// **'Discover and recommend shared interests'**
   String get interestSharingDesc;
 
-  /// Localized string for interests
+  /// Interests label
   ///
   /// In en, this message translates to:
   /// **'Interests'**
@@ -2572,7 +2584,7 @@ abstract class AppLocalizations {
   /// **'Original'**
   String get originalText;
 
-  /// Localized string for other
+  /// Other gender option
   ///
   /// In en, this message translates to:
   /// **'Other'**
@@ -2776,7 +2788,7 @@ abstract class AppLocalizations {
   /// **'Preview'**
   String get preview;
 
-  /// Localized string for previous
+  /// Previous button text
   ///
   /// In en, this message translates to:
   /// **'Previous'**
@@ -3429,6 +3441,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select the problematic message (optional)'**
   String get selectProblematicMessage;
+
+  /// Information about chat error analysis
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing the last 10 conversations.'**
+  String get chatErrorAnalysisInfo;
+
+  /// Question asking what was awkward in the chat
+  ///
+  /// In en, this message translates to:
+  /// **'What seemed awkward?'**
+  String get whatWasAwkward;
+
+  /// Example hint for error description
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Strange speech patterns (~nya expressions), awkward responses, repetitive answers, etc.'**
+  String get errorExampleHint;
 
   /// Localized string for selectReportReason
   ///
@@ -4575,6 +4605,306 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Dark'**
   String get darkThemeName;
+
+  /// Menu item to enable always showing translation
+  ///
+  /// In en, this message translates to:
+  /// **'Always Show Translation'**
+  String get alwaysShowTranslationOn;
+
+  /// Menu item to disable always showing translation
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Auto Translation'**
+  String get alwaysShowTranslationOff;
+
+  /// Information text explaining that selected message and translation will be analyzed
+  ///
+  /// In en, this message translates to:
+  /// **'We will analyze the selected message and its translation.'**
+  String get translationErrorAnalysisInfo;
+
+  /// Label asking user to describe translation issue
+  ///
+  /// In en, this message translates to:
+  /// **'What was wrong with the translation?'**
+  String get whatWasWrongWithTranslation;
+
+  /// Hint text for translation error description input field
+  ///
+  /// In en, this message translates to:
+  /// **'e.g., Incorrect meaning, unnatural expression, wrong context...'**
+  String get translationErrorHint;
+
+  /// Message shown when user tries to submit without selecting a message
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a message first'**
+  String get pleaseSelectMessage;
+
+  /// Title for my personas screen
+  ///
+  /// In en, this message translates to:
+  /// **'My Personas'**
+  String get myPersonas;
+
+  /// Button text for creating a new persona
+  ///
+  /// In en, this message translates to:
+  /// **'Create Persona'**
+  String get createPersona;
+
+  /// Subtitle for basic info step
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about your persona'**
+  String get tellUsAboutYourPersona;
+
+  /// Hint text for persona name input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter persona name'**
+  String get enterPersonaName;
+
+  /// Hint text for persona description
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your persona briefly'**
+  String get describeYourPersona;
+
+  /// Profile image step title
+  ///
+  /// In en, this message translates to:
+  /// **'Profile Image'**
+  String get profileImage;
+
+  /// Subtitle for image upload step
+  ///
+  /// In en, this message translates to:
+  /// **'Upload images for your persona'**
+  String get uploadPersonaImages;
+
+  /// Main image label
+  ///
+  /// In en, this message translates to:
+  /// **'Main Image'**
+  String get mainImage;
+
+  /// Tap to upload instruction
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to upload'**
+  String get tapToUpload;
+
+  /// Additional images label
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Images'**
+  String get additionalImages;
+
+  /// Add image button text
+  ///
+  /// In en, this message translates to:
+  /// **'Add Image'**
+  String get addImage;
+
+  /// MBTI question header
+  ///
+  /// In en, this message translates to:
+  /// **'Personality Question'**
+  String get mbtiQuestion;
+
+  /// MBTI test completion message
+  ///
+  /// In en, this message translates to:
+  /// **'Personality Test Complete!'**
+  String get mbtiComplete;
+
+  /// MBTI test step title
+  ///
+  /// In en, this message translates to:
+  /// **'MBTI Test'**
+  String get mbtiTest;
+
+  /// Description explaining that MBTI is for the persona's personality, not the user's
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s determine what personality your persona should have. Answer questions to shape their character.'**
+  String get mbtiStepDescription;
+
+  /// Button text to start the MBTI test
+  ///
+  /// In en, this message translates to:
+  /// **'Start Test'**
+  String get startTest;
+
+  /// Personality settings step title
+  ///
+  /// In en, this message translates to:
+  /// **'Personality Settings'**
+  String get personalitySettings;
+
+  /// Speech style label
+  ///
+  /// In en, this message translates to:
+  /// **'Speech Style'**
+  String get speechStyle;
+
+  /// Conversation style label
+  ///
+  /// In en, this message translates to:
+  /// **'Conversation Style'**
+  String get conversationStyle;
+
+  /// Share with community title
+  ///
+  /// In en, this message translates to:
+  /// **'Share with Community'**
+  String get shareWithCommunity;
+
+  /// Share description text
+  ///
+  /// In en, this message translates to:
+  /// **'Your persona can be shared with other users after approval'**
+  String get shareDescription;
+
+  /// Share persona toggle title
+  ///
+  /// In en, this message translates to:
+  /// **'Share Persona'**
+  String get sharePersona;
+
+  /// Will be shared after approval message
+  ///
+  /// In en, this message translates to:
+  /// **'Will be shared after admin approval'**
+  String get willBeSharedAfterApproval;
+
+  /// Private persona description
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see this persona'**
+  String get privatePersonaDescription;
+
+  /// Create button text
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// Persona created success message
+  ///
+  /// In en, this message translates to:
+  /// **'Persona created successfully!'**
+  String get personaCreated;
+
+  /// Create failed error message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create persona'**
+  String get createFailed;
+
+  /// Pending approval status
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Approval'**
+  String get pendingApproval;
+
+  /// Approved status
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get approved;
+
+  /// Private persona label
+  ///
+  /// In en, this message translates to:
+  /// **'Private'**
+  String get privatePersona;
+
+  /// Empty state title
+  ///
+  /// In en, this message translates to:
+  /// **'No Personas Yet'**
+  String get noPersonasYet;
+
+  /// Empty state description
+  ///
+  /// In en, this message translates to:
+  /// **'Create your first persona and start your journey'**
+  String get createYourFirstPersona;
+
+  /// Delete persona dialog title
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Persona'**
+  String get deletePersona;
+
+  /// Delete persona confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this persona?'**
+  String get deletePersonaConfirm;
+
+  /// Persona deleted success message
+  ///
+  /// In en, this message translates to:
+  /// **'Persona deleted successfully'**
+  String get personaDeleted;
+
+  /// Delete failed error message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete persona'**
+  String get deleteFailed;
+
+  /// Persona limit reached message
+  ///
+  /// In en, this message translates to:
+  /// **'You have reached the limit of 3 personas'**
+  String get personaLimitReached;
+
+  /// Persona name label
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get personaName;
+
+  /// Persona age label
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get personaAge;
+
+  /// Persona description label
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get personaDescription;
+
+  /// Hint text for persona name input
+  ///
+  /// In en, this message translates to:
+  /// **'Enter persona name'**
+  String get personaNameHint;
+
+  /// Hint text for persona description input
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the persona'**
+  String get personaDescriptionHint;
+
+  /// Content for login required dialog
+  ///
+  /// In en, this message translates to:
+  /// **'Please log in to continue'**
+  String get loginRequiredContent;
+
+  /// Button text for report error
+  ///
+  /// In en, this message translates to:
+  /// **'Report Error'**
+  String get reportErrorButton;
 }
 
 class _AppLocalizationsDelegate

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:io' show File;
+import 'dart:io' show File, Platform;
+import 'package:device_info_plus/device_info_plus.dart';
 import '../l10n/app_localizations.dart';
 
 // Only import permission_handler for non-web platforms
@@ -48,8 +49,26 @@ class PermissionHelper {
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           permission = Permission.photos;
         } else {
-          // Android 13 이상에서는 READ_MEDIA_IMAGES 권한 사용
-          permission = Permission.photos;
+          // Android 버전별 권한 처리
+          if (Platform.isAndroid) {
+            final deviceInfo = DeviceInfoPlugin();
+            final androidInfo = await deviceInfo.androidInfo;
+            
+            debugPrint('📸 Android SDK Version: ${androidInfo.version.sdkInt}');
+            
+            if (androidInfo.version.sdkInt >= 33) {
+              // Android 13 (API 33) 이상: READ_MEDIA_IMAGES 권한 사용
+              permission = Permission.photos;
+              debugPrint('📸 Using READ_MEDIA_IMAGES permission for Android 13+');
+            } else {
+              // Android 12 (API 32) 이하: READ_EXTERNAL_STORAGE 권한 사용
+              permission = Permission.storage;
+              debugPrint('📸 Using READ_EXTERNAL_STORAGE permission for Android 12-');
+            }
+          } else {
+            // 기본값 (Android가 아닌 경우)
+            permission = Permission.photos;
+          }
         }
         permissionName = AppLocalizations.of(context)!.galleryPermission;
         permissionDescription =
@@ -123,29 +142,96 @@ class PermissionHelper {
   /// 권한 거부 시 설정 안내 다이얼로그
   static void _showPermissionDeniedDialog(
       BuildContext context, String permissionName, bool isPermanentlyDenied) {
+    final localizations = AppLocalizations.of(context)!;
+    
+    // 플랫폼별 안내 메시지 선택
+    final bool isIOS = !kIsWeb && Platform.isIOS;
+    final String permissionGuideText = isIOS 
+        ? localizations.permissionGuideIOS 
+        : localizations.permissionGuideAndroid;
+    
     showDialog(
       context: context,
+      barrierDismissible: false, // 다이얼로그 밖을 클릭해도 닫히지 않음
       builder: (context) => AlertDialog(
-        title: Text(AppLocalizations.of(context)!.permissionDenied),
-        content: Text(
-          AppLocalizations.of(context)!.permissionDeniedMessage(permissionName),
+        title: Row(
+          children: [
+            Icon(
+              Icons.photo_camera,
+              color: Theme.of(context).colorScheme.primary,
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(localizations.permissionDenied),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              localizations.permissionDeniedMessage(permissionName),
+              style: const TextStyle(fontSize: 16),
+            ),
+            if (isPermanentlyDenied) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: Colors.orange.withOpacity(0.3),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: Colors.orange[700],
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        permissionGuideText,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.orange[700],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(AppLocalizations.of(context)!.confirm),
-          ),
-          if (isPermanentlyDenied)
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                openAppSettings();
-              },
-              child: Text(AppLocalizations.of(context)!.goToSettings),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
-              ),
+            child: Text(
+              localizations.cancel,
+              style: TextStyle(color: Colors.grey[600]),
             ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Navigator.pop(context);
+              openAppSettings();
+            },
+            icon: Icon(
+              isIOS ? Icons.settings_applications : Icons.settings,
+              size: 18,
+            ),
+            label: Text(localizations.goToSettings),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            ),
+          ),
         ],
       ),
     );

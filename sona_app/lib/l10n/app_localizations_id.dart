@@ -155,7 +155,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get backButton => 'Kembali';
 
   @override
-  String get basicInfo => 'Informasi dasar';
+  String get basicInfo => 'Informasi Dasar';
 
   @override
   String get basicInfoDescription =>
@@ -722,6 +722,14 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get goToSettings => 'Ke pengaturan';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled =>
@@ -1785,6 +1793,16 @@ class AppLocalizationsId extends AppLocalizations {
       'Pilih pesan yang bermasalah (opsional)';
 
   @override
+  String get chatErrorAnalysisInfo => 'Menganalisis 10 percakapan terakhir.';
+
+  @override
+  String get whatWasAwkward => 'Apa yang terasa tidak natural?';
+
+  @override
+  String get errorExampleHint =>
+      'Contoh: Cara bicara yang tidak natural (akhiran ~nya)...';
+
+  @override
   String get selectReportReason => 'Pilih alasan laporan';
 
   @override
@@ -2391,4 +2409,163 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Gelap';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Kami akan menganalisis pesan dan terjemahan yang dipilih.';
+
+  @override
+  String get whatWasWrongWithTranslation =>
+      'Apa yang salah dengan terjemahannya?';
+
+  @override
+  String get translationErrorHint =>
+      'Contoh: Makna salah, ungkapan tidak alami, konteks salah...';
+
+  @override
+  String get pleaseSelectMessage => 'Silakan pilih pesan terlebih dahulu';
+
+  @override
+  String get myPersonas => 'Persona Saya';
+
+  @override
+  String get createPersona => 'Buat Persona';
+
+  @override
+  String get tellUsAboutYourPersona => 'Ceritakan tentang persona Anda';
+
+  @override
+  String get enterPersonaName => 'Masukkan nama persona';
+
+  @override
+  String get describeYourPersona => 'Deskripsikan persona Anda secara singkat';
+
+  @override
+  String get profileImage => 'Gambar Profil';
+
+  @override
+  String get uploadPersonaImages => 'Unggah gambar untuk persona Anda';
+
+  @override
+  String get mainImage => 'Gambar Utama';
+
+  @override
+  String get tapToUpload => 'Ketuk untuk mengunggah';
+
+  @override
+  String get additionalImages => 'Gambar Tambahan';
+
+  @override
+  String get addImage => 'Tambah Gambar';
+
+  @override
+  String get mbtiQuestion => 'Pertanyaan Kepribadian';
+
+  @override
+  String get mbtiComplete => 'Tes Kepribadian Selesai!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Pengaturan Kepribadian';
+
+  @override
+  String get speechStyle => 'Gaya Berbicara';
+
+  @override
+  String get conversationStyle => 'Gaya Percakapan';
+
+  @override
+  String get shareWithCommunity => 'Bagikan dengan Komunitas';
+
+  @override
+  String get shareDescription =>
+      'Persona Anda akan dibagikan dengan pengguna lain setelah disetujui';
+
+  @override
+  String get sharePersona => 'Bagikan Persona';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Akan dibagikan setelah admin menyetujui';
+
+  @override
+  String get privatePersonaDescription =>
+      'Hanya Anda yang dapat melihat persona ini';
+
+  @override
+  String get create => 'Buat';
+
+  @override
+  String get personaCreated => 'Persona berhasil dibuat!';
+
+  @override
+  String get createFailed => 'Gagal membuat persona';
+
+  @override
+  String get pendingApproval => 'Menunggu Persetujuan';
+
+  @override
+  String get approved => 'Disetujui';
+
+  @override
+  String get privatePersona => 'Pribadi';
+
+  @override
+  String get noPersonasYet => 'Belum Ada Persona';
+
+  @override
+  String get createYourFirstPersona =>
+      'Buat persona pertama Anda dan mulai perjalanan';
+
+  @override
+  String get deletePersona => 'Hapus Persona';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Apakah Anda yakin ingin menghapus persona ini?';
+
+  @override
+  String get personaDeleted => 'Persona berhasil dihapus';
+
+  @override
+  String get deleteFailed => 'Gagal menghapus';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

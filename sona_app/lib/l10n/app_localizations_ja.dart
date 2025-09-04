@@ -83,7 +83,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get allFeaturesRequired => '※ すべての機能はサービス提供に必要です';
 
   @override
-  String get allPersonas => 'すべてのペルソナ';
+  String get allPersonas => 'すべて';
 
   @override
   String get allPersonasMatched => 'すべてのペルソナとマッチしました！チャットを始めましょう。';
@@ -692,6 +692,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get goToSettings => '設定へ移動';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled => 'Googleログインがキャンセルされました。\nもう一度お試しください。';
@@ -1696,7 +1704,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get selectFeeling => '気分を選択';
 
   @override
-  String get selectGender => '性別を選択してください';
+  String get selectGender => '性別を選択';
 
   @override
   String get selectInterests => '興味を選択してください（最低1つ）';
@@ -1715,6 +1723,15 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get selectProblematicMessage => '問題のあるメッセージを選択（任意）';
+
+  @override
+  String get chatErrorAnalysisInfo => '最近10件の会話を分析しています。';
+
+  @override
+  String get whatWasAwkward => 'どんな点が違和感がありましたか？';
+
+  @override
+  String get errorExampleHint => '例：不自然な話し方（〜にゃという語尾）...';
 
   @override
   String get selectReportReason => '通報理由を選択してください';
@@ -2302,4 +2319,156 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get darkThemeName => 'ダーク';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo => '選択したメッセージと翻訳を分析します。';
+
+  @override
+  String get whatWasWrongWithTranslation => '翻訳のどこが間違っていましたか？';
+
+  @override
+  String get translationErrorHint => '例：意味が違う、不自然な表現、文脈の誤り...';
+
+  @override
+  String get pleaseSelectMessage => '最初にメッセージを選択してください';
+
+  @override
+  String get myPersonas => 'マイペルソナ';
+
+  @override
+  String get createPersona => 'ペルソナを作成';
+
+  @override
+  String get tellUsAboutYourPersona => 'Tell us about your persona';
+
+  @override
+  String get enterPersonaName => 'Enter persona name';
+
+  @override
+  String get describeYourPersona => 'Describe your persona briefly';
+
+  @override
+  String get profileImage => 'Profile Image';
+
+  @override
+  String get uploadPersonaImages => 'Upload images for your persona';
+
+  @override
+  String get mainImage => 'Main Image';
+
+  @override
+  String get tapToUpload => 'Tap to upload';
+
+  @override
+  String get additionalImages => 'Additional Images';
+
+  @override
+  String get addImage => 'Add Image';
+
+  @override
+  String get mbtiQuestion => '性格質問';
+
+  @override
+  String get mbtiComplete => '性格テスト完了！';
+
+  @override
+  String get mbtiTest => 'MBTIテスト';
+
+  @override
+  String get mbtiStepDescription =>
+      'ペルソナにどんな性格を持たせたいですか？質問に答えてペルソナの性格を決めてください。';
+
+  @override
+  String get startTest => 'テストを開始';
+
+  @override
+  String get personalitySettings => 'Personality Settings';
+
+  @override
+  String get speechStyle => '話し方';
+
+  @override
+  String get conversationStyle => '会話スタイル';
+
+  @override
+  String get shareWithCommunity => 'Share with Community';
+
+  @override
+  String get shareDescription => '承認後、他のユーザーもこのペルソナを使用できます';
+
+  @override
+  String get sharePersona => 'Share Persona';
+
+  @override
+  String get willBeSharedAfterApproval => 'Will be shared after admin approval';
+
+  @override
+  String get privatePersonaDescription => 'Only you can see this persona';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get personaCreated => 'Persona created successfully!';
+
+  @override
+  String get createFailed => 'Failed to create persona';
+
+  @override
+  String get pendingApproval => '承認待ち';
+
+  @override
+  String get approved => '承認済み';
+
+  @override
+  String get privatePersona => 'Private';
+
+  @override
+  String get noPersonasYet => 'No Personas Yet';
+
+  @override
+  String get createYourFirstPersona =>
+      'Create your first persona and start your journey';
+
+  @override
+  String get deletePersona => 'ペルソナを削除';
+
+  @override
+  String get deletePersonaConfirm => 'このペルソナを削除してもよろしいですか？';
+
+  @override
+  String get personaDeleted => 'ペルソナが削除されました';
+
+  @override
+  String get deleteFailed => '削除に失敗しました';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => '名前';
+
+  @override
+  String get personaAge => '年齢';
+
+  @override
+  String get personaDescription => '紹介';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

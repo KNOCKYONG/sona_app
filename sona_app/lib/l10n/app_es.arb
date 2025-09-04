@@ -3122,5 +3122,221 @@
   "darkThemeName": "Oscuro",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Analizando las últimas 10 conversaciones.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Explica el análisis de conversaciones recientes en el diálogo de informe de error del chat"
+  },
+  "whatWasAwkward": "¿Qué te pareció extraño?",
+  "@whatWasAwkward": {
+    "description": "Etiqueta preguntando al usuario sobre la parte extraña"
+  },
+  "errorExampleHint": "Ej: Forma de hablar extraña (terminaciones ~nya)...",
+  "@errorExampleHint": {
+    "description": "Texto de sugerencia para el campo de entrada de descripción de error"
+  },
+  "translationErrorAnalysisInfo": "Analizaremos el mensaje seleccionado y su traducción.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "¿Qué estaba mal con la traducción?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Ej: Significado incorrecto, expresión poco natural, contexto erróneo...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Por favor, selecciona un mensaje primero",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Mis Personas",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Crear Persona",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Información Básica",
+  "@basicInfo": {
+    "description": "Basic info step title"
+  },
+  "uploadPhoto": "Subir Foto",
+  "@uploadPhoto": {
+    "description": "Upload photo step title"
+  },
+  "mbtiTest": "Test MBTI",
+  "@mbtiTest": {
+    "description": "MBTI test step title"
+  },
+  "mbtiQuestion": "Pregunta de Personalidad",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "¡Prueba de Personalidad Completa!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "mbtiStepDescription": "¿Qué personalidad quieres que tenga tu persona? Responde las preguntas para definir su carácter.",
+  "@mbtiStepDescription": {
+    "description": "Description explaining that MBTI is for the persona's personality, not the user's"
+  },
+  "startTest": "Iniciar Prueba",
+  "@startTest": {
+    "description": "Button text to start the MBTI test"
+  },
+  "personality": "Configuración de Personalidad",
+  "@personality": {
+    "description": "Personality step title"
+  },
+  "shareSettings": "Configuración de Compartir",
+  "@shareSettings": {
+    "description": "Share settings step title"
+  },
+  "personaName": "Nombre de Persona",
+  "@personaName": {
+    "description": "Persona name field label"
+  },
+  "personaNameHint": "Ej: Ana, Carlos",
+  "@personaNameHint": {
+    "description": "Persona name field hint"
+  },
+  "personaAge": "Edad",
+  "@personaAge": {
+    "description": "Persona age field label"
+  },
+  "personaDescription": "Descripción",
+  "@personaDescription": {
+    "description": "Persona description field label"
+  },
+  "personaDescriptionHint": "Describe a tu persona brevemente",
+  "@personaDescriptionHint": {
+    "description": "Persona description field hint"
+  },
+  "selectMainPhoto": "Seleccionar Foto Principal",
+  "@selectMainPhoto": {
+    "description": "Select main photo button"
+  },
+  "addAdditionalPhotos": "Fotos Adicionales (máximo 4)",
+  "@addAdditionalPhotos": {
+    "description": "Add additional photos label"
+  },
+  "question": "Pregunta",
+  "@question": {
+    "description": "Question label"
+  },
+  "speechStyle": "Estilo de Habla",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "friendly": "Amigable",
+  "@friendly": {
+    "description": "Friendly speech style"
+  },
+  "polite": "Cortés",
+  "@polite": {
+    "description": "Polite speech style"
+  },
+  "chic": "Elegante",
+  "@chic": {
+    "description": "Chic speech style"
+  },
+  "lively": "Animado",
+  "@lively": {
+    "description": "Lively speech style"
+  },
+  "conversationStyle": "Estilo de Conversación",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "talkative": "Conversador",
+  "@talkative": {
+    "description": "Talkative conversation style"
+  },
+  "quiet": "Reservado",
+  "@quiet": {
+    "description": "Quiet conversation style"
+  },
+  "empathetic": "Empático",
+  "@empathetic": {
+    "description": "Empathetic conversation style"
+  },
+  "logical": "Lógico",
+  "@logical": {
+    "description": "Logical conversation style"
+  },
+  "interests": "Intereses",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "selectInterests": "Selecciona tus intereses",
+  "@selectInterests": {
+    "description": "Select interests instruction"
+  },
+  "shareWithOthers": "Compartir con otros usuarios",
+  "@shareWithOthers": {
+    "description": "Share with others option"
+  },
+  "willBeSharedAfterApproval": "Se compartirá después de la aprobación del administrador",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval note"
+  },
+  "keepPrivate": "Mantener privado",
+  "@keepPrivate": {
+    "description": "Keep private option"
+  },
+  "creating": "Creando...",
+  "@creating": {
+    "description": "Creating status"
+  },
+  "personaCreated": "Persona creada exitosamente",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Falló la creación",
+  "@createFailed": {
+    "description": "Create failed message"
+  },
+  "allPersonas": "Todas las Personas",
+  "@allPersonas": {
+    "description": "All personas tab"
+  },
+  "pendingApproval": "Pendiente de Aprobación",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Aprobado",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "noPersonasFound": "No se encontraron personas",
+  "@noPersonasFound": {
+    "description": "No personas found message"
+  },
+  "edit": "Editar",
+  "@edit": {
+    "description": "Edit button"
+  },
+  "delete": "Eliminar",
+  "@delete": {
+    "description": "Delete button"
+  },
+  "deletePersona": "Eliminar Persona",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "¿Estás seguro de que deseas eliminar esta persona? Esta acción no se puede deshacer.",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona eliminada exitosamente",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Falló la eliminación",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

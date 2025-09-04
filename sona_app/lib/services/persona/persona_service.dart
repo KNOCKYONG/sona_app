@@ -115,10 +115,18 @@ class PersonaService extends BaseService {
       // Excluding matched persona IDs: ${matchedIds.length}
 
       // 🔥 무한 스와이프 - 매칭된 페르소나만 제외
+      // 커스텀 페르소나는 다음 조건일 때만 표시:
+      // 1. 시스템 페르소나 (isCustom = false)
+      // 2. 공개 승인된 페르소나 (isShare = true & isConfirm = true)
+      // 3. 자신이 만든 페르소나 (createdBy = currentUserId)
       final filtered = _allPersonas
           .where((persona) =>
                   !matchedIds.contains(persona.id) &&
-                  !_actionedPersonaIds.contains(persona.id)
+                  !_actionedPersonaIds.contains(persona.id) &&
+                  // 커스텀 페르소나 필터링
+                  (!persona.isCustom || // 시스템 페르소나는 모두 표시
+                   (persona.isShare && persona.isConfirm) || // 공개 승인된 커스텀 페르소나
+                   persona.createdBy == _currentUserId) // 자신이 만든 페르소나
               // 최근 스와이프 필터 제거 - 무한 스와이프
               // R2 필터링 제거 - 모든 페르소나 표시
               )
@@ -1341,6 +1349,11 @@ class PersonaService extends BaseService {
             ? List<String>.from(data['keywords'])
             : null,
         hasValidR2Image: data['hasValidR2Image'] ?? null,
+        // 커스텀 페르소나 필드
+        createdBy: data['createdBy'],
+        isCustom: data['isCustom'] ?? false,
+        isShare: data['isShare'] ?? false,
+        isConfirm: data['isConfirm'] ?? false,
       );
 
       return persona;
@@ -1472,11 +1485,16 @@ class PersonaService extends BaseService {
       final blockedIds = _blockService.getBlockedPersonaIds();
       
       // 🔥 무한 스와이프 - 매칭된 페르소나와 차단된 페르소나 제외
+      // 커스텀 페르소나 필터링 추가
       final filtered = _allPersonas
           .where((persona) =>
                   !matchedIds.contains(persona.id) &&
                   !_actionedPersonaIds.contains(persona.id) &&
-                  !blockedIds.contains(persona.id)  // 차단된 AI 제외
+                  !blockedIds.contains(persona.id) &&  // 차단된 AI 제외
+                  // 커스텀 페르소나 필터링
+                  (!persona.isCustom || // 시스템 페르소나는 모두 표시
+                   (persona.isShare && persona.isConfirm) || // 공개 승인된 커스텀 페르소나
+                   persona.createdBy == _currentUserId) // 자신이 만든 페르소나
               // 최근 스와이프 필터 제거 - 무한 스와이프
               // R2 필터링 제거 - 모든 페르소나 표시
               )

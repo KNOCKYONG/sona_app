@@ -158,7 +158,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get backButton => 'Tillbaka';
 
   @override
-  String get basicInfo => 'Grundläggande information';
+  String get basicInfo => 'Grundläggande Information';
 
   @override
   String get basicInfoDescription =>
@@ -724,6 +724,14 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get goToSettings => 'Gå till Inställningar';
+
+  @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
 
   @override
   String get googleLoginCanceled => 'Google-inloggning avbröts.';
@@ -1309,7 +1317,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get originalText => 'Original';
 
   @override
-  String get other => 'Annat';
+  String get other => 'Övrigt';
 
   @override
   String get otherError => 'Annan fel';
@@ -1785,6 +1793,17 @@ class AppLocalizationsSv extends AppLocalizations {
   @override
   String get selectProblematicMessage =>
       'Välj det problematiska meddelandet (valfritt)';
+
+  @override
+  String get chatErrorAnalysisInfo =>
+      'Analyserar de senaste 10 konversationerna.';
+
+  @override
+  String get whatWasAwkward => 'Vad verkade konstigt?';
+
+  @override
+  String get errorExampleHint =>
+      'T.ex.: Konstigt sätt att tala (~nya ändelser)...';
 
   @override
   String get selectReportReason => 'Välj rapporteringsorsak';
@@ -2394,4 +2413,161 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get darkThemeName => 'Mörk';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'Vi kommer att analysera det valda meddelandet och dess översättning.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'Vad var fel med översättningen?';
+
+  @override
+  String get translationErrorHint =>
+      'T.ex: Felaktig betydelse, onaturligt uttryck, fel sammanhang...';
+
+  @override
+  String get pleaseSelectMessage => 'Välj ett meddelande först';
+
+  @override
+  String get myPersonas => 'Mina Personligheter';
+
+  @override
+  String get createPersona => 'Skapa Personlighet';
+
+  @override
+  String get tellUsAboutYourPersona => 'Berätta om din personlighet';
+
+  @override
+  String get enterPersonaName => 'Ange personlighetsnamn';
+
+  @override
+  String get describeYourPersona => 'Beskriv din personlighet kort';
+
+  @override
+  String get profileImage => 'Profilbild';
+
+  @override
+  String get uploadPersonaImages => 'Ladda upp bilder för din personlighet';
+
+  @override
+  String get mainImage => 'Huvudbild';
+
+  @override
+  String get tapToUpload => 'Tryck för att ladda upp';
+
+  @override
+  String get additionalImages => 'Ytterligare Bilder';
+
+  @override
+  String get addImage => 'Lägg Till Bild';
+
+  @override
+  String get mbtiQuestion => 'Personlighetsfråga';
+
+  @override
+  String get mbtiComplete => 'Personlighetstest Klar!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'Personlighetsinställningar';
+
+  @override
+  String get speechStyle => 'Talstil';
+
+  @override
+  String get conversationStyle => 'Samtalsstil';
+
+  @override
+  String get shareWithCommunity => 'Dela med Gemenskap';
+
+  @override
+  String get shareDescription =>
+      'Din personlighet kommer att delas med andra användare efter godkännande';
+
+  @override
+  String get sharePersona => 'Dela Personlighet';
+
+  @override
+  String get willBeSharedAfterApproval =>
+      'Kommer att delas efter administratörsgodkännande';
+
+  @override
+  String get privatePersonaDescription => 'Endast du kan se denna personlighet';
+
+  @override
+  String get create => 'Skapa';
+
+  @override
+  String get personaCreated => 'Personlighet skapad framgångsrikt!';
+
+  @override
+  String get createFailed => 'Misslyckades med att skapa personlighet';
+
+  @override
+  String get pendingApproval => 'Väntar på Godkännande';
+
+  @override
+  String get approved => 'Godkänd';
+
+  @override
+  String get privatePersona => 'Privat';
+
+  @override
+  String get noPersonasYet => 'Inga Personligheter Än';
+
+  @override
+  String get createYourFirstPersona =>
+      'Skapa din första personlighet och börja din resa';
+
+  @override
+  String get deletePersona => 'Ta Bort Personlighet';
+
+  @override
+  String get deletePersonaConfirm =>
+      'Är du säker på att du vill ta bort denna personlighet?';
+
+  @override
+  String get personaDeleted => 'Personlighet borttagen framgångsrikt';
+
+  @override
+  String get deleteFailed => 'Borttagning misslyckades';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

@@ -3122,5 +3122,185 @@
   "darkThemeName": "डार्क",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "पिछली 10 बातचीत का विश्लेषण किया जा रहा है।",
+  "@chatErrorAnalysisInfo": {
+    "description": "चैट त्रुटि रिपोर्ट संवाद में हाल की बातचीत के विश्लेषण की व्याख्या करता है"
+  },
+  "whatWasAwkward": "क्या अजीब लगा?",
+  "@whatWasAwkward": {
+    "description": "उपयोगकर्ता से अजीब भाग के बारे में पूछने वाला लेबल"
+  },
+  "errorExampleHint": "उदाहरण: अजीब बोलने का तरीका (~nya अंत)...",
+  "@errorExampleHint": {
+    "description": "त्रुटि विवरण इनपुट फ़ील्ड के लिए संकेत पाठ"
+  },
+  "translationErrorAnalysisInfo": "हम चयनित संदेश और इसके अनुवाद का विश्लेषण करेंगे।",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "अनुवाद में क्या गलत था?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "उदाहरण: गलत अर्थ, अप्राकृतिक अभिव्यक्ति, गलत संदर्भ...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "कृपया पहले एक संदेश चुनें",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "मेरे व्यक्तित्व",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "व्यक्तित्व बनाएं",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "बुनियादी जानकारी",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "अपने व्यक्तित्व के बारे में बताएं",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "व्यक्तित्व का नाम दर्ज करें",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "अन्य",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "संक्षेप में अपने व्यक्तित्व का वर्णन करें",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "प्रोफाइल चित्र",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "अपने व्यक्तित्व के लिए चित्र अपलोड करें",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "मुख्य चित्र",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "अपलोड करने के लिए टैप करें",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "अतिरिक्त चित्र",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "चित्र जोड़ें",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "व्यक्तित्व प्रश्न",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "व्यक्तित्व परीक्षा पूर्ण!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "व्यक्तित्व सेटिंग्स",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "बोलचाल की शैली",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "बातचीत की शैली",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "रुचियां",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "समुदाय के साथ साझा करें",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "आपका व्यक्तित्व अनुमोदन के बाद अन्य उपयोगकर्ताओं के साथ साझा किया जाएगा",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "व्यक्तित्व साझा करें",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "व्यवस्थापक की अनुमति के बाद साझा किया जाएगा",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "केवल आप इस व्यक्तित्व को देख सकते हैं",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "पिछला",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "बनाएं",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "व्यक्तित्व सफलतापूर्वक बनाया गया!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "व्यक्तित्व बनाने में विफल",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "सभी",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "अनुमोदन प्रतीक्षित",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "अनुमोदित",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "निजी",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "अभी तक कोई व्यक्तित्व नहीं",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "अपना पहला व्यक्तित्व बनाएं और यात्रा शुरू करें",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "व्यक्तित्व हटाएं",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "क्या आप वाकई इस व्यक्तित्व को हटाना चाहते हैं?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "व्यक्तित्व सफलतापूर्वक हटाया गया",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "हटाने में विफल",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

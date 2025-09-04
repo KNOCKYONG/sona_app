@@ -711,6 +711,14 @@ class AppLocalizationsAr extends AppLocalizations {
   String get goToSettings => 'الذهاب إلى الإعدادات';
 
   @override
+  String get permissionGuideAndroid =>
+      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+
+  @override
+  String get permissionGuideIOS =>
+      'Settings > SONA > Photos\nPlease allow photo access';
+
+  @override
   String get googleLoginCanceled =>
       'تم إلغاء تسجيل الدخول عبر Google. يرجى المحاولة مرة أخرى.';
 
@@ -1765,6 +1773,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get selectProblematicMessage => 'اختر الرسالة المشكلة (اختياري)';
 
   @override
+  String get chatErrorAnalysisInfo => 'جاري تحليل آخر 10 محادثات.';
+
+  @override
+  String get whatWasAwkward => 'ما الذي بدا غريباً؟';
+
+  @override
+  String get errorExampleHint => 'مثال: طريقة كلام غريبة (نهايات ~nya)...';
+
+  @override
   String get selectReportReason => 'اختر سبب التقرير';
 
   @override
@@ -2364,4 +2381,159 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get darkThemeName => 'داكن';
+
+  @override
+  String get alwaysShowTranslationOn => 'Always Show Translation';
+
+  @override
+  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+
+  @override
+  String get translationErrorAnalysisInfo =>
+      'سنقوم بتحليل الرسالة المختارة وترجمتها.';
+
+  @override
+  String get whatWasWrongWithTranslation => 'ما الخطأ في الترجمة؟';
+
+  @override
+  String get translationErrorHint =>
+      'مثال: معنى خاطئ، تعبير غير طبيعي، سياق خاطئ...';
+
+  @override
+  String get pleaseSelectMessage => 'الرجاء اختيار رسالة أولاً';
+
+  @override
+  String get myPersonas => 'شخصياتي';
+
+  @override
+  String get createPersona => 'إنشاء شخصية';
+
+  @override
+  String get tellUsAboutYourPersona => 'أخبرنا عن شخصيتك';
+
+  @override
+  String get enterPersonaName => 'أدخل اسم الشخصية';
+
+  @override
+  String get describeYourPersona => 'اوصف شخصيتك بإيجاز';
+
+  @override
+  String get profileImage => 'صورة الملف الشخصي';
+
+  @override
+  String get uploadPersonaImages => 'ارفع صوراً لشخصيتك';
+
+  @override
+  String get mainImage => 'الصورة الرئيسية';
+
+  @override
+  String get tapToUpload => 'اضغط للرفع';
+
+  @override
+  String get additionalImages => 'صور إضافية';
+
+  @override
+  String get addImage => 'إضافة صورة';
+
+  @override
+  String get mbtiQuestion => 'سؤال الشخصية';
+
+  @override
+  String get mbtiComplete => 'اكتمل اختبار الشخصية!';
+
+  @override
+  String get mbtiTest => 'MBTI Test';
+
+  @override
+  String get mbtiStepDescription =>
+      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+
+  @override
+  String get startTest => 'Start Test';
+
+  @override
+  String get personalitySettings => 'إعدادات الشخصية';
+
+  @override
+  String get speechStyle => 'أسلوب الكلام';
+
+  @override
+  String get conversationStyle => 'أسلوب المحادثة';
+
+  @override
+  String get shareWithCommunity => 'مشاركة مع المجتمع';
+
+  @override
+  String get shareDescription =>
+      'ستتم مشاركة شخصيتك مع المستخدمين الآخرين بعد الموافقة';
+
+  @override
+  String get sharePersona => 'مشاركة الشخصية';
+
+  @override
+  String get willBeSharedAfterApproval => 'ستتم المشاركة بعد موافقة المشرف';
+
+  @override
+  String get privatePersonaDescription => 'يمكنك فقط رؤية هذه الشخصية';
+
+  @override
+  String get create => 'إنشاء';
+
+  @override
+  String get personaCreated => 'تم إنشاء الشخصية بنجاح!';
+
+  @override
+  String get createFailed => 'فشل في إنشاء الشخصية';
+
+  @override
+  String get pendingApproval => 'في انتظار الموافقة';
+
+  @override
+  String get approved => 'موافق عليها';
+
+  @override
+  String get privatePersona => 'خاصة';
+
+  @override
+  String get noPersonasYet => 'لا توجد شخصيات بعد';
+
+  @override
+  String get createYourFirstPersona => 'أنشئ شخصيتك الأولى وابدأ رحلتك';
+
+  @override
+  String get deletePersona => 'حذف الشخصية';
+
+  @override
+  String get deletePersonaConfirm =>
+      'هل أنت متأكد من أنك تريد حذف هذه الشخصية؟';
+
+  @override
+  String get personaDeleted => 'تم حذف الشخصية بنجاح';
+
+  @override
+  String get deleteFailed => 'فشل في الحذف';
+
+  @override
+  String get personaLimitReached => 'You have reached the limit of 3 personas';
+
+  @override
+  String get personaName => 'Name';
+
+  @override
+  String get personaAge => 'Age';
+
+  @override
+  String get personaDescription => 'Description';
+
+  @override
+  String get personaNameHint => 'Enter persona name';
+
+  @override
+  String get personaDescriptionHint => 'Describe the persona';
+
+  @override
+  String get loginRequiredContent => 'Please log in to continue';
+
+  @override
+  String get reportErrorButton => 'Report Error';
 }

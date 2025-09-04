@@ -3122,5 +3122,185 @@
   "darkThemeName": "Ciemny",
   "@darkThemeName": {
     "description": "Localized string for darkThemeName"
+  },
+  "chatErrorAnalysisInfo": "Analizowanie ostatnich 10 rozmów.",
+  "@chatErrorAnalysisInfo": {
+    "description": "Wyjaśnia analizę ostatnich rozmów w oknie raportu błędu czatu"
+  },
+  "whatWasAwkward": "Co wydawało się dziwne?",
+  "@whatWasAwkward": {
+    "description": "Etykieta pytająca użytkownika o dziwną część"
+  },
+  "errorExampleHint": "Np.: Dziwny sposób mówienia (końcówki ~nya)...",
+  "@errorExampleHint": {
+    "description": "Tekst podpowiedzi dla pola wprowadzania opisu błędu"
+  },
+  "translationErrorAnalysisInfo": "Przeanalizujemy wybraną wiadomość i jej tłumaczenie.",
+  "@translationErrorAnalysisInfo": {
+    "description": "Information text explaining that selected message and translation will be analyzed"
+  },
+  "whatWasWrongWithTranslation": "Co było nie tak z tłumaczeniem?",
+  "@whatWasWrongWithTranslation": {
+    "description": "Label asking user to describe translation issue"
+  },
+  "translationErrorHint": "Np.: Błędne znaczenie, nienaturalne wyrażenie, zły kontekst...",
+  "@translationErrorHint": {
+    "description": "Hint text for translation error description input field"
+  },
+  "pleaseSelectMessage": "Najpierw wybierz wiadomość",
+  "@pleaseSelectMessage": {
+    "description": "Message shown when user tries to submit without selecting a message"
+  },
+  "myPersonas": "Moje Persony",
+  "@myPersonas": {
+    "description": "Title for my personas screen"
+  },
+  "createPersona": "Utwórz Personę",
+  "@createPersona": {
+    "description": "Button text for creating a new persona"
+  },
+  "basicInfo": "Podstawowe Informacje",
+  "@basicInfo": {
+    "description": "Basic information step title"
+  },
+  "tellUsAboutYourPersona": "Opowiedz nam o swojej personie",
+  "@tellUsAboutYourPersona": {
+    "description": "Subtitle for basic info step"
+  },
+  "enterPersonaName": "Wprowadź nazwę persony",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "other": "Inne",
+  "@other": {
+    "description": "Other gender option"
+  },
+  "describeYourPersona": "Opisz swoją personę krótko",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "profileImage": "Zdjęcie Profilowe",
+  "@profileImage": {
+    "description": "Profile image step title"
+  },
+  "uploadPersonaImages": "Prześlij zdjęcia dla swojej persony",
+  "@uploadPersonaImages": {
+    "description": "Subtitle for image upload step"
+  },
+  "mainImage": "Główne Zdjęcie",
+  "@mainImage": {
+    "description": "Main image label"
+  },
+  "tapToUpload": "Dotknij, aby przesłać",
+  "@tapToUpload": {
+    "description": "Tap to upload instruction"
+  },
+  "additionalImages": "Dodatkowe Zdjęcia",
+  "@additionalImages": {
+    "description": "Additional images label"
+  },
+  "addImage": "Dodaj Zdjęcie",
+  "@addImage": {
+    "description": "Add image button text"
+  },
+  "mbtiQuestion": "Pytanie o Osobowość",
+  "@mbtiQuestion": {
+    "description": "MBTI question header"
+  },
+  "mbtiComplete": "Test Osobowości Ukończony!",
+  "@mbtiComplete": {
+    "description": "MBTI test completion message"
+  },
+  "personalitySettings": "Ustawienia Osobowości",
+  "@personalitySettings": {
+    "description": "Personality settings step title"
+  },
+  "speechStyle": "Styl Mowy",
+  "@speechStyle": {
+    "description": "Speech style label"
+  },
+  "conversationStyle": "Styl Rozmowy",
+  "@conversationStyle": {
+    "description": "Conversation style label"
+  },
+  "interests": "Zainteresowania",
+  "@interests": {
+    "description": "Interests label"
+  },
+  "shareWithCommunity": "Udostępnij Społeczności",
+  "@shareWithCommunity": {
+    "description": "Share with community title"
+  },
+  "shareDescription": "Twoja persona zostanie udostępniona innym użytkownikom po zatwierdzeniu",
+  "@shareDescription": {
+    "description": "Share description text"
+  },
+  "sharePersona": "Udostępnij Personę",
+  "@sharePersona": {
+    "description": "Share persona toggle title"
+  },
+  "willBeSharedAfterApproval": "Zostanie udostępniona po zatwierdzeniu przez administratora",
+  "@willBeSharedAfterApproval": {
+    "description": "Will be shared after approval message"
+  },
+  "privatePersonaDescription": "Tylko Ty możesz zobaczyć tę personę",
+  "@privatePersonaDescription": {
+    "description": "Private persona description"
+  },
+  "previous": "Poprzedni",
+  "@previous": {
+    "description": "Previous button text"
+  },
+  "create": "Utwórz",
+  "@create": {
+    "description": "Create button text"
+  },
+  "personaCreated": "Persona została pomyślnie utworzona!",
+  "@personaCreated": {
+    "description": "Persona created success message"
+  },
+  "createFailed": "Nie udało się utworzyć persony",
+  "@createFailed": {
+    "description": "Create failed error message"
+  },
+  "all": "Wszystkie",
+  "@all": {
+    "description": "All tab label"
+  },
+  "pendingApproval": "Oczekuje na Zatwierdzenie",
+  "@pendingApproval": {
+    "description": "Pending approval status"
+  },
+  "approved": "Zatwierdzona",
+  "@approved": {
+    "description": "Approved status"
+  },
+  "privatePersona": "Prywatna",
+  "@privatePersona": {
+    "description": "Private persona label"
+  },
+  "noPersonasYet": "Jeszcze Brak Person",
+  "@noPersonasYet": {
+    "description": "Empty state title"
+  },
+  "createYourFirstPersona": "Utwórz swoją pierwszą personę i rozpocznij podróż",
+  "@createYourFirstPersona": {
+    "description": "Empty state description"
+  },
+  "deletePersona": "Usuń Personę",
+  "@deletePersona": {
+    "description": "Delete persona dialog title"
+  },
+  "deletePersonaConfirm": "Czy na pewno chcesz usunąć tę personę?",
+  "@deletePersonaConfirm": {
+    "description": "Delete persona confirmation message"
+  },
+  "personaDeleted": "Persona została pomyślnie usunięta",
+  "@personaDeleted": {
+    "description": "Persona deleted success message"
+  },
+  "deleteFailed": "Usunięcie nie powiodło się",
+  "@deleteFailed": {
+    "description": "Delete failed message"
   }
 }

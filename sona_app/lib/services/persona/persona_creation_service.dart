@@ -159,7 +159,7 @@ class PersonaCreationService extends BaseService {
     required String speechStyle, // 친근한/정중한/시크한/활발한
     required List<String> interests, // 관심 분야
     required String conversationStyle, // 수다스러운/과묵한/공감적/논리적
-    required File mainImage,
+    File? mainImage,
     List<File>? additionalImages,
     required bool isShare, // 공유 여부
   }) async {
@@ -229,6 +229,7 @@ class PersonaCreationService extends BaseService {
           'createdBy': currentUser.uid,
           'isShare': isShare,
           'isConfirm': false, // 초기값은 미승인
+          'isDeleted': false, // 명시적으로 삭제되지 않음 표시
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
           // 추가 필드
@@ -237,10 +238,15 @@ class PersonaCreationService extends BaseService {
         };
 
         // 5. Firestore에 저장
-        final docRef = await _firestore
+        debugPrint('📝 Saving persona to Firebase: $personaId');
+        debugPrint('📋 Persona data: ${personaData.keys.join(', ')}');
+        
+        await _firestore
             .collection(AppConstants.personasCollection)
             .doc(personaId)
             .set(personaData);
+        
+        debugPrint('✅ Persona saved to Firebase successfully');
 
         // 6. 공유 요청 시 관리자에게 알림
         if (isShare) {
@@ -315,7 +321,7 @@ $mbtiDesc
     return keywords.take(10).toList(); // 최대 10개
   }
 
-  /// 이미지 업로드 헬퍼 메서드 (최적화 포함)
+  /// 이미지 업로드 헬퍼 메서드 (R2 전용)
   Future<String?> _uploadPersonaImage(String personaId, File imageFile, String imageType) async {
     try {
       final bytes = await imageFile.readAsBytes();
@@ -331,8 +337,13 @@ $mbtiDesc
         );
         
         // 중간 크기 URL 반환 (프로필용)
-        return result.getMainUrl(ImageSize.medium) ?? 
-               result.getMainUrl(ImageSize.small);
+        final url = result.getMainUrl(ImageSize.medium) ?? 
+                   result.getMainUrl(ImageSize.small);
+        
+        if (url != null) {
+          debugPrint('✅ Main image uploaded to R2: $url');
+          return url;
+        }
       } else {
         // 추가 이미지는 최적화 후 업로드
         final optimized = await ImageOptimizationService.optimizeImage(
@@ -348,10 +359,13 @@ $mbtiDesc
         final success = await CloudflareR2Service.uploadToR2(path, optimizedBytes);
         
         if (success) {
-          return CloudflareR2Service.generatePublicUrl(path);
+          final url = CloudflareR2Service.generatePublicUrl(path);
+          debugPrint('✅ Additional image uploaded to R2: $url');
+          return url;
         }
       }
       
+      debugPrint('❌ R2 upload failed. Image will not be available.');
       return null;
     } catch (e) {
       debugPrint('❌ Error uploading image: $e');
@@ -388,6 +402,8 @@ $mbtiDesc
         final querySnapshot = await _firestore
             .collection(AppConstants.personasCollection)
             .where('createdBy', isEqualTo: currentUser.uid)
+            .where('isDeleted', isNotEqualTo: true)
+            .orderBy('isDeleted')
             .orderBy('createdAt', descending: true)
             .get();
 

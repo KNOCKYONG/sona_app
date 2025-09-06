@@ -210,6 +210,7 @@ class PersonaService extends BaseService {
 
   Persona? get currentPersona => _currentPersona;
   bool? get currentPersonaCasualSpeech => _currentPersonaCasualSpeech;
+  String? get currentUserId => _currentUserId;
   @override
   bool get isLoading => super.isLoading;
   int get swipedPersonasCount => _sessionSwipedPersonas.length;
@@ -1189,12 +1190,30 @@ class PersonaService extends BaseService {
         // Strategy 1: Direct access (should work with new Security Rules)
         if (attempt == 1) {
           debugPrint('📖 Trying direct Firebase access...');
-          final querySnapshot = await FirebaseHelper.personas.get();
+          
+          // Get both regular personas and custom personas
+          final regularPersonasQuery = await FirebaseHelper.personas
+              .where('isCustom', isEqualTo: false)
+              .get();
+          
+          // Get custom personas created by current user
+          List<QueryDocumentSnapshot> customPersonaDocs = [];
+          if (_currentUserId != null && _currentUserId!.isNotEmpty) {
+            final customPersonasQuery = await FirebaseHelper.personas
+                .where('isCustom', isEqualTo: true)
+                .where('createdBy', isEqualTo: _currentUserId)
+                .get();
+            customPersonaDocs = customPersonasQuery.docs;
+            debugPrint('📝 Found ${customPersonaDocs.length} custom personas for user: $_currentUserId');
+          }
+          
+          // Combine both lists
+          final allDocs = [...regularPersonasQuery.docs, ...customPersonaDocs];
 
-          if (querySnapshot.docs.isNotEmpty) {
-            _allPersonas = _parseFirebasePersonas(querySnapshot.docs);
+          if (allDocs.isNotEmpty) {
+            _allPersonas = _parseFirebasePersonas(allDocs);
             debugPrint(
-                '✅ SUCCESS: Direct access loaded ${_allPersonas.length} personas');
+                '✅ SUCCESS: Direct access loaded ${_allPersonas.length} personas (${regularPersonasQuery.docs.length} regular + ${customPersonaDocs.length} custom)');
             return true;
           }
         }
@@ -1582,13 +1601,24 @@ class PersonaService extends BaseService {
       return persona.hasValidR2Image!;
     }
 
-    // 2. Check cache
+    // 2. For custom personas, quickly check photoUrls
+    if (persona.isCustom && persona.photoUrls.isNotEmpty) {
+      final r2Pattern =
+          RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
+      for (final url in persona.photoUrls) {
+        if (r2Pattern.hasMatch(url)) {
+          return true;
+        }
+      }
+    }
+
+    // 3. Check cache
     final cached = await R2ValidationCache.getCached(persona.id);
     if (cached != null) {
       return cached;
     }
 
-    // 3. Perform quick check
+    // 4. Perform quick check
     final hasR2 = _hasR2ImageQuick(persona);
 
     // 4. Cache the result
@@ -1599,6 +1629,17 @@ class PersonaService extends BaseService {
 
   /// Quick R2 image check without logging
   bool _hasR2ImageQuick(Persona persona) {
+    // For custom personas, check photoUrls first
+    if (persona.isCustom && persona.photoUrls.isNotEmpty) {
+      final r2Pattern =
+          RegExp(r'(teamsona\.work|r2\.dev|cloudflare|imagedelivery\.net)');
+      for (final url in persona.photoUrls) {
+        if (r2Pattern.hasMatch(url)) {
+          return true;
+        }
+      }
+    }
+
     if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
       return false;
     }
@@ -1633,6 +1674,20 @@ class PersonaService extends BaseService {
 
     // 2. 디버깅을 위한 상세 로그
     debugPrint('🔍 Checking R2 image for ${persona.name} (${persona.id})');
+
+    // 3. For custom personas, check photoUrls first
+    if (persona.isCustom && persona.photoUrls.isNotEmpty) {
+      debugPrint('  📝 Custom persona - checking photoUrls');
+      for (final url in persona.photoUrls) {
+        if (url.contains('teamsona.work') ||
+            url.contains('r2.dev') ||
+            url.contains('cloudflare') ||
+            url.contains('imagedelivery.net')) {
+          debugPrint('  ✅ Valid R2 URL found in photoUrls: $url');
+          return true;
+        }
+      }
+    }
 
     if (persona.imageUrls == null || persona.imageUrls!.isEmpty) {
       debugPrint('  ❌ No imageUrls found');

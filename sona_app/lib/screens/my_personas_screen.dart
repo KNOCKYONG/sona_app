@@ -731,6 +731,8 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
       // 대화방 삭제 (매칭된 경우)
       if (isMatched) {
         await _deleteChatRoom(persona.id);
+        // PersonaService에서 매칭된 페르소나 목록에서도 제거
+        personaService.removeFromMatchedPersonas(persona.id);
       }
       
       final success = await _personaCreationService.deleteCustomPersona(persona.id);

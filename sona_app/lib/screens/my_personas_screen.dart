@@ -487,6 +487,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
     
     // PersonaService를 통해 매칭 처리
     final personaService = Provider.of<PersonaService>(context, listen: false);
+    final localizations = AppLocalizations.of(context)!;
     
     // 이미 매칭되어 있는지 확인
     final isAlreadyMatched = personaService.matchedPersonas.any((p) => p.id == persona.id);
@@ -503,6 +504,64 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
         );
       }
     } else {
+      // 매칭되지 않은 경우 확인 다이얼로그 표시
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(localizations.startConversation),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${persona.name}${localizations.withPersonaChat}'),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    const Icon(Icons.favorite, color: Colors.red, size: 20),
+                    const SizedBox(width: 8),
+                    Text(
+                      localizations.useOneHeart,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  '${localizations.currentHearts}: ${personaService.availableHearts}',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(localizations.cancel),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  foregroundColor: Colors.white,
+                ),
+                child: Text(localizations.confirm),
+              ),
+            ],
+          );
+        },
+      );
+      
+      if (confirmed != true) {
+        return; // 사용자가 취소한 경우
+      }
+      
       // 매칭되지 않은 경우 매칭 처리 (하트 1개 소모)
       try {
         // 매칭 처리 - persona 객체도 함께 전달
@@ -529,7 +588,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('매칭에 실패했습니다'),
+                content: Text(localizations.matchingFailed),
                 backgroundColor: Colors.red,
               ),
             );
@@ -540,7 +599,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('대화 시작에 실패했습니다'),
+              content: Text(localizations.startChatFailed),
               backgroundColor: Colors.red,
             ),
           );

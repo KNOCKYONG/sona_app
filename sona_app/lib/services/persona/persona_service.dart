@@ -16,6 +16,7 @@ import 'r2_validation_cache.dart';
 import '../cache/image_preload_service.dart';
 import '../storage/guest_conversation_service.dart';
 import '../block_service.dart';
+import '../purchase/purchase_service.dart';
 import 'dart:convert';
 
 /// 🚀 Optimized Persona Service with Performance Enhancements
@@ -498,6 +499,17 @@ class PersonaService extends BaseService {
         }
       }
 
+      // 하트 1개 소모 (이미 매칭된 경우는 제외)
+      if (!_matchedPersonas.any((p) => p.id == personaId)) {
+        final purchaseService = PurchaseService();
+        final heartConsumed = await purchaseService.useHearts(1);
+        if (!heartConsumed) {
+          debugPrint('❌ Failed to consume heart for liking persona: $personaId');
+          return false;
+        }
+        debugPrint('💕 Successfully consumed 1 heart for liking persona: $personaId');
+      }
+
       // 재매칭 시 leftChat 플래그 리셋
       final currentUser = FirebaseAuth.instance.currentUser;
       final isGuest = currentUser?.isAnonymous ?? false;
@@ -602,6 +614,17 @@ class PersonaService extends BaseService {
       }
 
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
+
+      // 하트 3개 소모 (슈퍼라이크, 이미 매칭된 경우는 제외)
+      if (!_matchedPersonas.any((p) => p.id == personaId)) {
+        final purchaseService = PurchaseService();
+        final heartConsumed = await purchaseService.useHearts(3);
+        if (!heartConsumed) {
+          debugPrint('❌ Failed to consume hearts for super liking persona: $personaId');
+          return false;
+        }
+        debugPrint('⭐ Successfully consumed 3 hearts for super liking persona: $personaId');
+      }
 
       // 재매칭 시 leftChat 플래그 리셋
       final currentUser = FirebaseAuth.instance.currentUser;

@@ -177,4 +177,78 @@ class PreferencesManager {
   /// 시스템 언어 사용 여부 저장
   static Future<bool> setUseSystemLanguage(bool useSystem) =>
       setBool(AppConstants.useSystemLanguageKey, useSystem);
+
+  // Language preference learning methods
+  
+  /// 언어 사용 기록 가져오기
+  static Future<Map<String, int>> getLanguageHistory() async {
+    final jsonString = await getString('language_history');
+    if (jsonString != null) {
+      try {
+        final decoded = jsonDecode(jsonString);
+        return Map<String, int>.from(decoded);
+      } catch (e) {
+        return {};
+      }
+    }
+    return {};
+  }
+  
+  /// 언어 사용 기록하기
+  static Future<void> recordLanguageUsage(String languageCode) async {
+    final history = await getLanguageHistory();
+    history[languageCode] = (history[languageCode] ?? 0) + 1;
+    await setString('language_history', jsonEncode(history));
+    
+    // 5회 이상 사용 시 선호 언어 업데이트
+    if (history[languageCode]! >= 5) {
+      await updatePreferredLanguages(languageCode);
+    }
+  }
+  
+  /// 선호 언어 목록 가져오기 (최대 3개)
+  static Future<List<String>> getPreferredLanguages() async {
+    final jsonString = await getString('preferred_languages');
+    if (jsonString != null) {
+      try {
+        return List<String>.from(jsonDecode(jsonString));
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  }
+  
+  /// 선호 언어 업데이트
+  static Future<void> updatePreferredLanguages(String languageCode) async {
+    final preferred = await getPreferredLanguages();
+    
+    // 이미 있으면 순서만 조정
+    if (preferred.contains(languageCode)) {
+      preferred.remove(languageCode);
+    }
+    
+    // 맨 앞에 추가
+    preferred.insert(0, languageCode);
+    
+    // 최대 3개만 유지
+    if (preferred.length > 3) {
+      preferred.removeRange(3, preferred.length);
+    }
+    
+    await setString('preferred_languages', jsonEncode(preferred));
+  }
+  
+  /// 자동 번역 선호도 가져오기
+  static Future<bool> getAutoTranslateForLanguage(String languageCode) async {
+    final prefs = await getJson('auto_translate_preferences') ?? {};
+    return prefs[languageCode] ?? false;
+  }
+  
+  /// 자동 번역 선호도 설정
+  static Future<void> setAutoTranslateForLanguage(String languageCode, bool enable) async {
+    final prefs = await getJson('auto_translate_preferences') ?? {};
+    prefs[languageCode] = enable;
+    await setJson('auto_translate_preferences', prefs);
+  }
 }

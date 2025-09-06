@@ -14,6 +14,7 @@ import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
 import '../services/ui/haptic_service.dart';
 import '../services/block_service.dart';
+import '../services/language/language_detection_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
@@ -507,6 +508,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   void _sendMessage() async {
     final content = _messageController.text.trim();
     if (content.isEmpty) return;
+    
+    // Record language usage for learning
+    try {
+      final detectedLanguage = LanguageDetectionService().detectLanguage(content);
+      await PreferencesManager.recordLanguageUsage(detectedLanguage);
+    } catch (e) {
+      debugPrint('Error recording language usage: $e');
+    }
 
     // 햅틱 피드백 제거 (사용자 요청)
 
@@ -1523,13 +1532,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           ? messages.sublist(messages.length - 10)
           : messages;
       
-      // Directly send error report without dialog
-      // 다이얼로그 없이 바로 전송
-      String? errorDescription = 'User reported chat error';
-      String? problemMessage = null;
+      // Show dialog to collect error details
+      String? errorDescription;
+      String? problemMessage;
       
-      // Skip dialog and directly send report
-      /*
       final result = await showDialog<Map<String, String>>(
         context: context,
         builder: (context) {
@@ -1671,71 +1677,73 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         },
       );
       
-      if (result != null) {
-        errorDescription = result['description'];
-        problemMessage = result['message'];
+      // User cancelled the dialog
+      if (result == null) {
+        return;
       }
-      */
+      
+      errorDescription = result['description'];
+      problemMessage = result['message'];
+      
+      debugPrint('🔍 Sending error report with user input');
+      debugPrint('🔍 Messages count: ${recentMessages.length}');
+
+      // Store context before async operation
+      final scaffoldMessenger = ScaffoldMessenger.of(context);
+      final navigator = Navigator.of(context);
+
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) => const Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFFFF6B9D),
+          ),
+        ),
+      );
+
+      bool success = false;
+      String? errorMessage;
+
+      try {
+        // Combine problem message and description for userMessage
+        final fullErrorDescription = problemMessage != null && problemMessage.isNotEmpty
+            ? '${AppLocalizations.of(context)!.problemMessage}: "$problemMessage"\n\n${AppLocalizations.of(context)!.errorDescription}: $errorDescription'
+            : '${AppLocalizations.of(context)!.errorDescription}: $errorDescription';
         
-        debugPrint('🔍 Sending error report directly with 10 messages');
-        debugPrint('🔍 Messages count: ${recentMessages.length}');
+        await chatService.sendChatErrorReport(
+          userId: userId,
+          personaId: currentPersona.id,
+          userMessage: fullErrorDescription,
+        );
+        success = true;
+      } catch (e) {
+        debugPrint('🔥 Error sending chat error report: $e');
+        errorMessage = e.toString().contains('permission')
+            ? AppLocalizations.of(context)!.permissionDeniedTryLater
+              : AppLocalizations.of(context)!.networkErrorOccurred;
+      }
 
-        // Store context before async operation
-        final scaffoldMessenger = ScaffoldMessenger.of(context);
-        final navigator = Navigator.of(context);
+      // Close loading dialog
+      navigator.pop();
 
-        // Show loading dialog
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (dialogContext) => const Center(
-            child: CircularProgressIndicator(
-              color: Color(0xFFFF6B9D),
-            ),
+      // Show result message
+      if (success) {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.chatErrorSentSuccessfully),
+            backgroundColor: Colors.green,
           ),
         );
-
-        bool success = false;
-        String? errorMessage;
-
-        try {
-          // Combine problem message and description for userMessage
-          final fullErrorDescription = problemMessage != null && problemMessage.isNotEmpty
-              ? '${AppLocalizations.of(context)!.problemMessage}: "$problemMessage"\n\n${AppLocalizations.of(context)!.errorDescription}: $errorDescription'
-              : '${AppLocalizations.of(context)!.errorDescription}: $errorDescription';
-          
-          await chatService.sendChatErrorReport(
-            userId: userId,
-            personaId: currentPersona.id,
-            userMessage: fullErrorDescription,
-          );
-          success = true;
-        } catch (e) {
-          debugPrint('🔥 Error sending chat error report: $e');
-          errorMessage = e.toString().contains('permission')
-              ? AppLocalizations.of(context)!.permissionDeniedTryLater
-              : AppLocalizations.of(context)!.networkErrorOccurred;
-        }
-
-        // Close loading dialog
-        navigator.pop();
-
-        // Show result message
-        if (success) {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(AppLocalizations.of(context)!.chatErrorSentSuccessfully),
-              backgroundColor: Colors.green,
-            ),
-          );
-        } else {
-          scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text('${AppLocalizations.of(context)!.errorSendingFailed}: $errorMessage'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
+      } else {
+        scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text('${AppLocalizations.of(context)!.errorSendingFailed}: $errorMessage'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
       // Closing brace for the main if condition
     } else {
       debugPrint(

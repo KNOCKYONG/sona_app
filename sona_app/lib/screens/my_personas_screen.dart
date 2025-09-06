@@ -10,6 +10,7 @@ import '../services/persona/persona_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../l10n/app_localizations.dart';
 import '../core/constants.dart';
+import '../services/purchase/purchase_service.dart';
 import 'create_persona_screen.dart';
 import 'chat_screen.dart';
 
@@ -505,6 +506,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
       }
     } else {
       // 매칭되지 않은 경우 확인 다이얼로그 표시
+      final purchaseService = Provider.of<PurchaseService>(context, listen: false);
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (BuildContext context) {
@@ -514,7 +516,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${persona.name}${localizations.withPersonaChat}'),
+                Text('${persona.name}과(와) 대화를 시작하시겠습니까?'),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -528,7 +530,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '${localizations.currentHearts}: ${personaService.availableHearts}',
+                  '${localizations.ownedHearts}: ${purchaseService.hearts}',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,
@@ -599,7 +601,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(localizations.startChatFailed),
+              content: Text('대화 시작에 실패했습니다'),
               backgroundColor: Colors.red,
             ),
           );

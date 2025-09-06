@@ -3215,6 +3215,10 @@
   "@personaLimitReached": {
     "description": "Persona limit reached message"
   },
+  "addImage": "이미지 추가",
+  "@addImage": {
+    "description": "Add image button text"
+  },
   "uploadPhoto": "사진 업로드",
   "@uploadPhoto": {
     "description": "Upload photo step title"
@@ -3872,5 +3876,61 @@
   "mainImageRequired": "메인 프로필 이미지를 추가해주세요",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "speechStyleRequired": "말투를 선택해주세요",
+  "@speechStyleRequired": {
+    "description": "Validation message: speechStyleRequired"
+  },
+  "conversationStyleRequired": "대화 스타일을 선택해주세요",
+  "@conversationStyleRequired": {
+    "description": "Validation message: conversationStyleRequired"
+  },
+  "profileImage": "프로필 이미지",
+  "@profileImage": {
+    "description": "profileImage for persona creation"
+  },
+  "uploadPersonaImages": "페르소나 이미지를 업로드하세요",
+  "@uploadPersonaImages": {
+    "description": "uploadPersonaImages for persona creation"
+  },
+  "tellUsAboutYourPersona": "페르소나에 대해 알려주세요",
+  "@tellUsAboutYourPersona": {
+    "description": "tellUsAboutYourPersona for persona creation"
+  },
+  "personalitySettings": "성격 설정",
+  "@personalitySettings": {
+    "description": "personalitySettings for persona creation"
+  },
+  "tapToUpload": "탭하여 업로드",
+  "@tapToUpload": {
+    "description": "tapToUpload for persona creation"
+  },
+  "mainImage": "메인 이미지",
+  "@mainImage": {
+    "description": "mainImage for persona creation"
+  },
+  "additionalImages": "추가 이미지",
+  "@additionalImages": {
+    "description": "additionalImages for persona creation"
+  },
+  "shareWithCommunity": "커뮤니티와 공유",
+  "@shareWithCommunity": {
+    "description": "shareWithCommunity for persona creation"
+  },
+  "shareDescription": "승인 후 다른 사용자와 페르소나를 공유할 수 있습니다",
+  "@shareDescription": {
+    "description": "shareDescription for persona creation"
+  },
+  "sharePersona": "페르소나 공유",
+  "@sharePersona": {
+    "description": "sharePersona for persona creation"
+  },
+  "privatePersonaDescription": "본인만 볼 수 있는 페르소나",
+  "@privatePersonaDescription": {
+    "description": "privatePersonaDescription for persona creation"
+  },
+  "create": "생성",
+  "@create": {
+    "description": "create button text"
   }
 }

@@ -290,30 +290,6 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
               color: Colors.grey[600],
             ),
           ),
-          const SizedBox(height: 8),
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.blue.withOpacity(0.3)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.info_outline, size: 20, color: Colors.blue[700]),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    localizations.imageOptionalR2,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.blue[700],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           const SizedBox(height: 24),
           
           // 메인 이미지
@@ -601,7 +577,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       return const SizedBox.shrink();
     }
     
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
@@ -892,12 +868,16 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
             decoration: BoxDecoration(
               color: _isShare
                   ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
-                  : Colors.grey[100],
+                  : Theme.of(context).brightness == Brightness.dark
+                      ? Colors.grey[800]
+                      : Colors.grey[100],
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _isShare
                     ? Theme.of(context).colorScheme.primary
-                    : Colors.grey[300]!,
+                    : Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[700]!
+                        : Colors.grey[300]!,
                 width: 2,
               ),
             ),
@@ -910,9 +890,10 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
               },
               title: Text(
                 localizations.sharePersona,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
+                  color: Theme.of(context).textTheme.bodyLarge?.color,
                 ),
               ),
               subtitle: Text(
@@ -921,7 +902,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                     : localizations.privatePersonaDescription,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.grey[600],
+                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
                 ),
               ),
               activeColor: Theme.of(context).colorScheme.primary,
@@ -937,6 +918,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   Widget _buildNavigationButtons() {
     final localizations = AppLocalizations.of(context)!;
     final canProceed = _canProceedToNextStep();
+    
     
     return Container(
       padding: const EdgeInsets.all(20),
@@ -975,12 +957,27 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
             child: ElevatedButton(
               onPressed: (_isCreating || !canProceed) ? null : _handleNext,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Colors.white,
+                backgroundColor: canProceed && !_isCreating
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[700]
+                        : Colors.grey[400],
+                foregroundColor: canProceed && !_isCreating
+                    ? Colors.white
+                    : Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey[400]
+                        : Colors.white,
+                disabledBackgroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[700]
+                    : Colors.grey[400],
+                disabledForegroundColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.grey[400]
+                    : Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+                elevation: canProceed && !_isCreating ? 2 : 0,
               ),
               child: _isCreating
                   ? const SizedBox(
@@ -1022,9 +1019,11 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       case 1: // 이미지
         return true; // 이미지는 선택사항 (R2 설정 시에만 업로드)
       case 2: // MBTI
-        return true; // 답변은 클릭으로 진행
+        return _mbtiAnswers.length >= 4; // 4개 질문 모두 답변 완료
       case 3: // 성격
-        return _selectedInterests.isNotEmpty;
+        return _speechStyle.isNotEmpty && 
+               _conversationStyle.isNotEmpty && 
+               _selectedInterests.isNotEmpty;
       case 4: // 공유 설정
         return true;
       default:
@@ -1033,54 +1032,8 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   }
 
   Future<void> _handleNext() async {
-    final localizations = AppLocalizations.of(context)!;
-    
-    // Validation with user feedback
-    String? validationMessage;
-    
-    switch (_currentStep) {
-      case 0: // Basic info
-        if (_nameController.text.trim().isEmpty) {
-          validationMessage = localizations.nameRequired;
-        } else if (_ageController.text.trim().isEmpty) {
-          validationMessage = localizations.ageRequired;
-        } else if (_descriptionController.text.trim().isEmpty) {
-          validationMessage = localizations.descriptionRequired;
-        }
-        break;
-      case 1: // Profile image
-        if (_mainImage == null) {
-          validationMessage = localizations.mainImageRequired;
-        }
-        break;
-      case 2: // MBTI
-        if (_mbtiAnswers.length < 4) {
-          validationMessage = localizations.mbtiIncomplete;
-        }
-        break;
-      case 3: // Interests
-        if (_selectedInterests.isEmpty) {
-          validationMessage = localizations.interestsRequired;
-        }
-        break;
-    }
-    
-    // Show validation message if validation failed
-    if (validationMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(validationMessage),
-          backgroundColor: Colors.orange,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 2),
-        ),
-      );
-      return;
-    }
+    // Hide keyboard 
+    FocusScope.of(context).unfocus();
     
     if (_currentStep == 2) {
       // MBTI 단계에서는 모든 질문 완료 확인

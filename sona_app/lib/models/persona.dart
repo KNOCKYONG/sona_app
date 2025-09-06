@@ -300,6 +300,19 @@ class Persona {
         photoUrlsList = [];
       }
     }
+    
+    // createdAt 파싱 처리 - Timestamp 타입 처리
+    DateTime createdAtDate;
+    if (json['createdAt'] != null) {
+      if (json['createdAt'] is String) {
+        createdAtDate = DateTime.parse(json['createdAt']);
+      } else {
+        // Firebase Timestamp 처리
+        createdAtDate = (json['createdAt'] as dynamic).toDate();
+      }
+    } else {
+      createdAtDate = DateTime.now();
+    }
 
     return Persona(
       id: json['id'],
@@ -309,7 +322,7 @@ class Persona {
       photoUrls: photoUrlsList,
       personality: json['personality'],
       likes: json['likes'] ?? json['relationshipScore'] ?? 0, // 호환성을 위해 둘 다 체크
-      createdAt: DateTime.parse(json['createdAt']),
+      createdAt: createdAtDate,
       preferences: Map<String, dynamic>.from(json['preferences'] ?? {}),
       gender: json['gender'] ?? 'female',
       mbti: json['mbti'] ?? 'ENFP',
@@ -327,7 +340,9 @@ class Persona {
       isShare: json['isShare'] ?? false,
       isConfirm: json['isConfirm'] ?? false,
       confirmedAt: json['confirmedAt'] != null 
-          ? DateTime.parse(json['confirmedAt']) 
+          ? (json['confirmedAt'] is String 
+              ? DateTime.parse(json['confirmedAt'])
+              : (json['confirmedAt'] as dynamic).toDate())
           : null,
       reviewedBy: json['reviewedBy'],
     );

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../services/persona/persona_creation_service.dart';
+import '../services/persona/persona_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../utils/permission_helper.dart';
 import '../l10n/app_localizations.dart';
@@ -269,15 +271,51 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
               color: Colors.grey[600],
             ),
           ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.blue.withOpacity(0.3)),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 20, color: Colors.blue[700]),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    '이미지는 선택사항입니다. R2가 설정된 경우에만 업로드됩니다.',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.blue[700],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 24),
           
           // 메인 이미지
-          Text(
-            localizations.mainImage,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            children: [
+              Text(
+                localizations.mainImage,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '(선택사항)',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           Center(
@@ -328,12 +366,24 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
           const SizedBox(height: 24),
           
           // 추가 이미지
-          Text(
-            '${localizations.additionalImages} (${_additionalImages.length}/4)',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+          Row(
+            children: [
+              Text(
+                '${localizations.additionalImages} (${_additionalImages.length}/4)',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '(선택사항)',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 12),
           GridView.builder(
@@ -431,7 +481,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     final currentQuestionIndex = _mbtiAnswers.length;
     
     // Show description on first question
-    if (currentQuestionIndex == 0) {
+    if (currentQuestionIndex == 0 && !_mbtiAnswers.containsKey(1)) {
       return Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -463,7 +513,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  _mbtiAnswers[0] = '';  // Start the questions
+                  _mbtiAnswers[1] = '';  // Start with question id 1
                 });
               },
               style: ElevatedButton.styleFrom(
@@ -482,7 +532,8 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       );
     }
     
-    if (currentQuestionIndex >= PersonaCreationService.mbtiQuestions.length) {
+    // Check if all questions are answered
+    if (_mbtiAnswers.length >= 4) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -514,14 +565,28 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       );
     }
     
-    final question = PersonaCreationService.mbtiQuestions[currentQuestionIndex];
+    // Find next unanswered question
+    late final MBTIQuestion question;
+    bool foundQuestion = false;
+    for (final q in PersonaCreationService.mbtiQuestions) {
+      if (!_mbtiAnswers.containsKey(q.id) || _mbtiAnswers[q.id]!.isEmpty) {
+        question = q;
+        foundQuestion = true;
+        break;
+      }
+    }
+    
+    if (!foundQuestion) {
+      // This shouldn't happen, but handle gracefully
+      return const SizedBox.shrink();
+    }
     
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
         children: [
           Text(
-            '${localizations.mbtiQuestion} ${currentQuestionIndex + 1}/8',
+            '${localizations.mbtiQuestion} ${_mbtiAnswers.length}/4',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
@@ -546,12 +611,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                 _mbtiAnswers[question.id] = 'A';
               });
               // Auto proceed to next question after a short delay
-              if (_mbtiAnswers.length < 8) {
-                await Future.delayed(const Duration(milliseconds: 300));
-                if (mounted) {
-                  setState(() {});
-                }
-              }
+              // setState will automatically rebuild and show next question
             },
             borderRadius: BorderRadius.circular(16),
             child: Container(
@@ -607,12 +667,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                 _mbtiAnswers[question.id] = 'B';
               });
               // Auto proceed to next question after a short delay
-              if (_mbtiAnswers.length < 8) {
-                await Future.delayed(const Duration(milliseconds: 300));
-                if (mounted) {
-                  setState(() {});
-                }
-              }
+              // setState will automatically rebuild and show next question
             },
             borderRadius: BorderRadius.circular(16),
             child: Container(
@@ -919,7 +974,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                   : Text(
                       _currentStep == 4
                           ? localizations.create
-                          : (_currentStep == 2 && _mbtiAnswers.length < 8)
+                          : (_currentStep == 2 && _mbtiAnswers.length < 4)
                               ? localizations.next
                               : localizations.next,
                       style: const TextStyle(
@@ -945,7 +1000,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
             int.parse(_ageController.text) >= 18 &&
             int.parse(_ageController.text) <= 65;
       case 1: // 이미지
-        return _mainImage != null;
+        return true; // 이미지는 선택사항 (R2 설정 시에만 업로드)
       case 2: // MBTI
         return true; // 답변은 클릭으로 진행
       case 3: // 성격
@@ -960,7 +1015,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   Future<void> _handleNext() async {
     if (_currentStep == 2) {
       // MBTI 단계에서는 모든 질문 완료 확인
-      if (_mbtiAnswers.length < 8) {
+      if (_mbtiAnswers.length < 4) {
         return; // 아직 질문이 남음
       }
     }
@@ -1013,13 +1068,21 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
         speechStyle: _speechStyle,
         interests: _selectedInterests,
         conversationStyle: _conversationStyle,
-        mainImage: _mainImage!,
+        mainImage: _mainImage,
         additionalImages: _additionalImages,
         isShare: _isShare,
       );
       
       if (personaId != null) {
         await HapticService.success();
+        
+        // Refresh PersonaService to include the newly created custom persona
+        if (mounted) {
+          final personaService = Provider.of<PersonaService>(context, listen: false);
+          // Reinitialize to reload all personas including the new custom one
+          await personaService.initialize(userId: personaService.currentUserId);
+          debugPrint('✅ PersonaService refreshed after creating custom persona');
+        }
         
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -1034,11 +1097,23 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     } catch (e) {
       await HapticService.error();
       
+      debugPrint('❌ Error creating persona: $e');
+      
       if (mounted) {
+        String errorMessage = AppLocalizations.of(context)!.createFailed;
+        
+        // 더 구체적인 에러 메시지
+        if (e.toString().contains('permission')) {
+          errorMessage = 'Firebase 권한 오류: 관리자에게 문의하세요';
+        } else if (e.toString().contains('network')) {
+          errorMessage = '네트워크 오류: 인터넷 연결을 확인하세요';
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(AppLocalizations.of(context)!.createFailed),
+            content: Text(errorMessage),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
           ),
         );
       }

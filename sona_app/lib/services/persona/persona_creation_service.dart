@@ -39,7 +39,7 @@ class PersonaCreationService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // MBTI 질문 리스트
+  // MBTI 질문 리스트 (4개로 간소화)
   static const List<MBTIQuestion> mbtiQuestions = [
     MBTIQuestion(
       id: 1,
@@ -70,38 +70,6 @@ class PersonaCreationService extends BaseService {
       question: '약속을 잡을 때',
       optionA: '○시 ○분에 정확히 만나자',
       optionB: '그때쯤 보면 되지 뭐~',
-      typeA: 'J',
-      typeB: 'P',
-    ),
-    MBTIQuestion(
-      id: 5,
-      question: '주말 계획',
-      optionA: '집에서 혼자 쉬고 싶어',
-      optionB: '친구들이랑 놀러 가자!',
-      typeA: 'I',
-      typeB: 'E',
-    ),
-    MBTIQuestion(
-      id: 6,
-      question: '설명할 때',
-      optionA: '1번은 이거, 2번은 저거...',
-      optionB: '전체적인 그림을 보면...',
-      typeA: 'S',
-      typeB: 'N',
-    ),
-    MBTIQuestion(
-      id: 7,
-      question: '친구가 힘들어할 때',
-      optionA: '이렇게 해결하면 될 것 같아',
-      optionB: '많이 힘들었구나, 괜찮아?',
-      typeA: 'T',
-      typeB: 'F',
-    ),
-    MBTIQuestion(
-      id: 8,
-      question: '여행 스타일',
-      optionA: '미리 계획 다 짜놓자',
-      optionB: '가서 즉흥적으로 정하자',
       typeA: 'J',
       typeB: 'P',
     ),
@@ -159,7 +127,7 @@ class PersonaCreationService extends BaseService {
     required String speechStyle, // 친근한/정중한/시크한/활발한
     required List<String> interests, // 관심 분야
     required String conversationStyle, // 수다스러운/과묵한/공감적/논리적
-    required File mainImage,
+    File? mainImage,
     List<File>? additionalImages,
     required bool isShare, // 공유 여부
   }) async {
@@ -229,6 +197,7 @@ class PersonaCreationService extends BaseService {
           'createdBy': currentUser.uid,
           'isShare': isShare,
           'isConfirm': false, // 초기값은 미승인
+          'isDeleted': false, // 명시적으로 삭제되지 않음 표시
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
           // 추가 필드
@@ -237,10 +206,15 @@ class PersonaCreationService extends BaseService {
         };
 
         // 5. Firestore에 저장
-        final docRef = await _firestore
+        debugPrint('📝 Saving persona to Firebase: $personaId');
+        debugPrint('📋 Persona data: ${personaData.keys.join(', ')}');
+        
+        await _firestore
             .collection(AppConstants.personasCollection)
             .doc(personaId)
             .set(personaData);
+        
+        debugPrint('✅ Persona saved to Firebase successfully');
 
         // 6. 공유 요청 시 관리자에게 알림
         if (isShare) {
@@ -315,7 +289,7 @@ $mbtiDesc
     return keywords.take(10).toList(); // 최대 10개
   }
 
-  /// 이미지 업로드 헬퍼 메서드 (최적화 포함)
+  /// 이미지 업로드 헬퍼 메서드 (R2 전용)
   Future<String?> _uploadPersonaImage(String personaId, File imageFile, String imageType) async {
     try {
       final bytes = await imageFile.readAsBytes();
@@ -331,8 +305,13 @@ $mbtiDesc
         );
         
         // 중간 크기 URL 반환 (프로필용)
-        return result.getMainUrl(ImageSize.medium) ?? 
-               result.getMainUrl(ImageSize.small);
+        final url = result.getMainUrl(ImageSize.medium) ?? 
+                   result.getMainUrl(ImageSize.small);
+        
+        if (url != null) {
+          debugPrint('✅ Main image uploaded to R2: $url');
+          return url;
+        }
       } else {
         // 추가 이미지는 최적화 후 업로드
         final optimized = await ImageOptimizationService.optimizeImage(
@@ -348,10 +327,13 @@ $mbtiDesc
         final success = await CloudflareR2Service.uploadToR2(path, optimizedBytes);
         
         if (success) {
-          return CloudflareR2Service.generatePublicUrl(path);
+          final url = CloudflareR2Service.generatePublicUrl(path);
+          debugPrint('✅ Additional image uploaded to R2: $url');
+          return url;
         }
       }
       
+      debugPrint('❌ R2 upload failed. Image will not be available.');
       return null;
     } catch (e) {
       debugPrint('❌ Error uploading image: $e');
@@ -388,6 +370,8 @@ $mbtiDesc
         final querySnapshot = await _firestore
             .collection(AppConstants.personasCollection)
             .where('createdBy', isEqualTo: currentUser.uid)
+            .where('isDeleted', isNotEqualTo: true)
+            .orderBy('isDeleted')
             .orderBy('createdAt', descending: true)
             .get();
 

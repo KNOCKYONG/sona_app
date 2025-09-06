@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:intl/intl.dart';
 import 'image_optimization_service.dart';
 
 /// Cloudflare R2 서비스
@@ -51,12 +53,11 @@ class CloudflareR2Service {
         if (uploadSuccess) {
           final url = generatePublicUrl(path);
           mainUrls[size] = url;
+          debugPrint(
+              '✅ Uploaded main ${size.suffix}: ${ImageOptimizationService.formatBytes(mainOptimized.fileSizes[size]!)}');
         } else {
           debugPrint('❌ Failed to upload main image ${size.suffix}');
         }
-
-        debugPrint(
-            '📤 Uploaded main ${size.suffix}: ${ImageOptimizationService.formatBytes(mainOptimized.fileSizes[size]!)}');
       }
 
       // 3. 추가 이미지들 처리
@@ -115,13 +116,14 @@ class CloudflareR2Service {
   /// Public URL 생성
   static String generatePublicUrl(String path) {
     // 실제 R2 Public URL 형식
-    // 예: https://pub-abc123.r2.dev/sona-personas/personas/...
+    // 예: https://pub-abc123.r2.dev/personas/...
     if (publicUrl.isNotEmpty) {
-      return '$publicUrl/$bucketName/$path';
+      // R2 public URL is configured to serve the bucket directly
+      return '$publicUrl/$path';
     }
 
     // 개발 중 임시 URL
-    return 'https://pub-demo.r2.dev/$bucketName/$path';
+    return 'https://pub-demo.r2.dev/$path';
   }
 
   /// 이미지 프리로드 (썸네일만)
@@ -164,36 +166,102 @@ class CloudflareR2Service {
     }
   }
 
-  /// R2에 실제 파일 업로드 (Workers API 사용)
+  /// R2에 실제 파일 업로드 (S3 API 사용)
   static Future<bool> uploadToR2(String path, Uint8List data) async {
     try {
-      // Cloudflare Workers API 엔드포인트
-      // 실제로는 Workers를 통한 프록시 API를 만들어야 함
-      final workersUrl = dotenv.env['CLOUDFLARE_WORKERS_UPLOAD_URL'] ?? 
-                         'https://r2-upload.your-domain.workers.dev';
+      // R2 S3 API 자격 증명
+      final endpoint = dotenv.env['R2_ENDPOINT'] ?? '';
       
-      final request = http.MultipartRequest('POST', Uri.parse(workersUrl))
-        ..headers['Authorization'] = 'Bearer ${dotenv.env['WORKERS_API_KEY'] ?? ''}'
-        ..fields['path'] = path
-        ..fields['bucket'] = bucketName
-        ..files.add(http.MultipartFile.fromBytes(
-          'file',
-          data,
-          filename: path.split('/').last,
-        ));
-
-      final response = await request.send();
-      final responseBody = await response.stream.bytesToString();
+      if (accessKeyId.isEmpty || secretAccessKey.isEmpty || endpoint.isEmpty) {
+        debugPrint('❌ R2 S3 credentials not configured in .env file');
+        return false;
+      }
       
-      if (response.statusCode == 200) {
-        debugPrint('✅ Successfully uploaded to R2: $path');
+      // S3 요청 준비
+      final now = DateTime.now().toUtc();
+      final dateStamp = DateFormat('yyyyMMdd').format(now);
+      final amzDate = DateFormat("yyyyMMdd'T'HHmmss'Z'").format(now);
+      
+      // 요청 헤더
+      final host = Uri.parse(endpoint).host;
+      final contentType = 'image/jpeg';
+      final contentLength = data.length.toString();
+      
+      // Canonical Request 생성
+      final canonicalUri = '/$bucketName/$path';
+      final canonicalQueryString = '';
+      final payloadHash = sha256.convert(data).toString();
+      
+      final canonicalHeaders = 
+        'content-length:$contentLength\n' +
+        'content-type:$contentType\n' +
+        'host:$host\n' +
+        'x-amz-content-sha256:$payloadHash\n' +
+        'x-amz-date:$amzDate\n';
+      
+      final signedHeaders = 'content-length;content-type;host;x-amz-content-sha256;x-amz-date';
+      
+      final canonicalRequest = 
+        'PUT\n' +
+        '$canonicalUri\n' +
+        '$canonicalQueryString\n' +
+        '$canonicalHeaders\n' +
+        '$signedHeaders\n' +
+        '$payloadHash';
+      
+      // String to Sign 생성
+      final algorithm = 'AWS4-HMAC-SHA256';
+      // R2는 'auto' region을 사용
+      final credentialScope = '$dateStamp/auto/s3/aws4_request';
+      final stringToSign = 
+        '$algorithm\n' +
+        '$amzDate\n' +
+        '$credentialScope\n' +
+        sha256.convert(utf8.encode(canonicalRequest)).toString();
+      
+      // Signing Key 생성
+      final kDate = Hmac(sha256, utf8.encode('AWS4$secretAccessKey'))
+          .convert(utf8.encode(dateStamp));
+      final kRegion = Hmac(sha256, kDate.bytes)
+          .convert(utf8.encode('auto'));  // R2는 'auto' region 사용
+      final kService = Hmac(sha256, kRegion.bytes)
+          .convert(utf8.encode('s3'));
+      final kSigning = Hmac(sha256, kService.bytes)
+          .convert(utf8.encode('aws4_request'));
+      
+      // 서명 생성
+      final signature = Hmac(sha256, kSigning.bytes)
+          .convert(utf8.encode(stringToSign))
+          .toString();
+      
+      // Authorization 헤더
+      final authorization = 
+        '$algorithm Credential=$accessKeyId/$credentialScope, ' +
+        'SignedHeaders=$signedHeaders, Signature=$signature';
+      
+      // HTTP 요청 실행
+      final response = await http.put(
+        Uri.parse('$endpoint/$bucketName/$path'),
+        headers: {
+          'Authorization': authorization,
+          'Content-Type': contentType,
+          'Content-Length': contentLength,
+          'Host': host,
+          'x-amz-content-sha256': payloadHash,
+          'x-amz-date': amzDate,
+        },
+        body: data,
+      );
+      
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint('✅ Successfully uploaded to R2 via S3 API: $path');
         return true;
       } else {
-        debugPrint('❌ R2 upload failed: $responseBody');
+        debugPrint('❌ R2 S3 upload failed: ${response.statusCode} - ${response.body}');
         return false;
       }
     } catch (e) {
-      debugPrint('❌ Error uploading to R2: $e');
+      debugPrint('❌ Error uploading to R2 via S3 API: $e');
       return false;
     }
   }

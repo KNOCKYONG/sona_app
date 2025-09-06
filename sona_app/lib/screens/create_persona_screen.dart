@@ -1105,6 +1105,18 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
           // Reinitialize to reload all personas including the new custom one
           await personaService.initialize(userId: personaService.currentUserId);
           debugPrint('✅ PersonaService refreshed after creating custom persona');
+          
+          // 자동으로 매칭 처리 - 커스텀 페르소나와 즉시 매칭
+          try {
+            final matched = await personaService.matchWithPersona(personaId);
+            if (matched) {
+              debugPrint('✅ Successfully matched with custom persona: $personaId');
+            } else {
+              debugPrint('⚠️ Failed to match with custom persona: $personaId');
+            }
+          } catch (e) {
+            debugPrint('❌ Error matching with custom persona: $e');
+          }
         }
         
         if (mounted) {

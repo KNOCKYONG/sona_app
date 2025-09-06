@@ -533,7 +533,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     }
     
     // Check if all questions are answered
-    if (_mbtiAnswers.length >= 8) {
+    if (_mbtiAnswers.length >= 4) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -586,7 +586,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       child: Column(
         children: [
           Text(
-            '${localizations.mbtiQuestion} ${_mbtiAnswers.length}/8',
+            '${localizations.mbtiQuestion} ${_mbtiAnswers.length}/4',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
@@ -974,7 +974,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                   : Text(
                       _currentStep == 4
                           ? localizations.create
-                          : (_currentStep == 2 && _mbtiAnswers.length < 8)
+                          : (_currentStep == 2 && _mbtiAnswers.length < 4)
                               ? localizations.next
                               : localizations.next,
                       style: const TextStyle(
@@ -1015,7 +1015,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   Future<void> _handleNext() async {
     if (_currentStep == 2) {
       // MBTI 단계에서는 모든 질문 완료 확인
-      if (_mbtiAnswers.length < 8) {
+      if (_mbtiAnswers.length < 4) {
         return; // 아직 질문이 남음
       }
     }

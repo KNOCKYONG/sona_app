@@ -477,7 +477,7 @@ class PersonaService extends BaseService {
   }
 
   /// Optimized persona like with batch operations
-  Future<bool> likePersona(String personaId) async {
+  Future<bool> likePersona(String personaId, {Persona? personaObject}) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
@@ -488,10 +488,14 @@ class PersonaService extends BaseService {
     }
 
     try {
-      final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+      // Use provided persona object or find it in _allPersonas
+      Persona? persona = personaObject;
       if (persona == null) {
-        debugPrint('⚠️ Persona not found for liking: $personaId');
-        return false;
+        persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+        if (persona == null) {
+          debugPrint('⚠️ Persona not found for liking: $personaId');
+          return false;
+        }
       }
 
       // 재매칭 시 leftChat 플래그 리셋
@@ -576,7 +580,7 @@ class PersonaService extends BaseService {
   }
 
   /// Optimized persona super like with enhanced relationship score
-  Future<bool> superLikePersona(String personaId) async {
+  Future<bool> superLikePersona(String personaId, {Persona? personaObject}) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
@@ -587,10 +591,14 @@ class PersonaService extends BaseService {
     }
 
     try {
-      final persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+      // Use provided persona object or find it in _allPersonas
+      Persona? persona = personaObject;
       if (persona == null) {
-        debugPrint('⚠️ Persona not found for super liking: $personaId');
-        return false;
+        persona = _allPersonas.where((p) => p.id == personaId).firstOrNull;
+        if (persona == null) {
+          debugPrint('⚠️ Persona not found for super liking: $personaId');
+          return false;
+        }
       }
 
       debugPrint('⭐ Processing SUPER LIKE for persona: ${persona.name}');
@@ -2402,7 +2410,7 @@ class PersonaService extends BaseService {
   }
 
   Future<bool> matchWithPersona(String personaId,
-      {bool isSuperLike = false}) async {
+      {bool isSuperLike = false, Persona? personaObject}) async {
     // 🔥 이미 매칭된 페르소나인지 먼저 확인
     if (_matchedPersonas.any((p) => p.id == personaId)) {
       debugPrint(
@@ -2425,10 +2433,10 @@ class PersonaService extends BaseService {
 
     if (isSuperLike) {
       debugPrint('⭐ Processing as SUPER LIKE: $personaId');
-      return await superLikePersona(personaId);
+      return await superLikePersona(personaId, personaObject: personaObject);
     } else {
       debugPrint('💕 Processing as regular LIKE: $personaId');
-      return await likePersona(personaId);
+      return await likePersona(personaId, personaObject: personaObject);
     }
   }
 

@@ -39,7 +39,7 @@ class PersonaCreationService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // MBTI 질문 리스트
+  // MBTI 질문 리스트 (4개로 간소화)
   static const List<MBTIQuestion> mbtiQuestions = [
     MBTIQuestion(
       id: 1,
@@ -70,38 +70,6 @@ class PersonaCreationService extends BaseService {
       question: '약속을 잡을 때',
       optionA: '○시 ○분에 정확히 만나자',
       optionB: '그때쯤 보면 되지 뭐~',
-      typeA: 'J',
-      typeB: 'P',
-    ),
-    MBTIQuestion(
-      id: 5,
-      question: '주말 계획',
-      optionA: '집에서 혼자 쉬고 싶어',
-      optionB: '친구들이랑 놀러 가자!',
-      typeA: 'I',
-      typeB: 'E',
-    ),
-    MBTIQuestion(
-      id: 6,
-      question: '설명할 때',
-      optionA: '1번은 이거, 2번은 저거...',
-      optionB: '전체적인 그림을 보면...',
-      typeA: 'S',
-      typeB: 'N',
-    ),
-    MBTIQuestion(
-      id: 7,
-      question: '친구가 힘들어할 때',
-      optionA: '이렇게 해결하면 될 것 같아',
-      optionB: '많이 힘들었구나, 괜찮아?',
-      typeA: 'T',
-      typeB: 'F',
-    ),
-    MBTIQuestion(
-      id: 8,
-      question: '여행 스타일',
-      optionA: '미리 계획 다 짜놓자',
-      optionB: '가서 즉흥적으로 정하자',
       typeA: 'J',
       typeB: 'P',
     ),

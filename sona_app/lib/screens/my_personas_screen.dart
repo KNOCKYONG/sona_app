@@ -505,8 +505,11 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
     } else {
       // 매칭되지 않은 경우 매칭 처리 (하트 1개 소모)
       try {
-        // 매칭 처리
-        final success = await personaService.matchWithPersona(persona.id);
+        // 매칭 처리 - persona 객체도 함께 전달
+        final success = await personaService.matchWithPersona(
+          persona.id,
+          personaObject: persona,
+        );
         if (success) {
           // 매칭 성공 후 페르소나 설정
           await personaService.setCurrentPersona(persona);

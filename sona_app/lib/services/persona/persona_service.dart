@@ -150,7 +150,7 @@ class PersonaService extends BaseService {
           .where((persona) =>
                   !_isPersonaRecentlySwiped(persona.id) &&
                   !matchedIds.contains(persona.id) &&
-                  _hasR2Image(persona) // Only include personas with R2 images
+                  (persona.isCustom || _hasR2Image(persona)) // Allow custom personas even without R2 images
               )
           .toList();
     }
@@ -205,8 +205,16 @@ class PersonaService extends BaseService {
     if (!_matchedPersonasLoaded) {
       _lazyLoadMatchedPersonas();
     }
-    // Filter out personas without R2 images
-    return _matchedPersonas.where((persona) => _hasR2Image(persona)).toList();
+    // Allow custom personas even without R2 images
+    // Only filter out system personas without R2 images
+    return _matchedPersonas.where((persona) {
+      // Custom personas created by users are always shown
+      if (persona.isCustom) {
+        return true;
+      }
+      // System personas must have R2 images
+      return _hasR2Image(persona);
+    }).toList();
   }
 
   Persona? get currentPersona => _currentPersona;
@@ -222,9 +230,9 @@ class PersonaService extends BaseService {
     debugPrint('📊 Calculating waitingPersonasCount...');
     debugPrint('  Total personas: ${_allPersonas.length}');
 
-    // 전체 페르소나 중 R2 이미지가 있는 것만
+    // 전체 페르소나 중 R2 이미지가 있거나 커스텀 페르소나인 것
     final totalWithImages =
-        _allPersonas.where((persona) => _hasR2Image(persona)).toList();
+        _allPersonas.where((persona) => persona.isCustom || _hasR2Image(persona)).toList();
     debugPrint('  Personas with R2 images: ${totalWithImages.length}');
 
     // 성별 필터링 적용 (게스트는 필터링 없음)

@@ -2350,7 +2350,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get createPersona => '페르소나 만들기';
 
   @override
-  String get tellUsAboutYourPersona => 'Tell us about your persona';
+  String get tellUsAboutYourPersona => '페르소나에 대해 알려주세요';
 
   @override
   String get enterPersonaName => 'Enter persona name';
@@ -2359,22 +2359,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get describeYourPersona => 'Describe your persona briefly';
 
   @override
-  String get profileImage => 'Profile Image';
+  String get profileImage => '프로필 이미지';
 
   @override
-  String get uploadPersonaImages => 'Upload images for your persona';
+  String get uploadPersonaImages => '페르소나 이미지를 업로드하세요';
 
   @override
-  String get mainImage => 'Main Image';
+  String get mainImage => '메인 이미지';
 
   @override
-  String get tapToUpload => 'Tap to upload';
+  String get tapToUpload => '탭하여 업로드';
 
   @override
-  String get additionalImages => 'Additional Images';
+  String get additionalImages => '추가 이미지';
 
   @override
-  String get addImage => 'Add Image';
+  String get addImage => '이미지 추가';
 
   @override
   String get mbtiQuestion => '성격 질문';
@@ -2393,7 +2393,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get startTest => '테스트 시작';
 
   @override
-  String get personalitySettings => 'Personality Settings';
+  String get personalitySettings => '성격 설정';
 
   @override
   String get speechStyle => '말투';
@@ -2402,23 +2402,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get conversationStyle => '대화 스타일';
 
   @override
-  String get shareWithCommunity => 'Share with Community';
+  String get shareWithCommunity => '커뮤니티와 공유';
 
   @override
-  String get shareDescription =>
-      'Your persona can be shared with other users after approval';
+  String get shareDescription => '승인 후 다른 사용자와 페르소나를 공유할 수 있습니다';
 
   @override
-  String get sharePersona => 'Share Persona';
+  String get sharePersona => '페르소나 공유';
 
   @override
   String get willBeSharedAfterApproval => '관리자 승인 후 공유됩니다';
 
   @override
-  String get privatePersonaDescription => 'Only you can see this persona';
+  String get privatePersonaDescription => '본인만 볼 수 있는 페르소나';
 
   @override
-  String get create => 'Create';
+  String get create => '생성';
 
   @override
   String get personaCreated => '페르소나가 생성되었습니다';

@@ -1080,8 +1080,37 @@ class PersonaService extends BaseService {
           }
         }));
 
-        final persona =
+        // 먼저 _allPersonas에서 찾기
+        Persona? persona =
             _allPersonas.where((p) => p.id == personaId).firstOrNull;
+        
+        // _allPersonas에 없으면 Firebase에서 직접 로드 (커스텀 페르소나일 가능성)
+        if (persona == null) {
+          try {
+            final personaDoc = await FirebaseHelper.personas.doc(personaId).get();
+            if (personaDoc.exists) {
+              final personaData = personaDoc.data() as Map<String, dynamic>?;
+              if (personaData != null) {
+                // 커스텀 페르소나인지 확인하고 권한 체크
+                final isCustom = personaData['isCustom'] ?? false;
+                final createdBy = personaData['createdBy'];
+                
+                if (isCustom && createdBy == _currentUserId) {
+                  // 커스텀 페르소나 생성
+                  persona = _parseFirebaseDocumentSnapshot(personaDoc);
+                  // _allPersonas에도 추가하여 캐싱
+                  if (persona != null && !_allPersonas.any((p) => p.id == persona!.id)) {
+                    _allPersonas.add(persona);
+                    debugPrint('    🎯 Loaded and cached custom persona: ${persona.name}');
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            debugPrint('    ❌ Error loading custom persona $personaId: $e');
+          }
+        }
+        
         if (persona != null) {
           final likes = data['likes'] ?? data['relationshipScore'] ?? 50;
 
@@ -1343,9 +1372,86 @@ class PersonaService extends BaseService {
     return false;
   }
 
-  /// Parse Firebase personas documents into Persona objects
-  List<Persona> _parseFirebasePersonas(List<QueryDocumentSnapshot> docs) {
-    return docs.map((doc) {
+  /// Parse single Firebase persona document into Persona object (from DocumentSnapshot)
+  Persona? _parseFirebaseDocumentSnapshot(DocumentSnapshot doc) {
+    try {
+      final data = doc.data() as Map<String, dynamic>?;
+      if (data == null) return null;
+
+      // Parse photoUrls - handle both string and array formats with validation
+      List<String> photoUrls = [];
+
+      // First check if R2 images are available in imageUrls field
+      if (data['imageUrls'] != null && data['imageUrls'] is Map) {
+        // R2 images are available, clear photoUrls to force using R2 images
+        photoUrls = [];
+        debugPrint(
+            '🎯 R2 images available for ${data['name']}, clearing photoUrls');
+      } else if (data['photoUrls'] != null) {
+        // No R2 images, use legacy photoUrls with validation
+        if (data['photoUrls'] is List) {
+          final rawUrls = List<String>.from(data['photoUrls']);
+          photoUrls = _validateAndFilterPhotoUrls(rawUrls);
+        } else if (data['photoUrls'] is String) {
+          String photoUrlsStr = data['photoUrls'];
+          // Remove brackets and split by comma
+          photoUrlsStr = photoUrlsStr.replaceAll('[', '').replaceAll(']', '');
+          final rawUrls =
+              photoUrlsStr.split(', ').map((url) => url.trim()).toList();
+          photoUrls = _validateAndFilterPhotoUrls(rawUrls);
+        }
+      }
+
+      // Parse imageUrls for R2 storage
+      Map<String, dynamic>? imageUrls;
+      if (data['imageUrls'] != null) {
+        debugPrint('🔍 Parsing imageUrls for ${data['name']}:');
+        debugPrint('   Type: ${data['imageUrls'].runtimeType}');
+        debugPrint('   Value: ${data['imageUrls']}');
+
+        if (data['imageUrls'] is Map) {
+          imageUrls = Map<String, dynamic>.from(data['imageUrls']);
+          debugPrint('   ✅ Parsed as Map: $imageUrls');
+        } else if (data['imageUrls'] is String) {
+          // Sometimes Firebase returns "[Object]" as a string
+          debugPrint('   ⚠️ imageUrls is String, might be corrupted data');
+        }
+      }
+
+      final persona = Persona(
+        id: doc.id,
+        name: data['name'] ?? '',
+        age: data['age'] ?? 0,
+        description: data['description'] ?? '',
+        photoUrls: photoUrls,
+        personality: data['personality'] ?? '',
+        likes: 0,
+        gender: data['gender'] ?? 'female',
+        mbti: data['mbti'] ?? 'ENFP',
+        imageUrls: imageUrls, // Add R2 image URLs
+        topics:
+            data['topics'] != null ? List<String>.from(data['topics']) : null,
+        keywords: data['keywords'] != null
+            ? List<String>.from(data['keywords'])
+            : null,
+        hasValidR2Image: data['hasValidR2Image'] ?? null,
+        // 커스텀 페르소나 필드
+        createdBy: data['createdBy'],
+        isCustom: data['isCustom'] ?? false,
+        isShare: data['isShare'] ?? false,
+        isConfirm: data['isConfirm'] ?? false,
+      );
+
+      return persona;
+    } catch (e) {
+      debugPrint('❌ Error parsing persona document ${doc.id}: $e');
+      return null;
+    }
+  }
+
+  /// Parse single Firebase persona document into Persona object (from QueryDocumentSnapshot)
+  Persona? _parseFirebasePersona(QueryDocumentSnapshot doc) {
+    try {
       final data = doc.data() as Map<String, dynamic>;
 
       // Parse photoUrls - handle both string and array formats with validation
@@ -1413,7 +1519,17 @@ class PersonaService extends BaseService {
       );
 
       return persona;
-    }).toList();
+    } catch (e) {
+      debugPrint('❌ Error parsing persona document ${doc.id}: $e');
+      return null;
+    }
+  }
+  
+  /// Parse Firebase personas documents into Persona objects
+  List<Persona> _parseFirebasePersonas(List<QueryDocumentSnapshot> docs) {
+    return docs.map((doc) {
+      return _parseFirebasePersona(doc);
+    }).where((persona) => persona != null).cast<Persona>().toList();
   }
 
   /// 🔧 Validate and filter photo URLs - only return valid URLs, no placeholders
@@ -1478,9 +1594,45 @@ class PersonaService extends BaseService {
           await PreferencesManager.getStringList('matched_personas') ?? [];
 
       // 로컬에서 로드한 페르소나들
-      final localPersonas = _allPersonas
-          .where((persona) => matchedIds.contains(persona.id))
-          .toList();
+      final localPersonas = <Persona>[];
+      
+      for (final personaId in matchedIds) {
+        // 먼저 _allPersonas에서 찾기
+        Persona? persona = _allPersonas
+            .where((p) => p.id == personaId)
+            .firstOrNull;
+        
+        // _allPersonas에 없으면 Firebase에서 직접 로드 (커스텀 페르소나일 가능성)
+        if (persona == null && _currentUserId != null) {
+          try {
+            final doc = await FirebaseHelper.personas.doc(personaId).get();
+            if (doc.exists) {
+              final data = doc.data() as Map<String, dynamic>?;
+              if (data != null) {
+                // 커스텀 페르소나인지 확인하고 권한 체크
+                final isCustom = data['isCustom'] ?? false;
+                final createdBy = data['createdBy'];
+                
+                if (isCustom && createdBy == _currentUserId) {
+                  // 커스텀 페르소나 생성
+                  persona = _parseFirebaseDocumentSnapshot(doc);
+                  // _allPersonas에도 추가하여 캐싱
+                  if (persona != null && !_allPersonas.any((p) => p.id == persona!.id)) {
+                    _allPersonas.add(persona);
+                    debugPrint('🎯 Added custom persona to _allPersonas: ${persona.name}');
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            debugPrint('❌ Error loading custom persona $personaId: $e');
+          }
+        }
+        
+        if (persona != null) {
+          localPersonas.add(persona);
+        }
+      }
       
       // leftChat 상태 체크하여 필터링
       final filteredPersonas = <Persona>[];
@@ -1494,6 +1646,7 @@ class PersonaService extends BaseService {
       }
       
       _matchedPersonas = filteredPersonas;
+      debugPrint('📱 Loaded ${_matchedPersonas.length} matched personas from local (including custom)');
     } catch (e) {
       debugPrint('Error loading from local storage: $e');
       _matchedPersonas = [];

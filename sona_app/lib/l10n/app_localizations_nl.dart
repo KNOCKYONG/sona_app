@@ -2591,4 +2591,383 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get reportErrorButton => 'Report Error';
+
+  @override
+  String get speechStyleFriendly => 'Vriendelijk';
+
+  @override
+  String get speechStylePolite => 'Beleefd';
+
+  @override
+  String get speechStyleChic => 'Chic';
+
+  @override
+  String get speechStyleLively => 'Levendig';
+
+  @override
+  String get conversationStyleTalkative => 'Spraakzaam';
+
+  @override
+  String get conversationStyleQuiet => 'Rustig';
+
+  @override
+  String get conversationStyleEmpathetic => 'Empathisch';
+
+  @override
+  String get conversationStyleLogical => 'Logisch';
+
+  @override
+  String get interestMusic => 'Muziek';
+
+  @override
+  String get interestMovies => 'Films';
+
+  @override
+  String get interestReading => 'Lezen';
+
+  @override
+  String get interestTravel => 'Reizen';
+
+  @override
+  String get interestExercise => 'Sport';
+
+  @override
+  String get interestGaming => 'Gaming';
+
+  @override
+  String get interestCooking => 'Koken';
+
+  @override
+  String get interestFashion => 'Mode';
+
+  @override
+  String get interestArt => 'Kunst';
+
+  @override
+  String get interestPhotography => 'Fotografie';
+
+  @override
+  String get interestTechnology => 'Technologie';
+
+  @override
+  String get interestScience => 'Wetenschap';
+
+  @override
+  String get interestHistory => 'Geschiedenis';
+
+  @override
+  String get interestPhilosophy => 'Filosofie';
+
+  @override
+  String get interestPolitics => 'Politiek';
+
+  @override
+  String get interestEconomy => 'Economie';
+
+  @override
+  String get interestSports => 'Sport';
+
+  @override
+  String get interestAnimation => 'Animatie';
+
+  @override
+  String get interestKpop => 'K-POP';
+
+  @override
+  String get interestDrama => 'Drama';
+
+  @override
+  String get imageOptionalR2 =>
+      'Afbeeldingen zijn optioneel. Ze worden alleen geüpload als R2 is geconfigureerd.';
+
+  @override
+  String get networkErrorCheckConnection =>
+      'Netwerkfout: Controleer uw internetverbinding';
+
+  @override
+  String get maxFiveItems => 'Maximaal 5 items';
+
+  @override
+  String get mbtiQuestion1 => 'When meeting new people';
+
+  @override
+  String get mbtiQuestion1OptionA => 'Hello... nice to meet you';
+
+  @override
+  String get mbtiQuestion1OptionB => 'Oh! Nice to meet you! I\'m XX!';
+
+  @override
+  String get mbtiQuestion2 => 'When understanding a situation';
+
+  @override
+  String get mbtiQuestion2OptionA => 'What exactly happened and how?';
+
+  @override
+  String get mbtiQuestion2OptionB => 'I think I get the general feeling';
+
+  @override
+  String get mbtiQuestion3 => 'When making decisions';
+
+  @override
+  String get mbtiQuestion3OptionA => 'Thinking logically...';
+
+  @override
+  String get mbtiQuestion3OptionB => 'Your feelings matter more';
+
+  @override
+  String get mbtiQuestion4 => 'When making appointments';
+
+  @override
+  String get mbtiQuestion4OptionA => 'Let\'s meet exactly at X o\'clock';
+
+  @override
+  String get mbtiQuestion4OptionB => 'See you around that time~';
+
+  @override
+  String get meetNewSona => 'Meet new Sona!';
+
+  @override
+  String ageAndPersonality(String age, String personality) {
+    return '$age years old • $personality';
+  }
+
+  @override
+  String get guestLabel => 'Guest';
+
+  @override
+  String get developerOptions => 'Developer Options';
+
+  @override
+  String get reengagementNotificationTest => 'Re-engagement Notification Test';
+
+  @override
+  String get churnRiskNotificationTest => 'Churn Risk Notification Test';
+
+  @override
+  String get selectChurnRisk => 'Select churn risk:';
+
+  @override
+  String get sevenDaysInactive => '7+ days inactive (90% risk)';
+
+  @override
+  String get threeDaysInactive => '3 days inactive (70% risk)';
+
+  @override
+  String get oneDayInactive => '1 day inactive (50% risk)';
+
+  @override
+  String get generalNotification => 'General notification (30% risk)';
+
+  @override
+  String get noActivePersonas => 'No active personas';
+
+  @override
+  String percentDiscount(String percent) {
+    return '$percent% OFF';
+  }
+
+  @override
+  String imageLoadProgress(String loaded, String total) {
+    return '$loaded / $total images';
+  }
+
+  @override
+  String get checkingNewImages => 'Checking for new images...';
+
+  @override
+  String get findingNewPersonas => 'Finding new personas...';
+
+  @override
+  String get superLikeMatch => 'Super Like Match!';
+
+  @override
+  String get matchSuccess => 'Match Success!';
+
+  @override
+  String restartingConversationWith(String name) {
+    return 'Restarting conversation with $name!';
+  }
+
+  @override
+  String personaLikesYou(String name) {
+    return '$name especially likes you!';
+  }
+
+  @override
+  String matchedWithPersona(String name) {
+    return 'Matched with $name!';
+  }
+
+  @override
+  String get previousConversationKept =>
+      'Previous conversation is preserved. Continue where you left off!';
+
+  @override
+  String get specialConnectionStart =>
+      'Start of a special connection! Sona is waiting for you';
+
+  @override
+  String get preparingProfilePicture => 'Preparing profile picture...';
+
+  @override
+  String get newSonaComingSoon => 'New Sona coming soon!';
+
+  @override
+  String get superLikeDescription => 'Super Like (instant love stage)';
+
+  @override
+  String get checkingMorePersonas => 'Checking more personas...';
+
+  @override
+  String get allFilter => 'All';
+
+  @override
+  String get published => 'Published';
+
+  @override
+  String yearsOld(String age) {
+    return '$age years old';
+  }
+
+  @override
+  String startConversationWithPersona(String name) {
+    return 'Start conversation with $name?';
+  }
+
+  @override
+  String get failedToStartConversation => 'Failed to start conversation';
+
+  @override
+  String get cannotDeleteApprovedPersona => 'Cannot delete approved persona';
+
+  @override
+  String get deletePersonaWithConversation =>
+      'This persona has an active conversation. Delete anyway?\nThe chat room will also be deleted.';
+
+  @override
+  String get sharedPersonaDeleteWarning =>
+      'This is a shared persona. It will only be removed from your list.';
+
+  @override
+  String get firebasePermissionError =>
+      'Firebase permission error: Please contact administrator';
+
+  @override
+  String get checkingPersonaInfo => 'Checking persona information...';
+
+  @override
+  String get personaCacheDescription =>
+      'Persona images are saved on device for fast loading.';
+
+  @override
+  String get cacheDeleteWarning =>
+      'Deleting cache will require re-downloading images.';
+
+  @override
+  String get blockedAIDescription =>
+      'Blocked AI will be excluded from matching and chat list.';
+
+  @override
+  String searchResultsCount(String count) {
+    return 'Search results: $count';
+  }
+
+  @override
+  String questionsCount(String count) {
+    return '$count questions';
+  }
+
+  @override
+  String get readyToChat => 'Ready to chat!';
+
+  @override
+  String preparingPersonasCount(String count) {
+    return 'Preparing personas... ($count)';
+  }
+
+  @override
+  String get loggingIn => 'Logging in...';
+
+  @override
+  String languageChangedTo(String language) {
+    return 'Language changed to $language';
+  }
+
+  @override
+  String get englishLanguage => 'English';
+
+  @override
+  String get japaneseLanguage => 'Japanese';
+
+  @override
+  String get chineseLanguage => 'Chinese';
+
+  @override
+  String get thaiLanguage => 'Thai';
+
+  @override
+  String get vietnameseLanguage => 'Vietnamese';
+
+  @override
+  String get indonesianLanguage => 'Indonesian';
+
+  @override
+  String get tagalogLanguage => 'Tagalog';
+
+  @override
+  String get spanishLanguage => 'Spanish';
+
+  @override
+  String get frenchLanguage => 'French';
+
+  @override
+  String get germanLanguage => 'German';
+
+  @override
+  String get russianLanguage => 'Russian';
+
+  @override
+  String get portugueseLanguage => 'Portuguese';
+
+  @override
+  String get italianLanguage => 'Italian';
+
+  @override
+  String get dutchLanguage => 'Dutch';
+
+  @override
+  String get swedishLanguage => 'Swedish';
+
+  @override
+  String get polishLanguage => 'Polish';
+
+  @override
+  String get turkishLanguage => 'Turkish';
+
+  @override
+  String get arabicLanguage => 'Arabic';
+
+  @override
+  String get hindiLanguage => 'Hindi';
+
+  @override
+  String get urduLanguage => 'Urdu';
+
+  @override
+  String get nameRequired => 'Please enter a name';
+
+  @override
+  String get ageRequired => 'Please enter age';
+
+  @override
+  String get descriptionRequired => 'Please enter a description';
+
+  @override
+  String get mbtiIncomplete => 'Please complete all MBTI questions';
+
+  @override
+  String get interestsRequired => 'Please select at least one interest';
+
+  @override
+  String get mainImageRequired => 'Please add a main profile image';
 }

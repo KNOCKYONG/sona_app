@@ -15,14 +15,14 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
   // Get localized language names
   List<LanguageOption> _getLanguages(AppLocalizations l10n) {
     return [
-      LanguageOption('en', 'English', '🇺🇸', l10n.english),
-      LanguageOption('ko', '한국어', '🇰🇷', l10n.korean),
-      LanguageOption('ja', '日本語', '🇯🇵', l10n.japanese),
-      LanguageOption('zh', '中文', '🇨🇳', l10n.chinese),
-      LanguageOption('th', 'ภาษาไทย', '🇹🇭', l10n.thai),
-      LanguageOption('vi', 'Tiếng Việt', '🇻🇳', l10n.vietnamese),
-      LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', l10n.indonesian),
-      LanguageOption('es', 'Español', '🇪🇸', l10n.spanish),
+      LanguageOption('en', 'English', '🇺🇸', l10n.englishLanguage),
+      LanguageOption('ko', '한국어', '🇰🇷', l10n.koreanLanguage),
+      LanguageOption('ja', '日本語', '🇯🇵', l10n.japaneseLanguage),
+      LanguageOption('zh', '中文', '🇨🇳', l10n.chineseLanguage),
+      LanguageOption('th', 'ภาษาไทย', '🇹🇭', l10n.thaiLanguage),
+      LanguageOption('vi', 'Tiếng Việt', '🇻🇳', l10n.vietnameseLanguage),
+      LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', l10n.indonesianLanguage),
+      LanguageOption('es', 'Español', '🇪🇸', l10n.spanishLanguage),
       // These languages are not officially supported yet
       // LanguageOption('fr', 'Français', '🇫🇷', 'Français'),
       // LanguageOption('de', 'Deutsch', '🇩🇪', 'Deutsch'),

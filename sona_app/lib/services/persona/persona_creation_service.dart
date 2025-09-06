@@ -10,6 +10,8 @@ import '../storage/firebase_storage_service.dart';
 import 'cloudflare_r2_service.dart';
 import 'image_optimization_service.dart';
 import 'dart:typed_data';
+import '../../l10n/app_localizations.dart';
+import 'package:flutter/material.dart';
 
 /// MBTI 질문 데이터
 class MBTIQuestion {
@@ -39,6 +41,46 @@ class PersonaCreationService extends BaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  // MBTI questions are now localized
+  static List<MBTIQuestion> getMBTIQuestions(BuildContext context) {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      MBTIQuestion(
+        id: 1,
+        question: localizations.mbtiQuestion1,
+        optionA: localizations.mbtiQuestion1OptionA,
+        optionB: localizations.mbtiQuestion1OptionB,
+        typeA: 'I',
+        typeB: 'E',
+      ),
+      MBTIQuestion(
+        id: 2,
+        question: localizations.mbtiQuestion2,
+        optionA: localizations.mbtiQuestion2OptionA,
+        optionB: localizations.mbtiQuestion2OptionB,
+        typeA: 'S',
+        typeB: 'N',
+      ),
+      MBTIQuestion(
+        id: 3,
+        question: localizations.mbtiQuestion3,
+        optionA: localizations.mbtiQuestion3OptionA,
+        optionB: localizations.mbtiQuestion3OptionB,
+        typeA: 'T',
+        typeB: 'F',
+      ),
+      MBTIQuestion(
+        id: 4,
+        question: localizations.mbtiQuestion4,
+        optionA: localizations.mbtiQuestion4OptionA,
+        optionB: localizations.mbtiQuestion4OptionB,
+        typeA: 'J',
+        typeB: 'P',
+      ),
+    ];
+  }
+
+  // Keep the old static list for backward compatibility (will be removed later)
   // MBTI 질문 리스트 (4개로 간소화)
   static const List<MBTIQuestion> mbtiQuestions = [
     MBTIQuestion(
@@ -76,12 +118,13 @@ class PersonaCreationService extends BaseService {
   ];
 
   /// MBTI 계산 로직
-  String calculateMBTI(Map<int, String> answers) {
+  String calculateMBTI(BuildContext context, Map<int, String> answers) {
     int iCount = 0, eCount = 0;
     int sCount = 0, nCount = 0;
     int tCount = 0, fCount = 0;
     int jCount = 0, pCount = 0;
 
+    final mbtiQuestions = getMBTIQuestions(context);
     for (final entry in answers.entries) {
       final question = mbtiQuestions.firstWhere((q) => q.id == entry.key);
       final answer = entry.value;
@@ -119,6 +162,7 @@ class PersonaCreationService extends BaseService {
 
   /// 페르소나 생성 (메인 메서드)
   Future<String?> createCustomPersona({
+    required BuildContext context,
     required String name,
     required int age,
     required String gender,
@@ -139,7 +183,7 @@ class PersonaCreationService extends BaseService {
         }
 
         // 1. MBTI 계산
-        final mbti = calculateMBTI(mbtiAnswers);
+        final mbti = calculateMBTI(context, mbtiAnswers);
         debugPrint('📊 Calculated MBTI: $mbti');
 
         // 2. 이미지 업로드

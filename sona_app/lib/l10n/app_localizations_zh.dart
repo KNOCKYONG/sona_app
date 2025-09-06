@@ -2456,4 +2456,373 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get reportErrorButton => 'Report Error';
+
+  @override
+  String get speechStyleFriendly => '友好';
+
+  @override
+  String get speechStylePolite => '礼貌';
+
+  @override
+  String get speechStyleChic => '时尚';
+
+  @override
+  String get speechStyleLively => '活泼';
+
+  @override
+  String get conversationStyleTalkative => '健谈';
+
+  @override
+  String get conversationStyleQuiet => '安静';
+
+  @override
+  String get conversationStyleEmpathetic => '有同理心';
+
+  @override
+  String get conversationStyleLogical => '逻辑性';
+
+  @override
+  String get interestMusic => '音乐';
+
+  @override
+  String get interestMovies => '电影';
+
+  @override
+  String get interestReading => '阅读';
+
+  @override
+  String get interestTravel => '旅行';
+
+  @override
+  String get interestExercise => '运动';
+
+  @override
+  String get interestGaming => '游戏';
+
+  @override
+  String get interestCooking => '烹饪';
+
+  @override
+  String get interestFashion => '时尚';
+
+  @override
+  String get interestArt => '艺术';
+
+  @override
+  String get interestPhotography => '摄影';
+
+  @override
+  String get interestTechnology => '科技';
+
+  @override
+  String get interestScience => '科学';
+
+  @override
+  String get interestHistory => '历史';
+
+  @override
+  String get interestPhilosophy => '哲学';
+
+  @override
+  String get interestPolitics => '政治';
+
+  @override
+  String get interestEconomy => '经济';
+
+  @override
+  String get interestSports => '体育';
+
+  @override
+  String get interestAnimation => '动画';
+
+  @override
+  String get interestKpop => 'K-POP';
+
+  @override
+  String get interestDrama => '电视剧';
+
+  @override
+  String get imageOptionalR2 => '图片是可选的。只有在配置了R2后才会上传。';
+
+  @override
+  String get networkErrorCheckConnection => '网络错误：请检查您的网络连接';
+
+  @override
+  String get maxFiveItems => '最多5个';
+
+  @override
+  String get mbtiQuestion1 => '遇到新朋友时';
+
+  @override
+  String get mbtiQuestion1OptionA => '你好...很高兴认识你';
+
+  @override
+  String get mbtiQuestion1OptionB => '哦！很高兴认识你！我是○○！';
+
+  @override
+  String get mbtiQuestion2 => '了解情况时';
+
+  @override
+  String get mbtiQuestion2OptionA => '具体发生了什么？怎么回事？';
+
+  @override
+  String get mbtiQuestion2OptionB => '我大概了解是什么感觉';
+
+  @override
+  String get mbtiQuestion3 => '做决定时';
+
+  @override
+  String get mbtiQuestion3OptionA => '从逻辑上考虑...';
+
+  @override
+  String get mbtiQuestion3OptionB => '你的感受更重要';
+
+  @override
+  String get mbtiQuestion4 => '约定时间时';
+
+  @override
+  String get mbtiQuestion4OptionA => '我们○点○分准时见面';
+
+  @override
+  String get mbtiQuestion4OptionB => '那个时候见就行～';
+
+  @override
+  String get meetNewSona => '认识新的Sona！';
+
+  @override
+  String ageAndPersonality(String age, String personality) {
+    return '$age岁 • $personality';
+  }
+
+  @override
+  String get guestLabel => '访客';
+
+  @override
+  String get developerOptions => '开发者选项';
+
+  @override
+  String get reengagementNotificationTest => '重新参与通知测试';
+
+  @override
+  String get churnRiskNotificationTest => '流失风险通知测试';
+
+  @override
+  String get selectChurnRisk => '选择流失风险:';
+
+  @override
+  String get sevenDaysInactive => '7天以上未登录（风险90%）';
+
+  @override
+  String get threeDaysInactive => '3天未登录（风险70%）';
+
+  @override
+  String get oneDayInactive => '1天未登录（风险50%）';
+
+  @override
+  String get generalNotification => '一般通知（风险30%）';
+
+  @override
+  String get noActivePersonas => '没有活跃的角色';
+
+  @override
+  String percentDiscount(String percent) {
+    return '$percent%折扣';
+  }
+
+  @override
+  String imageLoadProgress(String loaded, String total) {
+    return '$loaded / $total 图片';
+  }
+
+  @override
+  String get checkingNewImages => '检查新图片中...';
+
+  @override
+  String get findingNewPersonas => '寻找新角色中...';
+
+  @override
+  String get superLikeMatch => '超级喜欢匹配！';
+
+  @override
+  String get matchSuccess => '匹配成功！';
+
+  @override
+  String restartingConversationWith(String name) {
+    return '与$name\\n重新开始对话！';
+  }
+
+  @override
+  String personaLikesYou(String name) {
+    return '$name\\n特别喜欢你！';
+  }
+
+  @override
+  String matchedWithPersona(String name) {
+    return '与$name匹配成功！';
+  }
+
+  @override
+  String get previousConversationKept => '之前的对话已保留。继续你们的聊天吧！';
+
+  @override
+  String get specialConnectionStart => '特别缘分的开始！Sona在等你';
+
+  @override
+  String get preparingProfilePicture => '准备个人资料图片中...';
+
+  @override
+  String get newSonaComingSoon => '新的Sona即将推出！';
+
+  @override
+  String get superLikeDescription => '超级喜欢（直接恋爱阶段）';
+
+  @override
+  String get checkingMorePersonas => '检查更多角色中...';
+
+  @override
+  String get allFilter => '全部';
+
+  @override
+  String get published => '已发布';
+
+  @override
+  String yearsOld(String age) {
+    return '$age岁';
+  }
+
+  @override
+  String startConversationWithPersona(String name) {
+    return '与$name开始对话？';
+  }
+
+  @override
+  String get failedToStartConversation => '开始对话失败';
+
+  @override
+  String get cannotDeleteApprovedPersona => '无法删除已批准的角色';
+
+  @override
+  String get deletePersonaWithConversation => '此角色有进行中的对话。确定删除吗？\\n聊天室也将被删除。';
+
+  @override
+  String get sharedPersonaDeleteWarning => '这是共享角色。只会从您的列表中删除。';
+
+  @override
+  String get firebasePermissionError => 'Firebase权限错误：请联系管理员';
+
+  @override
+  String get checkingPersonaInfo => '检查角色信息中...';
+
+  @override
+  String get personaCacheDescription => '角色图片已保存在设备上，可快速加载。';
+
+  @override
+  String get cacheDeleteWarning => '删除缓存将需要重新下载图片。';
+
+  @override
+  String get blockedAIDescription => '被屏蔽的AI将从匹配和聊天列表中排除。';
+
+  @override
+  String searchResultsCount(String count) {
+    return '搜索结果: $count个';
+  }
+
+  @override
+  String questionsCount(String count) {
+    return '$count个问题';
+  }
+
+  @override
+  String get readyToChat => '准备好聊天了！';
+
+  @override
+  String preparingPersonasCount(String count) {
+    return '准备角色中... ($count)';
+  }
+
+  @override
+  String get loggingIn => '登录中...';
+
+  @override
+  String languageChangedTo(String language) {
+    return '语言已更改为$language';
+  }
+
+  @override
+  String get englishLanguage => '英语';
+
+  @override
+  String get japaneseLanguage => '日语';
+
+  @override
+  String get chineseLanguage => '中文';
+
+  @override
+  String get thaiLanguage => '泰语';
+
+  @override
+  String get vietnameseLanguage => '越南语';
+
+  @override
+  String get indonesianLanguage => '印尼语';
+
+  @override
+  String get tagalogLanguage => '他加禄语';
+
+  @override
+  String get spanishLanguage => '西班牙语';
+
+  @override
+  String get frenchLanguage => '法语';
+
+  @override
+  String get germanLanguage => '德语';
+
+  @override
+  String get russianLanguage => '俄语';
+
+  @override
+  String get portugueseLanguage => '葡萄牙语';
+
+  @override
+  String get italianLanguage => '意大利语';
+
+  @override
+  String get dutchLanguage => '荷兰语';
+
+  @override
+  String get swedishLanguage => '瑞典语';
+
+  @override
+  String get polishLanguage => '波兰语';
+
+  @override
+  String get turkishLanguage => '土耳其语';
+
+  @override
+  String get arabicLanguage => '阿拉伯语';
+
+  @override
+  String get hindiLanguage => '印地语';
+
+  @override
+  String get urduLanguage => '乌尔都语';
+
+  @override
+  String get nameRequired => 'Please enter a name';
+
+  @override
+  String get ageRequired => 'Please enter age';
+
+  @override
+  String get descriptionRequired => 'Please enter a description';
+
+  @override
+  String get mbtiIncomplete => 'Please complete all MBTI questions';
+
+  @override
+  String get interestsRequired => 'Please select at least one interest';
+
+  @override
+  String get mainImageRequired => 'Please add a main profile image';
 }

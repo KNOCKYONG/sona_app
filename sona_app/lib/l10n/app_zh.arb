@@ -104,9 +104,9 @@
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "所有角色",
+  "allPersonas": "全部",
   "@allPersonas": {
-    "description": "Localized string for allPersonas"
+    "description": "All personas tab"
   },
   "allPersonasMatched": "所有角色已匹配！开始与他们聊天吧。",
   "@allPersonasMatched": {
@@ -195,7 +195,7 @@
   },
   "basicInfo": "基本信息",
   "@basicInfo": {
-    "description": "Localized string for basicInfo"
+    "description": "Basic info step"
   },
   "basicInfoDescription": "请填写基本信息以创建账户",
   "@basicInfoDescription": {
@@ -554,7 +554,7 @@
   },
   "delete": "删除",
   "@delete": {
-    "description": "Localized string for delete"
+    "description": "Delete action"
   },
   "deleteAccount": "删除账户",
   "@deleteAccount": {
@@ -631,7 +631,7 @@
   },
   "edit": "编辑",
   "@edit": {
-    "description": "Localized string for edit"
+    "description": "Edit action"
   },
   "editInfo": "编辑信息",
   "@editInfo": {
@@ -850,9 +850,9 @@
   "@fashion": {
     "description": "Localized string for fashion"
   },
-  "female": "女",
+  "female": "女性",
   "@female": {
-    "description": "Localized string for female"
+    "description": "Female gender option"
   },
   "filter": "筛选",
   "@filter": {
@@ -1151,7 +1151,7 @@
   },
   "interests": "兴趣",
   "@interests": {
-    "description": "Localized string for interests"
+    "description": "Interests label"
   },
   "invalidEmailFormat": "无效的电子邮件格式",
   "@invalidEmailFormat": {
@@ -1378,9 +1378,9 @@
   "@makeFriends": {
     "description": "Localized string for makeFriends"
   },
-  "male": "男",
+  "male": "男性",
   "@male": {
-    "description": "Localized string for male"
+    "description": "Male gender option"
   },
   "manageBlockedAIs": "管理已屏蔽的AI",
   "@manageBlockedAIs": {
@@ -1716,7 +1716,7 @@
   },
   "optional": "可选",
   "@optional": {
-    "description": "Localized string for optional"
+    "description": "optional"
   },
   "or": "或",
   "@or": {
@@ -1732,7 +1732,7 @@
   },
   "other": "其他",
   "@other": {
-    "description": "Localized string for other"
+    "description": "Other gender option"
   },
   "otherError": "其他错误",
   "@otherError": {
@@ -1823,9 +1823,9 @@
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "个性",
+  "personality": "性格",
   "@personality": {
-    "description": "Localized string for personality"
+    "description": "Personality step"
   },
   "pets": "宠物",
   "@pets": {
@@ -2323,7 +2323,7 @@
   },
   "selectGender": "选择性别",
   "@selectGender": {
-    "description": "Localized string for selectGender"
+    "description": "Select gender prompt"
   },
   "selectInterests": "请选择您的兴趣（至少 1 个）",
   "@selectInterests": {
@@ -3175,26 +3175,6 @@
   "@personaDescription": {
     "description": "Persona description label"
   },
-  "male": "男性",
-  "@male": {
-    "description": "Male gender option"
-  },
-  "female": "女性",
-  "@female": {
-    "description": "Female gender option"
-  },
-  "other": "其他",
-  "@other": {
-    "description": "Other gender option"
-  },
-  "selectGender": "选择性别",
-  "@selectGender": {
-    "description": "Select gender prompt"
-  },
-  "basicInfo": "基本信息",
-  "@basicInfo": {
-    "description": "Basic info step"
-  },
   "photos": "照片",
   "@photos": {
     "description": "Photos step"
@@ -3218,10 +3198,6 @@
   "startTest": "开始测试",
   "@startTest": {
     "description": "Button text to start the MBTI test"
-  },
-  "personality": "性格",
-  "@personality": {
-    "description": "Personality step"
   },
   "speechStyle": "说话风格",
   "@speechStyle": {
@@ -3275,10 +3251,6 @@
   "@logical": {
     "description": "Logical conversation style"
   },
-  "interests": "兴趣",
-  "@interests": {
-    "description": "Interests label"
-  },
   "shareWithOthers": "与其他用户分享",
   "@shareWithOthers": {
     "description": "Share with others option"
@@ -3295,10 +3267,6 @@
   "@uploadingImages": {
     "description": "Uploading images status"
   },
-  "allPersonas": "全部",
-  "@allPersonas": {
-    "description": "All personas tab"
-  },
   "pendingApproval": "待审核",
   "@pendingApproval": {
     "description": "Pending approval status"
@@ -3310,14 +3278,6 @@
   "noPersonasFound": "没有角色",
   "@noPersonasFound": {
     "description": "No personas found message"
-  },
-  "edit": "编辑",
-  "@edit": {
-    "description": "Edit action"
-  },
-  "delete": "删除",
-  "@delete": {
-    "description": "Delete action"
   },
   "deletePersona": "删除角色",
   "@deletePersona": {
@@ -3334,5 +3294,531 @@
   "deleteFailed": "删除失败",
   "@deleteFailed": {
     "description": "Delete failed message"
+  },
+  "speechStyleFriendly": "友好",
+  "@speechStyleFriendly": {
+    "description": "speech style option"
+  },
+  "speechStylePolite": "礼貌",
+  "@speechStylePolite": {
+    "description": "speech style option"
+  },
+  "speechStyleChic": "时尚",
+  "@speechStyleChic": {
+    "description": "speech style option"
+  },
+  "speechStyleLively": "活泼",
+  "@speechStyleLively": {
+    "description": "speech style option"
+  },
+  "conversationStyleTalkative": "健谈",
+  "@conversationStyleTalkative": {
+    "description": "conversation style option"
+  },
+  "conversationStyleQuiet": "安静",
+  "@conversationStyleQuiet": {
+    "description": "conversation style option"
+  },
+  "conversationStyleEmpathetic": "有同理心",
+  "@conversationStyleEmpathetic": {
+    "description": "conversation style option"
+  },
+  "conversationStyleLogical": "逻辑性",
+  "@conversationStyleLogical": {
+    "description": "conversation style option"
+  },
+  "interestMusic": "音乐",
+  "@interestMusic": {
+    "description": " interest option"
+  },
+  "interestMovies": "电影",
+  "@interestMovies": {
+    "description": " interest option"
+  },
+  "interestReading": "阅读",
+  "@interestReading": {
+    "description": " interest option"
+  },
+  "interestTravel": "旅行",
+  "@interestTravel": {
+    "description": " interest option"
+  },
+  "interestExercise": "运动",
+  "@interestExercise": {
+    "description": " interest option"
+  },
+  "interestGaming": "游戏",
+  "@interestGaming": {
+    "description": " interest option"
+  },
+  "interestCooking": "烹饪",
+  "@interestCooking": {
+    "description": " interest option"
+  },
+  "interestFashion": "时尚",
+  "@interestFashion": {
+    "description": " interest option"
+  },
+  "interestArt": "艺术",
+  "@interestArt": {
+    "description": " interest option"
+  },
+  "interestPhotography": "摄影",
+  "@interestPhotography": {
+    "description": " interest option"
+  },
+  "interestTechnology": "科技",
+  "@interestTechnology": {
+    "description": " interest option"
+  },
+  "interestScience": "科学",
+  "@interestScience": {
+    "description": " interest option"
+  },
+  "interestHistory": "历史",
+  "@interestHistory": {
+    "description": " interest option"
+  },
+  "interestPhilosophy": "哲学",
+  "@interestPhilosophy": {
+    "description": " interest option"
+  },
+  "interestPolitics": "政治",
+  "@interestPolitics": {
+    "description": " interest option"
+  },
+  "interestEconomy": "经济",
+  "@interestEconomy": {
+    "description": " interest option"
+  },
+  "interestSports": "体育",
+  "@interestSports": {
+    "description": " interest option"
+  },
+  "interestAnimation": "动画",
+  "@interestAnimation": {
+    "description": " interest option"
+  },
+  "interestKpop": "K-POP",
+  "@interestKpop": {
+    "description": " interest option"
+  },
+  "interestDrama": "电视剧",
+  "@interestDrama": {
+    "description": " interest option"
+  },
+  "imageOptionalR2": "图片是可选的。只有在配置了R2后才会上传。",
+  "@imageOptionalR2": {
+    "description": "imageOptionalR2"
+  },
+  "networkErrorCheckConnection": "网络错误：请检查您的网络连接",
+  "@networkErrorCheckConnection": {
+    "description": "networkErrorCheckConnection"
+  },
+  "maxFiveItems": "最多5个",
+  "@maxFiveItems": {
+    "description": "maxFiveItems"
+  },
+  "mbtiQuestion1": "遇到新朋友时",
+  "@mbtiQuestion1": {
+    "description": "Mbtiquestion1"
+  },
+  "mbtiQuestion1OptionA": "你好...很高兴认识你",
+  "@mbtiQuestion1OptionA": {
+    "description": "Mbtiquestion1Optiona"
+  },
+  "mbtiQuestion1OptionB": "哦！很高兴认识你！我是○○！",
+  "@mbtiQuestion1OptionB": {
+    "description": "Mbtiquestion1Optionb"
+  },
+  "mbtiQuestion2": "了解情况时",
+  "@mbtiQuestion2": {
+    "description": "Mbtiquestion2"
+  },
+  "mbtiQuestion2OptionA": "具体发生了什么？怎么回事？",
+  "@mbtiQuestion2OptionA": {
+    "description": "Mbtiquestion2Optiona"
+  },
+  "mbtiQuestion2OptionB": "我大概了解是什么感觉",
+  "@mbtiQuestion2OptionB": {
+    "description": "Mbtiquestion2Optionb"
+  },
+  "mbtiQuestion3": "做决定时",
+  "@mbtiQuestion3": {
+    "description": "Mbtiquestion3"
+  },
+  "mbtiQuestion3OptionA": "从逻辑上考虑...",
+  "@mbtiQuestion3OptionA": {
+    "description": "Mbtiquestion3Optiona"
+  },
+  "mbtiQuestion3OptionB": "你的感受更重要",
+  "@mbtiQuestion3OptionB": {
+    "description": "Mbtiquestion3Optionb"
+  },
+  "mbtiQuestion4": "约定时间时",
+  "@mbtiQuestion4": {
+    "description": "Mbtiquestion4"
+  },
+  "mbtiQuestion4OptionA": "我们○点○分准时见面",
+  "@mbtiQuestion4OptionA": {
+    "description": "Mbtiquestion4Optiona"
+  },
+  "mbtiQuestion4OptionB": "那个时候见就行～",
+  "@mbtiQuestion4OptionB": {
+    "description": "Mbtiquestion4Optionb"
+  },
+  "meetNewSona": "认识新的Sona！",
+  "@meetNewSona": {
+    "description": "Meetnewsona"
+  },
+  "ageAndPersonality": "{age}岁 • {personality}",
+  "@ageAndPersonality": {
+    "description": "Ageandpersonality",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      },
+      "personality": {
+        "type": "String"
+      }
+    }
+  },
+  "guestLabel": "访客",
+  "@guestLabel": {
+    "description": "Guestlabel"
+  },
+  "developerOptions": "开发者选项",
+  "@developerOptions": {
+    "description": "Developeroptions"
+  },
+  "reengagementNotificationTest": "重新参与通知测试",
+  "@reengagementNotificationTest": {
+    "description": "Reengagementnotificationtest"
+  },
+  "churnRiskNotificationTest": "流失风险通知测试",
+  "@churnRiskNotificationTest": {
+    "description": "Churnrisknotificationtest"
+  },
+  "selectChurnRisk": "选择流失风险:",
+  "@selectChurnRisk": {
+    "description": "Selectchurnrisk"
+  },
+  "sevenDaysInactive": "7天以上未登录（风险90%）",
+  "@sevenDaysInactive": {
+    "description": "Sevendaysinactive"
+  },
+  "threeDaysInactive": "3天未登录（风险70%）",
+  "@threeDaysInactive": {
+    "description": "Threedaysinactive"
+  },
+  "oneDayInactive": "1天未登录（风险50%）",
+  "@oneDayInactive": {
+    "description": "Onedayinactive"
+  },
+  "generalNotification": "一般通知（风险30%）",
+  "@generalNotification": {
+    "description": "Generalnotification"
+  },
+  "noActivePersonas": "没有活跃的角色",
+  "@noActivePersonas": {
+    "description": "Noactivepersonas"
+  },
+  "percentDiscount": "{percent}%折扣",
+  "@percentDiscount": {
+    "description": "Percentdiscount",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "imageLoadProgress": "{loaded} / {total} 图片",
+  "@imageLoadProgress": {
+    "description": "Imageloadprogress",
+    "placeholders": {
+      "loaded": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "checkingNewImages": "检查新图片中...",
+  "@checkingNewImages": {
+    "description": "Checkingnewimages"
+  },
+  "findingNewPersonas": "寻找新角色中...",
+  "@findingNewPersonas": {
+    "description": "Findingnewpersonas"
+  },
+  "superLikeMatch": "超级喜欢匹配！",
+  "@superLikeMatch": {
+    "description": "Superlikematch"
+  },
+  "matchSuccess": "匹配成功！",
+  "@matchSuccess": {
+    "description": "Matchsuccess"
+  },
+  "restartingConversationWith": "与{name}\\n重新开始对话！",
+  "@restartingConversationWith": {
+    "description": "Restartingconversationwith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personaLikesYou": "{name}\\n特别喜欢你！",
+  "@personaLikesYou": {
+    "description": "Personalikesyou",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedWithPersona": "与{name}匹配成功！",
+  "@matchedWithPersona": {
+    "description": "Matchedwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "previousConversationKept": "之前的对话已保留。继续你们的聊天吧！",
+  "@previousConversationKept": {
+    "description": "Previousconversationkept"
+  },
+  "specialConnectionStart": "特别缘分的开始！Sona在等你",
+  "@specialConnectionStart": {
+    "description": "Specialconnectionstart"
+  },
+  "preparingProfilePicture": "准备个人资料图片中...",
+  "@preparingProfilePicture": {
+    "description": "Preparingprofilepicture"
+  },
+  "newSonaComingSoon": "新的Sona即将推出！",
+  "@newSonaComingSoon": {
+    "description": "Newsonacomingsoon"
+  },
+  "superLikeDescription": "超级喜欢（直接恋爱阶段）",
+  "@superLikeDescription": {
+    "description": "Superlikedescription"
+  },
+  "checkingMorePersonas": "检查更多角色中...",
+  "@checkingMorePersonas": {
+    "description": "Checkingmorepersonas"
+  },
+  "allFilter": "全部",
+  "@allFilter": {
+    "description": "Allfilter"
+  },
+  "published": "已发布",
+  "@published": {
+    "description": "Published"
+  },
+  "yearsOld": "{age}岁",
+  "@yearsOld": {
+    "description": "Yearsold",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "startConversationWithPersona": "与{name}开始对话？",
+  "@startConversationWithPersona": {
+    "description": "Startconversationwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToStartConversation": "开始对话失败",
+  "@failedToStartConversation": {
+    "description": "Failedtostartconversation"
+  },
+  "cannotDeleteApprovedPersona": "无法删除已批准的角色",
+  "@cannotDeleteApprovedPersona": {
+    "description": "Cannotdeleteapprovedpersona"
+  },
+  "deletePersonaWithConversation": "此角色有进行中的对话。确定删除吗？\\n聊天室也将被删除。",
+  "@deletePersonaWithConversation": {
+    "description": "Deletepersonawithconversation"
+  },
+  "sharedPersonaDeleteWarning": "这是共享角色。只会从您的列表中删除。",
+  "@sharedPersonaDeleteWarning": {
+    "description": "Sharedpersonadeletewarning"
+  },
+  "firebasePermissionError": "Firebase权限错误：请联系管理员",
+  "@firebasePermissionError": {
+    "description": "Firebasepermissionerror"
+  },
+  "checkingPersonaInfo": "检查角色信息中...",
+  "@checkingPersonaInfo": {
+    "description": "Checkingpersonainfo"
+  },
+  "personaCacheDescription": "角色图片已保存在设备上，可快速加载。",
+  "@personaCacheDescription": {
+    "description": "Personacachedescription"
+  },
+  "cacheDeleteWarning": "删除缓存将需要重新下载图片。",
+  "@cacheDeleteWarning": {
+    "description": "Cachedeletewarning"
+  },
+  "blockedAIDescription": "被屏蔽的AI将从匹配和聊天列表中排除。",
+  "@blockedAIDescription": {
+    "description": "Blockedaidescription"
+  },
+  "searchResultsCount": "搜索结果: {count}个",
+  "@searchResultsCount": {
+    "description": "Searchresultscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsCount": "{count}个问题",
+  "@questionsCount": {
+    "description": "Questionscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToChat": "准备好聊天了！",
+  "@readyToChat": {
+    "description": "Readytochat"
+  },
+  "preparingPersonasCount": "准备角色中... ({count})",
+  "@preparingPersonasCount": {
+    "description": "Preparingpersonascount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "loggingIn": "登录中...",
+  "@loggingIn": {
+    "description": "Loggingin"
+  },
+  "languageChangedTo": "语言已更改为{language}",
+  "@languageChangedTo": {
+    "description": "Languagechangedto",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "englishLanguage": "英语",
+  "@englishLanguage": {
+    "description": "Englishlanguage"
+  },
+  "japaneseLanguage": "日语",
+  "@japaneseLanguage": {
+    "description": "Japaneselanguage"
+  },
+  "chineseLanguage": "中文",
+  "@chineseLanguage": {
+    "description": "Chineselanguage"
+  },
+  "thaiLanguage": "泰语",
+  "@thaiLanguage": {
+    "description": "Thailanguage"
+  },
+  "vietnameseLanguage": "越南语",
+  "@vietnameseLanguage": {
+    "description": "Vietnameselanguage"
+  },
+  "indonesianLanguage": "印尼语",
+  "@indonesianLanguage": {
+    "description": "Indonesianlanguage"
+  },
+  "tagalogLanguage": "他加禄语",
+  "@tagalogLanguage": {
+    "description": "Tagaloglanguage"
+  },
+  "spanishLanguage": "西班牙语",
+  "@spanishLanguage": {
+    "description": "Spanishlanguage"
+  },
+  "frenchLanguage": "法语",
+  "@frenchLanguage": {
+    "description": "Frenchlanguage"
+  },
+  "germanLanguage": "德语",
+  "@germanLanguage": {
+    "description": "Germanlanguage"
+  },
+  "russianLanguage": "俄语",
+  "@russianLanguage": {
+    "description": "Russianlanguage"
+  },
+  "portugueseLanguage": "葡萄牙语",
+  "@portugueseLanguage": {
+    "description": "Portugueselanguage"
+  },
+  "italianLanguage": "意大利语",
+  "@italianLanguage": {
+    "description": "Italianlanguage"
+  },
+  "dutchLanguage": "荷兰语",
+  "@dutchLanguage": {
+    "description": "Dutchlanguage"
+  },
+  "swedishLanguage": "瑞典语",
+  "@swedishLanguage": {
+    "description": "Swedishlanguage"
+  },
+  "polishLanguage": "波兰语",
+  "@polishLanguage": {
+    "description": "Polishlanguage"
+  },
+  "turkishLanguage": "土耳其语",
+  "@turkishLanguage": {
+    "description": "Turkishlanguage"
+  },
+  "arabicLanguage": "阿拉伯语",
+  "@arabicLanguage": {
+    "description": "Arabiclanguage"
+  },
+  "hindiLanguage": "印地语",
+  "@hindiLanguage": {
+    "description": "Hindilanguage"
+  },
+  "urduLanguage": "乌尔都语",
+  "@urduLanguage": {
+    "description": "Urdulanguage"
+  },
+  "nameRequired": "Please enter a name",
+  "@nameRequired": {
+    "description": "Validation message: nameRequired"
+  },
+  "ageRequired": "Please enter age",
+  "@ageRequired": {
+    "description": "Validation message: ageRequired"
+  },
+  "descriptionRequired": "Please enter a description",
+  "@descriptionRequired": {
+    "description": "Validation message: descriptionRequired"
+  },
+  "mbtiIncomplete": "Please complete all MBTI questions",
+  "@mbtiIncomplete": {
+    "description": "Validation message: mbtiIncomplete"
+  },
+  "interestsRequired": "Please select at least one interest",
+  "@interestsRequired": {
+    "description": "Validation message: interestsRequired"
+  },
+  "mainImageRequired": "Please add a main profile image",
+  "@mainImageRequired": {
+    "description": "Validation message: mainImageRequired"
   }
 }

@@ -297,11 +297,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
             
             // 개발자 옵션 (디버그 모드에서만 표시)
             if (kDebugMode) ...[
-              _buildSectionTitle('개발자 옵션'),
+              _buildSectionTitle(localizations.developerOptions),
               _buildMenuItem(
                 icon: Icons.bug_report_outlined,
-                title: '재참여 알림 테스트',
-                subtitle: '이탈 위험도별 알림 테스트',
+                title: localizations.reengagementNotificationTest,
+                subtitle: localizations.churnRiskNotificationTest,
                 onTap: () {
                   _showReengagementTestDialog();
                 },
@@ -565,31 +565,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showReengagementTestDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: const Text('재참여 알림 테스트'),
+      builder: (context) {
+        final localizations = AppLocalizations.of(context)!;
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: Text(localizations.reengagementNotificationTest),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('이탈 위험도를 선택하세요:'),
+            Text(localizations.selectChurnRisk),
             const SizedBox(height: 16),
-            _buildTestButton('7일 이상 미접속 (위험도 90%)', 0.9),
-            _buildTestButton('3일 미접속 (위험도 70%)', 0.7),
-            _buildTestButton('1일 미접속 (위험도 50%)', 0.5),
-            _buildTestButton('일반 알림 (위험도 30%)', 0.3),
+            _buildTestButton(localizations.sevenDaysInactive, 0.9),
+            _buildTestButton(localizations.threeDaysInactive, 0.7),
+            _buildTestButton(localizations.oneDayInactive, 0.5),
+            _buildTestButton(localizations.generalNotification, 0.3),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('닫기'),
+            child: Text(localizations.close),
           ),
         ],
-      ),
-    );
+      );
+    });
   }
   
   Widget _buildTestButton(String label, double churnRisk) {

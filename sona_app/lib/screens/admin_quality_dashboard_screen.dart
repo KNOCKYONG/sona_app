@@ -596,11 +596,11 @@ class _AdminQualityDashboardScreenState
     if (difference.inMinutes < 1) {
       return AppLocalizations.of(context)!.justNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}분 전';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes, difference.inMinutes.toString());
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}시간 전';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours, difference.inHours.toString());
     } else {
-      return '${difference.inDays}일 전';
+      return AppLocalizations.of(context)!.daysAgo(difference.inDays, difference.inDays.toString());
     }
   }
 }

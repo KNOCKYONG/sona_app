@@ -210,10 +210,10 @@ class _SplashScreenState extends State<SplashScreen>
               await Future.wait(chatFutures);
               debugPrint('✅ [SplashScreen] Chat histories preloaded for ${personasToPreload.length} personas');
               
-              _updateProgress(0.95, 'Ready to chat!');
+              _updateProgress(0.95, AppLocalizations.of(context)!.readyToChat);
             }
 
-            _updateProgress(1.0, 'Complete!');
+            _updateProgress(1.0, AppLocalizations.of(context)!.complete);
 
             await Future.delayed(const Duration(milliseconds: 300));
 
@@ -249,7 +249,7 @@ class _SplashScreenState extends State<SplashScreen>
                 // 페르소나 개수 표시
                 if (message.contains('Persona data') && personaService.allPersonas.isNotEmpty) {
                   final count = personaService.allPersonas.length;
-                  _updateProgress(mappedProgress, 'Preparing personas... ($count)');
+                  _updateProgress(mappedProgress, AppLocalizations.of(context)!.preparingPersonasCount(count.toString()));
                 }
               },
             );
@@ -436,7 +436,7 @@ class _SplashScreenState extends State<SplashScreen>
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Logging in...',
+                      AppLocalizations.of(context)!.loggingIn,
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFFFF6B9D),
@@ -464,7 +464,7 @@ class _SplashScreenState extends State<SplashScreen>
       if (success) {
         setState(() {
           _progress = 1.0;
-          _loadingMessage = '완료!';
+          _loadingMessage = AppLocalizations.of(context)!.complete;
         });
         await Future.delayed(const Duration(milliseconds: 300));
         Navigator.of(context)

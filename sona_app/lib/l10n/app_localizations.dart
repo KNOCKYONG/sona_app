@@ -2560,7 +2560,7 @@ abstract class AppLocalizations {
   /// **'Open Settings'**
   String get openSettings;
 
-  /// Localized string for optional
+  /// Optional label
   ///
   /// In en, this message translates to:
   /// **'Optional'**
@@ -4905,6 +4905,696 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Report Error'**
   String get reportErrorButton;
+
+  /// Friendly speech style option
+  ///
+  /// In en, this message translates to:
+  /// **'Friendly'**
+  String get speechStyleFriendly;
+
+  /// Polite speech style option
+  ///
+  /// In en, this message translates to:
+  /// **'Polite'**
+  String get speechStylePolite;
+
+  /// Chic speech style option
+  ///
+  /// In en, this message translates to:
+  /// **'Chic'**
+  String get speechStyleChic;
+
+  /// Lively speech style option
+  ///
+  /// In en, this message translates to:
+  /// **'Lively'**
+  String get speechStyleLively;
+
+  /// Talkative conversation style option
+  ///
+  /// In en, this message translates to:
+  /// **'Talkative'**
+  String get conversationStyleTalkative;
+
+  /// Quiet conversation style option
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet'**
+  String get conversationStyleQuiet;
+
+  /// Empathetic conversation style option
+  ///
+  /// In en, this message translates to:
+  /// **'Empathetic'**
+  String get conversationStyleEmpathetic;
+
+  /// Logical conversation style option
+  ///
+  /// In en, this message translates to:
+  /// **'Logical'**
+  String get conversationStyleLogical;
+
+  /// Music interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get interestMusic;
+
+  /// Movies interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Movies'**
+  String get interestMovies;
+
+  /// Reading interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get interestReading;
+
+  /// Travel interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Travel'**
+  String get interestTravel;
+
+  /// Exercise interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise'**
+  String get interestExercise;
+
+  /// Gaming interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Gaming'**
+  String get interestGaming;
+
+  /// Cooking interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Cooking'**
+  String get interestCooking;
+
+  /// Fashion interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Fashion'**
+  String get interestFashion;
+
+  /// Art interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Art'**
+  String get interestArt;
+
+  /// Photography interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Photography'**
+  String get interestPhotography;
+
+  /// Technology interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Technology'**
+  String get interestTechnology;
+
+  /// Science interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Science'**
+  String get interestScience;
+
+  /// History interest option
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get interestHistory;
+
+  /// Philosophy interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Philosophy'**
+  String get interestPhilosophy;
+
+  /// Politics interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Politics'**
+  String get interestPolitics;
+
+  /// Economy interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Economy'**
+  String get interestEconomy;
+
+  /// Sports interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get interestSports;
+
+  /// Animation interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Animation'**
+  String get interestAnimation;
+
+  /// K-POP interest option
+  ///
+  /// In en, this message translates to:
+  /// **'K-POP'**
+  String get interestKpop;
+
+  /// Drama interest option
+  ///
+  /// In en, this message translates to:
+  /// **'Drama'**
+  String get interestDrama;
+
+  /// Message explaining that images are optional and require R2
+  ///
+  /// In en, this message translates to:
+  /// **'Images are optional. They will only be uploaded if R2 is configured.'**
+  String get imageOptionalR2;
+
+  /// Network error message
+  ///
+  /// In en, this message translates to:
+  /// **'Network error: Please check your internet connection'**
+  String get networkErrorCheckConnection;
+
+  /// Maximum 5 items message
+  ///
+  /// In en, this message translates to:
+  /// **'Up to 5 items'**
+  String get maxFiveItems;
+
+  /// Mbtiquestion1
+  ///
+  /// In en, this message translates to:
+  /// **'When meeting new people'**
+  String get mbtiQuestion1;
+
+  /// Mbtiquestion1Optiona
+  ///
+  /// In en, this message translates to:
+  /// **'Hello... nice to meet you'**
+  String get mbtiQuestion1OptionA;
+
+  /// Mbtiquestion1Optionb
+  ///
+  /// In en, this message translates to:
+  /// **'Oh! Nice to meet you! I\'m XX!'**
+  String get mbtiQuestion1OptionB;
+
+  /// Mbtiquestion2
+  ///
+  /// In en, this message translates to:
+  /// **'When understanding a situation'**
+  String get mbtiQuestion2;
+
+  /// Mbtiquestion2Optiona
+  ///
+  /// In en, this message translates to:
+  /// **'What exactly happened and how?'**
+  String get mbtiQuestion2OptionA;
+
+  /// Mbtiquestion2Optionb
+  ///
+  /// In en, this message translates to:
+  /// **'I think I get the general feeling'**
+  String get mbtiQuestion2OptionB;
+
+  /// Mbtiquestion3
+  ///
+  /// In en, this message translates to:
+  /// **'When making decisions'**
+  String get mbtiQuestion3;
+
+  /// Mbtiquestion3Optiona
+  ///
+  /// In en, this message translates to:
+  /// **'Thinking logically...'**
+  String get mbtiQuestion3OptionA;
+
+  /// Mbtiquestion3Optionb
+  ///
+  /// In en, this message translates to:
+  /// **'Your feelings matter more'**
+  String get mbtiQuestion3OptionB;
+
+  /// Mbtiquestion4
+  ///
+  /// In en, this message translates to:
+  /// **'When making appointments'**
+  String get mbtiQuestion4;
+
+  /// Mbtiquestion4Optiona
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s meet exactly at X o\'clock'**
+  String get mbtiQuestion4OptionA;
+
+  /// Mbtiquestion4Optionb
+  ///
+  /// In en, this message translates to:
+  /// **'See you around that time~'**
+  String get mbtiQuestion4OptionB;
+
+  /// Meetnewsona
+  ///
+  /// In en, this message translates to:
+  /// **'Meet new Sona!'**
+  String get meetNewSona;
+
+  /// Ageandpersonality
+  ///
+  /// In en, this message translates to:
+  /// **'{age} years old • {personality}'**
+  String ageAndPersonality(String age, String personality);
+
+  /// Guestlabel
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get guestLabel;
+
+  /// Developeroptions
+  ///
+  /// In en, this message translates to:
+  /// **'Developer Options'**
+  String get developerOptions;
+
+  /// Reengagementnotificationtest
+  ///
+  /// In en, this message translates to:
+  /// **'Re-engagement Notification Test'**
+  String get reengagementNotificationTest;
+
+  /// Churnrisknotificationtest
+  ///
+  /// In en, this message translates to:
+  /// **'Churn Risk Notification Test'**
+  String get churnRiskNotificationTest;
+
+  /// Selectchurnrisk
+  ///
+  /// In en, this message translates to:
+  /// **'Select churn risk:'**
+  String get selectChurnRisk;
+
+  /// Sevendaysinactive
+  ///
+  /// In en, this message translates to:
+  /// **'7+ days inactive (90% risk)'**
+  String get sevenDaysInactive;
+
+  /// Threedaysinactive
+  ///
+  /// In en, this message translates to:
+  /// **'3 days inactive (70% risk)'**
+  String get threeDaysInactive;
+
+  /// Onedayinactive
+  ///
+  /// In en, this message translates to:
+  /// **'1 day inactive (50% risk)'**
+  String get oneDayInactive;
+
+  /// Generalnotification
+  ///
+  /// In en, this message translates to:
+  /// **'General notification (30% risk)'**
+  String get generalNotification;
+
+  /// Noactivepersonas
+  ///
+  /// In en, this message translates to:
+  /// **'No active personas'**
+  String get noActivePersonas;
+
+  /// Percentdiscount
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% OFF'**
+  String percentDiscount(String percent);
+
+  /// Imageloadprogress
+  ///
+  /// In en, this message translates to:
+  /// **'{loaded} / {total} images'**
+  String imageLoadProgress(String loaded, String total);
+
+  /// Checkingnewimages
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for new images...'**
+  String get checkingNewImages;
+
+  /// Findingnewpersonas
+  ///
+  /// In en, this message translates to:
+  /// **'Finding new personas...'**
+  String get findingNewPersonas;
+
+  /// Superlikematch
+  ///
+  /// In en, this message translates to:
+  /// **'Super Like Match!'**
+  String get superLikeMatch;
+
+  /// Matchsuccess
+  ///
+  /// In en, this message translates to:
+  /// **'Match Success!'**
+  String get matchSuccess;
+
+  /// Restartingconversationwith
+  ///
+  /// In en, this message translates to:
+  /// **'Restarting conversation with {name}!'**
+  String restartingConversationWith(String name);
+
+  /// Personalikesyou
+  ///
+  /// In en, this message translates to:
+  /// **'{name} especially likes you!'**
+  String personaLikesYou(String name);
+
+  /// Matchedwithpersona
+  ///
+  /// In en, this message translates to:
+  /// **'Matched with {name}!'**
+  String matchedWithPersona(String name);
+
+  /// Previousconversationkept
+  ///
+  /// In en, this message translates to:
+  /// **'Previous conversation is preserved. Continue where you left off!'**
+  String get previousConversationKept;
+
+  /// Specialconnectionstart
+  ///
+  /// In en, this message translates to:
+  /// **'Start of a special connection! Sona is waiting for you'**
+  String get specialConnectionStart;
+
+  /// Preparingprofilepicture
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing profile picture...'**
+  String get preparingProfilePicture;
+
+  /// Newsonacomingsoon
+  ///
+  /// In en, this message translates to:
+  /// **'New Sona coming soon!'**
+  String get newSonaComingSoon;
+
+  /// Superlikedescription
+  ///
+  /// In en, this message translates to:
+  /// **'Super Like (instant love stage)'**
+  String get superLikeDescription;
+
+  /// Checkingmorepersonas
+  ///
+  /// In en, this message translates to:
+  /// **'Checking more personas...'**
+  String get checkingMorePersonas;
+
+  /// Allfilter
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get allFilter;
+
+  /// Published
+  ///
+  /// In en, this message translates to:
+  /// **'Published'**
+  String get published;
+
+  /// Yearsold
+  ///
+  /// In en, this message translates to:
+  /// **'{age} years old'**
+  String yearsOld(String age);
+
+  /// Startconversationwithpersona
+  ///
+  /// In en, this message translates to:
+  /// **'Start conversation with {name}?'**
+  String startConversationWithPersona(String name);
+
+  /// Failedtostartconversation
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start conversation'**
+  String get failedToStartConversation;
+
+  /// Cannotdeleteapprovedpersona
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot delete approved persona'**
+  String get cannotDeleteApprovedPersona;
+
+  /// Deletepersonawithconversation
+  ///
+  /// In en, this message translates to:
+  /// **'This persona has an active conversation. Delete anyway?\nThe chat room will also be deleted.'**
+  String get deletePersonaWithConversation;
+
+  /// Sharedpersonadeletewarning
+  ///
+  /// In en, this message translates to:
+  /// **'This is a shared persona. It will only be removed from your list.'**
+  String get sharedPersonaDeleteWarning;
+
+  /// Firebasepermissionerror
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase permission error: Please contact administrator'**
+  String get firebasePermissionError;
+
+  /// Checkingpersonainfo
+  ///
+  /// In en, this message translates to:
+  /// **'Checking persona information...'**
+  String get checkingPersonaInfo;
+
+  /// Personacachedescription
+  ///
+  /// In en, this message translates to:
+  /// **'Persona images are saved on device for fast loading.'**
+  String get personaCacheDescription;
+
+  /// Cachedeletewarning
+  ///
+  /// In en, this message translates to:
+  /// **'Deleting cache will require re-downloading images.'**
+  String get cacheDeleteWarning;
+
+  /// Blockedaidescription
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked AI will be excluded from matching and chat list.'**
+  String get blockedAIDescription;
+
+  /// Searchresultscount
+  ///
+  /// In en, this message translates to:
+  /// **'Search results: {count}'**
+  String searchResultsCount(String count);
+
+  /// Questionscount
+  ///
+  /// In en, this message translates to:
+  /// **'{count} questions'**
+  String questionsCount(String count);
+
+  /// Readytochat
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to chat!'**
+  String get readyToChat;
+
+  /// Preparingpersonascount
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing personas... ({count})'**
+  String preparingPersonasCount(String count);
+
+  /// Loggingin
+  ///
+  /// In en, this message translates to:
+  /// **'Logging in...'**
+  String get loggingIn;
+
+  /// Languagechangedto
+  ///
+  /// In en, this message translates to:
+  /// **'Language changed to {language}'**
+  String languageChangedTo(String language);
+
+  /// Englishlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get englishLanguage;
+
+  /// Japaneselanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get japaneseLanguage;
+
+  /// Chineselanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get chineseLanguage;
+
+  /// Thailanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Thai'**
+  String get thaiLanguage;
+
+  /// Vietnameselanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Vietnamese'**
+  String get vietnameseLanguage;
+
+  /// Indonesianlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Indonesian'**
+  String get indonesianLanguage;
+
+  /// Tagaloglanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Tagalog'**
+  String get tagalogLanguage;
+
+  /// Spanishlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanishLanguage;
+
+  /// Frenchlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get frenchLanguage;
+
+  /// Germanlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get germanLanguage;
+
+  /// Russianlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get russianLanguage;
+
+  /// Portugueselanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Portuguese'**
+  String get portugueseLanguage;
+
+  /// Italianlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get italianLanguage;
+
+  /// Dutchlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Dutch'**
+  String get dutchLanguage;
+
+  /// Swedishlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Swedish'**
+  String get swedishLanguage;
+
+  /// Polishlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Polish'**
+  String get polishLanguage;
+
+  /// Turkishlanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get turkishLanguage;
+
+  /// Arabiclanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get arabicLanguage;
+
+  /// Hindilanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Hindi'**
+  String get hindiLanguage;
+
+  /// Urdulanguage
+  ///
+  /// In en, this message translates to:
+  /// **'Urdu'**
+  String get urduLanguage;
+
+  /// Validation message: nameRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a name'**
+  String get nameRequired;
+
+  /// Validation message: ageRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter age'**
+  String get ageRequired;
+
+  /// Validation message: descriptionRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a description'**
+  String get descriptionRequired;
+
+  /// Validation message: mbtiIncomplete
+  ///
+  /// In en, this message translates to:
+  /// **'Please complete all MBTI questions'**
+  String get mbtiIncomplete;
+
+  /// Validation message: interestsRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one interest'**
+  String get interestsRequired;
+
+  /// Validation message: mainImageRequired
+  ///
+  /// In en, this message translates to:
+  /// **'Please add a main profile image'**
+  String get mainImageRequired;
 }
 
 class _AppLocalizationsDelegate

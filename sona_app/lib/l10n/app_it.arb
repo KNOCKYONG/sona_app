@@ -106,7 +106,7 @@
   },
   "allPersonas": "Tutte le Personas",
   "@allPersonas": {
-    "description": "Localized string for allPersonas"
+    "description": "All personas tab"
   },
   "allPersonasMatched": "Tutte le personas abbinate! Inizia a chattare con loro.",
   "@allPersonasMatched": {
@@ -195,7 +195,7 @@
   },
   "basicInfo": "Informazioni di Base",
   "@basicInfo": {
-    "description": "Localized string for basicInfo"
+    "description": "Basic info step title"
   },
   "basicInfoDescription": "Si prega di inserire informazioni di base per creare un account",
   "@basicInfoDescription": {
@@ -554,7 +554,7 @@
   },
   "delete": "Elimina",
   "@delete": {
-    "description": "Localized string for delete"
+    "description": "Delete button"
   },
   "deleteAccount": "Elimina account",
   "@deleteAccount": {
@@ -631,7 +631,7 @@
   },
   "edit": "Modifica",
   "@edit": {
-    "description": "Localized string for edit"
+    "description": "Edit button"
   },
   "editInfo": "Modifica Info",
   "@editInfo": {
@@ -1151,7 +1151,7 @@
   },
   "interests": "Interessi",
   "@interests": {
-    "description": "Localized string for interests"
+    "description": "Interests label"
   },
   "invalidEmailFormat": "Formato email non valido",
   "@invalidEmailFormat": {
@@ -1714,9 +1714,9 @@
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Facoltativo",
+  "optional": "Opzionale",
   "@optional": {
-    "description": "Localized string for optional"
+    "description": "optional"
   },
   "or": "or",
   "@or": {
@@ -1823,9 +1823,9 @@
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "Personality",
+  "personality": "Impostazioni di Personalità",
   "@personality": {
-    "description": "Localized string for personality"
+    "description": "Personality step title"
   },
   "pets": "Pets",
   "@pets": {
@@ -2325,9 +2325,9 @@
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
-  "selectInterests": "Per favore seleziona i tuoi interessi (almeno 1)",
+  "selectInterests": "Seleziona i tuoi interessi",
   "@selectInterests": {
-    "description": "Localized string for selectInterests"
+    "description": "Select interests instruction"
   },
   "selectLanguage": "Seleziona Lingua",
   "@selectLanguage": {
@@ -3159,10 +3159,6 @@
   "@createPersona": {
     "description": "Button text for creating a new persona"
   },
-  "basicInfo": "Informazioni di Base",
-  "@basicInfo": {
-    "description": "Basic info step title"
-  },
   "uploadPhoto": "Carica Foto",
   "@uploadPhoto": {
     "description": "Upload photo step title"
@@ -3170,10 +3166,6 @@
   "mbtiTest": "Test MBTI",
   "@mbtiTest": {
     "description": "MBTI test step title"
-  },
-  "personality": "Impostazioni di Personalità",
-  "@personality": {
-    "description": "Personality step title"
   },
   "shareSettings": "Impostazioni di Condivisione",
   "@shareSettings": {
@@ -3251,14 +3243,6 @@
   "@logical": {
     "description": "Logical conversation style"
   },
-  "interests": "Interessi",
-  "@interests": {
-    "description": "Interests label"
-  },
-  "selectInterests": "Seleziona i tuoi interessi",
-  "@selectInterests": {
-    "description": "Select interests instruction"
-  },
   "shareWithOthers": "Condividi con altri utenti",
   "@shareWithOthers": {
     "description": "Share with others option"
@@ -3283,10 +3267,6 @@
   "@createFailed": {
     "description": "Create failed message"
   },
-  "allPersonas": "Tutte le Personas",
-  "@allPersonas": {
-    "description": "All personas tab"
-  },
   "pendingApproval": "In Attesa di Approvazione",
   "@pendingApproval": {
     "description": "Pending approval status"
@@ -3298,14 +3278,6 @@
   "noPersonasFound": "Nessuna persona trovata",
   "@noPersonasFound": {
     "description": "No personas found message"
-  },
-  "edit": "Modifica",
-  "@edit": {
-    "description": "Edit button"
-  },
-  "delete": "Elimina",
-  "@delete": {
-    "description": "Delete button"
   },
   "deletePersona": "Elimina Persona",
   "@deletePersona": {
@@ -3322,5 +3294,531 @@
   "deleteFailed": "Eliminazione fallita",
   "@deleteFailed": {
     "description": "Delete failed message"
+  },
+  "speechStyleFriendly": "Amichevole",
+  "@speechStyleFriendly": {
+    "description": "speech style option"
+  },
+  "speechStylePolite": "Educato",
+  "@speechStylePolite": {
+    "description": "speech style option"
+  },
+  "speechStyleChic": "Chic",
+  "@speechStyleChic": {
+    "description": "speech style option"
+  },
+  "speechStyleLively": "Vivace",
+  "@speechStyleLively": {
+    "description": "speech style option"
+  },
+  "conversationStyleTalkative": "Loquace",
+  "@conversationStyleTalkative": {
+    "description": "conversation style option"
+  },
+  "conversationStyleQuiet": "Tranquillo",
+  "@conversationStyleQuiet": {
+    "description": "conversation style option"
+  },
+  "conversationStyleEmpathetic": "Empatico",
+  "@conversationStyleEmpathetic": {
+    "description": "conversation style option"
+  },
+  "conversationStyleLogical": "Logico",
+  "@conversationStyleLogical": {
+    "description": "conversation style option"
+  },
+  "interestMusic": "Musica",
+  "@interestMusic": {
+    "description": " interest option"
+  },
+  "interestMovies": "Film",
+  "@interestMovies": {
+    "description": " interest option"
+  },
+  "interestReading": "Lettura",
+  "@interestReading": {
+    "description": " interest option"
+  },
+  "interestTravel": "Viaggi",
+  "@interestTravel": {
+    "description": " interest option"
+  },
+  "interestExercise": "Esercizio",
+  "@interestExercise": {
+    "description": " interest option"
+  },
+  "interestGaming": "Gaming",
+  "@interestGaming": {
+    "description": " interest option"
+  },
+  "interestCooking": "Cucina",
+  "@interestCooking": {
+    "description": " interest option"
+  },
+  "interestFashion": "Moda",
+  "@interestFashion": {
+    "description": " interest option"
+  },
+  "interestArt": "Arte",
+  "@interestArt": {
+    "description": " interest option"
+  },
+  "interestPhotography": "Fotografia",
+  "@interestPhotography": {
+    "description": " interest option"
+  },
+  "interestTechnology": "Tecnologia",
+  "@interestTechnology": {
+    "description": " interest option"
+  },
+  "interestScience": "Scienza",
+  "@interestScience": {
+    "description": " interest option"
+  },
+  "interestHistory": "Storia",
+  "@interestHistory": {
+    "description": " interest option"
+  },
+  "interestPhilosophy": "Filosofia",
+  "@interestPhilosophy": {
+    "description": " interest option"
+  },
+  "interestPolitics": "Politica",
+  "@interestPolitics": {
+    "description": " interest option"
+  },
+  "interestEconomy": "Economia",
+  "@interestEconomy": {
+    "description": " interest option"
+  },
+  "interestSports": "Sport",
+  "@interestSports": {
+    "description": " interest option"
+  },
+  "interestAnimation": "Animazione",
+  "@interestAnimation": {
+    "description": " interest option"
+  },
+  "interestKpop": "K-POP",
+  "@interestKpop": {
+    "description": " interest option"
+  },
+  "interestDrama": "Drama",
+  "@interestDrama": {
+    "description": " interest option"
+  },
+  "imageOptionalR2": "Le immagini sono opzionali. Verranno caricate solo se R2 è configurato.",
+  "@imageOptionalR2": {
+    "description": "imageOptionalR2"
+  },
+  "networkErrorCheckConnection": "Errore di rete: Controlla la tua connessione internet",
+  "@networkErrorCheckConnection": {
+    "description": "networkErrorCheckConnection"
+  },
+  "maxFiveItems": "Fino a 5 elementi",
+  "@maxFiveItems": {
+    "description": "maxFiveItems"
+  },
+  "mbtiQuestion1": "When meeting new people",
+  "@mbtiQuestion1": {
+    "description": "Mbtiquestion1"
+  },
+  "mbtiQuestion1OptionA": "Hello... nice to meet you",
+  "@mbtiQuestion1OptionA": {
+    "description": "Mbtiquestion1Optiona"
+  },
+  "mbtiQuestion1OptionB": "Oh! Nice to meet you! I'm XX!",
+  "@mbtiQuestion1OptionB": {
+    "description": "Mbtiquestion1Optionb"
+  },
+  "mbtiQuestion2": "When understanding a situation",
+  "@mbtiQuestion2": {
+    "description": "Mbtiquestion2"
+  },
+  "mbtiQuestion2OptionA": "What exactly happened and how?",
+  "@mbtiQuestion2OptionA": {
+    "description": "Mbtiquestion2Optiona"
+  },
+  "mbtiQuestion2OptionB": "I think I get the general feeling",
+  "@mbtiQuestion2OptionB": {
+    "description": "Mbtiquestion2Optionb"
+  },
+  "mbtiQuestion3": "When making decisions",
+  "@mbtiQuestion3": {
+    "description": "Mbtiquestion3"
+  },
+  "mbtiQuestion3OptionA": "Thinking logically...",
+  "@mbtiQuestion3OptionA": {
+    "description": "Mbtiquestion3Optiona"
+  },
+  "mbtiQuestion3OptionB": "Your feelings matter more",
+  "@mbtiQuestion3OptionB": {
+    "description": "Mbtiquestion3Optionb"
+  },
+  "mbtiQuestion4": "When making appointments",
+  "@mbtiQuestion4": {
+    "description": "Mbtiquestion4"
+  },
+  "mbtiQuestion4OptionA": "Let's meet exactly at X o'clock",
+  "@mbtiQuestion4OptionA": {
+    "description": "Mbtiquestion4Optiona"
+  },
+  "mbtiQuestion4OptionB": "See you around that time~",
+  "@mbtiQuestion4OptionB": {
+    "description": "Mbtiquestion4Optionb"
+  },
+  "meetNewSona": "Meet new Sona!",
+  "@meetNewSona": {
+    "description": "Meetnewsona"
+  },
+  "ageAndPersonality": "{age} years old • {personality}",
+  "@ageAndPersonality": {
+    "description": "Ageandpersonality",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      },
+      "personality": {
+        "type": "String"
+      }
+    }
+  },
+  "guestLabel": "Guest",
+  "@guestLabel": {
+    "description": "Guestlabel"
+  },
+  "developerOptions": "Developer Options",
+  "@developerOptions": {
+    "description": "Developeroptions"
+  },
+  "reengagementNotificationTest": "Re-engagement Notification Test",
+  "@reengagementNotificationTest": {
+    "description": "Reengagementnotificationtest"
+  },
+  "churnRiskNotificationTest": "Churn Risk Notification Test",
+  "@churnRiskNotificationTest": {
+    "description": "Churnrisknotificationtest"
+  },
+  "selectChurnRisk": "Select churn risk:",
+  "@selectChurnRisk": {
+    "description": "Selectchurnrisk"
+  },
+  "sevenDaysInactive": "7+ days inactive (90% risk)",
+  "@sevenDaysInactive": {
+    "description": "Sevendaysinactive"
+  },
+  "threeDaysInactive": "3 days inactive (70% risk)",
+  "@threeDaysInactive": {
+    "description": "Threedaysinactive"
+  },
+  "oneDayInactive": "1 day inactive (50% risk)",
+  "@oneDayInactive": {
+    "description": "Onedayinactive"
+  },
+  "generalNotification": "General notification (30% risk)",
+  "@generalNotification": {
+    "description": "Generalnotification"
+  },
+  "noActivePersonas": "No active personas",
+  "@noActivePersonas": {
+    "description": "Noactivepersonas"
+  },
+  "percentDiscount": "{percent}% OFF",
+  "@percentDiscount": {
+    "description": "Percentdiscount",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "imageLoadProgress": "{loaded} / {total} images",
+  "@imageLoadProgress": {
+    "description": "Imageloadprogress",
+    "placeholders": {
+      "loaded": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "checkingNewImages": "Checking for new images...",
+  "@checkingNewImages": {
+    "description": "Checkingnewimages"
+  },
+  "findingNewPersonas": "Finding new personas...",
+  "@findingNewPersonas": {
+    "description": "Findingnewpersonas"
+  },
+  "superLikeMatch": "Super Like Match!",
+  "@superLikeMatch": {
+    "description": "Superlikematch"
+  },
+  "matchSuccess": "Match Success!",
+  "@matchSuccess": {
+    "description": "Matchsuccess"
+  },
+  "restartingConversationWith": "Restarting conversation with {name}!",
+  "@restartingConversationWith": {
+    "description": "Restartingconversationwith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personaLikesYou": "{name} especially likes you!",
+  "@personaLikesYou": {
+    "description": "Personalikesyou",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedWithPersona": "Matched with {name}!",
+  "@matchedWithPersona": {
+    "description": "Matchedwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "previousConversationKept": "Previous conversation is preserved. Continue where you left off!",
+  "@previousConversationKept": {
+    "description": "Previousconversationkept"
+  },
+  "specialConnectionStart": "Start of a special connection! Sona is waiting for you",
+  "@specialConnectionStart": {
+    "description": "Specialconnectionstart"
+  },
+  "preparingProfilePicture": "Preparing profile picture...",
+  "@preparingProfilePicture": {
+    "description": "Preparingprofilepicture"
+  },
+  "newSonaComingSoon": "New Sona coming soon!",
+  "@newSonaComingSoon": {
+    "description": "Newsonacomingsoon"
+  },
+  "superLikeDescription": "Super Like (instant love stage)",
+  "@superLikeDescription": {
+    "description": "Superlikedescription"
+  },
+  "checkingMorePersonas": "Checking more personas...",
+  "@checkingMorePersonas": {
+    "description": "Checkingmorepersonas"
+  },
+  "allFilter": "All",
+  "@allFilter": {
+    "description": "Allfilter"
+  },
+  "published": "Published",
+  "@published": {
+    "description": "Published"
+  },
+  "yearsOld": "{age} years old",
+  "@yearsOld": {
+    "description": "Yearsold",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "startConversationWithPersona": "Start conversation with {name}?",
+  "@startConversationWithPersona": {
+    "description": "Startconversationwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToStartConversation": "Failed to start conversation",
+  "@failedToStartConversation": {
+    "description": "Failedtostartconversation"
+  },
+  "cannotDeleteApprovedPersona": "Cannot delete approved persona",
+  "@cannotDeleteApprovedPersona": {
+    "description": "Cannotdeleteapprovedpersona"
+  },
+  "deletePersonaWithConversation": "This persona has an active conversation. Delete anyway?\nThe chat room will also be deleted.",
+  "@deletePersonaWithConversation": {
+    "description": "Deletepersonawithconversation"
+  },
+  "sharedPersonaDeleteWarning": "This is a shared persona. It will only be removed from your list.",
+  "@sharedPersonaDeleteWarning": {
+    "description": "Sharedpersonadeletewarning"
+  },
+  "firebasePermissionError": "Firebase permission error: Please contact administrator",
+  "@firebasePermissionError": {
+    "description": "Firebasepermissionerror"
+  },
+  "checkingPersonaInfo": "Checking persona information...",
+  "@checkingPersonaInfo": {
+    "description": "Checkingpersonainfo"
+  },
+  "personaCacheDescription": "Persona images are saved on device for fast loading.",
+  "@personaCacheDescription": {
+    "description": "Personacachedescription"
+  },
+  "cacheDeleteWarning": "Deleting cache will require re-downloading images.",
+  "@cacheDeleteWarning": {
+    "description": "Cachedeletewarning"
+  },
+  "blockedAIDescription": "Blocked AI will be excluded from matching and chat list.",
+  "@blockedAIDescription": {
+    "description": "Blockedaidescription"
+  },
+  "searchResultsCount": "Search results: {count}",
+  "@searchResultsCount": {
+    "description": "Searchresultscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsCount": "{count} questions",
+  "@questionsCount": {
+    "description": "Questionscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToChat": "Ready to chat!",
+  "@readyToChat": {
+    "description": "Readytochat"
+  },
+  "preparingPersonasCount": "Preparing personas... ({count})",
+  "@preparingPersonasCount": {
+    "description": "Preparingpersonascount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "loggingIn": "Logging in...",
+  "@loggingIn": {
+    "description": "Loggingin"
+  },
+  "languageChangedTo": "Language changed to {language}",
+  "@languageChangedTo": {
+    "description": "Languagechangedto",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "englishLanguage": "English",
+  "@englishLanguage": {
+    "description": "Englishlanguage"
+  },
+  "japaneseLanguage": "Japanese",
+  "@japaneseLanguage": {
+    "description": "Japaneselanguage"
+  },
+  "chineseLanguage": "Chinese",
+  "@chineseLanguage": {
+    "description": "Chineselanguage"
+  },
+  "thaiLanguage": "Thai",
+  "@thaiLanguage": {
+    "description": "Thailanguage"
+  },
+  "vietnameseLanguage": "Vietnamese",
+  "@vietnameseLanguage": {
+    "description": "Vietnameselanguage"
+  },
+  "indonesianLanguage": "Indonesian",
+  "@indonesianLanguage": {
+    "description": "Indonesianlanguage"
+  },
+  "tagalogLanguage": "Tagalog",
+  "@tagalogLanguage": {
+    "description": "Tagaloglanguage"
+  },
+  "spanishLanguage": "Spanish",
+  "@spanishLanguage": {
+    "description": "Spanishlanguage"
+  },
+  "frenchLanguage": "French",
+  "@frenchLanguage": {
+    "description": "Frenchlanguage"
+  },
+  "germanLanguage": "German",
+  "@germanLanguage": {
+    "description": "Germanlanguage"
+  },
+  "russianLanguage": "Russian",
+  "@russianLanguage": {
+    "description": "Russianlanguage"
+  },
+  "portugueseLanguage": "Portuguese",
+  "@portugueseLanguage": {
+    "description": "Portugueselanguage"
+  },
+  "italianLanguage": "Italian",
+  "@italianLanguage": {
+    "description": "Italianlanguage"
+  },
+  "dutchLanguage": "Dutch",
+  "@dutchLanguage": {
+    "description": "Dutchlanguage"
+  },
+  "swedishLanguage": "Swedish",
+  "@swedishLanguage": {
+    "description": "Swedishlanguage"
+  },
+  "polishLanguage": "Polish",
+  "@polishLanguage": {
+    "description": "Polishlanguage"
+  },
+  "turkishLanguage": "Turkish",
+  "@turkishLanguage": {
+    "description": "Turkishlanguage"
+  },
+  "arabicLanguage": "Arabic",
+  "@arabicLanguage": {
+    "description": "Arabiclanguage"
+  },
+  "hindiLanguage": "Hindi",
+  "@hindiLanguage": {
+    "description": "Hindilanguage"
+  },
+  "urduLanguage": "Urdu",
+  "@urduLanguage": {
+    "description": "Urdulanguage"
+  },
+  "nameRequired": "Please enter a name",
+  "@nameRequired": {
+    "description": "Validation message: nameRequired"
+  },
+  "ageRequired": "Please enter age",
+  "@ageRequired": {
+    "description": "Validation message: ageRequired"
+  },
+  "descriptionRequired": "Please enter a description",
+  "@descriptionRequired": {
+    "description": "Validation message: descriptionRequired"
+  },
+  "mbtiIncomplete": "Please complete all MBTI questions",
+  "@mbtiIncomplete": {
+    "description": "Validation message: mbtiIncomplete"
+  },
+  "interestsRequired": "Please select at least one interest",
+  "@interestsRequired": {
+    "description": "Validation message: interestsRequired"
+  },
+  "mainImageRequired": "Please add a main profile image",
+  "@mainImageRequired": {
+    "description": "Validation message: mainImageRequired"
   }
 }

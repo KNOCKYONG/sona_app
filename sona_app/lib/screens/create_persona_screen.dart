@@ -36,19 +36,38 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   Map<int, String> _mbtiAnswers = {};
   
   // Step 4: 추가 성격 설정
-  String _speechStyle = '친근한';
-  String _conversationStyle = '공감적';
+  String _speechStyle = 'friendly';
+  String _conversationStyle = 'empathetic';
   List<String> _selectedInterests = [];
   
   // Step 5: 공유 설정
   bool _isShare = false;
   
-  final List<String> _availableInterests = [
-    '음악', '영화', '독서', '여행', '운동',
-    '게임', '요리', '패션', '미술', '사진',
-    '기술', '과학', '역사', '철학', '정치',
-    '경제', '스포츠', '애니메이션', 'K-POP', '드라마'
-  ];
+  List<String> get _availableInterests {
+    final localizations = AppLocalizations.of(context)!;
+    return [
+      localizations.interestMusic,
+      localizations.interestMovies,
+      localizations.interestReading,
+      localizations.interestTravel,
+      localizations.interestExercise,
+      localizations.interestGaming,
+      localizations.interestCooking,
+      localizations.interestFashion,
+      localizations.interestArt,
+      localizations.interestPhotography,
+      localizations.interestTechnology,
+      localizations.interestScience,
+      localizations.interestHistory,
+      localizations.interestPhilosophy,
+      localizations.interestPolitics,
+      localizations.interestEconomy,
+      localizations.interestSports,
+      localizations.interestAnimation,
+      localizations.interestKpop,
+      localizations.interestDrama
+    ];
+  }
 
   @override
   void dispose() {
@@ -285,7 +304,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '이미지는 선택사항입니다. R2가 설정된 경우에만 업로드됩니다.',
+                    localizations.imageOptionalR2,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.blue[700],
@@ -309,7 +328,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                '(선택사항)',
+                '(${localizations.optional})',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],
@@ -377,7 +396,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
               ),
               const SizedBox(width: 8),
               Text(
-                '(선택사항)',
+                '(${localizations.optional})',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[600],
@@ -553,7 +572,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
             ),
             const SizedBox(height: 8),
             Text(
-              'MBTI: ${_personaCreationService.calculateMBTI(_mbtiAnswers)}',
+              'MBTI: ${_personaCreationService.calculateMBTI(context, _mbtiAnswers)}',
               style: TextStyle(
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.primary,
@@ -566,9 +585,10 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     }
     
     // Find next unanswered question
+    final mbtiQuestions = PersonaCreationService.getMBTIQuestions(context);
     late final MBTIQuestion question;
     bool foundQuestion = false;
-    for (final q in PersonaCreationService.mbtiQuestions) {
+    for (final q in mbtiQuestions) {
       if (!_mbtiAnswers.containsKey(q.id) || _mbtiAnswers[q.id]!.isEmpty) {
         question = q;
         foundQuestion = true;
@@ -747,14 +767,14 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
           Wrap(
             spacing: 8,
             children: [
-              _buildStyleChip('친근한', _speechStyle == '친근한', 
-                (value) => setState(() => _speechStyle = '친근한')),
-              _buildStyleChip('정중한', _speechStyle == '정중한',
-                (value) => setState(() => _speechStyle = '정중한')),
-              _buildStyleChip('시크한', _speechStyle == '시크한',
-                (value) => setState(() => _speechStyle = '시크한')),
-              _buildStyleChip('활발한', _speechStyle == '활발한',
-                (value) => setState(() => _speechStyle = '활발한')),
+              _buildStyleChip(localizations.speechStyleFriendly, _speechStyle == 'friendly', 
+                (value) => setState(() => _speechStyle = 'friendly')),
+              _buildStyleChip(localizations.speechStylePolite, _speechStyle == 'polite',
+                (value) => setState(() => _speechStyle = 'polite')),
+              _buildStyleChip(localizations.speechStyleChic, _speechStyle == 'chic',
+                (value) => setState(() => _speechStyle = 'chic')),
+              _buildStyleChip(localizations.speechStyleLively, _speechStyle == 'lively',
+                (value) => setState(() => _speechStyle = 'lively')),
             ],
           ),
           const SizedBox(height: 24),
@@ -771,21 +791,21 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
           Wrap(
             spacing: 8,
             children: [
-              _buildStyleChip('수다스러운', _conversationStyle == '수다스러운',
-                (value) => setState(() => _conversationStyle = '수다스러운')),
-              _buildStyleChip('과묵한', _conversationStyle == '과묵한',
-                (value) => setState(() => _conversationStyle = '과묵한')),
-              _buildStyleChip('공감적', _conversationStyle == '공감적',
-                (value) => setState(() => _conversationStyle = '공감적')),
-              _buildStyleChip('논리적', _conversationStyle == '논리적',
-                (value) => setState(() => _conversationStyle = '논리적')),
+              _buildStyleChip(localizations.conversationStyleTalkative, _conversationStyle == 'talkative',
+                (value) => setState(() => _conversationStyle = 'talkative')),
+              _buildStyleChip(localizations.conversationStyleQuiet, _conversationStyle == 'quiet',
+                (value) => setState(() => _conversationStyle = 'quiet')),
+              _buildStyleChip(localizations.conversationStyleEmpathetic, _conversationStyle == 'empathetic',
+                (value) => setState(() => _conversationStyle = 'empathetic')),
+              _buildStyleChip(localizations.conversationStyleLogical, _conversationStyle == 'logical',
+                (value) => setState(() => _conversationStyle = 'logical')),
             ],
           ),
           const SizedBox(height: 24),
           
           // 관심 분야 선택
           Text(
-            '${localizations.interests} (최대 5개)',
+            '${localizations.interests} (${localizations.maxFiveItems})',
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -1013,6 +1033,55 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   }
 
   Future<void> _handleNext() async {
+    final localizations = AppLocalizations.of(context)!;
+    
+    // Validation with user feedback
+    String? validationMessage;
+    
+    switch (_currentStep) {
+      case 0: // Basic info
+        if (_nameController.text.trim().isEmpty) {
+          validationMessage = localizations.nameRequired;
+        } else if (_ageController.text.trim().isEmpty) {
+          validationMessage = localizations.ageRequired;
+        } else if (_descriptionController.text.trim().isEmpty) {
+          validationMessage = localizations.descriptionRequired;
+        }
+        break;
+      case 1: // Profile image
+        if (_mainImage == null) {
+          validationMessage = localizations.mainImageRequired;
+        }
+        break;
+      case 2: // MBTI
+        if (_mbtiAnswers.length < 4) {
+          validationMessage = localizations.mbtiIncomplete;
+        }
+        break;
+      case 3: // Interests
+        if (_selectedInterests.isEmpty) {
+          validationMessage = localizations.interestsRequired;
+        }
+        break;
+    }
+    
+    // Show validation message if validation failed
+    if (validationMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(validationMessage),
+          backgroundColor: Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: const EdgeInsets.all(16),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+    
     if (_currentStep == 2) {
       // MBTI 단계에서는 모든 질문 완료 확인
       if (_mbtiAnswers.length < 4) {
@@ -1060,6 +1129,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     
     try {
       final personaId = await _personaCreationService.createCustomPersona(
+        context: context,
         name: _nameController.text.trim(),
         age: int.parse(_ageController.text),
         gender: _selectedGender,
@@ -1100,13 +1170,14 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
       debugPrint('❌ Error creating persona: $e');
       
       if (mounted) {
-        String errorMessage = AppLocalizations.of(context)!.createFailed;
+        final localizations = AppLocalizations.of(context)!;
+        String errorMessage = localizations.createFailed;
         
         // 더 구체적인 에러 메시지
         if (e.toString().contains('permission')) {
-          errorMessage = 'Firebase 권한 오류: 관리자에게 문의하세요';
+          errorMessage = AppLocalizations.of(context)!.firebasePermissionError;
         } else if (e.toString().contains('network')) {
-          errorMessage = '네트워크 오류: 인터넷 연결을 확인하세요';
+          errorMessage = localizations.networkErrorCheckConnection;
         }
         
         ScaffoldMessenger.of(context).showSnackBar(

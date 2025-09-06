@@ -1260,7 +1260,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get openSettings => '設定を開く';
 
   @override
-  String get optional => '任意';
+  String get optional => 'オプション';
 
   @override
   String get or => 'または';
@@ -2471,4 +2471,374 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get reportErrorButton => 'Report Error';
+
+  @override
+  String get speechStyleFriendly => 'フレンドリー';
+
+  @override
+  String get speechStylePolite => '丁寧';
+
+  @override
+  String get speechStyleChic => 'シック';
+
+  @override
+  String get speechStyleLively => '活発';
+
+  @override
+  String get conversationStyleTalkative => 'おしゃべり';
+
+  @override
+  String get conversationStyleQuiet => '物静か';
+
+  @override
+  String get conversationStyleEmpathetic => '共感的';
+
+  @override
+  String get conversationStyleLogical => '論理的';
+
+  @override
+  String get interestMusic => '音楽';
+
+  @override
+  String get interestMovies => '映画';
+
+  @override
+  String get interestReading => '読書';
+
+  @override
+  String get interestTravel => '旅行';
+
+  @override
+  String get interestExercise => '運動';
+
+  @override
+  String get interestGaming => 'ゲーム';
+
+  @override
+  String get interestCooking => '料理';
+
+  @override
+  String get interestFashion => 'ファッション';
+
+  @override
+  String get interestArt => 'アート';
+
+  @override
+  String get interestPhotography => '写真';
+
+  @override
+  String get interestTechnology => 'テクノロジー';
+
+  @override
+  String get interestScience => '科学';
+
+  @override
+  String get interestHistory => '歴史';
+
+  @override
+  String get interestPhilosophy => '哲学';
+
+  @override
+  String get interestPolitics => '政治';
+
+  @override
+  String get interestEconomy => '経済';
+
+  @override
+  String get interestSports => 'スポーツ';
+
+  @override
+  String get interestAnimation => 'アニメーション';
+
+  @override
+  String get interestKpop => 'K-POP';
+
+  @override
+  String get interestDrama => 'ドラマ';
+
+  @override
+  String get imageOptionalR2 => '画像はオプションです。R2が設定されている場合のみアップロードされます。';
+
+  @override
+  String get networkErrorCheckConnection => 'ネットワークエラー：インターネット接続を確認してください';
+
+  @override
+  String get maxFiveItems => '最大5個まで';
+
+  @override
+  String get mbtiQuestion1 => '新しい人に会った時';
+
+  @override
+  String get mbtiQuestion1OptionA => 'こんにちは...よろしくお願いします';
+
+  @override
+  String get mbtiQuestion1OptionB => 'おお！よろしく！私は○○です！';
+
+  @override
+  String get mbtiQuestion2 => '状況を把握する時';
+
+  @override
+  String get mbtiQuestion2OptionA => '具体的に何がどうなったの？';
+
+  @override
+  String get mbtiQuestion2OptionB => 'だいたいの感じはわかる';
+
+  @override
+  String get mbtiQuestion3 => '決定を下す時';
+
+  @override
+  String get mbtiQuestion3OptionA => '論理的に考えると...';
+
+  @override
+  String get mbtiQuestion3OptionB => 'あなたの気持ちが大切';
+
+  @override
+  String get mbtiQuestion4 => '約束をする時';
+
+  @override
+  String get mbtiQuestion4OptionA => '○時○分きっかりに会いましょう';
+
+  @override
+  String get mbtiQuestion4OptionB => 'その頃に会えばいいよ～';
+
+  @override
+  String get meetNewSona => '新しいソナに会いましょう！';
+
+  @override
+  String ageAndPersonality(String age, String personality) {
+    return '$age歳 • $personality';
+  }
+
+  @override
+  String get guestLabel => 'ゲスト';
+
+  @override
+  String get developerOptions => '開発者オプション';
+
+  @override
+  String get reengagementNotificationTest => '再エンゲージメント通知テスト';
+
+  @override
+  String get churnRiskNotificationTest => '離脱リスク通知テスト';
+
+  @override
+  String get selectChurnRisk => '離脱リスクを選択:';
+
+  @override
+  String get sevenDaysInactive => '7日以上未接続（リスク90%）';
+
+  @override
+  String get threeDaysInactive => '3日未接続（リスク70%）';
+
+  @override
+  String get oneDayInactive => '1日未接続（リスク50%）';
+
+  @override
+  String get generalNotification => '一般通知（リスク30%）';
+
+  @override
+  String get noActivePersonas => 'アクティブなペルソナがありません';
+
+  @override
+  String percentDiscount(String percent) {
+    return '$percent%オフ';
+  }
+
+  @override
+  String imageLoadProgress(String loaded, String total) {
+    return '$loaded / $total 画像';
+  }
+
+  @override
+  String get checkingNewImages => '新しい画像を確認中...';
+
+  @override
+  String get findingNewPersonas => '新しいペルソナを探しています...';
+
+  @override
+  String get superLikeMatch => 'スーパーライクマッチ！';
+
+  @override
+  String get matchSuccess => 'マッチング成功！';
+
+  @override
+  String restartingConversationWith(String name) {
+    return '$nameさんと\\n会話を再開します！';
+  }
+
+  @override
+  String personaLikesYou(String name) {
+    return '$nameさんがあなたを\\n特別に気に入っています！';
+  }
+
+  @override
+  String matchedWithPersona(String name) {
+    return '$nameさんとマッチしました！';
+  }
+
+  @override
+  String get previousConversationKept => '以前の会話が保存されています。続きから始めましょう！';
+
+  @override
+  String get specialConnectionStart => '特別な縁の始まり！ソナがあなたを待っています';
+
+  @override
+  String get preparingProfilePicture => 'プロフィール写真を準備中...';
+
+  @override
+  String get newSonaComingSoon => '新しいソナが間もなく追加されます！';
+
+  @override
+  String get superLikeDescription => 'スーパーライク（即恋愛段階）';
+
+  @override
+  String get checkingMorePersonas => 'さらに多くのペルソナを確認中...';
+
+  @override
+  String get allFilter => 'すべて';
+
+  @override
+  String get published => '公開済み';
+
+  @override
+  String yearsOld(String age) {
+    return '$age歳';
+  }
+
+  @override
+  String startConversationWithPersona(String name) {
+    return '$nameと会話を始めますか？';
+  }
+
+  @override
+  String get failedToStartConversation => '会話の開始に失敗しました';
+
+  @override
+  String get cannotDeleteApprovedPersona => '承認されたペルソナは削除できません';
+
+  @override
+  String get deletePersonaWithConversation =>
+      'このペルソナには進行中の会話があります。削除しますか？\\nチャットルームも削除されます。';
+
+  @override
+  String get sharedPersonaDeleteWarning => 'これは共有ペルソナです。あなたのリストからのみ削除されます。';
+
+  @override
+  String get firebasePermissionError => 'Firebase権限エラー：管理者にお問い合わせください';
+
+  @override
+  String get checkingPersonaInfo => 'ペルソナ情報を確認中...';
+
+  @override
+  String get personaCacheDescription => 'ペルソナ画像がデバイスに保存され、高速読み込みが可能です。';
+
+  @override
+  String get cacheDeleteWarning => 'キャッシュを削除すると、画像を再ダウンロードする必要があります。';
+
+  @override
+  String get blockedAIDescription => 'ブロックされたAIはマッチングとチャットリストから除外されます。';
+
+  @override
+  String searchResultsCount(String count) {
+    return '検索結果: $count件';
+  }
+
+  @override
+  String questionsCount(String count) {
+    return '$count個の質問';
+  }
+
+  @override
+  String get readyToChat => 'チャット準備完了！';
+
+  @override
+  String preparingPersonasCount(String count) {
+    return 'ペルソナ準備中... ($count)';
+  }
+
+  @override
+  String get loggingIn => 'ログイン中...';
+
+  @override
+  String languageChangedTo(String language) {
+    return '言語が$languageに変更されました';
+  }
+
+  @override
+  String get englishLanguage => '英語';
+
+  @override
+  String get japaneseLanguage => '日本語';
+
+  @override
+  String get chineseLanguage => '中国語';
+
+  @override
+  String get thaiLanguage => 'タイ語';
+
+  @override
+  String get vietnameseLanguage => 'ベトナム語';
+
+  @override
+  String get indonesianLanguage => 'インドネシア語';
+
+  @override
+  String get tagalogLanguage => 'タガログ語';
+
+  @override
+  String get spanishLanguage => 'スペイン語';
+
+  @override
+  String get frenchLanguage => 'フランス語';
+
+  @override
+  String get germanLanguage => 'ドイツ語';
+
+  @override
+  String get russianLanguage => 'ロシア語';
+
+  @override
+  String get portugueseLanguage => 'ポルトガル語';
+
+  @override
+  String get italianLanguage => 'イタリア語';
+
+  @override
+  String get dutchLanguage => 'オランダ語';
+
+  @override
+  String get swedishLanguage => 'スウェーデン語';
+
+  @override
+  String get polishLanguage => 'ポーランド語';
+
+  @override
+  String get turkishLanguage => 'トルコ語';
+
+  @override
+  String get arabicLanguage => 'アラビア語';
+
+  @override
+  String get hindiLanguage => 'ヒンディー語';
+
+  @override
+  String get urduLanguage => 'ウルドゥー語';
+
+  @override
+  String get nameRequired => 'Please enter a name';
+
+  @override
+  String get ageRequired => 'Please enter age';
+
+  @override
+  String get descriptionRequired => 'Please enter a description';
+
+  @override
+  String get mbtiIncomplete => 'Please complete all MBTI questions';
+
+  @override
+  String get interestsRequired => 'Please select at least one interest';
+
+  @override
+  String get mainImageRequired => 'Please add a main profile image';
 }

@@ -171,7 +171,7 @@ class _MatchedPersonasScreenState extends State<MatchedPersonasScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            '새로운 소나를 만나보세요!',
+                            AppLocalizations.of(context)!.meetNewSona,
                             style: TextStyle(
                               fontSize: 14,
                               color: Theme.of(context).textTheme.bodySmall?.color,
@@ -340,7 +340,7 @@ class _PersonaCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${persona.age}세 • ${persona.personality}',
+                        AppLocalizations.of(context)!.ageAndPersonality(persona.age.toString(), persona.personality),
                         style: TextStyle(
                           fontSize: 13,
                           color: Colors.grey[600],

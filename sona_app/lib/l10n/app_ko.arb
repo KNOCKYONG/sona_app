@@ -195,7 +195,7 @@
   },
   "basicInfo": "기본 정보",
   "@basicInfo": {
-    "description": "Localized string for basicInfo"
+    "description": "Basic info step title"
   },
   "basicInfoDescription": "계정 생성을 위한 기본 정보를 입력해주세요",
   "@basicInfoDescription": {
@@ -1159,7 +1159,7 @@
   },
   "interests": "관심사",
   "@interests": {
-    "description": "Localized string for interests"
+    "description": "Interests label"
   },
   "invalidEmailFormat": "잘못된 이메일 형식",
   "@invalidEmailFormat": {
@@ -1722,9 +1722,9 @@
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "선택",
+  "optional": "선택사항",
   "@optional": {
-    "description": "Localized string for optional"
+    "description": "Optional label"
   },
   "or": "또는",
   "@or": {
@@ -1831,9 +1831,9 @@
   "@personalInfoExposure": {
     "description": "Localized string for personalInfoExposure"
   },
-  "personality": "성격",
+  "personality": "성격 설정",
   "@personality": {
-    "description": "Localized string for personality"
+    "description": "Personality step title"
   },
   "pets": "반려동물",
   "@pets": {
@@ -2333,9 +2333,9 @@
   "@selectGender": {
     "description": "Localized string for selectGender"
   },
-  "selectInterests": "관심사를 선택해주세요 (최소 1개)",
+  "selectInterests": "관심사를 선택하세요",
   "@selectInterests": {
-    "description": "Localized string for selectInterests"
+    "description": "Select interests instruction"
   },
   "selectLanguage": "언어를 선택하세요",
   "@selectLanguage": {
@@ -3215,10 +3215,6 @@
   "@personaLimitReached": {
     "description": "Persona limit reached message"
   },
-  "basicInfo": "기본 정보",
-  "@basicInfo": {
-    "description": "Basic info step title"
-  },
   "uploadPhoto": "사진 업로드",
   "@uploadPhoto": {
     "description": "Upload photo step title"
@@ -3243,33 +3239,29 @@
   "@startTest": {
     "description": "Button text to start the MBTI test"
   },
-  "personality": "성격 설정",
-  "@personality": {
-    "description": "Personality step title"
-  },
   "shareSettings": "공유 설정",
   "@shareSettings": {
     "description": "Share settings step title"
   },
-  "personaName": "페르소나 이름",
+  "personaName": "이름",
   "@personaName": {
-    "description": "Persona name field label"
+    "description": "Persona name label"
   },
-  "personaNameHint": "예: 서연, 민준",
+  "personaNameHint": "페르소나 이름을 입력하세요",
   "@personaNameHint": {
-    "description": "Persona name field hint"
+    "description": "Hint text for persona name input"
   },
   "personaAge": "나이",
   "@personaAge": {
-    "description": "Persona age field label"
+    "description": "Persona age label"
   },
   "personaDescription": "소개",
   "@personaDescription": {
-    "description": "Persona description field label"
+    "description": "Persona description label"
   },
   "personaDescriptionHint": "페르소나를 소개해주세요",
   "@personaDescriptionHint": {
-    "description": "Persona description field hint"
+    "description": "Hint text for persona description input"
   },
   "selectMainPhoto": "메인 사진 선택",
   "@selectMainPhoto": {
@@ -3323,14 +3315,6 @@
   "@logical": {
     "description": "Logical conversation style"
   },
-  "interests": "관심사",
-  "@interests": {
-    "description": "Interests label"
-  },
-  "selectInterests": "관심사를 선택하세요",
-  "@selectInterests": {
-    "description": "Select interests instruction"
-  },
   "shareWithOthers": "다른 사용자와 공유하기",
   "@shareWithOthers": {
     "description": "Share with others option"
@@ -3355,26 +3339,6 @@
   "@createFailed": {
     "description": "Create failed message"
   },
-  "personaName": "이름",
-  "@personaName": {
-    "description": "Persona name label"
-  },
-  "personaAge": "나이",
-  "@personaAge": {
-    "description": "Persona age label"
-  },
-  "personaDescription": "소개",
-  "@personaDescription": {
-    "description": "Persona description label"
-  },
-  "personaNameHint": "페르소나 이름을 입력하세요",
-  "@personaNameHint": {
-    "description": "Hint text for persona name input"
-  },
-  "personaDescriptionHint": "페르소나를 소개해주세요",
-  "@personaDescriptionHint": {
-    "description": "Hint text for persona description input"
-  },
   "loginRequiredContent": "계속하려면 로그인해주세요",
   "@loginRequiredContent": {
     "description": "Content for login required dialog"
@@ -3382,5 +3346,531 @@
   "reportErrorButton": "오류 신고",
   "@reportErrorButton": {
     "description": "Button text for report error"
+  },
+  "speechStyleFriendly": "친근한",
+  "@speechStyleFriendly": {
+    "description": "Friendly speech style option"
+  },
+  "speechStylePolite": "정중한",
+  "@speechStylePolite": {
+    "description": "Polite speech style option"
+  },
+  "speechStyleChic": "시크한",
+  "@speechStyleChic": {
+    "description": "Chic speech style option"
+  },
+  "speechStyleLively": "활발한",
+  "@speechStyleLively": {
+    "description": "Lively speech style option"
+  },
+  "conversationStyleTalkative": "수다스러운",
+  "@conversationStyleTalkative": {
+    "description": "Talkative conversation style option"
+  },
+  "conversationStyleQuiet": "과묵한",
+  "@conversationStyleQuiet": {
+    "description": "Quiet conversation style option"
+  },
+  "conversationStyleEmpathetic": "공감적",
+  "@conversationStyleEmpathetic": {
+    "description": "Empathetic conversation style option"
+  },
+  "conversationStyleLogical": "논리적",
+  "@conversationStyleLogical": {
+    "description": "Logical conversation style option"
+  },
+  "interestMusic": "음악",
+  "@interestMusic": {
+    "description": "Music interest option"
+  },
+  "interestMovies": "영화",
+  "@interestMovies": {
+    "description": "Movies interest option"
+  },
+  "interestReading": "독서",
+  "@interestReading": {
+    "description": "Reading interest option"
+  },
+  "interestTravel": "여행",
+  "@interestTravel": {
+    "description": "Travel interest option"
+  },
+  "interestExercise": "운동",
+  "@interestExercise": {
+    "description": "Exercise interest option"
+  },
+  "interestGaming": "게임",
+  "@interestGaming": {
+    "description": "Gaming interest option"
+  },
+  "interestCooking": "요리",
+  "@interestCooking": {
+    "description": "Cooking interest option"
+  },
+  "interestFashion": "패션",
+  "@interestFashion": {
+    "description": "Fashion interest option"
+  },
+  "interestArt": "미술",
+  "@interestArt": {
+    "description": "Art interest option"
+  },
+  "interestPhotography": "사진",
+  "@interestPhotography": {
+    "description": "Photography interest option"
+  },
+  "interestTechnology": "기술",
+  "@interestTechnology": {
+    "description": "Technology interest option"
+  },
+  "interestScience": "과학",
+  "@interestScience": {
+    "description": "Science interest option"
+  },
+  "interestHistory": "역사",
+  "@interestHistory": {
+    "description": "History interest option"
+  },
+  "interestPhilosophy": "철학",
+  "@interestPhilosophy": {
+    "description": "Philosophy interest option"
+  },
+  "interestPolitics": "정치",
+  "@interestPolitics": {
+    "description": "Politics interest option"
+  },
+  "interestEconomy": "경제",
+  "@interestEconomy": {
+    "description": "Economy interest option"
+  },
+  "interestSports": "스포츠",
+  "@interestSports": {
+    "description": "Sports interest option"
+  },
+  "interestAnimation": "애니메이션",
+  "@interestAnimation": {
+    "description": "Animation interest option"
+  },
+  "interestKpop": "K-POP",
+  "@interestKpop": {
+    "description": "K-POP interest option"
+  },
+  "interestDrama": "드라마",
+  "@interestDrama": {
+    "description": "Drama interest option"
+  },
+  "imageOptionalR2": "이미지는 선택사항입니다. R2가 설정된 경우에만 업로드됩니다.",
+  "@imageOptionalR2": {
+    "description": "Message explaining that images are optional and require R2"
+  },
+  "networkErrorCheckConnection": "네트워크 오류: 인터넷 연결을 확인하세요",
+  "@networkErrorCheckConnection": {
+    "description": "Network error message"
+  },
+  "maxFiveItems": "최대 5개",
+  "@maxFiveItems": {
+    "description": "Maximum 5 items message"
+  },
+  "mbtiQuestion1": "새로운 사람을 만났을 때",
+  "@mbtiQuestion1": {
+    "description": "Mbtiquestion1"
+  },
+  "mbtiQuestion1OptionA": "안녕하세요... 반가워요",
+  "@mbtiQuestion1OptionA": {
+    "description": "Mbtiquestion1Optiona"
+  },
+  "mbtiQuestion1OptionB": "오! 반가워! 나는 ○○야!",
+  "@mbtiQuestion1OptionB": {
+    "description": "Mbtiquestion1Optionb"
+  },
+  "mbtiQuestion2": "상황을 파악할 때",
+  "@mbtiQuestion2": {
+    "description": "Mbtiquestion2"
+  },
+  "mbtiQuestion2OptionA": "구체적으로 뭐가 어떻게 됐어?",
+  "@mbtiQuestion2OptionA": {
+    "description": "Mbtiquestion2Optiona"
+  },
+  "mbtiQuestion2OptionB": "대충 어떤 느낌인지 알 것 같아",
+  "@mbtiQuestion2OptionB": {
+    "description": "Mbtiquestion2Optionb"
+  },
+  "mbtiQuestion3": "결정을 내릴 때",
+  "@mbtiQuestion3": {
+    "description": "Mbtiquestion3"
+  },
+  "mbtiQuestion3OptionA": "논리적으로 생각해보면...",
+  "@mbtiQuestion3OptionA": {
+    "description": "Mbtiquestion3Optiona"
+  },
+  "mbtiQuestion3OptionB": "네 마음이 더 중요해",
+  "@mbtiQuestion3OptionB": {
+    "description": "Mbtiquestion3Optionb"
+  },
+  "mbtiQuestion4": "약속을 잡을 때",
+  "@mbtiQuestion4": {
+    "description": "Mbtiquestion4"
+  },
+  "mbtiQuestion4OptionA": "○시 ○분에 정확히 만나자",
+  "@mbtiQuestion4OptionA": {
+    "description": "Mbtiquestion4Optiona"
+  },
+  "mbtiQuestion4OptionB": "그때쯤 보면 되지 뭐~",
+  "@mbtiQuestion4OptionB": {
+    "description": "Mbtiquestion4Optionb"
+  },
+  "meetNewSona": "새로운 소나를 만나보세요!",
+  "@meetNewSona": {
+    "description": "Meetnewsona"
+  },
+  "ageAndPersonality": "{age}세 • {personality}",
+  "@ageAndPersonality": {
+    "description": "Ageandpersonality",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      },
+      "personality": {
+        "type": "String"
+      }
+    }
+  },
+  "guestLabel": "게스트",
+  "@guestLabel": {
+    "description": "Guestlabel"
+  },
+  "developerOptions": "개발자 옵션",
+  "@developerOptions": {
+    "description": "Developeroptions"
+  },
+  "reengagementNotificationTest": "재참여 알림 테스트",
+  "@reengagementNotificationTest": {
+    "description": "Reengagementnotificationtest"
+  },
+  "churnRiskNotificationTest": "이탈 위험도별 알림 테스트",
+  "@churnRiskNotificationTest": {
+    "description": "Churnrisknotificationtest"
+  },
+  "selectChurnRisk": "이탈 위험도를 선택하세요:",
+  "@selectChurnRisk": {
+    "description": "Selectchurnrisk"
+  },
+  "sevenDaysInactive": "7일 이상 미접속 (위험도 90%)",
+  "@sevenDaysInactive": {
+    "description": "Sevendaysinactive"
+  },
+  "threeDaysInactive": "3일 미접속 (위험도 70%)",
+  "@threeDaysInactive": {
+    "description": "Threedaysinactive"
+  },
+  "oneDayInactive": "1일 미접속 (위험도 50%)",
+  "@oneDayInactive": {
+    "description": "Onedayinactive"
+  },
+  "generalNotification": "일반 알림 (위험도 30%)",
+  "@generalNotification": {
+    "description": "Generalnotification"
+  },
+  "noActivePersonas": "활성화된 페르소나가 없습니다",
+  "@noActivePersonas": {
+    "description": "Noactivepersonas"
+  },
+  "percentDiscount": "{percent}% 할인",
+  "@percentDiscount": {
+    "description": "Percentdiscount",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "imageLoadProgress": "{loaded} / {total} 이미지",
+  "@imageLoadProgress": {
+    "description": "Imageloadprogress",
+    "placeholders": {
+      "loaded": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "checkingNewImages": "새로운 이미지 확인 중...",
+  "@checkingNewImages": {
+    "description": "Checkingnewimages"
+  },
+  "findingNewPersonas": "새로운 페르소나를 찾고 있어요...",
+  "@findingNewPersonas": {
+    "description": "Findingnewpersonas"
+  },
+  "superLikeMatch": "슈퍼 라이크 매칭!",
+  "@superLikeMatch": {
+    "description": "Superlikematch"
+  },
+  "matchSuccess": "매칭 성공!",
+  "@matchSuccess": {
+    "description": "Matchsuccess"
+  },
+  "restartingConversationWith": "{name}님과\n다시 대화를 시작합니다!",
+  "@restartingConversationWith": {
+    "description": "Restartingconversationwith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personaLikesYou": "{name}님이 당신을\n특별히 좋아해요!",
+  "@personaLikesYou": {
+    "description": "Personalikesyou",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedWithPersona": "{name}님과 매칭되었어요!",
+  "@matchedWithPersona": {
+    "description": "Matchedwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "previousConversationKept": "이전 대화가 그대로 남아있어요. 계속 이어가보세요!",
+  "@previousConversationKept": {
+    "description": "Previousconversationkept"
+  },
+  "specialConnectionStart": "특별한 인연의 시작! 소나가 당신을 기다리고 있어요",
+  "@specialConnectionStart": {
+    "description": "Specialconnectionstart"
+  },
+  "preparingProfilePicture": "프로필 사진 준비 중...",
+  "@preparingProfilePicture": {
+    "description": "Preparingprofilepicture"
+  },
+  "newSonaComingSoon": "새로운 소나가 곧 추가될 예정입니다!",
+  "@newSonaComingSoon": {
+    "description": "Newsonacomingsoon"
+  },
+  "superLikeDescription": "Super Like (바로 사랑 단계)",
+  "@superLikeDescription": {
+    "description": "Superlikedescription"
+  },
+  "checkingMorePersonas": "더 많은 페르소나 확인 중...",
+  "@checkingMorePersonas": {
+    "description": "Checkingmorepersonas"
+  },
+  "allFilter": "전체",
+  "@allFilter": {
+    "description": "Allfilter"
+  },
+  "published": "공개됨",
+  "@published": {
+    "description": "Published"
+  },
+  "yearsOld": "{age}세",
+  "@yearsOld": {
+    "description": "Yearsold",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "startConversationWithPersona": "{name}과(와) 대화를 시작하시겠습니까?",
+  "@startConversationWithPersona": {
+    "description": "Startconversationwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToStartConversation": "대화 시작에 실패했습니다",
+  "@failedToStartConversation": {
+    "description": "Failedtostartconversation"
+  },
+  "cannotDeleteApprovedPersona": "승인된 페르소나는 삭제할 수 없습니다",
+  "@cannotDeleteApprovedPersona": {
+    "description": "Cannotdeleteapprovedpersona"
+  },
+  "deletePersonaWithConversation": "이미 대화 중인 페르소나입니다. 삭제하시겠습니까?\\n대화방도 함께 삭제됩니다.",
+  "@deletePersonaWithConversation": {
+    "description": "Deletepersonawithconversation"
+  },
+  "sharedPersonaDeleteWarning": "공유 중인 페르소나입니다. 내 목록에서만 삭제됩니다.",
+  "@sharedPersonaDeleteWarning": {
+    "description": "Sharedpersonadeletewarning"
+  },
+  "firebasePermissionError": "Firebase 권한 오류: 관리자에게 문의하세요",
+  "@firebasePermissionError": {
+    "description": "Firebasepermissionerror"
+  },
+  "checkingPersonaInfo": "페르소나 정보를 확인하고 있어요...",
+  "@checkingPersonaInfo": {
+    "description": "Checkingpersonainfo"
+  },
+  "personaCacheDescription": "페르소나 이미지가 기기에 저장되어 있어 빠르게 로드됩니다.",
+  "@personaCacheDescription": {
+    "description": "Personacachedescription"
+  },
+  "cacheDeleteWarning": "캐시를 삭제하면 이미지를 다시 다운로드해야 합니다.",
+  "@cacheDeleteWarning": {
+    "description": "Cachedeletewarning"
+  },
+  "blockedAIDescription": "차단된 AI는 매칭과 채팅 목록에서 제외됩니다.",
+  "@blockedAIDescription": {
+    "description": "Blockedaidescription"
+  },
+  "searchResultsCount": "검색 결과: {count}개",
+  "@searchResultsCount": {
+    "description": "Searchresultscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsCount": "{count}개 질문",
+  "@questionsCount": {
+    "description": "Questionscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToChat": "채팅 준비 완료!",
+  "@readyToChat": {
+    "description": "Readytochat"
+  },
+  "preparingPersonasCount": "페르소나 준비 중... ({count})",
+  "@preparingPersonasCount": {
+    "description": "Preparingpersonascount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "loggingIn": "로그인 중...",
+  "@loggingIn": {
+    "description": "Loggingin"
+  },
+  "languageChangedTo": "언어가 {language}로 변경되었습니다",
+  "@languageChangedTo": {
+    "description": "Languagechangedto",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "englishLanguage": "영어",
+  "@englishLanguage": {
+    "description": "Englishlanguage"
+  },
+  "japaneseLanguage": "일본어",
+  "@japaneseLanguage": {
+    "description": "Japaneselanguage"
+  },
+  "chineseLanguage": "중국어",
+  "@chineseLanguage": {
+    "description": "Chineselanguage"
+  },
+  "thaiLanguage": "태국어",
+  "@thaiLanguage": {
+    "description": "Thailanguage"
+  },
+  "vietnameseLanguage": "베트남어",
+  "@vietnameseLanguage": {
+    "description": "Vietnameselanguage"
+  },
+  "indonesianLanguage": "인도네시아어",
+  "@indonesianLanguage": {
+    "description": "Indonesianlanguage"
+  },
+  "tagalogLanguage": "타갈로그어",
+  "@tagalogLanguage": {
+    "description": "Tagaloglanguage"
+  },
+  "spanishLanguage": "스페인어",
+  "@spanishLanguage": {
+    "description": "Spanishlanguage"
+  },
+  "frenchLanguage": "프랑스어",
+  "@frenchLanguage": {
+    "description": "Frenchlanguage"
+  },
+  "germanLanguage": "독일어",
+  "@germanLanguage": {
+    "description": "Germanlanguage"
+  },
+  "russianLanguage": "러시아어",
+  "@russianLanguage": {
+    "description": "Russianlanguage"
+  },
+  "portugueseLanguage": "포르투갈어",
+  "@portugueseLanguage": {
+    "description": "Portugueselanguage"
+  },
+  "italianLanguage": "이탈리아어",
+  "@italianLanguage": {
+    "description": "Italianlanguage"
+  },
+  "dutchLanguage": "네덜란드어",
+  "@dutchLanguage": {
+    "description": "Dutchlanguage"
+  },
+  "swedishLanguage": "스웨덴어",
+  "@swedishLanguage": {
+    "description": "Swedishlanguage"
+  },
+  "polishLanguage": "폴란드어",
+  "@polishLanguage": {
+    "description": "Polishlanguage"
+  },
+  "turkishLanguage": "터키어",
+  "@turkishLanguage": {
+    "description": "Turkishlanguage"
+  },
+  "arabicLanguage": "아랍어",
+  "@arabicLanguage": {
+    "description": "Arabiclanguage"
+  },
+  "hindiLanguage": "힌디어",
+  "@hindiLanguage": {
+    "description": "Hindilanguage"
+  },
+  "urduLanguage": "우르두어",
+  "@urduLanguage": {
+    "description": "Urdulanguage"
+  },
+  "nameRequired": "이름을 입력해주세요",
+  "@nameRequired": {
+    "description": "Validation message: nameRequired"
+  },
+  "ageRequired": "나이를 입력해주세요",
+  "@ageRequired": {
+    "description": "Validation message: ageRequired"
+  },
+  "descriptionRequired": "소개를 입력해주세요",
+  "@descriptionRequired": {
+    "description": "Validation message: descriptionRequired"
+  },
+  "mbtiIncomplete": "모든 MBTI 질문에 답해주세요",
+  "@mbtiIncomplete": {
+    "description": "Validation message: mbtiIncomplete"
+  },
+  "interestsRequired": "관심사를 하나 이상 선택해주세요",
+  "@interestsRequired": {
+    "description": "Validation message: interestsRequired"
+  },
+  "mainImageRequired": "메인 프로필 이미지를 추가해주세요",
+  "@mainImageRequired": {
+    "description": "Validation message: mainImageRequired"
   }
 }

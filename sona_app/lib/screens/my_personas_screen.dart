@@ -306,7 +306,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            '${persona.age}세',
+                            localizations.yearsOld(persona.age.toString()),
                             style: TextStyle(
                               fontSize: 12,
                               color: Theme.of(context).colorScheme.primary,
@@ -395,7 +395,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: () => _startChat(persona),
-                    tooltip: '대화 시작',
+                    tooltip: localizations.startConversation,
                   ),
                   // 메뉴 버튼
                   PopupMenuButton<String>(
@@ -602,7 +602,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('대화 시작에 실패했습니다'),
+              content: Text(localizations.failedToStartConversation),
               backgroundColor: Colors.red,
             ),
           );
@@ -677,6 +677,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
 
   void _deletePersona(Persona persona) async {
     await HapticService.selectionClick();
+    final localizations = AppLocalizations.of(context)!;
     
     // 승인된 페르소나는 삭제 불가
     if (persona.isConfirm) {
@@ -684,7 +685,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('승인된 페르소나는 삭제할 수 없습니다'),
+            content: Text(localizations.cannotDeleteApprovedPersona),
             backgroundColor: Colors.orange,
           ),
         );
@@ -699,11 +700,11 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
     // 경고 메시지 결정
     String warningMessage;
     if (isMatched) {
-      warningMessage = '이미 대화 중인 페르소나입니다. 삭제하시겠습니까?\n대화방도 함께 삭제됩니다.';
+      warningMessage = localizations.deletePersonaWithConversation;
     } else if (persona.isShare) {
-      warningMessage = '공유 중인 페르소나입니다. 내 목록에서만 삭제됩니다.';
+      warningMessage = localizations.sharedPersonaDeleteWarning;
     } else {
-      warningMessage = AppLocalizations.of(context)!.deletePersonaConfirm;
+      warningMessage = localizations.deletePersonaConfirm;
     }
     
     final confirmed = await showDialog<bool>(

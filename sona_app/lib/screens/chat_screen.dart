@@ -2762,7 +2762,7 @@ class _AppBarTitle extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.guestModeTitle.split(' ')[0], // "게스트"
+                      AppLocalizations.of(context)!.guestLabel,
                       style: TextStyle(
                         fontSize: 11,
                         color: Colors.blue[700],

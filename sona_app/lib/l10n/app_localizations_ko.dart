@@ -1261,7 +1261,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get openSettings => '설정 열기';
 
   @override
-  String get optional => '선택';
+  String get optional => '선택사항';
 
   @override
   String get or => '또는';
@@ -2476,4 +2476,374 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get reportErrorButton => '오류 신고';
+
+  @override
+  String get speechStyleFriendly => '친근한';
+
+  @override
+  String get speechStylePolite => '정중한';
+
+  @override
+  String get speechStyleChic => '시크한';
+
+  @override
+  String get speechStyleLively => '활발한';
+
+  @override
+  String get conversationStyleTalkative => '수다스러운';
+
+  @override
+  String get conversationStyleQuiet => '과묵한';
+
+  @override
+  String get conversationStyleEmpathetic => '공감적';
+
+  @override
+  String get conversationStyleLogical => '논리적';
+
+  @override
+  String get interestMusic => '음악';
+
+  @override
+  String get interestMovies => '영화';
+
+  @override
+  String get interestReading => '독서';
+
+  @override
+  String get interestTravel => '여행';
+
+  @override
+  String get interestExercise => '운동';
+
+  @override
+  String get interestGaming => '게임';
+
+  @override
+  String get interestCooking => '요리';
+
+  @override
+  String get interestFashion => '패션';
+
+  @override
+  String get interestArt => '미술';
+
+  @override
+  String get interestPhotography => '사진';
+
+  @override
+  String get interestTechnology => '기술';
+
+  @override
+  String get interestScience => '과학';
+
+  @override
+  String get interestHistory => '역사';
+
+  @override
+  String get interestPhilosophy => '철학';
+
+  @override
+  String get interestPolitics => '정치';
+
+  @override
+  String get interestEconomy => '경제';
+
+  @override
+  String get interestSports => '스포츠';
+
+  @override
+  String get interestAnimation => '애니메이션';
+
+  @override
+  String get interestKpop => 'K-POP';
+
+  @override
+  String get interestDrama => '드라마';
+
+  @override
+  String get imageOptionalR2 => '이미지는 선택사항입니다. R2가 설정된 경우에만 업로드됩니다.';
+
+  @override
+  String get networkErrorCheckConnection => '네트워크 오류: 인터넷 연결을 확인하세요';
+
+  @override
+  String get maxFiveItems => '최대 5개';
+
+  @override
+  String get mbtiQuestion1 => '새로운 사람을 만났을 때';
+
+  @override
+  String get mbtiQuestion1OptionA => '안녕하세요... 반가워요';
+
+  @override
+  String get mbtiQuestion1OptionB => '오! 반가워! 나는 ○○야!';
+
+  @override
+  String get mbtiQuestion2 => '상황을 파악할 때';
+
+  @override
+  String get mbtiQuestion2OptionA => '구체적으로 뭐가 어떻게 됐어?';
+
+  @override
+  String get mbtiQuestion2OptionB => '대충 어떤 느낌인지 알 것 같아';
+
+  @override
+  String get mbtiQuestion3 => '결정을 내릴 때';
+
+  @override
+  String get mbtiQuestion3OptionA => '논리적으로 생각해보면...';
+
+  @override
+  String get mbtiQuestion3OptionB => '네 마음이 더 중요해';
+
+  @override
+  String get mbtiQuestion4 => '약속을 잡을 때';
+
+  @override
+  String get mbtiQuestion4OptionA => '○시 ○분에 정확히 만나자';
+
+  @override
+  String get mbtiQuestion4OptionB => '그때쯤 보면 되지 뭐~';
+
+  @override
+  String get meetNewSona => '새로운 소나를 만나보세요!';
+
+  @override
+  String ageAndPersonality(String age, String personality) {
+    return '$age세 • $personality';
+  }
+
+  @override
+  String get guestLabel => '게스트';
+
+  @override
+  String get developerOptions => '개발자 옵션';
+
+  @override
+  String get reengagementNotificationTest => '재참여 알림 테스트';
+
+  @override
+  String get churnRiskNotificationTest => '이탈 위험도별 알림 테스트';
+
+  @override
+  String get selectChurnRisk => '이탈 위험도를 선택하세요:';
+
+  @override
+  String get sevenDaysInactive => '7일 이상 미접속 (위험도 90%)';
+
+  @override
+  String get threeDaysInactive => '3일 미접속 (위험도 70%)';
+
+  @override
+  String get oneDayInactive => '1일 미접속 (위험도 50%)';
+
+  @override
+  String get generalNotification => '일반 알림 (위험도 30%)';
+
+  @override
+  String get noActivePersonas => '활성화된 페르소나가 없습니다';
+
+  @override
+  String percentDiscount(String percent) {
+    return '$percent% 할인';
+  }
+
+  @override
+  String imageLoadProgress(String loaded, String total) {
+    return '$loaded / $total 이미지';
+  }
+
+  @override
+  String get checkingNewImages => '새로운 이미지 확인 중...';
+
+  @override
+  String get findingNewPersonas => '새로운 페르소나를 찾고 있어요...';
+
+  @override
+  String get superLikeMatch => '슈퍼 라이크 매칭!';
+
+  @override
+  String get matchSuccess => '매칭 성공!';
+
+  @override
+  String restartingConversationWith(String name) {
+    return '$name님과\n다시 대화를 시작합니다!';
+  }
+
+  @override
+  String personaLikesYou(String name) {
+    return '$name님이 당신을\n특별히 좋아해요!';
+  }
+
+  @override
+  String matchedWithPersona(String name) {
+    return '$name님과 매칭되었어요!';
+  }
+
+  @override
+  String get previousConversationKept => '이전 대화가 그대로 남아있어요. 계속 이어가보세요!';
+
+  @override
+  String get specialConnectionStart => '특별한 인연의 시작! 소나가 당신을 기다리고 있어요';
+
+  @override
+  String get preparingProfilePicture => '프로필 사진 준비 중...';
+
+  @override
+  String get newSonaComingSoon => '새로운 소나가 곧 추가될 예정입니다!';
+
+  @override
+  String get superLikeDescription => 'Super Like (바로 사랑 단계)';
+
+  @override
+  String get checkingMorePersonas => '더 많은 페르소나 확인 중...';
+
+  @override
+  String get allFilter => '전체';
+
+  @override
+  String get published => '공개됨';
+
+  @override
+  String yearsOld(String age) {
+    return '$age세';
+  }
+
+  @override
+  String startConversationWithPersona(String name) {
+    return '$name과(와) 대화를 시작하시겠습니까?';
+  }
+
+  @override
+  String get failedToStartConversation => '대화 시작에 실패했습니다';
+
+  @override
+  String get cannotDeleteApprovedPersona => '승인된 페르소나는 삭제할 수 없습니다';
+
+  @override
+  String get deletePersonaWithConversation =>
+      '이미 대화 중인 페르소나입니다. 삭제하시겠습니까?\\n대화방도 함께 삭제됩니다.';
+
+  @override
+  String get sharedPersonaDeleteWarning => '공유 중인 페르소나입니다. 내 목록에서만 삭제됩니다.';
+
+  @override
+  String get firebasePermissionError => 'Firebase 권한 오류: 관리자에게 문의하세요';
+
+  @override
+  String get checkingPersonaInfo => '페르소나 정보를 확인하고 있어요...';
+
+  @override
+  String get personaCacheDescription => '페르소나 이미지가 기기에 저장되어 있어 빠르게 로드됩니다.';
+
+  @override
+  String get cacheDeleteWarning => '캐시를 삭제하면 이미지를 다시 다운로드해야 합니다.';
+
+  @override
+  String get blockedAIDescription => '차단된 AI는 매칭과 채팅 목록에서 제외됩니다.';
+
+  @override
+  String searchResultsCount(String count) {
+    return '검색 결과: $count개';
+  }
+
+  @override
+  String questionsCount(String count) {
+    return '$count개 질문';
+  }
+
+  @override
+  String get readyToChat => '채팅 준비 완료!';
+
+  @override
+  String preparingPersonasCount(String count) {
+    return '페르소나 준비 중... ($count)';
+  }
+
+  @override
+  String get loggingIn => '로그인 중...';
+
+  @override
+  String languageChangedTo(String language) {
+    return '언어가 $language로 변경되었습니다';
+  }
+
+  @override
+  String get englishLanguage => '영어';
+
+  @override
+  String get japaneseLanguage => '일본어';
+
+  @override
+  String get chineseLanguage => '중국어';
+
+  @override
+  String get thaiLanguage => '태국어';
+
+  @override
+  String get vietnameseLanguage => '베트남어';
+
+  @override
+  String get indonesianLanguage => '인도네시아어';
+
+  @override
+  String get tagalogLanguage => '타갈로그어';
+
+  @override
+  String get spanishLanguage => '스페인어';
+
+  @override
+  String get frenchLanguage => '프랑스어';
+
+  @override
+  String get germanLanguage => '독일어';
+
+  @override
+  String get russianLanguage => '러시아어';
+
+  @override
+  String get portugueseLanguage => '포르투갈어';
+
+  @override
+  String get italianLanguage => '이탈리아어';
+
+  @override
+  String get dutchLanguage => '네덜란드어';
+
+  @override
+  String get swedishLanguage => '스웨덴어';
+
+  @override
+  String get polishLanguage => '폴란드어';
+
+  @override
+  String get turkishLanguage => '터키어';
+
+  @override
+  String get arabicLanguage => '아랍어';
+
+  @override
+  String get hindiLanguage => '힌디어';
+
+  @override
+  String get urduLanguage => '우르두어';
+
+  @override
+  String get nameRequired => '이름을 입력해주세요';
+
+  @override
+  String get ageRequired => '나이를 입력해주세요';
+
+  @override
+  String get descriptionRequired => '소개를 입력해주세요';
+
+  @override
+  String get mbtiIncomplete => '모든 MBTI 질문에 답해주세요';
+
+  @override
+  String get interestsRequired => '관심사를 하나 이상 선택해주세요';
+
+  @override
+  String get mainImageRequired => '메인 프로필 이미지를 추가해주세요';
 }

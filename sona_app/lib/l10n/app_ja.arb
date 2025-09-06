@@ -104,9 +104,9 @@
   "@allFeaturesRequired": {
     "description": "Localized string for allFeaturesRequired"
   },
-  "allPersonas": "すべてのペルソナ",
+  "allPersonas": "すべて",
   "@allPersonas": {
-    "description": "Localized string for allPersonas"
+    "description": "All personas tab"
   },
   "allPersonasMatched": "すべてのペルソナとマッチしました！チャットを始めましょう。",
   "@allPersonasMatched": {
@@ -195,7 +195,7 @@
   },
   "basicInfo": "基本情報",
   "@basicInfo": {
-    "description": "Localized string for basicInfo"
+    "description": "Basic info step"
   },
   "basicInfoDescription": "アカウント作成のため基本情報を入力してください",
   "@basicInfoDescription": {
@@ -554,7 +554,7 @@
   },
   "delete": "削除",
   "@delete": {
-    "description": "Localized string for delete"
+    "description": "Delete action"
   },
   "deleteAccount": "アカウント削除",
   "@deleteAccount": {
@@ -631,7 +631,7 @@
   },
   "edit": "編集",
   "@edit": {
-    "description": "Localized string for edit"
+    "description": "Edit action"
   },
   "editInfo": "情報を編集",
   "@editInfo": {
@@ -852,7 +852,7 @@
   },
   "female": "女性",
   "@female": {
-    "description": "Localized string for female"
+    "description": "Female gender option"
   },
   "filter": "フィルター",
   "@filter": {
@@ -1151,7 +1151,7 @@
   },
   "interests": "興味",
   "@interests": {
-    "description": "Localized string for interests"
+    "description": "Interests label"
   },
   "invalidEmailFormat": "無効なメールフォーマット",
   "@invalidEmailFormat": {
@@ -1380,7 +1380,7 @@
   },
   "male": "男性",
   "@male": {
-    "description": "Localized string for male"
+    "description": "Male gender option"
   },
   "manageBlockedAIs": "ブロックしたAIを管理",
   "@manageBlockedAIs": {
@@ -1714,9 +1714,9 @@
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "任意",
+  "optional": "オプション",
   "@optional": {
-    "description": "Localized string for optional"
+    "description": "optional"
   },
   "or": "または",
   "@or": {
@@ -1732,7 +1732,7 @@
   },
   "other": "その他",
   "@other": {
-    "description": "Localized string for other"
+    "description": "Other gender option"
   },
   "otherError": "その他のエラー",
   "@otherError": {
@@ -1825,7 +1825,7 @@
   },
   "personality": "性格",
   "@personality": {
-    "description": "Localized string for personality"
+    "description": "Personality step"
   },
   "pets": "ペット",
   "@pets": {
@@ -2321,9 +2321,9 @@
   "@selectFeeling": {
     "description": "Localized string for selectFeeling"
   },
-  "selectGender": "性別を選択してください",
+  "selectGender": "性別を選択",
   "@selectGender": {
-    "description": "Localized string for selectGender"
+    "description": "Select gender prompt"
   },
   "selectInterests": "興味を選択してください（最低1つ）",
   "@selectInterests": {
@@ -3175,26 +3175,6 @@
   "@personaDescription": {
     "description": "Persona description label"
   },
-  "male": "男性",
-  "@male": {
-    "description": "Male gender option"
-  },
-  "female": "女性",
-  "@female": {
-    "description": "Female gender option"
-  },
-  "other": "その他",
-  "@other": {
-    "description": "Other gender option"
-  },
-  "selectGender": "性別を選択",
-  "@selectGender": {
-    "description": "Select gender prompt"
-  },
-  "basicInfo": "基本情報",
-  "@basicInfo": {
-    "description": "Basic info step"
-  },
   "photos": "写真",
   "@photos": {
     "description": "Photos step"
@@ -3218,10 +3198,6 @@
   "startTest": "テストを開始",
   "@startTest": {
     "description": "Button text to start the MBTI test"
-  },
-  "personality": "性格",
-  "@personality": {
-    "description": "Personality step"
   },
   "speechStyle": "話し方",
   "@speechStyle": {
@@ -3275,10 +3251,6 @@
   "@logical": {
     "description": "Logical conversation style"
   },
-  "interests": "興味",
-  "@interests": {
-    "description": "Interests label"
-  },
   "shareWithOthers": "他のユーザーと共有",
   "@shareWithOthers": {
     "description": "Share with others option"
@@ -3295,10 +3267,6 @@
   "@uploadingImages": {
     "description": "Uploading images status"
   },
-  "allPersonas": "すべて",
-  "@allPersonas": {
-    "description": "All personas tab"
-  },
   "pendingApproval": "承認待ち",
   "@pendingApproval": {
     "description": "Pending approval status"
@@ -3310,14 +3278,6 @@
   "noPersonasFound": "ペルソナがありません",
   "@noPersonasFound": {
     "description": "No personas found message"
-  },
-  "edit": "編集",
-  "@edit": {
-    "description": "Edit action"
-  },
-  "delete": "削除",
-  "@delete": {
-    "description": "Delete action"
   },
   "deletePersona": "ペルソナを削除",
   "@deletePersona": {
@@ -3334,5 +3294,531 @@
   "deleteFailed": "削除に失敗しました",
   "@deleteFailed": {
     "description": "Delete failed message"
+  },
+  "speechStyleFriendly": "フレンドリー",
+  "@speechStyleFriendly": {
+    "description": "speech style option"
+  },
+  "speechStylePolite": "丁寧",
+  "@speechStylePolite": {
+    "description": "speech style option"
+  },
+  "speechStyleChic": "シック",
+  "@speechStyleChic": {
+    "description": "speech style option"
+  },
+  "speechStyleLively": "活発",
+  "@speechStyleLively": {
+    "description": "speech style option"
+  },
+  "conversationStyleTalkative": "おしゃべり",
+  "@conversationStyleTalkative": {
+    "description": "conversation style option"
+  },
+  "conversationStyleQuiet": "物静か",
+  "@conversationStyleQuiet": {
+    "description": "conversation style option"
+  },
+  "conversationStyleEmpathetic": "共感的",
+  "@conversationStyleEmpathetic": {
+    "description": "conversation style option"
+  },
+  "conversationStyleLogical": "論理的",
+  "@conversationStyleLogical": {
+    "description": "conversation style option"
+  },
+  "interestMusic": "音楽",
+  "@interestMusic": {
+    "description": " interest option"
+  },
+  "interestMovies": "映画",
+  "@interestMovies": {
+    "description": " interest option"
+  },
+  "interestReading": "読書",
+  "@interestReading": {
+    "description": " interest option"
+  },
+  "interestTravel": "旅行",
+  "@interestTravel": {
+    "description": " interest option"
+  },
+  "interestExercise": "運動",
+  "@interestExercise": {
+    "description": " interest option"
+  },
+  "interestGaming": "ゲーム",
+  "@interestGaming": {
+    "description": " interest option"
+  },
+  "interestCooking": "料理",
+  "@interestCooking": {
+    "description": " interest option"
+  },
+  "interestFashion": "ファッション",
+  "@interestFashion": {
+    "description": " interest option"
+  },
+  "interestArt": "アート",
+  "@interestArt": {
+    "description": " interest option"
+  },
+  "interestPhotography": "写真",
+  "@interestPhotography": {
+    "description": " interest option"
+  },
+  "interestTechnology": "テクノロジー",
+  "@interestTechnology": {
+    "description": " interest option"
+  },
+  "interestScience": "科学",
+  "@interestScience": {
+    "description": " interest option"
+  },
+  "interestHistory": "歴史",
+  "@interestHistory": {
+    "description": " interest option"
+  },
+  "interestPhilosophy": "哲学",
+  "@interestPhilosophy": {
+    "description": " interest option"
+  },
+  "interestPolitics": "政治",
+  "@interestPolitics": {
+    "description": " interest option"
+  },
+  "interestEconomy": "経済",
+  "@interestEconomy": {
+    "description": " interest option"
+  },
+  "interestSports": "スポーツ",
+  "@interestSports": {
+    "description": " interest option"
+  },
+  "interestAnimation": "アニメーション",
+  "@interestAnimation": {
+    "description": " interest option"
+  },
+  "interestKpop": "K-POP",
+  "@interestKpop": {
+    "description": " interest option"
+  },
+  "interestDrama": "ドラマ",
+  "@interestDrama": {
+    "description": " interest option"
+  },
+  "imageOptionalR2": "画像はオプションです。R2が設定されている場合のみアップロードされます。",
+  "@imageOptionalR2": {
+    "description": "imageOptionalR2"
+  },
+  "networkErrorCheckConnection": "ネットワークエラー：インターネット接続を確認してください",
+  "@networkErrorCheckConnection": {
+    "description": "networkErrorCheckConnection"
+  },
+  "maxFiveItems": "最大5個まで",
+  "@maxFiveItems": {
+    "description": "maxFiveItems"
+  },
+  "mbtiQuestion1": "新しい人に会った時",
+  "@mbtiQuestion1": {
+    "description": "Mbtiquestion1"
+  },
+  "mbtiQuestion1OptionA": "こんにちは...よろしくお願いします",
+  "@mbtiQuestion1OptionA": {
+    "description": "Mbtiquestion1Optiona"
+  },
+  "mbtiQuestion1OptionB": "おお！よろしく！私は○○です！",
+  "@mbtiQuestion1OptionB": {
+    "description": "Mbtiquestion1Optionb"
+  },
+  "mbtiQuestion2": "状況を把握する時",
+  "@mbtiQuestion2": {
+    "description": "Mbtiquestion2"
+  },
+  "mbtiQuestion2OptionA": "具体的に何がどうなったの？",
+  "@mbtiQuestion2OptionA": {
+    "description": "Mbtiquestion2Optiona"
+  },
+  "mbtiQuestion2OptionB": "だいたいの感じはわかる",
+  "@mbtiQuestion2OptionB": {
+    "description": "Mbtiquestion2Optionb"
+  },
+  "mbtiQuestion3": "決定を下す時",
+  "@mbtiQuestion3": {
+    "description": "Mbtiquestion3"
+  },
+  "mbtiQuestion3OptionA": "論理的に考えると...",
+  "@mbtiQuestion3OptionA": {
+    "description": "Mbtiquestion3Optiona"
+  },
+  "mbtiQuestion3OptionB": "あなたの気持ちが大切",
+  "@mbtiQuestion3OptionB": {
+    "description": "Mbtiquestion3Optionb"
+  },
+  "mbtiQuestion4": "約束をする時",
+  "@mbtiQuestion4": {
+    "description": "Mbtiquestion4"
+  },
+  "mbtiQuestion4OptionA": "○時○分きっかりに会いましょう",
+  "@mbtiQuestion4OptionA": {
+    "description": "Mbtiquestion4Optiona"
+  },
+  "mbtiQuestion4OptionB": "その頃に会えばいいよ～",
+  "@mbtiQuestion4OptionB": {
+    "description": "Mbtiquestion4Optionb"
+  },
+  "meetNewSona": "新しいソナに会いましょう！",
+  "@meetNewSona": {
+    "description": "Meetnewsona"
+  },
+  "ageAndPersonality": "{age}歳 • {personality}",
+  "@ageAndPersonality": {
+    "description": "Ageandpersonality",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      },
+      "personality": {
+        "type": "String"
+      }
+    }
+  },
+  "guestLabel": "ゲスト",
+  "@guestLabel": {
+    "description": "Guestlabel"
+  },
+  "developerOptions": "開発者オプション",
+  "@developerOptions": {
+    "description": "Developeroptions"
+  },
+  "reengagementNotificationTest": "再エンゲージメント通知テスト",
+  "@reengagementNotificationTest": {
+    "description": "Reengagementnotificationtest"
+  },
+  "churnRiskNotificationTest": "離脱リスク通知テスト",
+  "@churnRiskNotificationTest": {
+    "description": "Churnrisknotificationtest"
+  },
+  "selectChurnRisk": "離脱リスクを選択:",
+  "@selectChurnRisk": {
+    "description": "Selectchurnrisk"
+  },
+  "sevenDaysInactive": "7日以上未接続（リスク90%）",
+  "@sevenDaysInactive": {
+    "description": "Sevendaysinactive"
+  },
+  "threeDaysInactive": "3日未接続（リスク70%）",
+  "@threeDaysInactive": {
+    "description": "Threedaysinactive"
+  },
+  "oneDayInactive": "1日未接続（リスク50%）",
+  "@oneDayInactive": {
+    "description": "Onedayinactive"
+  },
+  "generalNotification": "一般通知（リスク30%）",
+  "@generalNotification": {
+    "description": "Generalnotification"
+  },
+  "noActivePersonas": "アクティブなペルソナがありません",
+  "@noActivePersonas": {
+    "description": "Noactivepersonas"
+  },
+  "percentDiscount": "{percent}%オフ",
+  "@percentDiscount": {
+    "description": "Percentdiscount",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "imageLoadProgress": "{loaded} / {total} 画像",
+  "@imageLoadProgress": {
+    "description": "Imageloadprogress",
+    "placeholders": {
+      "loaded": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "checkingNewImages": "新しい画像を確認中...",
+  "@checkingNewImages": {
+    "description": "Checkingnewimages"
+  },
+  "findingNewPersonas": "新しいペルソナを探しています...",
+  "@findingNewPersonas": {
+    "description": "Findingnewpersonas"
+  },
+  "superLikeMatch": "スーパーライクマッチ！",
+  "@superLikeMatch": {
+    "description": "Superlikematch"
+  },
+  "matchSuccess": "マッチング成功！",
+  "@matchSuccess": {
+    "description": "Matchsuccess"
+  },
+  "restartingConversationWith": "{name}さんと\\n会話を再開します！",
+  "@restartingConversationWith": {
+    "description": "Restartingconversationwith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personaLikesYou": "{name}さんがあなたを\\n特別に気に入っています！",
+  "@personaLikesYou": {
+    "description": "Personalikesyou",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedWithPersona": "{name}さんとマッチしました！",
+  "@matchedWithPersona": {
+    "description": "Matchedwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "previousConversationKept": "以前の会話が保存されています。続きから始めましょう！",
+  "@previousConversationKept": {
+    "description": "Previousconversationkept"
+  },
+  "specialConnectionStart": "特別な縁の始まり！ソナがあなたを待っています",
+  "@specialConnectionStart": {
+    "description": "Specialconnectionstart"
+  },
+  "preparingProfilePicture": "プロフィール写真を準備中...",
+  "@preparingProfilePicture": {
+    "description": "Preparingprofilepicture"
+  },
+  "newSonaComingSoon": "新しいソナが間もなく追加されます！",
+  "@newSonaComingSoon": {
+    "description": "Newsonacomingsoon"
+  },
+  "superLikeDescription": "スーパーライク（即恋愛段階）",
+  "@superLikeDescription": {
+    "description": "Superlikedescription"
+  },
+  "checkingMorePersonas": "さらに多くのペルソナを確認中...",
+  "@checkingMorePersonas": {
+    "description": "Checkingmorepersonas"
+  },
+  "allFilter": "すべて",
+  "@allFilter": {
+    "description": "Allfilter"
+  },
+  "published": "公開済み",
+  "@published": {
+    "description": "Published"
+  },
+  "yearsOld": "{age}歳",
+  "@yearsOld": {
+    "description": "Yearsold",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "startConversationWithPersona": "{name}と会話を始めますか？",
+  "@startConversationWithPersona": {
+    "description": "Startconversationwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToStartConversation": "会話の開始に失敗しました",
+  "@failedToStartConversation": {
+    "description": "Failedtostartconversation"
+  },
+  "cannotDeleteApprovedPersona": "承認されたペルソナは削除できません",
+  "@cannotDeleteApprovedPersona": {
+    "description": "Cannotdeleteapprovedpersona"
+  },
+  "deletePersonaWithConversation": "このペルソナには進行中の会話があります。削除しますか？\\nチャットルームも削除されます。",
+  "@deletePersonaWithConversation": {
+    "description": "Deletepersonawithconversation"
+  },
+  "sharedPersonaDeleteWarning": "これは共有ペルソナです。あなたのリストからのみ削除されます。",
+  "@sharedPersonaDeleteWarning": {
+    "description": "Sharedpersonadeletewarning"
+  },
+  "firebasePermissionError": "Firebase権限エラー：管理者にお問い合わせください",
+  "@firebasePermissionError": {
+    "description": "Firebasepermissionerror"
+  },
+  "checkingPersonaInfo": "ペルソナ情報を確認中...",
+  "@checkingPersonaInfo": {
+    "description": "Checkingpersonainfo"
+  },
+  "personaCacheDescription": "ペルソナ画像がデバイスに保存され、高速読み込みが可能です。",
+  "@personaCacheDescription": {
+    "description": "Personacachedescription"
+  },
+  "cacheDeleteWarning": "キャッシュを削除すると、画像を再ダウンロードする必要があります。",
+  "@cacheDeleteWarning": {
+    "description": "Cachedeletewarning"
+  },
+  "blockedAIDescription": "ブロックされたAIはマッチングとチャットリストから除外されます。",
+  "@blockedAIDescription": {
+    "description": "Blockedaidescription"
+  },
+  "searchResultsCount": "検索結果: {count}件",
+  "@searchResultsCount": {
+    "description": "Searchresultscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsCount": "{count}個の質問",
+  "@questionsCount": {
+    "description": "Questionscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToChat": "チャット準備完了！",
+  "@readyToChat": {
+    "description": "Readytochat"
+  },
+  "preparingPersonasCount": "ペルソナ準備中... ({count})",
+  "@preparingPersonasCount": {
+    "description": "Preparingpersonascount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "loggingIn": "ログイン中...",
+  "@loggingIn": {
+    "description": "Loggingin"
+  },
+  "languageChangedTo": "言語が{language}に変更されました",
+  "@languageChangedTo": {
+    "description": "Languagechangedto",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "englishLanguage": "英語",
+  "@englishLanguage": {
+    "description": "Englishlanguage"
+  },
+  "japaneseLanguage": "日本語",
+  "@japaneseLanguage": {
+    "description": "Japaneselanguage"
+  },
+  "chineseLanguage": "中国語",
+  "@chineseLanguage": {
+    "description": "Chineselanguage"
+  },
+  "thaiLanguage": "タイ語",
+  "@thaiLanguage": {
+    "description": "Thailanguage"
+  },
+  "vietnameseLanguage": "ベトナム語",
+  "@vietnameseLanguage": {
+    "description": "Vietnameselanguage"
+  },
+  "indonesianLanguage": "インドネシア語",
+  "@indonesianLanguage": {
+    "description": "Indonesianlanguage"
+  },
+  "tagalogLanguage": "タガログ語",
+  "@tagalogLanguage": {
+    "description": "Tagaloglanguage"
+  },
+  "spanishLanguage": "スペイン語",
+  "@spanishLanguage": {
+    "description": "Spanishlanguage"
+  },
+  "frenchLanguage": "フランス語",
+  "@frenchLanguage": {
+    "description": "Frenchlanguage"
+  },
+  "germanLanguage": "ドイツ語",
+  "@germanLanguage": {
+    "description": "Germanlanguage"
+  },
+  "russianLanguage": "ロシア語",
+  "@russianLanguage": {
+    "description": "Russianlanguage"
+  },
+  "portugueseLanguage": "ポルトガル語",
+  "@portugueseLanguage": {
+    "description": "Portugueselanguage"
+  },
+  "italianLanguage": "イタリア語",
+  "@italianLanguage": {
+    "description": "Italianlanguage"
+  },
+  "dutchLanguage": "オランダ語",
+  "@dutchLanguage": {
+    "description": "Dutchlanguage"
+  },
+  "swedishLanguage": "スウェーデン語",
+  "@swedishLanguage": {
+    "description": "Swedishlanguage"
+  },
+  "polishLanguage": "ポーランド語",
+  "@polishLanguage": {
+    "description": "Polishlanguage"
+  },
+  "turkishLanguage": "トルコ語",
+  "@turkishLanguage": {
+    "description": "Turkishlanguage"
+  },
+  "arabicLanguage": "アラビア語",
+  "@arabicLanguage": {
+    "description": "Arabiclanguage"
+  },
+  "hindiLanguage": "ヒンディー語",
+  "@hindiLanguage": {
+    "description": "Hindilanguage"
+  },
+  "urduLanguage": "ウルドゥー語",
+  "@urduLanguage": {
+    "description": "Urdulanguage"
+  },
+  "nameRequired": "Please enter a name",
+  "@nameRequired": {
+    "description": "Validation message: nameRequired"
+  },
+  "ageRequired": "Please enter age",
+  "@ageRequired": {
+    "description": "Validation message: ageRequired"
+  },
+  "descriptionRequired": "Please enter a description",
+  "@descriptionRequired": {
+    "description": "Validation message: descriptionRequired"
+  },
+  "mbtiIncomplete": "Please complete all MBTI questions",
+  "@mbtiIncomplete": {
+    "description": "Validation message: mbtiIncomplete"
+  },
+  "interestsRequired": "Please select at least one interest",
+  "@interestsRequired": {
+    "description": "Validation message: interestsRequired"
+  },
+  "mainImageRequired": "Please add a main profile image",
+  "@mainImageRequired": {
+    "description": "Validation message: mainImageRequired"
   }
 }

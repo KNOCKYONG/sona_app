@@ -94,7 +94,7 @@
   },
   "all": "Alla",
   "@all": {
-    "description": "Localized string for all"
+    "description": "All tab label"
   },
   "allAgree": "Godkänn allt",
   "@allAgree": {
@@ -193,9 +193,9 @@
   "@backButton": {
     "description": "Localized string for backButton"
   },
-  "basicInfo": "Grundläggande information",
+  "basicInfo": "Grundläggande Information",
   "@basicInfo": {
-    "description": "Localized string for basicInfo"
+    "description": "Basic information step title"
   },
   "basicInfoDescription": "Vänligen ange grundläggande information för att skapa ett konto",
   "@basicInfoDescription": {
@@ -1151,7 +1151,7 @@
   },
   "interests": "Intressen",
   "@interests": {
-    "description": "Localized string for interests"
+    "description": "Interests label"
   },
   "invalidEmailFormat": "Ogiltigt e-postformat",
   "@invalidEmailFormat": {
@@ -1714,9 +1714,9 @@
   "@openSettings": {
     "description": "Localized string for openSettings"
   },
-  "optional": "Valfri",
+  "optional": "Valfritt",
   "@optional": {
-    "description": "Localized string for optional"
+    "description": "optional"
   },
   "or": "or",
   "@or": {
@@ -1730,9 +1730,9 @@
   "@originalText": {
     "description": "Localized string for originalText"
   },
-  "other": "Annat",
+  "other": "Övrigt",
   "@other": {
-    "description": "Localized string for other"
+    "description": "Other gender option"
   },
   "otherError": "Annan fel",
   "@otherError": {
@@ -1873,7 +1873,7 @@
   },
   "previous": "Föregående",
   "@previous": {
-    "description": "Localized string for previous"
+    "description": "Previous button text"
   },
   "privacy": "Integritetspolicy",
   "@privacy": {
@@ -3159,10 +3159,6 @@
   "@createPersona": {
     "description": "Button text for creating a new persona"
   },
-  "basicInfo": "Grundläggande Information",
-  "@basicInfo": {
-    "description": "Basic information step title"
-  },
   "tellUsAboutYourPersona": "Berätta om din personlighet",
   "@tellUsAboutYourPersona": {
     "description": "Subtitle for basic info step"
@@ -3170,10 +3166,6 @@
   "enterPersonaName": "Ange personlighetsnamn",
   "@enterPersonaName": {
     "description": "Hint text for persona name input"
-  },
-  "other": "Övrigt",
-  "@other": {
-    "description": "Other gender option"
   },
   "describeYourPersona": "Beskriv din personlighet kort",
   "@describeYourPersona": {
@@ -3223,10 +3215,6 @@
   "@conversationStyle": {
     "description": "Conversation style label"
   },
-  "interests": "Intressen",
-  "@interests": {
-    "description": "Interests label"
-  },
   "shareWithCommunity": "Dela med Gemenskap",
   "@shareWithCommunity": {
     "description": "Share with community title"
@@ -3247,10 +3235,6 @@
   "@privatePersonaDescription": {
     "description": "Private persona description"
   },
-  "previous": "Föregående",
-  "@previous": {
-    "description": "Previous button text"
-  },
   "create": "Skapa",
   "@create": {
     "description": "Create button text"
@@ -3262,10 +3246,6 @@
   "createFailed": "Misslyckades med att skapa personlighet",
   "@createFailed": {
     "description": "Create failed error message"
-  },
-  "all": "Alla",
-  "@all": {
-    "description": "All tab label"
   },
   "pendingApproval": "Väntar på Godkännande",
   "@pendingApproval": {
@@ -3302,5 +3282,531 @@
   "deleteFailed": "Borttagning misslyckades",
   "@deleteFailed": {
     "description": "Delete failed message"
+  },
+  "speechStyleFriendly": "Vänlig",
+  "@speechStyleFriendly": {
+    "description": "speech style option"
+  },
+  "speechStylePolite": "Artig",
+  "@speechStylePolite": {
+    "description": "speech style option"
+  },
+  "speechStyleChic": "Chic",
+  "@speechStyleChic": {
+    "description": "speech style option"
+  },
+  "speechStyleLively": "Livlig",
+  "@speechStyleLively": {
+    "description": "speech style option"
+  },
+  "conversationStyleTalkative": "Pratsam",
+  "@conversationStyleTalkative": {
+    "description": "conversation style option"
+  },
+  "conversationStyleQuiet": "Tyst",
+  "@conversationStyleQuiet": {
+    "description": "conversation style option"
+  },
+  "conversationStyleEmpathetic": "Empatisk",
+  "@conversationStyleEmpathetic": {
+    "description": "conversation style option"
+  },
+  "conversationStyleLogical": "Logisk",
+  "@conversationStyleLogical": {
+    "description": "conversation style option"
+  },
+  "interestMusic": "Musik",
+  "@interestMusic": {
+    "description": " interest option"
+  },
+  "interestMovies": "Filmer",
+  "@interestMovies": {
+    "description": " interest option"
+  },
+  "interestReading": "Läsning",
+  "@interestReading": {
+    "description": " interest option"
+  },
+  "interestTravel": "Resor",
+  "@interestTravel": {
+    "description": " interest option"
+  },
+  "interestExercise": "Träning",
+  "@interestExercise": {
+    "description": " interest option"
+  },
+  "interestGaming": "Gaming",
+  "@interestGaming": {
+    "description": " interest option"
+  },
+  "interestCooking": "Matlagning",
+  "@interestCooking": {
+    "description": " interest option"
+  },
+  "interestFashion": "Mode",
+  "@interestFashion": {
+    "description": " interest option"
+  },
+  "interestArt": "Konst",
+  "@interestArt": {
+    "description": " interest option"
+  },
+  "interestPhotography": "Fotografi",
+  "@interestPhotography": {
+    "description": " interest option"
+  },
+  "interestTechnology": "Teknik",
+  "@interestTechnology": {
+    "description": " interest option"
+  },
+  "interestScience": "Vetenskap",
+  "@interestScience": {
+    "description": " interest option"
+  },
+  "interestHistory": "Historia",
+  "@interestHistory": {
+    "description": " interest option"
+  },
+  "interestPhilosophy": "Filosofi",
+  "@interestPhilosophy": {
+    "description": " interest option"
+  },
+  "interestPolitics": "Politik",
+  "@interestPolitics": {
+    "description": " interest option"
+  },
+  "interestEconomy": "Ekonomi",
+  "@interestEconomy": {
+    "description": " interest option"
+  },
+  "interestSports": "Sport",
+  "@interestSports": {
+    "description": " interest option"
+  },
+  "interestAnimation": "Animation",
+  "@interestAnimation": {
+    "description": " interest option"
+  },
+  "interestKpop": "K-POP",
+  "@interestKpop": {
+    "description": " interest option"
+  },
+  "interestDrama": "Drama",
+  "@interestDrama": {
+    "description": " interest option"
+  },
+  "imageOptionalR2": "Bilder är valfria. De laddas bara upp om R2 är konfigurerad.",
+  "@imageOptionalR2": {
+    "description": "imageOptionalR2"
+  },
+  "networkErrorCheckConnection": "Nätverksfel: Kontrollera din internetanslutning",
+  "@networkErrorCheckConnection": {
+    "description": "networkErrorCheckConnection"
+  },
+  "maxFiveItems": "Upp till 5 objekt",
+  "@maxFiveItems": {
+    "description": "maxFiveItems"
+  },
+  "mbtiQuestion1": "When meeting new people",
+  "@mbtiQuestion1": {
+    "description": "Mbtiquestion1"
+  },
+  "mbtiQuestion1OptionA": "Hello... nice to meet you",
+  "@mbtiQuestion1OptionA": {
+    "description": "Mbtiquestion1Optiona"
+  },
+  "mbtiQuestion1OptionB": "Oh! Nice to meet you! I'm XX!",
+  "@mbtiQuestion1OptionB": {
+    "description": "Mbtiquestion1Optionb"
+  },
+  "mbtiQuestion2": "When understanding a situation",
+  "@mbtiQuestion2": {
+    "description": "Mbtiquestion2"
+  },
+  "mbtiQuestion2OptionA": "What exactly happened and how?",
+  "@mbtiQuestion2OptionA": {
+    "description": "Mbtiquestion2Optiona"
+  },
+  "mbtiQuestion2OptionB": "I think I get the general feeling",
+  "@mbtiQuestion2OptionB": {
+    "description": "Mbtiquestion2Optionb"
+  },
+  "mbtiQuestion3": "When making decisions",
+  "@mbtiQuestion3": {
+    "description": "Mbtiquestion3"
+  },
+  "mbtiQuestion3OptionA": "Thinking logically...",
+  "@mbtiQuestion3OptionA": {
+    "description": "Mbtiquestion3Optiona"
+  },
+  "mbtiQuestion3OptionB": "Your feelings matter more",
+  "@mbtiQuestion3OptionB": {
+    "description": "Mbtiquestion3Optionb"
+  },
+  "mbtiQuestion4": "When making appointments",
+  "@mbtiQuestion4": {
+    "description": "Mbtiquestion4"
+  },
+  "mbtiQuestion4OptionA": "Let's meet exactly at X o'clock",
+  "@mbtiQuestion4OptionA": {
+    "description": "Mbtiquestion4Optiona"
+  },
+  "mbtiQuestion4OptionB": "See you around that time~",
+  "@mbtiQuestion4OptionB": {
+    "description": "Mbtiquestion4Optionb"
+  },
+  "meetNewSona": "Meet new Sona!",
+  "@meetNewSona": {
+    "description": "Meetnewsona"
+  },
+  "ageAndPersonality": "{age} years old • {personality}",
+  "@ageAndPersonality": {
+    "description": "Ageandpersonality",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      },
+      "personality": {
+        "type": "String"
+      }
+    }
+  },
+  "guestLabel": "Guest",
+  "@guestLabel": {
+    "description": "Guestlabel"
+  },
+  "developerOptions": "Developer Options",
+  "@developerOptions": {
+    "description": "Developeroptions"
+  },
+  "reengagementNotificationTest": "Re-engagement Notification Test",
+  "@reengagementNotificationTest": {
+    "description": "Reengagementnotificationtest"
+  },
+  "churnRiskNotificationTest": "Churn Risk Notification Test",
+  "@churnRiskNotificationTest": {
+    "description": "Churnrisknotificationtest"
+  },
+  "selectChurnRisk": "Select churn risk:",
+  "@selectChurnRisk": {
+    "description": "Selectchurnrisk"
+  },
+  "sevenDaysInactive": "7+ days inactive (90% risk)",
+  "@sevenDaysInactive": {
+    "description": "Sevendaysinactive"
+  },
+  "threeDaysInactive": "3 days inactive (70% risk)",
+  "@threeDaysInactive": {
+    "description": "Threedaysinactive"
+  },
+  "oneDayInactive": "1 day inactive (50% risk)",
+  "@oneDayInactive": {
+    "description": "Onedayinactive"
+  },
+  "generalNotification": "General notification (30% risk)",
+  "@generalNotification": {
+    "description": "Generalnotification"
+  },
+  "noActivePersonas": "No active personas",
+  "@noActivePersonas": {
+    "description": "Noactivepersonas"
+  },
+  "percentDiscount": "{percent}% OFF",
+  "@percentDiscount": {
+    "description": "Percentdiscount",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "imageLoadProgress": "{loaded} / {total} images",
+  "@imageLoadProgress": {
+    "description": "Imageloadprogress",
+    "placeholders": {
+      "loaded": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "checkingNewImages": "Checking for new images...",
+  "@checkingNewImages": {
+    "description": "Checkingnewimages"
+  },
+  "findingNewPersonas": "Finding new personas...",
+  "@findingNewPersonas": {
+    "description": "Findingnewpersonas"
+  },
+  "superLikeMatch": "Super Like Match!",
+  "@superLikeMatch": {
+    "description": "Superlikematch"
+  },
+  "matchSuccess": "Match Success!",
+  "@matchSuccess": {
+    "description": "Matchsuccess"
+  },
+  "restartingConversationWith": "Restarting conversation with {name}!",
+  "@restartingConversationWith": {
+    "description": "Restartingconversationwith",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "personaLikesYou": "{name} especially likes you!",
+  "@personaLikesYou": {
+    "description": "Personalikesyou",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "matchedWithPersona": "Matched with {name}!",
+  "@matchedWithPersona": {
+    "description": "Matchedwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "previousConversationKept": "Previous conversation is preserved. Continue where you left off!",
+  "@previousConversationKept": {
+    "description": "Previousconversationkept"
+  },
+  "specialConnectionStart": "Start of a special connection! Sona is waiting for you",
+  "@specialConnectionStart": {
+    "description": "Specialconnectionstart"
+  },
+  "preparingProfilePicture": "Preparing profile picture...",
+  "@preparingProfilePicture": {
+    "description": "Preparingprofilepicture"
+  },
+  "newSonaComingSoon": "New Sona coming soon!",
+  "@newSonaComingSoon": {
+    "description": "Newsonacomingsoon"
+  },
+  "superLikeDescription": "Super Like (instant love stage)",
+  "@superLikeDescription": {
+    "description": "Superlikedescription"
+  },
+  "checkingMorePersonas": "Checking more personas...",
+  "@checkingMorePersonas": {
+    "description": "Checkingmorepersonas"
+  },
+  "allFilter": "All",
+  "@allFilter": {
+    "description": "Allfilter"
+  },
+  "published": "Published",
+  "@published": {
+    "description": "Published"
+  },
+  "yearsOld": "{age} years old",
+  "@yearsOld": {
+    "description": "Yearsold",
+    "placeholders": {
+      "age": {
+        "type": "String"
+      }
+    }
+  },
+  "startConversationWithPersona": "Start conversation with {name}?",
+  "@startConversationWithPersona": {
+    "description": "Startconversationwithpersona",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToStartConversation": "Failed to start conversation",
+  "@failedToStartConversation": {
+    "description": "Failedtostartconversation"
+  },
+  "cannotDeleteApprovedPersona": "Cannot delete approved persona",
+  "@cannotDeleteApprovedPersona": {
+    "description": "Cannotdeleteapprovedpersona"
+  },
+  "deletePersonaWithConversation": "This persona has an active conversation. Delete anyway?\nThe chat room will also be deleted.",
+  "@deletePersonaWithConversation": {
+    "description": "Deletepersonawithconversation"
+  },
+  "sharedPersonaDeleteWarning": "This is a shared persona. It will only be removed from your list.",
+  "@sharedPersonaDeleteWarning": {
+    "description": "Sharedpersonadeletewarning"
+  },
+  "firebasePermissionError": "Firebase permission error: Please contact administrator",
+  "@firebasePermissionError": {
+    "description": "Firebasepermissionerror"
+  },
+  "checkingPersonaInfo": "Checking persona information...",
+  "@checkingPersonaInfo": {
+    "description": "Checkingpersonainfo"
+  },
+  "personaCacheDescription": "Persona images are saved on device for fast loading.",
+  "@personaCacheDescription": {
+    "description": "Personacachedescription"
+  },
+  "cacheDeleteWarning": "Deleting cache will require re-downloading images.",
+  "@cacheDeleteWarning": {
+    "description": "Cachedeletewarning"
+  },
+  "blockedAIDescription": "Blocked AI will be excluded from matching and chat list.",
+  "@blockedAIDescription": {
+    "description": "Blockedaidescription"
+  },
+  "searchResultsCount": "Search results: {count}",
+  "@searchResultsCount": {
+    "description": "Searchresultscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "questionsCount": "{count} questions",
+  "@questionsCount": {
+    "description": "Questionscount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "readyToChat": "Ready to chat!",
+  "@readyToChat": {
+    "description": "Readytochat"
+  },
+  "preparingPersonasCount": "Preparing personas... ({count})",
+  "@preparingPersonasCount": {
+    "description": "Preparingpersonascount",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "loggingIn": "Logging in...",
+  "@loggingIn": {
+    "description": "Loggingin"
+  },
+  "languageChangedTo": "Language changed to {language}",
+  "@languageChangedTo": {
+    "description": "Languagechangedto",
+    "placeholders": {
+      "language": {
+        "type": "String"
+      }
+    }
+  },
+  "englishLanguage": "English",
+  "@englishLanguage": {
+    "description": "Englishlanguage"
+  },
+  "japaneseLanguage": "Japanese",
+  "@japaneseLanguage": {
+    "description": "Japaneselanguage"
+  },
+  "chineseLanguage": "Chinese",
+  "@chineseLanguage": {
+    "description": "Chineselanguage"
+  },
+  "thaiLanguage": "Thai",
+  "@thaiLanguage": {
+    "description": "Thailanguage"
+  },
+  "vietnameseLanguage": "Vietnamese",
+  "@vietnameseLanguage": {
+    "description": "Vietnameselanguage"
+  },
+  "indonesianLanguage": "Indonesian",
+  "@indonesianLanguage": {
+    "description": "Indonesianlanguage"
+  },
+  "tagalogLanguage": "Tagalog",
+  "@tagalogLanguage": {
+    "description": "Tagaloglanguage"
+  },
+  "spanishLanguage": "Spanish",
+  "@spanishLanguage": {
+    "description": "Spanishlanguage"
+  },
+  "frenchLanguage": "French",
+  "@frenchLanguage": {
+    "description": "Frenchlanguage"
+  },
+  "germanLanguage": "German",
+  "@germanLanguage": {
+    "description": "Germanlanguage"
+  },
+  "russianLanguage": "Russian",
+  "@russianLanguage": {
+    "description": "Russianlanguage"
+  },
+  "portugueseLanguage": "Portuguese",
+  "@portugueseLanguage": {
+    "description": "Portugueselanguage"
+  },
+  "italianLanguage": "Italian",
+  "@italianLanguage": {
+    "description": "Italianlanguage"
+  },
+  "dutchLanguage": "Dutch",
+  "@dutchLanguage": {
+    "description": "Dutchlanguage"
+  },
+  "swedishLanguage": "Swedish",
+  "@swedishLanguage": {
+    "description": "Swedishlanguage"
+  },
+  "polishLanguage": "Polish",
+  "@polishLanguage": {
+    "description": "Polishlanguage"
+  },
+  "turkishLanguage": "Turkish",
+  "@turkishLanguage": {
+    "description": "Turkishlanguage"
+  },
+  "arabicLanguage": "Arabic",
+  "@arabicLanguage": {
+    "description": "Arabiclanguage"
+  },
+  "hindiLanguage": "Hindi",
+  "@hindiLanguage": {
+    "description": "Hindilanguage"
+  },
+  "urduLanguage": "Urdu",
+  "@urduLanguage": {
+    "description": "Urdulanguage"
+  },
+  "nameRequired": "Please enter a name",
+  "@nameRequired": {
+    "description": "Validation message: nameRequired"
+  },
+  "ageRequired": "Please enter age",
+  "@ageRequired": {
+    "description": "Validation message: ageRequired"
+  },
+  "descriptionRequired": "Please enter a description",
+  "@descriptionRequired": {
+    "description": "Validation message: descriptionRequired"
+  },
+  "mbtiIncomplete": "Please complete all MBTI questions",
+  "@mbtiIncomplete": {
+    "description": "Validation message: mbtiIncomplete"
+  },
+  "interestsRequired": "Please select at least one interest",
+  "@interestsRequired": {
+    "description": "Validation message: interestsRequired"
+  },
+  "mainImageRequired": "Please add a main profile image",
+  "@mainImageRequired": {
+    "description": "Validation message: mainImageRequired"
   }
 }

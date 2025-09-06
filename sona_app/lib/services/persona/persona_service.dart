@@ -478,7 +478,7 @@ class PersonaService extends BaseService {
   }
 
   /// Optimized persona like with batch operations
-  Future<bool> likePersona(String personaId, {Persona? personaObject}) async {
+  Future<bool> likePersona(String personaId, {Persona? personaObject, PurchaseService? purchaseService}) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
@@ -501,13 +501,16 @@ class PersonaService extends BaseService {
 
       // 하트 1개 소모 (이미 매칭된 경우는 제외)
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
-        final purchaseService = PurchaseService();
-        final heartConsumed = await purchaseService.useHearts(1);
-        if (!heartConsumed) {
-          debugPrint('❌ Failed to consume heart for liking persona: $personaId');
-          return false;
+        if (purchaseService != null) {
+          final heartConsumed = await purchaseService.useHearts(1);
+          if (!heartConsumed) {
+            debugPrint('❌ Failed to consume heart for liking persona: $personaId');
+            return false;
+          }
+          debugPrint('💕 Successfully consumed 1 heart for liking persona: $personaId');
+        } else {
+          debugPrint('⚠️ PurchaseService not provided, skipping heart consumption');
         }
-        debugPrint('💕 Successfully consumed 1 heart for liking persona: $personaId');
       }
 
       // 재매칭 시 leftChat 플래그 리셋
@@ -592,7 +595,7 @@ class PersonaService extends BaseService {
   }
 
   /// Optimized persona super like with enhanced relationship score
-  Future<bool> superLikePersona(String personaId, {Persona? personaObject}) async {
+  Future<bool> superLikePersona(String personaId, {Persona? personaObject, PurchaseService? purchaseService}) async {
     if (_currentUserId == null) {
       _currentUserId = await DeviceIdService.getTemporaryUserId();
     }
@@ -617,13 +620,16 @@ class PersonaService extends BaseService {
 
       // 하트 3개 소모 (슈퍼라이크, 이미 매칭된 경우는 제외)
       if (!_matchedPersonas.any((p) => p.id == personaId)) {
-        final purchaseService = PurchaseService();
-        final heartConsumed = await purchaseService.useHearts(3);
-        if (!heartConsumed) {
-          debugPrint('❌ Failed to consume hearts for super liking persona: $personaId');
-          return false;
+        if (purchaseService != null) {
+          final heartConsumed = await purchaseService.useHearts(3);
+          if (!heartConsumed) {
+            debugPrint('❌ Failed to consume hearts for super liking persona: $personaId');
+            return false;
+          }
+          debugPrint('⭐ Successfully consumed 3 hearts for super liking persona: $personaId');
+        } else {
+          debugPrint('⚠️ PurchaseService not provided, skipping heart consumption');
         }
-        debugPrint('⭐ Successfully consumed 3 hearts for super liking persona: $personaId');
       }
 
       // 재매칭 시 leftChat 플래그 리셋
@@ -2433,7 +2439,7 @@ class PersonaService extends BaseService {
   }
 
   Future<bool> matchWithPersona(String personaId,
-      {bool isSuperLike = false, Persona? personaObject}) async {
+      {bool isSuperLike = false, Persona? personaObject, PurchaseService? purchaseService}) async {
     // 🔥 이미 매칭된 페르소나인지 먼저 확인
     if (_matchedPersonas.any((p) => p.id == personaId)) {
       debugPrint(
@@ -2456,10 +2462,10 @@ class PersonaService extends BaseService {
 
     if (isSuperLike) {
       debugPrint('⭐ Processing as SUPER LIKE: $personaId');
-      return await superLikePersona(personaId, personaObject: personaObject);
+      return await superLikePersona(personaId, personaObject: personaObject, purchaseService: purchaseService);
     } else {
       debugPrint('💕 Processing as regular LIKE: $personaId');
-      return await likePersona(personaId, personaObject: personaObject);
+      return await likePersona(personaId, personaObject: personaObject, purchaseService: purchaseService);
     }
   }
 

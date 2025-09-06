@@ -3,12 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io' show Platform;
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../../services/persona/persona_service.dart';
 import '../../services/chat/core/chat_service.dart';
 import '../../services/auth/auth_service.dart';
 import '../../services/ui/haptic_service.dart';
+import '../../services/language/language_detection_service.dart';
+import '../../services/locale_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
 import '../../l10n/app_localizations.dart';
@@ -101,6 +104,55 @@ class _TextMessageState extends State<_TextMessage> {
     // If alwaysShowTranslation is enabled and message has translation, show it by default
     if (widget.alwaysShowTranslation && widget.message.translatedContent != null) {
       _showTranslation = true;
+    }
+    
+    // Auto-show translation if foreign language tags are detected
+    if (!widget.message.isFromUser && widget.message.translatedContent != null) {
+      // Check if the translated content contains foreign language tags
+      final tagPattern = RegExp(r'\[(EN|JA|ZH|TH|VI|ID|TL|ES|FR|DE|IT|PT|RU|NL|SV|PL|TR|AR|HI|UR)\]');
+      if (tagPattern.hasMatch(widget.message.translatedContent!)) {
+        _showTranslation = true;
+      }
+    }
+    
+    // Check if message language differs from system language
+    if (!_showTranslation && !widget.message.isFromUser && 
+        widget.message.content.isNotEmpty && widget.message.translatedContent != null) {
+      _checkLanguageAndAutoShowTranslation();
+    }
+  }
+  
+  Future<void> _checkLanguageAndAutoShowTranslation() async {
+    try {
+      // Get system language
+      final String systemLanguage = _getSystemLanguage();
+      
+      // Detect message language
+      final messageLanguage = LanguageDetectionService().detectLanguage(widget.message.content);
+      
+      // Show translation if languages differ
+      if (systemLanguage != messageLanguage && widget.message.translatedContent != null) {
+        if (mounted) {
+          setState(() {
+            _showTranslation = true;
+          });
+        }
+      }
+    } catch (e) {
+      debugPrint('Error in language detection: $e');
+    }
+  }
+  
+  String _getSystemLanguage() {
+    // Try to get locale from context first
+    try {
+      final locale = Localizations.localeOf(context);
+      return locale.languageCode;
+    } catch (e) {
+      // Fallback to platform locale
+      final platformLocale = Platform.localeName;
+      // Extract language code (e.g., "en_US" -> "en")
+      return platformLocale.split('_')[0].split('-')[0].toLowerCase();
     }
   }
 

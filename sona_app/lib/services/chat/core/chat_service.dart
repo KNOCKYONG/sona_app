@@ -3835,36 +3835,8 @@ class ChatService extends BaseService {
         emotion = EmotionType.shy;
       }
 
-      // T(사고) vs F(감정) 추가 요소
-      if (mbti.contains('T')) {
-        // 사고형 - 논리적이고 직접적인 표현 추가
-        final tAdditions = [
-          ' 오늘 뭐 하고 있었어?',
-        ];
-        greetingContent = greetings[_random.nextInt(greetings.length)] +
-            tAdditions[_random.nextInt(tAdditions.length)];
-      } else {
-        // 감정형 - 따뜻하고 공감적인 표현 추가
-        final fAdditions = [
-          ' 오늘 기분은 어때?ㅎㅎ',
-          ' 편하게 얘기해~ㅎㅎ',
-          ' 대화할 수 있어서 정말 기뻐 ㅎㅎ',
-          ' 우리 금방 친해질 것 같아!ㅎㅎ',
-          ' 오늘 하루는 어땠어? 들려줘ㅎㅎ',
-          ' 뭐든 편하게 이야기해! 다 들어줄게ㅎㅎ',
-        ];
-        greetingContent = greetings[_random.nextInt(greetings.length)] +
-            fAdditions[_random.nextInt(fAdditions.length)];
-      }
-
-      // P(인식) vs J(판단) 추가 요소
-      if (mbti.endsWith('P')) {
-        // 인식형 - 자유롭고 유연한 느낌
-        if (_random.nextBool()) {
-          greetingContent =
-              greetingContent.replaceAll('?', '~?').replaceAll('!', '~!');
-        }
-      }
+      // 기본 인사말만 사용 - 추가 문구는 OpenAI API가 생성하도록
+      greetingContent = greetings[_random.nextInt(greetings.length)];
 
       // 특별한 MBTI 조합별 추가 인사
       final specialGreetings = _random.nextInt(10); // 30% 확률로 특별 인사

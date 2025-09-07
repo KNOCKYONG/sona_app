@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "Cấu hình cách hiển thị bản dịch trong trò chuyện",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "Luôn hiển thị bản dịch",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "Tự động hiển thị bản dịch cho tất cả tin nhắn",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "Du lịch",
   "@travel": {
     "description": "Localized string for travel"

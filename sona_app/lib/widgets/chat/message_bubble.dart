@@ -10,7 +10,6 @@ import '../../services/persona/persona_service.dart';
 import '../../services/chat/core/chat_service.dart';
 import '../../services/auth/auth_service.dart';
 import '../../services/ui/haptic_service.dart';
-import '../../services/language/language_detection_service.dart';
 import '../../services/locale_service.dart';
 import '../../theme/app_theme.dart';
 import '../persona/persona_profile_viewer.dart';
@@ -101,9 +100,20 @@ class _TextMessageState extends State<_TextMessage> {
   @override
   void initState() {
     super.initState();
+    
+    // Debug: Log message translation info
+    if (!widget.message.isFromUser) {
+      debugPrint('🎈 MessageBubble init:');
+      debugPrint('  - Content: "${widget.message.content.substring(0, widget.message.content.length > 50 ? 50 : widget.message.content.length)}..."');
+      debugPrint('  - Has translatedContent: ${widget.message.translatedContent != null}');
+      debugPrint('  - translatedContent: "${widget.message.translatedContent ?? 'null'}"');
+      debugPrint('  - alwaysShowTranslation: ${widget.alwaysShowTranslation}');
+    }
+    
     // If alwaysShowTranslation is enabled and message has translation, show it by default
     if (widget.alwaysShowTranslation && widget.message.translatedContent != null) {
       _showTranslation = true;
+      debugPrint('  ✅ Showing translation due to alwaysShowTranslation');
     }
     
     // Auto-show translation if foreign language tags are detected
@@ -112,6 +122,7 @@ class _TextMessageState extends State<_TextMessage> {
       final tagPattern = RegExp(r'\[(EN|JA|ZH|TH|VI|ID|TL|ES|FR|DE|IT|PT|RU|NL|SV|PL|TR|AR|HI|UR)\]');
       if (tagPattern.hasMatch(widget.message.translatedContent!)) {
         _showTranslation = true;
+        debugPrint('  ✅ Showing translation due to language tags detected');
       }
     }
     
@@ -127,11 +138,8 @@ class _TextMessageState extends State<_TextMessage> {
       // Get system language
       final String systemLanguage = _getSystemLanguage();
       
-      // Detect message language
-      final messageLanguage = LanguageDetectionService().detectLanguage(widget.message.content);
-      
-      // Show translation if languages differ
-      if (systemLanguage != messageLanguage && widget.message.translatedContent != null) {
+      // Show translation if available
+      if (widget.message.translatedContent != null) {
         if (mounted) {
           setState(() {
             _showTranslation = true;

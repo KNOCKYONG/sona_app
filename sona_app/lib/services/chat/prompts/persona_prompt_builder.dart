@@ -15,6 +15,7 @@ class PersonaPromptBuilder {
     String? contextMemory,
     bool isCasualSpeech = false,
     int? userAge,
+    String? languageCode,
   }) {
     // 통합 프롬프트 서비스로 리다이렉트 - 중복 제거
     return UnifiedPromptService.buildPrompt(
@@ -25,7 +26,7 @@ class PersonaPromptBuilder {
       userAge: userAge,
       isCasualSpeech: isCasualSpeech,
       contextMemory: contextMemory,
-      languageCode: 'ko', // Default to Korean for backward compatibility
+      languageCode: languageCode ?? 'ko', // Use provided language or default to Korean
     );
   }
   

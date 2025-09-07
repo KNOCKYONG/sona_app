@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "チャットで翻訳が表示される方法を設定します",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "常に翻訳を表示",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "すべてのメッセージに対して自動的に翻訳を表示します",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "旅行",
   "@travel": {
     "description": "Localized string for travel"

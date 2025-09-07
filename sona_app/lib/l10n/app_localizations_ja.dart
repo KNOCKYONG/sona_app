@@ -2135,6 +2135,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get translationSettings => '翻訳設定';
 
   @override
+  String get translationSettingsDescription => 'チャットで翻訳が表示される方法を設定します';
+
+  @override
+  String get alwaysShowTranslation => '常に翻訳を表示';
+
+  @override
+  String get alwaysShowTranslationDescription => 'すべてのメッセージに対して自動的に翻訳を表示します';
+
+  @override
   String get travel => '旅行';
 
   @override

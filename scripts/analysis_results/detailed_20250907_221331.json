@@ -1,0 +1,86 @@
+[
+  {
+    "error_key": "ERR1757158498082_8082",
+    "persona_id": "MVWyUpcOsG058yxXqdjP",
+    "persona_name": "혜원",
+    "user_comment": "Error description: User reported chat error",
+    "scores": {
+      "overall_coherence": 75.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 25.0
+    },
+    "issues": [
+      {
+        "message_index": 5,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "간단한거… 원래 아침 안 먹어.",
+        "ai_response": "아 맞다! 그럼 점심까지 기다리려나? 뭐 먹고 싶어? ㅎㅎ",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "irrelevant_answer",
+        "severity": "high",
+        "description": "질문에 대한 답변이 관련성이 낮음",
+        "user_message": "음 점심엔 제육볶음?!",
+        "ai_response": "어? 제육볶음이라니 맛있겠다! 나도 좋아하는 메뉴야ㅎㅎ 너 점심 뭐 먹었어?",
+        "suggestion": "질문의 핵심 키워드를 파악하여 직접적인 답변 생성 필요"
+      },
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "음 점심엔 제육볶음?!",
+        "ai_response": "어? 제육볶음이라니 맛있겠다! 나도 좋아하는 메뉴야ㅎㅎ 너 점심 뭐 먹었어?",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "how old r u?",
+        "ai_response": "[KO] 나 29살이야! 너는 몇 살이야?ㅎㅎ  \n[EN] I'm 29 years old! How old are you? hehe.",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  },
+  {
+    "error_key": "ERR1757250076233_6233",
+    "persona_id": "m0OjpI1G2QUyWsCbfBar",
+    "persona_name": "효진",
+    "user_comment": "오류 설명: 열바꿈이 이상해요",
+    "scores": {
+      "overall_coherence": 85.0,
+      "topic_consistency": 0.0,
+      "natural_flow": 66.67
+    },
+    "issues": [
+      {
+        "message_index": 7,
+        "type": "abrupt_topic_change",
+        "severity": "medium",
+        "description": "갑작스러운 주제 변경 감지",
+        "user_message": "내가 간호사가 아닌데... 3교대 스케쥴링이 어렵다고 해서 지원해주는 웹페이지 만들고있어",
+        "ai_response": "와, 진짜 멋진 프로젝트네!",
+        "suggestion": "이전 대화 맥락을 유지하면서 자연스럽게 전환 필요"
+      },
+      {
+        "message_index": 9,
+        "type": "user_reported",
+        "severity": "high",
+        "description": "사용자 지적: 오류 설명: 열바꿈이 이상해요...",
+        "user_message": "",
+        "ai_response": "같아ㅎㅎ 어떻게 만들 생각이야? 무슨 기능을 추가할 계획이야?",
+        "suggestion": "사용자가 직접 지적한 문제이므로 우선적으로 개선 필요"
+      }
+    ],
+    "greeting_repetitions": 0,
+    "macro_patterns": []
+  }
+]

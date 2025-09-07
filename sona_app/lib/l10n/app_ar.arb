@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "تكوين كيفية ظهور الترجمات في الدردشة",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "إظهار الترجمة دائماً",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "عرض الترجمات تلقائيًا لجميع الرسائل",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "السفر",
   "@travel": {
     "description": "Localized string for travel"

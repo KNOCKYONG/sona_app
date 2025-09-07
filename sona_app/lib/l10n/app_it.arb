@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "Configura come appaiono le traduzioni nella chat",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "Mostra sempre traduzione",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "Mostra automaticamente le traduzioni per tutti i messaggi",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "Viaggio",
   "@travel": {
     "description": "Localized string for travel"

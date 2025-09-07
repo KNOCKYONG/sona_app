@@ -2142,6 +2142,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get translationSettings => '번역 설정';
 
   @override
+  String get translationSettingsDescription => '채팅에서 번역이 표시되는 방식을 설정합니다';
+
+  @override
+  String get alwaysShowTranslation => '항상 번역 표시';
+
+  @override
+  String get alwaysShowTranslationDescription => '모든 메시지에 대해 자동으로 번역을 표시합니다';
+
+  @override
   String get travel => '여행';
 
   @override

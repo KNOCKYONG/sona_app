@@ -2182,6 +2182,17 @@ class AppLocalizationsVi extends AppLocalizations {
   String get translationSettings => 'Cài đặt dịch';
 
   @override
+  String get translationSettingsDescription =>
+      'Cấu hình cách hiển thị bản dịch trong trò chuyện';
+
+  @override
+  String get alwaysShowTranslation => 'Luôn hiển thị bản dịch';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Tự động hiển thị bản dịch cho tất cả tin nhắn';
+
+  @override
   String get travel => 'Du lịch';
 
   @override

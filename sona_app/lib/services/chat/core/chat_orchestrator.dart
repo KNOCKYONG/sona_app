@@ -55,7 +55,6 @@ import '../quality/emotional_nuance_system.dart';
 import '../quality/praise_encouragement_system.dart';
 import '../quality/fun_element_system.dart';
 import '../quality/intimacy_building_system.dart';
-import '../../language/language_detection_service.dart';
 
 /// 메시지 타입 enum
 enum ChatMessageType {
@@ -278,22 +277,19 @@ class ChatOrchestrator {
       debugPrint('🌍 OpenAI will auto-detect language from: "$userMessage"');
       debugPrint('🌐 System info - System: $systemLanguage, App: $appLanguage');
       
-      // 클라이언트 언어 감지는 비활성화 (OpenAI가 담당)
-      // targetLanguage는 null로 유지하여 OpenAI가 자유롭게 언어를 감지하도록 함
-      if (false) { // 비활성화됨
-        final languageService = LanguageDetectionService();
-        final detectedLang = languageService.detectLanguageWithPriority(
-          userMessage,
-          systemLanguage: systemLanguage,
-          appLanguage: appLanguage,
-        );
-        
-        if (detectedLang != 'ko') {
-          userLanguage = detectedLang;
-          debugPrint(
-              '🌍 Client detected: $detectedLang (${_getLanguageName(detectedLang)})');
-        }
-      }
+      // 번역 생성 여부 결정 로직 개선
+      // userLanguage: 사용자가 앱 설정에서 선택한 언어 (번역 대상 언어)
+      // OpenAI가 직접 언어를 감지하여 처리
+      
+      debugPrint('🌍 User preferred language: $userLanguage');
+      
+      // 번역이 필요한지 확인 - 항상 언어 태그 생성을 위해 true로 설정
+      // OpenAI가 입력 언어를 자동 감지하여 외국어 입력시 번역 생성
+      final bool needsTranslation = true; // 항상 언어 감지 활성화
+      
+      debugPrint('🌍 Language detection enabled for automatic translation');
+      
+      // OpenAI가 직접 언어를 감지하므로 별도 변수 불필요
 
       // 1단계: 완전한 페르소나 정보 로드
       final personaData = await _relationshipCache.getCompletePersona(
@@ -324,15 +320,7 @@ class ChatOrchestrator {
 
       // 2.5단계: 다국어 입력 처리
       // ⚠️ 모든 언어 입력은 OpenAI API로 처리 - 하드코딩 절대 금지
-      if (userLanguage != null && userLanguage == 'en') {
-        // 영어 입력도 API로 처리
-        debugPrint('🌍 English input detected, will be processed by API: $userMessage');
-      } else if (userLanguage != null && userLanguage != 'ko') {
-        // ⚠️ 외국어 입력도 OpenAI API로 처리
-        // 하드코딩된 응답 사용 금지
-        debugPrint('🌍 Foreign language detected ($userLanguage), will be processed by API: $userMessage');
-        // API로 처리하도록 계속 진행 (return하지 않음)
-      }
+      debugPrint('🌍 Message will be processed by OpenAI API with automatic language detection: $userMessage');
       
       // 3단계: 간단한 반응 체크 -> 프롬프트 힌트 생성으로 변경
       // 하드코딩 응답 제거: 모든 응답은 OpenAI API를 통해 생성
@@ -396,6 +384,7 @@ class ChatOrchestrator {
         contextMemory: contextMemory,
         isCasualSpeech: true, // 항상 반말 모드
         userAge: userAge,
+        languageCode: systemLanguage ?? appLanguage ?? 'ko', // Use system language first, then app language
       );
 
       // 말투 적응 가이드를 프롬프트에 추가
@@ -720,15 +709,19 @@ class ChatOrchestrator {
       
       // 다국어 입력 시 특별 컨텍스트 힌트 추가  
       String? enhancedContextHint = contextHint;
-      if (userLanguage != null && userLanguage != 'ko') {
-        // 언어별 이름 가져오기
-        final languageName = _getLanguageFullName(userLanguage);
-        final langCodeUpper = userLanguage.toUpperCase();
+      if (needsTranslation) {
+        // 자동 언어 감지 모드 활성화 - OpenAI가 입력 언어를 자동으로 감지
+        String languageHint = '''
+## 🌍 AUTOMATIC LANGUAGE DETECTION ENABLED:
+- OpenAI will automatically detect the input language
+- For non-Korean input: Generate [KO] + [detected language] tags
+- For Korean input: No tags needed (respond in Korean only)
+''';
         
-        String languageHint = '';
-        
-        // 영어는 기존 상세 힌트 사용
-        if (userLanguage == 'en') {
+        // 영어 특별 처리 (약어 등)
+        if (userMessage.toLowerCase().contains('r u') || 
+            userMessage.toLowerCase().contains('how r') ||
+            userMessage.toLowerCase().contains('what r')) {
           languageHint = '''
 ## 🌍 CRITICAL: English Input - RESPOND IN KOREAN WITH TRANSLATION:
 - User's message in English: "$userMessage"
@@ -748,22 +741,6 @@ class ChatOrchestrator {
 - ALWAYS understand and respond appropriately in Korean
 - NEVER say "무슨 말씀이신지 잘 모르겠어요" for English
 - NEVER say "영어로 말하니까 신기하네" repeatedly
-''';
-        } else {
-          // 다른 모든 언어에 대한 범용 힌트
-          languageHint = '''
-## 🌍 CRITICAL: $languageName Input - RESPOND IN KOREAN WITH TRANSLATION:
-- User's message in $languageName: "$userMessage"
-- YOU MUST RESPOND IN KOREAN
-- YOU MUST START YOUR RESPONSE WITH [KO] TAG
-- YOU MUST INCLUDE [$langCodeUpper] TAG WITH $languageName TRANSLATION
-- Example format:
-  [KO] 한국어 응답
-  [$langCodeUpper] $languageName translation
-  
-- ALWAYS understand and respond appropriately in Korean
-- Provide natural, conversational response
-- Match the emotional tone of the user's message
 ''';
         }
         
@@ -803,11 +780,20 @@ class ChatOrchestrator {
           contextHint: finalContextHint,
           userNickname: userNickname,
           userAge: userAge,
-          targetLanguage: userLanguage,
+          targetLanguage: 'auto',  // OpenAI가 자동으로 언어 감지하여 번역
+          systemLanguage: systemLanguage,  // 시스템 언어 전달
           storeResponse: true,  // 서버에 응답 저장
         );
         
         rawResponse = responseResult.content;
+        
+        // 🔍 디버그: AI 응답 로깅
+        debugPrint('🤖 AI Raw Response: $rawResponse');
+        debugPrint('🌍 Target Language: auto');
+        debugPrint('🌍 Has [KO] tag: ${rawResponse.contains('[KO]')}');
+        debugPrint('🌍 Has [VI] tag: ${rawResponse.contains('[VI]')}');
+        debugPrint('🌍 Has [EN] tag: ${rawResponse.contains('[EN]')}');
+        debugPrint('🌍 Has any language tag: ${rawResponse.contains('[') && rawResponse.contains(']')}');
         
         // 대화 ID 업데이트 (서버에서 관리)
         final newConversationId = responseResult.conversationId;
@@ -848,7 +834,7 @@ class ChatOrchestrator {
           userAge: userAge,
           isCasualSpeech: true,
           contextHint: finalContextHint,
-          targetLanguage: userLanguage,
+          targetLanguage: 'auto',  // OpenAI가 자동으로 언어 감지하여 번역
           systemLanguage: systemLanguage,  // 시스템 언어 전달
         );
       }
@@ -859,11 +845,11 @@ class ChatOrchestrator {
       List<String>? translatedContents; // 각 메시지별 번역 저장
       String originalKorean = ''; // 후처리 전 한국어 저장
       
-      // 영어 응답인 경우 파싱
-      if (userLanguage != null && userLanguage != 'ko') {
-        debugPrint('🌍 Processing multilingual response for language: $userLanguage');
+      // 번역이 포함된 응답인 경우 파싱 (항상 시도)
+      if (rawResponse.contains('[KO]') || rawResponse.contains('[EN]') || rawResponse.contains('[VI]')) {
+        debugPrint('🌍 Processing multilingual response with language tags');
         final multilingualParsed =
-            _parseMultilingualResponse(rawResponse, userLanguage);
+            _parseMultilingualResponse(rawResponse, 'auto');
         
         // 한국어 응답이 파싱되면 사용, 아니면 원본 사용
         if (multilingualParsed['korean'] != null) {
@@ -965,6 +951,8 @@ class ChatOrchestrator {
         chatHistory: chatHistory,
         userId: userId,
         userNickname: userNickname,
+        userLanguage: userLanguage,
+        systemLanguage: systemLanguage,
         contextHint: finalContextHint,
       );
 
@@ -974,6 +962,10 @@ class ChatOrchestrator {
 
       // 7.5단계: 각 메시지별 번역 생성 및 의문문 처리 (개선된 매핑 기반)
       if (translatedContent != null && responseContents.length > 1) {
+        debugPrint('📦 Multiple messages (${responseContents.length}) with translation');
+        debugPrint('  Korean messages: ${responseContents.map((c) => '"$c"').join(', ')}');
+        debugPrint('  Translation: "$translatedContent"');
+        
         // 매핑 기반으로 번역 분할 - 한글과 번역이 정확히 대응되도록
         translatedContents = _splitTranslationWithMapping(
           koreanMessages: responseContents,
@@ -981,11 +973,16 @@ class ChatOrchestrator {
           targetLanguage: userLanguage ?? 'en',
         );
         
+        debugPrint('  Split translations: ${translatedContents?.map((c) => '"$c"').join(', ') ?? 'null'}');
+        
         // 구두점 처리 제거 - 번역 그대로 사용
         // 번역 API가 이미 적절한 구두점을 포함하므로 강제 추가 불필요
       } else if (translatedContent != null) {
+        debugPrint('📦 Single message with translation');
         // 단일 메시지 그대로 사용
         translatedContents = [translatedContent];
+      } else {
+        debugPrint('📦 No translation available');
       }
 
       // 8단계: 감정 분석 및 점수 계산 (첫 번째 메시지 기준)
@@ -1144,7 +1141,7 @@ class ChatOrchestrator {
           userAge: userAge,
           isCasualSpeech: true,
           contextHint: regenerationHints.join('\n'),
-          targetLanguage: userLanguage,
+          targetLanguage: 'auto',  // OpenAI가 자동으로 언어 감지하여 번역
         );
         
         if (regeneratedResponse.isNotEmpty) {
@@ -1581,10 +1578,27 @@ class ChatOrchestrator {
     debugPrint('📝 Full API Response: $response');
     debugPrint('📊 Response length: ${response.length} characters');
 
-    // [KO]와 [EN] 태그가 있는지 확인
+    // [KO]와 다른 언어 태그가 있는지 확인
     final hasKoTag = response.contains('[KO]');
-    final langTag = targetLanguage.toUpperCase();
-    final hasLangTag = response.contains('[$langTag]');
+    
+    // 자동 감지 모드일 때는 모든 언어 태그 확인
+    String langTag = '';
+    bool hasLangTag = false;
+    
+    if (targetLanguage == 'auto') {
+      // 가능한 모든 언어 태그 확인
+      final possibleTags = ['EN', 'JA', 'ZH', 'ES', 'FR', 'DE', 'IT', 'PT', 'RU', 'AR', 'TH', 'ID', 'MS', 'VI', 'NL', 'SV', 'PL', 'TR', 'HI', 'UR', 'TL'];
+      for (final tag in possibleTags) {
+        if (response.contains('[$tag]')) {
+          langTag = tag;
+          hasLangTag = true;
+          break;
+        }
+      }
+    } else {
+      langTag = targetLanguage.toUpperCase();
+      hasLangTag = response.contains('[$langTag]');
+    }
     
     debugPrint('🏷️ Has [KO] tag: $hasKoTag');
     debugPrint('🏷️ Has [$langTag] tag: $hasLangTag');
@@ -3027,6 +3041,12 @@ class ChatOrchestrator {
     debugPrint('🌍 Target language: $targetLanguage');
     debugPrint('🌍 Translation content: $translatedContent');
     
+    // 번역이 충분하지 않은 경우 처리
+    if (translatedContent.isEmpty) {
+      debugPrint('⚠️ Empty translation content');
+      return List.filled(koreanMessages.length, '');
+    }
+    
     // 1. 각 한국어 메시지의 문장 개수 계산
     List<int> koreanSentenceCounts = [];
     List<List<String>> koreanMessageSentences = [];
@@ -3094,6 +3114,18 @@ class ChatOrchestrator {
       debugPrint('  Korean sentences: $totalKoreanSentences');
       debugPrint('  Translated sentences: ${translatedSentences.length}');
       debugPrint('  Difference: ${(totalKoreanSentences - translatedSentences.length).abs()}');
+      
+      // 번역이 한국어보다 훨씬 짧은 경우 (예: 3문장 -> 1문장)
+      // 첫 번째 메시지에만 전체 번역을 할당
+      if (translatedSentences.length == 1 && koreanMessages.length > 1) {
+        debugPrint('🎯 Special case: Single translation for multiple Korean messages');
+        debugPrint('  Assigning entire translation to first message only');
+        result.add(translatedContent);
+        for (int i = 1; i < koreanMessages.length; i++) {
+          result.add(''); // 나머지 메시지는 빈 번역
+        }
+        return result;
+      }
     }
     
     // 6. 문장 개수 비율로 분배
@@ -3305,6 +3337,8 @@ class ChatOrchestrator {
     required List<Message> chatHistory,
     required String userId,
     String? userNickname,
+    String? userLanguage,
+    String? systemLanguage,
     String? contextHint,
   }) async {
     debugPrint('🔍 Starting comprehensive response validation pipeline');
@@ -3350,6 +3384,9 @@ class ChatOrchestrator {
         chatHistory: chatHistory,
         userId: userId,
         userNickname: userNickname,
+        userAge: null,
+        userLanguage: userLanguage,
+        systemLanguage: systemLanguage,
         contextHint: contextHint,
         maxRetries: 1,
       );
@@ -3437,6 +3474,7 @@ class ChatOrchestrator {
     String? userNickname,
     int? userAge,
     String? userLanguage,
+    String? systemLanguage,
     String? contextHint,
     int maxRetries = 2,
   }) async {
@@ -3474,7 +3512,8 @@ ${contextHint ?? ''}''';
           recentMessages: chatHistory,
           userNickname: userNickname,
           contextHint: enhancedHint,
-          targetLanguage: userLanguage,
+          targetLanguage: 'auto',  // OpenAI가 자동으로 언어 감지하여 번역
+          systemLanguage: systemLanguage,  // 시스템 언어 추가
         );
         
         // 재생성된 응답도 검증 (재귀 호출, 횟수 감소)
@@ -3487,6 +3526,7 @@ ${contextHint ?? ''}''';
           userNickname: userNickname,
           userAge: userAge,
           userLanguage: userLanguage,
+          systemLanguage: systemLanguage,
           contextHint: contextHint,
           maxRetries: maxRetries - 1,
         );
@@ -3947,9 +3987,12 @@ ${contextHint ?? ''}''';
             topic.toLowerCase().contains(recentTopic.toLowerCase()) ||
             recentTopic.toLowerCase().contains(topic.toLowerCase()))).toList();
         
-        // 가중치 적용: 완전 일치 100%, 부분 일치 50%
+        // 의미적 연관성 체크 (관련 주제도 고려)
+        final semanticMatches = _findSemanticMatches(currentTopics.toSet(), recentTopics);
+        
+        // 가중치 적용: 완전 일치 100%, 부분 일치 50%, 의미 일치 30%
         if (currentTopics.isNotEmpty) {
-          relevanceScore = ((exactMatches.length * 100) + (partialMatches.length * 50)) / 
+          relevanceScore = ((exactMatches.length * 100) + (partialMatches.length * 50) + (semanticMatches * 30)) / 
                           (currentTopics.length * 100) * 100;
         } else {
           // 주제가 없는 짧은 메시지는 기본 점수
@@ -6892,6 +6935,115 @@ extension ChatOrchestratorQualityExtension on ChatOrchestrator {
   }
 
   /// 키워드 추출 (TF-IDF 개념 적용)
+  /// 의미적으로 연관된 주제 찾기
+  int _findSemanticMatches(Set<String> currentTopics, List<String> recentTopics) {
+    int matches = 0;
+    
+    // 의미적 연관 관계 정의 (21개 언어 지원)
+    // 지원 언어: ko, en, ja, zh, th, vi, id, tl, es, fr, de, ru, pt, it, nl, sv, pl, tr, ar, hi, ur
+    final semanticRelations = {
+      // 여행 관련 (Travel)
+      '여행': ['해외', '비행기', '호텔', '관광', '여행지', '휴가', 'travel', 'trip', 'vacation', 'flight', 'hotel', 
+               '旅行', '旅游', '飞机', '酒店', 'การเดินทาง', 'du lịch', 'perjalanan', 'paglalakbay', 'viaje', 
+               'voyage', 'Reise', 'путешествие', 'viagem', 'viaggio', 'reis', 'resa', 'podróż', 'seyahat', 
+               'سفر', 'यात्रा', 'سفر'],
+      'travel': ['trip', 'vacation', 'flight', 'hotel', 'tour', 'abroad', '여행', '해외', '비행기', '호텔', 
+                 '旅行', '観光', 'ท่องเที่ยว', 'du lịch', 'wisata', 'bakasyon', 'turismo', 'tourisme', 
+                 'Tourismus', 'туризм', 'turismo', 'turismo', 'toerisme', 'turism', 'turystyka', 'turizm',
+                 'سياحة', 'पर्यटन', 'سیاحت'],
+      
+      // 음식 관련 (Food)
+      '음식': ['맛집', '요리', '레시피', '배달', '카페', '디저트', 'food', 'restaurant', 'cafe', 'cooking', 
+              '料理', '食事', '美食', 'อาหาร', 'món ăn', 'makanan', 'pagkain', 'comida', 'nourriture', 
+              'Essen', 'еда', 'comida', 'cibo', 'voedsel', 'mat', 'jedzenie', 'yemek', 'طعام', 'भोजन', 'کھانا'],
+      'food': ['restaurant', 'cooking', 'recipe', 'delivery', 'cafe', 'dessert', '음식', '맛집', '요리', 
+               '料理', '美食', 'ร้านอาหาร', 'nhà hàng', 'restoran', 'restawran', 'restaurante', 'restaurant', 
+               'Restaurant', 'ресторан', 'restaurante', 'ristorante', 'restaurant', 'restaurang', 'restauracja', 
+               'restoran', 'مطعم', 'रेस्तरां', 'ریستوران'],
+      
+      // 운동 관련 (Exercise)
+      '운동': ['헬스', '다이어트', '건강', '요가', '러닝', '스포츠', 'exercise', 'workout', 'gym', 'sports', 
+              '運動', '健康', 'การออกกำลังกาย', 'tập thể dục', 'olahraga', 'ehersisyo', 'ejercicio', 
+              'exercice', 'Übung', 'упражнение', 'exercício', 'esercizio', 'oefening', 'träning', 
+              'ćwiczenie', 'egzersiz', 'تمرين', 'व्यायाम', 'ورزش'],
+      'exercise': ['workout', 'gym', 'health', 'yoga', 'running', 'sports', '운동', '헬스', '다이어트', 
+                   '運動', '锻炼', 'กีฬา', 'thể thao', 'olahraga', 'palakasan', 'deporte', 'sport', 
+                   'Sport', 'спорт', 'esporte', 'sport', 'sport', 'sport', 'sport', 'spor', 
+                   'رياضة', 'खेल', 'کھیل'],
+      
+      // 일/직장 관련 (Work)
+      '일': ['회사', '직장', '업무', '야근', '프로젝트', '미팅', 'work', 'job', 'office', 'meeting', 
+            '仕事', '工作', 'งาน', 'công việc', 'pekerjaan', 'trabaho', 'trabajo', 'travail', 
+            'Arbeit', 'работа', 'trabalho', 'lavoro', 'werk', 'arbete', 'praca', 'iş', 
+            'عمل', 'काम', 'کام'],
+      'work': ['job', 'office', 'business', 'meeting', 'project', 'company', '일', '회사', '직장', 
+               '仕事', '工作', 'สำนักงาน', 'văn phòng', 'kantor', 'opisina', 'oficina', 'bureau', 
+               'Büro', 'офис', 'escritório', 'ufficio', 'kantoor', 'kontor', 'biuro', 'ofis', 
+               'مكتب', 'कार्यालय', 'دفتر'],
+      
+      // 공부 관련 (Study)
+      '공부': ['시험', '학교', '과제', '수업', '학원', '대학', 'study', 'school', 'exam', 'homework', 
+              '勉強', '学習', 'การศึกษา', 'học tập', 'belajar', 'pag-aaral', 'estudio', 'étude', 
+              'Studium', 'учеба', 'estudo', 'studio', 'studie', 'studier', 'nauka', 'çalışma', 
+              'دراسة', 'अध्ययन', 'تعلیم'],
+      'study': ['school', 'exam', 'homework', 'class', 'university', 'test', '공부', '시험', '학교', 
+                '勉強', '学习', 'โรงเรียน', 'trường học', 'sekolah', 'paaralan', 'escuela', 'école', 
+                'Schule', 'школа', 'escola', 'scuola', 'school', 'skola', 'szkoła', 'okul', 
+                'مدرسة', 'स्कूल', 'سکول'],
+      
+      // 엔터테인먼트 관련 (Entertainment)
+      '영화': ['드라마', '넷플릭스', '예능', 'TV', '유튜브', 'movie', 'drama', 'netflix', 'youtube', 
+              '映画', '电影', 'หนัง', 'phim', 'film', 'pelikula', 'película', 'film', 
+              'Film', 'фильм', 'filme', 'film', 'film', 'film', 'film', 'film', 
+              'فيلم', 'फिल्म', 'فلم'],
+      'movie': ['drama', 'netflix', 'TV', 'youtube', 'show', 'film', '영화', '드라마', '映画', 
+                'ドラマ', '电影', 'ละคร', 'phim truyền hình', 'drama', 'drama', 'drama', 'drame', 
+                'Drama', 'драма', 'drama', 'dramma', 'drama', 'drama', 'dramat', 'dram', 
+                'دراما', 'नाटक', 'ڈرامہ'],
+      
+      // 게임 관련 (Game)
+      '게임': ['롤', '배그', '피시방', '플스', '닌텐도', 'game', 'gaming', 'LOL', 'playstation', 
+              'ゲーム', '游戏', 'เกม', 'trò chơi', 'permainan', 'laro', 'juego', 'jeu', 
+              'Spiel', 'игра', 'jogo', 'gioco', 'spel', 'spel', 'gra', 'oyun', 
+              'لعبة', 'खेल', 'کھیل'],
+      'game': ['gaming', 'LOL', 'PUBG', 'playstation', 'nintendo', 'PC', '게임', '롤', 'ゲーム', 
+               '游戏', 'วิดีโอเกม', 'trò chơi điện tử', 'video game', 'laro', 'videojuego', 'jeu vidéo', 
+               'Videospiel', 'видеоигра', 'videogame', 'videogioco', 'videogame', 'videospel', 'gra wideo', 
+               'video oyunu', 'لعبة فيديو', 'वीडियो गेम', 'ویڈیو گیم'],
+      
+      // 쇼핑 관련 (Shopping)
+      '쇼핑': ['옷', '패션', '화장품', '신발', '가방', '액세서리', 'shopping', 'fashion', 'clothes', 'makeup', 
+              '買い物', '购物', 'ช้อปปิ้ง', 'mua sắm', 'belanja', 'pamimili', 'compras', 'shopping', 
+              'Einkaufen', 'покупки', 'compras', 'shopping', 'winkelen', 'shopping', 'zakupy', 'alışveriş', 
+              'تسوق', 'खरीदारी', 'خریداری'],
+      'shopping': ['fashion', 'clothes', 'makeup', 'shoes', 'bag', 'accessory', '쇼핑', '옷', '패션', 
+                   '買い物', '购物', 'แฟชั่น', 'thời trang', 'mode', 'moda', 'moda', 'mode', 
+                   'Mode', 'мода', 'moda', 'moda', 'mode', 'mode', 'moda', 'moda', 
+                   'موضة', 'फैशन', 'فیشن'],
+    };
+    
+    for (final current in currentTopics) {
+      for (final recent in recentTopics) {
+        // 같은 의미 그룹에 속하는지 체크 (대소문자 구분 없이)
+        final currentLower = current.toLowerCase();
+        final recentLower = recent.toLowerCase();
+        
+        for (final entry in semanticRelations.entries) {
+          final keyLower = entry.key.toLowerCase();
+          final valueLower = entry.value.map((v) => v.toLowerCase()).toList();
+          
+          if ((keyLower == currentLower || valueLower.contains(currentLower)) &&
+              (keyLower == recentLower || valueLower.contains(recentLower))) {
+            matches++;
+            break;
+          }
+        }
+      }
+    }
+    
+    return matches;
+  }
+  
   Set<String> _extractKeywords(String text) {
     // 확장된 불용어 사전
     final stopWords = {

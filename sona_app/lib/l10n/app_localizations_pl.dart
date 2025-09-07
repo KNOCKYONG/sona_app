@@ -2242,6 +2242,17 @@ class AppLocalizationsPl extends AppLocalizations {
   String get translationSettings => 'Ustawienia tłumaczenia';
 
   @override
+  String get translationSettingsDescription =>
+      'Skonfiguruj sposób wyświetlania tłumaczeń w czacie';
+
+  @override
+  String get alwaysShowTranslation => 'Zawsze pokazuj tłumaczenie';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Automatycznie pokazuj tłumaczenia dla wszystkich wiadomości';
+
+  @override
   String get travel => 'Podróż';
 
   @override

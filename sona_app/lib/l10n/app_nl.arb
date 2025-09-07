@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "Configureer hoe vertalingen in de chat verschijnen",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "Altijd vertaling tonen",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "Automatisch vertalingen voor alle berichten weergeven",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "Reizen",
   "@travel": {
     "description": "Localized string for travel"

@@ -2229,6 +2229,17 @@ class AppLocalizationsHi extends AppLocalizations {
   String get translationSettings => 'अनुवाद सेटिंग्स';
 
   @override
+  String get translationSettingsDescription =>
+      'चैट में अनुवाद कैसे दिखाई दें, इसे कॉन्फ़िगर करें';
+
+  @override
+  String get alwaysShowTranslation => 'हमेशा अनुवाद दिखाएं';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'सभी संदेशों के लिए स्वचालित रूप से अनुवाद दिखाएं';
+
+  @override
   String get travel => 'यात्रा';
 
   @override

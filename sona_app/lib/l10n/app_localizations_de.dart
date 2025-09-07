@@ -2260,6 +2260,17 @@ class AppLocalizationsDe extends AppLocalizations {
   String get translationSettings => 'Übersetzungseinstellungen';
 
   @override
+  String get translationSettingsDescription =>
+      'Konfigurieren Sie, wie Übersetzungen im Chat angezeigt werden';
+
+  @override
+  String get alwaysShowTranslation => 'Übersetzung immer anzeigen';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Übersetzungen für alle Nachrichten automatisch anzeigen';
+
+  @override
   String get travel => 'Reisen';
 
   @override

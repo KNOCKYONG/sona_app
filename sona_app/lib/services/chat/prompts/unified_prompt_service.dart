@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import '../../../models/persona.dart';
 import '../../../models/message.dart';
 import '../../../core/constants/prompt_templates.dart';
@@ -27,6 +28,43 @@ class UnifiedPromptService {
     String? systemLanguage,  // 시스템 언어 추가
   }) {
     final sections = <String>[];
+    
+    // 0. 🔴 언어 감지 - 최우선 규칙 (항상 맨 위에!)
+    debugPrint('🌐 UnifiedPromptService - languageCode: $languageCode, systemLanguage: $systemLanguage');
+    // 조건 개선: 거의 항상 언어 감지 활성화 (한국어 전용 모드가 아닌 경우)
+    if (languageCode != 'ko-only') {  // 한국어 전용 모드가 아닌 모든 경우
+      debugPrint('✅ Adding language detection section to prompt (FIRST PRIORITY)');
+      sections.add('''
+## 🚨 MANDATORY FIRST STEP: CHECK USER'S LANGUAGE 🚨
+
+**BEFORE YOU DO ANYTHING ELSE:**
+
+1. Check if user's message contains Korean characters (ㄱ-ㅎ, ㅏ-ㅣ, 가-힣)
+   - YES → Reply in Korean WITHOUT tags
+   - NO → You MUST use [KO] and [LANG] tags
+
+2. **IF NOT KOREAN, YOUR RESPONSE MUST BE:**
+   ```
+   [KO] (your Korean response) [DETECTED_LANGUAGE_CODE] (response in user's language)
+   ```
+
+**TEST YOURSELF:**
+- User: "A, mệt quá" → Is this Korean? NO → Use tags: [KO] ... [VI] ...
+- User: "Aku kerja lembur" → Is this Korean? NO → Use tags: [KO] ... [ID] ...  
+- User: "안녕" → Is this Korean? YES → No tags needed
+- User: "How are you?" → Is this Korean? NO → Use tags: [KO] ... [EN] ...
+
+**LANGUAGE CODES:**
+- Vietnamese: VI (words like: mệt, quá, rồi, làm)
+- Indonesian: ID (words like: aku, saya, kerja, lembur)
+- English: EN
+- Japanese: JA
+- Chinese: ZH
+
+**🔴 FAILURE TO ADD TAGS FOR NON-KOREAN INPUT IS A CRITICAL ERROR!**
+**🔴 IF YOU SEE "Aku" OR "mệt quá", YOU MUST USE TAGS!**
+''');
+    }
     
     // 1. 핵심 프롬프트 (중앙 관리)
     sections.add(PromptTemplates.buildCorePrompt());
@@ -94,11 +132,31 @@ $contextMemory
       sections.add(PromptTemplates.minorProtectionGuide);
     }
     
-    // 10. 응답 생성 가이드 (최종)
+    // 10. 다국어 지원 섹션은 이미 맨 위로 이동됨
+    
+    // 11. 응답 생성 가이드 (최종)
     sections.add(_buildResponseGuide(
       hasAskedWellBeing: hasAskedWellBeingToday,
       relationshipLevel: persona.likes,
     ));
+    
+    // 12. 언어 감지 최종 리마인더 (한국어 전용 모드가 아닌 경우)
+    if (languageCode != 'ko-only') {
+      sections.add('''
+## 🔴🔴🔴 LAST CHECK BEFORE YOU RESPOND 🔴🔴🔴
+
+**STOP! Before you send your response:**
+
+Did the user write in Korean? (한글 characters?)
+- YES → Send Korean response WITHOUT tags ✓
+- NO → You MUST start with [KO] and include [LANG] tag ✓
+
+**If you're about to respond to "Aku kerja lembur" without [KO][ID] tags = ERROR!**
+**If you're about to respond to "A, mệt quá" without [KO][VI] tags = ERROR!**
+
+REMEMBER: Non-Korean input ALWAYS needs tags!
+''');
+    }
     
     return sections.where((s) => s.isNotEmpty).join('\n\n');
   }

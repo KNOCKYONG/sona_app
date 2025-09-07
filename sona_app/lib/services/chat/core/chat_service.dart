@@ -984,7 +984,7 @@ class ChatService extends BaseService {
         chatHistory: chatHistory,
         userNickname: userNickname,
         userAge: userAge,
-        userLanguage: userLanguage,
+        userLanguage: userLanguage,  // Pass user's preferred language for translation generation
         conversationId: conversationId,
         systemLanguage: systemLanguage,
         appLanguage: appLanguage,
@@ -1047,6 +1047,11 @@ class ChatService extends BaseService {
       }
       
       // Send response messages using new contents array
+      debugPrint('🔍 ChatService: Sending messages with translation info:');
+      debugPrint('  - translatedContent: ${response.translatedContent}');
+      debugPrint('  - translatedContents: ${response.translatedContents}');
+      debugPrint('  - targetLanguage: ${response.targetLanguage}');
+      
       await _sendMultipleMessages(
         contents: allContents,
         persona: persona,
@@ -1252,7 +1257,9 @@ class ChatService extends BaseService {
 
   /// Cache management
   String _getCacheKey(String personaId, String message) {
-    return '${personaId}_${message.hashCode}';
+    // Include user language in cache key to prevent cross-language cache hits
+    final lang = getUserLanguage();
+    return '${personaId}_${lang}_${message.hashCode}';
   }
 
   _CachedResponse? _getFromCache(String key) {
@@ -1905,11 +1912,16 @@ class ChatService extends BaseService {
       totalDelay = 2.0 + _random.nextDouble(); // 2-3초
       debugPrint('💭 Reaction detected ("${userMessage.content}"), waiting ${totalDelay.toStringAsFixed(1)}s for follow-up');
     } else {
-      // 일반 메시지: 기존 로직
-      final baseDelay = _random.nextInt(7) / 10.0 + 0.3; // 0.3-1 seconds
+      // 일반 메시지: 더 빠른 응답 (평균 0.2초 목표)
+      final baseDelay = _random.nextInt(2) / 10.0 + 0.1; // 0.1-0.3 seconds (faster)
       final additionalDelay =
-          (_responseQueues[personaId]!.messages.length - 1) * 0.3; // 0.3 second per message
+          (_responseQueues[personaId]!.messages.length - 1) * 0.05; // 0.05 second per message (much faster)
       totalDelay = baseDelay + additionalDelay;
+      
+      // Cap at 0.3 seconds maximum for better UX
+      if (totalDelay > 0.3) {
+        totalDelay = 0.3;
+      }
       debugPrint('📱 Setting AI response delay for ${persona.name}: ${totalDelay.toStringAsFixed(1)}s');
     }
 
@@ -2988,6 +3000,11 @@ class ChatService extends BaseService {
           // 호환성 유지: translatedContents가 없는 경우 마지막 메시지에만 번역 추가
           messageTranslation = translatedContent;
         }
+        
+        // Debug translation assignment
+        if (messageTranslation != null) {
+          debugPrint('📝 Message $i translation: "$messageTranslation"');
+        }
 
         final aiMessage = Message(
           id: _uuid.v4(),
@@ -3018,6 +3035,13 @@ class ChatService extends BaseService {
         // _splitMessageContent에서 이미 완전한 문장 단위로 파싱했으므로
         // 추가 병합 없이 각 메시지를 독립적으로 표시
         _messagesByPersona[persona.id]!.add(aiMessage);
+        
+        // Debug: Check if message has translation
+        if (aiMessage.translatedContent != null) {
+          debugPrint('✅ Message saved WITH translation: "${aiMessage.translatedContent}"');
+        } else {
+          debugPrint('⚠️ Message saved WITHOUT translation for content: "${messagePart}"');
+        }
 
         // Always update global messages when it's the current persona
         if (_currentPersonaId == persona.id) {

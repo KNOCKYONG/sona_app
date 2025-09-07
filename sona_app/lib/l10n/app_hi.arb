@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "चैट में अनुवाद कैसे दिखाई दें, इसे कॉन्फ़िगर करें",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "हमेशा अनुवाद दिखाएं",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "सभी संदेशों के लिए स्वचालित रूप से अनुवाद दिखाएं",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "यात्रा",
   "@travel": {
     "description": "Localized string for travel"

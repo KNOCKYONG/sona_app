@@ -2228,6 +2228,17 @@ class AppLocalizationsSv extends AppLocalizations {
   String get translationSettings => 'Översättningsinställningar';
 
   @override
+  String get translationSettingsDescription =>
+      'Konfigurera hur översättningar visas i chatten';
+
+  @override
+  String get alwaysShowTranslation => 'Visa alltid översättning';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Visa automatiskt översättningar för alla meddelanden';
+
+  @override
   String get travel => 'Resa';
 
   @override

@@ -2224,6 +2224,17 @@ class AppLocalizationsId extends AppLocalizations {
   String get translationSettings => 'Pengaturan Terjemahan';
 
   @override
+  String get translationSettingsDescription =>
+      'Konfigurasi cara terjemahan muncul dalam obrolan';
+
+  @override
+  String get alwaysShowTranslation => 'Selalu Tampilkan Terjemahan';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Secara otomatis menampilkan terjemahan untuk semua pesan';
+
+  @override
   String get travel => 'Perjalanan';
 
   @override

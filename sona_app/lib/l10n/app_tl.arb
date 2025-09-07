@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "I-configure kung paano lalabas ang mga pagsasalin sa chat",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "Palaging Ipakita ang Pagsasalin",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "Awtomatikong magpakita ng mga pagsasalin para sa lahat ng mensahe",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "Maglakbay",
   "@travel": {
     "description": "Localized string for travel"

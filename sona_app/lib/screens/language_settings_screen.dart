@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui';
 import '../l10n/app_localizations.dart';
 import '../services/locale_service.dart';
+import '../core/preferences_manager.dart';
 
 class LanguageSettingsScreen extends StatefulWidget {
   const LanguageSettingsScreen({super.key});
@@ -12,6 +13,22 @@ class LanguageSettingsScreen extends StatefulWidget {
 }
 
 class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
+  bool _alwaysShowTranslation = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadTranslationPreference();
+  }
+  
+  Future<void> _loadTranslationPreference() async {
+    final alwaysShow = await PreferencesManager.getBool('always_show_translation') ?? false;
+    if (mounted) {
+      setState(() {
+        _alwaysShowTranslation = alwaysShow;
+      });
+    }
+  }
   // Get localized language names
   List<LanguageOption> _getLanguages(AppLocalizations l10n) {
     return [
@@ -23,12 +40,19 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
       LanguageOption('vi', 'Tiếng Việt', '🇻🇳', l10n.vietnameseLanguage),
       LanguageOption('id', 'Bahasa Indonesia', '🇮🇩', l10n.indonesianLanguage),
       LanguageOption('es', 'Español', '🇪🇸', l10n.spanishLanguage),
-      // These languages are not officially supported yet
-      // LanguageOption('fr', 'Français', '🇫🇷', 'Français'),
-      // LanguageOption('de', 'Deutsch', '🇩🇪', 'Deutsch'),
-      // LanguageOption('ru', 'Русский', '🇷🇺', 'Русский'),
-      // LanguageOption('pt', 'Português', '🇵🇹', 'Português'),
-      // LanguageOption('it', 'Italiano', '🇮🇹', 'Italiano'),
+      LanguageOption('tl', 'Filipino', '🇵🇭', l10n.tagalogLanguage),
+      LanguageOption('fr', 'Français', '🇫🇷', l10n.frenchLanguage),
+      LanguageOption('de', 'Deutsch', '🇩🇪', l10n.germanLanguage),
+      LanguageOption('ru', 'Русский', '🇷🇺', l10n.russianLanguage),
+      LanguageOption('pt', 'Português', '🇵🇹', l10n.portugueseLanguage),
+      LanguageOption('it', 'Italiano', '🇮🇹', l10n.italianLanguage),
+      LanguageOption('nl', 'Nederlands', '🇳🇱', l10n.dutchLanguage),
+      LanguageOption('sv', 'Svenska', '🇸🇪', l10n.swedishLanguage),
+      LanguageOption('pl', 'Polski', '🇵🇱', l10n.polishLanguage),
+      LanguageOption('tr', 'Türkçe', '🇹🇷', l10n.turkishLanguage),
+      LanguageOption('ar', 'العربية', '🇸🇦', l10n.arabicLanguage),
+      LanguageOption('hi', 'हिन्दी', '🇮🇳', l10n.hindiLanguage),
+      LanguageOption('ur', 'اردو', '🇵🇰', l10n.urduLanguage),
     ];
   }
 
@@ -252,6 +276,86 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
               ),
             ),
           ],
+
+          const SizedBox(height: 20),
+
+          // 번역 설정 섹션
+          Container(
+            decoration: BoxDecoration(
+              color: theme.cardColor,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: theme.dividerColor.withOpacity(0.2),
+              ),
+            ),
+            child: Column(
+              children: [
+                // 번역 설정 헤더
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.translate,
+                        color: theme.colorScheme.primary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              AppLocalizations.of(context)!.translationSettings ?? 'Translation Settings',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              AppLocalizations.of(context)!.translationSettingsDescription ?? 'Configure how translations appear in chat',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.textTheme.bodySmall?.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(height: 1, color: theme.dividerColor.withOpacity(0.2)),
+                // 항상 번역 표시 스위치
+                SwitchListTile(
+                  title: Text(
+                    AppLocalizations.of(context)!.alwaysShowTranslation ?? 'Always Show Translation',
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  subtitle: Text(
+                    AppLocalizations.of(context)!.alwaysShowTranslationDescription ?? 'Automatically show translations for all messages',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: theme.textTheme.bodySmall?.color,
+                    ),
+                  ),
+                  value: _alwaysShowTranslation,
+                  onChanged: (value) async {
+                    setState(() {
+                      _alwaysShowTranslation = value;
+                    });
+                    await PreferencesManager.setBool('always_show_translation', value);
+                  },
+                  activeColor: theme.colorScheme.primary,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                ),
+              ],
+            ),
+          ),
 
           const SizedBox(height: 20),
 

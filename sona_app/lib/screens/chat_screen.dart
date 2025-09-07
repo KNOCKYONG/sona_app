@@ -14,7 +14,6 @@ import '../services/relationship/relation_score_service.dart';
 import '../services/relationship/relationship_visual_system.dart';
 import '../services/ui/haptic_service.dart';
 import '../services/block_service.dart';
-import '../services/language/language_detection_service.dart';
 import '../models/persona.dart';
 import '../models/message.dart';
 import '../widgets/chat/message_bubble.dart';
@@ -509,13 +508,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     final content = _messageController.text.trim();
     if (content.isEmpty) return;
     
-    // Record language usage for learning
-    try {
-      final detectedLanguage = LanguageDetectionService().detectLanguage(content);
-      await PreferencesManager.recordLanguageUsage(detectedLanguage);
-    } catch (e) {
-      debugPrint('Error recording language usage: $e');
-    }
+    // Language usage recording removed - OpenAI handles language detection
 
     // 햅틱 피드백 제거 (사용자 요청)
 
@@ -1662,12 +1655,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                     child: Text(AppLocalizations.of(context)!.cancel),
                   ),
                   ElevatedButton(
-                    onPressed: description.isNotEmpty ? () {
+                    onPressed: () {
                       Navigator.pop(context, {
                         'message': selectedMessage,
                         'description': description,
                       });
-                    } : null,
+                    },
                     child: Text(AppLocalizations.of(context)!.sendReport),
                   ),
                 ],
@@ -1708,9 +1701,23 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
       try {
         // Combine problem message and description for userMessage
-        final fullErrorDescription = problemMessage != null && problemMessage.isNotEmpty
-            ? '${AppLocalizations.of(context)!.problemMessage}: "$problemMessage"\n\n${AppLocalizations.of(context)!.errorDescription}: $errorDescription'
-            : '${AppLocalizations.of(context)!.errorDescription}: $errorDescription';
+        String fullErrorDescription = '';
+        
+        if (problemMessage != null && problemMessage.isNotEmpty) {
+          fullErrorDescription += '${AppLocalizations.of(context)!.problemMessage}: "$problemMessage"';
+        }
+        
+        if (errorDescription != null && errorDescription.isNotEmpty) {
+          if (fullErrorDescription.isNotEmpty) {
+            fullErrorDescription += '\n\n';
+          }
+          fullErrorDescription += '${AppLocalizations.of(context)!.errorDescription}: $errorDescription';
+        }
+        
+        // 둘 다 비어있으면 기본 메시지
+        if (fullErrorDescription.isEmpty) {
+          fullErrorDescription = 'User reported an issue without additional comments';
+        }
         
         await chatService.sendChatErrorReport(
           userId: userId,
@@ -1950,6 +1957,65 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  String _extractKoreanFromMessage(Message msg) {
+    final content = msg.content;
+    
+    // If content has [KO] tag, extract Korean text
+    if (content.contains('[KO]')) {
+      final koIndex = content.indexOf('[KO]');
+      final koreanStart = koIndex + 4; // '[KO]'.length = 4
+      
+      // Find the next language tag to determine where Korean ends
+      final langTags = ['[VI]', '[EN]', '[ID]', '[JA]', '[ZH]', '[TH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]'];
+      var koreanEnd = content.length;
+      
+      for (final tag in langTags) {
+        final tagIndex = content.indexOf(tag, koreanStart);
+        if (tagIndex != -1 && tagIndex < koreanEnd) {
+          koreanEnd = tagIndex;
+        }
+      }
+      
+      return content.substring(koreanStart, koreanEnd).trim();
+    }
+    
+    // If no [KO] tag, return the whole content (for backward compatibility)
+    return content;
+  }
+
+  String _extractTranslationFromMessage(Message msg) {
+    // First check if there's a translatedContent field
+    if (msg.translatedContent != null && msg.translatedContent!.isNotEmpty) {
+      return msg.translatedContent!;
+    }
+    
+    // Otherwise, try to extract from embedded tags in content
+    final content = msg.content;
+    
+    // Check for language tags (e.g., [VI], [EN], [ID], etc.)
+    final langTags = ['[VI]', '[EN]', '[ID]', '[JA]', '[ZH]', '[TH]', '[ES]', '[FR]', '[DE]', '[IT]', '[PT]', '[RU]', '[AR]'];
+    
+    for (final tag in langTags) {
+      if (content.contains(tag)) {
+        // Extract text after the language tag
+        final tagIndex = content.indexOf(tag);
+        final translationStart = tagIndex + tag.length;
+        
+        // Find the end (either next [KO] tag or end of string)
+        final nextKoIndex = content.indexOf('[KO]', translationStart);
+        final translationEnd = nextKoIndex != -1 ? nextKoIndex : content.length;
+        
+        final translation = content.substring(translationStart, translationEnd).trim();
+        if (translation.isNotEmpty) {
+          return translation;
+        }
+      }
+    }
+    
+    // If no translation found, return empty string
+    return '';
+  }
+
   Future<void> _handleTranslationError() async {
     final chatService = Provider.of<ChatService>(context, listen: false);
     final authService = Provider.of<AuthService>(context, listen: false);
@@ -1963,12 +2029,33 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     if (userId.isNotEmpty && currentPersona != null) {
       // Get recent messages with translations (실제 번역 내용이 있는 메시지만)
       final messages = chatService.getMessages(currentPersona.id);
+      
+      debugPrint('📊 Translation Error Dialog - Total messages: ${messages.length}');
+      
+      // Debug: Log all AI messages
+      for (var msg in messages.where((m) => !m.isFromUser).take(5)) {
+        debugPrint('🔍 AI Message:');
+        debugPrint('  - Content: "${msg.content.substring(0, msg.content.length > 100 ? 100 : msg.content.length)}..."');
+        debugPrint('  - Has translatedContent: ${msg.translatedContent != null && msg.translatedContent!.isNotEmpty}');
+        debugPrint('  - translatedContent: "${msg.translatedContent ?? 'null'}"');
+        debugPrint('  - Has [KO] tag: ${msg.content.contains('[KO]')}');
+        debugPrint('  - Has other lang tags: VI=${msg.content.contains('[VI]')}, EN=${msg.content.contains('[EN]')}, ID=${msg.content.contains('[ID]')}');
+      }
+      
+      // Check for both old style (translatedContent field) and new style (embedded tags in content)
+      // Note: translatedContent might be empty string for split messages where translation is in first message only
       final translatedMessages = messages
           .where((msg) => 
               !msg.isFromUser && 
-              msg.translatedContent != null && 
-              msg.translatedContent!.isNotEmpty)
+              ((msg.translatedContent != null) || // Allow empty string translations
+               // Also check if content has language tags embedded
+               (msg.content.contains('[KO]') && 
+                (msg.content.contains('[VI]') || msg.content.contains('[EN]') || 
+                 msg.content.contains('[ID]') || msg.content.contains('[JA]') ||
+                 msg.content.contains('[ZH]') || msg.content.contains('[TH]')))))
           .toList();
+      
+      debugPrint('✅ Found ${translatedMessages.length} messages with translations');
 
       if (translatedMessages.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -2051,7 +2138,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${currentPersona.name}: ${msg.content}',
+                                    '${currentPersona.name}: ${_extractKoreanFromMessage(msg)}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                     maxLines: 2,
@@ -2065,7 +2152,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                       const SizedBox(width: 4),
                                       Expanded(
                                         child: Text(
-                                          msg.translatedContent ?? '',
+                                          _extractTranslationFromMessage(msg),
                                           style: TextStyle(
                                               fontSize: 13,
                                               color: Colors.grey[700]),

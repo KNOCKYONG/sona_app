@@ -58,6 +58,7 @@ class ConversationAnalysis:
     error_key: str
     persona_id: str
     persona_name: str
+    user_comment: str  # 사용자가 신고할 때 입력한 코멘트
     overall_coherence_score: float  # 0-100
     context_issues: List[ContextIssue]
     topic_consistency_score: float  # 0-100
@@ -73,7 +74,7 @@ class ContextAnalyzer:
         self.topic_keywords = {}
         self.conversation_patterns = []
         
-    def analyze_conversation(self, messages: List[Dict], persona_name: str, persona_id: str, error_key: str) -> ConversationAnalysis:
+    def analyze_conversation(self, messages: List[Dict], persona_name: str, persona_id: str, error_key: str, user_comment: str = "") -> ConversationAnalysis:
         """전체 대화를 분석하여 맥락 일관성을 평가합니다."""
         
         context_issues = []
@@ -176,6 +177,11 @@ class ContextAnalyzer:
         flow_issues = self._analyze_conversation_flow(conversation_pairs)
         context_issues.extend(flow_issues)
         
+        # 5. 사용자 코멘트 분석 (있는 경우)
+        if user_comment:
+            comment_issues = self.analyze_user_comment(user_comment, messages)
+            context_issues.extend(comment_issues)
+        
         # 점수 계산
         coherence_score = self._calculate_coherence_score(context_issues, len(messages))
         topic_score = self._calculate_topic_consistency_score(conversation_pairs)
@@ -185,6 +191,7 @@ class ContextAnalyzer:
             error_key=error_key,
             persona_id=persona_id,
             persona_name=persona_name,
+            user_comment=user_comment,
             overall_coherence_score=coherence_score,
             context_issues=context_issues,
             topic_consistency_score=topic_score,
@@ -279,6 +286,233 @@ class ContextAnalyzer:
                     ai_response=current,
                     suggestion="응답 다양성을 높이고 템플릿 의존도 감소 필요"
                 ))
+        
+        return issues
+    
+    def analyze_user_comment(self, comment: str, messages: List[Dict]) -> List[ContextIssue]:
+        """사용자 코멘트를 분석하여 문제점을 식별합니다."""
+        issues = []
+        
+        if not comment:
+            return issues
+            
+        # 다국어 지원 - 사용자가 지적한 문제 타입 키워드 분석
+        problem_keywords = {
+            # 한국어
+            '이상': IssueSeverity.HIGH,
+            '안맞': IssueSeverity.HIGH,
+            '반복': IssueSeverity.MEDIUM,
+            '엉뚱': IssueSeverity.HIGH,
+            '무시': IssueSeverity.HIGH,
+            '대답안': IssueSeverity.CRITICAL,
+            '말안됨': IssueSeverity.CRITICAL,
+            '어색': IssueSeverity.MEDIUM,
+            '끊': IssueSeverity.HIGH,
+            '갑자기': IssueSeverity.MEDIUM,
+            '맥락': IssueSeverity.HIGH,
+            '관련없': IssueSeverity.HIGH,
+            '틀린': IssueSeverity.HIGH,
+            '잘못': IssueSeverity.HIGH,
+            '줄바꿈': IssueSeverity.MEDIUM,
+            '줄바꾸기': IssueSeverity.MEDIUM,
+            '띄어쓰기': IssueSeverity.LOW,
+            
+            # 영어
+            'strange': IssueSeverity.HIGH,
+            'weird': IssueSeverity.HIGH,
+            'wrong': IssueSeverity.HIGH,
+            'repeat': IssueSeverity.MEDIUM,
+            'repetitive': IssueSeverity.MEDIUM,
+            'ignore': IssueSeverity.HIGH,
+            'ignored': IssueSeverity.HIGH,
+            'no answer': IssueSeverity.CRITICAL,
+            'no response': IssueSeverity.CRITICAL,
+            'awkward': IssueSeverity.MEDIUM,
+            'sudden': IssueSeverity.MEDIUM,
+            'suddenly': IssueSeverity.MEDIUM,
+            'context': IssueSeverity.HIGH,
+            'unrelated': IssueSeverity.HIGH,
+            'irrelevant': IssueSeverity.HIGH,
+            'incorrect': IssueSeverity.HIGH,
+            'error': IssueSeverity.HIGH,
+            'line break': IssueSeverity.MEDIUM,
+            'newline': IssueSeverity.MEDIUM,
+            'spacing': IssueSeverity.LOW,
+            
+            # 일본어
+            'おかしい': IssueSeverity.HIGH,
+            '変': IssueSeverity.HIGH,
+            '繰り返': IssueSeverity.MEDIUM,
+            '無視': IssueSeverity.HIGH,
+            '答えない': IssueSeverity.CRITICAL,
+            '違う': IssueSeverity.HIGH,
+            '間違': IssueSeverity.HIGH,
+            '改行': IssueSeverity.MEDIUM,
+            
+            # 중국어
+            '奇怪': IssueSeverity.HIGH,
+            '错误': IssueSeverity.HIGH,
+            '重复': IssueSeverity.MEDIUM,
+            '忽略': IssueSeverity.HIGH,
+            '没回答': IssueSeverity.CRITICAL,
+            '不对': IssueSeverity.HIGH,
+            '换行': IssueSeverity.MEDIUM,
+            
+            # 태국어 (Thai)
+            'แปลก': IssueSeverity.HIGH,
+            'ผิด': IssueSeverity.HIGH,
+            'ซ้ำ': IssueSeverity.MEDIUM,
+            'ไม่ตอบ': IssueSeverity.CRITICAL,
+            'ขัดจังหวะ': IssueSeverity.HIGH,
+            
+            # 베트남어 (Vietnamese)
+            'lạ': IssueSeverity.HIGH,
+            'sai': IssueSeverity.HIGH,
+            'lặp lại': IssueSeverity.MEDIUM,
+            'bỏ qua': IssueSeverity.HIGH,
+            'không trả lời': IssueSeverity.CRITICAL,
+            
+            # 인도네시아어 (Indonesian)
+            'aneh': IssueSeverity.HIGH,
+            'salah': IssueSeverity.HIGH,
+            'berulang': IssueSeverity.MEDIUM,
+            'abaikan': IssueSeverity.HIGH,
+            'tidak menjawab': IssueSeverity.CRITICAL,
+            
+            # 타갈로그어 (Tagalog)
+            'kakaiba': IssueSeverity.HIGH,
+            'mali': IssueSeverity.HIGH,
+            'paulit-ulit': IssueSeverity.MEDIUM,
+            'hindi sumagot': IssueSeverity.CRITICAL,
+            
+            # 스페인어 (Spanish)
+            'extraño': IssueSeverity.HIGH,
+            'raro': IssueSeverity.HIGH,
+            'incorrecto': IssueSeverity.HIGH,
+            'repetir': IssueSeverity.MEDIUM,
+            'ignorar': IssueSeverity.HIGH,
+            'sin respuesta': IssueSeverity.CRITICAL,
+            
+            # 프랑스어 (French)
+            'étrange': IssueSeverity.HIGH,
+            'bizarre': IssueSeverity.HIGH,
+            'incorrect': IssueSeverity.HIGH,
+            'répéter': IssueSeverity.MEDIUM,
+            'ignorer': IssueSeverity.HIGH,
+            'pas de réponse': IssueSeverity.CRITICAL,
+            
+            # 독일어 (German)
+            'seltsam': IssueSeverity.HIGH,
+            'falsch': IssueSeverity.HIGH,
+            'wiederholen': IssueSeverity.MEDIUM,
+            'ignorieren': IssueSeverity.HIGH,
+            'keine antwort': IssueSeverity.CRITICAL,
+            
+            # 러시아어 (Russian)
+            'странный': IssueSeverity.HIGH,
+            'неправильный': IssueSeverity.HIGH,
+            'повторять': IssueSeverity.MEDIUM,
+            'игнорировать': IssueSeverity.HIGH,
+            'нет ответа': IssueSeverity.CRITICAL,
+            
+            # 포르투갈어 (Portuguese)
+            'estranho': IssueSeverity.HIGH,
+            'errado': IssueSeverity.HIGH,
+            'repetir': IssueSeverity.MEDIUM,
+            'ignorar': IssueSeverity.HIGH,
+            'sem resposta': IssueSeverity.CRITICAL,
+            
+            # 이탈리아어 (Italian)
+            'strano': IssueSeverity.HIGH,
+            'sbagliato': IssueSeverity.HIGH,
+            'ripetere': IssueSeverity.MEDIUM,
+            'ignorare': IssueSeverity.HIGH,
+            'nessuna risposta': IssueSeverity.CRITICAL,
+            
+            # 네덜란드어 (Dutch)
+            'vreemd': IssueSeverity.HIGH,
+            'fout': IssueSeverity.HIGH,
+            'herhalen': IssueSeverity.MEDIUM,
+            'negeren': IssueSeverity.HIGH,
+            'geen antwoord': IssueSeverity.CRITICAL,
+            
+            # 스웨덴어 (Swedish)
+            'konstig': IssueSeverity.HIGH,
+            'fel': IssueSeverity.HIGH,
+            'upprepa': IssueSeverity.MEDIUM,
+            'ignorera': IssueSeverity.HIGH,
+            'inget svar': IssueSeverity.CRITICAL,
+            
+            # 폴란드어 (Polish)
+            'dziwny': IssueSeverity.HIGH,
+            'błędny': IssueSeverity.HIGH,
+            'powtarzać': IssueSeverity.MEDIUM,
+            'ignorować': IssueSeverity.HIGH,
+            'brak odpowiedzi': IssueSeverity.CRITICAL,
+            
+            # 터키어 (Turkish)
+            'garip': IssueSeverity.HIGH,
+            'yanlış': IssueSeverity.HIGH,
+            'tekrar': IssueSeverity.MEDIUM,
+            'görmezden': IssueSeverity.HIGH,
+            'cevap yok': IssueSeverity.CRITICAL,
+            
+            # 아랍어 (Arabic)
+            'غريب': IssueSeverity.HIGH,
+            'خطأ': IssueSeverity.HIGH,
+            'تكرار': IssueSeverity.MEDIUM,
+            'تجاهل': IssueSeverity.HIGH,
+            'لا جواب': IssueSeverity.CRITICAL,
+            
+            # 힌디어 (Hindi)
+            'अजीब': IssueSeverity.HIGH,
+            'गलत': IssueSeverity.HIGH,
+            'दोहराना': IssueSeverity.MEDIUM,
+            'अनदेखा': IssueSeverity.HIGH,
+            'कोई जवाब नहीं': IssueSeverity.CRITICAL,
+            
+            # 우르두어 (Urdu)
+            'عجیب': IssueSeverity.HIGH,
+            'غلط': IssueSeverity.HIGH,
+            'دہرانا': IssueSeverity.MEDIUM,
+            'نظرانداز': IssueSeverity.HIGH,
+            'کوئی جواب نہیں': IssueSeverity.CRITICAL,
+        }
+        
+        # 코멘트에서 문제 키워드 찾기 (대소문자 구분 없이)
+        comment_lower = comment.lower()
+        for keyword, severity in problem_keywords.items():
+            if keyword.lower() in comment_lower:
+                # 문제가 지적된 메시지 찾기
+                problem_message_idx = len(messages) - 1  # 기본적으로 마지막 메시지
+                
+                # "Problem Message:" 패턴이 있으면 해당 메시지 찾기 (다국어 지원)
+                problem_patterns = [
+                    'Problem Message:', 'problem message:', 
+                    '문제 메시지:', '오류 메시지:',
+                    'Error Message:', 'error message:',
+                    '問題メッセージ:', 'エラーメッセージ:',
+                    '问题消息:', '错误消息:'
+                ]
+                
+                if any(pattern in comment for pattern in problem_patterns):
+                    for i, msg in enumerate(messages):
+                        if not msg.get('isFromUser', False):
+                            msg_content = msg.get('content', '')
+                            if msg_content in comment:
+                                problem_message_idx = i
+                                break
+                
+                issues.append(ContextIssue(
+                    message_index=problem_message_idx,
+                    issue_type="user_reported",
+                    severity=severity,
+                    description=f"사용자 지적: {comment[:100]}...",
+                    user_message="",
+                    ai_response=messages[problem_message_idx].get('content', '') if problem_message_idx < len(messages) else "",
+                    suggestion="사용자가 직접 지적한 문제이므로 우선적으로 개선 필요"
+                ))
+                break
         
         return issues
     
@@ -533,6 +767,7 @@ def save_analysis_results(analyses: List[ConversationAnalysis], output_dir: str 
             "error_key": analysis.error_key,
             "persona_id": analysis.persona_id,
             "persona_name": analysis.persona_name,
+            "user_comment": analysis.user_comment,  # 사용자 코멘트 추가
             "scores": {
                 "overall_coherence": analysis.overall_coherence_score,
                 "topic_consistency": analysis.topic_consistency_score,
@@ -598,6 +833,8 @@ def print_analysis_summary(analyses: List[ConversationAnalysis]):
         print(f"\n🚨 심각한 문제가 있는 대화: {len(critical_conversations)}개")
         for conv in critical_conversations[:3]:  # 최대 3개만 표시
             print(f"  - {conv.persona_name} ({conv.error_key}): 일관성 {conv.overall_coherence_score:.1f}점")
+            if conv.user_comment:
+                print(f"    💬 사용자 신고: {conv.user_comment[:100]}...")
             critical_issues = [i for i in conv.context_issues if i.severity == IssueSeverity.CRITICAL]
             for issue in critical_issues[:2]:  # 각 대화당 최대 2개 이슈만 표시
                 print(f"    ⚠️  {issue.description}")
@@ -615,6 +852,20 @@ def print_analysis_summary(analyses: List[ConversationAnalysis]):
         avg_score = summary["avg_score"] / summary["count"]
         print(f"  - {persona_name}: 평균 {avg_score:.1f}점, 문제 {summary['issues']}개")
     
+    # 사용자가 직접 지적한 문제들
+    user_reported_issues = []
+    for analysis in analyses:
+        if analysis.user_comment:
+            user_issues = [i for i in analysis.context_issues if i.issue_type == "user_reported"]
+            if user_issues or analysis.user_comment:  # 코멘트만 있어도 표시
+                user_reported_issues.append((analysis, user_issues))
+    
+    if user_reported_issues:
+        print(f"\n💬 사용자가 직접 신고한 문제: {len(user_reported_issues)}건")
+        for analysis, issues in user_reported_issues[:5]:  # 최대 5개만 표시
+            print(f"  - {analysis.persona_name} ({analysis.error_key}):")
+            print(f"    코멘트: {analysis.user_comment[:100]}...")
+    
     # 가장 흔한 문제 유형
     issue_types = defaultdict(int)
     for analysis in analyses:
@@ -626,6 +877,7 @@ def print_analysis_summary(analyses: List[ConversationAnalysis]):
         for issue_type, count in sorted(issue_types.items(), key=lambda x: x[1], reverse=True)[:5]:
             issue_type_korean = {
                 "greeting_repetition": "인사말 반복",
+                "user_reported": "사용자 신고",
                 "macro_response": "동일 응답 반복",
                 "irrelevant_answer": "관련 없는 답변",
                 "abrupt_topic_change": "갑작스러운 주제 변경",
@@ -670,15 +922,19 @@ def analyze_chat_errors(recheck=False, collection_name=None):
         persona_name = data.get('persona_name', 'Unknown')
         persona_id = data.get('persona', 'Unknown')
         chat_messages = data.get('chat', [])
+        user_comment = data.get('user_message', '')  # 사용자 코멘트 읽기
         
         print(f"분석 중: {error_key} - {persona_name}")
+        if user_comment:
+            print(f"  💬 사용자 코멘트: {user_comment[:80]}...")
         
         # 대화 분석 수행
         analysis = analyzer.analyze_conversation(
             messages=chat_messages,
             persona_name=persona_name,
             persona_id=persona_id,
-            error_key=error_key
+            error_key=error_key,
+            user_comment=user_comment
         )
         analyses.append(analysis)
         

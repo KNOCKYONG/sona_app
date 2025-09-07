@@ -4246,6 +4246,24 @@ abstract class AppLocalizations {
   /// **'Translation Settings'**
   String get translationSettings;
 
+  /// Description for translation settings section
+  ///
+  /// In en, this message translates to:
+  /// **'Configure how translations appear in chat'**
+  String get translationSettingsDescription;
+
+  /// Toggle to always show translations
+  ///
+  /// In en, this message translates to:
+  /// **'Always Show Translation'**
+  String get alwaysShowTranslation;
+
+  /// Description for always show translation toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically show translations for all messages'**
+  String get alwaysShowTranslationDescription;
+
   /// Localized string for travel
   ///
   /// In en, this message translates to:

@@ -2249,6 +2249,17 @@ class AppLocalizationsNl extends AppLocalizations {
   String get translationSettings => 'Vertaalinstellingen';
 
   @override
+  String get translationSettingsDescription =>
+      'Configureer hoe vertalingen in de chat verschijnen';
+
+  @override
+  String get alwaysShowTranslation => 'Altijd vertaling tonen';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Automatisch vertalingen voor alle berichten weergeven';
+
+  @override
   String get travel => 'Reizen';
 
   @override

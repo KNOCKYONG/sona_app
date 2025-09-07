@@ -2121,6 +2121,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get translationSettings => '翻译设置';
 
   @override
+  String get translationSettingsDescription => '配置聊天中翻译的显示方式';
+
+  @override
+  String get alwaysShowTranslation => '始终显示翻译';
+
+  @override
+  String get alwaysShowTranslationDescription => '自动显示所有消息的翻译';
+
+  @override
   String get travel => '旅行';
 
   @override

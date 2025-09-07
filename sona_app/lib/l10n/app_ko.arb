@@ -2893,6 +2893,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "채팅에서 번역이 표시되는 방식을 설정합니다",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "항상 번역 표시",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "모든 메시지에 대해 자동으로 번역을 표시합니다",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "여행",
   "@travel": {
     "description": "Localized string for travel"

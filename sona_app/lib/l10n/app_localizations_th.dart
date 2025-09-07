@@ -2193,6 +2193,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get translationSettings => 'การตั้งค่าการแปล';
 
   @override
+  String get translationSettingsDescription => 'กำหนดค่าวิธีการแสดงการแปลในแชท';
+
+  @override
+  String get alwaysShowTranslation => 'แสดงการแปลเสมอ';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'แสดงการแปลสำหรับข้อความทั้งหมดโดยอัตโนมัติ';
+
+  @override
   String get travel => 'การเดินทาง';
 
   @override

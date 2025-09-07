@@ -12,29 +12,30 @@ import '../analysis/pattern_analyzer_service.dart';
 import '../analysis/advanced_pattern_analyzer.dart';
 import '../utils/persona_relationship_cache.dart';
 
-/// 🚀 OpenAI Conversations/Responses API 서비스
+/// 🚀 OpenAI Chat Completions API 서비스
 /// 
-/// 새로운 API를 활용한 최적화된 대화 관리:
-/// - Conversations API: 대화 상태 자동 관리
-/// - Responses API: 대화 컨텍스트 체이닝
-/// - 서버 측 대화 히스토리 관리
-/// - 30일 자동 보존
+/// Chat Completions API를 활용한 최적화된 대화 관리:
+/// - 표준 Chat Completions API 사용 (Conversations/Responses API 출시 대기중)
+/// - 로컬 대화 상태 관리 및 캐싱
+/// - 언어 자동 감지 및 번역 지원
+/// - 토큰 최적화 및 컨텍스트 관리
 class ConversationsService {
   static const String _baseUrl = 'https://api.openai.com';
   static String get _apiKey => AppConstants.openAIKey;
   
   // API 엔드포인트
-  static const String _conversationsEndpoint = '/v1/conversations';
-  static const String _responsesEndpoint = '/v1/responses';
+  // Note: OpenAI doesn't have Conversations/Responses API yet, using Chat Completions
+  static const String _conversationsEndpoint = '/v1/chat/completions';  // Fallback to chat API
+  static const String _responsesEndpoint = '/v1/chat/completions';      // Use standard chat API
   
   // 토큰 제한 설정 (4000 토큰 충분히 활용)
   static const int _maxInputTokens = 4000;  // 4200 중 4000 활용
   static const int _maxOutputTokens = 250;
   static const int _maxTranslationTokens = 500;
   
-  // 토큰 할당 전략
-  static const int _systemPromptTokens = 1800;  // 풍부한 페르소나
-  static const int _historyTokens = 2000;       // 20-25턴 대화
+  // 토큰 할당 전략 (조정됨)
+  static const int _systemPromptTokens = 2500;  // 프롬프트 증가 (언어 감지 포함)
+  static const int _historyTokens = 1300;       // 10-15턴 대화로 감소
   static const int _userMessageTokens = 200;    // 현재 메시지
   
   // API 파라미터 최적화 (일관성 향상을 위해 조정)
@@ -270,7 +271,7 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
     }
   }
   
-  /// 🎯 메인 응답 생성 메서드 (Responses API 사용)
+  /// 🎯 메인 응답 생성 메서드 (Chat Completions API 사용)
   static Future<ResponseResult> generateResponse({
     required Persona persona,
     required String userMessage,
@@ -281,15 +282,13 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
     String? userNickname,
     int? userAge,
     String? targetLanguage,
+    String? systemLanguage,  // 시스템 언어 추가
     String? previousResponseId,
     bool storeResponse = true,
   }) async {
     try {
-      // 1. 대화 ID 확인 또는 생성
-      conversationId ??= await getOrCreateConversation(
-        userId: userId,
-        personaId: persona.id,
-      );
+      // 1. 대화 ID 생성 (로컬용)
+      conversationId ??= '${userId}_${persona.id}';
       
       // 2. 고급 패턴 분석
       final advancedAnalyzer = AdvancedPatternAnalyzer();
@@ -320,7 +319,8 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
         isCasualSpeech: true,
         contextHint: enhancedContextHint,
         patternAnalysis: advancedAnalysis.basicAnalysis,
-        languageCode: targetLanguage ?? 'ko',
+        languageCode: targetLanguage == 'auto' ? 'auto' : (systemLanguage ?? targetLanguage ?? 'ko'),
+        systemLanguage: systemLanguage,
       );
       
       // 5. 입력 메시지 구성
@@ -330,47 +330,51 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
         recentMessages: recentMessages,
       );
       
-      // 6. 반복 억제를 위한 logit_bias 생성
-      final logitBias = _buildLogitBias(recentMessages);
+      // 🔍 디버그: 프롬프트 확인
+      debugPrint('🎯 System Prompt Length: ${prompt.length} chars');
+      debugPrint('🎯 Has language detection prompt: ${prompt.toUpperCase().contains('LANGUAGE DETECTION') || prompt.contains('FIRST PRIORITY')}');
+      debugPrint('🎯 Has [KO] tag instruction: ${prompt.contains('[KO]')}');
+      debugPrint('🎯 Target Language: $targetLanguage');
+      debugPrint('🎯 Language code passed: ${targetLanguage == 'auto' ? 'auto' : (systemLanguage ?? targetLanguage ?? 'ko')}');
+      debugPrint('🎯 User Message: $userMessage');
       
-      // 7. API 호출
-      final requestBody = {
+      // 프롬프트 내용 일부 확인
+      if (prompt.toUpperCase().contains('LANGUAGE DETECTION') || prompt.contains('FIRST PRIORITY')) {
+        debugPrint('✅ Language detection section found in prompt');
+        // Show first 500 chars to verify it's at the top
+        debugPrint('📝 Prompt start: ${prompt.substring(0, prompt.length > 500 ? 500 : prompt.length)}...');
+      } else {
+        debugPrint('❌ Language detection section NOT found in prompt');
+        debugPrint('🔍 Checking languageCode condition: ${targetLanguage == 'auto' ? 'auto' : (systemLanguage ?? targetLanguage ?? 'ko')}');
+        // Show first 500 chars to debug why it's missing
+        debugPrint('📝 Prompt start: ${prompt.substring(0, prompt.length > 500 ? 500 : prompt.length)}...');
+      }
+      
+      // 6. 반복 억제를 위한 logit_bias 생성
+      // Responses API doesn't support logit_bias parameter
+      // final logitBias = _buildLogitBias(recentMessages);
+      
+      // 7. API 호출 (Chat Completions API 형식)
+      final Map<String, dynamic> requestBody = {
         'model': AppConstants.openAIModel,
-        'input': inputMessages,
-        'conversation': conversationId,
-        'store': storeResponse,
-        'max_completion_tokens': targetLanguage != null 
+        'messages': inputMessages,  // 'input' -> 'messages' for Chat API
+        'max_tokens': (targetLanguage != null && targetLanguage != 'ko')
             ? _maxTranslationTokens 
             : _maxOutputTokens,
         'temperature': _temperature,
+        'top_p': _topP,
+        // Chat Completions API에서 지원하는 파라미터들
         'presence_penalty': _presencePenalty,
         'frequency_penalty': _frequencyPenalty,
-        'top_p': _topP,
-        
-        // 🆕 고급 파라미터 활용
-        'stop': [
-          '\n\n\n',      // 과도한 줄바꿈 방지
-          '[SYSTEM]',    // 시스템 메시지 유출 방지
-          '###',         // 구분자 방지
-          '```',         // 코드 블록 방지
-        ],
-        
-        // 🆕 반복 패턴 억제
-        if (logitBias.isNotEmpty) 'logit_bias': logitBias,
-        
-        // 🆕 이전 응답 체이닝
-        if (previousResponseId != null) 
-          'previous_response_id': previousResponseId
-        else if (_lastResponseCache.containsKey(conversationId))
-          'previous_response_id': _lastResponseCache[conversationId],
-        
-        // 🆕 개발 모드 재현성
-        if (AppConstants.isDevelopment) 'seed': 42,
-        
-        // 🆕 다국어 처리 최적화
-        if (targetLanguage != null && targetLanguage != 'ko')
-          'response_format': {'type': 'json_object'},
       };
+      
+      // 🔍 디버그: Request 확인
+      debugPrint('📤 Sending to Chat Completions API:');
+      debugPrint('  - Model: ${requestBody['model']}');
+      debugPrint('  - Max Tokens: ${requestBody['max_tokens']}');
+      debugPrint('  - Temperature: ${requestBody['temperature']}');
+      debugPrint('  - Messages count: ${inputMessages.length}');
+      debugPrint('  - System prompt has language detection: ${(inputMessages[0]['content']?.toUpperCase().contains('LANGUAGE DETECTION') ?? false) || (inputMessages[0]['content']?.contains('FIRST PRIORITY') ?? false)}');
       
       final response = await _httpClient.post(
         Uri.parse('$_baseUrl$_responsesEndpoint'),
@@ -384,25 +388,36 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
         onTimeout: () => throw TimeoutException('OpenAI API timeout'),
       );
       
-      debugPrint('📡 Responses API Status: ${response.statusCode}');
+      debugPrint('📡 Chat Completions API Status: ${response.statusCode}');
       
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final responseId = data['id'];
-        final outputText = data['output_text'] ?? 
-                          data['output']?[0]?['content'] ?? 
-                          '';
+        // Chat Completions API response format
+        final responseId = data['id'] ?? '';
+        final choices = data['choices'] ?? [];
+        final outputText = choices.isNotEmpty 
+            ? choices[0]['message']['content'] ?? ''
+            : '';
         
         // 응답 ID 캐시
-        _lastResponseCache[conversationId] = responseId;
+        if (responseId.isNotEmpty) {
+          _lastResponseCache[conversationId] = responseId;
+        }
         
         // 토큰 사용량 로깅
         final usage = data['usage'];
         if (usage != null) {
-          debugPrint('Token usage - Input: ${usage['input_tokens']}, '
-                    'Output: ${usage['output_tokens']}, '
+          debugPrint('Token usage - Input: ${usage['prompt_tokens']}, '
+                    'Output: ${usage['completion_tokens']}, '
                     'Total: ${usage['total_tokens']}');
         }
+        
+        // 🔍 디버그: 응답 내용 확인
+        debugPrint('🎯 Chat Completions API Success:');
+        debugPrint('  Response ID: $responseId');
+        debugPrint('  Output Text: $outputText');
+        debugPrint('  Has [VI] tag: ${outputText.contains('[VI]')}');
+        debugPrint('  Has [KO] tag: ${outputText.contains('[KO]')}');
         
         return ResponseResult(
           content: outputText.toString().trim(),
@@ -411,6 +426,36 @@ ${tags != null && tags.isNotEmpty ? '태그: ${tags.join(', ')}' : ''}
           tokenUsage: usage,
         );
       } else {
+        // 상세한 에러 로깅
+        debugPrint('❌ Chat Completions API Error: ${response.statusCode}');
+        debugPrint('❌ Error Body: ${response.body}');
+        
+        // API 에러 분석
+        try {
+          final errorData = jsonDecode(response.body);
+          if (errorData['error'] != null) {
+            final error = errorData['error'];
+            debugPrint('❌ Error Type: ${error['type']}');
+            debugPrint('❌ Error Message: ${error['message']}');
+            debugPrint('❌ Error Code: ${error['code']}');
+            
+            // Request body 디버깅을 위해 일부 표시
+            debugPrint('📤 Request had:');
+            debugPrint('  - Model: ${requestBody['model']}');
+            debugPrint('  - Store: ${requestBody['store']}');
+            debugPrint('  - Has conversation: ${requestBody.containsKey('conversation')}');
+            debugPrint('  - Has previous_response_id: ${requestBody.containsKey('previous_response_id')}');
+            if (requestBody.containsKey('conversation')) {
+              debugPrint('  - Conversation ID: ${requestBody['conversation']}');
+            }
+            if (requestBody.containsKey('previous_response_id')) {
+              debugPrint('  - Previous Response ID: ${requestBody['previous_response_id']}');
+            }
+          }
+        } catch (e) {
+          debugPrint('❌ Could not parse error response: $e');
+        }
+        
         throw Exception('API error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {

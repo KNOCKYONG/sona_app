@@ -2235,6 +2235,17 @@ class AppLocalizationsRu extends AppLocalizations {
   String get translationSettings => 'Настройки перевода';
 
   @override
+  String get translationSettingsDescription =>
+      'Настройте отображение переводов в чате';
+
+  @override
+  String get alwaysShowTranslation => 'Всегда показывать перевод';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Автоматически показывать переводы для всех сообщений';
+
+  @override
   String get travel => 'Путешествие';
 
   @override

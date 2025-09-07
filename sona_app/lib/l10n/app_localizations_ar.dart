@@ -2197,6 +2197,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get translationSettings => 'إعدادات الترجمة';
 
   @override
+  String get translationSettingsDescription =>
+      'تكوين كيفية ظهور الترجمات في الدردشة';
+
+  @override
+  String get alwaysShowTranslation => 'إظهار الترجمة دائماً';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'عرض الترجمات تلقائيًا لجميع الرسائل';
+
+  @override
   String get travel => 'السفر';
 
   @override

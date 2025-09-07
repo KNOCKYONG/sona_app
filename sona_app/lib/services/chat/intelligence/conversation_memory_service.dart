@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -664,7 +665,7 @@ class ConversationMemoryService {
         final topMemories = relevantMemories.take(3);
         for (final memory in topMemories) {
           // ConversationsService를 통해 저장하는 로직은 ChatOrchestrator에서 처리
-          debugPrint('📌 Important memory selected for server storage: ${memory.content.substring(0, 30)}...');
+          debugPrint('📌 Important memory selected for server storage: ${memory.content.substring(0, math.min(50, memory.content.length))}...');
         }
       }
     }

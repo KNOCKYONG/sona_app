@@ -2257,6 +2257,17 @@ class AppLocalizationsTl extends AppLocalizations {
   String get translationSettings => 'Mga Setting ng Pagsasalin';
 
   @override
+  String get translationSettingsDescription =>
+      'I-configure kung paano lalabas ang mga pagsasalin sa chat';
+
+  @override
+  String get alwaysShowTranslation => 'Palaging Ipakita ang Pagsasalin';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Awtomatikong magpakita ng mga pagsasalin para sa lahat ng mensahe';
+
+  @override
   String get travel => 'Maglakbay';
 
   @override

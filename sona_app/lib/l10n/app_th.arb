@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "กำหนดค่าวิธีการแสดงการแปลในแชท",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "แสดงการแปลเสมอ",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "แสดงการแปลสำหรับข้อความทั้งหมดโดยอัตโนมัติ",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "การเดินทาง",
   "@travel": {
     "description": "Localized string for travel"

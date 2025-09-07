@@ -2230,6 +2230,17 @@ class AppLocalizationsTr extends AppLocalizations {
   String get translationSettings => 'Çeviri Ayarları';
 
   @override
+  String get translationSettingsDescription =>
+      'Sohbette çevirilerin nasıl görüneceğini yapılandırın';
+
+  @override
+  String get alwaysShowTranslation => 'Her Zaman Çeviriyi Göster';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'Tüm mesajlar için çevirileri otomatik olarak göster';
+
+  @override
   String get travel => 'Seyahat';
 
   @override

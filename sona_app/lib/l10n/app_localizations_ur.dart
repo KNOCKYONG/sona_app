@@ -2230,6 +2230,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get translationSettings => 'ترجمے کی ترتیبات';
 
   @override
+  String get translationSettingsDescription =>
+      'چیٹ میں ترجمے کیسے ظاہر ہوں اس کی تشکیل کریں';
+
+  @override
+  String get alwaysShowTranslation => 'ہمیشہ ترجمہ دکھائیں';
+
+  @override
+  String get alwaysShowTranslationDescription =>
+      'تمام پیغامات کے لیے خودکار طور پر ترجمہ دکھائیں';
+
+  @override
   String get travel => 'سفر';
 
   @override

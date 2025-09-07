@@ -2873,6 +2873,18 @@
   "@translationSettings": {
     "description": "Localized string for translationSettings"
   },
+  "translationSettingsDescription": "چیٹ میں ترجمے کیسے ظاہر ہوں اس کی تشکیل کریں",
+  "@translationSettingsDescription": {
+    "description": "Description for translation settings section"
+  },
+  "alwaysShowTranslation": "ہمیشہ ترجمہ دکھائیں",
+  "@alwaysShowTranslation": {
+    "description": "Toggle to always show translations"
+  },
+  "alwaysShowTranslationDescription": "تمام پیغامات کے لیے خودکار طور پر ترجمہ دکھائیں",
+  "@alwaysShowTranslationDescription": {
+    "description": "Description for always show translation toggle"
+  },
   "travel": "سفر",
   "@travel": {
     "description": "Localized string for travel"

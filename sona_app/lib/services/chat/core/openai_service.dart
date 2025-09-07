@@ -248,7 +248,7 @@ class OpenAIService {
       userAge: request.userAge,
       isCasualSpeech: request.isCasualSpeech,
       contextHint: enhancedContextHint,
-      targetLanguage: request.targetLanguage,
+      targetLanguage: request.targetLanguage,  // 타겟 언어 전달
       systemLanguage: request.systemLanguage,  // 시스템 언어 전달
       patternAnalysis: advancedAnalysis.basicAnalysis, // 기본 패턴 분석 결과 전달
       hasAskedWellBeingToday: hasAskedWellBeingToday,

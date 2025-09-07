@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/message.dart';
 import '../../models/persona.dart';
 import '../base/base_service.dart';
-import '../language/language_detection_service.dart';
 import '../language/multilingual_emotion_dictionary.dart';
 import '../language/multilingual_intensity_analyzer.dart';
 
@@ -30,15 +29,17 @@ class ComplexEmotionService extends BaseService {
     required List<Message> recentMessages,
     required Persona persona,
     required int likeScore,
+    String languageCode = 'ko',  // Default to Korean
   }) {
     // 주 감정 분석
-    final primaryEmotion = _analyzePrimaryEmotion(userMessage, recentMessages);
+    final primaryEmotion = _analyzePrimaryEmotion(userMessage, recentMessages, languageCode);
     
     // 부 감정 분석
     final secondaryEmotion = _analyzeSecondaryEmotion(
       userMessage, 
       primaryEmotion,
       likeScore,
+      languageCode,
     );
     
     // 감정 강도 계산
@@ -46,6 +47,7 @@ class ComplexEmotionService extends BaseService {
       userMessage,
       primaryEmotion,
       likeScore,
+      languageCode,
     );
     
     // 감정 뉘앙스 결정
@@ -61,6 +63,7 @@ class ComplexEmotionService extends BaseService {
       userMessage,
       recentMessages,
       likeScore,
+      languageCode,
     );
     
     _currentState = ComplexEmotionState(
@@ -82,47 +85,46 @@ class ComplexEmotionService extends BaseService {
   EmotionType _analyzePrimaryEmotion(
     String message,
     List<Message> recentMessages,
+    String languageCode,
   ) {
     final lower = message.toLowerCase();
     
-    // 언어 감지
-    final languageDetector = LanguageDetectionService();
-    final language = languageDetector.detectLanguage(message);
+    // Use provided language code
     final emotionDict = MultilingualEmotionDictionary();
     
     // 언어별 감정 키워드로 분석
     // 사랑/애정
-    final loveKeywords = emotionDict.getKeywords(language, 'love');
+    final loveKeywords = emotionDict.getKeywords(languageCode, 'love');
     if (loveKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.love;
     }
     
     // 기쁨/행복
-    final happyKeywords = emotionDict.getKeywords(language, 'happy');
+    final happyKeywords = emotionDict.getKeywords(languageCode, 'happy');
     if (happyKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.happy;
     }
     
     // 슬픔
-    final sadKeywords = emotionDict.getKeywords(language, 'sad');
+    final sadKeywords = emotionDict.getKeywords(languageCode, 'sad');
     if (sadKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.sad;
     }
     
     // 화남
-    final angryKeywords = emotionDict.getKeywords(language, 'angry');
+    final angryKeywords = emotionDict.getKeywords(languageCode, 'angry');
     if (angryKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.angry;
     }
     
     // 걱정/불안
-    final concernedKeywords = emotionDict.getKeywords(language, 'concerned');
+    final concernedKeywords = emotionDict.getKeywords(languageCode, 'concerned');
     if (concernedKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.concerned;
     }
     
     // 놀람
-    final surprisedKeywords = emotionDict.getKeywords(language, 'surprised');
+    final surprisedKeywords = emotionDict.getKeywords(languageCode, 'surprised');
     if (surprisedKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       return EmotionType.surprised;
     }
@@ -157,15 +159,14 @@ class ComplexEmotionService extends BaseService {
     String message,
     EmotionType primaryEmotion,
     int likeScore,
+    String languageCode,
   ) {
     final lower = message.toLowerCase();
     
-    // 언어 감지
-    final languageDetector = LanguageDetectionService();
-    final language = languageDetector.detectLanguage(message);
+    // Use provided language code
     
     // 언어별 복합 감정 패턴
-    switch (language) {
+    switch (languageCode) {
       case 'ko':
         return _analyzeKoreanSecondaryEmotion(lower, primaryEmotion, likeScore);
       case 'en':
@@ -348,17 +349,16 @@ class ComplexEmotionService extends BaseService {
     String message,
     EmotionType emotion,
     int likeScore,
+    String languageCode,
   ) {
-    // 언어 감지
-    final languageDetector = LanguageDetectionService();
-    final language = languageDetector.detectLanguage(message);
+    // Use provided language code
     
     // 다국어 강도 분석기 사용
     final intensityAnalyzer = MultilingualIntensityAnalyzer();
-    double intensity = intensityAnalyzer.analyzeIntensity(message, language);
+    double intensity = intensityAnalyzer.analyzeIntensity(message, languageCode);
     
     // 문화별 조정 계수 적용
-    intensity *= intensityAnalyzer.getCulturalAdjustment(language);
+    intensity *= intensityAnalyzer.getCulturalAdjustment(languageCode);
     
     // 감정 유형별 추가 조정
     if (emotion == EmotionType.love || emotion == EmotionType.happy) {
@@ -511,26 +511,25 @@ class ComplexEmotionService extends BaseService {
     String userMessage,
     List<Message> recentMessages,
     int likeScore,
+    String languageCode,
   ) {
     // 사용자 감정 감지
     EmotionType? userEmotion;
     final lower = userMessage.toLowerCase();
     
-    // 언어 감지
-    final languageDetector = LanguageDetectionService();
-    final language = languageDetector.detectLanguage(userMessage);
+    // Use provided language code
     final emotionDict = MultilingualEmotionDictionary();
     
     // 언어별 감정 키워드로 감지
-    final sadKeywords = emotionDict.getKeywords(language, 'sad');
+    final sadKeywords = emotionDict.getKeywords(languageCode, 'sad');
     if (sadKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
       userEmotion = EmotionType.sad;
     } else {
-      final happyKeywords = emotionDict.getKeywords(language, 'happy');
+      final happyKeywords = emotionDict.getKeywords(languageCode, 'happy');
       if (happyKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
         userEmotion = EmotionType.happy;
       } else {
-        final angryKeywords = emotionDict.getKeywords(language, 'angry');
+        final angryKeywords = emotionDict.getKeywords(languageCode, 'angry');
         if (angryKeywords.any((keyword) => lower.contains(keyword.toLowerCase()))) {
           userEmotion = EmotionType.angry;
         }

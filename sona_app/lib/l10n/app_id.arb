@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "Sembunyikan Terjemahan Otomatis",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Selalu Tampilkan Terjemahan",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "Silakan masuk untuk melanjutkan",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "Mari tentukan kepribadian apa yang harus dimiliki persona Anda. Jawab pertanyaan untuk membentuk karakternya.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "Pengaturan > Aplikasi > SONA > Izin\nHarap izinkan akses foto",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Pengaturan > SONA > Foto\nHarap izinkan akses foto",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "Jelaskan persona",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "Anda telah mencapai batas 3 persona",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "Masukkan nama persona",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "Laporkan Kesalahan",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "Mulai Tes",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "Tes MBTI",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "Usia",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "Deskripsi",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "Nama",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "Mulai percakapan dengan {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Notifikasi keterlibatan ulang dikirim ke {personaName} (Risiko: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Tidak ada persona aktif",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

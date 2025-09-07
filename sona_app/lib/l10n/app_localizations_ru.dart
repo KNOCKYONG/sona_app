@@ -727,11 +727,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'Настройки > Приложения > SONA > Разрешения\nРазрешите доступ к фото';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'Настройки > SONA > Фото\nРазрешите доступ к фото';
 
   @override
   String get googleLoginCanceled =>
@@ -2421,10 +2421,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get darkThemeName => 'Темная';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'Всегда показывать перевод';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'Скрыть автоперевод';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2447,50 +2447,50 @@ class AppLocalizationsRu extends AppLocalizations {
   String get createPersona => 'Создать Персону';
 
   @override
-  String get tellUsAboutYourPersona => 'Tell us about your persona';
+  String get tellUsAboutYourPersona => 'Расскажите о вашей персоне';
 
   @override
-  String get enterPersonaName => 'Enter persona name';
+  String get enterPersonaName => 'Введите имя персоны';
 
   @override
-  String get describeYourPersona => 'Describe your persona briefly';
+  String get describeYourPersona => 'Кратко опишите вашу персону';
 
   @override
-  String get profileImage => 'Profile Image';
+  String get profileImage => 'Изображение профиля';
 
   @override
-  String get uploadPersonaImages => 'Upload images for your persona';
+  String get uploadPersonaImages => 'Загрузите изображения для персоны';
 
   @override
-  String get mainImage => 'Main Image';
+  String get mainImage => 'Главное изображение';
 
   @override
-  String get tapToUpload => 'Tap to upload';
+  String get tapToUpload => 'Нажмите для загрузки';
 
   @override
-  String get additionalImages => 'Additional Images';
+  String get additionalImages => 'Дополнительные изображения';
 
   @override
-  String get addImage => 'Add Image';
+  String get addImage => 'Добавить изображение';
 
   @override
-  String get mbtiQuestion => 'Personality Question';
+  String get mbtiQuestion => 'Вопрос о личности';
 
   @override
-  String get mbtiComplete => 'Personality Test Complete!';
+  String get mbtiComplete => 'Тест личности завершен!';
 
   @override
   String get mbtiTest => 'Тест MBTI';
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'Давайте определим, какая личность должна быть у вашей персоны. Ответьте на вопросы, чтобы сформировать ее характер.';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'Начать тест';
 
   @override
-  String get personalitySettings => 'Personality Settings';
+  String get personalitySettings => 'Настройки личности';
 
   @override
   String get speechStyle => 'Стиль Речи';
@@ -2499,24 +2499,24 @@ class AppLocalizationsRu extends AppLocalizations {
   String get conversationStyle => 'Стиль Разговора';
 
   @override
-  String get shareWithCommunity => 'Share with Community';
+  String get shareWithCommunity => 'Поделиться с сообществом';
 
   @override
   String get shareDescription =>
-      'Your persona can be shared with other users after approval';
+      'Ваша персона может быть доступна другим пользователям после одобрения';
 
   @override
-  String get sharePersona => 'Share Persona';
+  String get sharePersona => 'Поделиться персоной';
 
   @override
   String get willBeSharedAfterApproval =>
       'Будет опубликовано после одобрения администратора';
 
   @override
-  String get privatePersonaDescription => 'Only you can see this persona';
+  String get privatePersonaDescription => 'Только вы видите эту персону';
 
   @override
-  String get create => 'Create';
+  String get create => 'Создать';
 
   @override
   String get personaCreated => 'Персона успешно создана';
@@ -2531,14 +2531,14 @@ class AppLocalizationsRu extends AppLocalizations {
   String get approved => 'Одобрено';
 
   @override
-  String get privatePersona => 'Private';
+  String get privatePersona => 'Приватная';
 
   @override
-  String get noPersonasYet => 'No Personas Yet';
+  String get noPersonasYet => 'Персон пока нет';
 
   @override
   String get createYourFirstPersona =>
-      'Create your first persona and start your journey';
+      'Создайте свою первую персону и начните путешествие';
 
   @override
   String get deletePersona => 'Удалить Персону';
@@ -2554,7 +2554,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get deleteFailed => 'Не удалось удалить';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'Достигнут лимит в 3 персоны';
 
   @override
   String get personaName => 'Имя Персоны';
@@ -2572,10 +2572,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get personaDescriptionHint => 'Кратко опишите вашу персону';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'Войдите, чтобы продолжить';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'Сообщить об ошибке';
 
   @override
   String get speechStyleFriendly => 'Дружелюбный';
@@ -2955,4 +2955,17 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Начать разговор с $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Уведомление о повторном вовлечении отправлено $personaName (Риск: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'Нет активной персоны';
 }

@@ -3820,5 +3820,146 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "addImage": "Adicionar imagem",
+  "@addImage": {
+    "description": "Localized string for addImage"
+  },
+  "additionalImages": "Imagens adicionais",
+  "@additionalImages": {
+    "description": "Localized string for additionalImages"
+  },
+  "alwaysShowTranslationOff": "Ocultar tradução automática",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Sempre mostrar tradução",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "create": "Criar",
+  "@create": {
+    "description": "Localized string for create"
+  },
+  "createYourFirstPersona": "Crie sua primeira persona e comece sua jornada",
+  "@createYourFirstPersona": {
+    "description": "Localized string for createYourFirstPersona"
+  },
+  "describeYourPersona": "Descreva brevemente sua persona",
+  "@describeYourPersona": {
+    "description": "Localized string for describeYourPersona"
+  },
+  "enterPersonaName": "Digite o nome da persona",
+  "@enterPersonaName": {
+    "description": "Localized string for enterPersonaName"
+  },
+  "loginRequiredContent": "Faça login para continuar",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mainImage": "Imagem principal",
+  "@mainImage": {
+    "description": "Localized string for mainImage"
+  },
+  "noPersonasYet": "Ainda sem personas",
+  "@noPersonasYet": {
+    "description": "Localized string for noPersonasYet"
+  },
+  "permissionGuideAndroid": "Configurações > Apps > SONA > Permissões\nPermita acesso às fotos",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Ajustes > SONA > Fotos\nPermita acesso às fotos",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaLimitReached": "Você atingiu o limite de 3 personas",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personalitySettings": "Configurações de personalidade",
+  "@personalitySettings": {
+    "description": "Localized string for personalitySettings"
+  },
+  "privatePersona": "Privado",
+  "@privatePersona": {
+    "description": "Localized string for privatePersona"
+  },
+  "privatePersonaDescription": "Apenas você pode ver esta persona",
+  "@privatePersonaDescription": {
+    "description": "Localized string for privatePersonaDescription"
+  },
+  "profileImage": "Imagem de perfil",
+  "@profileImage": {
+    "description": "Localized string for profileImage"
+  },
+  "reportErrorButton": "Reportar erro",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "sharePersona": "Compartilhar persona",
+  "@sharePersona": {
+    "description": "Localized string for sharePersona"
+  },
+  "shareWithCommunity": "Compartilhar com a comunidade",
+  "@shareWithCommunity": {
+    "description": "Localized string for shareWithCommunity"
+  },
+  "tapToUpload": "Toque para enviar",
+  "@tapToUpload": {
+    "description": "Localized string for tapToUpload"
+  },
+  "tellUsAboutYourPersona": "Conte-nos sobre sua persona",
+  "@tellUsAboutYourPersona": {
+    "description": "Localized string for tellUsAboutYourPersona"
+  },
+  "uploadPersonaImages": "Enviar imagens para sua persona",
+  "@uploadPersonaImages": {
+    "description": "Localized string for uploadPersonaImages"
+  },
+  "mbtiComplete": "Teste de personalidade concluído!",
+  "@mbtiComplete": {
+    "description": "Localized string for mbtiComplete"
+  },
+  "mbtiQuestion": "Pergunta de personalidade",
+  "@mbtiQuestion": {
+    "description": "Localized string for mbtiQuestion"
+  },
+  "mbtiStepDescription": "Vamos determinar qual personalidade sua persona deve ter. Responda às perguntas para moldar seu caráter.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "shareDescription": "Sua persona pode ser compartilhada com outros usuários após aprovação",
+  "@shareDescription": {
+    "description": "Localized string for shareDescription"
+  },
+  "startTest": "Iniciar teste",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "startChatWithPersona": "Iniciar uma conversa com {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Notificação de reengajamento enviada para {personaName} (Risco: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Nenhuma persona ativa",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

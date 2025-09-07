@@ -233,7 +233,7 @@ class _SplashScreenState extends State<SplashScreen>
               '🔐 [SplashScreen] User is not authenticated, initializing for guest');
           
           // 게스트 사용자도 PersonaService 초기화 (첫 설치 무한 로딩 방지)
-          _updateProgress(0.5, 'Preparing persona data...');
+          _updateProgress(0.5, AppLocalizations.of(context)!.preparingPersonas);
           
           try {
             debugPrint('🔐 [SplashScreen] Initializing PersonaService for guest user...');
@@ -261,7 +261,7 @@ class _SplashScreenState extends State<SplashScreen>
           }
           
           // 로그인되지 않은 경우
-          _updateProgress(1.0, 'Welcome!');
+          _updateProgress(1.0, AppLocalizations.of(context)!.guestModeWelcome);
           await Future.delayed(const Duration(milliseconds: 500));
           _showWelcomeDialog();
         }

@@ -713,11 +713,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'Cài đặt > Ứng dụng > SONA > Quyền\nVui lòng cho phép truy cập ảnh';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'Cài đặt > SONA > Ảnh\nVui lòng cho phép truy cập ảnh';
 
   @override
   String get googleLoginCanceled => 'Đăng nhập Google đã hủy';
@@ -2367,10 +2367,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get darkThemeName => 'Tối';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'Luôn hiển thị bản dịch';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'Ẩn dịch tự động';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2427,14 +2427,14 @@ class AppLocalizationsVi extends AppLocalizations {
   String get mbtiComplete => 'Bài Kiểm Tra Tính Cách Hoàn Thành!';
 
   @override
-  String get mbtiTest => 'MBTI Test';
+  String get mbtiTest => 'Kiểm tra MBTI';
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'Hãy xác định persona của bạn nên có tính cách như thế nào. Trả lời các câu hỏi để hình thành tính cách của họ.';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'Bắt đầu kiểm tra';
 
   @override
   String get personalitySettings => 'Cài Đặt Tính Cách';
@@ -2502,28 +2502,28 @@ class AppLocalizationsVi extends AppLocalizations {
   String get deleteFailed => 'Xóa thất bại';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'Bạn đã đạt giới hạn 3 persona';
 
   @override
-  String get personaName => 'Name';
+  String get personaName => 'Tên';
 
   @override
-  String get personaAge => 'Age';
+  String get personaAge => 'Tuổi';
 
   @override
-  String get personaDescription => 'Description';
+  String get personaDescription => 'Mô tả';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'Nhập tên persona';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'Mô tả persona';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'Vui lòng đăng nhập để tiếp tục';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'Báo cáo lỗi';
 
   @override
   String get speechStyleFriendly => 'Thân thiện';
@@ -2903,4 +2903,17 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Bắt đầu trò chuyện với $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Đã gửi thông báo tái tương tác cho $personaName (Rủi ro: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'Không có persona hoạt động';
 }

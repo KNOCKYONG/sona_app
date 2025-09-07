@@ -3868,5 +3868,30 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "startChatWithPersona": "Start a conversation with {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Re-engagement notification sent to {personaName} (Risk: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "No active persona",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "स्वचालित अनुवाद छुपाएं",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "हमेशा अनुवाद दिखाएं",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "जारी रखने के लिए कृपया लॉगिन करें",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "आइए निर्धारित करें कि आपके व्यक्तित्व की क्या विशेषता होनी चाहिए। उनके चरित्र को आकार देने के लिए प्रश्नों का उत्तर दें।",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "सेटिंग्स > ऐप्स > SONA > अनुमतियां\nकृपया फोटो की अनुमति दें",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "सेटिंग्स > SONA > फोटो\nकृपया फोटो एक्सेस की अनुमति दें",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "व्यक्तित्व का वर्णन करें",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "आप 3 व्यक्तित्वों की सीमा तक पहुंच गए हैं",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "व्यक्तित्व का नाम दर्ज करें",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "त्रुटि रिपोर्ट करें",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "परीक्षण शुरू करें",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "MBTI परीक्षण",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "आयु",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "विवरण",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "नाम",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "{personaName} के साथ बातचीत शुरू करें?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "{personaName} को पुनः जुड़ाव सूचना भेजी गई (जोखिम: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "कोई सक्रिय व्यक्तित्व नहीं",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

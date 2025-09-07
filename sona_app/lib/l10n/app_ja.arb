@@ -3820,5 +3820,146 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "addImage": "画像を追加",
+  "@addImage": {
+    "description": "Localized string for addImage"
+  },
+  "additionalImages": "追加画像",
+  "@additionalImages": {
+    "description": "Localized string for additionalImages"
+  },
+  "alwaysShowTranslationOff": "自動翻訳を非表示",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "常に翻訳を表示",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "create": "作成",
+  "@create": {
+    "description": "Localized string for create"
+  },
+  "createFailed": "ペルソナの作成に失敗しました",
+  "@createFailed": {
+    "description": "Localized string for createFailed"
+  },
+  "createYourFirstPersona": "最初のペルソナを作成して旅を始めましょう",
+  "@createYourFirstPersona": {
+    "description": "Localized string for createYourFirstPersona"
+  },
+  "describeYourPersona": "ペルソナを簡単に説明してください",
+  "@describeYourPersona": {
+    "description": "Localized string for describeYourPersona"
+  },
+  "enterPersonaName": "ペルソナ名を入力",
+  "@enterPersonaName": {
+    "description": "Localized string for enterPersonaName"
+  },
+  "loginRequiredContent": "続行するにはログインしてください",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mainImage": "メイン画像",
+  "@mainImage": {
+    "description": "Localized string for mainImage"
+  },
+  "noPersonasYet": "まだペルソナがありません",
+  "@noPersonasYet": {
+    "description": "Localized string for noPersonasYet"
+  },
+  "permissionGuideAndroid": "設定 > アプリ > SONA > 権限\n写真の許可を有効にしてください",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "設定 > SONA > 写真\n写真へのアクセスを許可してください",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaCreated": "ペルソナが正常に作成されました！",
+  "@personaCreated": {
+    "description": "Localized string for personaCreated"
+  },
+  "personaDescriptionHint": "ペルソナを説明",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "ペルソナの上限3つに達しました",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "ペルソナ名を入力",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "personalitySettings": "性格設定",
+  "@personalitySettings": {
+    "description": "Localized string for personalitySettings"
+  },
+  "privatePersona": "プライベート",
+  "@privatePersona": {
+    "description": "Localized string for privatePersona"
+  },
+  "privatePersonaDescription": "あなただけが見ることができるペルソナ",
+  "@privatePersonaDescription": {
+    "description": "Localized string for privatePersonaDescription"
+  },
+  "profileImage": "プロフィール画像",
+  "@profileImage": {
+    "description": "Localized string for profileImage"
+  },
+  "reportErrorButton": "エラーを報告",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "sharePersona": "ペルソナを共有",
+  "@sharePersona": {
+    "description": "Localized string for sharePersona"
+  },
+  "shareWithCommunity": "コミュニティと共有",
+  "@shareWithCommunity": {
+    "description": "Localized string for shareWithCommunity"
+  },
+  "tapToUpload": "タップしてアップロード",
+  "@tapToUpload": {
+    "description": "Localized string for tapToUpload"
+  },
+  "tellUsAboutYourPersona": "あなたのペルソナについて教えてください",
+  "@tellUsAboutYourPersona": {
+    "description": "Localized string for tellUsAboutYourPersona"
+  },
+  "uploadPersonaImages": "ペルソナの画像をアップロード",
+  "@uploadPersonaImages": {
+    "description": "Localized string for uploadPersonaImages"
+  },
+  "willBeSharedAfterApproval": "管理者の承認後に共有されます",
+  "@willBeSharedAfterApproval": {
+    "description": "Localized string for willBeSharedAfterApproval"
+  },
+  "startChatWithPersona": "{personaName}と会話を始めますか？",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "{personaName}への再エンゲージメント通知を送信しました (リスク: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "アクティブなペルソナがありません",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

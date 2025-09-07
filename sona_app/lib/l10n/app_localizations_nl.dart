@@ -735,11 +735,11 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'Instellingen > Apps > SONA > Toestemmingen\nSta foto-toegang toe';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'Instellingen > SONA > Foto\'s\nSta foto-toegang toe';
 
   @override
   String get googleLoginCanceled =>
@@ -2436,10 +2436,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get darkThemeName => 'Donker';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'Altijd vertaling tonen';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'Automatische vertaling verbergen';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2499,10 +2499,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'Laten we bepalen welke persoonlijkheid je persona moet hebben. Beantwoord vragen om hun karakter te vormen.';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'Test starten';
 
   @override
   String get personalitySettings => 'Persoonlijkheidsinstellingen';
@@ -2569,28 +2569,28 @@ class AppLocalizationsNl extends AppLocalizations {
   String get deleteFailed => 'Verwijderen mislukt';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'Je hebt de limiet van 3 personas bereikt';
 
   @override
-  String get personaName => 'Name';
+  String get personaName => 'Naam';
 
   @override
-  String get personaAge => 'Age';
+  String get personaAge => 'Leeftijd';
 
   @override
-  String get personaDescription => 'Description';
+  String get personaDescription => 'Beschrijving';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'Voer persona naam in';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'Beschrijf de persona';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'Log in om door te gaan';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'Fout melden';
 
   @override
   String get speechStyleFriendly => 'Vriendelijk';
@@ -2970,4 +2970,17 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Gesprek beginnen met $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Herbetrokkenheidsmelding verzonden naar $personaName (Risico: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'Geen actieve persona';
 }

@@ -728,11 +728,11 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'سیٹنگز > ایپس > SONA > اجازات\nبراہ کرم تصویر کی اجازت دیں';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'سیٹنگز > SONA > تصاویر\nبراہ کرم تصویر تک رسائی کی اجازت دیں';
 
   @override
   String get googleLoginCanceled => 'گوگل لاگ ان منسوخ کر دیا گیا۔';
@@ -2415,10 +2415,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get darkThemeName => 'ڈارک';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'ہمیشہ ترجمہ دکھائیں';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'خودکار ترجمہ چھپائیں';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2474,14 +2474,14 @@ class AppLocalizationsUr extends AppLocalizations {
   String get mbtiComplete => 'شخصیت کا ٹیسٹ مکمل!';
 
   @override
-  String get mbtiTest => 'MBTI Test';
+  String get mbtiTest => 'MBTI ٹیسٹ';
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'آئیے طے کریں کہ آپ کی شخصیت کی کیا خصوصیت ہونی چاہیے۔ ان کے کردار کو تشکیل دینے کے لیے سوالات کا جواب دیں۔';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'ٹیسٹ شروع کریں';
 
   @override
   String get personalitySettings => 'شخصیت کی ترتیبات';
@@ -2547,28 +2547,28 @@ class AppLocalizationsUr extends AppLocalizations {
   String get deleteFailed => 'ڈیلیٹ کرنے میں ناکامی';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'آپ 3 شخصیات کی حد تک پہنچ گئے ہیں';
 
   @override
-  String get personaName => 'Name';
+  String get personaName => 'نام';
 
   @override
-  String get personaAge => 'Age';
+  String get personaAge => 'عمر';
 
   @override
-  String get personaDescription => 'Description';
+  String get personaDescription => 'تفصیل';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'شخصیت کا نام درج کریں';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'شخصیت کی وضاحت کریں';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'جاری رکھنے کے لیے لاگ ان کریں';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'خرابی کی اطلاع دیں';
 
   @override
   String get speechStyleFriendly => 'دوستانہ';
@@ -2948,4 +2948,17 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return '$personaName کے ساتھ بات چیت شروع کریں؟';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return '$personaName کو دوبارہ مشغولیت کی اطلاع بھیجی گئی (خطرہ: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'کوئی فعال شخصیت نہیں';
 }

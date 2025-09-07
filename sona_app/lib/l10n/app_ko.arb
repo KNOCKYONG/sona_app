@@ -3932,5 +3932,38 @@
   "create": "생성",
   "@create": {
     "description": "create button text"
+  },
+  "enterPersonaName": "페르소나 이름을 입력하세요",
+  "@enterPersonaName": {
+    "description": "Hint text for persona name input"
+  },
+  "describeYourPersona": "페르소나를 간단히 설명해주세요",
+  "@describeYourPersona": {
+    "description": "Hint text for persona description"
+  },
+  "startChatWithPersona": "{personaName}과(와) 대화를 시작하시겠습니까?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "{personaName}님의 재참여 알림을 보냈습니다 (위험도: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "활성화된 페르소나가 없습니다",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

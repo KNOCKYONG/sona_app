@@ -5595,6 +5595,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please add a main profile image'**
   String get mainImageRequired;
+
+  /// Localized string for startChatWithPersona
+  ///
+  /// In en, this message translates to:
+  /// **'Start a conversation with {personaName}?'**
+  String startChatWithPersona(String personaName);
+
+  /// Localized string for reengagementNotificationSent
+  ///
+  /// In en, this message translates to:
+  /// **'Re-engagement notification sent to {personaName} (Risk: {riskPercent}%)'**
+  String reengagementNotificationSent(String personaName, String riskPercent);
+
+  /// Localized string for noActivePersona
+  ///
+  /// In en, this message translates to:
+  /// **'No active persona'**
+  String get noActivePersona;
 }
 
 class _AppLocalizationsDelegate

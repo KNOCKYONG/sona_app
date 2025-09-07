@@ -3820,5 +3820,146 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "addImage": "Добавить изображение",
+  "@addImage": {
+    "description": "Localized string for addImage"
+  },
+  "additionalImages": "Дополнительные изображения",
+  "@additionalImages": {
+    "description": "Localized string for additionalImages"
+  },
+  "alwaysShowTranslationOff": "Скрыть автоперевод",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Всегда показывать перевод",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "create": "Создать",
+  "@create": {
+    "description": "Localized string for create"
+  },
+  "createYourFirstPersona": "Создайте свою первую персону и начните путешествие",
+  "@createYourFirstPersona": {
+    "description": "Localized string for createYourFirstPersona"
+  },
+  "describeYourPersona": "Кратко опишите вашу персону",
+  "@describeYourPersona": {
+    "description": "Localized string for describeYourPersona"
+  },
+  "enterPersonaName": "Введите имя персоны",
+  "@enterPersonaName": {
+    "description": "Localized string for enterPersonaName"
+  },
+  "loginRequiredContent": "Войдите, чтобы продолжить",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mainImage": "Главное изображение",
+  "@mainImage": {
+    "description": "Localized string for mainImage"
+  },
+  "noPersonasYet": "Персон пока нет",
+  "@noPersonasYet": {
+    "description": "Localized string for noPersonasYet"
+  },
+  "permissionGuideAndroid": "Настройки > Приложения > SONA > Разрешения\nРазрешите доступ к фото",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Настройки > SONA > Фото\nРазрешите доступ к фото",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaLimitReached": "Достигнут лимит в 3 персоны",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personalitySettings": "Настройки личности",
+  "@personalitySettings": {
+    "description": "Localized string for personalitySettings"
+  },
+  "privatePersona": "Приватная",
+  "@privatePersona": {
+    "description": "Localized string for privatePersona"
+  },
+  "privatePersonaDescription": "Только вы видите эту персону",
+  "@privatePersonaDescription": {
+    "description": "Localized string for privatePersonaDescription"
+  },
+  "profileImage": "Изображение профиля",
+  "@profileImage": {
+    "description": "Localized string for profileImage"
+  },
+  "reportErrorButton": "Сообщить об ошибке",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "sharePersona": "Поделиться персоной",
+  "@sharePersona": {
+    "description": "Localized string for sharePersona"
+  },
+  "shareWithCommunity": "Поделиться с сообществом",
+  "@shareWithCommunity": {
+    "description": "Localized string for shareWithCommunity"
+  },
+  "tapToUpload": "Нажмите для загрузки",
+  "@tapToUpload": {
+    "description": "Localized string for tapToUpload"
+  },
+  "tellUsAboutYourPersona": "Расскажите о вашей персоне",
+  "@tellUsAboutYourPersona": {
+    "description": "Localized string for tellUsAboutYourPersona"
+  },
+  "uploadPersonaImages": "Загрузите изображения для персоны",
+  "@uploadPersonaImages": {
+    "description": "Localized string for uploadPersonaImages"
+  },
+  "mbtiComplete": "Тест личности завершен!",
+  "@mbtiComplete": {
+    "description": "Localized string for mbtiComplete"
+  },
+  "mbtiQuestion": "Вопрос о личности",
+  "@mbtiQuestion": {
+    "description": "Localized string for mbtiQuestion"
+  },
+  "mbtiStepDescription": "Давайте определим, какая личность должна быть у вашей персоны. Ответьте на вопросы, чтобы сформировать ее характер.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "shareDescription": "Ваша персона может быть доступна другим пользователям после одобрения",
+  "@shareDescription": {
+    "description": "Localized string for shareDescription"
+  },
+  "startTest": "Начать тест",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "startChatWithPersona": "Начать разговор с {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Уведомление о повторном вовлечении отправлено {personaName} (Риск: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Нет активной персоны",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

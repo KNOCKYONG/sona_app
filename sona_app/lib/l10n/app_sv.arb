@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "Dölj automatisk översättning",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Visa alltid översättning",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "Logga in för att fortsätta",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "Låt oss bestämma vilken personlighet din persona ska ha. Svara på frågor för att forma deras karaktär.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "Inställningar > Appar > SONA > Behörigheter\nTillåt fotoåtkomst",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Inställningar > SONA > Foton\nTillåt fotoåtkomst",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "Beskriv personan",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "Du har nått gränsen på 3 personas",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "Ange personanamn",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "Rapportera fel",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "Starta test",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "MBTI-test",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "Ålder",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "Beskrivning",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "Namn",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "Starta en konversation med {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Återengagemangsmeddelande skickat till {personaName} (Risk: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Ingen aktiv persona",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

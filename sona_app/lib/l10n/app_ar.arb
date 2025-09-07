@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "إخفاء الترجمة التلقائية",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "إظهار الترجمة دائماً",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "يرجى تسجيل الدخول للمتابعة",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "دعنا نحدد الشخصية التي يجب أن تكون عليها شخصيتك. أجب على الأسئلة لتشكيل شخصيتها.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "الإعدادات > التطبيقات > SONA > الصلاحيات\nيرجى السماح بصلاحية الصور",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "الإعدادات > SONA > الصور\nيرجى السماح بالوصول للصور",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "صف الشخصية",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "لقد وصلت إلى حد 3 شخصيات",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "أدخل اسم الشخصية",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "الإبلاغ عن خطأ",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "بدء الاختبار",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "اختبار MBTI",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "العمر",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "الوصف",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "الاسم",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "بدء محادثة مع {personaName}؟",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "تم إرسال إشعار إعادة المشاركة إلى {personaName} (المخاطر: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "لا توجد شخصية نشطة",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

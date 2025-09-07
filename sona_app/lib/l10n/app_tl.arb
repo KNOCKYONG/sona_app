@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "Itago ang Awtomatikong Pagsasalin",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Palaging Ipakita ang Pagsasalin",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "Mag-login para magpatuloy",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "Tukuyin natin kung anong personalidad ang dapat magkaroon ang iyong persona. Sagutin ang mga tanong para hubugin ang kanilang karakter.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "Settings > Apps > SONA > Permissions\nPahintulutan ang access sa larawan",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Settings > SONA > Photos\nPahintulutan ang access sa larawan",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "Ilarawan ang persona",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "Naabot mo na ang limitasyon na 3 persona",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "Ilagay ang pangalan ng persona",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "I-report ang Error",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "Simulan ang Pagsusulit",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "MBTI Test",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "Edad",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "Paglalarawan",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "Pangalan",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "Magsimula ng pag-uusap kay {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Ipinadala ang abiso ng muling pakikipag-ugnayan kay {personaName} (Panganib: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Walang aktibong persona",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

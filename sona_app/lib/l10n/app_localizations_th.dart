@@ -712,11 +712,11 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'การตั้งค่า > แอป > SONA > สิทธิ์\nกรุณาอนุญาตการเข้าถึงรูปภาพ';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'การตั้งค่า > SONA > รูปภาพ\nกรุณาอนุญาตการเข้าถึงรูปภาพ';
 
   @override
   String get googleLoginCanceled => 'การเข้าสู่ระบบ Google ถูกยกเลิก';
@@ -2379,10 +2379,10 @@ class AppLocalizationsTh extends AppLocalizations {
   String get darkThemeName => 'มืด';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'แสดงการแปลเสมอ';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'ซ่อนการแปลอัตโนมัติ';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2438,14 +2438,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get mbtiComplete => 'แบบทดสอบบุคลิกภาพเสร็จสิ้น!';
 
   @override
-  String get mbtiTest => 'MBTI Test';
+  String get mbtiTest => 'แบบทดสอบ MBTI';
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'มากำหนดว่าเพอร์โซน่าของคุณควรมีบุคลิกภาพแบบไหน ตอบคำถามเพื่อสร้างลักษณะนิสัย';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'เริ่มทดสอบ';
 
   @override
   String get personalitySettings => 'การตั้งค่าบุคลิกภาพ';
@@ -2511,28 +2511,28 @@ class AppLocalizationsTh extends AppLocalizations {
   String get deleteFailed => 'ลบไม่สำเร็จ';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'คุณถึงขีดจำกัด 3 เพอร์โซน่าแล้ว';
 
   @override
-  String get personaName => 'Name';
+  String get personaName => 'ชื่อ';
 
   @override
-  String get personaAge => 'Age';
+  String get personaAge => 'อายุ';
 
   @override
-  String get personaDescription => 'Description';
+  String get personaDescription => 'คำอธิบาย';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'ใส่ชื่อเพอร์โซน่า';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'อธิบายเพอร์โซน่า';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'รายงานข้อผิดพลาด';
 
   @override
   String get speechStyleFriendly => 'เป็นมิตร';
@@ -2912,4 +2912,17 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'เริ่มการสนทนากับ $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'ส่งการแจ้งเตือนการมีส่วนร่วมใหม่ถึง $personaName (ความเสี่ยง: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'ไม่มีเพอร์โซน่าที่ใช้งานอยู่';
 }

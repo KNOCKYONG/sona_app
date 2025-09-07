@@ -2353,10 +2353,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tellUsAboutYourPersona => '페르소나에 대해 알려주세요';
 
   @override
-  String get enterPersonaName => 'Enter persona name';
+  String get enterPersonaName => '페르소나 이름을 입력하세요';
 
   @override
-  String get describeYourPersona => 'Describe your persona briefly';
+  String get describeYourPersona => '페르소나를 간단히 설명해주세요';
 
   @override
   String get profileImage => '프로필 이미지';
@@ -2845,4 +2845,17 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mainImageRequired => '메인 프로필 이미지를 추가해주세요';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return '$personaName과(와) 대화를 시작하시겠습니까?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return '$personaName님의 재참여 알림을 보냈습니다 (위험도: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => '활성화된 페르소나가 없습니다';
 }

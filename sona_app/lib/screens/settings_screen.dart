@@ -620,7 +620,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('${persona.name}님의 재참여 알림을 보냈습니다 (위험도: ${(churnRisk * 100).toInt()}%)'),
+                  content: Text(AppLocalizations.of(context)!.reengagementNotificationSent(persona.name, (churnRisk * 100).toInt().toString())),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -628,8 +628,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           } else {
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('활성화된 페르소나가 없습니다'),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.noActivePersona),
                   backgroundColor: Colors.orange,
                 ),
               );

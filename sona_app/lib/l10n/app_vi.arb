@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "Ẩn dịch tự động",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Luôn hiển thị bản dịch",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "Vui lòng đăng nhập để tiếp tục",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "Hãy xác định persona của bạn nên có tính cách như thế nào. Trả lời các câu hỏi để hình thành tính cách của họ.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "Cài đặt > Ứng dụng > SONA > Quyền\nVui lòng cho phép truy cập ảnh",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Cài đặt > SONA > Ảnh\nVui lòng cho phép truy cập ảnh",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "Mô tả persona",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "Bạn đã đạt giới hạn 3 persona",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "Nhập tên persona",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "Báo cáo lỗi",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "Bắt đầu kiểm tra",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "Kiểm tra MBTI",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "Tuổi",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "Mô tả",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "Tên",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "Bắt đầu trò chuyện với {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Đã gửi thông báo tái tương tác cho {personaName} (Rủi ro: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Không có persona hoạt động",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

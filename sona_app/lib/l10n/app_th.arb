@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "ซ่อนการแปลอัตโนมัติ",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "แสดงการแปลเสมอ",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "กรุณาเข้าสู่ระบบเพื่อดำเนินการต่อ",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "มากำหนดว่าเพอร์โซน่าของคุณควรมีบุคลิกภาพแบบไหน ตอบคำถามเพื่อสร้างลักษณะนิสัย",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "การตั้งค่า > แอป > SONA > สิทธิ์\nกรุณาอนุญาตการเข้าถึงรูปภาพ",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "การตั้งค่า > SONA > รูปภาพ\nกรุณาอนุญาตการเข้าถึงรูปภาพ",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "อธิบายเพอร์โซน่า",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "คุณถึงขีดจำกัด 3 เพอร์โซน่าแล้ว",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "ใส่ชื่อเพอร์โซน่า",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "รายงานข้อผิดพลาด",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "เริ่มทดสอบ",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "แบบทดสอบ MBTI",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "อายุ",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "คำอธิบาย",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "ชื่อ",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "เริ่มการสนทนากับ {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "ส่งการแจ้งเตือนการมีส่วนร่วมใหม่ถึง {personaName} (ความเสี่ยง: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "ไม่มีเพอร์โซน่าที่ใช้งานอยู่",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

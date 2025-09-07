@@ -3808,5 +3808,90 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "alwaysShowTranslationOff": "Ukryj automatyczne tłumaczenie",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Zawsze pokazuj tłumaczenie",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "loginRequiredContent": "Zaloguj się, aby kontynuować",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mbtiStepDescription": "Określmy, jaką osobowość powinna mieć twoja persona. Odpowiedz na pytania, aby ukształtować jej charakter.",
+  "@mbtiStepDescription": {
+    "description": "Localized string for mbtiStepDescription"
+  },
+  "permissionGuideAndroid": "Ustawienia > Aplikacje > SONA > Uprawnienia\nZezwól na dostęp do zdjęć",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Ustawienia > SONA > Zdjęcia\nZezwól na dostęp do zdjęć",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "personaDescriptionHint": "Opisz personę",
+  "@personaDescriptionHint": {
+    "description": "Localized string for personaDescriptionHint"
+  },
+  "personaLimitReached": "Osiągnąłeś limit 3 person",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personaNameHint": "Wprowadź nazwę persony",
+  "@personaNameHint": {
+    "description": "Localized string for personaNameHint"
+  },
+  "reportErrorButton": "Zgłoś błąd",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startTest": "Rozpocznij test",
+  "@startTest": {
+    "description": "Localized string for startTest"
+  },
+  "mbtiTest": "Test MBTI",
+  "@mbtiTest": {
+    "description": "Localized string for mbtiTest"
+  },
+  "personaAge": "Wiek",
+  "@personaAge": {
+    "description": "Localized string for personaAge"
+  },
+  "personaDescription": "Opis",
+  "@personaDescription": {
+    "description": "Localized string for personaDescription"
+  },
+  "personaName": "Imię",
+  "@personaName": {
+    "description": "Localized string for personaName"
+  },
+  "startChatWithPersona": "Rozpocząć rozmowę z {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Powiadomienie o ponownym zaangażowaniu wysłane do {personaName} (Ryzyko: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Brak aktywnej persony",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

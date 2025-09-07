@@ -2949,4 +2949,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Start a conversation with $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Re-engagement notification sent to $personaName (Risk: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'No active persona';
 }

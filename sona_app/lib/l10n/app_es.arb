@@ -3836,5 +3836,130 @@
   "mainImageRequired": "Please add a main profile image",
   "@mainImageRequired": {
     "description": "Validation message: mainImageRequired"
+  },
+  "addImage": "Añadir imagen",
+  "@addImage": {
+    "description": "Localized string for addImage"
+  },
+  "additionalImages": "Imágenes adicionales",
+  "@additionalImages": {
+    "description": "Localized string for additionalImages"
+  },
+  "alwaysShowTranslationOff": "Ocultar traducción automática",
+  "@alwaysShowTranslationOff": {
+    "description": "Localized string for alwaysShowTranslationOff"
+  },
+  "alwaysShowTranslationOn": "Mostrar siempre traducción",
+  "@alwaysShowTranslationOn": {
+    "description": "Localized string for alwaysShowTranslationOn"
+  },
+  "create": "Crear",
+  "@create": {
+    "description": "Localized string for create"
+  },
+  "createYourFirstPersona": "Crea tu primera persona y comienza tu viaje",
+  "@createYourFirstPersona": {
+    "description": "Localized string for createYourFirstPersona"
+  },
+  "describeYourPersona": "Describe brevemente tu persona",
+  "@describeYourPersona": {
+    "description": "Localized string for describeYourPersona"
+  },
+  "enterPersonaName": "Ingresa el nombre de la persona",
+  "@enterPersonaName": {
+    "description": "Localized string for enterPersonaName"
+  },
+  "loginRequiredContent": "Inicia sesión para continuar",
+  "@loginRequiredContent": {
+    "description": "Localized string for loginRequiredContent"
+  },
+  "mainImage": "Imagen principal",
+  "@mainImage": {
+    "description": "Localized string for mainImage"
+  },
+  "noPersonasYet": "Aún no hay personas",
+  "@noPersonasYet": {
+    "description": "Localized string for noPersonasYet"
+  },
+  "personaLimitReached": "Has alcanzado el límite de 3 personas",
+  "@personaLimitReached": {
+    "description": "Localized string for personaLimitReached"
+  },
+  "personalitySettings": "Configuración de personalidad",
+  "@personalitySettings": {
+    "description": "Localized string for personalitySettings"
+  },
+  "privatePersona": "Privado",
+  "@privatePersona": {
+    "description": "Localized string for privatePersona"
+  },
+  "privatePersonaDescription": "Solo tú puedes ver esta persona",
+  "@privatePersonaDescription": {
+    "description": "Localized string for privatePersonaDescription"
+  },
+  "profileImage": "Imagen de perfil",
+  "@profileImage": {
+    "description": "Localized string for profileImage"
+  },
+  "sharePersona": "Compartir persona",
+  "@sharePersona": {
+    "description": "Localized string for sharePersona"
+  },
+  "shareWithCommunity": "Compartir con la comunidad",
+  "@shareWithCommunity": {
+    "description": "Localized string for shareWithCommunity"
+  },
+  "tapToUpload": "Toca para subir",
+  "@tapToUpload": {
+    "description": "Localized string for tapToUpload"
+  },
+  "tellUsAboutYourPersona": "Cuéntanos sobre tu persona",
+  "@tellUsAboutYourPersona": {
+    "description": "Localized string for tellUsAboutYourPersona"
+  },
+  "uploadPersonaImages": "Sube imágenes para tu persona",
+  "@uploadPersonaImages": {
+    "description": "Localized string for uploadPersonaImages"
+  },
+  "shareDescription": "Tu persona puede ser compartida con otros usuarios después de la aprobación",
+  "@shareDescription": {
+    "description": "Localized string for shareDescription"
+  },
+  "permissionGuideAndroid": "Configuración > Aplicaciones > SONA > Permisos\nPermite el acceso a fotos",
+  "@permissionGuideAndroid": {
+    "description": "Localized string for permissionGuideAndroid"
+  },
+  "permissionGuideIOS": "Configuración > SONA > Fotos\nPermite el acceso a fotos",
+  "@permissionGuideIOS": {
+    "description": "Localized string for permissionGuideIOS"
+  },
+  "reportErrorButton": "Reportar error",
+  "@reportErrorButton": {
+    "description": "Localized string for reportErrorButton"
+  },
+  "startChatWithPersona": "¿Iniciar una conversación con {personaName}?",
+  "@startChatWithPersona": {
+    "description": "Localized string for startChatWithPersona",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      }
+    }
+  },
+  "reengagementNotificationSent": "Notificación de reenganche enviada a {personaName} (Riesgo: {riskPercent}%)",
+  "@reengagementNotificationSent": {
+    "description": "Localized string for reengagementNotificationSent",
+    "placeholders": {
+      "personaName": {
+        "type": "String"
+      },
+      "riskPercent": {
+        "type": "String"
+      }
+    }
+  },
+  "noActivePersona": "Sin persona activa",
+  "@noActivePersona": {
+    "description": "Localized string for noActivePersona"
   }
 }

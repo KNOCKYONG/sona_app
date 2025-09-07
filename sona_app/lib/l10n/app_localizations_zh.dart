@@ -692,12 +692,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get goToSettings => '前往设置';
 
   @override
-  String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+  String get permissionGuideAndroid => '设置 > 应用 > SONA > 权限\n请允许照片权限';
 
   @override
-  String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+  String get permissionGuideIOS => '设置 > SONA > 照片\n请允许照片访问';
 
   @override
   String get googleLoginCanceled => '谷歌登录已取消。';
@@ -2307,10 +2305,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get darkThemeName => '深色';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => '始终显示翻译';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => '隐藏自动翻译';
 
   @override
   String get translationErrorAnalysisInfo => '我们将分析所选消息及其翻译。';
@@ -2331,31 +2329,31 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createPersona => '创建角色';
 
   @override
-  String get tellUsAboutYourPersona => 'Tell us about your persona';
+  String get tellUsAboutYourPersona => '告诉我们关于您的角色';
 
   @override
-  String get enterPersonaName => 'Enter persona name';
+  String get enterPersonaName => '输入角色名称';
 
   @override
-  String get describeYourPersona => 'Describe your persona briefly';
+  String get describeYourPersona => '简要描述您的角色';
 
   @override
-  String get profileImage => 'Profile Image';
+  String get profileImage => '个人资料图片';
 
   @override
-  String get uploadPersonaImages => 'Upload images for your persona';
+  String get uploadPersonaImages => '上传角色图片';
 
   @override
-  String get mainImage => 'Main Image';
+  String get mainImage => '主图片';
 
   @override
-  String get tapToUpload => 'Tap to upload';
+  String get tapToUpload => '点击上传';
 
   @override
-  String get additionalImages => 'Additional Images';
+  String get additionalImages => '附加图片';
 
   @override
-  String get addImage => 'Add Image';
+  String get addImage => '添加图片';
 
   @override
   String get mbtiQuestion => '性格问题';
@@ -2373,7 +2371,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get startTest => '开始测试';
 
   @override
-  String get personalitySettings => 'Personality Settings';
+  String get personalitySettings => '个性设置';
 
   @override
   String get speechStyle => '说话风格';
@@ -2382,28 +2380,28 @@ class AppLocalizationsZh extends AppLocalizations {
   String get conversationStyle => '对话风格';
 
   @override
-  String get shareWithCommunity => 'Share with Community';
+  String get shareWithCommunity => '与社区分享';
 
   @override
   String get shareDescription => '批准后，其他用户也可以使用这个角色';
 
   @override
-  String get sharePersona => 'Share Persona';
+  String get sharePersona => '分享角色';
 
   @override
-  String get willBeSharedAfterApproval => 'Will be shared after admin approval';
+  String get willBeSharedAfterApproval => '管理员批准后将被分享';
 
   @override
-  String get privatePersonaDescription => 'Only you can see this persona';
+  String get privatePersonaDescription => '只有您可以看到此角色';
 
   @override
-  String get create => 'Create';
+  String get create => '创建';
 
   @override
-  String get personaCreated => 'Persona created successfully!';
+  String get personaCreated => '角色创建成功！';
 
   @override
-  String get createFailed => 'Failed to create persona';
+  String get createFailed => '创建角色失败';
 
   @override
   String get pendingApproval => '待审核';
@@ -2412,14 +2410,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get approved => '已批准';
 
   @override
-  String get privatePersona => 'Private';
+  String get privatePersona => '私人';
 
   @override
-  String get noPersonasYet => 'No Personas Yet';
+  String get noPersonasYet => '还没有角色';
 
   @override
-  String get createYourFirstPersona =>
-      'Create your first persona and start your journey';
+  String get createYourFirstPersona => '创建您的第一个角色并开始您的旅程';
 
   @override
   String get deletePersona => '删除角色';
@@ -2434,7 +2431,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteFailed => '删除失败';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => '您已达到3个角色的限制';
 
   @override
   String get personaName => '名字';
@@ -2446,16 +2443,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get personaDescription => '介绍';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => '输入角色名称';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => '描述角色';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => '请登录以继续';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => '报告错误';
 
   @override
   String get speechStyleFriendly => '友好';
@@ -2825,4 +2822,17 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return '要与$personaName开始对话吗？';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return '已向$personaName发送重新参与通知 (风险: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => '没有活跃的角色';
 }

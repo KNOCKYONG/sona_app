@@ -737,11 +737,11 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'Settings > Apps > SONA > Permissions\nPahintulutan ang access sa larawan';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'Settings > SONA > Photos\nPahintulutan ang access sa larawan';
 
   @override
   String get googleLoginCanceled => 'Nakansela ang pag-login sa Google.';
@@ -2446,10 +2446,10 @@ class AppLocalizationsTl extends AppLocalizations {
   String get darkThemeName => 'Madilim';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'Palaging Ipakita ang Pagsasalin';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'Itago ang Awtomatikong Pagsasalin';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2511,10 +2511,10 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'Tukuyin natin kung anong personalidad ang dapat magkaroon ang iyong persona. Sagutin ang mga tanong para hubugin ang kanilang karakter.';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'Simulan ang Pagsusulit';
 
   @override
   String get personalitySettings => 'Mga Setting ng Personalidad';
@@ -2582,28 +2582,28 @@ class AppLocalizationsTl extends AppLocalizations {
   String get deleteFailed => 'Hindi natanggal';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'Naabot mo na ang limitasyon na 3 persona';
 
   @override
-  String get personaName => 'Name';
+  String get personaName => 'Pangalan';
 
   @override
-  String get personaAge => 'Age';
+  String get personaAge => 'Edad';
 
   @override
-  String get personaDescription => 'Description';
+  String get personaDescription => 'Paglalarawan';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'Ilagay ang pangalan ng persona';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'Ilarawan ang persona';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => 'Mag-login para magpatuloy';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'I-report ang Error';
 
   @override
   String get speechStyleFriendly => 'Palakaibigan';
@@ -2983,4 +2983,17 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Magsimula ng pag-uusap kay $personaName?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Ipinadala ang abiso ng muling pakikipag-ugnayan kay $personaName (Panganib: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'Walang aktibong persona';
 }

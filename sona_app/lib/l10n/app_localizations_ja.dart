@@ -694,12 +694,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get goToSettings => '設定へ移動';
 
   @override
-  String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+  String get permissionGuideAndroid => '設定 > アプリ > SONA > 権限\n写真の許可を有効にしてください';
 
   @override
-  String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+  String get permissionGuideIOS => '設定 > SONA > 写真\n写真へのアクセスを許可してください';
 
   @override
   String get googleLoginCanceled => 'Googleログインがキャンセルされました。\nもう一度お試しください。';
@@ -2321,10 +2319,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get darkThemeName => 'ダーク';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => '常に翻訳を表示';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => '自動翻訳を非表示';
 
   @override
   String get translationErrorAnalysisInfo => '選択したメッセージと翻訳を分析します。';
@@ -2345,31 +2343,31 @@ class AppLocalizationsJa extends AppLocalizations {
   String get createPersona => 'ペルソナを作成';
 
   @override
-  String get tellUsAboutYourPersona => 'Tell us about your persona';
+  String get tellUsAboutYourPersona => 'あなたのペルソナについて教えてください';
 
   @override
-  String get enterPersonaName => 'Enter persona name';
+  String get enterPersonaName => 'ペルソナ名を入力';
 
   @override
-  String get describeYourPersona => 'Describe your persona briefly';
+  String get describeYourPersona => 'ペルソナを簡単に説明してください';
 
   @override
-  String get profileImage => 'Profile Image';
+  String get profileImage => 'プロフィール画像';
 
   @override
-  String get uploadPersonaImages => 'Upload images for your persona';
+  String get uploadPersonaImages => 'ペルソナの画像をアップロード';
 
   @override
-  String get mainImage => 'Main Image';
+  String get mainImage => 'メイン画像';
 
   @override
-  String get tapToUpload => 'Tap to upload';
+  String get tapToUpload => 'タップしてアップロード';
 
   @override
-  String get additionalImages => 'Additional Images';
+  String get additionalImages => '追加画像';
 
   @override
-  String get addImage => 'Add Image';
+  String get addImage => '画像を追加';
 
   @override
   String get mbtiQuestion => '性格質問';
@@ -2388,7 +2386,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get startTest => 'テストを開始';
 
   @override
-  String get personalitySettings => 'Personality Settings';
+  String get personalitySettings => '性格設定';
 
   @override
   String get speechStyle => '話し方';
@@ -2397,28 +2395,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get conversationStyle => '会話スタイル';
 
   @override
-  String get shareWithCommunity => 'Share with Community';
+  String get shareWithCommunity => 'コミュニティと共有';
 
   @override
   String get shareDescription => '承認後、他のユーザーもこのペルソナを使用できます';
 
   @override
-  String get sharePersona => 'Share Persona';
+  String get sharePersona => 'ペルソナを共有';
 
   @override
-  String get willBeSharedAfterApproval => 'Will be shared after admin approval';
+  String get willBeSharedAfterApproval => '管理者の承認後に共有されます';
 
   @override
-  String get privatePersonaDescription => 'Only you can see this persona';
+  String get privatePersonaDescription => 'あなただけが見ることができるペルソナ';
 
   @override
-  String get create => 'Create';
+  String get create => '作成';
 
   @override
-  String get personaCreated => 'Persona created successfully!';
+  String get personaCreated => 'ペルソナが正常に作成されました！';
 
   @override
-  String get createFailed => 'Failed to create persona';
+  String get createFailed => 'ペルソナの作成に失敗しました';
 
   @override
   String get pendingApproval => '承認待ち';
@@ -2427,14 +2425,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get approved => '承認済み';
 
   @override
-  String get privatePersona => 'Private';
+  String get privatePersona => 'プライベート';
 
   @override
-  String get noPersonasYet => 'No Personas Yet';
+  String get noPersonasYet => 'まだペルソナがありません';
 
   @override
-  String get createYourFirstPersona =>
-      'Create your first persona and start your journey';
+  String get createYourFirstPersona => '最初のペルソナを作成して旅を始めましょう';
 
   @override
   String get deletePersona => 'ペルソナを削除';
@@ -2449,7 +2446,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get deleteFailed => '削除に失敗しました';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached => 'ペルソナの上限3つに達しました';
 
   @override
   String get personaName => '名前';
@@ -2461,16 +2458,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get personaDescription => '紹介';
 
   @override
-  String get personaNameHint => 'Enter persona name';
+  String get personaNameHint => 'ペルソナ名を入力';
 
   @override
-  String get personaDescriptionHint => 'Describe the persona';
+  String get personaDescriptionHint => 'ペルソナを説明';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent => '続行するにはログインしてください';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'エラーを報告';
 
   @override
   String get speechStyleFriendly => 'フレンドリー';
@@ -2841,4 +2838,17 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return '$personaNameと会話を始めますか？';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return '$personaNameへの再エンゲージメント通知を送信しました (リスク: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'アクティブなペルソナがありません';
 }

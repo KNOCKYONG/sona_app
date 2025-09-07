@@ -516,7 +516,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${persona.name}과(와) 대화를 시작하시겠습니까?'),
+                Text(AppLocalizations.of(context)!.startChatWithPersona(persona.name)),
                 const SizedBox(height: 12),
                 Row(
                   children: [

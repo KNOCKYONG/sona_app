@@ -735,11 +735,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get permissionGuideAndroid =>
-      'Settings > Apps > SONA > Permissions\nPlease allow photo permission';
+      'Einstellungen > Apps > SONA > Berechtigungen\nBitte Foto-Berechtigung erlauben';
 
   @override
   String get permissionGuideIOS =>
-      'Settings > SONA > Photos\nPlease allow photo access';
+      'Einstellungen > SONA > Fotos\nBitte Fotozugriff erlauben';
 
   @override
   String get googleLoginCanceled =>
@@ -2448,10 +2448,10 @@ class AppLocalizationsDe extends AppLocalizations {
   String get darkThemeName => 'Dunkel';
 
   @override
-  String get alwaysShowTranslationOn => 'Always Show Translation';
+  String get alwaysShowTranslationOn => 'Übersetzung immer anzeigen';
 
   @override
-  String get alwaysShowTranslationOff => 'Hide Auto Translation';
+  String get alwaysShowTranslationOff => 'Automatische Übersetzung ausblenden';
 
   @override
   String get translationErrorAnalysisInfo =>
@@ -2476,50 +2476,50 @@ class AppLocalizationsDe extends AppLocalizations {
   String get createPersona => 'Persona Erstellen';
 
   @override
-  String get tellUsAboutYourPersona => 'Tell us about your persona';
+  String get tellUsAboutYourPersona => 'Erzählen Sie uns von Ihrer Persona';
 
   @override
-  String get enterPersonaName => 'Enter persona name';
+  String get enterPersonaName => 'Persona-Namen eingeben';
 
   @override
-  String get describeYourPersona => 'Describe your persona briefly';
+  String get describeYourPersona => 'Beschreiben Sie Ihre Persona kurz';
 
   @override
-  String get profileImage => 'Profile Image';
+  String get profileImage => 'Profilbild';
 
   @override
-  String get uploadPersonaImages => 'Upload images for your persona';
+  String get uploadPersonaImages => 'Bilder für Ihre Persona hochladen';
 
   @override
-  String get mainImage => 'Main Image';
+  String get mainImage => 'Hauptbild';
 
   @override
-  String get tapToUpload => 'Tap to upload';
+  String get tapToUpload => 'Zum Hochladen tippen';
 
   @override
-  String get additionalImages => 'Additional Images';
+  String get additionalImages => 'Zusätzliche Bilder';
 
   @override
-  String get addImage => 'Add Image';
+  String get addImage => 'Bild hinzufügen';
 
   @override
-  String get mbtiQuestion => 'Personality Question';
+  String get mbtiQuestion => 'Persönlichkeitsfrage';
 
   @override
-  String get mbtiComplete => 'Personality Test Complete!';
+  String get mbtiComplete => 'Persönlichkeitstest abgeschlossen!';
 
   @override
   String get mbtiTest => 'MBTI Test';
 
   @override
   String get mbtiStepDescription =>
-      'Let\'s determine what personality your persona should have. Answer questions to shape their character.';
+      'Lassen Sie uns bestimmen, welche Persönlichkeit Ihre Persona haben soll. Beantworten Sie Fragen, um ihren Charakter zu formen.';
 
   @override
-  String get startTest => 'Start Test';
+  String get startTest => 'Test starten';
 
   @override
-  String get personalitySettings => 'Personality Settings';
+  String get personalitySettings => 'Persönlichkeitseinstellungen';
 
   @override
   String get speechStyle => 'Sprechstil';
@@ -2528,24 +2528,24 @@ class AppLocalizationsDe extends AppLocalizations {
   String get conversationStyle => 'Gesprächsstil';
 
   @override
-  String get shareWithCommunity => 'Share with Community';
+  String get shareWithCommunity => 'Mit Community teilen';
 
   @override
   String get shareDescription =>
-      'Your persona can be shared with other users after approval';
+      'Ihre Persona kann nach Genehmigung mit anderen Benutzern geteilt werden';
 
   @override
-  String get sharePersona => 'Share Persona';
+  String get sharePersona => 'Persona teilen';
 
   @override
   String get willBeSharedAfterApproval =>
       'Wird nach Administrator-Genehmigung geteilt';
 
   @override
-  String get privatePersonaDescription => 'Only you can see this persona';
+  String get privatePersonaDescription => 'Nur Sie können diese Persona sehen';
 
   @override
-  String get create => 'Create';
+  String get create => 'Erstellen';
 
   @override
   String get personaCreated => 'Persona erfolgreich erstellt';
@@ -2560,14 +2560,14 @@ class AppLocalizationsDe extends AppLocalizations {
   String get approved => 'Genehmigt';
 
   @override
-  String get privatePersona => 'Private';
+  String get privatePersona => 'Privat';
 
   @override
-  String get noPersonasYet => 'No Personas Yet';
+  String get noPersonasYet => 'Noch keine Personas';
 
   @override
   String get createYourFirstPersona =>
-      'Create your first persona and start your journey';
+      'Erstellen Sie Ihre erste Persona und beginnen Sie Ihre Reise';
 
   @override
   String get deletePersona => 'Persona Löschen';
@@ -2583,7 +2583,8 @@ class AppLocalizationsDe extends AppLocalizations {
   String get deleteFailed => 'Löschen fehlgeschlagen';
 
   @override
-  String get personaLimitReached => 'You have reached the limit of 3 personas';
+  String get personaLimitReached =>
+      'Sie haben das Limit von 3 Personas erreicht';
 
   @override
   String get personaName => 'Persona-Name';
@@ -2601,10 +2602,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get personaDescriptionHint => 'Beschreiben Sie Ihr Persona kurz';
 
   @override
-  String get loginRequiredContent => 'Please log in to continue';
+  String get loginRequiredContent =>
+      'Bitte melden Sie sich an, um fortzufahren';
 
   @override
-  String get reportErrorButton => 'Report Error';
+  String get reportErrorButton => 'Fehler melden';
 
   @override
   String get speechStyleFriendly => 'Freundlich';
@@ -2984,4 +2986,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get mainImageRequired => 'Please add a main profile image';
+
+  @override
+  String startChatWithPersona(String personaName) {
+    return 'Gespräch mit $personaName beginnen?';
+  }
+
+  @override
+  String reengagementNotificationSent(String personaName, String riskPercent) {
+    return 'Wiederbindungsbenachrichtigung an $personaName gesendet (Risiko: $riskPercent%)';
+  }
+
+  @override
+  String get noActivePersona => 'Keine aktive Persona';
 }

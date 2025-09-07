@@ -2995,4 +2995,33 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Sin persona activa';
+
+  @override
+  String get noInternetConnection => 'Sin Conexión a Internet';
+
+  @override
+  String get internetRequiredMessage =>
+      'Se requiere una conexión a internet para usar SONA. Por favor, verifica tu conexión e intenta de nuevo.';
+
+  @override
+  String get retryConnection => 'Reintentar';
+
+  @override
+  String get openNetworkSettings => 'Abrir Configuración';
+
+  @override
+  String get checkingConnection => 'Verificando conexión...';
+
+  @override
+  String get editPersona => 'Editar Persona';
+
+  @override
+  String get personaUpdated => 'Persona actualizada con éxito';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Las personas aprobadas no se pueden editar';
+
+  @override
+  String get update => 'Actualizar';
 }

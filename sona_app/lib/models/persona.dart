@@ -21,6 +21,7 @@ class Persona {
 
   // R2 이미지 유효성 캐싱 필드
   final bool? hasValidR2Image; // Firebase에 저장된 R2 이미지 유효성
+  final int? imageUpdatedAt; // 이미지 업데이트 타임스탬프 (캐시 무효화용)
 
   // 사용자 생성 페르소나 필드
   final String? createdBy; // 생성자 userId
@@ -47,6 +48,7 @@ class Persona {
     this.topics, // 주제들
     this.keywords, // 키워드들
     this.hasValidR2Image, // R2 이미지 유효성
+    this.imageUpdatedAt, // 이미지 업데이트 타임스탬프
     this.createdBy, // 생성자
     this.isCustom = false, // 기본값: 시스템 페르소나
     this.isShare = false, // 기본값: 공유 안함
@@ -334,6 +336,7 @@ class Persona {
           json['keywords'] != null ? List<String>.from(json['keywords']) : null,
       matchedAt: _parseMatchedAt(json['matchedAt']),
       hasValidR2Image: json['hasValidR2Image'] ?? null,
+      imageUpdatedAt: json['imageUpdatedAt'],
       // 사용자 생성 페르소나 필드
       createdBy: json['createdBy'],
       isCustom: json['isCustom'] ?? false,

@@ -2835,4 +2835,31 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get noActivePersona => '没有活跃的角色';
+
+  @override
+  String get noInternetConnection => '无网络连接';
+
+  @override
+  String get internetRequiredMessage => '使用SONA需要互联网连接。请检查您的连接并重试。';
+
+  @override
+  String get retryConnection => '重试';
+
+  @override
+  String get openNetworkSettings => '打开设置';
+
+  @override
+  String get checkingConnection => '正在检查连接...';
+
+  @override
+  String get editPersona => '编辑人格';
+
+  @override
+  String get personaUpdated => '人格已成功更新';
+
+  @override
+  String get cannotEditApprovedPersona => '已批准的人格无法编辑';
+
+  @override
+  String get update => '更新';
 }

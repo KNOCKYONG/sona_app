@@ -190,11 +190,34 @@ class PersonaCreationService extends BaseService {
         final personaId = 'custom_${currentUser.uid}_${DateTime.now().millisecondsSinceEpoch}';
         debugPrint('🆔 Generated Persona ID: $personaId');
         
+        // 이미지 버전 (타임스탬프) 생성
+        final imageVersion = DateTime.now().millisecondsSinceEpoch;
+        
         // 메인 이미지 처리
         String? mainImageUrl;
+        Map<String, dynamic>? imageUrls;
         if (mainImage != null) {
           debugPrint('📸 Processing main image...');
-          mainImageUrl = await _uploadPersonaImage(personaId, mainImage, 'main');
+          
+          // CloudflareR2Service로 직접 업로드 (버전 포함)
+          final bytes = await mainImage.readAsBytes();
+          final result = await CloudflareR2Service.uploadPersonaImages(
+            personaId: personaId,
+            mainImage: bytes,
+            includeOriginal: false,
+          );
+          
+          mainImageUrl = result.getMainUrl(ImageSize.medium) ?? 
+                        result.getMainUrl(ImageSize.small);
+          
+          // imageUrls 구조 생성
+          imageUrls = {
+            'thumb': {'jpg': result.mainImageUrls[ImageSize.thumbnail] ?? ''},
+            'small': {'jpg': result.mainImageUrls[ImageSize.small] ?? ''},
+            'medium': {'jpg': result.mainImageUrls[ImageSize.medium] ?? ''},
+            'large': {'jpg': result.mainImageUrls[ImageSize.large] ?? ''},
+          };
+          
           debugPrint('✅ Main image uploaded: $mainImageUrl');
         }
 
@@ -244,6 +267,9 @@ class PersonaCreationService extends BaseService {
           'isDeleted': false, // 명시적으로 삭제되지 않음 표시
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
+          // 이미지 관련 필드
+          'imageUrls': imageUrls,
+          'imageUpdatedAt': mainImage != null ? imageVersion : null,
           // 추가 필드
           'topics': interests,
           'keywords': _generateKeywords(name, description, interests),
@@ -483,26 +509,48 @@ $mbtiDesc
           await _notifyAdminForReview(personaId, name, currentUser.uid);
         }
 
+        // 기존 페르소나 데이터 가져오기 (이미지 업데이트 여부와 관계없이)
+        final existingDoc = await _firestore
+            .collection(AppConstants.personasCollection)
+            .doc(personaId)
+            .get();
+        
+        final existingData = existingDoc.data() ?? {};
+        List<String> photoUrls = List<String>.from(existingData['photoUrls'] ?? []);
+        Map<String, dynamic>? imageUrls = existingData['imageUrls'] != null 
+            ? Map<String, dynamic>.from(existingData['imageUrls']) 
+            : null;
+        
         // 이미지 업로드 처리 (새 이미지가 있는 경우만)
         if (mainImage != null || (additionalImages != null && additionalImages.isNotEmpty)) {
-          final List<String> photoUrls = [];
-          Map<String, dynamic>? imageUrls;
+          // 이미지 업데이트 타임스탬프 추가 (캐시 무효화용)
+          final imageTimestamp = DateTime.now().millisecondsSinceEpoch;
+          updates['imageUpdatedAt'] = imageTimestamp;
           
           // 메인 이미지 업로드
           if (mainImage != null) {
-            final mainImageUrl = await _uploadPersonaImage(personaId, mainImage, 'main');
-            if (mainImageUrl != null) {
-              photoUrls.add(mainImageUrl);
-            }
-            
-            // R2 이미지 URL 구조 생성
             try {
               final bytes = await mainImage.readAsBytes();
+              
+              // R2에 업로드 (모든 크기)
               final result = await CloudflareR2Service.uploadPersonaImages(
                 personaId: personaId,
                 mainImage: bytes,
                 includeOriginal: false,
               );
+              
+              // 메인 URL 가져오기 (medium 크기 우선)
+              final mainImageUrl = result.getMainUrl(ImageSize.medium) ?? 
+                                  result.getMainUrl(ImageSize.small);
+              
+              if (mainImageUrl != null) {
+                // 기존 메인 이미지 교체 (첫 번째 URL)
+                if (photoUrls.isNotEmpty) {
+                  photoUrls[0] = mainImageUrl;
+                } else {
+                  photoUrls.add(mainImageUrl);
+                }
+              }
               
               // PersonaImageUrls 객체를 Map으로 변환
               imageUrls = {
@@ -519,13 +567,21 @@ $mbtiDesc
                   'jpg': result.mainImageUrls[ImageSize.large] ?? '',
                 },
               };
+              
+              debugPrint('✅ Main image uploaded and updated successfully');
             } catch (e) {
-              debugPrint('❌ Error creating R2 image structure: $e');
+              debugPrint('❌ Error uploading main image: $e');
             }
           }
           
           // 추가 이미지 업로드
           if (additionalImages != null && additionalImages.isNotEmpty) {
+            // 기존 추가 이미지들 제거하고 새로 추가
+            // 메인 이미지만 보존 (첫 번째 요소)
+            if (photoUrls.isNotEmpty) {
+              photoUrls = [photoUrls[0]]; // 메인 이미지만 유지
+            }
+            
             for (int i = 0; i < additionalImages.length; i++) {
               final imageUrl = await _uploadPersonaImage(personaId, additionalImages[i], 'additional_$i');
               if (imageUrl != null) {
@@ -534,9 +590,8 @@ $mbtiDesc
             }
           }
           
-          if (photoUrls.isNotEmpty) {
-            updates['photoUrls'] = photoUrls;
-          }
+          // 항상 photoUrls 업데이트 (빈 배열이어도 업데이트)
+          updates['photoUrls'] = photoUrls;
           
           if (imageUrls != null) {
             updates['imageUrls'] = imageUrls;

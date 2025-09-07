@@ -46,6 +46,7 @@ class CloudflareR2Service {
         final size = entry.key;
         final imageData = entry.value;
 
+        // 파일명 (버전 없이 원래대로)
         final path = 'personas/$personaId/main_${size.suffix}.jpg';
 
         // R2 API를 통한 업로드
@@ -76,6 +77,7 @@ class CloudflareR2Service {
             final size = entry.key;
             final imageData = entry.value;
 
+            // 추가 이미지 파일명 (버전 없이 원래대로)
             final path = 'personas/$personaId/sub${i}_${size.suffix}.jpg';
 
             // R2 API를 통한 업로드
@@ -105,25 +107,33 @@ class CloudflareR2Service {
     }
   }
 
-  /// 이미지 URL 생성 (크기별)
+  /// 이미지 URL 생성 (크기별, 선택적 타임스탬프 포함)
   static String getImageUrl(String personaId, ImageSize size,
-      {bool isMain = true, int? index}) {
+      {bool isMain = true, int? index, int? timestamp}) {
     final prefix = isMain ? 'main' : 'sub$index';
     final path = 'personas/$personaId/${prefix}_${size.suffix}.jpg';
-    return generatePublicUrl(path);
+    return generatePublicUrl(path, timestamp: timestamp);
   }
 
-  /// Public URL 생성
-  static String generatePublicUrl(String path) {
+  /// Public URL 생성 (선택적 타임스탬프 포함)
+  static String generatePublicUrl(String path, {int? timestamp}) {
     // 실제 R2 Public URL 형식
     // 예: https://pub-abc123.r2.dev/personas/...
+    String baseUrl;
     if (publicUrl.isNotEmpty) {
       // R2 public URL is configured to serve the bucket directly
-      return '$publicUrl/$path';
+      baseUrl = '$publicUrl/$path';
+    } else {
+      // 개발 중 임시 URL
+      baseUrl = 'https://pub-demo.r2.dev/$path';
     }
-
-    // 개발 중 임시 URL
-    return 'https://pub-demo.r2.dev/$path';
+    
+    // 타임스탬프가 제공되면 쿼리 파라미터로 추가 (캐시 무효화용)
+    if (timestamp != null) {
+      return '$baseUrl?v=$timestamp';
+    }
+    
+    return baseUrl;
   }
 
   /// 이미지 프리로드 (썸네일만)

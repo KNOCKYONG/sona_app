@@ -2966,4 +2966,32 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Aktif persona yok';
+
+  @override
+  String get noInternetConnection => 'İnternet Bağlantısı Yok';
+
+  @override
+  String get internetRequiredMessage =>
+      'SONA kullanmak için internet bağlantısı gereklidir. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.';
+
+  @override
+  String get retryConnection => 'Tekrar Dene';
+
+  @override
+  String get openNetworkSettings => 'Ayarları Aç';
+
+  @override
+  String get checkingConnection => 'Bağlantı kontrol ediliyor...';
+
+  @override
+  String get editPersona => 'Persona Düzenle';
+
+  @override
+  String get personaUpdated => 'Persona başarıyla güncellendi';
+
+  @override
+  String get cannotEditApprovedPersona => 'Onaylanmış personalar düzenlenemez';
+
+  @override
+  String get update => 'Güncelle';
 }

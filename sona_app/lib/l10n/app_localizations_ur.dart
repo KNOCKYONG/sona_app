@@ -2961,4 +2961,33 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get noActivePersona => 'کوئی فعال شخصیت نہیں';
+
+  @override
+  String get noInternetConnection => 'انٹرنیٹ کنکشن نہیں ہے';
+
+  @override
+  String get internetRequiredMessage =>
+      'SONA استعمال کرنے کے لیے انٹرنیٹ کنکشن کی ضرورت ہے۔ براہ کرم اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get retryConnection => 'دوبارہ کوشش کریں';
+
+  @override
+  String get openNetworkSettings => 'سیٹنگز کھولیں';
+
+  @override
+  String get checkingConnection => 'کنکشن چیک کیا جا رہا ہے...';
+
+  @override
+  String get editPersona => 'پرسونا میں ترمیم کریں';
+
+  @override
+  String get personaUpdated => 'پرسونا کامیابی سے اپ ڈیٹ ہوا';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'منظور شدہ پرسونا میں ترمیم نہیں کی جا سکتی';
+
+  @override
+  String get update => 'اپ ڈیٹ';
 }

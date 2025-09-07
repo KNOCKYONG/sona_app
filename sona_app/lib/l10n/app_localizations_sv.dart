@@ -2962,4 +2962,33 @@ class AppLocalizationsSv extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Ingen aktiv persona';
+
+  @override
+  String get noInternetConnection => 'Ingen Internetanslutning';
+
+  @override
+  String get internetRequiredMessage =>
+      'En internetanslutning krävs för att använda SONA. Kontrollera din anslutning och försök igen.';
+
+  @override
+  String get retryConnection => 'Försök igen';
+
+  @override
+  String get openNetworkSettings => 'Öppna Inställningar';
+
+  @override
+  String get checkingConnection => 'Kontrollerar anslutning...';
+
+  @override
+  String get editPersona => 'Redigera Persona';
+
+  @override
+  String get personaUpdated => 'Persona uppdaterad framgångsrikt';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Godkända personas kan inte redigeras';
+
+  @override
+  String get update => 'Uppdatera';
 }

@@ -2960,4 +2960,33 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Tidak ada persona aktif';
+
+  @override
+  String get noInternetConnection => 'Tidak Ada Koneksi Internet';
+
+  @override
+  String get internetRequiredMessage =>
+      'Koneksi internet diperlukan untuk menggunakan SONA. Silakan periksa koneksi Anda dan coba lagi.';
+
+  @override
+  String get retryConnection => 'Coba Lagi';
+
+  @override
+  String get openNetworkSettings => 'Buka Pengaturan';
+
+  @override
+  String get checkingConnection => 'Memeriksa koneksi...';
+
+  @override
+  String get editPersona => 'Edit Persona';
+
+  @override
+  String get personaUpdated => 'Persona berhasil diperbarui';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Persona yang telah disetujui tidak dapat diedit';
+
+  @override
+  String get update => 'Perbarui';
 }

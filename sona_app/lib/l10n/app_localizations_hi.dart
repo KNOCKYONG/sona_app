@@ -2962,4 +2962,33 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get noActivePersona => 'कोई सक्रिय व्यक्तित्व नहीं';
+
+  @override
+  String get noInternetConnection => 'इंटरनेट कनेक्शन नहीं है';
+
+  @override
+  String get internetRequiredMessage =>
+      'SONA का उपयोग करने के लिए इंटरनेट कनेक्शन की आवश्यकता है। कृपया अपना कनेक्शन जांचें और फिर से प्रयास करें।';
+
+  @override
+  String get retryConnection => 'पुनः प्रयास करें';
+
+  @override
+  String get openNetworkSettings => 'सेटिंग्स खोलें';
+
+  @override
+  String get checkingConnection => 'कनेक्शन जांच रहे हैं...';
+
+  @override
+  String get editPersona => 'पर्सोना संपादित करें';
+
+  @override
+  String get personaUpdated => 'पर्सोना सफलतापूर्वक अपडेट किया गया';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'अनुमोदित पर्सोना संपादित नहीं किए जा सकते';
+
+  @override
+  String get update => 'अपडेट करें';
 }

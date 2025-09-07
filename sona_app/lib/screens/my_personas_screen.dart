@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../config/custom_cache_manager.dart';
 import '../models/persona.dart';
 import '../services/persona/persona_creation_service.dart';
 import '../services/persona/persona_service.dart';
@@ -258,7 +259,12 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                   child: ClipOval(
                     child: persona.photoUrls.isNotEmpty
                         ? CachedNetworkImage(
-                            imageUrl: persona.photoUrls.first,
+                            imageUrl: persona.imageUpdatedAt != null 
+                                ? '${persona.photoUrls.first}?v=${persona.imageUpdatedAt}'
+                                : persona.photoUrls.first,
+                            cacheKey: persona.imageUpdatedAt != null 
+                                ? '${persona.id}_${persona.imageUpdatedAt}'
+                                : persona.photoUrls.first,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Container(
                               color: Colors.grey[200],
@@ -635,6 +641,27 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
     );
     
     if (result == true) {
+      // 모든 이미지 캐시 완전히 클리어
+      if (persona.photoUrls.isNotEmpty) {
+        // 모든 이미지 URL에 대해 캐시 클리어
+        for (final imageUrl in persona.photoUrls) {
+          // 기본 URL 캐시 클리어
+          await CachedNetworkImage.evictFromCache(imageUrl);
+          
+          // PersonaCacheManager에서도 제거
+          await PersonaCacheManager.instance.removeFile(imageUrl);
+          
+          // 가능한 모든 캐시 키 제거
+          await CachedNetworkImage.evictFromCache('${persona.id}_${persona.imageUpdatedAt}');
+          await CachedNetworkImage.evictFromCache(persona.photoUrls.first);
+        }
+        
+        // 전체 캐시 클리어 (마지막 수단)
+        await PersonaCacheManager.instance.emptyCache();
+      }
+      
+      // 약간의 지연 후 데이터 리로드 (캐시 클리어가 완료되도록)
+      await Future.delayed(const Duration(milliseconds: 500));
       await _loadMyPersonas();
     }
   }

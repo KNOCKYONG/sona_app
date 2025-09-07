@@ -192,7 +192,12 @@ class _PersonaProfileViewerState extends State<PersonaProfileViewer>
                                     return GestureDetector(
                                       onTapUp: _onPhotoTap,
                                       child: CachedNetworkImage(
-                                        imageUrl: allImageUrls[index],
+                                        imageUrl: widget.persona.imageUpdatedAt != null 
+                                            ? '${allImageUrls[index]}?v=${widget.persona.imageUpdatedAt}'
+                                            : allImageUrls[index],
+                                        cacheKey: widget.persona.imageUpdatedAt != null 
+                                            ? '${widget.persona.id}_${index}_${widget.persona.imageUpdatedAt}'
+                                            : allImageUrls[index],
                                         fit: BoxFit.cover,
                                         placeholder: (context, url) =>
                                             Container(

@@ -2968,4 +2968,33 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Нет активной персоны';
+
+  @override
+  String get noInternetConnection => 'Нет подключения к Интернету';
+
+  @override
+  String get internetRequiredMessage =>
+      'Для использования SONA требуется подключение к интернету. Пожалуйста, проверьте ваше подключение и попробуйте снова.';
+
+  @override
+  String get retryConnection => 'Повторить';
+
+  @override
+  String get openNetworkSettings => 'Открыть настройки';
+
+  @override
+  String get checkingConnection => 'Проверка подключения...';
+
+  @override
+  String get editPersona => 'Редактировать персону';
+
+  @override
+  String get personaUpdated => 'Персона успешно обновлена';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Одобренные персоны нельзя редактировать';
+
+  @override
+  String get update => 'Обновить';
 }

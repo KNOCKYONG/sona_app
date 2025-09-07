@@ -2851,4 +2851,32 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get noActivePersona => 'アクティブなペルソナがありません';
+
+  @override
+  String get noInternetConnection => 'インターネット接続なし';
+
+  @override
+  String get internetRequiredMessage =>
+      'SONAを使用するにはインターネット接続が必要です。接続を確認してもう一度お試しください。';
+
+  @override
+  String get retryConnection => '再試行';
+
+  @override
+  String get openNetworkSettings => '設定を開く';
+
+  @override
+  String get checkingConnection => '接続を確認中...';
+
+  @override
+  String get editPersona => 'ペルソナを編集';
+
+  @override
+  String get personaUpdated => 'ペルソナが正常に更新されました';
+
+  @override
+  String get cannotEditApprovedPersona => '承認されたペルソナは編集できません';
+
+  @override
+  String get update => '更新';
 }

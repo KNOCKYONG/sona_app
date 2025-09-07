@@ -5613,6 +5613,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No active persona'**
   String get noActivePersona;
+
+  /// Title for no internet connection dialog
+  ///
+  /// In en, this message translates to:
+  /// **'No Internet Connection'**
+  String get noInternetConnection;
+
+  /// Message explaining that internet is required
+  ///
+  /// In en, this message translates to:
+  /// **'An internet connection is required to use SONA. Please check your connection and try again.'**
+  String get internetRequiredMessage;
+
+  /// Button text to retry network connection
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retryConnection;
+
+  /// Button text to open network settings
+  ///
+  /// In en, this message translates to:
+  /// **'Open Settings'**
+  String get openNetworkSettings;
+
+  /// Message shown while checking network connection
+  ///
+  /// In en, this message translates to:
+  /// **'Checking connection...'**
+  String get checkingConnection;
+
+  /// Localized string for editPersona
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Persona'**
+  String get editPersona;
+
+  /// Localized string for personaUpdated
+  ///
+  /// In en, this message translates to:
+  /// **'Persona updated successfully'**
+  String get personaUpdated;
+
+  /// Localized string for cannotEditApprovedPersona
+  ///
+  /// In en, this message translates to:
+  /// **'Approved personas cannot be edited'**
+  String get cannotEditApprovedPersona;
+
+  /// Localized string for update
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
 }
 
 class _AppLocalizationsDelegate

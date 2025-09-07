@@ -2996,4 +2996,33 @@ class AppLocalizationsTl extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Walang aktibong persona';
+
+  @override
+  String get noInternetConnection => 'Walang Koneksyon sa Internet';
+
+  @override
+  String get internetRequiredMessage =>
+      'Kailangan ng koneksyon sa internet para gamitin ang SONA. Pakisuri ang iyong koneksyon at subukan muli.';
+
+  @override
+  String get retryConnection => 'Subukan Muli';
+
+  @override
+  String get openNetworkSettings => 'Buksan ang Mga Setting';
+
+  @override
+  String get checkingConnection => 'Sinusuri ang koneksyon...';
+
+  @override
+  String get editPersona => 'I-edit ang Persona';
+
+  @override
+  String get personaUpdated => 'Matagumpay na na-update ang Persona';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Hindi maaaring i-edit ang mga aprubadong Persona';
+
+  @override
+  String get update => 'I-update';
 }

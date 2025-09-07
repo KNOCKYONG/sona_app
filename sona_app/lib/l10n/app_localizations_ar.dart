@@ -2928,4 +2928,32 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get noActivePersona => 'لا توجد شخصية نشطة';
+
+  @override
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
+
+  @override
+  String get internetRequiredMessage =>
+      'يتطلب استخدام SONA اتصالاً بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى.';
+
+  @override
+  String get retryConnection => 'إعادة المحاولة';
+
+  @override
+  String get openNetworkSettings => 'فتح الإعدادات';
+
+  @override
+  String get checkingConnection => 'جاري فحص الاتصال...';
+
+  @override
+  String get editPersona => 'تحرير الشخصية';
+
+  @override
+  String get personaUpdated => 'تم تحديث الشخصية بنجاح';
+
+  @override
+  String get cannotEditApprovedPersona => 'لا يمكن تحرير الشخصيات المعتمدة';
+
+  @override
+  String get update => 'تحديث';
 }

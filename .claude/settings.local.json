@@ -166,7 +166,9 @@
       "Read(/C:\\Users\\yong\\sonaapp\\sona_app\\lib\\l10n/**)",
       "Read(/C:\\Users\\yong\\sonaapp\\sona_app\\lib\\services\\persona/**)",
       "mcp__cloudflare-r2__worker_deploy",
-      "Read(/C:\\Users\\yong\\sonaapp\\sona_app\\lib\\l10n/**)"
+      "Read(/C:\\Users\\yong\\sonaapp\\sona_app\\lib\\l10n/**)",
+      "Bash(git checkout:*)",
+      "Bash*"
     ],
     "deny": [],
     "ask": []

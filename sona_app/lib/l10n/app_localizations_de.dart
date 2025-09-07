@@ -2999,4 +2999,33 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Keine aktive Persona';
+
+  @override
+  String get noInternetConnection => 'Keine Internetverbindung';
+
+  @override
+  String get internetRequiredMessage =>
+      'Eine Internetverbindung ist erforderlich, um SONA zu verwenden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.';
+
+  @override
+  String get retryConnection => 'Erneut versuchen';
+
+  @override
+  String get openNetworkSettings => 'Einstellungen öffnen';
+
+  @override
+  String get checkingConnection => 'Verbindung wird überprüft...';
+
+  @override
+  String get editPersona => 'Persona bearbeiten';
+
+  @override
+  String get personaUpdated => 'Persona erfolgreich aktualisiert';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Genehmigte Personas können nicht bearbeitet werden';
+
+  @override
+  String get update => 'Aktualisieren';
 }

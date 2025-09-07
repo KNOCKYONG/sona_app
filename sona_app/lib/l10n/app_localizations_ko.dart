@@ -2858,4 +2858,32 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get noActivePersona => '활성화된 페르소나가 없습니다';
+
+  @override
+  String get noInternetConnection => '인터넷 연결 없음';
+
+  @override
+  String get internetRequiredMessage =>
+      'SONA를 사용하려면 인터넷 연결이 필요합니다. 연결 상태를 확인하고 다시 시도해주세요.';
+
+  @override
+  String get retryConnection => '재시도';
+
+  @override
+  String get openNetworkSettings => '설정 열기';
+
+  @override
+  String get checkingConnection => '연결 확인 중...';
+
+  @override
+  String get editPersona => '페르소나 수정';
+
+  @override
+  String get personaUpdated => '페르소나가 성공적으로 업데이트되었습니다';
+
+  @override
+  String get cannotEditApprovedPersona => '승인된 페르소나는 수정할 수 없습니다';
+
+  @override
+  String get update => '업데이트';
 }

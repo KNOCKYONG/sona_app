@@ -2974,4 +2974,33 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Brak aktywnej persony';
+
+  @override
+  String get noInternetConnection => 'Brak Połączenia z Internetem';
+
+  @override
+  String get internetRequiredMessage =>
+      'Do korzystania z SONA wymagane jest połączenie z internetem. Sprawdź swoje połączenie i spróbuj ponownie.';
+
+  @override
+  String get retryConnection => 'Spróbuj ponownie';
+
+  @override
+  String get openNetworkSettings => 'Otwórz Ustawienia';
+
+  @override
+  String get checkingConnection => 'Sprawdzanie połączenia...';
+
+  @override
+  String get editPersona => 'Edytuj Personę';
+
+  @override
+  String get personaUpdated => 'Persona zaktualizowana pomyślnie';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Zatwierdzone persony nie mogą być edytowane';
+
+  @override
+  String get update => 'Aktualizuj';
 }

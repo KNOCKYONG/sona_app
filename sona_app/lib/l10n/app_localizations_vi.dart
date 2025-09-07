@@ -2916,4 +2916,33 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get noActivePersona => 'Không có persona hoạt động';
+
+  @override
+  String get noInternetConnection => 'Không có kết nối Internet';
+
+  @override
+  String get internetRequiredMessage =>
+      'Cần có kết nối internet để sử dụng SONA. Vui lòng kiểm tra kết nối và thử lại.';
+
+  @override
+  String get retryConnection => 'Thử lại';
+
+  @override
+  String get openNetworkSettings => 'Mở Cài đặt';
+
+  @override
+  String get checkingConnection => 'Đang kiểm tra kết nối...';
+
+  @override
+  String get editPersona => 'Chỉnh sửa Persona';
+
+  @override
+  String get personaUpdated => 'Cập nhật Persona thành công';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'Không thể chỉnh sửa Persona đã được phê duyệt';
+
+  @override
+  String get update => 'Cập nhật';
 }

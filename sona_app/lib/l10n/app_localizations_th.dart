@@ -2925,4 +2925,33 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get noActivePersona => 'ไม่มีเพอร์โซน่าที่ใช้งานอยู่';
+
+  @override
+  String get noInternetConnection => 'ไม่มีการเชื่อมต่ออินเทอร์เน็ต';
+
+  @override
+  String get internetRequiredMessage =>
+      'ต้องการการเชื่อมต่ออินเทอร์เน็ตเพื่อใช้ SONA กรุณาตรวจสอบการเชื่อมต่อและลองอีกครั้ง';
+
+  @override
+  String get retryConnection => 'ลองใหม่';
+
+  @override
+  String get openNetworkSettings => 'เปิดการตั้งค่า';
+
+  @override
+  String get checkingConnection => 'กำลังตรวจสอบการเชื่อมต่อ...';
+
+  @override
+  String get editPersona => 'แก้ไขเพอร์โซน่า';
+
+  @override
+  String get personaUpdated => 'อัปเดตเพอร์โซน่าสำเร็จ';
+
+  @override
+  String get cannotEditApprovedPersona =>
+      'ไม่สามารถแก้ไขเพอร์โซน่าที่ได้รับการอนุมัติแล้ว';
+
+  @override
+  String get update => 'อัปเดต';
 }

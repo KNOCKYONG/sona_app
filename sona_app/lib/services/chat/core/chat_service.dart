@@ -6,13 +6,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 import '../../../models/message.dart';
 import '../../../models/persona.dart';
+import '../../../models/emotion.dart';
 import '../../../core/constants.dart';
 import '../../../core/preferences_manager.dart';
 import '../../../helpers/firebase_helper.dart';
 import '../../base/base_service.dart';
 import 'openai_service.dart';
 import '../utils/natural_ai_service.dart';
-import 'chat_orchestrator.dart' hide MessageType;
+// Modular architecture imports (replacing ChatOrchestrator)
+import 'response_generator.dart';
+import 'context_analyzer.dart';
+import 'emotion_processor.dart';
+import 'memory_manager.dart';
+import 'validation_pipeline.dart';
 import 'conversation_state_adapter.dart';  // 🆕 마이그레이션 어댑터
 import 'conversations_service.dart';  // 🆕 OpenAI Conversations API
 import '../utils/persona_relationship_cache.dart';
@@ -39,6 +45,29 @@ class RudeMessageCheck {
   final String severity; // 'none', 'low', 'high'
 
   RudeMessageCheck({required this.isRude, required this.severity});
+}
+
+/// ChatOrchestrator 응답 포맷 (이전 버전과의 호환성을 위해 유지)
+class _ChatOrchestratorResponse {
+  final String content;
+  final List<String> contents;
+  final Emotion? emotion;
+  final int scoreChange;
+  final String? translatedContent;
+  final List<String> translatedContents;
+  final String? targetLanguage;
+  final Map<String, dynamic>? metadata;
+  
+  _ChatOrchestratorResponse({
+    required this.content,
+    required this.contents,
+    this.emotion,
+    required this.scoreChange,
+    this.translatedContent,
+    this.translatedContents = const [],
+    this.targetLanguage,
+    this.metadata,
+  });
 }
 
 /// 🚀 Optimized Chat Service with Performance Enhancements
@@ -705,7 +734,7 @@ class ChatService extends BaseService {
       // Check for inappropriate content and apply penalties
       // Get recent messages for consecutive pattern checking
       final recentMessages = _messagesByPersona[persona.id] ?? [];
-      final likePenalty = ChatOrchestrator.instance.calculateLikePenalty(
+      final likePenalty = ContextAnalyzer.calculateLikePenalty(
         content,
         recentMessages: recentMessages.reversed.take(5).toList(),
       );
@@ -977,17 +1006,28 @@ class ChatService extends BaseService {
         debugPrint('⚠️ Could not get system/app language: $e');
       }
       
-      final response = await ChatOrchestrator.instance.generateResponse(
-        userId: userId,
-        basePersona: persona,
+      // Use the new modular ResponseGenerator instead of ChatOrchestrator
+      final responseResult = await ResponseGenerator.instance.generateResponse(
         userMessage: userMessage,
         chatHistory: chatHistory,
-        userNickname: userNickname,
-        userAge: userAge,
-        userLanguage: userLanguage,
+        persona: persona,
+        userId: userId,
         conversationId: conversationId,
-        systemLanguage: systemLanguage,
-        appLanguage: appLanguage,
+        languageCode: appLanguage ?? systemLanguage ?? 'ko',
+        isInitialGreeting: chatHistory.isEmpty,
+      );
+      
+      // Convert the new response format to match expected structure
+      final response = _ChatOrchestratorResponse(
+        content: responseResult['response'] ?? '',
+        contents: [responseResult['response'] ?? ''],
+        emotion: responseResult['emotion'] as Emotion?,
+        scoreChange: responseResult['likesChange'] ?? 0,
+        translatedContent: responseResult['translations']?['content'],
+        translatedContents: responseResult['translations'] != null ? 
+            [responseResult['translations']['content']] : [],
+        targetLanguage: appLanguage ?? systemLanguage,
+        metadata: responseResult['metadata'],
       );
 
       // Handle Like system integration

@@ -896,6 +896,16 @@ class AppLocalizationsFr extends AppLocalizations {
   String get insufficientHearts => 'Cœurs insuffisants.';
 
   @override
+  String get noHeartsLeft => 'Plus de cœurs';
+
+  @override
+  String get needHeartsToChat =>
+      'Vous avez besoin de cœurs pour commencer une conversation avec ce personnage.';
+
+  @override
+  String get goToStore => 'Aller au magasin';
+
+  @override
   String get interestSharing => 'Partage d\'intérêts';
 
   @override

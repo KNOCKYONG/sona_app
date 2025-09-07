@@ -1750,6 +1750,24 @@ abstract class AppLocalizations {
   /// **'Insufficient hearts.'**
   String get insufficientHearts;
 
+  /// Message shown when user has no hearts left
+  ///
+  /// In en, this message translates to:
+  /// **'No Hearts Left'**
+  String get noHeartsLeft;
+
+  /// Message explaining that hearts are needed to chat
+  ///
+  /// In en, this message translates to:
+  /// **'You need hearts to start a conversation with this persona.'**
+  String get needHeartsToChat;
+
+  /// Button text to navigate to store
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Store'**
+  String get goToStore;
+
   /// Localized string for interestSharing
   ///
   /// In en, this message translates to:

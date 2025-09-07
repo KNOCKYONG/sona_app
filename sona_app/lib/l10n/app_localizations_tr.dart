@@ -883,6 +883,16 @@ class AppLocalizationsTr extends AppLocalizations {
   String get insufficientHearts => 'Yetersiz kalp.';
 
   @override
+  String get noHeartsLeft => 'Kalp kalmadı';
+
+  @override
+  String get needHeartsToChat =>
+      'Bu kişilikle sohbet başlatmak için kalplere ihtiyacınız var.';
+
+  @override
+  String get goToStore => 'Mağazaya git';
+
+  @override
   String get interestSharing => 'İlgi Alanlarını Paylaşma';
 
   @override

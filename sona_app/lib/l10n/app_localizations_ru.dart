@@ -882,6 +882,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get insufficientHearts => 'Insufficient hearts.';
 
   @override
+  String get noHeartsLeft => 'Сердца закончились';
+
+  @override
+  String get needHeartsToChat =>
+      'Вам нужны сердца, чтобы начать разговор с этой персоной.';
+
+  @override
+  String get goToStore => 'Перейти в магазин';
+
+  @override
   String get interestSharing => 'Interest Sharing';
 
   @override

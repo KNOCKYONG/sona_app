@@ -881,6 +881,16 @@ class AppLocalizationsPl extends AppLocalizations {
   String get insufficientHearts => 'Niewystarczająca liczba serc.';
 
   @override
+  String get noHeartsLeft => 'Brak serc';
+
+  @override
+  String get needHeartsToChat =>
+      'Potrzebujesz serc, aby rozpocząć rozmowę z tą personą.';
+
+  @override
+  String get goToStore => 'Idź do sklepu';
+
+  @override
   String get interestSharing => 'Dzielenie się zainteresowaniami';
 
   @override

@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "Walang Natirang Puso",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "Kailangan mo ng mga puso para magsimula ng pag-uusap sa persona na ito.",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "Pumunta sa Tindahan",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "Pagsasalo ng Interes",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

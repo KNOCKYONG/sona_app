@@ -893,6 +893,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get insufficientHearts => 'Corazones insuficientes.';
 
   @override
+  String get noHeartsLeft => 'Sin corazones';
+
+  @override
+  String get needHeartsToChat =>
+      'Necesitas corazones para iniciar una conversación con este personaje.';
+
+  @override
+  String get goToStore => 'Ir a la tienda';
+
+  @override
   String get interestSharing => 'Compartir Intereses';
 
   @override

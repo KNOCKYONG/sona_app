@@ -881,6 +881,16 @@ class AppLocalizationsHi extends AppLocalizations {
   String get insufficientHearts => 'पर्याप्त दिल नहीं हैं।';
 
   @override
+  String get noHeartsLeft => 'कोई दिल नहीं बचा';
+
+  @override
+  String get needHeartsToChat =>
+      'इस व्यक्तित्व के साथ बातचीत शुरू करने के लिए आपको दिलों की आवश्यकता है।';
+
+  @override
+  String get goToStore => 'स्टोर पर जाएं';
+
+  @override
   String get interestSharing => 'रुचि साझा करना';
 
   @override

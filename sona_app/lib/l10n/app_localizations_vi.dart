@@ -865,6 +865,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get insufficientHearts => 'Không đủ tim';
 
   @override
+  String get noHeartsLeft => 'Hết tim';
+
+  @override
+  String get needHeartsToChat =>
+      'Bạn cần có tim để bắt đầu cuộc trò chuyện với nhân vật này.';
+
+  @override
+  String get goToStore => 'Đến cửa hàng';
+
+  @override
   String get interestSharing => 'Chia sẻ sở thích';
 
   @override

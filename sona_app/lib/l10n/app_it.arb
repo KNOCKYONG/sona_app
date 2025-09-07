@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "Nessun cuore rimasto",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "Hai bisogno di cuori per iniziare una conversazione con questo personaggio.",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "Vai al negozio",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "Condivisione degli interessi",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

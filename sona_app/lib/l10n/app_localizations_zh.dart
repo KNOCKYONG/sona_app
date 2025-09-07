@@ -840,6 +840,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get insufficientHearts => '爱心不足';
 
   @override
+  String get noHeartsLeft => '没有爱心了';
+
+  @override
+  String get needHeartsToChat => '您需要爱心才能与此角色开始对话。';
+
+  @override
+  String get goToStore => '前往商店';
+
+  @override
   String get interestSharing => '兴趣分享';
 
   @override

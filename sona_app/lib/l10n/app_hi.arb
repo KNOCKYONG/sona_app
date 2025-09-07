@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "कोई दिल नहीं बचा",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "इस व्यक्तित्व के साथ बातचीत शुरू करने के लिए आपको दिलों की आवश्यकता है।",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "स्टोर पर जाएं",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "रुचि साझा करना",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

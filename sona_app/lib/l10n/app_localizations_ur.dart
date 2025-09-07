@@ -879,6 +879,16 @@ class AppLocalizationsUr extends AppLocalizations {
   String get insufficientHearts => 'ناکافی دل۔';
 
   @override
+  String get noHeartsLeft => 'کوئی دل باقی نہیں';
+
+  @override
+  String get needHeartsToChat =>
+      'اس شخصیت کے ساتھ بات چیت شروع کرنے کے لیے آپ کو دلوں کی ضرورت ہے۔';
+
+  @override
+  String get goToStore => 'اسٹور پر جائیں';
+
+  @override
   String get interestSharing => 'دلچسپی کا اشتراک';
 
   @override

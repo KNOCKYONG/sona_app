@@ -1149,6 +1149,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "하트가 없습니다",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "이 페르소나와 대화를 시작하려면 하트가 필요합니다.",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "스토어로 이동",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "관심사 공유",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

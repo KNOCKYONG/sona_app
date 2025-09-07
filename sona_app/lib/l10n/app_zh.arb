@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "没有爱心了",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "您需要爱心才能与此角色开始对话。",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "前往商店",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "兴趣分享",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

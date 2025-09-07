@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "Сердца закончились",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "Вам нужны сердца, чтобы начать разговор с этой персоной.",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "Перейти в магазин",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "Interest Sharing",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

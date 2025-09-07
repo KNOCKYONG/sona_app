@@ -862,6 +862,16 @@ class AppLocalizationsTh extends AppLocalizations {
   String get insufficientHearts => 'หัวใจไม่เพียงพอ';
 
   @override
+  String get noHeartsLeft => 'ไม่มีหัวใจเหลือ';
+
+  @override
+  String get needHeartsToChat =>
+      'คุณต้องมีหัวใจเพื่อเริ่มการสนทนากับเพอร์โซนานี้';
+
+  @override
+  String get goToStore => 'ไปที่ร้านค้า';
+
+  @override
   String get interestSharing => 'การแบ่งปันความสนใจ';
 
   @override

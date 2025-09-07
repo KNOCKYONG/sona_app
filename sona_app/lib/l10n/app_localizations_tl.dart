@@ -892,6 +892,16 @@ class AppLocalizationsTl extends AppLocalizations {
   String get insufficientHearts => 'Hindi sapat na puso.';
 
   @override
+  String get noHeartsLeft => 'Walang Natirang Puso';
+
+  @override
+  String get needHeartsToChat =>
+      'Kailangan mo ng mga puso para magsimula ng pag-uusap sa persona na ito.';
+
+  @override
+  String get goToStore => 'Pumunta sa Tindahan';
+
+  @override
   String get interestSharing => 'Pagsasalo ng Interes';
 
   @override

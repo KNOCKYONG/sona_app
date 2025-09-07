@@ -15,6 +15,7 @@ import '../services/purchase/purchase_service.dart';
 import '../widgets/persona/persona_profile_viewer.dart';
 import 'create_persona_screen.dart';
 import 'chat_screen.dart';
+import 'purchase_screen.dart';
 
 class MyPersonasScreen extends StatefulWidget {
   const MyPersonasScreen({Key? key}) : super(key: key);
@@ -568,6 +569,50 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
         return; // 사용자가 취소한 경우
       }
       
+      // 하트 개수 확인
+      if (purchaseService.hearts < 1) {
+        // 하트가 없는 경우 스토어로 이동 안내
+        await HapticService.error();
+        if (mounted) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text(localizations.noHeartsLeft),
+                content: Text(localizations.needHeartsToChat),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(localizations.cancel),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      // 스토어로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PurchaseScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text(localizations.goToStore),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+        return;
+      }
+      
       // 매칭되지 않은 경우 매칭 처리 (하트 1개 소모)
       try {
         // 매칭 처리 - persona 객체와 purchaseService도 함께 전달
@@ -591,6 +636,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
             );
           }
         } else {
+          // 하트가 있는데 매칭 실패한 경우에만 에러 표시
           await HapticService.error();
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(

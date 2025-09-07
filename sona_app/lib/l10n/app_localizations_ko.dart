@@ -845,6 +845,15 @@ class AppLocalizationsKo extends AppLocalizations {
   String get insufficientHearts => '하트가 부족합니다.';
 
   @override
+  String get noHeartsLeft => '하트가 없습니다';
+
+  @override
+  String get needHeartsToChat => '이 페르소나와 대화를 시작하려면 하트가 필요합니다.';
+
+  @override
+  String get goToStore => '스토어로 이동';
+
+  @override
   String get interestSharing => '관심사 공유';
 
   @override

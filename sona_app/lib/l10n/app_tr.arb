@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "Kalp kalmadı",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "Bu kişilikle sohbet başlatmak için kalplere ihtiyacınız var.",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "Mağazaya git",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "İlgi Alanlarını Paylaşma",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

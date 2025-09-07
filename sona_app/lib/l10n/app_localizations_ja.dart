@@ -843,6 +843,15 @@ class AppLocalizationsJa extends AppLocalizations {
   String get insufficientHearts => 'ハートが不足しています。';
 
   @override
+  String get noHeartsLeft => 'ハートがありません';
+
+  @override
+  String get needHeartsToChat => 'このペルソナと会話を始めるにはハートが必要です。';
+
+  @override
+  String get goToStore => 'ストアへ移動';
+
+  @override
   String get interestSharing => '興味の共有';
 
   @override

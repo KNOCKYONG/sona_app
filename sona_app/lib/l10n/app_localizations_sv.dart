@@ -879,6 +879,16 @@ class AppLocalizationsSv extends AppLocalizations {
   String get insufficientHearts => 'Otillräckliga hjärtan.';
 
   @override
+  String get noHeartsLeft => 'Inga hjärtan kvar';
+
+  @override
+  String get needHeartsToChat =>
+      'Du behöver hjärtan för att starta en konversation med denna persona.';
+
+  @override
+  String get goToStore => 'Gå till butiken';
+
+  @override
   String get interestSharing => 'Intressedelning';
 
   @override

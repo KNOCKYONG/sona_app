@@ -1141,6 +1141,18 @@
   "@insufficientHearts": {
     "description": "Localized string for insufficientHearts"
   },
+  "noHeartsLeft": "ไม่มีหัวใจเหลือ",
+  "@noHeartsLeft": {
+    "description": "Message shown when user has no hearts left"
+  },
+  "needHeartsToChat": "คุณต้องมีหัวใจเพื่อเริ่มการสนทนากับเพอร์โซนานี้",
+  "@needHeartsToChat": {
+    "description": "Message explaining that hearts are needed to chat"
+  },
+  "goToStore": "ไปที่ร้านค้า",
+  "@goToStore": {
+    "description": "Button text to navigate to store"
+  },
   "interestSharing": "การแบ่งปันความสนใจ",
   "@interestSharing": {
     "description": "Localized string for interestSharing"

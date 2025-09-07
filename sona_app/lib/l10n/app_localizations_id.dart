@@ -879,6 +879,16 @@ class AppLocalizationsId extends AppLocalizations {
   String get insufficientHearts => 'Hati tidak cukup';
 
   @override
+  String get noHeartsLeft => 'Tidak Ada Hati Tersisa';
+
+  @override
+  String get needHeartsToChat =>
+      'Anda memerlukan hati untuk memulai percakapan dengan persona ini.';
+
+  @override
+  String get goToStore => 'Pergi ke Toko';
+
+  @override
   String get interestSharing => 'Berbagi Minat';
 
   @override

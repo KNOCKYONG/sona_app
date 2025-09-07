@@ -865,6 +865,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get insufficientHearts => 'قلوب غير كافية.';
 
   @override
+  String get noHeartsLeft => 'لا توجد قلوب متبقية';
+
+  @override
+  String get needHeartsToChat => 'تحتاج إلى قلوب لبدء محادثة مع هذه الشخصية.';
+
+  @override
+  String get goToStore => 'الذهاب إلى المتجر';
+
+  @override
   String get interestSharing => 'مشاركة الاهتمامات';
 
   @override

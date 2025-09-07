@@ -30,6 +30,7 @@ import '../models/tip_data.dart';
 import '../widgets/tutorial/tip_card.dart';
 import '../widgets/skeleton/skeleton_widgets.dart';
 import 'dart:math';
+import 'purchase_screen.dart';
 
 class PersonaSelectionScreen extends StatefulWidget {
   const PersonaSelectionScreen({super.key});
@@ -1253,15 +1254,56 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                       
                                       if (!isRejoin) {
                                         // Only charge hearts for new matches, not re-joins
+                                        // 하트 개수 확인 (슈퍼라이크는 5개 필요)
+                                        if (purchaseService.hearts < 5) {
+                                          // 하트가 부족한 경우 스토어로 이동 안내
+                                          await HapticService.error();
+                                          setState(() => _isLoading = false);
+                                          if (mounted) {
+                                            showDialog(
+                                              context: screenContext,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text(AppLocalizations.of(context)!.noHeartsLeft),
+                                                  content: Text(AppLocalizations.of(context)!.needHeartsToChat),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text(AppLocalizations.of(context)!.cancel),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        // 스토어로 이동
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => const PurchaseScreen(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                        backgroundColor: Theme.of(context).colorScheme.primary,
+                                                        foregroundColor: Colors.white,
+                                                      ),
+                                                      child: Text(AppLocalizations.of(context)!.goToStore),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                          return;
+                                        }
+                                        
                                         // 하트 5개 차감
                                         final hasEnoughHearts =
                                             await purchaseService.useHearts(5);
                                         if (!hasEnoughHearts) {
-                                          ScaffoldMessenger.of(screenContext)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content: Text(AppLocalizations.of(context)!.insufficientHearts)),
-                                          );
+                                          // 실패한 경우 (이미 차감 시도 후)
                                           setState(() => _isLoading = false);
                                           return;
                                         }
@@ -1330,15 +1372,56 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
                                       
                                       if (!isRejoin) {
                                         // Only charge hearts for new matches, not re-joins
+                                        // 하트 개수 확인 (일반 라이크는 1개 필요)
+                                        if (purchaseService.hearts < 1) {
+                                          // 하트가 부족한 경우 스토어로 이동 안내
+                                          await HapticService.error();
+                                          setState(() => _isLoading = false);
+                                          if (mounted) {
+                                            showDialog(
+                                              context: screenContext,
+                                              barrierDismissible: false,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  title: Text(AppLocalizations.of(context)!.noHeartsLeft),
+                                                  content: Text(AppLocalizations.of(context)!.needHeartsToChat),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                      child: Text(AppLocalizations.of(context)!.cancel),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                        // 스토어로 이동
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => const PurchaseScreen(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      style: ElevatedButton.styleFrom(
+                                                        backgroundColor: Theme.of(context).colorScheme.primary,
+                                                        foregroundColor: Colors.white,
+                                                      ),
+                                                      child: Text(AppLocalizations.of(context)!.goToStore),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          }
+                                          return;
+                                        }
+                                        
                                         // 하트 1개 차감
                                         final hasEnoughHearts =
                                             await purchaseService.useHearts(1);
                                         if (!hasEnoughHearts) {
-                                          ScaffoldMessenger.of(screenContext)
-                                              .showSnackBar(
-                                            SnackBar(
-                                                content: Text(AppLocalizations.of(context)!.insufficientHearts)),
-                                          );
+                                          // 실패한 경우 (이미 차감 시도 후)
                                           setState(() => _isLoading = false);
                                           return;
                                         }

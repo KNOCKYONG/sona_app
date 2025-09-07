@@ -3961,5 +3961,41 @@
   "noActivePersona": "アクティブなペルソナがありません",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "インターネット接続なし",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "SONAを使用するにはインターネット接続が必要です。接続を確認してもう一度お試しください。",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "再試行",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "設定を開く",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "接続を確認中...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "ペルソナを編集",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "ペルソナが正常に更新されました",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "承認されたペルソナは編集できません",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "更新",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

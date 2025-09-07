@@ -3893,5 +3893,41 @@
   "noActivePersona": "Aktif persona yok",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "İnternet Bağlantısı Yok",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "SONA kullanmak için internet bağlantısı gereklidir. Lütfen bağlantınızı kontrol edin ve tekrar deneyin.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "Tekrar Dene",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "Ayarları Aç",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "Bağlantı kontrol ediliyor...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "Persona Düzenle",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "Persona başarıyla güncellendi",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "Onaylanmış personalar düzenlenemez",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "Güncelle",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

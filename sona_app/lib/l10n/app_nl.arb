@@ -3893,5 +3893,41 @@
   "noActivePersona": "Geen actieve persona",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "Geen Internetverbinding",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "Een internetverbinding is vereist om SONA te gebruiken. Controleer uw verbinding en probeer het opnieuw.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "Opnieuw proberen",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "Instellingen openen",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "Verbinding controleren...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "Persona bewerken",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "Persona succesvol bijgewerkt",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "Goedgekeurde personas kunnen niet worden bewerkt",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "Bijwerken",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

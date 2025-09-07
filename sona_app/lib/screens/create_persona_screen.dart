@@ -2,14 +2,18 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../services/persona/persona_creation_service.dart';
 import '../services/persona/persona_service.dart';
 import '../services/ui/haptic_service.dart';
 import '../utils/permission_helper.dart';
+import '../models/persona.dart';
 import '../l10n/app_localizations.dart';
 
 class CreatePersonaScreen extends StatefulWidget {
-  const CreatePersonaScreen({Key? key}) : super(key: key);
+  final Persona? editingPersona;
+  
+  const CreatePersonaScreen({Key? key, this.editingPersona}) : super(key: key);
 
   @override
   State<CreatePersonaScreen> createState() => _CreatePersonaScreenState();
@@ -31,6 +35,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   // Step 2: 프로필 이미지
   File? _mainImage;
   List<File> _additionalImages = [];
+  List<String> _existingImageUrls = []; // 기존 이미지 URL들
   
   // Step 3: MBTI 질문 답변
   Map<int, String> _mbtiAnswers = {};
@@ -70,6 +75,45 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    // Pre-fill values if editing
+    if (widget.editingPersona != null) {
+      final persona = widget.editingPersona!;
+      _nameController.text = persona.name;
+      _ageController.text = persona.age.toString();
+      _descriptionController.text = persona.description;
+      _selectedGender = persona.gender;
+      _isShare = persona.isShare;
+      
+      // 기존 이미지 URL 저장
+      _existingImageUrls = List<String>.from(persona.photoUrls);
+      
+      // Extract speech style and conversation style from personality string
+      final personalityParts = persona.personality.split('|');
+      if (personalityParts.isNotEmpty) {
+        _speechStyle = personalityParts[0].trim();
+      }
+      if (personalityParts.length > 1) {
+        _conversationStyle = personalityParts[1].trim();
+      }
+      
+      // Extract interests from preferences
+      if (persona.preferences.containsKey('interests')) {
+        _selectedInterests = List<String>.from(persona.preferences['interests']);
+      }
+      
+      // Set MBTI answers based on MBTI result
+      // This is a simplified approach - we'll need to reverse engineer the MBTI
+      // For now, we'll just mark it as complete if persona has MBTI
+      if (persona.mbti.isNotEmpty) {
+        // Pre-fill with dummy answers to show MBTI is complete
+        _mbtiAnswers = {1: 'A', 2: 'A', 3: 'A', 4: 'A'};
+      }
+    }
+  }
+  
+  @override
   void dispose() {
     _nameController.dispose();
     _ageController.dispose();
@@ -88,7 +132,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         title: Text(
-          localizations.createPersona,
+          widget.editingPersona != null ? localizations.editPersona : localizations.createPersona,
           style: TextStyle(
             color: Theme.of(context).textTheme.headlineSmall?.color,
             fontSize: 20,
@@ -179,10 +223,12 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
           // 이름 입력
           TextField(
             controller: _nameController,
+            maxLength: 10,  // 최대 10자로 제한
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
               labelText: localizations.personaName,
               hintText: localizations.personaNameHint,
+              counterText: '${_nameController.text.length}/10',  // 문자 수 표시
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -336,6 +382,34 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                         child: Image.file(
                           _mainImage!,
                           fit: BoxFit.cover,
+                        ),
+                      )
+                    : (_existingImageUrls.isNotEmpty && widget.editingPersona != null)
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(
+                          imageUrl: _existingImageUrls.first,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          errorWidget: (context, url, error) => Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                size: 48,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                localizations.tapToUpload,
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     : Column(
@@ -990,7 +1064,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
                     )
                   : Text(
                       _currentStep == 4
-                          ? localizations.create
+                          ? (widget.editingPersona != null ? localizations.update : localizations.create)
                           : (_currentStep == 2 && _mbtiAnswers.length < 4)
                               ? localizations.next
                               : localizations.next,
@@ -1010,6 +1084,7 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     switch (_currentStep) {
       case 0: // 기본 정보
         return _nameController.text.isNotEmpty &&
+            _nameController.text.length <= 10 &&  // 이름 길이 제한 체크
             _ageController.text.isNotEmpty &&
             _descriptionController.text.isNotEmpty &&
             _selectedGender.isNotEmpty &&
@@ -1081,48 +1156,68 @@ class _CreatePersonaScreenState extends State<CreatePersonaScreen> {
     });
     
     try {
-      final personaId = await _personaCreationService.createCustomPersona(
-        context: context,
-        name: _nameController.text.trim(),
-        age: int.parse(_ageController.text),
-        gender: _selectedGender,
-        description: _descriptionController.text.trim(),
-        mbtiAnswers: _mbtiAnswers,
-        speechStyle: _speechStyle,
-        interests: _selectedInterests,
-        conversationStyle: _conversationStyle,
-        mainImage: _mainImage,
-        additionalImages: _additionalImages,
-        isShare: _isShare,
-      );
+      final personaId = widget.editingPersona != null
+          ? await _personaCreationService.updateCustomPersona(
+              personaId: widget.editingPersona!.id,
+              context: context,
+              name: _nameController.text.trim(),
+              age: int.parse(_ageController.text),
+              gender: _selectedGender,
+              description: _descriptionController.text.trim(),
+              mbtiAnswers: _mbtiAnswers,
+              speechStyle: _speechStyle,
+              interests: _selectedInterests,
+              conversationStyle: _conversationStyle,
+              mainImage: _mainImage,
+              additionalImages: _additionalImages,
+              isShare: _isShare,
+            )
+          : await _personaCreationService.createCustomPersona(
+              context: context,
+              name: _nameController.text.trim(),
+              age: int.parse(_ageController.text),
+              gender: _selectedGender,
+              description: _descriptionController.text.trim(),
+              mbtiAnswers: _mbtiAnswers,
+              speechStyle: _speechStyle,
+              interests: _selectedInterests,
+              conversationStyle: _conversationStyle,
+              mainImage: _mainImage,
+              additionalImages: _additionalImages,
+              isShare: _isShare,
+            );
       
       if (personaId != null) {
         await HapticService.success();
         
-        // Refresh PersonaService to include the newly created custom persona
+        // Refresh PersonaService to include the newly created/updated custom persona
         if (mounted) {
           final personaService = Provider.of<PersonaService>(context, listen: false);
-          // Reinitialize to reload all personas including the new custom one
+          // Reinitialize to reload all personas including the new/updated custom one
           await personaService.initialize(userId: personaService.currentUserId);
-          debugPrint('✅ PersonaService refreshed after creating custom persona');
+          debugPrint('✅ PersonaService refreshed after ${widget.editingPersona != null ? "updating" : "creating"} custom persona');
           
-          // 자동으로 매칭 처리 - 커스텀 페르소나와 즉시 매칭
-          try {
-            final matched = await personaService.matchWithPersona(personaId);
-            if (matched) {
-              debugPrint('✅ Successfully matched with custom persona: $personaId');
-            } else {
-              debugPrint('⚠️ Failed to match with custom persona: $personaId');
+          // 자동으로 매칭 처리 - 커스텀 페르소나와 즉시 매칭 (새로 생성한 경우만)
+          if (widget.editingPersona == null) {
+            try {
+              final matched = await personaService.matchWithPersona(personaId);
+              if (matched) {
+                debugPrint('✅ Successfully matched with custom persona: $personaId');
+              } else {
+                debugPrint('⚠️ Failed to match with custom persona: $personaId');
+              }
+            } catch (e) {
+              debugPrint('❌ Error matching with custom persona: $e');
             }
-          } catch (e) {
-            debugPrint('❌ Error matching with custom persona: $e');
           }
         }
         
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(AppLocalizations.of(context)!.personaCreated),
+              content: Text(widget.editingPersona != null 
+                  ? AppLocalizations.of(context)!.personaUpdated 
+                  : AppLocalizations.of(context)!.personaCreated),
               backgroundColor: Colors.green,
             ),
           );

@@ -433,31 +433,113 @@ $mbtiDesc
   }
 
   /// 페르소나 업데이트
-  Future<bool> updateCustomPersona({
+  Future<String?> updateCustomPersona({
     required String personaId,
-    String? name,
-    String? description,
-    bool? isShare,
+    required BuildContext context,
+    required String name,
+    required int age,
+    required String gender,
+    required String description,
+    required Map<int, String> mbtiAnswers,
+    required String speechStyle,
+    required List<String> interests,
+    required String conversationStyle,
+    File? mainImage,
+    List<File>? additionalImages,
+    required bool isShare,
   }) async {
-    return await executeWithLoading<bool>(() async {
+    return await executeWithLoading<String?>(() async {
       try {
         final currentUser = _auth.currentUser;
         if (currentUser == null) {
           throw Exception('로그인이 필요합니다');
         }
 
+        // MBTI 계산
+        final mbti = calculateMBTI(context, mbtiAnswers);
+        
+        // 성격 설명 조합
+        final personality = '$speechStyle | $conversationStyle';
+
         final updates = <String, dynamic>{
+          'name': name,
+          'age': age,
+          'gender': gender,
+          'description': description,
+          'mbti': mbti,
+          'personality': personality,
+          'preferences': {
+            'interests': interests,
+            'speechStyle': speechStyle,
+            'conversationStyle': conversationStyle,
+          },
+          'isShare': isShare,
           'updatedAt': FieldValue.serverTimestamp(),
         };
 
-        if (name != null) updates['name'] = name;
-        if (description != null) updates['description'] = description;
-        if (isShare != null) {
-          updates['isShare'] = isShare;
-          if (isShare) {
-            // 공유로 변경 시 재승인 필요
-            updates['isConfirm'] = false;
-            await _notifyAdminForReview(personaId, name ?? 'Unknown', currentUser.uid);
+        // 공유 설정 변경 시 재승인 필요
+        if (isShare) {
+          updates['isConfirm'] = false;
+          await _notifyAdminForReview(personaId, name, currentUser.uid);
+        }
+
+        // 이미지 업로드 처리 (새 이미지가 있는 경우만)
+        if (mainImage != null || (additionalImages != null && additionalImages.isNotEmpty)) {
+          final List<String> photoUrls = [];
+          Map<String, dynamic>? imageUrls;
+          
+          // 메인 이미지 업로드
+          if (mainImage != null) {
+            final mainImageUrl = await _uploadPersonaImage(personaId, mainImage, 'main');
+            if (mainImageUrl != null) {
+              photoUrls.add(mainImageUrl);
+            }
+            
+            // R2 이미지 URL 구조 생성
+            try {
+              final bytes = await mainImage.readAsBytes();
+              final result = await CloudflareR2Service.uploadPersonaImages(
+                personaId: personaId,
+                mainImage: bytes,
+                includeOriginal: false,
+              );
+              
+              // PersonaImageUrls 객체를 Map으로 변환
+              imageUrls = {
+                'thumb': {
+                  'jpg': result.mainImageUrls[ImageSize.thumbnail] ?? '',
+                },
+                'small': {
+                  'jpg': result.mainImageUrls[ImageSize.small] ?? '',
+                },
+                'medium': {
+                  'jpg': result.mainImageUrls[ImageSize.medium] ?? '',
+                },
+                'large': {
+                  'jpg': result.mainImageUrls[ImageSize.large] ?? '',
+                },
+              };
+            } catch (e) {
+              debugPrint('❌ Error creating R2 image structure: $e');
+            }
+          }
+          
+          // 추가 이미지 업로드
+          if (additionalImages != null && additionalImages.isNotEmpty) {
+            for (int i = 0; i < additionalImages.length; i++) {
+              final imageUrl = await _uploadPersonaImage(personaId, additionalImages[i], 'additional_$i');
+              if (imageUrl != null) {
+                photoUrls.add(imageUrl);
+              }
+            }
+          }
+          
+          if (photoUrls.isNotEmpty) {
+            updates['photoUrls'] = photoUrls;
+          }
+          
+          if (imageUrls != null) {
+            updates['imageUrls'] = imageUrls;
           }
         }
 
@@ -466,12 +548,12 @@ $mbtiDesc
             .doc(personaId)
             .update(updates);
 
-        return true;
+        return personaId;
       } catch (e) {
         debugPrint('❌ Error updating persona: $e');
-        return false;
+        return null;
       }
-    }, errorContext: 'updateCustomPersona') ?? false;
+    }, errorContext: 'updateCustomPersona');
   }
 
   /// 페르소나 삭제 (Soft Delete)

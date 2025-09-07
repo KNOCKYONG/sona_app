@@ -11,6 +11,7 @@ import '../services/ui/haptic_service.dart';
 import '../l10n/app_localizations.dart';
 import '../core/constants.dart';
 import '../services/purchase/purchase_service.dart';
+import '../widgets/persona/persona_profile_viewer.dart';
 import 'create_persona_screen.dart';
 import 'chat_screen.dart';
 
@@ -252,18 +253,29 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                     width: 2,
                   ),
                 ),
-                child: ClipOval(
-                  child: persona.photoUrls.isNotEmpty
-                      ? CachedNetworkImage(
-                          imageUrl: persona.photoUrls.first,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(strokeWidth: 2),
+                child: GestureDetector(
+                  onTap: () => _showPersonaProfile(context, persona),
+                  child: ClipOval(
+                    child: persona.photoUrls.isNotEmpty
+                        ? CachedNetworkImage(
+                            imageUrl: persona.photoUrls.first,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
                             ),
-                          ),
-                          errorWidget: (context, url, error) => Container(
+                            errorWidget: (context, url, error) => Container(
+                              color: Colors.grey[200],
+                              child: Icon(
+                                Icons.person,
+                                size: 35,
+                                color: Colors.grey[400],
+                              ),
+                            ),
+                          )
+                        : Container(
                             color: Colors.grey[200],
                             child: Icon(
                               Icons.person,
@@ -271,15 +283,7 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                               color: Colors.grey[400],
                             ),
                           ),
-                        )
-                      : Container(
-                          color: Colors.grey[200],
-                          child: Icon(
-                            Icons.person,
-                            size: 35,
-                            color: Colors.grey[400],
-                          ),
-                        ),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -290,26 +294,36 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          persona.name,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Text(
+                            persona.name,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            localizations.yearsOld(persona.age.toString()),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).colorScheme.primary,
+                        Flexible(
+                          flex: 0,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '${persona.age} ${persona.mbti}',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
@@ -328,24 +342,6 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                     const SizedBox(height: 6),
                     Row(
                       children: [
-                        // MBTI 태그
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: Colors.purple.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            persona.mbti,
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: Colors.purple[700],
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        
                         // 상태 표시
                         if (persona.isShare) ...[
                           Icon(
@@ -414,16 +410,18 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
                   }
                 },
                 itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'edit',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.edit, size: 20),
-                        const SizedBox(width: 8),
-                        Text(localizations.edit),
-                      ],
+                  // 승인되지 않은 페르소나만 수정 가능
+                  if (!persona.isConfirm)
+                    PopupMenuItem(
+                      value: 'edit',
+                      child: Row(
+                        children: [
+                          const Icon(Icons.edit, size: 20),
+                          const SizedBox(width: 8),
+                          Text(localizations.edit),
+                        ],
+                      ),
                     ),
-                  ),
                   // 승인된 페르소나는 삭제 메뉴 숨김
                   if (!persona.isConfirm)
                     PopupMenuItem(
@@ -613,7 +611,53 @@ class _MyPersonasScreenState extends State<MyPersonasScreen>
 
   void _editPersona(Persona persona) async {
     await HapticService.selectionClick();
-    // TODO: 페르소나 수정 화면으로 이동
+    
+    // 승인된 페르소나는 수정 불가
+    if (persona.isConfirm) {
+      await HapticService.error();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.cannotEditApprovedPersona),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+      return;
+    }
+    
+    // 수정 화면으로 이동 (기존 데이터 전달)
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreatePersonaScreen(editingPersona: persona),
+      ),
+    );
+    
+    if (result == true) {
+      await _loadMyPersonas();
+    }
+  }
+  
+  void _showPersonaProfile(BuildContext context, Persona persona) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierDismissible: true,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return PersonaProfileViewer(
+            persona: persona,
+            onClose: () {},
+          );
+        },
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   /// 대화방 삭제 (페르소나와 관련된 모든 데이터)

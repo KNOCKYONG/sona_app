@@ -3893,5 +3893,41 @@
   "noActivePersona": "ไม่มีเพอร์โซน่าที่ใช้งานอยู่",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "ไม่มีการเชื่อมต่ออินเทอร์เน็ต",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "ต้องการการเชื่อมต่ออินเทอร์เน็ตเพื่อใช้ SONA กรุณาตรวจสอบการเชื่อมต่อและลองอีกครั้ง",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "ลองใหม่",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "เปิดการตั้งค่า",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "กำลังตรวจสอบการเชื่อมต่อ...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "แก้ไขเพอร์โซน่า",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "อัปเดตเพอร์โซน่าสำเร็จ",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "ไม่สามารถแก้ไขเพอร์โซน่าที่ได้รับการอนุมัติแล้ว",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "อัปเดต",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

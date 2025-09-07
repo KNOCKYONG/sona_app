@@ -3893,5 +3893,41 @@
   "noActivePersona": "لا توجد شخصية نشطة",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "يتطلب استخدام SONA اتصالاً بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "إعادة المحاولة",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "فتح الإعدادات",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "جاري فحص الاتصال...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "تحرير الشخصية",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "تم تحديث الشخصية بنجاح",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "لا يمكن تحرير الشخصيات المعتمدة",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "تحديث",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

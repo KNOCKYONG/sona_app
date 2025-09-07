@@ -3893,5 +3893,41 @@
   "noActivePersona": "کوئی فعال شخصیت نہیں",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "انٹرنیٹ کنکشن نہیں ہے",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "SONA استعمال کرنے کے لیے انٹرنیٹ کنکشن کی ضرورت ہے۔ براہ کرم اپنا کنکشن چیک کریں اور دوبارہ کوشش کریں۔",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "دوبارہ کوشش کریں",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "سیٹنگز کھولیں",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "کنکشن چیک کیا جا رہا ہے...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "پرسونا میں ترمیم کریں",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "پرسونا کامیابی سے اپ ڈیٹ ہوا",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "منظور شدہ پرسونا میں ترمیم نہیں کی جا سکتی",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "اپ ڈیٹ",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

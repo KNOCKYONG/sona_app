@@ -3893,5 +3893,41 @@
   "noActivePersona": "कोई सक्रिय व्यक्तित्व नहीं",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "इंटरनेट कनेक्शन नहीं है",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "SONA का उपयोग करने के लिए इंटरनेट कनेक्शन की आवश्यकता है। कृपया अपना कनेक्शन जांचें और फिर से प्रयास करें।",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "पुनः प्रयास करें",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "सेटिंग्स खोलें",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "कनेक्शन जांच रहे हैं...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "पर्सोना संपादित करें",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "पर्सोना सफलतापूर्वक अपडेट किया गया",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "अनुमोदित पर्सोना संपादित नहीं किए जा सकते",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "अपडेट करें",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

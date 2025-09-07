@@ -3961,5 +3961,41 @@
   "noActivePersona": "Keine aktive Persona",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "Keine Internetverbindung",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "Eine Internetverbindung ist erforderlich, um SONA zu verwenden. Bitte überprüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "Erneut versuchen",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "Einstellungen öffnen",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "Verbindung wird überprüft...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "Persona bearbeiten",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "Persona erfolgreich aktualisiert",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "Genehmigte Personas können nicht bearbeitet werden",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "Aktualisieren",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

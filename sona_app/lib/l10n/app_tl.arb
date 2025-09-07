@@ -3893,5 +3893,41 @@
   "noActivePersona": "Walang aktibong persona",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "Walang Koneksyon sa Internet",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "Kailangan ng koneksyon sa internet para gamitin ang SONA. Pakisuri ang iyong koneksyon at subukan muli.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "Subukan Muli",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "Buksan ang Mga Setting",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "Sinusuri ang koneksyon...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "I-edit ang Persona",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "Matagumpay na na-update ang Persona",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "Hindi maaaring i-edit ang mga aprubadong Persona",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "I-update",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

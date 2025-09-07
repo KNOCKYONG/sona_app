@@ -3893,5 +3893,41 @@
   "noActivePersona": "Brak aktywnej persony",
   "@noActivePersona": {
     "description": "Localized string for noActivePersona"
+  },
+  "noInternetConnection": "Brak Połączenia z Internetem",
+  "@noInternetConnection": {
+    "description": "Title for no internet connection dialog"
+  },
+  "internetRequiredMessage": "Do korzystania z SONA wymagane jest połączenie z internetem. Sprawdź swoje połączenie i spróbuj ponownie.",
+  "@internetRequiredMessage": {
+    "description": "Message explaining that internet is required"
+  },
+  "retryConnection": "Spróbuj ponownie",
+  "@retryConnection": {
+    "description": "Button text to retry network connection"
+  },
+  "openNetworkSettings": "Otwórz Ustawienia",
+  "@openNetworkSettings": {
+    "description": "Button text to open network settings"
+  },
+  "checkingConnection": "Sprawdzanie połączenia...",
+  "@checkingConnection": {
+    "description": "Message shown while checking network connection"
+  },
+  "editPersona": "Edytuj Personę",
+  "@editPersona": {
+    "description": "Localized string for editPersona"
+  },
+  "personaUpdated": "Persona zaktualizowana pomyślnie",
+  "@personaUpdated": {
+    "description": "Localized string for personaUpdated"
+  },
+  "cannotEditApprovedPersona": "Zatwierdzone persony nie mogą być edytowane",
+  "@cannotEditApprovedPersona": {
+    "description": "Localized string for cannotEditApprovedPersona"
+  },
+  "update": "Aktualizuj",
+  "@update": {
+    "description": "Localized string for update"
   }
 }

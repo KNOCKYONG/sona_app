@@ -731,6 +731,8 @@ class ChatService extends BaseService {
       final detectedLanguage = LanguageDetector.detectLanguageFromText(content);
       if (detectedLanguage != null && detectedLanguage != 'KO') {
         debugPrint('🌐 User message language detected: $detectedLanguage');
+        // Ensure metadata is not null before adding the detected language
+        metadata ??= {};
         metadata['detectedLanguage'] = detectedLanguage;
       }
       

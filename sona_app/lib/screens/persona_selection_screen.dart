@@ -236,7 +236,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
       if (item is Persona) {
         debugPrint('   ${i + 1}. Persona: ${item.name}');
       } else if (item is TipData) {
-        debugPrint('   ${i + 1}. Tip: ${item.title.substring(0, 20)}...');
+        final displayTitle = item.title.length > 20 
+            ? '${item.title.substring(0, 20)}...'
+            : item.title;
+        debugPrint('   ${i + 1}. Tip: $displayTitle');
       }
     }
   }
@@ -492,8 +495,10 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         usedTips.add(selectedTip);
         _cardItems.add(selectedTip);
         insertedTipCount++;
-        debugPrint(
-            '💡 Added tip at end: ${selectedTip.title.substring(0, 10)}...');
+        final displayTitle = selectedTip.title.length > 10 
+            ? '${selectedTip.title.substring(0, 10)}...'
+            : selectedTip.title;
+        debugPrint('💡 Added tip at end: $displayTitle');
       } else {
         break;
       }
@@ -507,7 +512,7 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
 
     // 안정적인 키 생성 - personas의 ID 조합으로 유니크한 키 생성
     _cardsKey =
-        'cards_${uniquePersonasList.map((p) => p.id.substring(0, 4)).join('_')}_${DateTime.now().millisecondsSinceEpoch}';
+        'cards_${uniquePersonasList.map((p) => p.id.length >= 4 ? p.id.substring(0, 4) : p.id).join('_')}_${DateTime.now().millisecondsSinceEpoch}';
 
     // 🎯 최종 카드 통계
     final personaCardCount = _cardItems.where((item) => item is Persona).length;
@@ -529,8 +534,11 @@ class _PersonaSelectionScreenState extends State<PersonaSelectionScreen>
         tipPositions.add(i);
       } else if (_cardItems[i] is Persona) {
         final persona = _cardItems[i] as Persona;
+        final idDisplay = persona.id.length >= 8 
+            ? persona.id.substring(0, 8) 
+            : persona.id;
         personaPositions
-            .add('[$i] ${persona.name} (${persona.id.substring(0, 8)})');
+            .add('[$i] ${persona.name} ($idDisplay)');
       }
     }
     debugPrint('💡 Tip card positions: $tipPositions');

@@ -281,6 +281,7 @@ class PersonaService extends BaseService {
   /// Initialize service with parallel loading
   Future<void> initialize({
     String? userId,
+    bool forceRefresh = false,
     Function(double progress, String message)? onProgress,
   }) async {
     // Initialize block service with user ID
@@ -304,7 +305,7 @@ class PersonaService extends BaseService {
     _loadingCompleter = Completer<void>();
 
     await executeWithLoading(() async {
-      await _initializeNormalMode(userId, onProgress);
+      await _initializeNormalMode(userId, forceRefresh, onProgress);
 
       _loadingCompleter!.complete();
     }, errorContext: 'initialize', showError: false);
@@ -313,6 +314,7 @@ class PersonaService extends BaseService {
   /// Normal mode initialization with parallel loading
   Future<void> _initializeNormalMode(
     String? userId,
+    bool forceRefresh,
     Function(double progress, String message)? onProgress,
   ) async {
     _currentUserId = await DeviceIdService.getCurrentUserId(
@@ -341,7 +343,15 @@ class PersonaService extends BaseService {
     // 🔥 먼저 모든 페르소나 데이터를 로드
     debugPrint(
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] Starting all personas load...');
-    await _loadFromFirebaseOrFallback();
+    
+    // Force refresh면 캐시 무시하고 Firebase에서 로드
+    if (forceRefresh) {
+      debugPrint('🔄 Force refresh enabled - loading from Firebase directly');
+      await _loadPersonasFromFirebase();
+    } else {
+      await _loadFromFirebaseOrFallback();
+    }
+    
     debugPrint(
         '⏱️ [${DateTime.now().millisecondsSinceEpoch}] All personas loaded: ${_allPersonas.length}');
 
@@ -2844,8 +2854,8 @@ class PersonaService extends BaseService {
         final cacheTime = DateTime.parse(decoded['timestamp'] as String);
         final personasList = decoded['personas'] as List;
 
-        // Check if cache is less than 24 hours old (extended for better performance)
-        if (DateTime.now().difference(cacheTime).inHours < 24) {
+        // Check if cache is less than 48 hours old to balance performance and freshness
+        if (DateTime.now().difference(cacheTime).inHours < 48) {
           _allPersonas = personasList
               .map((data) => Persona.fromJson(data as Map<String, dynamic>))
               .toList();
@@ -2888,8 +2898,8 @@ class PersonaService extends BaseService {
       if (timestamp == null) return true;
 
       final cacheTime = DateTime.parse(timestamp);
-      // Consider cache stale after 7 days (extended for better performance)
-      return DateTime.now().difference(cacheTime).inDays >= 7;
+      // Consider cache stale after 48 hours to ensure new personas are loaded
+      return DateTime.now().difference(cacheTime).inHours >= 48;
     } catch (e) {
       return true;
     }
@@ -2912,6 +2922,21 @@ class PersonaService extends BaseService {
     } catch (e) {
       debugPrint('❌ Error loading personas from Firebase: $e');
     }
+  }
+  
+  /// Clear all loaded data from memory to force reload from Firebase
+  void clearLoadedData() {
+    debugPrint('🗑️ Clearing all loaded persona data from memory');
+    _allPersonas.clear();
+    _matchedPersonas.clear();
+    _shuffledAvailablePersonas = null;
+    _lastShuffleTime = null;
+    _matchedPersonasLoaded = false;
+    _loadingCompleter = null;
+    _sessionSwipedPersonas.clear();
+    _personaMemoryCache.clear();
+    _lastPersonaCacheUpdate = null;
+    notifyListeners();
   }
 }
 

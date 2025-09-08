@@ -788,6 +788,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('images_preloaded');
       await prefs.remove('images_preload_date');
+      
+      // 🆕 페르소나 데이터 캐시도 삭제하여 Firebase에서 새로 로드하도록 함
+      await prefs.remove('cached_personas');
+      await prefs.remove('cached_personas_timestamp');
+      await prefs.remove('matched_personas');
+      await prefs.remove('swiped_personas');
+      await prefs.remove('tutorial_matched_personas');
+      debugPrint('🗑️ Cleared all persona caches - will reload from Firebase');
+      
+      // 🔄 PersonaService 재초기화하여 Firebase에서 새로 로드
+      final personaService = Provider.of<PersonaService>(context, listen: false);
+      personaService.clearLoadedData(); // 메모리의 데이터 클리어
+      await personaService.initialize(forceRefresh: true); // Firebase에서 새로 로드
 
       if (mounted) {
         Navigator.pop(context); // 로딩 다이얼로그 닫기

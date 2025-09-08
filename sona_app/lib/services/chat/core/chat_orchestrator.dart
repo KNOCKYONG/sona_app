@@ -28,6 +28,7 @@ import 'conversations_service.dart';  // 🆕 새로운 Conversations API 서비
 import '../../relationship/negative_behavior_system.dart';
 import '../../storage/guest_conversation_service.dart';
 import '../analysis/user_speech_pattern_analyzer.dart';
+import '../localization/language_detector.dart';
 import '../analysis/pattern_analyzer_service.dart';
 import '../analysis/advanced_pattern_analyzer.dart';
 import '../prompts/response_patterns.dart';
@@ -321,6 +322,12 @@ class ChatOrchestrator {
       // 2.5단계: 다국어 입력 처리
       // ⚠️ 모든 언어 입력은 OpenAI API로 처리 - 하드코딩 절대 금지
       debugPrint('🌍 Message will be processed by OpenAI API with automatic language detection: $userMessage');
+      
+      // Client-side language detection for immediate UI feedback
+      final detectedLanguage = LanguageDetector.detectLanguageFromText(userMessage);
+      if (detectedLanguage != null && detectedLanguage != 'KO') {
+        debugPrint('🔍 Client detected language: $detectedLanguage from message: "$userMessage"');
+      }
       
       // 3단계: 간단한 반응 체크 -> 프롬프트 힌트 생성으로 변경
       // 하드코딩 응답 제거: 모든 응답은 OpenAI API를 통해 생성

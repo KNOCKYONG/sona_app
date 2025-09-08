@@ -28,6 +28,7 @@ import '../../relationship/relation_score_service.dart';
 import '../../relationship/negative_behavior_system.dart';
 import '../../relationship/like_cooldown_system.dart';
 import '../../locale_service.dart';
+import '../localization/language_detector.dart';
 import '../../../models/chat_error_report.dart';
 import '../utils/error_recovery_service.dart';
 import '../utils/error_aggregation_service.dart';
@@ -726,6 +727,13 @@ class ChatService extends BaseService {
         );
       }
 
+      // Detect language for user message
+      final detectedLanguage = LanguageDetector.detectLanguageFromText(content);
+      if (detectedLanguage != null && detectedLanguage != 'KO') {
+        debugPrint('🌐 User message language detected: $detectedLanguage');
+        metadata['detectedLanguage'] = detectedLanguage;
+      }
+      
       // Create user message
       final userMessage = Message(
         id: _uuid.v4(),

@@ -68,6 +68,7 @@ class UnifiedPromptService {
    - Dutch: NL (hallo, bedankt, werk, moe)
    - Swedish: SV (hej, tack, arbete, trött)
    - Polish: PL (cześć, dziękuję, praca, zmęczony)
+   - Malay: MS (hai, terima kasih, kerja, penat, apa khabar)
    - Tagalog: TL (kumusta, salamat, trabaho, pagod)
 
 3. **YOUR RESPONSE FORMAT:**

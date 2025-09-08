@@ -180,5 +180,74 @@ void main() {
         expect(LanguageDetector.detectLanguageFromText('!@#\$%^'), isNull);
       });
     });
+    
+    group('Ambiguous keyword disambiguation', () {
+      test('Indonesian vs Malay - distinguishes correctly', () {
+        // Indonesian with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('aku sudah makan'), equals('ID'));
+        expect(LanguageDetector.detectLanguageFromText('belum selesai'), equals('ID'));
+        
+        // Malay with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('awak dah makan'), equals('MS'));
+        expect(LanguageDetector.detectLanguageFromText('macam mana ni'), equals('MS'));
+        
+        // Shared keywords - requires context
+        expect(LanguageDetector.detectLanguageFromText('saya kerja di sini, aku sudah datang'), equals('ID'));
+        expect(LanguageDetector.detectLanguageFromText('saya kerja di sini, awak boleh tak'), equals('MS'));
+      });
+      
+      test('Spanish vs Portuguese - distinguishes correctly', () {
+        // Spanish with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('hola qué tal estás'), equals('ES'));
+        expect(LanguageDetector.detectLanguageFromText('buenos días amigo'), equals('ES'));
+        
+        // Portuguese with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('olá você está bem'), equals('PT'));
+        expect(LanguageDetector.detectLanguageFromText('obrigado tchau'), equals('PT'));
+      });
+      
+      test('German vs Dutch - distinguishes correctly', () {
+        // German with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('danke schön wie geht es'), equals('DE'));
+        expect(LanguageDetector.detectLanguageFromText('ich bin müde'), equals('DE'));
+        
+        // Dutch with unique keywords
+        expect(LanguageDetector.detectLanguageFromText('bedankt hoe gaat het'), equals('NL'));
+        expect(LanguageDetector.detectLanguageFromText('tot ziens alsjeblieft'), equals('NL'));
+      });
+      
+      test('Special characters boost correct language', () {
+        // Spanish ñ
+        expect(LanguageDetector.detectLanguageFromText('año'), equals('ES'));
+        
+        // Portuguese ã
+        expect(LanguageDetector.detectLanguageFromText('não'), equals('PT'));
+        
+        // German ü
+        expect(LanguageDetector.detectLanguageFromText('müde'), equals('DE'));
+        
+        // Polish ł
+        expect(LanguageDetector.detectLanguageFromText('dziękuję bardzo'), equals('PL'));
+        
+        // Turkish ş
+        expect(LanguageDetector.detectLanguageFromText('teşekkür'), equals('TR'));
+      });
+      
+      test('Requires minimum confidence - returns null for single generic word', () {
+        // Single generic words should not be detected
+        expect(LanguageDetector.detectLanguageFromText('work'), isNull);
+        expect(LanguageDetector.detectLanguageFromText('good'), isNull);
+        expect(LanguageDetector.detectLanguageFromText('hello'), isNull);
+        expect(LanguageDetector.detectLanguageFromText('no'), isNull);
+      });
+      
+      test('Detects with multiple keyword matches', () {
+        // English with multiple keywords
+        expect(LanguageDetector.detectLanguageFromText('hello how are you doing today'), equals('EN'));
+        
+        // Spanish with multiple keywords
+        expect(LanguageDetector.detectLanguageFromText('hola gracias por qué'), equals('ES'));
+      });
+    });
   });
 }

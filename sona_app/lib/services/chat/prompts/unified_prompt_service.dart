@@ -43,26 +43,46 @@ class UnifiedPromptService {
    - YES → Reply in Korean WITHOUT tags
    - NO → You MUST use [KO] and [LANG] tags
 
-2. **IF NOT KOREAN, YOUR RESPONSE MUST BE:**
+2. **IF NOT KOREAN, DETECT LANGUAGE BY:**
+   
+   A) **UNIQUE SCRIPTS (2+ characters = definite match):**
+   - Thai script (ก-๛): สวัสดี, ครับ → [TH]
+   - Arabic script (؀-ۿ): مرحبا, شكرا → [AR]
+   - Hindi/Devanagari (ऀ-ॿ): नमस्ते, धन्यवाद → [HI]
+   - Chinese characters (一-龯): 你好, 谢谢 → [ZH]
+   - Japanese Hiragana (ぁ-ゖ): ありがとう → [JA]
+   - Japanese Katakana (ァ-ヺ): カタカナ → [JA]
+   - Cyrillic (А-я): привет, спасибо → [RU]
+   - Urdu script: السلام علیکم → [UR]
+   
+   B) **KEYWORDS for Latin-based languages:**
+   - Vietnamese: VI (mệt, quá, rồi, làm, xin chào, cảm ơn)
+   - Indonesian: ID (aku, saya, kerja, lembur, selamat, terima kasih)
+   - English: EN (hello, thanks, tired, how are you)
+   - Spanish: ES (hola, gracias, trabajo, cansado, cómo)
+   - French: FR (bonjour, merci, travail, fatigué, comment)
+   - German: DE (hallo, danke, arbeit, müde, wie geht)
+   - Italian: IT (ciao, grazie, lavoro, stanco, come)
+   - Portuguese: PT (olá, obrigado, trabalho, cansado)
+   - Turkish: TR (merhaba, teşekkür, yorgun, nasılsın)
+   - Dutch: NL (hallo, bedankt, werk, moe)
+   - Swedish: SV (hej, tack, arbete, trött)
+   - Polish: PL (cześć, dziękuję, praca, zmęczony)
+   - Tagalog: TL (kumusta, salamat, trabaho, pagod)
+
+3. **YOUR RESPONSE FORMAT:**
    ```
    [KO] (your Korean response) [DETECTED_LANGUAGE_CODE] (response in user's language)
    ```
 
-**TEST YOURSELF:**
-- User: "A, mệt quá" → Is this Korean? NO → Use tags: [KO] ... [VI] ...
-- User: "Aku kerja lembur" → Is this Korean? NO → Use tags: [KO] ... [ID] ...  
-- User: "안녕" → Is this Korean? YES → No tags needed
-- User: "How are you?" → Is this Korean? NO → Use tags: [KO] ... [EN] ...
+**EXAMPLES:**
+- User: "สวัสดีครับ" → Thai script detected → [KO] 안녕하세요! [TH] สวัสดีครับ!
+- User: "Aku capek" → Indonesian keywords → [KO] 피곤하구나 [ID] Ya, istirahat dulu
+- User: "مرحبا" → Arabic script → [KO] 안녕! [AR] مرحبا!
+- User: "안녕" → Korean → No tags, reply in Korean only
 
-**LANGUAGE CODES:**
-- Vietnamese: VI (words like: mệt, quá, rồi, làm)
-- Indonesian: ID (words like: aku, saya, kerja, lembur)
-- English: EN
-- Japanese: JA
-- Chinese: ZH
-
-**🔴 FAILURE TO ADD TAGS FOR NON-KOREAN INPUT IS A CRITICAL ERROR!**
-**🔴 IF YOU SEE "Aku" OR "mệt quá", YOU MUST USE TAGS!**
+**🔴 CRITICAL: ALWAYS CHECK SCRIPT FIRST, THEN KEYWORDS!**
+**🔴 2+ UNIQUE SCRIPT CHARACTERS = AUTOMATIC LANGUAGE DETECTION!**
 ''');
     }
     

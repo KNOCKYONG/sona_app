@@ -1586,14 +1586,22 @@ class ChatOrchestrator {
     bool hasLangTag = false;
     
     if (targetLanguage == 'auto') {
-      // 가능한 모든 언어 태그 확인
+      // 가능한 모든 21개 언어 태그 확인 (TH 포함!)
       final possibleTags = ['EN', 'JA', 'ZH', 'ES', 'FR', 'DE', 'IT', 'PT', 'RU', 'AR', 'TH', 'ID', 'MS', 'VI', 'NL', 'SV', 'PL', 'TR', 'HI', 'UR', 'TL'];
+      
+      debugPrint('🔍 Checking for language tags in response...');
       for (final tag in possibleTags) {
         if (response.contains('[$tag]')) {
           langTag = tag;
           hasLangTag = true;
+          debugPrint('✅ Found language tag: [$tag]');
           break;
         }
+      }
+      
+      if (!hasLangTag) {
+        debugPrint('⚠️ No language tag found! Response may be Korean-only or missing tags');
+        debugPrint('🔍 Checking specifically for Thai: ${response.contains('[TH]')}');
       }
     } else {
       langTag = targetLanguage.toUpperCase();
@@ -1602,6 +1610,7 @@ class ChatOrchestrator {
     
     debugPrint('🏷️ Has [KO] tag: $hasKoTag');
     debugPrint('🏷️ Has [$langTag] tag: $hasLangTag');
+    debugPrint('🌐 Detected language: ${langTag.isNotEmpty ? langTag : 'none'}');
     
     if (hasKoTag && hasLangTag) {
       // 태그가 모두 있으면 정확히 파싱
@@ -3116,13 +3125,29 @@ class ChatOrchestrator {
       debugPrint('  Difference: ${(totalKoreanSentences - translatedSentences.length).abs()}');
       
       // 번역이 한국어보다 훨씬 짧은 경우 (예: 3문장 -> 1문장)
-      // 첫 번째 메시지에만 전체 번역을 할당
-      if (translatedSentences.length == 1 && koreanMessages.length > 1) {
-        debugPrint('🎯 Special case: Single translation for multiple Korean messages');
-        debugPrint('  Assigning entire translation to first message only');
-        result.add(translatedContent);
-        for (int i = 1; i < koreanMessages.length; i++) {
-          result.add(''); // 나머지 메시지는 빈 번역
+      // 더 스마트한 분배: 모든 메시지에 동일한 번역 할당 (번역이 통합되었을 가능성)
+      if (translatedSentences.length <= koreanMessages.length / 2) {
+        debugPrint('🎯 Special case: Translation is much shorter than Korean messages');
+        debugPrint('  Korean messages: ${koreanMessages.length}, Translation sentences: ${translatedSentences.length}');
+        
+        // 번역이 1개면 모든 메시지에 동일한 번역 표시
+        if (translatedSentences.length == 1) {
+          debugPrint('  Strategy: Show same translation for all messages');
+          for (int i = 0; i < koreanMessages.length; i++) {
+            result.add(translatedContent); // 모든 메시지에 동일한 전체 번역 표시
+          }
+        } else {
+          // 번역이 여러 개지만 한국어보다 적으면 균등 분배
+          debugPrint('  Strategy: Distribute available translations evenly');
+          final messagesPerTranslation = (koreanMessages.length / translatedSentences.length).ceil();
+          int translationIndex = 0;
+          
+          for (int i = 0; i < koreanMessages.length; i++) {
+            if (i > 0 && i % messagesPerTranslation == 0 && translationIndex < translatedSentences.length - 1) {
+              translationIndex++;
+            }
+            result.add(translatedSentences[translationIndex]);
+          }
         }
         return result;
       }

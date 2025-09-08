@@ -2039,20 +2039,32 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         debugPrint('  - Has translatedContent: ${msg.translatedContent != null && msg.translatedContent!.isNotEmpty}');
         debugPrint('  - translatedContent: "${msg.translatedContent ?? 'null'}"');
         debugPrint('  - Has [KO] tag: ${msg.content.contains('[KO]')}');
-        debugPrint('  - Has other lang tags: VI=${msg.content.contains('[VI]')}, EN=${msg.content.contains('[EN]')}, ID=${msg.content.contains('[ID]')}');
+        // Check for all 21 language tags
+        final langTags = ['EN', 'JA', 'ZH', 'ES', 'FR', 'DE', 'IT', 'PT', 'RU', 'AR', 
+                         'TH', 'ID', 'MS', 'VI', 'NL', 'SV', 'PL', 'TR', 'HI', 'UR', 'TL'];
+        final detectedLangs = langTags.where((tag) => msg.content.contains('[$tag]')).toList();
+        debugPrint('  - Detected language tags: ${detectedLangs.join(', ')}');
       }
       
       // Check for both old style (translatedContent field) and new style (embedded tags in content)
-      // Note: translatedContent might be empty string for split messages where translation is in first message only
+      // Only include messages with actual translation content (not empty strings)
       final translatedMessages = messages
           .where((msg) => 
               !msg.isFromUser && 
-              ((msg.translatedContent != null) || // Allow empty string translations
-               // Also check if content has language tags embedded
+              ((msg.translatedContent != null && msg.translatedContent!.isNotEmpty) || // Only non-empty translations
+               // Also check if content has language tags embedded for all 21 languages
                (msg.content.contains('[KO]') && 
-                (msg.content.contains('[VI]') || msg.content.contains('[EN]') || 
-                 msg.content.contains('[ID]') || msg.content.contains('[JA]') ||
-                 msg.content.contains('[ZH]') || msg.content.contains('[TH]')))))
+                (msg.content.contains('[EN]') || msg.content.contains('[JA]') || 
+                 msg.content.contains('[ZH]') || msg.content.contains('[ES]') ||
+                 msg.content.contains('[FR]') || msg.content.contains('[DE]') ||
+                 msg.content.contains('[IT]') || msg.content.contains('[PT]') ||
+                 msg.content.contains('[RU]') || msg.content.contains('[AR]') ||
+                 msg.content.contains('[TH]') || msg.content.contains('[ID]') ||
+                 msg.content.contains('[MS]') || msg.content.contains('[VI]') ||
+                 msg.content.contains('[NL]') || msg.content.contains('[SV]') ||
+                 msg.content.contains('[PL]') || msg.content.contains('[TR]') ||
+                 msg.content.contains('[HI]') || msg.content.contains('[UR]') ||
+                 msg.content.contains('[TL]')))))
           .toList();
       
       debugPrint('✅ Found ${translatedMessages.length} messages with translations');

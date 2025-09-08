@@ -118,11 +118,17 @@ class _TextMessageState extends State<_TextMessage> {
     
     // Auto-show translation if foreign language tags are detected
     if (!widget.message.isFromUser && widget.message.translatedContent != null) {
-      // Check if the translated content contains foreign language tags
+      // Check if the translated content contains foreign language tags (all 21 languages)
       final tagPattern = RegExp(r'\[(EN|JA|ZH|TH|VI|ID|TL|ES|FR|DE|IT|PT|RU|NL|SV|PL|TR|AR|HI|UR)\]');
       if (tagPattern.hasMatch(widget.message.translatedContent!)) {
         _showTranslation = true;
-        debugPrint('  ✅ Showing translation due to language tags detected');
+        final match = tagPattern.firstMatch(widget.message.translatedContent!);
+        debugPrint('  ✅ Showing translation due to language tag: ${match?.group(0)}');
+        
+        // Debug: Check specifically for Thai
+        if (widget.message.translatedContent!.contains('[TH]')) {
+          debugPrint('  🇹🇭 Thai language detected in translation!');
+        }
       }
     }
     
